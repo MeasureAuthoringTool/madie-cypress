@@ -316,8 +316,30 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                                 },
                                 "measureSetId": uuidv4(),
                                 "ecqmTitle": "ecqmTitle",
+                                "reviewMetaData": {
+                                    "approvalDate": null,
+                                    "lastReviewDate": null
+                                },
+                                "measureSet": {
+                                    "id": "68ac804018f2135a1f3a17d3",
+                                    "cmsId": null,
+                                    "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                    "owner": "test.ReUser6408",
+                                    "acls": null
+                                },
                                 "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
-                                "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z"
+                                "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                                "testCaseConfiguration": {
+                                    "id": null,
+                                    "sdeIncluded": null
+                                },
+                                "scoring": null,
+                                "baseConfigurationTypes": null,
+                                "patientBasis": true,
+                                "rateAggregation": null,
+                                "improvementNotation": null,
+                                "improvementNotationDescription": null,
+
                             }
                         }).then((response) => {
                             expect(response.status).to.eql(200)

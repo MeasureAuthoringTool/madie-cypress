@@ -57,10 +57,31 @@ describe('Measure Service: Edit Measure', () => {
                             "measureScoring": "Ratio",
                             "versionId": vId,
                             "measureMetaData": { "experimental": false, "draft": true },
-                            "measureSetId": uuidv4(),
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
-                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z"
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
+                            "measureSetId": uuidv4()
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -90,11 +111,32 @@ describe('Measure Service: Edit Measure', () => {
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "measureMetaData": { "experimental": false, "draft": true },
-                            "versionId": vId,
-                            "measureSetId": uuidv4(),
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                             "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
+                            "versionId": vId,
+                            "measureSetId": uuidv4(),
                             "supplementalData": [
                                 {
                                     "definition": "supplementalDataDefinition",
@@ -153,10 +195,31 @@ describe('Measure Service: Edit Measure', () => {
                             "version": "0.0.000",
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureSetId': uuidv4(),
-                            'ecqmTitle': "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
                             "measureMetaData": { "experimental": false, "draft": true }
                         }
                     }).then((response) => {
@@ -199,7 +262,28 @@ describe('Measure Service: Edit Measure', () => {
                                     "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
                                     "url": "https://semanticbits.com/"
                                 }, "draft": true
-                            }
+                            },
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -230,9 +314,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "description": "SemanticBits", "draft": true }
                         }
                     }).then((response) => {
@@ -264,9 +369,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "copyright": "copyright", "draft": true }
                         }
                     }).then((response) => {
@@ -298,9 +424,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "disclaimer": "disclaimer", "draft": true }
                         }
                     }).then((response) => {
@@ -332,9 +479,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "rationale": "rationale", "draft": true }
                         }
                     }).then((response) => {
@@ -366,9 +534,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "author": "author", "draft": true }
                         }
                     }).then((response) => {
@@ -400,9 +589,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "guidance": "guidance", "draft": true }
                         }
                     }).then((response) => {
@@ -434,9 +644,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': "SDE Payer" }]
@@ -466,9 +697,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': "" }]
@@ -498,9 +750,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': null }]
@@ -534,7 +807,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': {
                                 "experimental": false,
                                 "endorsements": [
@@ -544,9 +840,7 @@ describe('Measure Service: Edit Measure', () => {
                                         "endorsementId": "1234"
                                     }
                                 ]
-                            },
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -591,8 +885,29 @@ describe('Measure Service: Edit Measure', () => {
                                     }
                                 ]
                             },
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             "scoringPrecision": 2
                         }
                     }).then((response) => {
@@ -622,18 +937,40 @@ describe('Measure Service: Edit Measure', () => {
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
-                            "measureMetaData": { "experimental": false,
+                            "measureMetaData": {
+                                "experimental": false,
                                 "draft": true,
                                 "intendedVenue": {
                                     "code": "eh",
                                     "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/intended-venue-codes",
                                     "display": "EH"
-                            }
-                                },
-                            "measureSetId": uuidv4(),
+                                }
+                            },
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                             "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
+                            "measureSetId": uuidv4(),
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -666,9 +1003,30 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "purpose": "reason for the measure to be made", "draft": true }
                         }
                     }).then((response) => {
@@ -720,9 +1078,30 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
                             'measureScoring': 'Ratio',
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': "SDE Payer" }]
@@ -773,10 +1152,31 @@ describe('Edit Measure Validations', () => {
                         'model': model,
                         "version": "0.0.000",
                         'measureScoring': 'Ratio',
-                        "ecqmTitle": "eCQMTitle",
-                        'cql': measureCQL,
-                        "measurementPeriodStart": mpStartDate,
-                        "measurementPeriodEnd": mpEndDate
+                        "reviewMetaData": {
+                            "approvalDate": null,
+                            "lastReviewDate": null
+                        },
+                        "measureSet": {
+                            "id": "68ac804018f2135a1f3a17d3",
+                            "cmsId": null,
+                            "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                            "owner": "test.ReUser6408",
+                            "acls": null
+                        },
+                        "ecqmTitle": "ecqmTitle",
+                        "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                        "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                        "testCaseConfiguration": {
+                            "id": null,
+                            "sdeIncluded": null
+                        },
+                        "scoring": null,
+                        "baseConfigurationTypes": null,
+                        "patientBasis": true,
+                        "rateAggregation": null,
+                        "improvementNotation": null,
+                        "improvementNotationDescription": null,
+                        'cql': measureCQL
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)
@@ -808,9 +1208,30 @@ describe('Edit Measure Validations', () => {
                             "ecqmTitle": "eCQMTitle",
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            'cql': measureCQL,
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
+                            'cql': measureCQL
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)
@@ -844,8 +1265,29 @@ describe('Edit Measure Validations', () => {
                             'cql': measureCQL,
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)
@@ -883,8 +1325,29 @@ describe('Edit Measure Validations', () => {
                             'cql': measureCQL,
                             'versionId': vId,
                             'measureSetId': uuidv4(),
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)
@@ -1036,10 +1499,31 @@ describe('Measurement Period Validations', () => {
                         'cqlLibraryName': updatedCQLLibraryName,
                         'model': model,
                         "version": "0.0.000",
-                        "ecqmTitle": "eCQMTitle",
+                        "reviewMetaData": {
+                            "approvalDate": null,
+                            "lastReviewDate": null
+                        },
+                        "measureSet": {
+                            "id": "68ac804018f2135a1f3a17d3",
+                            "cmsId": null,
+                            "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                            "owner": "test.ReUser6408",
+                            "acls": null
+                        },
+                        "ecqmTitle": "ecqmTitle",
+                        "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                        "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                        "testCaseConfiguration": {
+                            "id": null,
+                            "sdeIncluded": null
+                        },
+                        "scoring": null,
+                        "baseConfigurationTypes": null,
+                        "patientBasis": true,
+                        "rateAggregation": null,
+                        "improvementNotation": null,
+                        "improvementNotationDescription": null,
                         'cql': measureCQL,
-                        "measurementPeriodStart": "01/01/2021",
-                        "measurementPeriodEnd": "01/01/2023",
                         'measureScoring': 'Ratio'
                     }
                 }).then((response) => {

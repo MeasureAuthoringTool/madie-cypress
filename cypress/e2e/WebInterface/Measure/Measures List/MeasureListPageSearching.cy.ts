@@ -81,14 +81,29 @@ describe.skip('Measure List Page Searching', () => {
         cy.wait(5500)
 
         cy.get('.pagination-container').contains('button', '6').click()
-        cy.url().should('include','page=6')
+        cy.url().should('include', 'page=6')
 
         cy.get(MeasuresPage.searchInputBox).clear().type('dental{enter}')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         cy.contains('75FHIR').should('be.visible')
 
-        cy.url().should('include','page=1')
+        cy.url().should('include', 'page=1')
         cy.get('.pagination-container').contains('button', '1').should('have.class', 'Mui-selected')
+    })
+})
+
+describe.skip('Measure Filter on measure list page and searching with filters', () => {
+
+    beforeEach('Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 39500)
+    })
+
+    afterEach('Logout', () => {
+
+        OktaLogin.UILogout()
     })
 })

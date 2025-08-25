@@ -1,9 +1,9 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 
-let measureName  = []
-let CqlLibraryName  = []
+let measureName = []
+let CqlLibraryName = []
 let measureIds = []
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
@@ -21,8 +21,8 @@ describe('Measure List Pagination', () => {
 
         for (let i = 0; i <= 15; i++) {
 
-            measureName [i] = 'TestMeasure' + i + Date.now()
-            CqlLibraryName [i] = 'TestLibrary' + i + Date.now()
+            measureName[i] = 'TestMeasure' + i + Date.now()
+            CqlLibraryName[i] = 'TestLibrary' + i + Date.now()
 
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -46,7 +46,7 @@ describe('Measure List Pagination', () => {
                     }).then((response) => {
                         expect(response.status).to.eql(201)
                         expect(response.body.id).to.be.exist
-                        measureIds [i] = response.body.id
+                        measureIds[i] = response.body.id
                         fileContents = fileContents + measureIds[i] + ','
                         cy.writeFile('cypress/fixtures/measureId', fileContents)
                         cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
@@ -93,10 +93,32 @@ describe('Measure List Pagination', () => {
                                     "model": 'QI-Core v4.1.1',
                                     "versionId": vId,
                                     "measureSetId": measureSetId,
-                                    "ecqmTitle": "eCQMTitle",
+                                    "reviewMetaData": {
+                                        "approvalDate": null,
+                                        "lastReviewDate": null
+                                    },
+                                    "measureSet": {
+                                        "id": "68ac804018f2135a1f3a17d3",
+                                        "cmsId": null,
+                                        "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                        "owner": "test.ReUser6408",
+                                        "acls": null
+                                    },
+                                    "ecqmTitle": "ecqmTitle",
+                                    "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                                    "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                                    "testCaseConfiguration": {
+                                        "id": null,
+                                        "sdeIncluded": null
+                                    },
+                                    "scoring": null,
+                                    "baseConfigurationTypes": null,
+                                    "patientBasis": true,
+                                    "rateAggregation": null,
+                                    "improvementNotation": null,
+                                    "improvementNotationDescription": null,
+
                                     "active": false,
-                                    "measurementPeriodStart": mpStartDate,
-                                    "measurementPeriodEnd": mpEndDate
                                 }
 
                             }).then((response) => {
@@ -115,22 +137,22 @@ describe('Measure List Pagination', () => {
     it('Verify Pagination', () => {
 
         //Verify URL before clicking on Next button
-        cy.url().should('not.include','page=2')
+        cy.url().should('not.include', 'page=2')
         //Click on Next Button
-        cy.get(MeasuresPage.paginationNextButton).click( {force:true})
+        cy.get(MeasuresPage.paginationNextButton).click({ force: true })
         //Verify if Next Page loaded
-        cy.url().should('include','page=2')
+        cy.url().should('include', 'page=2')
 
         //Click on Previous Button
         cy.get(MeasuresPage.paginationPreviousButton).click()
         //Verify if Previous Page loaded
-        cy.url().should('include','page=1')
+        cy.url().should('include', 'page=1')
 
         //Verify pagination limit before change
         cy.get(MeasuresPage.paginationLimitSelect).should('contain', '10')
         cy.get(MeasuresPage.paginationLimitSelect).click()
         //Change pagination limit to 25
-        cy.get(MeasuresPage.paginationLimitEquals25).click( {force:true} )
+        cy.get(MeasuresPage.paginationLimitEquals25).click({ force: true })
         //Verify pagination limit after change
         cy.get(MeasuresPage.paginationLimitSelect).should('contain', '25')
     })

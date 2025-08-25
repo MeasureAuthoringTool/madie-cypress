@@ -219,8 +219,19 @@ describe('QDM Measure: Transmission format', () => {
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
-                            "measureMetaData": { "experimental": false, "draft": true, "transmissionFormat": "Test Transmission format" },
                             "measureSetId": uuidv4(),
+                            "measureMetaData": { "experimental": false, "draft": true, "transmissionFormat": "Test Transmission format" },
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                             "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
@@ -228,6 +239,12 @@ describe('QDM Measure: Transmission format', () => {
                                 "id": null,
                                 "sdeIncluded": null
                             },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
