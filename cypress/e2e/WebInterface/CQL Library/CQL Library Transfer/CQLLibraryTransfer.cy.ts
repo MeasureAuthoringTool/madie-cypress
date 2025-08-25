@@ -3,7 +3,7 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
+import { Utilities } from "../../../../Shared/Utilities"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -13,6 +13,7 @@ let randomCQLLibraryName = 'TransferTestCQLLibrary' + randValue + 5
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = Environment.credentials().harpUserALT
 let versionNumber = '1.0.000'
+const adminApiKey = Environment.credentials().adminApiKey
 
 describe('CQL Library Transfer', () => {
 
@@ -29,17 +30,32 @@ describe('CQL Library Transfer', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.UILogout()
+        OktaLogin.Logout()
+        Utilities.deleteLibrary(null, true)
     })
 
 
-    it('Verify transferred CQL Library is viewable under My Libraries tab', () => {
+    it('Verify transferred CQL Library is viewable under Owned Libraries tab', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        //Share Library with ALT User
-        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+        //Transfer Library to ALT User
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminApiKey
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
+                })
+            })
+        })
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -55,8 +71,22 @@ describe('CQL Library Transfer', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        //Share Library with ALT User
-        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+        //Transfer Library to ALT User
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminApiKey
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
+                })
+            })
+        })
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -137,8 +167,22 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        //Share Library with ALT User
-        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+        //Transfer Library to ALT User
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminApiKey
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
+                })
+            })
+        })
 
         //Login as ALT User
         OktaLogin.AltLogin()
