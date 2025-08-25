@@ -33,6 +33,15 @@ describe('Measure Sharing', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
     })
 
     afterEach('Log out and Clean up', () => {
@@ -65,6 +74,7 @@ describe('Measure Sharing', () => {
         OktaLogin.AltLogin()
 
         //Edit Measure details
+        cy.get(LandingPage.sharedMeasures).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
@@ -130,9 +140,8 @@ describe('Measure Sharing', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
-        cy.reload()
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 50000)
+        Utilities.waitForElementVisible(LandingPage.sharedMeasures, 50000)
+        cy.get(LandingPage.sharedMeasures).click()
         cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
 
         //Delete button disabled for shared owner
@@ -143,6 +152,7 @@ describe('Measure Sharing', () => {
         cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
 
         //Edit Measure details
+        cy.get(LandingPage.sharedMeasures).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
@@ -191,16 +201,21 @@ describe('Measure Sharing', () => {
     })
 
     it('Action centre share button disabled for Non Measure Owner', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
 
         //Login
         OktaLogin.AltLogin()
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
-
+        cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
+        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', newMeasureName)
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
         cy.get('[data-testid="share-action-btn"]').should('be.visible')
         cy.get('[data-testid="share-action-btn"]').should('be.disabled')
@@ -220,7 +235,7 @@ describe('Measure Sharing - Multiple instances', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
@@ -300,7 +315,7 @@ describe('Measure Sharing - Multiple instances', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(LandingPage.sharedMeasures).wait(500).click()
         cy.get('[class="measure-table"]').should('contain', updatedMeasuresPageName)
 
     })
@@ -335,7 +350,7 @@ describe('Delete Test Case with Shared user', () => {
 
         //Login as Alt User
         OktaLogin.AltLogin()
-
+        cy.get(LandingPage.sharedMeasures).click()
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -372,7 +387,7 @@ describe('Remove user\'s share access from a measure', () => {
     it('After removing access, user can no longer edit on the measure', () => {
 
         OktaLogin.AltLogin()
-
+        cy.get(LandingPage.sharedMeasures).click()
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
