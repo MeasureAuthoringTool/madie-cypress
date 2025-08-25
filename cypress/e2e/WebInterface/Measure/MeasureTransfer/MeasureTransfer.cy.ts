@@ -5,7 +5,7 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Ut
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import {EditMeasureActions, EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
@@ -49,7 +49,7 @@ describe('Measure Transfer', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(LandingPage.sharedMeasures).click()
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
     })
 
@@ -61,6 +61,7 @@ describe('Measure Transfer', () => {
         OktaLogin.AltLogin()
 
         //Edit Measure details
+        cy.get(LandingPage.sharedMeasures).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
@@ -273,7 +274,7 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(LandingPage.sharedMeasures).click()
         cy.get('[class="table-body measures-list"]').should('contain', newMeasureName)
         cy.get('[class="table-body measures-list"]').should('contain', randomMeasureName)
     })
@@ -306,7 +307,7 @@ describe('Delete Test Case with Transferred user', () => {
 
         //Login as Alt User
         OktaLogin.AltLogin()
-
+        cy.get(LandingPage.sharedMeasures).click()
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
