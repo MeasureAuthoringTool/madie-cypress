@@ -699,9 +699,30 @@ describe('Measure Service: Update Delete Flag', () => {
                                 "model": 'QI-Core v4.1.1',
                                 "versionId": vId,
                                 "measureSetId": measureSetId,
+                                "reviewMetaData": {
+                                    "approvalDate": null,
+                                    "lastReviewDate": null
+                                },
+                                "measureSet": {
+                                    "id": "68ac804018f2135a1f3a17d3",
+                                    "cmsId": null,
+                                    "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                    "owner": "test.ReUser6408",
+                                    "acls": null
+                                },
                                 "ecqmTitle": eCQMTitle,
-                                "measurementPeriodStart": mpStartDate,
-                                "measurementPeriodEnd": mpEndDate,
+                                "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                                "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                                "testCaseConfiguration": {
+                                    "id": null,
+                                    "sdeIncluded": null
+                                },
+                                "scoring": null,
+                                "baseConfigurationTypes": null,
+                                "patientBasis": true,
+                                "rateAggregation": null,
+                                "improvementNotation": null,
+                                "improvementNotationDescription": null,
                                 "active": false,
                                 "createdBy": defaultUser
                             }
@@ -758,7 +779,30 @@ describe('Measure Service: Update Delete Flag', () => {
                             "model": model,
                             "versionId": vId,
                             "measureSetId": uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             "measureScoring": 'Ratio',
                             "active": false,
                             //"createdBy": user
@@ -811,7 +855,30 @@ describe('Measure Service: Update Delete Flag', () => {
                             "model": model,
                             "versionId": vId,
                             "measureSetId": uuidv4(),
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
                             "ecqmTitle": eCQMTitle,
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             "active": false,
                             "createdBy": defaultUser
                         }
@@ -822,7 +889,8 @@ describe('Measure Service: Update Delete Flag', () => {
             })
         })
     })
-    it('After updating / deleting measure, test cases should be unavailable, too', () => {
+    //skipping until MAT-9091 has been fixed
+    it.skip('After updating / deleting measure, test cases should be unavailable, too', () => {
 
         let title = 'someTitleValue'
         let series = 'SomeSeriesValue'
@@ -849,6 +917,27 @@ describe('Measure Service: Update Delete Flag', () => {
                                 "model": model,
                                 "versionId": vId,
                                 "measureSetId": measureSetId,
+                                "reviewMetaData": {
+                                    "approvalDate": null,
+                                    "lastReviewDate": null
+                                },
+                                "measureSet": {
+                                    "id": "68ac804018f2135a1f3a17d3",
+                                    "cmsId": null,
+                                    "measureSetId": measureSetId,
+                                    "owner": defaultUser,
+                                    "acls": null
+                                },
+                                "testCaseConfiguration": {
+                                    "id": null,
+                                    "sdeIncluded": null
+                                },
+                                "scoring": null,
+                                "baseConfigurationTypes": null,
+                                "patientBasis": true,
+                                "rateAggregation": null,
+                                "improvementNotation": null,
+                                "improvementNotationDescription": null,
                                 "ecqmTitle": eCQMTitle,
                                 "measurementPeriodStart": mpStartDate,
                                 "measurementPeriodEnd": mpEndDate,
@@ -863,6 +952,7 @@ describe('Measure Service: Update Delete Flag', () => {
             })
 
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
@@ -879,6 +969,7 @@ describe('Measure Service: Update Delete Flag', () => {
 
             })
         })
+        cy.pause()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {

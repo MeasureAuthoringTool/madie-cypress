@@ -81,6 +81,27 @@ export class Utilities {
                                     "url": "https://semanticbits.com/"
                                 }
                             },
+                            "reviewMetaData": {
+                                "approvalDate": null,
+                                "lastReviewDate": null
+                            },
+                            "measureSet": {
+                                "id": "68ac804018f2135a1f3a17d3",
+                                "cmsId": null,
+                                "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
+                                "owner": "test.ReUser6408",
+                                "acls": null
+                            },
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": null
+                            },
+                            "scoring": null,
+                            "baseConfigurationTypes": null,
+                            "patientBasis": true,
+                            "rateAggregation": null,
+                            "improvementNotation": null,
+                            "improvementNotationDescription": null,
                             'programUseContext': {
                                 "code": "mips",
                                 "display": "MIPS",
@@ -138,7 +159,7 @@ export class Utilities {
                     expect(response.body.active).to.eql(true)
                     measureData = response.body
                     measureData.active = false
-                
+
                     cy.request({
                         url: '/api/measures/' + id,
                         method: 'PUT',
