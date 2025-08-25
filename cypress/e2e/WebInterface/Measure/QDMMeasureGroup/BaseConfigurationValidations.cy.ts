@@ -20,6 +20,7 @@ let measureCQL = MeasureCQL.simpleQDM_CQL
 const measureData: CreateMeasureOptions = {}
 
 describe('Validating Population tabs and fields, specific to QDM', () => {
+
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
@@ -29,8 +30,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         altMeasureName = measureName + altRandValue
         altCqlLibraryName = CqlLibraryName + altRandValue
 
-
-        //Create New Measure
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -63,7 +62,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -423,7 +421,6 @@ describe('Updates on Base Configuration page', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -433,11 +430,6 @@ describe('Updates on Base Configuration page', () => {
     })
 
     it('Changing the scoring elicits the Change Scoring prompt', () => {
-        //navigate to the main measures page
-        cy.get(Header.measures).click()
-
-        //click edit on measure action
-        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -555,15 +547,8 @@ describe('Updates on Base Configuration page', () => {
     })
 
     it('Verify confirmation dialogue when patient basis value changed', () => {
-        //navigate to the main measures page
-        cy.get(Header.measures).click()
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Add Criteria
