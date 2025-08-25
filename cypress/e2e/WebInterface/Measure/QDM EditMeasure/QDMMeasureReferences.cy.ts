@@ -158,7 +158,7 @@ describe('Add Measure Reference - ownership validation', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    it.only('Non Measure owner unable to add Measure References', () => {
+    it('Non Measure owner unable to add Measure References', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
@@ -207,7 +207,7 @@ describe('Delete or Edit Measure Reference - Ownership validation', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    it.only('Non Measure owner unable to delete or edit Measure reference', () => {
+    it('Non Measure owner unable to delete or edit Measure reference', () => {
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
