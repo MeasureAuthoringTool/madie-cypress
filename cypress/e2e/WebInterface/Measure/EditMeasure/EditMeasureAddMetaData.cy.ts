@@ -143,9 +143,9 @@ describe('Edit Measure: Add Meta Data', () => {
 
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 20700)
+        cy.get(MeasuresPage.ownedMeasures).should('exist')
+        cy.get(MeasuresPage.ownedMeasures).should('be.visible')
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
