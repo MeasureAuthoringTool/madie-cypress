@@ -12,8 +12,8 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-
-let measureCQL = MeasureCQL.zipfileExportQICore
+const measureCQL = MeasureCQL.zipfileExportQICore
+const expectedFileName = 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'
 
 describe('FHIR Measure Export, Not the Owner', () => {
 
@@ -30,9 +30,10 @@ describe('FHIR Measure Export, Not the Owner', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     it('Validate the zip file Export is downloaded for FHIR Measure', () => {
@@ -40,28 +41,28 @@ describe('FHIR Measure Export, Not the Owner', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         MeasuresPage.actionCenter('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, expectedFileName), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
-
-        OktaLogin.Logout()
     })
 
     it('Unzip the downloaded file and verify file types for FHIR Measure', () => {
 
+        cy.verifyDownload(expectedFileName)
+
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: expectedFileName, path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
 
-        //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'))
-            .should('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.html')
-            .and('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.xml')
-            .and('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.json')
+        // Verify files exist after unzip
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.html')
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.xml')
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.json')
     })
 })
 
