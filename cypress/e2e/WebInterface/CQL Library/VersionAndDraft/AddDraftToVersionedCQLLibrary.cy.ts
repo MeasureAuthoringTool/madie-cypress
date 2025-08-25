@@ -20,11 +20,6 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
 
-    afterEach('Logout', () => {
-
-        OktaLogin.UILogout()
-    })
-
     // just this 1st test has been prepped for when FF LibrarySearch = true, see references to MAT-5119
     // as of right now, this version should fail in DEV but pass in TEST
     it('Add Draft to the versioned Library from Owned Libraries', () => {
