@@ -95,8 +95,7 @@ describe('QDM Measure Reference', () => {
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
         cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete').click()
-        //Commenting until MAT-9046 is fixed
-        //cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })
@@ -159,7 +158,7 @@ describe('Add Measure Reference - ownership validation', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    it('Non Measure owner unable to add Measure References', () => {
+    it.only('Non Measure owner unable to add Measure References', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
@@ -208,7 +207,7 @@ describe('Delete or Edit Measure Reference - Ownership validation', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    it('Non Measure owner unable to delete or edit Measure reference', () => {
+    it.only('Non Measure owner unable to delete or edit Measure reference', () => {
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()

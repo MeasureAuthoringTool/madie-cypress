@@ -44,21 +44,7 @@ describe('Measure Sharing', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    it('Verify shared Measure is viewable under My Measures tab', () => {
-
-        //Share Measure with ALT User
-        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
-
-        //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
-        cy.reload()
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 50000)
-        cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
-    })
-
-    //Skipping until feature flag Measure Search is enabled
-    it.skip('Verify shared Measure is viewable under Shared Measure tab', () => {
+    it('Verify shared Measure is viewable under Shared Measure tab', () => {
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
