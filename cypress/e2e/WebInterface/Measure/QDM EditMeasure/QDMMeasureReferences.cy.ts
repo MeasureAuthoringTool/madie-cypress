@@ -95,8 +95,7 @@ describe('QDM Measure Reference', () => {
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
         cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete').click()
-        //Commenting until MAT-9046 is fixed
-        //cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })
