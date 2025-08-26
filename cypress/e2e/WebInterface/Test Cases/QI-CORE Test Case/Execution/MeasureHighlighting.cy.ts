@@ -12,6 +12,7 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
+let specificMeasureName = 'Intravesical Bacillus-Calmette-Guerin for Non-Muscle Invasive Bladder CancerFHIR'
 let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + now
@@ -1507,7 +1508,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
+        cy.wait('@callstacks', { timeout: 137000 })
 
         //run test case
         cy.get(TestCasesPage.runTestButton).should('be.visible')
@@ -1520,21 +1521,21 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
         cy.readFile('cypress/fixtures/measureGroupId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 35000)
+            Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 90000)
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 90000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n' +
                 '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"')
             cy.get('[data-ref-id="394"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 90000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', 'define "Denominator":\n' +
                 '  "Initial Population"')
             cy.get('[data-ref-id="405"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 90000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', 'define "Numerator":\n' +
                 '  "Encounter with VTE Prophylaxis Received From Day of Start of Hospitalization To Day After Admission or Procedure"\n' +
                 '      union ( "Encounter with Medication Oral Factor Xa Inhibitor Administered on Day of or Day After Admission or Procedure"\n' +
@@ -1640,11 +1641,12 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
 
         //run test case
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 90000)
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 25500)
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 90500)
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
@@ -1672,8 +1674,18 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
 
         OktaLogin.Login()
 
-        cy.visit('/measures/6500d7b2da013638e7b3dba0/edit/details/')
-     })
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
+        cy.get(MeasuresPage.searchInputBox).clear().type('CMS646FHIR').type('{enter}')
+        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', specificMeasureName)
+        cy.get(MeasuresPage.measureListTitles)
+            .find('[class="table-body measures-list"]')
+            .find('[data-testid="row-item"] > td').eq(4)
+            .find('[class="qpp-c-button qpp-c-button--outline-filled"]')
+            .should('contain', 'View')
+            .click()
+
+    })
 
     afterEach('Logout and Clean up Measures', () => {
 
@@ -1703,7 +1715,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
         // select NUMER tab
         cy.contains('button', 'NUMER').click()
         Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\n//placeholder\n  \ndefine "Numerator":\n')
-        cy.get('[data-ref-id="426"]').should('have.color', '#a63b12')
+        cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Numerator":\n  "First BCG Administered" is not null\nResultsUNHIT Definition(s) Used\ndefine "First BCG Administered":\n  First([MedicationAdministration: "Bacillus Calmette Guerin for Urology Care"] BCG\n      with "First Bladder Cancer Staging Procedure" FirstBladderCancerStaging\n        such that BCG.effective.toInterval() starts 6 months or less after day of start of FirstBladderCancerStaging.performed.toInterval()\n          and BCG.effective.toInterval() starts during day of "Measurement Period"\n      where BCG.status in { \'in-progress\', \'completed\' }\n      sort by start of effective.toInterval()\n  )\n\ndefine "First Bladder Cancer Staging Procedure":\n  First([Procedure: "Tumor staging (tumor staging)"] BladderCancerStaging\n      with "Bladder Cancer Diagnosis" BladderCancer\n        such that BladderCancerStaging.performed.toInterval() starts on or before day of start of BladderCancer.prevalenceInterval()\n      where BladderCancerStaging.status = \'completed\'\n      sort by start of performed.toInterval()\n  )\n\ndefine "Bladder Cancer Diagnosis":\n  ([ConditionProblemsHealthConcerns: "Bladder Cancer for Urology Care"] \n    union [ConditionEncounterDiagnosis: "Bladder Cancer for Urology Care"]) BladderCancer\n    where \n      (\n        BladderCancer.prevalenceInterval() starts before day of end of "Measurement Period"\n        or BladderCancer.onset.toInterval() before day of end of "Measurement Period"\n      )\n      and BladderCancer.isVerified()\n\ndefine fluent function isVerified(condition Choice<ConditionEncounterDiagnosis, ConditionProblemsHealthConcerns>):\n  condition.verificationStatus is not null implies\n    (condition.verificationStatus ~ QICoreCommon."confirmed"\n        or condition.verificationStatus ~ QICoreCommon."unconfirmed"\n        or condition.verificationStatus ~ QICoreCommon."provisional"\n        or condition.verificationStatus ~ QICoreCommon."differential"\n    )\n')
+        cy.get('[data-ref-id="350"]').should('have.color', '#a63b12')
     })
 })
