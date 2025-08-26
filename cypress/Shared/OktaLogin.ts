@@ -91,6 +91,7 @@ export class OktaLogin {
             }
 
         })
+        cy.reload()
         cy.get(LandingPage.newMeasureButton).should('be.visible')
         cy.log('Login Successful')
     }
