@@ -105,7 +105,7 @@ describe('Qi Core Measure Reference', () => {
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
         cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete <p>Text 1</p>?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete Text 1?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })

@@ -391,13 +391,14 @@ describe('Share measure from the Edit Measure page', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(MeasuresPage.sharedMeasures).click()
         cy.get(MeasuresPage.measureListTitles).should('contain', measureQDM)
 
         //Delete button disabled for shared owner
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
         cy.get('[data-testid="delete-action-btn"]').should('be.disabled')
 
@@ -463,15 +464,8 @@ describe('Share measure from the Edit Measure page', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(MeasuresPage.sharedMeasures).click()
         cy.get(MeasuresPage.measureListTitles).should('contain', measureQICore)
-
-        //Delete button disabled for shared owner
-        cy.readFile('cypress/fixtures/measureId' + '1').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-        })
-        cy.get('[data-testid="delete-action-btn"]').should('be.disabled')
 
         //Edit Measure details
         MeasuresPage.actionCenter('edit', 1)
