@@ -83,7 +83,9 @@ describe('QDM Measure Set - ownership validations', () => {
 
     it('Non Measure owner unable to add Measure Set', () => {
 
-        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.ownedMeasures).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure set page
