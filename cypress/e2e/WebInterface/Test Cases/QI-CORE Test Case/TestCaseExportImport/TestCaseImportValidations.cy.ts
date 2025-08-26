@@ -122,10 +122,11 @@ describe('Test Case Import: functionality tests', () => {
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //navigating to the All Measures tab
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')

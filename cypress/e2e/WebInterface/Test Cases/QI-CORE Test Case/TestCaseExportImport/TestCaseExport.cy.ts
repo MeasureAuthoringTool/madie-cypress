@@ -85,10 +85,10 @@ describe('QI-Core Single Test Case Export', () => {
     it('Non-owner of Measure: Export single QI-Core Test case', () => {
 
         OktaLogin.AltLogin()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         MeasuresPage.actionCenter('edit')
 
