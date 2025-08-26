@@ -80,6 +80,7 @@ export class CQLEditorPage {
 
     //CQL Builder Sub tabs
     public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
+    public static readonly collapseCQLBuilder = '[data-testid="collapsed-button"]'
 
     //Includes page
     public static readonly editLibraryAliasInput = '[data-testid="library-alias-input"]'
