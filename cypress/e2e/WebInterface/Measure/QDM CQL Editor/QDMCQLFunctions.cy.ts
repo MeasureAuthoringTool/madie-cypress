@@ -234,12 +234,18 @@ describe('QDM CQL Functions', () => {
         cy.get(CQLEditorPage.savedFunctionsTab).should('contain.text', 'Saved Functions (3)')
 
         //Add errors to CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}{enter}define \"test\":{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click()
+
 
         //Navigate to Functions tab
+        cy.get(CQLEditorPage.expandCQLBuilder).wait(1000).click()
+
+        cy.get(CQLEditorPage.collapseCQLBuilder).wait(1000).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.functionsTab).click()
+        cy.get(CQLEditorPage.definitionsTab).wait(1000).click()
+        cy.get(CQLEditorPage.functionsTab).wait(1000).click()
+
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
         //Navigate to Saved Functions tab

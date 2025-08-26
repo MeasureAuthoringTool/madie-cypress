@@ -459,12 +459,16 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (7)')
 
         //Add errors to CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}{enter}define \"test\":{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(700).click()
 
         //Navigate to Definitions tab
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.collapseCQLBuilder).wait(1000).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.functionsTab).wait(1000).click()
+        cy.get(CQLEditorPage.definitionsTab).wait(1000).click()
+        Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 90000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
         //Navigate to Saved Definitions tab
@@ -552,7 +556,7 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
 
         //Navigate to All Measures page
-        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
