@@ -16,7 +16,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, {measureCql: errorCql})
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
@@ -50,7 +50,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.get(TestCasesPage.testCaseExecutionError).should('not.exist')
         cy.get(CQLEditorPage.minimizedAlertsTab).should('be.visible')
 
-         // Click on the Alerts tab
+        // Click on the Alerts tab
         cy.get(CQLEditorPage.minimizedAlertsTab).click()
 
         // Back to start - red box shows, alerts tab is gone
@@ -59,7 +59,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
     })
 
     it('Test case shift dates failure shows error', () => {
-    
+
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -83,7 +83,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         // known issue - warning will be in a 2nd box, separate from errors
         cy.get(TestCasesPage.executionContextWarning).should('be.visible')
         cy.get('[data-testid="warn-title"]').should('have.text', 'The following Test Case dates could not be shifted. Please try again. If the issue continues, please contact helpdesk.abc - empty testcase')
-    
+
         // clear both - don't need qualifier .eq() for 2nd one, it's the only id
         cy.get(CQLEditorPage.minimizeButton).eq(1).click()
         cy.get(CQLEditorPage.minimizeButton).click()
@@ -109,7 +109,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the test cases
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, {measureCql: errorCql})
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
@@ -121,7 +121,9 @@ describe('Minimize Alerts - Non-owner can also minimize to review the test cases
         OktaLogin.Logout()
 
         OktaLogin.AltLogin()
-        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.ownedMeasures).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         MeasuresPage.actionCenter('edit')
     })
 
@@ -148,7 +150,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the test cases
         cy.get(TestCasesPage.testCaseExecutionError).should('not.exist')
         cy.get(CQLEditorPage.minimizedAlertsTab).should('be.visible')
 
-         // Click on the Alerts tab
+        // Click on the Alerts tab
         cy.get(CQLEditorPage.minimizedAlertsTab).click()
 
         // Back to start - red box shows, alerts tab is gone
