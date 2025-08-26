@@ -373,8 +373,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.sharedMeasures, 20700)
+        cy.get(MeasuresPage.sharedMeasures).click().wait(2000)
         //wait until page / tabs loads
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 60000)
 
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -491,8 +493,11 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.sharedMeasures, 20700)
+        cy.get(MeasuresPage.sharedMeasures).click().wait(2000)
         //wait until page / tabs loads
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 60000)
+
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
