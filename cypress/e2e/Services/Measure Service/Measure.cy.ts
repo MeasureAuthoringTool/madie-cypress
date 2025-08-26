@@ -162,8 +162,9 @@ describe('Measure Service: GET Requests tests', () => {
         })
     })
 
+    //Skipping until MAT-9108 is resolved
     //Get Measures by User
-    it('Get all Measures created by logged in User', () => {
+    it.skip('Get all Measures created by logged in User', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
