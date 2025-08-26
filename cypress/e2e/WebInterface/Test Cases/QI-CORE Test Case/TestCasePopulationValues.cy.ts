@@ -387,7 +387,7 @@ describe('Test Case Population dependencies', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it.only('Verify Test Case population dependencies for Proportion Measures', () => {
+    it('Verify Test Case population dependencies for Proportion Measures', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -529,7 +529,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it.only('Test Case Population value options are limited to those that are defined from Measure Group', () => {
+    it('Test Case Population value options are limited to those that are defined from Measure Group', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
