@@ -20,8 +20,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
     const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newMeasureName = measureName + randValue + 2
+    newCqlLibraryName = CqlLibraryName + randValue + 2
 
     beforeEach('Create Measure and login', () => {
 
@@ -300,8 +300,8 @@ describe('No values in QDM PC fields, when no CQL', () => {
     
     const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newMeasureName = measureName + randValue + 5
+    newCqlLibraryName = CqlLibraryName + randValue + 5
 
     beforeEach('Create Measure and login', () => {
 
@@ -346,8 +346,8 @@ describe('Save Population Criteria on QDM measure', () => {
     
     const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newMeasureName = measureName + randValue + 1
+    newCqlLibraryName = CqlLibraryName + randValue + 1
 
     beforeEach('Create Measure and login', () => {
 
@@ -403,8 +403,8 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
     const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newMeasureName = measureName + randValue + 8
+    newCqlLibraryName = CqlLibraryName + randValue + 8
 
     beforeEach('Create Measure and login', () => {
 
@@ -463,8 +463,8 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
     const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newMeasureName = measureName + randValue + 6
+    newCqlLibraryName = CqlLibraryName + randValue + 6
 
     beforeEach('Create Measure and login', () => {
 
