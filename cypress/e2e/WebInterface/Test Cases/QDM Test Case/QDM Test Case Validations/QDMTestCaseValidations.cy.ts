@@ -24,6 +24,7 @@ let altCqlLibraryName = ''
 let measureScoringCohort = 'Cohort'
 const qdmMeasureCQLwInvalidValueset = QdmCql.simpleQDM_CQL_invalid_valueset
 const qdmMeasureCQLwNonVsacValueset = QdmCql.QDMTestCaseCQLNonVsacValueset
+const qdmCqlFullElementSection = QdmCql.QDMTestCaseCQLFullElementSection
 const measureQDMCQL = QdmCql.QDM4TestCaseElementsAttributes
 
 const measureData: CreateMeasureOptions = {}
@@ -60,8 +61,9 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
     it('Fields on Test Case page are not editable by Non Measure Owner', () => {
 
         //navigate to the all measures tab
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(LandingPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
@@ -282,10 +284,6 @@ describe('Edit Test Case Validations', () => {
 describe('Dirty Check Validations', () => {
 
     beforeEach('Create QDM Measure, Test Case and Login', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
@@ -293,11 +291,10 @@ describe('Dirty Check Validations', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = measureQDMCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
-        OktaLogin.AltLogin()
+        OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
@@ -312,7 +309,7 @@ describe('Dirty Check Validations', () => {
 
     afterEach('Logout and cleanup', () => {
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Validate dirty check on the test case title, in the test case details tab', () => {
@@ -347,6 +344,7 @@ describe('Dirty Check Validations', () => {
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
         //verify that the discard modal appears
         Utilities.clickOnDiscardChanges()
+        cy.contains('Base Configuration').should('be.visible')
     })
 
     it('Validate dirty check on Testcase Expected/Actual tab', () => {
@@ -659,7 +657,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         //log into MADiE
         OktaLogin.Login()
@@ -720,15 +718,15 @@ describe('Non Boolean Population basis Expected values', () => {
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
-        measureData.measureScoring = measureScoringCohort
+        measureData.measureScoring = 'Proportion'
         measureData.patientBasis = 'false'
-        measureData.measureCql = qdmMeasureCQLwNonVsacValueset
+        measureData.measureCql = qdmCqlFullElementSection
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Denominator', '', 'Numerator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     afterEach('Logout and Clean up', () => {
@@ -782,4 +780,3 @@ describe('Non Boolean Population basis Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
     })
 })
-
