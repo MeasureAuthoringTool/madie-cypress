@@ -74,12 +74,6 @@ describe('Successful QDM Measure Export', () => {
 
     })
 
-    after('Clean up and Logout', () => {
-
-        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
-
-    })
-
     it('Validate the contents of the Human Readable HTML file', () => {
 
         //remove the baseUrl so that we can visit a local file
