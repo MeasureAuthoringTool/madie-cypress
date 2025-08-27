@@ -117,14 +117,16 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
 
+
         // check tc count is correct (original measure +1)
         TestCasesPage.grabValidateTestCaseNumber(1)
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
+
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(29)
+        TestCasesPage.grabTestCaseId(2)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
