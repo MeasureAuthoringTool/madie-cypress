@@ -487,7 +487,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         Utilities.waitForElementToNotExist(TestCasesPage.qdmManifestSuccess, 25000)
         //confirm that manifest drop down has selected value
         cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-2022-05-05')
-        cy.reload()
+
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
