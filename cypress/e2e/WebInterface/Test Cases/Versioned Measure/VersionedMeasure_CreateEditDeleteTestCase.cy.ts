@@ -161,6 +161,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
 
         //verify user can delete newly created test case after versioning
         TestCasesPage.checkTestCase(2)
+        TestCasesPage.checkTestCase(2)
 
         cy.get(TestCasesPage.actionCenterDelete).should('be.enabled')
 
