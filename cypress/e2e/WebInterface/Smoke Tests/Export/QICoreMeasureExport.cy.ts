@@ -193,11 +193,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             })
     })
 
-    after('Clean up', () => {
-
-        Utilities.deleteMeasure(measureNameFC, CqlLibraryNameFC)
-    })
-
     it('Verify content of a Qi Core measure HR file, before versioning', () => {
 
         cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR4.zip', { timeout: 15000 })
