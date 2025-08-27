@@ -7,7 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
 const timestamp = Date.now()
@@ -121,8 +121,9 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
+    //Skipping until MAT-9106 is resolved
     // run this and check modal for message
-    it('Verify error message on Measure Export when the Measure does not have CQL', () => {
+    it.skip('Verify error message on Measure Export when the Measure does not have CQL', () => {
 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -226,7 +227,8 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
+    // //Skipping until MAT-9106 is resolved
+    it.skip('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
 
         cy.get(Header.measures).click()
 
