@@ -125,6 +125,7 @@ export class MeasuresPage {
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
@@ -206,6 +207,7 @@ export class MeasuresPage {
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
                 cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
                 })

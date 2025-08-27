@@ -8,6 +8,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
@@ -367,19 +368,22 @@ describe('Test Case Population dependencies', () => {
     before('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, proportionMeasureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial PopulationOne', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne', 'Boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial PopulationOne', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne', 'Boolean')
-        OktaLogin.Login()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
+
     })
 
     after('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -507,20 +511,21 @@ describe('Test Case Expected Measure Group population values based on initial me
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(null, null, null, null, null, 'Procedure')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(null, null, null, null, null, 'Procedure')
-        OktaLogin.Login()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
