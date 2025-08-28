@@ -125,8 +125,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
-    //Skipping until MAT-9106 is resolved
-    it.skip('Verify error message on Measure Export when the Measure does not have CQL', () => {
+    it('Verify error message on Measure Export when the Measure does not have CQL', () => {
 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -233,8 +232,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
-    //Skipping until MAT-9106 is resolved
-    it.skip('Verify error message on Measure Export when the Population Criteria does not match with CQL', () => {
+    it('Verify error message on Measure Export when the Population Criteria does not match with CQL', () => {
 
         cy.get(Header.measures).click()
 
