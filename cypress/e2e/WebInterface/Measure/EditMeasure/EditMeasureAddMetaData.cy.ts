@@ -3,11 +3,11 @@ import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMea
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Header } from "../../../../Shared/Header"
-import { Utilities } from "../../../../Shared/Utilities"
-import { LandingPage } from "../../../../Shared/LandingPage"
+import {MadieObject, PermissionActions, Utilities} from "../../../../Shared/Utilities"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import {Environment} from "../../../../Shared/Environment"
 
 const now = Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -16,6 +16,7 @@ let CqlLibraryName = 'MeasureDefsLib' + now
 let newCqlLibraryName = ''
 let newMeasureName = ''
 const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
+let harpUserALT = Environment.credentials().harpUserALT
 
 describe('Edit Measure: Add Meta Data', () => {
 
@@ -407,6 +408,63 @@ describe('Generate CMS ID for QDM Measure', () => {
         })
 
         cy.log('CMS ID Generated successfully')
+
+    })
+})
+
+describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', () => {
+
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue + 8
+
+    beforeEach('Create Measure', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
+            '2012-01-02', '2013-01-01')
+
+    })
+
+    afterEach('Log out and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Verify that the Generate CMS ID button is disabled for Non Measure owners', () => {
+
+        OktaLogin.AltLogin()
+
+        //Navigate to All Measures page
+        cy.get(MeasuresPage.allMeasuresTab).should('exist')
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('view')
+
+        cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).should('not.be.enabled')
+
+    })
+
+    it('Verify that the Generate CMS ID button is disabled for Shared owners', () => {
+
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+
+        OktaLogin.AltLogin()
+
+        //Navigate to All Measures page
+        cy.get(MeasuresPage.allMeasuresTab).should('exist')
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('view')
+
+        cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).should('not.be.enabled')
 
     })
 })
