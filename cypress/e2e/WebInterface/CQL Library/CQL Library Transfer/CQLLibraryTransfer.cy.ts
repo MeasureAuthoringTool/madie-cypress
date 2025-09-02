@@ -1,9 +1,10 @@
 import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import {CQLLibraryPage, EditLibraryActions} from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../../Shared/Utilities"
+import {MeasuresPage} from "../../../../Shared/MeasuresPage";
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -100,6 +101,95 @@ describe('CQL Library Transfer', () => {
         cy.log('CQL Library Updated Successfully')
 
     })
+})
+
+//Skipping until feature flag TransferLibrary is removed
+describe.skip('CQL Library Transfer - Action Centre buttons', () => {
+
+    newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
+
+    beforeEach('Create Library and Set Access Token', () => {
+
+        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+    })
+
+    it('Verify CQL Library owner can transfer Library from Action centre transfer button on Owned Libraries page', () => {
+
+        //Login as Regular user and transfer Library to ALT user
+        OktaLogin.Login()
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).click()
+
+        //Share Library with ALT user
+        CQLLibrariesPage.cqlLibraryActionCenter('transfer')
+
+        //Verify message on the transfer pop up screen
+        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following library(s). All versions and drafts will be transferred, so only the most recent library name appears here.')
+        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        cy.get(MeasuresPage.transferContinueButton).click()
+
+        //Logout and Delete Library with ALT user
+        OktaLogin.UILogout()
+        Utilities.deleteLibrary(newCQLLibraryName, false)
+
+    })
+
+    it('Verify CQL Library owner can transfer Library from Action centre transfer button on Edit Library page', () => {
+
+        //Login as Regular user and transfer Library to ALT user
+        OktaLogin.Login()
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+
+        //Share Library with ALT user
+        CQLLibraryPage.actionCenter(EditLibraryActions.transfer)
+
+        //Verify message on the transfer pop up screen
+        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following library(s). All versions and drafts will be transferred, so only the most recent library name appears here.')
+        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        cy.get(MeasuresPage.transferContinueButton).click()
+
+        //Logout and Delete Library with ALT user
+        OktaLogin.UILogout()
+        Utilities.deleteLibrary(newCQLLibraryName, false)
+    })
+
+    it('Verify Transfer button disabled for non Library owner', () => {
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
+
+        Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 60000)
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
+
+        //Select the Library
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+
+        cy.get('[data-testid="transfer-action-tooltip"]').should('not.be.enabled')
+        cy.get('[data-testid="transfer-action-tooltip"]').trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip').should('contain.text', 'You cannot transfer a library you do not own, you have selected at least 1 library that you do not own')
+
+        //Logout and Delete Measure with Regular user
+        OktaLogin.UILogout()
+        Utilities.deleteLibrary(newCQLLibraryName)
+    })
+
 })
 
 describe('CQL Library Transfer - Multiple instances', () => {
