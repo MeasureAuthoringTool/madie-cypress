@@ -162,13 +162,12 @@ describe('Measure Service: GET Requests tests', () => {
         })
     })
 
-    //Skipping until MAT-9108 is resolved
     //Get Measures by User
-    it.skip('Get all Measures created by logged in User', () => {
+    it('Get all Measures created by logged in User', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measures?currentUser=true',
+                url: '/api/measures?ownershipTypes=OWNED',
                 method: 'GET',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
@@ -184,6 +183,7 @@ describe('Measure Service: GET Requests tests', () => {
         })
     })
 })
+
 describe('Measure Service: Error validations', () => {
     beforeEach('Set Access Token', () => {
 

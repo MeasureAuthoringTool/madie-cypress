@@ -960,8 +960,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
     })
 })
 
-//Skipping until MAT-9106 is resolved
-describe.skip('Measure bundle end point returns Supplemental data elements and Risk adjustment variables', () => {
+describe('Measure bundle end point returns Supplemental data elements and Risk adjustment variables', () => {
 
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
