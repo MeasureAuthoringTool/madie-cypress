@@ -36,6 +36,10 @@ export class MeasuresPage {
     public static readonly exportingSpinner = '.spinner'
     public static readonly exportFinishedCheck = '[data-testid="CheckCircleOutlineIcon"]'
 
+    //transfer
+    public static readonly newOwnerTextbox = '[data-testid="harp-id-input"]'
+    public static readonly transferContinueButton ='[data-testid="transfer-save-button"]'
+
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
     public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'
