@@ -58,10 +58,10 @@ describe('Check extensions data in QiCore 4.1.1 export', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('export')
-        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR4.zip', {timeout: 5500})
+        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR.zip', {timeout: 5500})
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', {zipFile: 'AutoTestTitle-v0.0.000-FHIR4.zip', path: downloadsFolder})
+        cy.task('unzipFile', {zipFile: 'AutoTestTitle-v0.0.000-FHIR.zip', path: downloadsFolder})
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -109,10 +109,10 @@ describe('Check extensions data in QiCore 6.0.0 export', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('export')
-        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', {timeout: 5500})
+        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR.zip', {timeout: 5500})
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', {zipFile: 'AutoTestTitle-v0.0.000-FHIR6.zip', path: downloadsFolder})
+        cy.task('unzipFile', {zipFile: 'AutoTestTitle-v0.0.000-FHIR.zip', path: downloadsFolder})
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)

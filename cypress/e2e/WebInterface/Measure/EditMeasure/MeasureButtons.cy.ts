@@ -8,7 +8,6 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
 import { Environment } from "../../../../Shared/Environment"
-import { LandingPage } from "../../../../Shared/LandingPage"
 import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
 
 const path = require('path')
@@ -18,12 +17,12 @@ const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-fo
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
+let qdmMeasureCQL = QdmCql.simpleQDM_CQL
 let measureQICore = ''
 let measureQDM = ''
 let qdmCQLLibrary = ''
 let qiCoreCQLLibrary = ''
 let harpUserALT = Environment.credentials().harpUserALT
-let qdmMeasureCQL = QdmCql.simpleQDM_CQL
 
 const measureData: CreateMeasureOptions = {}
 
@@ -313,7 +312,7 @@ describe('Export measure on the Edit Measure page', () => {
     })
 
     it('Export QiCore 4.1.1 measure', () => {
-        const exportName = 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'
+        const exportName = 'eCQMTitle4QICore-v0.0.000-FHIR.zip'
         const fullPathToExport = path.join(downloadsFolder, exportName)
 
         OktaLogin.Login()

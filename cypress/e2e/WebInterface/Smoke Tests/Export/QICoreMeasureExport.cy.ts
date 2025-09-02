@@ -114,7 +114,7 @@ describe('QI-Core Measure Export', () => {
 
         MeasuresPage.actionCenter('export')
 
-        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 15000 })
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 15000 })
         cy.log('Successfully verified zip file export')
 
         OktaLogin.Logout()
@@ -122,10 +122,10 @@ describe('QI-Core Measure Export', () => {
 
     it('Unzip the downloaded file and verify file types for QI-Core Measure', () => {
 
-        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 15000 })
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 15000 })
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -184,10 +184,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR4.zip', { timeout: 5500 })
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -195,7 +195,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
     it('Verify content of a Qi Core measure HR file, before versioning', () => {
 
-        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR4.zip', { timeout: 15000 })
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 15000 })
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
@@ -229,9 +229,9 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 '[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\nRate Aggregation\t\n\n' +
                 'test rA\n\n\nImprovement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase: ' +
                 '\'Increased score indicates improvement\']\nInitial Population\tID: InitialPopulation_1\nDescription:\n\n' +
-                'test IP P\n\nLogic Definition: Qualifying Encounters\nDenominator\tID: Denominator_1\nDescription:\n\n' +
-                'test d P\n\nLogic Definition: Qualifying Encounters\nNumerator\tID: Numerator_1\nDescription:\n\ntest n P\n\n' +
-                'Logic Definition: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
+                'test IP P\n\nCriteria: Qualifying Encounters\nDenominator\tID: Denominator_1\nDescription:\n\n' +
+                'test d P\n\nCriteria: Qualifying Encounters\nNumerator\tID: Numerator_1\nDescription:\n\ntest n P\n\n' +
+                'Criteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
                 'https://madie.cms.gov/Library/'+ CqlLibraryNameFC + '\nContents\tPopulation Criteria\n' +
                 'Logic Definitions\nTerminology\nDependencies\nData Requirements')
 
@@ -248,7 +248,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                 '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
                 '    where ValidEncounter.period during "Measurement Period"\n' +
-                '\n' +
+                'Definition\n' +
                 'Denominator\n' +
                 '\n' +
                 'define "Qualifying Encounters":\n' +
@@ -258,7 +258,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                 '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
                 '    where ValidEncounter.period during "Measurement Period"\n' +
-                '\n' +
+                'Definition\n' +
                 'Numerator\n' +
                 '\n' +
                 'define "Qualifying Encounters":\n' +
@@ -356,7 +356,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
                 '\n' +
-                'Generated using version 0.4.8 of the sample-content-ig Liquid templates')
+                'Generated using version 0.4.9 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -418,10 +418,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 500000 }).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -429,7 +429,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
     it('Verify the content of the HR file, for a Qi Core Measure, after the measure has been versioned', () => {
 
-        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 15000 })
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 15000 })
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
@@ -462,9 +462,9 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 '[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\nRate Aggregation\t\n\n' +
                 'test rA\n\n\nImprovement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase:' +
                 ' \'Increased score indicates improvement\']\nInitial Population\tID: InitialPopulation_1\nDescription:\n\n' +
-                'test IP P\n\nLogic Definition: Qualifying Encounters\nDenominator\tID: Denominator_1\nDescription:\n\n' +
-                'test d P\n\nLogic Definition: Qualifying Encounters\nNumerator\tID: Numerator_1\nDescription:\n\n' +
-                'test n P\n\nLogic Definition: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
+                'test IP P\n\nCriteria: Qualifying Encounters\nDenominator\tID: Denominator_1\nDescription:\n\n' +
+                'test d P\n\nCriteria: Qualifying Encounters\nNumerator\tID: Numerator_1\nDescription:\n\n' +
+                'test n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
                 'https://madie.cms.gov/Library/' + CqlLibraryNameFC + '\nContents\tPopulation Criteria\n' +
                 'Logic Definitions\nTerminology\nDependencies\nData Requirements')
 
@@ -480,7 +480,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                 '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
                 '    where ValidEncounter.period during "Measurement Period"\n' +
-                '\n' +
+                'Definition\n' +
                 'Denominator\n' +
                 '\n' +
                 'define "Qualifying Encounters":\n' +
@@ -490,7 +490,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                 '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
                 '    where ValidEncounter.period during "Measurement Period"\n' +
-                '\n' +
+                'Definition\n' +
                 'Numerator\n' +
                 '\n' +
                 'define "Qualifying Encounters":\n' +
@@ -588,7 +588,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
                 '\n' +
-                'Generated using version 0.4.8 of the sample-content-ig Liquid templates')
+                'Generated using version 0.4.9 of the sample-content-ig Liquid templates')
         })
     })
 })
