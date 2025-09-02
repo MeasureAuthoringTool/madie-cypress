@@ -5,25 +5,28 @@ import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
+import { QiCore4Cql, QiCore6Cql } from "../../../../../Shared/FHIRMeasuresCQL"
 import { Header } from "../../../../../Shared/Header"
 
 const now = Date.now()
 const measureName = 'CopyTo' + now
 const cqlLibraryName = 'CopyToLib' + now
 const testCase: TestCase = {
-    title: 'DEXA3MonthsAfterADTEdge',
+    title: 'Exam1MinBeforeAdmit',
     description: 'invalid on purpose',
-    group: 'NUMERPass'
+    group: 'HeartRateFail'
 }
-const existingMeasureCql = QiCore4Cql.BoneDensityEvalProstateCancer.replace('BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR', measureName)
+const existingMeasureCql = QiCore6Cql.cqlCMS529.replace('MyVersion529today', measureName)
 const basicCql = QiCore4Cql.stndBasicQICoreCQL.replace('TestLibrary1709929148231865', measureName)
+
+// need to find a new measure for this
 
 describe('Copy test cases from existing measure into new measure', () => {
     /*
         Using the static measure as our basis - assuming this will always be in MADiE
         Bone Density Evaluation for Patients with Prostate Cancer and Receiving Androgen Deprivation TherapyFHIR 
-        CMS id: 645FHIR
+        CMS id: 529FHIR
+        version 0.5.000
         We navigate straight to the measure in this test since the URL should always be the same (except for obvious env. differences)
     */
 
@@ -31,15 +34,12 @@ describe('Copy test cases from existing measure into new measure', () => {
         measureCql: existingMeasureCql,
     }
     const populations: MeasureGroups = {
-        initialPopulation: 'Initial Population',
-        denominator: 'Denominator',
-        numerator: 'Numerator',
-        denomException: 'Denominator Exception'
+        initialPopulation: 'Initial Population'
     }
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Proportion, populations)
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, measureOptions)
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.encounter, MeasureScoring.Cohort, populations)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description)
         OktaLogin.Login()
     })
@@ -52,8 +52,8 @@ describe('Copy test cases from existing measure into new measure', () => {
 
     it('Measures match population criteria - expected values will copy', () => {
 
-        // go to last 4.1.1 version of 645FHIR 
-        cy.visit('/measures/6500d9bfda013638e7b3dbcf/edit/details/')
+        // go to specific version of 529FHIR 
+        cy.visit('/measures/68066c8ec4eb2a08bc890e67/edit/details/')
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -63,8 +63,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(TestCasesPage.paginationLimitSelect).click()
         cy.get(TestCasesPage.paginationLimitAll).click()
 
-        // select all, copy to, select my new measure, save
-        Utilities.checkAll()
+        // select specific test case, copy to, select my new measure, save
+        TestCasesPage.checkTestCase(50)
 
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
@@ -81,22 +81,18 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // check tc count is correct (original measure +1)
-        TestCasesPage.grabValidateTestCaseNumber(50)
+        TestCasesPage.grabValidateTestCaseNumber(2)
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(49)
+        TestCasesPage.grabTestCaseId(2)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '1')
     })
 
     it('Measures do not match population criteria - test cases copy but expected values do not', () => {
@@ -106,10 +102,12 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
 
         // set IP
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
@@ -117,8 +115,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
-        // go to last 4.1.1 version of 645FHIR 
-        cy.visit('/measures/6500d9bfda013638e7b3dbcf/edit/details/')
+        // go to specific version of 529FHIR 
+        cy.visit('/measures/68066c8ec4eb2a08bc890e67/edit/details/')
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -128,8 +126,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(TestCasesPage.paginationLimitSelect).click()
         cy.get(TestCasesPage.paginationLimitAll).click()
 
-        // select all, copy to, select my new measure, save
-        Utilities.checkAll()
+        // select specific test case, copy to, select my new measure, save
+        TestCasesPage.checkTestCase(50)
 
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
@@ -146,19 +144,19 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // check tc count is correct (original measure +1)
-        TestCasesPage.grabValidateTestCaseNumber(50)
+        TestCasesPage.grabValidateTestCaseNumber(2)
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(49)
+        TestCasesPage.grabTestCaseId(2)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
-        /// these differ from previous test since it's a cohort measure now
-        cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
+        /// these differ from previous test since it's a proportion measure now
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
     })
 })
 
@@ -185,7 +183,7 @@ describe('Copy to new measure - partial success case', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
         Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 1)
     })
