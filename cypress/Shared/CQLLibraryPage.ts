@@ -11,7 +11,8 @@ export enum EditLibraryActions {
     delete,
     version,
     draft,
-    share
+    share,
+    transfer
 }
 
 export type CreateLibraryOptions = {
@@ -82,6 +83,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
+    public static readonly actionCenterTransfer = '[data-testid="transfer-action-btn"]'
 
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
@@ -320,6 +322,14 @@ export class CQLLibraryPage {
                 cy.get(this.actionCenterShare).should('be.visible')
                 cy.get(this.actionCenterShare).should('be.enabled')
                 cy.get(this.actionCenterShare).click()
+
+                break
+            }
+            case EditLibraryActions.transfer: {
+
+                cy.get(this.actionCenterTransfer).should('be.visible')
+                cy.get(this.actionCenterTransfer).should('be.enabled')
+                cy.get(this.actionCenterTransfer).click()
 
                 break
             }
