@@ -226,8 +226,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    // //Skipping until MAT-9106 is resolved
-    it.only('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
+    it('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
 
         cy.get(Header.measures).click()
 
