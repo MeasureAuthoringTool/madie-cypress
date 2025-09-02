@@ -133,13 +133,17 @@ describe.skip('Measure Transfer - Action Centre buttons', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('transfer')
+        //Verify message on the transfer pop up screen
+        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following measure(s). All versions and drafts will be transferred, so only the most recent measure name appears here.')
+        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        cy.get(MeasuresPage.transferContinueButton).click()
 
         //Logout and Delete Measure with ALT user
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, true)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false)
 
     })
 
@@ -150,13 +154,15 @@ describe.skip('Measure Transfer - Action Centre buttons', () => {
         //Navigate to Edit Measure page
         MeasuresPage.actionCenter('edit')
         EditMeasurePage.actionCenter(EditMeasureActions.transfer)
+        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        cy.get(MeasuresPage.transferContinueButton).click()
 
         //Logout and Delete Measure with ALT user
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, true)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false)
 
     })
 
