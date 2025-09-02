@@ -7,16 +7,14 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
-let measureNameTimeStamp = 'TestMeasure' + Date.now()
-let measureName = measureNameTimeStamp
-let CqlLibraryName = 'TestLibrary' + Date.now()
+const measureName = 'PPQiCorePT' + Date.now()
+const CqlLibraryName = 'PPQiCorePTLib' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-
-let measureCQL = MeasureCQL.CQL_Populations
+const measureCQL = MeasureCQL.CQL_Populations
+const zipFile = 'eCQMTitle4QICore-v1.0.000-FHIR.zip'
 
 describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
 
@@ -24,9 +22,9 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
     before('Create New Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+      
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -35,16 +33,12 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        OktaLogin.Login()
-
     })
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
 
-        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.measureDetailsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureDetailsTab).click()
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -120,27 +114,27 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         MeasuresPage.actionCenter('export')
 
-        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip')
+        cy.verifyDownload(zipFile)
         cy.log('Successfully verified zip file export')
         console.log('Successfully verified zip file export')
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
     })
 
     it('Unzip the downloaded file and verify file types', () => {
 
-        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip')
+        cy.verifyDownload(zipFile)
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: zipFile, path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 console.log('unzipFile Task finished')
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.html')
+        cy.readFile(path.join(downloadsFolder, zipFile))
+            .should('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.html')
             .and('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.xml')
             .and('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.json')
     })

@@ -53,10 +53,10 @@ describe('QI-Core Measure Export with Info', () => {
         Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 60000)
 
         MeasuresPage.actionCenter('export', null, exportOptions)
-        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', { timeout: 5500 })
+        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: 'AutoTestTitle-v0.0.000-FHIR6.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'AutoTestTitle-v0.0.000-FHIR.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -119,10 +119,10 @@ describe('QI-Core Measure Export for Publish', () => {
         Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 60000)
 
         MeasuresPage.actionCenter('export', null, exportOptions)
-        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', { timeout: 5500 })
+        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: 'AutoTestTitle-v0.0.000-FHIR6.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'AutoTestTitle-v0.0.000-FHIR.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)

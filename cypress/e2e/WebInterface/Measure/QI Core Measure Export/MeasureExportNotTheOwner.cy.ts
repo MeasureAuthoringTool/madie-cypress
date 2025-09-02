@@ -13,7 +13,7 @@ const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const measureCQL = MeasureCQL.zipfileExportQICore
-const expectedFileName = 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'
+const expectedFileName = 'eCQMTitle4QICore-v0.0.000-FHIR.zip'
 
 describe('FHIR Measure Export, Not the Owner', () => {
 
