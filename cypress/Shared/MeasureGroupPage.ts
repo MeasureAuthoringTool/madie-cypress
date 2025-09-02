@@ -29,8 +29,8 @@ export enum MeasureScoring {
 // valid for proportion, cohort, ratio
 export type MeasureGroups = {
     initialPopulation: string,
-    denominator: string,
-    numerator: string,
+    denominator?: string,
+    numerator?: string,
     denomExclusion?: string,
     numExclusion?: string,
     denomException?: string,
@@ -768,7 +768,6 @@ export class MeasureGroupPage {
         let measureGroupPath = 'cypress/fixtures/groupId'
         const numUuid = uuidv4()
         const denomUuid = uuidv4()
-
         if (denominatorObservation) {
             denominatorObservation.id = uuidv4()
             denominatorObservation.criteriaReference = denomUuid
@@ -785,20 +784,24 @@ export class MeasureGroupPage {
                 "name": "initialPopulation",
                 "definition": populations.initialPopulation,
                 "description": "<p>initial pop</p>"
-            },
-            {
+            }
+        ]
+        if (populations.denominator) {
+            popsArray.push({
                 "id": denomUuid,
                 "name": "denominator",
                 "definition": populations.denominator,
                 "description": "<p>denom</p>"
-            },
-            {
+            })
+        }
+        if (populations.numerator) {
+            popsArray.push({
                 "id": numUuid,
                 "name": "numerator",
                 "definition": populations.numerator,
                 "description": "<p>num</p>"
-            },
-        ]
+            })
+        }
         if (populations.denomExclusion) {
             popsArray.push({
                 "id": uuidv4(),

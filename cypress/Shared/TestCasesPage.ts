@@ -3,6 +3,7 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import dateTimeISO = CypressCommandLine.dateTimeISO
 import { CQLEditorPage } from "./CQLEditorPage"
+import { MeasuresPage } from "./MeasuresPage"
 
 export type TestCase = {
     title: string,
@@ -908,6 +909,7 @@ export class TestCasesPage {
                 cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
 
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                    Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
                     cy.get('[data-testid="measure-name-' + id + '_select"]')
                         .find('input')
                         .focus()
