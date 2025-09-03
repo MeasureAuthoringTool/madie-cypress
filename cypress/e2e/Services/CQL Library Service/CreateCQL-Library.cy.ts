@@ -145,7 +145,7 @@ describe('CQL Library Service: Create CQL Library', () => {
 })
 
 
-describe.only('CQL Library Name validations', () => {
+describe('CQL Library Name validations', () => {
 
     let apiCQLLibraryName = 'TestLibrary' + Date.now()
     let CQLLibraryPublisher = 'SemanticBits'
