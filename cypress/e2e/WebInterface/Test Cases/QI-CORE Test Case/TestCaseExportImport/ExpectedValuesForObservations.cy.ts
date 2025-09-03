@@ -109,7 +109,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.TestCasesSuccessMsg).should('be.visible')
         Utilities.waitForElementToNotExist(TestCasesPage.TestCasesSuccessMsg, 10000)
 
-        const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
+        const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
         // delete all tc
@@ -205,7 +205,7 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.TestCasesSuccessMsg).should('be.visible')
         Utilities.waitForElementToNotExist(TestCasesPage.TestCasesSuccessMsg, 10000)
 
-        const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
+        const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
         // delete all tc

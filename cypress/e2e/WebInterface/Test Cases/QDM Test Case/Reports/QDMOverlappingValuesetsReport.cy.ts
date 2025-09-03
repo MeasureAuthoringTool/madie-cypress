@@ -107,7 +107,7 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
         cy.contains('h2', 'Overlapping Codes').should('be.visible')
 
         //Verify Excel Export
-        const file = 'cypress/downloads/PC-334-v0.0.000-QDM5-OverlappingCodes.xlsx'
+        const file = 'cypress/downloads/PC-334-v0.0.000-QDM-OverlappingCodes.xlsx'
         cy.get(TestCasesPage.overlappingCodesExportBtn).should('be.visible')
         cy.get(TestCasesPage.overlappingCodesExportBtn).click()
         cy.get(TestCasesPage.exportSuccessMsg).should('contain.text', 'Overlapping Codes report exported successfully')

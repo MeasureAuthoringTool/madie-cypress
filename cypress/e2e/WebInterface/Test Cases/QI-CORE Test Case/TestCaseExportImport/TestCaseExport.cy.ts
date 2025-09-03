@@ -23,7 +23,7 @@ const testCasePIdPath = 'cypress/fixtures/testCasePId'
 const testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
-const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'
+const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip'
 
 describe('QI-Core Single Test Case Export', () => {
 
@@ -71,7 +71,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -104,7 +104,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -139,7 +139,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -199,22 +199,22 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
                 .and('contain', patientId, 'README.txt')
         })
         cy.readFile(testCasePIdPathSecnD).should('exist').then((patientId2) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-TitleforAutoTest2.json')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-TitleforAutoTest2.json')
                 .and('contain', patientId2)
         })
     })
@@ -240,22 +240,22 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
                 .and('contain', patientId, 'README.txt')
         })
         cy.readFile(testCasePIdPathSecnD).should('exist').then((patientId2) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-TitleforAutoTest2.json')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-TitleforAutoTest2.json')
                 .and('contain', patientId2)
         })
         cy.reload()
