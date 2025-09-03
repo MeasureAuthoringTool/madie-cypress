@@ -66,7 +66,7 @@ describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or C
         TestCasesPage.actionCenter(TestCaseAction.exportTransaction)
 
         //verify that the export occurred
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
     })
 
@@ -145,7 +145,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         TestCasesPage.actionCenter(TestCaseAction.exportTransaction)
 
         //verify that the export occurred
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
@@ -165,11 +165,11 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -189,7 +189,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         TestCasesPage.actionCenter(TestCaseAction.exportCollection)
 
         //verify that the export occurred
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
@@ -209,11 +209,11 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -274,7 +274,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         TestCasesPage.actionCenter(TestCaseAction.exportTransaction)
 
         //verify that the export occurred
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
@@ -295,11 +295,11 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -329,7 +329,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         TestCasesPage.actionCenter(TestCaseAction.exportCollection)
 
         //verify that the export occurred
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
@@ -350,11 +350,11 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
