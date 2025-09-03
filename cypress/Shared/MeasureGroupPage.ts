@@ -830,24 +830,24 @@ export class MeasureGroupPage {
         if (cvPopulations) {
             const measureUuid = uuidv4()
             popsArray = [
-            {
-                "id": uuidv4(),
-                "name": "initialPopulation",
-                "definition": cvPopulations.initialPopulation,
-                "description": "<p>initial pop</p>"
-            },
-            {
-                "id": measureUuid,
-                "name": "measurePopulation",
-                "definition": cvPopulations.measurePopulation,
-                "description": "<p>measure pop</p>"
-            },
-            {
-                "id": uuidv4(),
-                "name": "measurePopulationExclusion",
-                "definition": cvPopulations.measurePopExclusion ? cvPopulations.measurePopExclusion : '',
-                "description": "<p>measure exclusion</p>"
-            }
+                {
+                    "id": uuidv4(),
+                    "name": "initialPopulation",
+                    "definition": cvPopulations.initialPopulation,
+                    "description": "<p>initial pop</p>"
+                },
+                {
+                    "id": measureUuid,
+                    "name": "measurePopulation",
+                    "definition": cvPopulations.measurePopulation,
+                    "description": "<p>measure pop</p>"
+                },
+                {
+                    "id": uuidv4(),
+                    "name": "measurePopulationExclusion",
+                    "definition": cvPopulations.measurePopExclusion ? cvPopulations.measurePopExclusion : '',
+                    "description": "<p>measure exclusion</p>"
+                }
             ]
             if (cvPopulations.observation) {
                 cvPopulations.observation.id = uuidv4()
@@ -943,7 +943,7 @@ export class MeasureGroupPage {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
-                 // get starting data for the group
+                // get starting data for the group
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'GET',

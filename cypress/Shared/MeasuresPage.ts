@@ -28,6 +28,11 @@ export class MeasuresPage {
     public static readonly filterSearchInputBox = '[data-testid="measure-search-input"]'
     public static readonly searchInputBox = '[data-testid="measure-search-input"]'
     public static readonly filterByDropdown = '[data-testid="filter-by"]'
+    public static readonly filterNoOption = '[data-testid="--option"]'
+    public static readonly filterMeasureOption = '[data-testid="Measure-option"]'
+    public static readonly filterVersionOption = '[data-testid="Version-option"]'
+    public static readonly filterModelOption = '[data-testid="Model-option"]'
+    public static readonly filterCMSIdOption = '[data-testid="CMS ID-option"]'
 
     //export
     public static readonly exportNonPublishingOption = '[data-testid="export-option"]'
@@ -38,7 +43,7 @@ export class MeasuresPage {
 
     //transfer
     public static readonly newOwnerTextbox = '[data-testid="harp-id-input"]'
-    public static readonly transferContinueButton ='[data-testid="transfer-save-button"]'
+    public static readonly transferContinueButton = '[data-testid="transfer-save-button"]'
 
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
