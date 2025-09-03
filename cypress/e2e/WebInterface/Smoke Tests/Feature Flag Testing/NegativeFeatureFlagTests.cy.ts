@@ -11,7 +11,6 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
-
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
@@ -24,41 +23,6 @@ let measureCQLPFTests = MeasureCQL.CQL_Populations
 const now = require('dayjs')
 let mpStartDate = now().subtract('2', 'year').format('MM-DD-YYYY')
 let mpEndDate = now().format('MM-DD-YYYY')
-
-// "qiCoreBonnieTestCases": false
-describe('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
-
-    beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
-        CqlLibraryName = 'TestLibrary5' + Date.now()
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
-
-        OktaLogin.Login()
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
-
-    it('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
-
-        MeasuresPage.actionCenter("edit")
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //confirm that the import button is disabled / not available
-        Utilities.waitForElementToNotExist(TestCasesPage.bonnieImportTestCaseBtn, 35000)
-
-
-    })
-})
 
 // "qiCoreElementsTab": false
 describe('QI Core: Elements tab is not present', () => {

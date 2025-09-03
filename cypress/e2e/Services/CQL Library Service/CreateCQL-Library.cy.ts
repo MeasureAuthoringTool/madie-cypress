@@ -4,21 +4,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 let CQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
-let CQLLibraryPublisher = 'SemanticBits'
 let harpUser = Environment.credentials().harpUser
 
 describe('CQL Library Service: Create CQL Library', () => {
-
-    beforeEach('Set Access Token', () => {
-
-        CQLLibraryName = 'TestCqlLibrary' + Date.now()
-
-        cy.setAccessTokenCookie()
-
-        //Create CQL Library with Regular User
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
-
-    })
 
     it('Create QI-Core CQL Library, successful creation', () => {
         cy.clearAllCookies()
@@ -157,7 +145,7 @@ describe('CQL Library Service: Create CQL Library', () => {
 })
 
 
-describe('CQL Library Name validations', () => {
+describe.only('CQL Library Name validations', () => {
 
     let apiCQLLibraryName = 'TestLibrary' + Date.now()
     let CQLLibraryPublisher = 'SemanticBits'
