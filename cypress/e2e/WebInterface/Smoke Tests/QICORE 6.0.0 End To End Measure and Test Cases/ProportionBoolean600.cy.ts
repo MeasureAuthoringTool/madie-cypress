@@ -42,7 +42,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(EditMeasurePage.measureGroupsTab).wait(1000).click()
 
         Utilities.setMeasureGroupType()
 
