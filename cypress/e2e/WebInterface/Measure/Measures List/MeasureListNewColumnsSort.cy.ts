@@ -1,12 +1,12 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { Utilities } from "../../../../Shared/Utilities";
+import { Utilities } from "../../../../Shared/Utilities"
+
 const dayjs = require('dayjs')
 const today = dayjs().format('M/D/YYYY')
 
-// skipping until feature flag measureSearch is enabled
-describe.skip('Measure List Page Sort by Columns', () => {
+describe('Measure List Page Sort by Columns', () => {
 
     beforeEach('Login', () => {
 
