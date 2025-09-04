@@ -184,8 +184,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     })
 })
 
-//Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
-describe.skip('Create Test case for Qi Core Versioned Measure', () => {
+describe('Create Test case for Qi Core Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -235,8 +234,7 @@ describe.skip('Create Test case for Qi Core Versioned Measure', () => {
     })
 })
 
-//Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
-describe.skip('Edit and Delete Test case for Qi Core Versioned Measure', () => {
+describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 

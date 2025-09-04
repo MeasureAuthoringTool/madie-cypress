@@ -156,8 +156,7 @@ describe('Measure Versioning validations', () => {
     })
 })
 
-//Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
-describe.skip('Create Test case for QDM Versioned Measure', () => {
+describe('Create Test case for QDM Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -214,8 +213,7 @@ describe.skip('Create Test case for QDM Versioned Measure', () => {
     })
 })
 
-//Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
-describe.skip('Edit Test case for QDM Versioned Measure', () => {
+describe('Edit Test case for QDM Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
