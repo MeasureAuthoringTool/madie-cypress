@@ -134,7 +134,8 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
+        cy.get('#test-case-series-option-0').click()
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -145,7 +146,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
         //Add json to the test case
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.jsonTab).click()
+        //cy.get(TestCasesPage.jsonTab).click()
 
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 21500)
         cy.get(TestCasesPage.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
