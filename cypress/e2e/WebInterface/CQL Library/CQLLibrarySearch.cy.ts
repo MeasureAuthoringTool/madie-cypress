@@ -9,8 +9,7 @@ let CQLLibraryPublisher = 'ICFer'
 var CQLLibraryNameAlt = ""
 let CQLLibraryPublisherAlt = 'ICFerALTUser'
 
-//skipping until LibrarySearch feature flag is turned on
-describe.skip('CQL Library Search Validations', () => {
+describe('CQL Library Search Validations', () => {
 
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -137,8 +136,7 @@ describe.skip('CQL Library Search Validations', () => {
     })
 })
 
-//skipping until LibrarySearch feature flag is turned on
-describe.skip('CQL Library Search Validations -- User ownership', () => {
+describe('CQL Library Search Validations -- User ownership', () => {
 
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))

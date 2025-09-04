@@ -108,8 +108,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    //Skipping until feature flag 'stu6TestCaseValidation' is removed
-    it.skip('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
+    it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter("edit")
