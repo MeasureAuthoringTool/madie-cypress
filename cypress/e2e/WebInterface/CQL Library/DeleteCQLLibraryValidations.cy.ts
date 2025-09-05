@@ -33,6 +33,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -86,6 +87,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -159,6 +161,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
