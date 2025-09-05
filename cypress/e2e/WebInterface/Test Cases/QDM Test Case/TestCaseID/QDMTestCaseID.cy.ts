@@ -303,7 +303,6 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-       // cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase2.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
