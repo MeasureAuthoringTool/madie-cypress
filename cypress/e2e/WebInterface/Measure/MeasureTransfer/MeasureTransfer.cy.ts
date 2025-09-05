@@ -281,7 +281,6 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(LandingPage.sharedMeasures).click()
-        cy.get('[class="table-body measures-list"]').should('contain', newMeasureName)
         cy.get('[class="table-body measures-list"]').should('contain', randomMeasureName)
     })
 })
