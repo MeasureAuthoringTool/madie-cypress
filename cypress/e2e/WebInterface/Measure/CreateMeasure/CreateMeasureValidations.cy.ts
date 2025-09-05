@@ -200,19 +200,19 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
 
         //type some value in the text box and, then, clear text box
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('exist')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some test value')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('exist')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('be.visible')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('Some test value')
         cy.get(Utilities.DiscardButton).click()
         Utilities.clickOnDiscardChanges()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('not.contain.text')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('not.contain.text')
 
         //type some value in the text box and save it
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('exist')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some test value')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('exist')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('be.visible')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('Some test value')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('exist')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.enabled')
@@ -241,7 +241,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).should('be.visible')
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
 
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Some test value')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('contain.text', 'Some test value')
 
         //if new changes are made to Clinical Recommendation but, then, discarded, the previous value appears
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -258,19 +258,19 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
 
         //clear current value
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('exist')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('exist')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('be.visible')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{selectAll}{del}')
 
         //enter some new value that will not be saved
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('exist')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some new test value')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('exist')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('be.visible')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('Some new test value')
         cy.get(Utilities.DiscardButton).click()
         Utilities.clickOnDiscardChanges()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Some test value')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('contain.text', 'Some test value')
     })
 })
 
