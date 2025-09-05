@@ -6,8 +6,8 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 import * as path from 'path'
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage";
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage";
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
 
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
@@ -28,6 +28,7 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -35,17 +36,14 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('export')
+    
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
-        cy.verifyDownload(fileName + '4.zip', { timeout: 5500 })
+        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -54,7 +52,7 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec & included libraries', () => {
@@ -119,6 +117,7 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(null, null, 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
 
         MeasuresPage.actionCenter("edit")
@@ -128,16 +127,14 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(null, null, 'Qualifying Encounters', 'Encounter')
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('export') 
+        
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
-        cy.verifyDownload(fileName + '4.zip', { timeout: 5500 })
+        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -146,7 +143,7 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec & included libraries', () => {
@@ -213,14 +210,13 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
         // this function hardcodes a specific CQL
         MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
         
-        cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.actionCenter('export') 
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
-        cy.verifyDownload(fileName + '4.zip', { timeout: 5500 })
+        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -229,7 +225,7 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec', () => {
@@ -270,6 +266,7 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(null, false, 'Qualifying Encounters','Qualifying Encounters','Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -277,16 +274,14 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(null, false, 'Qualifying Encounters','Qualifying Encounters','Qualifying Encounters', 'Encounter' )
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('export')
+       
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
-        cy.verifyDownload(fileName + '4.zip', { timeout: 5500 })
+        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -295,7 +290,7 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec', () => {
