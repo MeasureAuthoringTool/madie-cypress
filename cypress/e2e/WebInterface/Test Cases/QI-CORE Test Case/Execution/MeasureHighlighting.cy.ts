@@ -12,7 +12,6 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
-let specificMeasureName = 'Intravesical Bacillus-Calmette-Guerin for Non-Muscle Invasive Bladder CancerFHIR'
 let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + now
@@ -757,6 +756,8 @@ describe('Measure Highlighting', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -767,28 +768,20 @@ describe('Measure Highlighting', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Execute single Test Case and verify Measure highlighting', () => {
 
         cy.intercept('/api/terminology/value-sets/expansion/fhir').as('expansion')
 
-        OktaLogin.Login()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
@@ -884,13 +877,16 @@ describe('Measure Highlighting', () => {
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
+describe('Highlighting accurately appears for a single PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+ 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -900,25 +896,18 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-    })
+   })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC', () => {
-
-        OktaLogin.Login()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+    it('Verify highlighting for a measure with a single PC', () => {
 
         //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
@@ -1002,13 +991,14 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
+describe('Highlighting accurately appears for a multiple PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -1017,25 +1007,19 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')        
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
-
-        OktaLogin.Login()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+    it('Verify highlighting for a measure with multiple PCs', () => {
 
         //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
@@ -1178,13 +1162,14 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+describe('Highlighting tab shows Results, Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLDFUTests)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcDFNJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -1194,24 +1179,18 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcDFNJson)
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
-
-        OktaLogin.Login()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+    it('Verify tabs in the highlighting sub-menu', () => {
 
         //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
@@ -1318,13 +1297,14 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+describe('Highlighting tab sub-sections default to expanded but can be collapsed', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLResults)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -1334,24 +1314,18 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
-
-        OktaLogin.Login()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+    it('Result section starts expanded with content and can be collapsed', () => {
 
         //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
@@ -1466,7 +1440,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a measure with same Definition in the library', () => {
+describe('Highlighting accurately appears for a measure with same Definition in the library', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
@@ -1478,10 +1452,10 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with same Definition in the included library', () => {
+    it('Highlighting is accurate when measure & included library both have definitions with the same name', () => {
 
         OktaLogin.Login()
 
@@ -1498,10 +1472,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.reload()
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 55000)
-        cy.get(TestCasesPage.executeTestCaseButton).scrollIntoView()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 55000)
 
         //Navigate to test case detail / edit page
@@ -1665,26 +1635,28 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
 describe('Verify highlighting occurs on an old versioned measure', () => {
 
     /*
+    Measure formerly called:
     'Intravesical Bacillus-Calmette-Guerin for Non-Muscle Invasive Bladder CancerFHIR' mode QiCore 4.1.1 v.1.4.000
     CMS646FHIR 
+    Now called: specificMeasureName below
     We navigate straight to the measure in this test since the URL should always be the same (except for obvious env. differences)
     */
-
+    const specificMeasureName = 'Test.CMS646.2023.11.14'
     beforeEach('Create measure and login', () => {
 
         OktaLogin.Login()
 
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
-        cy.get(MeasuresPage.searchInputBox).clear().type('CMS646FHIR').type('{enter}')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        cy.get(MeasuresPage.searchInputBox).clear().type('CMS646').type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', specificMeasureName)
         cy.get(MeasuresPage.measureListTitles)
             .find('[class="table-body measures-list"]')
-            .find('[data-testid="row-item"] > td').eq(4)
+            .find('[data-testid="row-item"]').eq(3)
             .find('[class="qpp-c-button qpp-c-button--outline-filled"]')
             .should('contain', 'View')
             .click()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1712,10 +1684,9 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-        // select NUMER tab
-        cy.contains('button', 'NUMER').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Numerator":\n  "First BCG Administered" is not null\nResultsUNHIT Definition(s) Used\ndefine "First BCG Administered":\n  First([MedicationAdministration: "Bacillus Calmette Guerin for Urology Care"] BCG\n      with "First Bladder Cancer Staging Procedure" FirstBladderCancerStaging\n        such that BCG.effective.toInterval() starts 6 months or less after day of start of FirstBladderCancerStaging.performed.toInterval()\n          and BCG.effective.toInterval() starts during day of "Measurement Period"\n      where BCG.status in { \'in-progress\', \'completed\' }\n      sort by start of effective.toInterval()\n  )\n\ndefine "First Bladder Cancer Staging Procedure":\n  First([Procedure: "Tumor staging (tumor staging)"] BladderCancerStaging\n      with "Bladder Cancer Diagnosis" BladderCancer\n        such that BladderCancerStaging.performed.toInterval() starts on or before day of start of BladderCancer.prevalenceInterval()\n      where BladderCancerStaging.status = \'completed\'\n      sort by start of performed.toInterval()\n  )\n\ndefine "Bladder Cancer Diagnosis":\n  ([ConditionProblemsHealthConcerns: "Bladder Cancer for Urology Care"] \n    union [ConditionEncounterDiagnosis: "Bladder Cancer for Urology Care"]) BladderCancer\n    where \n      (\n        BladderCancer.prevalenceInterval() starts before day of end of "Measurement Period"\n        or BladderCancer.onset.toInterval() before day of end of "Measurement Period"\n      )\n      and BladderCancer.isVerified()\n\ndefine fluent function isVerified(condition Choice<ConditionEncounterDiagnosis, ConditionProblemsHealthConcerns>):\n  condition.verificationStatus is not null implies\n    (condition.verificationStatus ~ QICoreCommon."confirmed"\n        or condition.verificationStatus ~ QICoreCommon."unconfirmed"\n        or condition.verificationStatus ~ QICoreCommon."provisional"\n        or condition.verificationStatus ~ QICoreCommon."differential"\n    )\n')
-        cy.get('[data-ref-id="350"]').should('have.color', '#a63b12')
+        //examine IP tab results
+        Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
+        cy.get('[data-statement-name="Initial Population"]').should('contain.text', '\ndefine "Initial Population":\n  "Has Qualifying Encounter"\n    and "Has Most Recent Bladder Cancer Tumor Staging is Ta HG, Tis, T1"\n    and  "First Qualifying Bladder Cancer Staging Procedure" is not null\n')
+        cy.get('[data-ref-id="781"]').should('have.color', '#a63b12')
     })
 })
