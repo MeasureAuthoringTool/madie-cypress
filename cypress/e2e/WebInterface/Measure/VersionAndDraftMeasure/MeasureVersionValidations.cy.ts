@@ -1,27 +1,26 @@
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
-import {TestCaseAction, TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {LandingPage} from "../../../../Shared/LandingPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
+import { TestCaseAction, TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Toasts } from "../../../../Shared/Toasts"
 
 const now = Date.now()
-let measureName = 'VersionValidations' + now
-let cqlLibraryName = 'VersionValidationsLib' + now
-let measureCQL = MeasureCQL.SBTEST_CQL
-let testCaseTitle = 'TestcaseTitle'
-let testCaseDescription = 'Description' + now
-let testCaseSeries = 'SBTestSeries'
-let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
-let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let testCaseJson = TestCaseJson.TestCaseJson_Valid
+const measureName = 'VersionValidations' + now
+const cqlLibraryName = 'VersionValidationsLib' + now
+const measureCQL = MeasureCQL.SBTEST_CQL
+const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
+const cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
+const testCaseJson = TestCaseJson.TestCaseJson_Valid
+const testCaseTitle = 'TestcaseTitle'
+const testCaseDescription = 'Description' + now
+const testCaseSeries = 'SBTestSeries'
 
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -48,8 +47,8 @@ describe('Measure Versioning validations', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('User can not version Measure if there is no CQL', () => {
@@ -102,15 +101,9 @@ describe('Measure Versioning validations', () => {
 
 describe('Measure Versioning when the measure has test case with errors', () => {
 
-    let newMeasureName = measureName + randValue
-    let newCqlLibraryName = cqlLibraryName + randValue + 4
-
     beforeEach('Create Measure and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        //Create New Measure and Measure Group
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
 
@@ -119,20 +112,16 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        cy.get(Header.mainMadiePageButton).click()
-        cy.get(LandingPage.newMeasureButton).should('be.visible')
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
+        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
     })
 
     it('User receives "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
         let versionNumber = '1.0.000'
-
-        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -188,35 +177,32 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        let newMeasureName = 'TestMeasure' + Date.now() + randValue
-        let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue + 4
-        //Create New Measure and Measure Group
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cohortMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
     })
 
-    it('Measure owner able to Add, Clone and Import Test cases to Qi Core Versioned Measure', () => {
+    it('Measure owner able to Add, Clone, and Import Test cases to Qi Core Versioned Measure', () => {
 
         //Version the Measure
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
+
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.successToast, { timeout: 45000 }).should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
 
         //Add Test case
@@ -230,7 +216,6 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
 
         //Verify that the Import Test case button is enabled
         cy.get(TestCasesPage.importTestCasesBtn).should('be.enabled')
-
     })
 })
 
@@ -238,19 +223,25 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        let newMeasureName = 'TestMeasure' + Date.now() + randValue
-        let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue + 4
-        //Create New Measure and Measure Group
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cohortMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-        OktaLogin.Login()
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000').wait(1000)
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(Toasts.successToast, { timeout: 45000 }).should('contain.text', 'New version of measure is Successfully created')
+
+        MeasuresPage.actionCenter('edit')
     })
 
     afterEach('Logout and Clean up', () => {
@@ -260,17 +251,6 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
     })
 
     it('Measure owner able to Edit Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
-
-        //Version the Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('version')
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        cy.log('Version Created Successfully')
-
-        MeasuresPage.actionCenter('edit')
 
         //Edit Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -282,28 +262,15 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).check()
 
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
     })
 
     it('Measure owner unable to Delete Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
-
-        //Version the Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('version')
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        cy.log('Version Created Successfully')
-
-        MeasuresPage.actionCenter('edit')
 
         //Edit Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -318,17 +285,7 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
 
     it('Measure owner able to Delete Test case on a Qi Core Versioned Measure, that was created after Versioning', () => {
 
-        //Version the Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('version')
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        cy.log('Version Created Successfully')
-
-        //Add Test case
-        MeasuresPage.actionCenter('edit')
+        // //Add Test case
         TestCasesPage.createTestCase('SecondTCTitle', 'SecondTCDescription', 'SecondTCSeries')
 
         //Select Test case
@@ -342,18 +299,14 @@ describe('Non Measure owner unable to create Version', () => {
 
     before('Create Measure with regular user and Login as Alt user', () => {
 
-        let newMeasureName = measureName + randValue
-        let newCqlLibraryName = cqlLibraryName + randValue
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
     })
 
     after('Logout and Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify Version button is not visible for non Measure owner', () => {
