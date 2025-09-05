@@ -146,8 +146,8 @@ describe('CQL Library Search Validations -- User ownership', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteLibrary(CQLLibraryName)
+        OktaLogin.Logout()
+        Utilities.deleteLibrary(CQLLibraryName, true)
     })
 
     it('Owner is different than current user, library will only appear in "All Libraries" searched list', () => {
