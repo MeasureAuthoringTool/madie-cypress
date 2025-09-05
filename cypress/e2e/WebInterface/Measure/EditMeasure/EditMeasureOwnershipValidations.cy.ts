@@ -39,7 +39,7 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     afterEach('Logout and clean up', () => {
 
-        OktaLogin.UILogout()
+        OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
     })
@@ -76,7 +76,7 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[class="rich-text-editor_read_only"]').should('exist')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[data-testid="genericField-value"]').should('exist')
 
         cy.get(EditMeasurePage.leftPanelCopyright).should('be.visible')
         cy.get(EditMeasurePage.leftPanelCopyright).click()
