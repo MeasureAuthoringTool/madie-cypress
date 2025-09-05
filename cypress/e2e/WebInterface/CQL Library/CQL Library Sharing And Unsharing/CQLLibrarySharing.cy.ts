@@ -152,6 +152,8 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
+        //Click on Expand button to view Versioned Library
+        cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
         cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
     })
 })
@@ -397,7 +399,6 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
 
         //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-        cy.get('[data-testid="cqlLibrary-button-1_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
         cy.get(CQLLibrariesPage.shareOption).click({force: true})
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
@@ -426,6 +427,8 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
         cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
-        cy.get('[data-testid="cqlLibrary-button-1_cqlLibraryName"]').should('contain.text', newCQLLibraryName)
+        //Click on Expand button to view Versioned Library
+        cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
+        cy.get('[data-testid="table-body"]').should('contain.text', newCQLLibraryName)
     })
 })
