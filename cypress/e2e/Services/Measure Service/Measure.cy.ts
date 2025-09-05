@@ -683,6 +683,9 @@ describe('Measure Service: Update Delete Flag', () => {
     })
     //update / delete measure
     it('Update / delete measure', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
@@ -708,7 +711,7 @@ describe('Measure Service: Update Delete Flag', () => {
                                     "id": "68ac804018f2135a1f3a17d3",
                                     "cmsId": null,
                                     "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
-                                    "owner": "test.ReUser6408",
+                                    "owner": defaultUser,
                                     "acls": null
                                 },
                                 "ecqmTitle": eCQMTitle,
