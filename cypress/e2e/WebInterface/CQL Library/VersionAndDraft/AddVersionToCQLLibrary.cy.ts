@@ -66,6 +66,7 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
