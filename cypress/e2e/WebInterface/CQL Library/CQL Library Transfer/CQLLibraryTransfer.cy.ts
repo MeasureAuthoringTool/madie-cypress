@@ -281,6 +281,8 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
+        //Click on Expand button to view Versioned Library
+        cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
         cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
     })
 })
