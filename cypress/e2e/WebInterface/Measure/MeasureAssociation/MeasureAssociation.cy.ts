@@ -935,6 +935,9 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 2)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 2)
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
