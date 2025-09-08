@@ -865,7 +865,7 @@ export class TestCaseJson {
         '    },\n' +
         '    "type" : "collection",\n' +
         '    "entry" : [ {\n' +
-        '      "fullUrl" : "nullPatient/18bcc6f0-e702-409f-9fad-1b428d30c56c",\n' +
+        '      "fullUrl" : "http://nullPatient/18bcc6f0-e702-409f-9fad-1b428d30c56c",\n' +
         '      "resource" : {\n' +
         '        "resourceType" : "Patient",\n' +
         '        "id" : "18bcc6f0-e702-409f-9fad-1b428d30c56c",\n' +
@@ -978,7 +978,7 @@ export class TestCaseJson {
         '        "birthDate" : "1954-02-10"\n' +
         '      }\n' +
         '    }, {\n' +
-        '      "fullUrl" : "nullEncounter/5c6c61ceb84846536a9a98f9",\n' +
+        '      "fullUrl" : "http://nullEncounter/5c6c61ceb84846536a9a98f9",\n' +
         '      "resource" : {\n' +
         '        "resourceType" : "Encounter",\n' +
         '        "id" : "5c6c61ceb84846536a9a98f9",\n' +

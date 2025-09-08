@@ -5,6 +5,7 @@ import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../../Shared/Utilities"
 
@@ -15,6 +16,7 @@ const qiCoreMeasureCQL = MeasureCQL.QiCoreCQLSDE.replace('QiCoreCQLLibrary173998
 let firstTestCaseTitle = 'PDxNotPsych60Mins'
 let testCaseDescription = 'IPPStrat1Pass'
 let testCaseSeries = 'SBTestSeries'
+let testCaseJsonFile = TestCaseJson.TCJsonRaceOMBRaceDetailed
 
 describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
@@ -22,7 +24,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, qiCoreMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patients Age 20 or Older at Start of Measurement Period')
-        TestCasesPage.CreateTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestCasesPage.CreateTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription, testCaseJsonFile)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -76,11 +78,6 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
-
-        //add json to test case
-        cy.wait(3000) // need this for editor to load data
-        TestCasesPage.ImportTestCaseFile('TCJsonRaceOMBRaceDetailed.json')
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Execute test case
         Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 16500)
@@ -139,11 +136,6 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //add json to test case
-        cy.wait(3000) // need this for editor to load data
-        TestCasesPage.ImportTestCaseFile('TCJsonRaceOMBRaceDetailed.json')
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
-
         //Execute test case
         cy.get(TestCasesPage.runTestButton).click()
         Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 9500)
@@ -179,11 +171,6 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
-
-        //add json to test case
-        cy.wait(3000) // need this for editor to load data
-        TestCasesPage.ImportTestCaseFile('TCJsonRaceOMBRaceDetailed.json')
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Execute test case
         Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 16500)
