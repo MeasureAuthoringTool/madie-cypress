@@ -95,21 +95,28 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
-        cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
+        //intercept draft id once measure is drafted
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
+        })
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile('cypress/fixtures/measureDraftId', request.response.body.id)
+        })
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
+        cy.readFile('cypress/fixtures/measureDraftId').should('exist').then((fileDraftContents) => {
             cy.reload(true)
             cy.scrollTo('top')
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView()
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileDraftContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileDraftContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').scrollIntoView()
+            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').click()
 
             //Verify version button is not visible
-            cy.get('[data-testid=draft-measure-' + fileContents + ']').should('not.exist')
+            cy.get('[data-testid=draft-measure-' + fileDraftContents + ']').should('not.exist')
         })
     })
 })
