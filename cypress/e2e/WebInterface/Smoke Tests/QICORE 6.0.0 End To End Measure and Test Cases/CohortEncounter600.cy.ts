@@ -9,6 +9,7 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Toasts } from "../../../../Shared/Toasts"
 import { Utilities } from "../../../../Shared/Utilities"
+import { Header } from "../../../../Shared/Header"
 
 const now = Date.now()
 const measureName = 'CohortEncounter600' + now
@@ -35,6 +36,12 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
         OktaLogin.Login()
+        MeasuresPage.actionCenter('edit', null)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Clean up', () => {
