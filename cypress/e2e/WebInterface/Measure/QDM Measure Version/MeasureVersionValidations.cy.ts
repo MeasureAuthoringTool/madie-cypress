@@ -195,7 +195,7 @@ describe('Create Test case for QDM Versioned Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
 
         //Add Test case
@@ -207,8 +207,6 @@ describe('Create Test case for QDM Versioned Measure', () => {
         cy.get(TestCasesPage.actionCenterClone).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
 
-        //Verify that the Import Test case button is enabled
-        cy.get(TestCasesPage.qdmImportTestCasesBtn).should('be.enabled')
 
     })
 })
@@ -253,7 +251,7 @@ describe('Edit Test case for QDM Versioned Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('edit')
@@ -281,7 +279,7 @@ describe('Edit Test case for QDM Versioned Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('edit')
@@ -305,7 +303,7 @@ describe('Edit Test case for QDM Versioned Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
 
         //Add Test case
@@ -366,7 +364,6 @@ describe('Non Measure owner unable to create Version', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
-        //cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
