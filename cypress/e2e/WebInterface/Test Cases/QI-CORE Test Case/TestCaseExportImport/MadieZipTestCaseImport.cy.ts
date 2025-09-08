@@ -130,7 +130,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
         //verify that the export occurred
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
