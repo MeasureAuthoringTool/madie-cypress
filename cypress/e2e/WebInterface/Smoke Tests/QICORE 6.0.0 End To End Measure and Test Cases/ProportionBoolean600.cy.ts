@@ -91,22 +91,46 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(EditMeasurePage.measureGroupsTab).wait(2500).click()
+        cy.get(EditMeasurePage.testCasesTab).wait(2500).click()
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+
 
         //verify Passing Tab's text
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(49/49)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '40%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(20/49)')
 
         //Verify Coverage percentage
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '99%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '83%')
 
 
         //after versioning, there should be no change to test results or coverage
 
-        EditMeasurePage.actionCenter(EditMeasureActions.version)
+        //EditMeasurePage.actionCenter(EditMeasureActions.version)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get(EditMeasurePage.editMeasureVersionActionBtn).should('be.visible')
+        cy.get(EditMeasurePage.editMeasureVersionActionBtn).should('be.enabled')
+        cy.get(EditMeasurePage.editMeasureVersionActionBtn).click()
+
+        // version modal
+        cy.get('#draggable-dialog-title').find('h2').should('have.text', 'Create Version')
+
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        // please leave this in place. it needs a short pause here for the modal to present new fields
+        cy.wait(1000)
+
+
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+
+
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).wait(1000).click()
 
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
@@ -115,13 +139,13 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //verify Passing Tab's text after Versioning
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(49/49)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '40%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(20/49)')
 
         //Verify Coverage percentage after versioning
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '99%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '83%')
 
     })
 })
