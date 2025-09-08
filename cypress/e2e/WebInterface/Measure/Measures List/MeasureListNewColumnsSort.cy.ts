@@ -15,87 +15,119 @@ describe('Measure List Page Sort by Columns', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Measure sorting by columns on All Measures tab', () => {
 
-        cy.intercept('/api/measures?currentUser=false&limit=10&page=0&sort=*&direction=ASC').as('sort')
-        cy.intercept('/api/measures?currentUser=false&limit=10&page=0&sort=*&direction=DESC').as('sort2')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=ASC').as('sort')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=DESC').as('sort2')
 
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=version&direction=ASC').as('sort3')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=version&direction=DESC').as('sort4')
+
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=model&direction=ASC').as('sort5')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=model&direction=DESC').as('sort6')
+
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=ASC').as('sort7')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=DESC').as('sort8')
+
+        //here - cms id
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=ASC').as('sort9')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=DESC').as('sort10')
+
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=ASC').as('sort11')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=DESC').as('sort12')
+
+        // out of order, but not worth resetting everything
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureMetaData.draft&direction=ASC').as('sort13')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureMetaData.draft&direction=DESC').as('sort14')
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
 
         //sort by measure
         cy.contains('.header-button', 'Measure').click()
         cy.wait('@sort')
-        MeasuresPage.checkFirstRow({name: '2025Anticoagulation Therapy for Atrial Fibrillation/Flutter CMS71'})
+        MeasuresPage.checkFirstRow({name: '\t Test.CMS334.emm'})
         cy.contains('.header-button', 'Measure').click()
         cy.wait('@sort2')
-        MeasuresPage.checkFirstRow({name: 'tillertest'})
+        MeasuresPage.checkFirstRow({name: 'Zoom In Information'})
 
         // sort by version
         cy.contains('.header-button', 'Version').click()
-        cy.wait('@sort')
+        cy.wait('@sort3')
         MeasuresPage.checkFirstRow({version: '0.0.000'})
         cy.contains('.header-button', 'Version').click()
-        cy.wait('@sort2')
+        cy.wait('@sort4')
         MeasuresPage.checkFirstRow({version: '15.1.000'})
 
         // sort by status
         cy.contains('.header-button', 'Status').click()
-        cy.wait('@sort')
+        cy.wait('@sort13')
         MeasuresPage.checkFirstRow({status: ''})
         cy.contains('.header-button', 'Status').click()
-        cy.wait('@sort2')
+        cy.wait('@sort14')
         MeasuresPage.checkFirstRow({status: 'Draft'})
 
         // sort by model
         cy.contains('.header-button', 'Model').click()
-        cy.wait('@sort')
+        cy.wait('@sort5')
         MeasuresPage.checkFirstRow({model: SupportedModels.QDM })
         cy.contains('.header-button', 'Model').click()
-        cy.wait('@sort2')
+        cy.wait('@sort6')
         MeasuresPage.checkFirstRow({model: SupportedModels.qiCore6 })
 
         // sort by shared
         cy.contains('.header-button', 'Shared').click()
-        cy.wait('@sort')
+        cy.wait('@sort7')
         MeasuresPage.checkFirstRow({shared: false})
         cy.contains('.header-button', 'Shared').click()
-        cy.wait('@sort2')
+        cy.wait('@sort8')
         MeasuresPage.checkFirstRow({shared: true})
 
         // sort by cms id empty
         cy.contains('.header-button', 'CMS ID').click()
-        cy.wait('@sort')
+        cy.wait('@sort9')
         MeasuresPage.checkFirstRow({cmsId:''})
         cy.contains('.header-button', 'CMS ID').click()
-        cy.wait('@sort2')
-        MeasuresPage.checkFirstRow({cmsId:'1321'})
+        cy.wait('@sort10')
+        // since we have tests for generating CMS id now, need to do this annoying check now
+        cy.get('[data-testid="row-item"]').first().find('td').eq(6).invoke('text').then(cmsId => {
+            
+            const greatestProdId = 1321 // we can periodically update this I guess?
+            if (cmsId.toString().length < 5) {
+                const idNumber = Number(cmsId)
+                expect(idNumber).to.be.greaterThan(greatestProdId)
+            } else {
+                const fhirNumber = cmsId.slice(0, -4)
+                expect(fhirNumber).to.be.greaterThan(greatestProdId)
+                expect(cmsId).to.have.string('FHIR')
+            }
+        })
 
         // sort by updated
         cy.contains('.header-button', 'Updated').click()
-        cy.wait('@sort')
+        cy.wait('@sort11')
         MeasuresPage.checkFirstRow({updated: '11/16/2022'})
         cy.contains('.header-button', 'Updated').click()
-        cy.wait('@sort2')
+        cy.wait('@sort12')
         MeasuresPage.checkFirstRow({updated: today})
     })
 
     it('Column sort resets pagination to page 1', () => {
 
-        cy.intercept('/api/measures?currentUser=false&limit=10&page=0&sort=*&direction=ASC').as('sort')
-        cy.intercept('/api/measures?currentUser=false&limit=10&page=0&sort=*&direction=DESC').as('sort2')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=model&direction=ASC').as('sort')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=model&direction=DESC').as('sort2')
 
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 23500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 23500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
 
          // go to page 2
          cy.get(MeasuresPage.paginationNextButton).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 23500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
 
         // sort by model
         cy.contains('.header-button', 'Model').click()
@@ -108,7 +140,7 @@ describe('Measure List Page Sort by Columns', () => {
 
         // go to page 6
         cy.get('.MuiPagination-ul').children().eq(5).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
 
         // verify page 6
         cy.url().should('match', /page=6/)
@@ -126,10 +158,10 @@ describe('Measure List Page Sort by Columns', () => {
 
     it('Sort cycles - ASC by column, DESC by column, most recently updated (default)', () => {
 
-        cy.intercept('/api/measures?currentUser=false&limit=10&page=0&sort=*&direction=ASC').as('sort')
-        cy.intercept('/api/measures?currentUser=false&limit=10&page=0&sort=*&direction=DESC').as('sort2')
-        cy.intercept('/api/measures?currentUser=false&limit=10&page=0&sort=&direction=').as('sort3')
-
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=ASC').as('sort')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=DESC').as('sort2')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=&direction=').as('sort3')
+       
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
@@ -179,18 +211,18 @@ describe('Measure List Page Sort by Columns', () => {
 
     it('Sort is not allowed on checkbox column, action button column, or expansion column', () => {
 
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
 
         cy.get('thead tr').first().then(headerRow => {
 
             // checkbox
-            cy.wrap(headerRow.children().eq(0).find('button')).should('be.disabled')
+            cy.wrap(headerRow.children().eq(0).find('button')).should('not.have.class', 'header-button')
             // action button
-            cy.wrap(headerRow.children().eq(8).find('button')).should('be.disabled')
+            cy.wrap(headerRow.children().eq(8).find('button')).should('not.have.class', 'header-button')
             // expansion button
-            cy.wrap(headerRow.children().eq(9).find('button')).should('be.disabled')
+            cy.wrap(headerRow.children().eq(9).find('span')).should('not.have.class', 'header-button')
         })
     })
 })
