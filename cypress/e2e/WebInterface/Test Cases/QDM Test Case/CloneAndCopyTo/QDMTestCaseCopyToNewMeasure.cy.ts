@@ -82,9 +82,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
-
         // need to select correct version of the measure with .eq(1)
-        cy.get('[data-testid="row-item"]').eq(9).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
 
 
         // got to test case tab
@@ -126,7 +125,7 @@ describe('Copy test cases from existing measure into new measure', () => {
 
 
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(2)
+        TestCasesPage.grabTestCaseId(8)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -176,7 +175,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').eq(9).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -213,7 +212,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(2)
+        TestCasesPage.grabTestCaseId(8)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
