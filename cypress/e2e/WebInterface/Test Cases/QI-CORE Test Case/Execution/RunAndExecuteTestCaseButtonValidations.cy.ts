@@ -1297,13 +1297,17 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
-        //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError:' +
-            ' Bundle entry missing fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlError: Relative ' +
-            'Reference appears inside Bundle whose entry is missing a fullUrlWarning: No code provided, and a code should be provided ' +
-            'from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)Error: ' +
-            'Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in ' +
-            'the entry')
+        //confirm error messages
+        const expectedErrors = [
+            'Error: All resources must have an Id',
+            'Error: Bundle entry missing fullUrl',
+            'Error: Relative Reference appears inside Bundle whose entry is missing a fullUrl',
+            'Error: Relative Reference appears inside Bundle whose entry is missing a fullUrl',
+            'Error: Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in the entry',
+            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)'
+        ]
+
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).children().text().should('deep.equal', expectedErrors)
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')
@@ -1525,8 +1529,6 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-            cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
             cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
