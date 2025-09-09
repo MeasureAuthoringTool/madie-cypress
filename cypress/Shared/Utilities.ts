@@ -421,7 +421,7 @@ export class Utilities {
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).wait(100).type('Process').wait(100).type('{downArrow}').wait(100).type('{enter}')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).wait(100).type('Process').wait(100).type('{downArrow}').wait(100).type('{enter}').wait(500)
         cy.get('[data-testid="populationBasis"]').click()
 
     }
