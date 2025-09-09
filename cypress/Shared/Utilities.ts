@@ -1,5 +1,4 @@
 import { TestCasesPage } from "./TestCasesPage"
-import { Header } from "./Header"
 import { MeasureGroupPage } from "./MeasureGroupPage"
 import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
@@ -7,7 +6,7 @@ import { Environment } from "./Environment"
 import { Measure } from "@madie/madie-models"
 
 const adminApiKey = Environment.credentials().adminApiKey
-let harpUser = Environment.credentials().harpUser
+const harpUser = Environment.credentials().harpUser
 
 export enum PermissionActions {
     GRANT = 'GRANT',
@@ -16,7 +15,8 @@ export enum PermissionActions {
 
 export enum MadieObject {
     Measure = 'measure',
-    Library = 'library'
+    Library = 'library',
+    TestCase = 'testCase'
 }
 
 export class Utilities {
@@ -341,7 +341,6 @@ export class Utilities {
                 break
 
             }
-
         }
     }
 
@@ -423,7 +422,6 @@ export class Utilities {
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).wait(100).type('Process').wait(100).type('{downArrow}').wait(100).type('{enter}').wait(500)
         cy.get('[data-testid="populationBasis"]').click()
-
     }
 
     public static validateErrors(errorElementObject: string, errorContainer: string, errorMsg1: string, errorMsg2?: string): void {
@@ -435,7 +433,6 @@ export class Utilities {
         if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
             cy.get(errorContainer).invoke('show').should('contain', errorMsg1)
         }
-
     }
 
     public static validateToastMessage(message: string, timeout?: number) {
@@ -488,10 +485,6 @@ export class Utilities {
                 })
             })
         })
-
-
-
-
     }
 
     public static checkAll() {
@@ -535,5 +528,81 @@ export class Utilities {
             })
 
         })
+    }
+
+    public static lockControl(type: MadieObject, lockObject: boolean) {
+        let action = 'PUT'
+        if (type == MadieObject.Library) {
+            action = 'POST'
+        }
+        if (!lockObject) {
+            action = 'DELETE'
+        }
+
+        switch (type) {
+
+            case MadieObject.Measure:
+                cy.getCookie('accessToken').then((accessToken) => {
+                    cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                        cy.request({
+                            url: '/api/measures/' + id + '/measure-lock', 
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value,
+                            },
+                            method: action
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                        })
+                    })
+                })
+                break
+
+            case MadieObject.TestCase:
+                cy.getCookie('accessToken').then((accessToken) => {
+                    cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
+                            let lockUrl = '/api/measures/' + measureId + '/test-cases/' + tcId + '/lock'
+                            if (!lockObject) {
+                                lockUrl = '/api/test-cases/' + tcId + '/unlock'
+                            }
+                            
+                            cy.request({
+                                url: lockUrl,
+                                headers: {
+                                    authorization: 'Bearer ' + accessToken.value,
+                                },
+                                method: action
+                            }).then((response) => {
+                                expect(response.status).to.eql(200)
+                            })
+                        })
+                    })
+                })
+                break
+
+            case MadieObject.Library:
+                cy.getCookie('accessToken').then((accessToken) => {
+                    cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                        let lockUrl = '/api/libraries/' + id + '/lock'
+                        if (!lockObject) {
+                            lockUrl = '/api/libraries/' + id + '/unlock'
+                        }
+
+                        cy.request({
+                            url: lockUrl, 
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value,
+                            },
+                            method: action
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                        })
+                    })
+                })
+                break
+
+            default:
+                cy.log('No action. Unsupported type.')
+        }
     }
 }
