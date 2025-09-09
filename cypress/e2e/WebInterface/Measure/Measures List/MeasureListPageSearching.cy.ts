@@ -2,10 +2,8 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { LandingPage } from "../../../../Shared/LandingPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -38,11 +36,9 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     '\ttrue'
 
 let measureName = 'MeasureSearch' + Date.now()
-let newMeasureName = ''
 let CqlLibraryName = 'MeasureSearchLib' + Date.now()
-
+let newMeasureName = ''
 let tempCqlLibName = ''
-
 let QDMmeasureName = 'QDMMeasureSearch' + Date.now()
 let QDMCqlLibraryName = 'QDMMeasureSearchLib' + Date.now()
 
@@ -51,7 +47,13 @@ let measureSetFilePath = 'cypress/fixtures/measureSetId'
 
 describe('Measure List Page Searching', () => {
 
+    let measureName = ''
+    let CqlLibraryName = ''
+
     beforeEach('Login', () => {
+
+        measureName = 'MeasureSearch1' + Date.now()
+        CqlLibraryName = 'MeasureSearchLib1' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
@@ -332,8 +334,8 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(Header.mainMadiePageButton).wait(1500).click()
         cy.get(MeasuresPage.filterByDropdown).should('contain', 'Filter By')
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
-
     })
+
     it('Measure search on My Measures and All Measures tab using the Version filter', () => {
 
         //Login
@@ -363,8 +365,8 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
         cy.get(MeasuresPage.searchInputBox).type('1.0.000').type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
-
     })
+
     it('Measure search on My Measures and All Measures tab using the Model filter', () => {
 
         //Login
@@ -424,8 +426,8 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
         cy.get(MeasuresPage.searchInputBox).type('QDM').type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', QDMmeasureName)
-
     })
+
     it('Measure search on My Measures and All Measures tab using the CMS ID filter', () => {
 
         //Login
@@ -493,8 +495,8 @@ describe('Measure Filter on measure list page and searching with filters', () =>
             cy.get(MeasuresPage.searchInputBox).type(fileContents).type('{enter}')
         })
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', QDMmeasureName)
-
     })
+
     it('Measure search on My Measures and All Measures tab using no filter', () => {
 
         //Login
@@ -523,6 +525,5 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.filterNoOption).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(measureName).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
-
     })
 })
