@@ -3,6 +3,7 @@ import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
+import { Measure } from "@madie/madie-models"
 const now = require('dayjs')
 
 export enum SupportedModels {
@@ -972,5 +973,67 @@ export class CreateMeasurePage {
         })
         cy.log(user)
         return user
+    }
+
+    public static CloneMeasureAPI(existingId: string, newName: string, newLibrraryName: string, overrideOptions?: CreateMeasureOptions) {
+        let measureNumber
+
+        // example of configuring options
+        if (overrideOptions && overrideOptions.measureNumber) {
+            measureNumber = overrideOptions.measureNumber
+        }
+
+        cy.getCookie('accessToken').then((accessToken) => {
+
+            // query existing measure for all data
+            cy.request({
+                url: '/api/measures/' + existingId,
+                method: 'GET',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                }
+            }).then((response) => {
+                const clonedMeasure = response.body as Measure
+
+                // clear out data required to be fresh
+                clonedMeasure.measureName = newName
+                clonedMeasure.cqlLibraryName = newLibrraryName
+                clonedMeasure.measureSetId = uuidv4()
+                clonedMeasure.versionId = uuidv4()
+                clonedMeasure.measureSet = null
+                clonedMeasure.createdAt = null
+                clonedMeasure.createdBy = null
+                clonedMeasure.lastModifiedAt = null
+                clonedMeasure.lastModifiedBy = null
+
+                // example of changing data for new measure
+                if (overrideOptions && overrideOptions.ecqmTitle) {
+                    clonedMeasure.ecqmTitle = overrideOptions.ecqmTitle
+                }
+
+                cy.request({
+                    url: '/api/measure?addDefaultCQL=false',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: clonedMeasure
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+
+                    if (measureNumber > 0) {
+                        cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
+                        cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+                        cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
+                    }
+                    else {
+                        cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                        cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                        cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    }
+                })
+            }) 
+        })
     }
 }
