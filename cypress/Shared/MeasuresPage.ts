@@ -45,6 +45,11 @@ export class MeasuresPage {
     public static readonly newOwnerTextbox = '[data-testid="harp-id-input"]'
     public static readonly transferContinueButton = '[data-testid="transfer-save-button"]'
 
+    //history
+    public static readonly userActionRow = '[data-testid="measure-history-cell-0_actionType"]'
+    public static readonly harpIdRow = '[data-testid="measure-history-cell-0_performedBy"]'
+    public static readonly additionalActionRow = '[data-testid="measure-history-cell-0_additionalActionMessage"]'
+
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
     public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'
@@ -255,6 +260,14 @@ export class MeasuresPage {
                 cy.get('[data-testid="view-hr-action-btn"]').should('be.visible')
                 cy.get('[data-testid="view-hr-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="view-hr-action-btn"]').click()
+
+                break
+            }
+            case 'viewhistory': {
+
+                cy.get('[data-testid="history-action-btn"]').should('be.visible')
+                cy.get('[data-testid="history-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="history-action-btn"]').click()
 
                 break
             }
