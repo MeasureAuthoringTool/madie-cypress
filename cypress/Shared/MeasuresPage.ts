@@ -138,9 +138,8 @@ export class MeasuresPage {
             filePath = 'cypress/fixtures/measureId' + measureNumber
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 60000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 60000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
