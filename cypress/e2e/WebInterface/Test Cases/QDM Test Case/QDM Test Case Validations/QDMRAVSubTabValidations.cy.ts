@@ -81,20 +81,11 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         // go through discard cycle 
         // patientBasis works for all 2 choice radios
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
         cy.get(TestCasesPage.discardRavChangesOption).click()
         Utilities.clickOnDiscardChanges()
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).should('be.checked')
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).should('be.checked')
 
-        cy.get(TestCasesPage.saveRAVOption).should('be.disabled')
-        cy.get(TestCasesPage.discardRavChangesOption).should('be.disabled')
-
-        // re-do & save
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
-        cy.get(TestCasesPage.saveRAVOption).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
-
-        // check buttons disabled
         cy.get(TestCasesPage.saveRAVOption).should('be.disabled')
         cy.get(TestCasesPage.discardRavChangesOption).should('be.disabled')
 
@@ -203,6 +194,21 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
+
+        //navigate to the RAV side tab section on the test cases tab
+        Utilities.waitForElementVisible(TestCasesPage.qdmRAVSideNavLink, 30000)
+        cy.get(TestCasesPage.qdmRAVSideNavLink).click()
+
+        // set RAV to disabled/No
+        // patientBasis works for all 2 choice radios
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
+        cy.get(TestCasesPage.saveRAVOption).click()
+        Utilities.waitForElementDisabled(TestCasesPage.saveRAVOption, 15000)
+
+        //return to test case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -297,14 +303,14 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '0%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '6%')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
 
         //Navigate to the RAV side tab and select Yes
         Utilities.waitForElementVisible(TestCasesPage.qdmRAVSideNavLink, 30000)
         cy.get(TestCasesPage.qdmRAVSideNavLink).click()
 
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
         cy.get(TestCasesPage.saveRAVOption).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
@@ -321,7 +327,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '6%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '0%')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
     })
 })
