@@ -7,6 +7,7 @@ import { Measure } from "@madie/madie-models"
 
 const adminApiKey = Environment.credentials().adminApiKey
 const harpUser = Environment.credentials().harpUser
+const harpUserALT = Environment.credentials().harpUserALT
 
 export enum PermissionActions {
     GRANT = 'GRANT',
@@ -179,16 +180,18 @@ export class Utilities {
     }
 
     public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
-
+        let user = ''
         let measurePath = 'cypress/fixtures/measureId'
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
         }
         if (altUser) {
+            user = harpUserALT
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
         } else {
+            user = harpUser
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
@@ -207,7 +210,7 @@ export class Utilities {
                     headers: {
                         Authorization: 'Bearer ' + accessToken.value,
                         'api-key': adminApiKey,
-                        'harpId': harpUser
+                        'harpId': user
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
