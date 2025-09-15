@@ -80,33 +80,32 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 90000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.5.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 90000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS645FHIR-v1.5.000-FHIR6-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
+        waitForValidationToBe90()
+
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2500).click()
-        cy.get(EditMeasurePage.testCasesTab).wait(2500).click()
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
 
         //verify Passing Tab's text
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '40%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(20/49)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '90%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(46/51)')
 
         //Verify Coverage percentage
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '83%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
 
 
         //after versioning, there should be no change to test results or coverage
@@ -122,12 +121,11 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+
         // please leave this in place. it needs a short pause here for the modal to present new fields
         cy.wait(1000)
 
-
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-
 
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).wait(1000).click()
@@ -139,13 +137,25 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //verify Passing Tab's text after Versioning
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '40%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(20/49)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '90%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(46/51)')
 
         //Verify Coverage percentage after versioning
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '83%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
 
     })
 })
+
+function waitForValidationToBe90() {
+    cy.get(TestCasesPage.testCaseListValidationPercTab)
+        .invoke('text')
+        .then((text: string) => {
+            if (!text.includes('90%')) {
+                cy.wait(5000)
+                cy.reload()
+                waitForValidationToBe90()
+            }
+        })
+}
