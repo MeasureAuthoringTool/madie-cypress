@@ -3141,7 +3141,7 @@ export class MeasureCQL {
         'define function daysObs(e Encounter):\n' +
         '  duration in days of e.period\n'
 
-    public static readonly CQL_BoneDensity_Proportion_Boolean = 'library BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR6 version \'1.4.000\'\n' +
+    public static readonly CQL_BoneDensity_Proportion_Boolean = 'library CMS645FHIRBoneDensityPCADTherapy version \'1.0.000\'\n' +
         '\n' +
         'using QICore version \'6.0.0\'\n' +
         '\n' +
@@ -3171,15 +3171,11 @@ export class MeasureCQL {
         '  "Initial Population"\n' +
         '\n' +
         'define "Numerator":\n' +
-        '   "Has Baseline DEXA Scan Two Years Prior to the Start of or Less than Three Months After the Start of ADT"\n' +
+        '  "Has Baseline DEXA Scan Two Years Prior to the Start of or Less than Three Months After the Start of ADT"\n' +
         '\n' +
         'define "Denominator Exception":\n' +
-        '  false\n' +
-        '  // @commmentedOutReason: Negation issue related to https://github.com/cqframework/cql-execution/issues/296, \n' +
-        '  //                       which is tied to https://oncprojectracking.healthit.gov/support/browse/BONNIEMAT-1455. \n' +
-        '  //                       Due to this being the only logic in population, created a \'false\' placeholder\n' +
-        '  // exists ( "No Bone Density Scan Ordered Due to Patient Refusal")\n' +
-        '  //   or exists ( "No Bone Density Scan Performed Due to Patient Refusal")\n' +
+        '  exists ( "No Bone Density Scan Ordered Due to Patient Refusal" )\n' +
+        '    or exists ( "No Bone Density Scan Performed Due to Patient Refusal" )\n' +
         '\n' +
         'define "SDE Ethnicity":\n' +
         '  SDE."SDE Ethnicity"\n' +
@@ -3200,14 +3196,13 @@ export class MeasureCQL {
         '            or DEXAOrdered.authoredOn 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
         '        where DEXAOrdered.status in { \'active\', \'completed\' }\n' +
         '          and DEXAOrdered.intent = \'order\'\n' +
-        '          and DEXAOrdered.doNotPerform is not true\n' +
         '    )\n' +
-        '    union ( [LaboratoryResultObservation: "DEXA Bone Density for Urology Care"] DEXAPerformed\n' +
-        '      with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
-        '        such that DEXAPerformed.effective.toInterval ( ) 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
-        '          or DEXAPerformed.effective.toInterval ( ) 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
-        '      where DEXAPerformed.status in { \'final\', \'amended\', \'corrected\' }\n' +
-        '    )\n' +
+        '      union ( [ObservationClinicalResult: "DEXA Bone Density for Urology Care"] DEXAPerformed\n' +
+        '          with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
+        '            such that DEXAPerformed.effective.toInterval ( ) 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
+        '              or DEXAPerformed.effective.toInterval ( ) 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
+        '          where DEXAPerformed.status in { \'final\', \'amended\', \'corrected\' }\n' +
+        '      )\n' +
         '  )\n' +
         '\n' +
         'define "No Bone Density Scan Ordered Due to Patient Refusal":\n' +
@@ -3228,7 +3223,7 @@ export class MeasureCQL {
         '      with "Prostate Cancer Diagnosis" ProstateCancer\n' +
         '        such that ADTDateTime during day of ProstateCancer.prevalenceInterval()\n' +
         '          and ADTDateTime during day of Interval[start of "Measurement Period" - 3 months, start of "Measurement Period" + 9 months]\n' +
-        '    sort ascending\n' +
+        '      sort ascending\n' +
         '  )\n' +
         '\n' +
         'define "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period":\n' +
@@ -3238,7 +3233,6 @@ export class MeasureCQL {
         '        and OrderTwelveMonthADT.authoredOn during day of Interval[start of "Measurement Period" - 3 months, start of "Measurement Period" + 9 months]\n' +
         '        and OrderTwelveMonthADT.status in { \'active\', \'completed\' }\n' +
         '        and OrderTwelveMonthADT.intent = \'order\'\n' +
-        '        and OrderTwelveMonthADT.doNotPerform is not true\n' +
         '\n' +
         'define "Androgen Deprivation Therapy for Urology Care Medication Active Start Dates":\n' +
         '  [MedicationRequest: "Androgen Deprivation Therapy for Urology Care"] ADTActive\n' +
@@ -3247,17 +3241,16 @@ export class MeasureCQL {
         '      )) DrugPeriods\n' +
         '        sort by start of $this\n' +
         '    ),\n' +
-        '         //get the very first event\n' +
-        '    \n' +
+        '\n' +
+        '    //get the very first event as interval\n' +
         '    firstMedicationEvent: First((ADTActive.dosageInstruction.timing dosageTiming\n' +
-        '                                      //returns first event for the specific dosageTiming\n' +
-        '        \n' +
+        '        //returns first event for the specific dosageTiming\n' +
         '        return First(dosageTiming.event dosageTimingEvents\n' +
         '            sort ascending\n' +
         '        )) firstEvents\n' +
         '        sort ascending\n' +
         '    ),\n' +
-        '    medicationDateTime: NormalizeInterval(firstMedicationEvent, firstMedicationPeriod).earliest ( )\n' +
+        '    medicationDateTime: Min( { firstMedicationEvent, start of firstMedicationPeriod, end of firstMedicationPeriod } )\n' +
         '    where ADTActive.status in { \'active\', \'completed\' }\n' +
         '      and ADTActive.intent in { \'order\', \'original-order\', \'reflex-order\', \'filler-order\', \'instance-order\' }\n' +
         '    return medicationDateTime\n' +
@@ -3269,26 +3262,31 @@ export class MeasureCQL {
         '      )) DrugPeriods\n' +
         '        sort by start of $this\n' +
         '    ),\n' +
-        '    medicationDateTime: NormalizeInterval(ADTOrder.authoredOn, firstMedicationPeriod).earliest ( )\n' +
+        '    medicationDateTime: Min( { ADTOrder.authoredOn, start of firstMedicationPeriod, end of firstMedicationPeriod })\n' +
         '    where ADTOrder.status in { \'active\', \'completed\' }\n' +
         '      and ADTOrder.intent in { \'order\', \'original-order\', \'reflex-order\', \'filler-order\', \'instance-order\' }\n' +
         '    return medicationDateTime\n' +
         '\n' +
         'define "Has Qualifying Encounter":\n' +
         '  exists ( ["Encounter": "Office Visit"] OfficeVisit\n' +
-        '      where OfficeVisit.period during "Measurement Period"\n' +
+        '      where OfficeVisit.period during day of "Measurement Period"\n' +
         '        and OfficeVisit.status = \'finished\'\n' +
         '  )\n' +
         '\n' +
         'define "Prostate Cancer Diagnosis":\n' +
-        '  ([ConditionProblemsHealthConcerns: "Prostate Cancer"] \n' +
-        '    union [ConditionEncounterDiagnosis: "Prostate Cancer"]) ProstateCancer\n' +
-        '    where ProstateCancer.prevalenceInterval ( ) overlaps "Measurement Period"\n' +
-        '      and ProstateCancer.clinicalStatus ~ QICoreCommon."active"\n' +
-        '      and ProstateCancer.verificationStatus ~ QICoreCommon."confirmed"\n' +
+        '  ( [ConditionProblemsHealthConcerns: "Prostate Cancer"]\n' +
+        '    union [ConditionEncounterDiagnosis: "Prostate Cancer"] ) ProstateCancer\n' +
+        '    where ProstateCancer.prevalenceInterval ( ) overlaps day of "Measurement Period"\n' +
+        '      and ProstateCancer.isVerified()\n' +
         '\n' +
-        'define function NormalizeInterval(pointInTime DateTime, dateTimeInterval Interval<DateTime>):\n' +
-        '  if pointInTime is not null then Interval[pointInTime, pointInTime]\n' +
-        '    else if dateTimeInterval is not null then dateTimeInterval \n' +
-        '    else null as Interval<DateTime>'
+        '/*      \n' +
+        '@description: Returns true if the given condition either has no verification status or has a verification status of confirmed, unconfirmed, provisional, or differential\n' +
+        '*/\n' +
+        'define fluent function isVerified(condition Choice<ConditionEncounterDiagnosis, ConditionProblemsHealthConcerns>):\n' +
+        '  condition.verificationStatus is not null implies\n' +
+        '    (condition.verificationStatus ~ QICoreCommon."confirmed"\n' +
+        '      or condition.verificationStatus ~ QICoreCommon."unconfirmed"\n' +
+        '      or condition.verificationStatus ~ QICoreCommon."provisional"\n' +
+        '      or condition.verificationStatus ~ QICoreCommon."differential"\n' +
+        '    )'
 }

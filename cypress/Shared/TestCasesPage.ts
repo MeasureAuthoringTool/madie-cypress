@@ -206,6 +206,7 @@ export class TestCasesPage {
     public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
     public static readonly testCaseListPassingPercTab = '[data-testid="passing-tab"]'
     public static readonly testCaseListCoveragePercTab = '[data-testid="coverage-tab"]'
+    public static readonly testCaseListValidationPercTab = '[data-testid="validation-tab"]'
     public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
     public static readonly testCaseAction0Btn = '[data-testid="test-case-title-0_action"]'
