@@ -10,7 +10,8 @@ export enum EditMeasureActions {
     draft = 'draft',
     viewHR = 'viewHR',
     share = 'share',
-    transfer = 'transfer'
+    transfer = 'transfer',
+    viewHistory = 'viewHistory'
 }
 
 export class EditMeasurePage {
@@ -35,6 +36,7 @@ export class EditMeasurePage {
     public static readonly viewHRActionBtn = '[data-testid="Viewhumanreadable"]'
     public static readonly shareMeasureActionBtn = '[data-testid="Share/Unshare"]'
     public static readonly transferMeasureActionBtn = '[data-testid="transfer-action-btn"]'
+    public static readonly viewHistoryActionBtn = '[data-testid="ViewHistory"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
 
@@ -317,6 +319,16 @@ export class EditMeasurePage {
                 cy.get(this.transferMeasureActionBtn).should('be.visible')
                 cy.get(this.transferMeasureActionBtn).should('be.enabled')
                 cy.get(this.transferMeasureActionBtn).click()
+
+                break
+            }
+
+            case EditMeasureActions.viewHistory: {
+                cy.get(this.viewHistoryActionBtn).should('be.visible')
+                cy.get(this.viewHistoryActionBtn).should('be.enabled')
+                cy.get(this.viewHistoryActionBtn).click()
+
+                break
             }
 
             default: { }
