@@ -1680,15 +1680,11 @@ export class MeasureCQL {
         '  AgeInYearsAt (start of "Measurement Period") >= 20\n'
 
     public static readonly QiCoreCQLSDE = 'library QiCoreCQLLibrary1739988331418 version \'0.0.000\'\n' +
-
-        'using QICore version \'4.1.1\'\n' +
-        '\n' +
+        'using QICore version \'4.1.1\'\n\n' +
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
         'include SupplementalDataElements version \'3.5.000\' called SDE\n' +
-        'include MATGlobalCommonFunctionsFHIR4 version \'1.0.000\' called Global\n' +
-        '\n' +
-        'codesystem "ICD10CM": \'http://hl7.org/fhir/sid/icd-10-cm\'\n' +
-        '\n' +
+        'include MATGlobalCommonFunctionsFHIR4 version \'1.0.000\' called Global\n\n' +
+        'codesystem "ICD10CM": \'http://hl7.org/fhir/sid/icd-10-cm\'\n\n' +
         'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
         'valueset "Atherosclerosis and Peripheral Arterial Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1047.21\'\n' +
         'valueset "Breastfeeding": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1047.73\'\n' +
@@ -1731,8 +1727,6 @@ export class MeasureCQL {
         '\n' +
         'context Patient\n' +
         '\n' +
-        '\n' +
-        '\n' +
         'define "SDE Ethnicity":\n' +
         '  SDE."SDE Ethnicity"\n' +
         '\n' +
@@ -1748,30 +1742,26 @@ export class MeasureCQL {
         'define "Patients Age 20 or Older at Start of Measurement Period":\n' +
         '  AgeInYearsAt (start of "Measurement Period") >= 20\n' +
         '\n' +
-        '\n' +
-        '\n' +
-        'define "Qualifying Encounter during Measurement Period":\n' +
-        '  ( [Encounter: "Annual Wellness Visit"]\n' +
-        '                union [Encounter: "Office Visit"]\n' +
-        '                union [Encounter: "Outpatient Consultation"]\n' +
-        '                union [Encounter: "Outpatient Encounters for Preventive Care"]\n' +
-        '                union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
-        '                union [Encounter: "Preventive Care Services - Other"]\n' +
-        '                union [Encounter: "Preventive Care Services-Individual Counseling"]\n' +
-        '                union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"] ) ValidEncounter\n' +
-        '                    where ValidEncounter.period during "Measurement Period"\n' +
-        '                    and ValidEncounter.status = \'finished\'\n' +
-        '\n' +
-        'define "Statin Therapy Ordered during Measurement Period":\n' +
-        '  ( [MedicationRequest: "Low Intensity Statin Therapy"]\n' +
-        '                union [MedicationRequest: "Moderate Intensity Statin Therapy"]\n' +
-        '                union [MedicationRequest: "High Intensity Statin Therapy"] ) StatinOrdered\n' +
-        '                    where StatinOrdered.authoredOn during "Measurement Period"\n' +
-        '                    and StatinOrdered.status in { \'active\', \'completed\' }\n' +
-        '                    and StatinOrdered.intent = \'order\'\n' +
-        '\n' +
-        '\n' +
-        '\n' +
+        // 'define "Qualifying Encounter during Measurement Period":\n' +
+        // '  ( [Encounter: "Annual Wellness Visit"]\n' +
+        // '                union [Encounter: "Office Visit"]\n' +
+        // '                union [Encounter: "Outpatient Consultation"]\n' +
+        // '                union [Encounter: "Outpatient Encounters for Preventive Care"]\n' +
+        // '                union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+        // '                union [Encounter: "Preventive Care Services - Other"]\n' +
+        // '                union [Encounter: "Preventive Care Services-Individual Counseling"]\n' +
+        // '                union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"] ) ValidEncounter\n' +
+        // '                    where ValidEncounter.period during "Measurement Period"\n' +
+        // '                    and ValidEncounter.status = \'finished\'\n' +
+        // '\n' +
+        // 'define "Statin Therapy Ordered during Measurement Period":\n' +
+        // '  ( [MedicationRequest: "Low Intensity Statin Therapy"]\n' +
+        // '                union [MedicationRequest: "Moderate Intensity Statin Therapy"]\n' +
+        // '                union [MedicationRequest: "High Intensity Statin Therapy"] ) StatinOrdered\n' +
+        // '                    where StatinOrdered.authoredOn during "Measurement Period"\n' +
+        // '                    and StatinOrdered.status in { \'active\', \'completed\' }\n' +
+        // '                    and StatinOrdered.intent = \'order\'\n' +
+        // '\n' +
         'define "Denominator Exceptions 1":\n' +
         '  true\n' +
         '\n' +
@@ -1779,9 +1769,7 @@ export class MeasureCQL {
         '  true\n' +
         '\n' +
         'define "Denominator Exceptions 3":\n' +
-        '  true\n' +
-        '\n' +
-        '\n'
+        '  true\n'
 
     public static readonly SBTESTCMS347_CQL = 'library SBTESTCMS347 version \'0.0.016\'\n' +
         '\n' +
