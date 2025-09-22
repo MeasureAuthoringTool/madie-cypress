@@ -1739,7 +1739,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-    })
+        })
 })
 
 describe('Verify multiple IPs on the highlighting tab', () => {
