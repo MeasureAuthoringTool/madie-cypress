@@ -1,15 +1,15 @@
-import {Environment} from "../../../../Shared/Environment"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasureActions, EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {LandingPage} from "../../../../Shared/LandingPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {Header} from "../../../../Shared/Header"
+import { Environment } from "../../../../Shared/Environment"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -132,7 +132,7 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
         //Share Measure
         MeasuresPage.actionCenter('edit')
         EditMeasurePage.actionCenter(EditMeasureActions.share)
-        cy.get(EditMeasurePage.shareOption).click({force: true})
+        cy.get(EditMeasurePage.shareOption).click({ force: true })
         cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
         cy.get(EditMeasurePage.addBtn).click()
 
@@ -157,7 +157,7 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
 
         //Un Share Measure
         EditMeasurePage.actionCenter(EditMeasureActions.share)
-        cy.get(EditMeasurePage.unshareOption).click({force: true})
+        cy.get(EditMeasurePage.unshareOption).click({ force: true })
         cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.unshareCheckBox).click()
         cy.get(EditMeasurePage.saveUserBtn).click()

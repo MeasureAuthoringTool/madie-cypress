@@ -18,8 +18,8 @@ const now = require('dayjs')
 const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 const mpEndDate = now().format('YYYY-MM-DD')
 
-const expectedQiCoreVersion = '3.27.0'
-const expectedQdmVersion = '3.27.0'
+const expectedQiCoreVersion = '3.29.0'
+const expectedQdmVersion = '3.29.0'
 const measureData: CreateMeasureOptions = {}
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
@@ -63,7 +63,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
-           
+
                     cy.request({
                         url: '/api/fhir/translator-version?draft=true',
                         headers: {
@@ -151,7 +151,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
-          
+
                     cy.request({
                         url: '/api/qdm/translator-version?draft=true',
                         headers: {

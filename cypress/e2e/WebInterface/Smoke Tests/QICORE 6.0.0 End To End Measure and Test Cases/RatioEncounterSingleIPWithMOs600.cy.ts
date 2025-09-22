@@ -25,7 +25,7 @@ const opts: CreateMeasureOptions = {
     mpEndDate: '2026-12-31'
 }
 
-describe.skip('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () => {
+describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
 
@@ -122,5 +122,6 @@ describe.skip('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', 
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+
     })
 })
