@@ -83,7 +83,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
-    public static readonly actionCenterTransfer = '[data-testid="transfer-action-btn"]'
+    public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
 
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'

@@ -103,8 +103,7 @@ describe('CQL Library Transfer', () => {
     })
 })
 
-//Skipping until feature flag TransferLibrary is removed
-describe.skip('CQL Library Transfer - Action Centre buttons', () => {
+describe('CQL Library Transfer - Action Centre buttons', () => {
 
     newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
@@ -132,11 +131,37 @@ describe.skip('CQL Library Transfer - Action Centre buttons', () => {
         //Verify message on the transfer pop up screen
         cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following library(s). All versions and drafts will be transferred, so only the most recent library name appears here.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+
+        //Select Retain Share Access checkbox
+        cy.get('[data-testid="retainShareAccess"]').click()
         cy.get(MeasuresPage.transferContinueButton).click()
 
-        //Logout and Delete Library with ALT user
+        //Verify toast message
+        cy.get('[data-testid="toast-success"]').should('contain.text', 'The library(s) were successfully transferred. If you chose to retain share access, you will still be able to edit the libraries.')
+
+        //Verify the user still has Share access to the Library
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
+        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+
+        //Logout as Regular user and Login as ALT user to verify ownership
         OktaLogin.UILogout()
-        Utilities.deleteLibrary(newCQLLibraryName, false)
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
+        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+
+        //Verify the user has Edit access to the Library
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear()
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(updatedCQLLibraryName)
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
+        cy.log('CQL Library Updated Successfully')
+
+        //Delete Library with ALT user
+        Utilities.deleteLibrary(newCQLLibraryName, true)
 
     })
 
@@ -159,9 +184,21 @@ describe.skip('CQL Library Transfer - Action Centre buttons', () => {
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
 
+        //Verify toast message
+        cy.get('[data-testid="edit-library-cql-success-text"]').should('contain.text', 'The library(s) were successfully transferred. If you chose to retain share access, you will still be able to edit the libraries.')
+
+        //Logout as Regular user and Login as ALT user to verify ownership
+        OktaLogin.UILogout()
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
+        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+
         //Logout and Delete Library with ALT user
         OktaLogin.UILogout()
-        Utilities.deleteLibrary(newCQLLibraryName, false)
+        Utilities.deleteLibrary(newCQLLibraryName, true)
     })
 
     it('Verify Transfer button disabled for non Library owner', () => {
