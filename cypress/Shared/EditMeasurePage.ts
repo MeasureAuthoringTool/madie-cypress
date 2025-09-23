@@ -154,7 +154,8 @@ export class EditMeasurePage {
     //Measure MetaData
 
     //RTE field button(s)
-    public static readonly RTEContentField = '[data-testid="rich-text-editor-content"]'
+    public static readonly RTEContentField = '[data-testid="genericField-rich-text-editor-content"]'
+    public static readonly RTEFieldToolbar = '[data-testid="genericField-rich-text-editor-toolbar"]'
     public static readonly rteToolBar = '[data-testid="rich-text-editor-toolbar"]'
     public static readonly unDoBtn = '[data-testid="UndoIcon"]'
     public static readonly reDoBtn = '[data-testid="RedoIcon"]'
@@ -167,13 +168,13 @@ export class EditMeasurePage {
     public static readonly embdTableBtn = '[data-testid="TableChartIcon"]'
 
     //RTE Embedded table button(s)
-    public static readonly embdTableAddRowAboveBtn = '[data-testid="add-row-above-tooltip"]'
-    public static readonly embdTableAddRowBelowBtn = '[data-testid="add-row-below-tooltip"]'
-    public static readonly embdTableRemoveRowBtn = '[data-testid="remove-row-tooltip"]'
-    public static readonly embdTableAddColLeftBtn = '[data-testid="add-column-left-tooltip"]'
-    public static readonly embdTableAddColRightBtn = '[data-testid="add-column-right-tooltip"]'
-    public static readonly embdTableRemoveColBtn = '[data-testid="remove-column-tooltip"]'
-    public static readonly embdTableRemoveTblBtn = '[data-testid="remove-table-tooltip"]'
+    public static readonly embdTableAddRowAboveBtn = '[data-testid="genericField-add-row-above-tooltip"]'
+    public static readonly embdTableAddRowBelowBtn = '[data-testid="genericField-add-row-below-tooltip"]'
+    public static readonly embdTableRemoveRowBtn = '[data-testid="genericField-remove-row-tooltip"]'
+    public static readonly embdTableAddColLeftBtn = '[data-testid="genericField-add-column-left-tooltip"]'
+    public static readonly embdTableAddColRightBtn = '[data-testid="genericField-add-column-right-tooltip"]'
+    public static readonly embdTableRemoveColBtn = '[data-testid="genericField-remove-column-tooltip"]'
+    public static readonly embdTableRemoveTblBtn = '[data-testid="genericField-remove-table-tooltip"]'
 
     //Model & Measurement Start and End date(s)
     public static readonly mpStart = '[data-testid="measurement-period-start-input"]'
