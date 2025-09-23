@@ -106,7 +106,7 @@
 		"@madie/madie-models": "^1.4.37",
 		"fs-extra": "^11.3.0",
 		"node": "^20.0.0",
-		"puppeteer": "^24.12.0",
+		"puppeteer": "^24.18.0",
 		"unzipper": "^0.12.3",
 		"uuid": "^7.0.3",
 		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
