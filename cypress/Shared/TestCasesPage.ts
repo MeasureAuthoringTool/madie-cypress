@@ -195,7 +195,6 @@ export class TestCasesPage {
     public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
 
-
     public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
@@ -220,6 +219,9 @@ export class TestCasesPage {
     public static readonly tcCoverageSections = '[class="accordion-section"]'
     public static readonly tcCoverageContent = '[class="accordion-content"]'
     public static readonly testCaseCountByCaseNumber = '[data-testid*="_caseNumber"]'
+    public static readonly editTestcaseSDEWarning = '[data-testid="test_case_execution_warnings"]'
+    public static readonly editTestcaseRelevantElementsWarning = '[data-testid="test_case_missing_data_elements"]'
+
 
     //Test Case Population Values
     public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
