@@ -608,4 +608,35 @@ export class Utilities {
                 cy.log('No action. Unsupported type.')
         }
     }
+
+    public static verifyAllLocksDeleted() {
+        // only works with harpUser now, no current use-case to support altUser
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measures/unlock', 
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value,
+                },
+                method: 'DELETE'
+            }).then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body).to.include('No measure locks found for harpId: ' + harpUser)
+                expect(response.body).to.include('No test case locks found for harpId: ' + harpUser)
+            })
+        })
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries/unlock', 
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value,
+                },
+                method: 'DELETE'
+            }).then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body).to.include('No library locks found for harpId: ' + harpUser)
+            })
+        })
+    }
 }
