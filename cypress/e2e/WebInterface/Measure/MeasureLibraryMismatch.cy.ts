@@ -8,16 +8,13 @@ import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 const now = Date.now()
 const measureName = 'MismatchMeasure' + now
 const libraryName = 'MismatchMeasureLib' + now
-let measurePath = 'cypress/fixtures/measureId'
+const measurePath = 'cypress/fixtures/measureId'
 
 /*
     Disclaimer: these tests are relying on existing, commonly used libraries 
     instead of being self-contained & making their own libraries as part of the test.
     If they are all failing, the cause may be not being able to fetch libraries.
-    QDM 5.6: QDMCommon 1.0.000
-    QiCore 4.1.1: CQMCommon 2.2.000
-    QiCore 6.0.0: SupplementalDataElements 4.0.000
-    FHIR 4.0.1: FHIRHelpers 4.4.000
+    Check on the failing test's cqlFile for libraries it uses.
 */
 
 describe('Mismatch between measure model and library model -- error state', () => {
@@ -25,8 +22,7 @@ describe('Mismatch between measure model and library model -- error state', () =
     afterEach('Logout and Clean up Measure', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, libraryName)
+        Utilities.deleteMeasure()
     })
 
     it('QDM 5.6 measure, add QiCore 4.1.1 library', () => {
@@ -69,14 +65,14 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        const expectedError = 'Library model and version does not match the Measure model and version for name: QDMCommon, version: 1.0.000'
+        const expectedError = 'Library model and version does not match the Measure model and version for name: MATGlobalCommonFunction, version: 1.1.000'
         cy.scrollTo('top')
         cy.readFile(measurePath).should('exist').then((measureId) => {
             cy.url().should('contain', measureId + '/edit/cql-editor')
         })
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
     })
-
 
     it('QiCore 4.1.1 measure, add QiCore 6.0.0 library', () => {
         const cqlFile = 'cypress/fixtures/MismatchCql/Qicore4MeasureQicore6Lib.txt'
@@ -99,6 +95,7 @@ describe('Mismatch between measure model and library model -- error state', () =
             cy.url().should('contain', measureId + '/edit/cql-editor')
         })
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
     })
 
     it('QiCore 6.0.0 measure, add QiCore 4.1.1  library', () => {
@@ -122,6 +119,7 @@ describe('Mismatch between measure model and library model -- error state', () =
             cy.url().should('contain', measureId + '/edit/cql-editor')
         })
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
     })
 })
 
@@ -130,8 +128,7 @@ describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
     afterEach('Logout and Clean up Measure', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, libraryName)
+        Utilities.deleteMeasure()
     })
 
     it('QiCore 4.1.1 measure, add FHIR 4.0.1 library', () => {
