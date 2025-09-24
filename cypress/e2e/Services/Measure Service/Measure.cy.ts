@@ -363,7 +363,6 @@ describe('Measure Service: Error validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                //expect(response.body.validationErrors.measureSetId).to.eql("Measure Set ID is required.")
             })
         })
     })
@@ -809,7 +808,6 @@ describe('Measure Service: Update Delete Flag', () => {
                             "improvementNotationDescription": null,
                             "measureScoring": 'Ratio',
                             "active": false,
-                            //"createdBy": user
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(403)
@@ -893,8 +891,8 @@ describe('Measure Service: Update Delete Flag', () => {
             })
         })
     })
-    //skipping until MAT-9091 has been fixed
-    it.skip('After updating / deleting measure, test cases should be unavailable, too', () => {
+
+    it('After updating / deleting measure, test cases should be unavailable, too', () => {
 
         let title = 'someTitleValue'
         let series = 'SomeSeriesValue'
@@ -973,7 +971,6 @@ describe('Measure Service: Update Delete Flag', () => {
 
             })
         })
-        cy.pause()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
@@ -1174,7 +1171,6 @@ describe('Delete QDM Measure with admin API Key', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
     })
 
-    //MAT-8548
     it('Delete versioned QDM Measure with admin API key', () => {
 
         //Version Measure
@@ -1192,6 +1188,7 @@ describe('Delete QDM Measure with admin API Key', () => {
                 })
             })
         })
+
         //Delete Versioned Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
