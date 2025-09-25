@@ -109,7 +109,8 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Save Test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(500).click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
 
@@ -213,6 +214,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Add Elements to the second Test case
@@ -224,7 +226,8 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Save Test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(500).click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Element - Physical Exam:Performed: Systolic blood pressure
@@ -286,6 +289,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page

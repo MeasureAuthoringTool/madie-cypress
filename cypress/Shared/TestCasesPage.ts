@@ -868,7 +868,7 @@ export class TestCasesPage {
 
         if (dob) {
             cy.get(TestCasesPage.QDMDob).clear().click()
-            cy.get(TestCasesPage.QDMDob).type(dob).click()
+            cy.get(TestCasesPage.QDMDob).wait(500).type(dob).click().wait(500)
         }
     }
 
