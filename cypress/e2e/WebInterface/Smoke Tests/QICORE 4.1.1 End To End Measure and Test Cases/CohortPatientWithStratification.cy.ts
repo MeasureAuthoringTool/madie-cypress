@@ -33,24 +33,12 @@ let measureCQL = 'library CohortPatientWithStrartification version \'0.0.000\'\n
     'define "Initial Population":\n' +
     '   true\n' +
     ' \n' +
-    'define "Qualifying Encounters":\n' +
-    '(\n' +
-    '[Encounter: "Office Visit"]\n' +
-    'union [Encounter: "Annual Wellness Visit"]\n' +
-    'union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
-    'union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
-    'union [Encounter: "Home Healthcare Services"]\n' +
-    ') ValidEncounter\n' +
-    'where ValidEncounter.period during "Measurement Period"\n' +
-    'and ValidEncounter.isFinishedEncounter()\n' +
-    '\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '(Enc E where E.status = \'finished\') is not null\n' +
     '\n' +
     'define "Stratification 1":\n' +
     'true'
 
-//MAT-7727
 describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
