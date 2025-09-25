@@ -89,7 +89,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        waitForValidationToBe90()
+        waitForValidationToBe100()
 
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
@@ -99,8 +99,8 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //verify Passing Tab's text
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '90%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(46/51)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(51/51)')
 
         //Verify Coverage percentage
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
@@ -128,7 +128,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).wait(1000).click()
 
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
@@ -137,8 +136,8 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //verify Passing Tab's text after Versioning
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '90%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(46/51)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(51/51)')
 
         //Verify Coverage percentage after versioning
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
@@ -148,14 +147,14 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
     })
 })
 
-function waitForValidationToBe90() {
+function waitForValidationToBe100() {
     cy.get(TestCasesPage.testCaseListValidationPercTab)
         .invoke('text')
         .then((text: string) => {
-            if (!text.includes('90%')) {
+            if (!text.includes('100%')) {
                 cy.wait(5000)
                 cy.reload()
-                waitForValidationToBe90()
+                waitForValidationToBe100()
             }
         })
 }
