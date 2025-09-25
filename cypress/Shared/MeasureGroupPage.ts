@@ -261,14 +261,14 @@ export class MeasureGroupPage {
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
-    public static readonly riskAdjustmentDescriptionTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly riskAdjustmentDescriptionTextBox = '[data-testid="riskAdjustmentDescription-rich-text-editor-content"]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
     public static readonly supplementalDataDefinitionSelect = '#supplemental-data'
     public static readonly supplementalDataDefinitionDropdown = '#supplemental-data-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="supplementalDataDescription-rich-text-editor-content"]'
     public static readonly saveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
     public static readonly discardChangesBtn = '[data-testid=cancel-button]'
