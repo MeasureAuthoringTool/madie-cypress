@@ -7,6 +7,7 @@ import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { Toasts } from "../../../../../Shared/Toasts"
 
 const now = Date.now()
 const measureName = 'QiCoreShiftDates' + now
@@ -129,7 +130,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         })
     })
 
-    it('Shift single test case dates to the past using the acion center option', () => {
+    it('Shift single test case dates to the past using the action center option', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -159,10 +160,9 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 3500)
 
         //confirm success message
-        cy.get(TestCasesPage.TestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(Toasts.otherSuccessToast, { timeout: 9500 }).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //Validate if the Measurement period start date is updated for first Test case
         cy.getCookie('accessToken').then((accessToken) => {
