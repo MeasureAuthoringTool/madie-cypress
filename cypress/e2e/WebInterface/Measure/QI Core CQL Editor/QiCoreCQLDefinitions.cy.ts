@@ -131,7 +131,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Search for Qi-Core CQL Definitions Expression Editor Name Options', () => {
@@ -431,10 +431,10 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
-    // skipping for now: open bug https://jira.cms.gov/browse/MAT-8114 affcting this scenario
+    // skipping for now: manual tests are fine, Cypress cannot trigger this error box for some reason?
     it.skip('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
@@ -496,7 +496,7 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
@@ -526,9 +526,9 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
         // click into View screen
         cy.get('[data-testid="view-button-0"]').click()
 
-        cy.get(CQLEditorPage.definitionNameTextBox).should('be.disabled')
-        // sub element of type combo-box
-        cy.get('[data-testid="type-selector-input"]').should('be.disabled')
+        // needs to be readonly & new version of selector after RTE update
+        cy.get('[name="definitionName"]').should('have.attr', 'readonly')
+        cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypeBoolean')
         cy.get(CQLEditorPage.expressionInsertBtn).should('be.disabled')
         cy.get('[data-testid="cancel-definition-btn"]').should('be.enabled')
     })
