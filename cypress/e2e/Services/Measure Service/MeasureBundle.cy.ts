@@ -613,7 +613,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                     expect(response.body.entry[0].resource.group[0].population[2].criteria.expression).to.eql('numeratorExclusion')
                     expect(response.body.entry[0].resource.group[0].population[3].code.coding[0].code).to.eql('measure-observation')
                     expect(response.body.entry[0].resource.group[0].population[3].criteria.expression).to.eql('isFinishedEncounter')
-                    expect(response.body.entry[0].resource.group[0].population[3].extension[0].valueString).to.eql('Count')
+                    expect(response.body.entry[0].resource.group[0].population[3].extension[0].valueCode).to.eql('Count')
                 })
             })
         })
