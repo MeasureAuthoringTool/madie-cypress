@@ -38,7 +38,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="referenceText-rich-text-editor-content"]').type('Measure Reference')
 
         //intercept reference id once reference is created
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -66,7 +66,7 @@ describe('Qi Core Measure Reference', () => {
 
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').clear().type('Updated Measure Reference').wait(2000)
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="referenceText-rich-text-editor-content"]').clear().type('Updated Measure Reference').wait(2000)
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
@@ -96,7 +96,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="referenceText-rich-text-editor-content"]').type('Measure Reference')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
@@ -118,7 +118,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="referenceText-rich-text-editor-content"]').type('Measure Reference')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
@@ -128,7 +128,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Test')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="referenceText-rich-text-editor-content"]').type('Test')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
@@ -189,7 +189,7 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="referenceText-rich-text-editor-content"]').type('Measure Reference')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
