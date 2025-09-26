@@ -1387,28 +1387,6 @@ export class MeasureCQL {
         'define "Patients Age 20 or Older at Start of Measurement Period":\n' +
         '  AgeInYearsAt (start of "Measurement Period") >= 20\n' +
         '\n' +
-        'define "Qualifying Encounter during Measurement Period":\n' +
-        '  ( [Encounter: "Annual Wellness Visit"]\n' +
-        '                union [Encounter: "Office Visit"]\n' +
-        '                union [Encounter: "Outpatient Consultation"]\n' +
-        '                union [Encounter: "Outpatient Encounters for Preventive Care"]\n' +
-        '                union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
-        '                union [Encounter: "Preventive Care Services - Other"]\n' +
-        '                union [Encounter: "Preventive Care Services-Individual Counseling"]\n' +
-        '                union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"] ) ValidEncounter\n' +
-        '                    where ValidEncounter.period during "Measurement Period"\n' +
-        '                    and ValidEncounter.status = \'finished\'\n' +
-        '\n' +
-        'define "Statin Therapy Ordered during Measurement Period":\n' +
-        '  ( [MedicationRequest: "Low Intensity Statin Therapy"]\n' +
-        '                union [MedicationRequest: "Moderate Intensity Statin Therapy"]\n' +
-        '                union [MedicationRequest: "High Intensity Statin Therapy"] ) StatinOrdered\n' +
-        '                    where StatinOrdered.authoredOn during "Measurement Period"\n' +
-        '                    and StatinOrdered.status in { \'active\', \'completed\' }\n' +
-        '                    and StatinOrdered.intent = \'order\'\n' +
-        '\n' +
-        '\n' +
-        '\n' +
         'define "Denominator Exceptions 1":\n' +
         '  true\n' +
         '\n' +
