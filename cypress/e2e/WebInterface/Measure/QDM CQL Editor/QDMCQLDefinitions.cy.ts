@@ -470,7 +470,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get(CQLEditorPage.definitionsTab).wait(1000).click()
         Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 90000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
-
+        //Verify Expression editor name dropdown is disabled when there are CQL errors
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (0)').click()
         cy.get('[class="Definitions___StyledTd-sc-cj02bv-0 kITigf"]').should('contain.text', 'No Results were found')
@@ -578,7 +578,7 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
         // click into View screen
         cy.get('[data-testid="view-button-0"]').click()
 
-        cy.get(CQLEditorPage.definitionNameTextBox).should('be.disabled')
+        cy.get(CQLEditorPage.definitionNameTextBox).should('not.exist')
         // sub element of tyoe combo-box
         cy.get('[data-testid="type-selector-input"]').should('be.disabled')
         cy.get(CQLEditorPage.expressionInsertBtn).should('be.disabled')
