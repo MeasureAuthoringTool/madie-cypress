@@ -175,7 +175,8 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
     })
 })
 
-describe('Measure History - Version and Draft actions', () => {
+//Skipping until Feature flag MeasureHistory is removed
+describe.skip('Measure History - Version and Draft actions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -231,7 +232,8 @@ describe('Measure History - Version and Draft actions', () => {
     })
 })
 
-describe('Measure History - Associate Measure actions', () => {
+//Skipping until Feature flag MeasureHistory is removed
+describe.skip('Measure History - Associate Measure actions', () => {
 
 
     let measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
