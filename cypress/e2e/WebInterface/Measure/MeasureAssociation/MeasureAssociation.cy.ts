@@ -544,25 +544,25 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.leftPanelDescription).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdescription + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMdescription + '</p>')
 
         //Confirm Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMcopyright + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMcopyright + '</p>')
 
         //Confirm Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdisclaimer + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMdisclaimer + '</p>')
 
         //Confirm Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMrationale + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMrationale + '</p>')
 
         //Confirm Steward & Developers
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
@@ -578,13 +578,13 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMguidance + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMguidance + '</p>')
 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMclinicalRecommendation + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMclinicalRecommendation + '</p>')
     })
 })
 
@@ -652,6 +652,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -660,6 +661,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -668,6 +670,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -676,6 +679,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -1096,22 +1100,22 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Confirm Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdescription + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMdescription + '</p>')
 
         //Confirm Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMcopyright + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMcopyright + '</p>')
 
         //Confirm Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdisclaimer + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMdisclaimer + '</p>')
 
         //Confirm Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMrationale + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMrationale + '</p>')
 
         //Confirm Steward & Developers
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
@@ -1126,12 +1130,12 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Confirm Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMguidance + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMguidance + '</p>')
 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMclinicalRecommendation + '</p></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMclinicalRecommendation + '</p>')
     })
 })
 
