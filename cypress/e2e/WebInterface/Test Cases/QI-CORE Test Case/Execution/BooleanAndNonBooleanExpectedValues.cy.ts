@@ -21,8 +21,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
-            '2012-01-02', '2013-01-01')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -80,7 +79,6 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).should('contain.value', '1')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('contain.value', '2')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('contain.value', '3')
-
     })
 
     it('Verify Expected values for multiple measure groups with Boolean and Non boolean Population Basis', () => {
@@ -109,7 +107,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]')
             .clear()
             .type('{selectAll}{backspace}')
             .type('Typed some value for Rate Aggregation text area field').wait(500)
@@ -175,7 +173,6 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         //Assert Expected values for Population Basis Boolean (Cohort Measure Group)
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.checked')
-
     })
 
     it('Verify Expected / Actual page dirty check with Non-Boolean Population Basis', () => {
@@ -218,7 +215,6 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         //verify that the discard modal appears
         Utilities.clickOnDiscardChanges()
-
     })
 
     it('Validate and save Non Boolean Expected values', () => {
@@ -287,8 +283,7 @@ describe('Boolean Population Basis Expected Values', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
-            '2012-01-02', '2013-01-01')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -330,7 +325,7 @@ describe('Boolean Population Basis Expected Values', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]')
             .clear()
             .type('{selectAll}{backspace}')
             .type('Typed some value for Rate Aggregation text area field').wait(500)
@@ -428,7 +423,7 @@ describe('Boolean Population Basis Expected Values', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]')
             .clear()
             .type('{selectAll}{backspace}')
             .type('Typed some value for Rate Aggregation text area field').wait(500)
@@ -495,8 +490,7 @@ describe('Expected values for second initial population', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
-            '2012-01-02', '2013-01-01')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -533,7 +527,7 @@ describe('Expected values for second initial population', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]')
             .clear()
             .type('{selectAll}{backspace}')
             .type('Typed some value for Rate Aggregation text area field').wait(500)
