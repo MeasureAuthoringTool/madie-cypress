@@ -156,7 +156,7 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
         //Verify information text on share screen
         cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a Library, all versions and drafts are shared, so only the most recent library name appears here.Deselect the users with whom you want to unshare the library(s).')
-        cy.get(CQLLibrariesPage.expandArrow).click()
+        cy.get(CQLLibrariesPage.expandArrow).eq(0).click()
 
         cy.get(CQLLibrariesPage.unshareCheckBox).click()
         cy.get(CQLLibrariesPage.saveUserBtn).click()

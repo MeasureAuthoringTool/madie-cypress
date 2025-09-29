@@ -17,14 +17,11 @@ describe('Qi-Core Library Includes fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit', 0)
 
-        //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
@@ -32,8 +29,7 @@ describe('Qi-Core Library Includes fields', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Search for Qi-Core Included Libraries', () => {
@@ -103,7 +99,6 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get('[data-testid="library-alias-input"]').type('VTE')
         cy.get('[data-testid="apply-button"]').click()
         cy.get('[class="toast info"]').should('contain.text', 'Alias VTE has already been defined in the CQL.')
-
     })
 
     it('Verify Included Libraries under Saved Libraries tab', () => {
@@ -113,10 +108,10 @@ describe('Qi-Core Library Includes fields', () => {
 
         //Navigate to Saved Libraries tab
         cy.get(CQLEditorPage.savedLibrariesTab).click()
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'FHIRHelpers')//Alias
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'FHIRHelpers')//Name
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', '4.1.000')//Version
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'abdullah.rafiqi')//Owner
+        cy.get('[data-test-id="row-0"]').find('td').eq(0).should('contain.text', 'FHIRHelpers') //Alias
+        cy.get('[data-test-id="row-0"]').find('td').eq(1).should('contain.text', 'FHIRHelpers') //Name
+        cy.get('[data-test-id="row-0"]').find('td').eq(2).should('contain.text', '4.1.000') //Version
+        cy.get('[data-test-id="row-0"]').find('td').eq(3).should('contain.text', 'Angela.flanagan') //Owner
     })
 
     it('Qi Core: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {
@@ -368,7 +363,6 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(TestCasesPage.tcSearchIcone).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
-
     })
 
     it('Qi Core: Edit Included Libraries functionality -- when changes to the CQL is saved', () => {
@@ -415,7 +409,6 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(TestCasesPage.tcSearchIcone).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
-
     })
 
     it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () => {

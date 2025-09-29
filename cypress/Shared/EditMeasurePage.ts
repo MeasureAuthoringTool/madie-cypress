@@ -113,7 +113,7 @@ export class EditMeasurePage {
     public static readonly saveMeasureDefinition = '[data-testid="measure-definition-save"]'
     public static readonly createDefinitionBtn = '[data-testid="create-definition-button"]'
     public static readonly definitionTermInput = '[data-testid="measure-definition-term-input"]'
-    public static readonly definitionInput = '[data-testid="rich-text-editor-content"]'
+    public static readonly definitionInput = '[data-testid="definition-rich-text-editor-content"]'
     public static readonly definitionMetaTable = '[id="measure-meta-data-table"]'
     public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
     public static readonly emptyDefinitionVal = '[data-testid="empty-definitions"]'

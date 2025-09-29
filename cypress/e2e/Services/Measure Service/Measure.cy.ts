@@ -971,6 +971,7 @@ describe('Measure Service: Update Delete Flag', () => {
 
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
