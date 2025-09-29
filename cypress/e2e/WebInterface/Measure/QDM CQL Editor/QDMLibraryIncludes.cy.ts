@@ -72,7 +72,11 @@ describe('QDM Library Includes fields', () => {
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('sdoh')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'SDOH4.0.000ltj7708View / ApplySDOH3.2.000ltj7708View / ApplySDOH3.1.000ltj7708View / ApplySDOH3.0.000ltj7708View / ApplySDOH2.0.000ltj7708View / Apply')
+        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]')
+            .find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable)
+            .find('[data-testid="library-results-tbl"]')
+            .find('[data-testid="library-results-table-body"]')
+            .should('include.text', 'SDOH5.1.000ltj7708View / ApplySDOH5.0.000ltj7708View / ApplySDOH4.0.000ltj7708View / ApplySDOH3.2.000ltj7708View / Apply')
     })
 
     it('Apply QDM Included library to the CQL and save', () => {
@@ -140,7 +144,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-test-id="row-0"]').children().first().should('contain.text', 'Common')
         cy.get('[data-test-id="row-0"]').children().eq(1).should('contain.text', 'MATGlobalCommonFunctionsQDM')
         cy.get('[data-test-id="row-0"]').children().eq(2).should('contain.text', '8.0.000')
-        cy.get('[data-test-id="row-0"]').children().eq(3).should('contain.text', 'abdullah.rafiqi')
+        cy.get('[data-test-id="row-0"]').children().eq(3).should('contain.text', 'Angela.flanagan')
     })
 
     it('QDM: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {
