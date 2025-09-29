@@ -540,8 +540,8 @@ describe('Delete validations for versioned Measure', () => {
                                 'title': testCaseTitle,
                             }
                         }).then((response) => {
-                            expect(response.status).to.eql(400)
-                            expect(response.body.message).to.include('Test case(s) cannot be deleted, please contact the helpdesk')
+                            expect(response.status).to.eql(405)
+                            expect(response.body.error).to.include('Method Not Allowed')
                         })
                     })
                 })
