@@ -7,18 +7,18 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Toasts } from "../../../../../Shared/Toasts"
+import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
-let testCaseSeries = 'SBTestSeries'
-let mesureCQLPFTests = MeasureCQL.CQL_Populations
+const measureName = 'ETCByNonOwner' + Date.now()
+const CqlLibraryName = 'ETCByNonOwnerLib' + Date.now()
+const testCaseTitle = 'test case title'
+const testCaseDescription = 'DENOMFail' + Date.now()
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
+const testCaseSeries = 'SBTestSeries'
+const measureCQLPFTests = QiCore4Cql.reduced_CQL_Multiple_Populations
 
 describe('Ability to run valid test cases whether or not the user is the owner of the measure or if the measure has not been shared with the user', () => {
 
@@ -28,9 +28,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests, null, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null, true)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.AltLogin()
 
@@ -45,34 +43,6 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
-
-        //Add second Measure Group with return type as Boolean
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('boolean')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -108,35 +78,22 @@ describe('Ability to run valid test cases whether or not the user is the owner o
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(measureName, newCqlLibraryName, false, true)
+        Utilities.deleteMeasure(null, null, false, true)
     })
 
     it('Run / Execute single passing Test Case, on the Test Case list page, where the user is not the owner nor shared' +
         ' -- Run button is available and correct results are provided', () => {
 
             //Add json to the test case
-            Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
             cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, {parseSpecialCharSequences: false})
 
-            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
             Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
-
-            cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-            cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
-
-            TestCasesPage.clickEditforCreatedTestCase()
 
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -144,7 +101,15 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+            cy.get(TestCasesPage.testCaseIPPExpected).click()
+
+            cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
+            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
+            cy.get(TestCasesPage.testCaseDENOMExpected).click()
+
+            cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+            cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+            cy.get(TestCasesPage.testCaseNUMERExpected).click()
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -191,13 +156,12 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
-        })
+    })
 
     it('Run / Execute single passing Test Case, on the Test Case details page, where the user is not the owner nor shared' +
         ' -- Run button is available and correct results are provided', () => {
 
             //Add json to the test case
-            Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
@@ -208,14 +172,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-            cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
             cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
-       
-            Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 37700)
-            cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
-
-            TestCasesPage.clickEditforCreatedTestCase()
 
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -224,6 +181,14 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseIPPExpected).click()
+
+            cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
+            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
+            cy.get(TestCasesPage.testCaseDENOMExpected).click()
+
+            cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+            cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+            cy.get(TestCasesPage.testCaseNUMERExpected).click()
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -242,7 +207,6 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             OktaLogin.Login()
 
             cy.get(LandingPage.allMeasuresTab).click()
-            cy.reload()
 
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
@@ -273,7 +237,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.tctExpectedActualSubTab).click()
             cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
             cy.get(TestCasesPage.measureActualCheckbox).should('be.checked')
-        })
+    })
 
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning -- when user is not the owner', () => {
 
@@ -299,7 +263,15 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        cy.get(TestCasesPage.testCaseIPPExpected).click()
+
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENOMExpected).click()
+
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMERExpected).click()
 
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
