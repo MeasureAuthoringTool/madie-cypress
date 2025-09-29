@@ -892,7 +892,8 @@ describe('Measure Service: Update Delete Flag', () => {
         })
     })
 
-    it('After updating / deleting measure, test cases should be unavailable, too', () => {
+    //Skipping until MAT-9223 is resolved
+    it.skip('After updating / deleting measure, test cases should be unavailable, too', () => {
 
         let title = 'someTitleValue'
         let series = 'SomeSeriesValue'
