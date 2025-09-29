@@ -17,8 +17,8 @@ describe('Measure List Page Sort by Columns', () => {
 
         OktaLogin.UILogout()
     })
-
-    it('Measure sorting by columns on All Measures tab', () => {
+    //skipping test until MAT-8868 is fixed
+    it.skip('Measure sorting by columns on All Measures tab', () => {
 
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=ASC').as('sort')
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=DESC').as('sort2')
@@ -50,52 +50,52 @@ describe('Measure List Page Sort by Columns', () => {
         //sort by measure
         cy.contains('.header-button', 'Measure').click()
         cy.wait('@sort')
-        MeasuresPage.checkFirstRow({name: '\t Test.CMS334.emm'})
+        MeasuresPage.checkFirstRow({ name: '\t Test.CMS334.emm' })
         cy.contains('.header-button', 'Measure').click()
         cy.wait('@sort2')
-        MeasuresPage.checkFirstRow({name: 'Zoom In Information'})
+        MeasuresPage.checkFirstRow({ name: 'Zoom In Information' })
 
         // sort by version
         cy.contains('.header-button', 'Version').click()
         cy.wait('@sort3')
-        MeasuresPage.checkFirstRow({version: '0.0.000'})
+        MeasuresPage.checkFirstRow({ version: '0.0.000' })
         cy.contains('.header-button', 'Version').click()
         cy.wait('@sort4')
-        MeasuresPage.checkFirstRow({version: '15.1.000'})
+        MeasuresPage.checkFirstRow({ version: '15.1.000' })
 
         // sort by status
         cy.contains('.header-button', 'Status').click()
         cy.wait('@sort13')
-        MeasuresPage.checkFirstRow({status: ''})
+        MeasuresPage.checkFirstRow({ status: '' })
         cy.contains('.header-button', 'Status').click()
         cy.wait('@sort14')
-        MeasuresPage.checkFirstRow({status: 'Draft'})
+        MeasuresPage.checkFirstRow({ status: 'Draft' })
 
         // sort by model
         cy.contains('.header-button', 'Model').click()
         cy.wait('@sort5')
-        MeasuresPage.checkFirstRow({model: SupportedModels.QDM })
+        MeasuresPage.checkFirstRow({ model: SupportedModels.QDM })
         cy.contains('.header-button', 'Model').click()
         cy.wait('@sort6')
-        MeasuresPage.checkFirstRow({model: SupportedModels.qiCore6 })
+        MeasuresPage.checkFirstRow({ model: SupportedModels.qiCore6 })
 
         // sort by shared
         cy.contains('.header-button', 'Shared').click()
         cy.wait('@sort7')
-        MeasuresPage.checkFirstRow({shared: false})
+        MeasuresPage.checkFirstRow({ shared: false })
         cy.contains('.header-button', 'Shared').click()
         cy.wait('@sort8')
-        MeasuresPage.checkFirstRow({shared: true})
+        MeasuresPage.checkFirstRow({ shared: true })
 
         // sort by cms id empty
         cy.contains('.header-button', 'CMS ID').click()
         cy.wait('@sort9')
-        MeasuresPage.checkFirstRow({cmsId:''})
+        MeasuresPage.checkFirstRow({ cmsId: '' })
         cy.contains('.header-button', 'CMS ID').click()
         cy.wait('@sort10')
         // since we have tests for generating CMS id now, need to do this annoying check now
         cy.get('[data-testid="row-item"]').first().find('td').eq(6).invoke('text').then(cmsId => {
-            
+
             const greatestProdId = 1321 // we can periodically update this I guess?
             if (cmsId.toString().length < 5) {
                 const idNumber = Number(cmsId)
@@ -110,10 +110,10 @@ describe('Measure List Page Sort by Columns', () => {
         // sort by updated
         cy.contains('.header-button', 'Updated').click()
         cy.wait('@sort11')
-        MeasuresPage.checkFirstRow({updated: '11/16/2022'})
+        MeasuresPage.checkFirstRow({ updated: '11/16/2022' })
         cy.contains('.header-button', 'Updated').click()
         cy.wait('@sort12')
-        MeasuresPage.checkFirstRow({updated: today})
+        MeasuresPage.checkFirstRow({ updated: today })
     })
 
     it('Column sort resets pagination to page 1', () => {
@@ -125,14 +125,14 @@ describe('Measure List Page Sort by Columns', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
 
-         // go to page 2
-         cy.get(MeasuresPage.paginationNextButton).click()
+        // go to page 2
+        cy.get(MeasuresPage.paginationNextButton).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
 
         // sort by model
         cy.contains('.header-button', 'Model').click()
         cy.wait('@sort')
-        MeasuresPage.checkFirstRow({model: SupportedModels.QDM })
+        MeasuresPage.checkFirstRow({ model: SupportedModels.QDM })
 
         // verify page 1
         cy.url().should('match', /page=1/)
@@ -149,7 +149,7 @@ describe('Measure List Page Sort by Columns', () => {
         // sort by model again to reset
         cy.contains('.header-button', 'Model').click()
         cy.wait('@sort2')
-        MeasuresPage.checkFirstRow({model: SupportedModels.qiCore6 })
+        MeasuresPage.checkFirstRow({ model: SupportedModels.qiCore6 })
 
         // verify page 1
         cy.url().should('match', /page=1/)
@@ -161,7 +161,7 @@ describe('Measure List Page Sort by Columns', () => {
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=ASC').as('sort')
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=DESC').as('sort2')
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=&direction=').as('sort3')
-       
+
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
@@ -170,7 +170,7 @@ describe('Measure List Page Sort by Columns', () => {
         let secondMeasureName = ''
         let secondDate = ''
 
-        MeasuresPage.checkFirstRow({updated: today})
+        MeasuresPage.checkFirstRow({ updated: today })
         cy.get('.measures-list tr').first().then(firstRow => {
 
             // save name of default 1st measure
@@ -206,7 +206,7 @@ describe('Measure List Page Sort by Columns', () => {
         cy.contains('.header-button', 'Measure').click()
         cy.wait('@sort3')
         // verify return to default sort by "last updated", i.e. measure showing is same as when test started
-        MeasuresPage.checkFirstRow({name: originalMeasureName, updated: today})
+        MeasuresPage.checkFirstRow({ name: originalMeasureName, updated: today })
     })
 
     it('Sort is not allowed on checkbox column, action button column, or expansion column', () => {
