@@ -78,8 +78,7 @@ describe('Validating Population tabs', () => {
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
         cy.get(MeasureGroupPage.rateAggregation).clear()
-        cy.get(MeasureGroupPage.rateAggregation).type('{selectAll}{backspace}')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).type('{selectAll}{backspace}Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save measure group
@@ -111,7 +110,7 @@ describe('Validating Population tabs', () => {
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
         cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>Typed some value for Rate Aggregation text area field</p></div>')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.html', '<p>Typed some value for Rate Aggregation text area field</p>')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
@@ -136,7 +135,7 @@ describe('Validating Population tabs', () => {
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
         cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>Typed some value for Rate Aggregation text area field</p></div>')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.html', '<p>Typed some value for Rate Aggregation text area field</p>')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
@@ -351,7 +350,6 @@ describe('Validating Reporting tabs', () => {
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -374,7 +372,6 @@ describe('Validating Reporting tabs', () => {
         //save selected IN value
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-
         //confirm message
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
 
@@ -383,7 +380,6 @@ describe('Validating Reporting tabs', () => {
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -396,9 +392,8 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
         cy.get(MeasureGroupPage.improvementNotationValues)
             .type('{downArrow}{enter}')
-        cy.get(MeasureGroupPage.improvementNotationDescQiCore).find(EditMeasurePage.RTEContentField)
-            .type('{selectAll}{backspace}')
-            .type('Loss of points is actually good.').wait(500)
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore)
+            .type('{selectAll}{backspace}Loss of points is actually good.').wait(500)
 
         //save selected IN value
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -410,7 +405,6 @@ describe('Validating Reporting tabs', () => {
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -520,18 +514,12 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
             .clear()
-            .type('{selectAll}{backspace}')
-            .type('Denominator Description').wait(500)
+            .type('{selectAll}{backspace}Denominator Description').wait(500)
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
-
-        //navigate to the main MADiE page
-        cy.get(Header.mainMadiePageButton).click()
-
-        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
@@ -541,8 +529,8 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         //Click on Supplemental data tab
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
 
-        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
-            .should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>Denominator Description</p></div>')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .should('have.html', '<p>Denominator Description</p>')
     })
 
     it('Clicking on Discard changes button on Risk Adjustment page will revert the changes made before save', () => {
