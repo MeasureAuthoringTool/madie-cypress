@@ -4,7 +4,8 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Header } from "../../../../Shared/Header"
 
-describe('Measure Unlock fires when the user logs in & logs out', () => {
+//Skipping until Feature flag 'Locking' is removed
+describe.skip('Measure Unlock fires when the user logs in & logs out', () => {
 
     it('aaaaaaa', () => {
 
