@@ -4,10 +4,10 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
 
 const measureName = 'PCCTCList' + Date.now()
 const CqlLibraryName = 'PCCTCListLib' + Date.now()
@@ -16,7 +16,7 @@ const secondTestCaseTitle = 'Second Test case'
 const testCaseDescription = 'DENOMFail' + Date.now()
 const testCaseSeries = 'SBTestSeries'
 const validTestCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
-const measureCQL = MeasureCQL.CQL_Multiple_Populations
+const measureCQL = QiCore4Cql.reduced_CQL_Multiple_Populations
 
 describe('Code Coverage Highlighting', () => {
 
@@ -44,7 +44,7 @@ describe('Code Coverage Highlighting', () => {
 
     afterEach('Logout', () => {
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate Passing and Code Coverage tabs contain the initial "-" value, and displays a percentage when Test Case is ran', () => {
@@ -93,14 +93,14 @@ describe('Code Coverage Highlighting', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Encounter')
+        cy.get(MeasureGroupPage.popBasis).type('Boolean')
         cy.get(MeasureGroupPage.popBasisOption).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Qualifying Encounters')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Qualifying Encounters')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Qualifying Encounters')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial PopulationOne')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial PopulationOne')
 
         Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
         cy.get(MeasureGroupPage.reportingTab).click()
@@ -145,7 +145,7 @@ describe('Code Coverage Highlighting', () => {
         //verify percentage number appears in tabs heading
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '55% Coverage')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100% Coverage')
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
