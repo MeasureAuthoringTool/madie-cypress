@@ -102,7 +102,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should('contain.text', 'Test case updated successfully!MADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
