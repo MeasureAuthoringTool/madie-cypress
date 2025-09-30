@@ -380,6 +380,25 @@ export class TestCasesPage {
     public static readonly leftNavExpand = '[data-testid="test-case-sidebar-expand-icon"]'
     public static readonly leftNavMenuList = '[data-testid="test-case-sidebar"]'
 
+    public static readonly openDateCalculator = '[data-testid="editor-calculator-button"]'
+    public static readonly calculatorTool = {
+        durDiffTab: '[data-testid="duration-difference-tab"]',
+        startDate: '[data-testid="start-date-input"]',
+        endDate: '[data-testid="end-date-input"]',
+        precision: '#precision-select',
+        includeEndDateCheckbox: '#endDateInclusive',
+        calculateDuration: '[data-testid="calculate-duration"]',
+        durationResults: '[data-testid="duration-result"]',
+        differenceResults: '[data-testid="difference-result"]',
+        computedDateTab: '[data-testid="computed-date-tab"]',
+        initialDate: '[data-testid="initial-date-input"]',
+        addRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:first', //name = mui-101
+        subtractRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:last',
+        dwmyInput: '[data-testid="precision-number-input"]',
+        dwmyUnitsSelect: '[data-testid="precision-input"]', //same as above?
+        close: '[data-testid="calculation-close-button"]'
+    }
+
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
     //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
     //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries
