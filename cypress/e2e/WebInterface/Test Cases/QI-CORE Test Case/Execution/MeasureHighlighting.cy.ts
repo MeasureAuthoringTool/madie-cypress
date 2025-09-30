@@ -26,6 +26,323 @@ const measureGroupPath = 'cypress/fixtures/groupId'
 const measureSecondGroupPath = 'cypress/fixtures/groupId2'
 const measurePath = 'cypress/fixtures/measureId'
 
+let measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine = 'library Library7027567898767 version \'0.0.000\'\n' +
+    '\n' +
+    'using QICore version \'4.1.1\'\n' +
+    '\n' +
+    'include CQMCommon version \'2.1.000\' called CQMCommon\n' +
+    'include QICoreCommon version \'2.1.000\' called QICoreCommon\n' +
+    'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
+    'include SupplementalDataElements version \'3.5.000\' called SDE\n' +
+    'include TJCOverall version \'8.13.000\' called TJC\n' +
+    'include VTE version \'8.7.000\' called VTE\n\n' +
+    'codesystem "LOINC": \'http://loinc.org\'\n\n' +
+    'valueset "Application of Graduated Compression Stockings":\'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.66\'\n' +
+    'valueset "Application of Intermittent Pneumatic Compression Devices": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.65\'\n' +
+    'valueset "Application of Venous Foot Pumps": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.64\'\n' +
+    'valueset "Atrial Fibrillation or Flutter": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.202\' \n' +
+    'valueset "Comfort Measures": \'http://cts.nlm.nih.gov/fhir/ValueSet/1.3.6.1.4.1.33895.1.3.0.45\'\n' +
+    'valueset "Direct Thrombin Inhibitor": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.205\' \n' +
+    'valueset "Emergency Department Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.292\' \n' +
+    'valueset "General or Neuraxial Anesthesia": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.1743\' \n' +
+    'valueset "General Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.255\' \n' +
+    'valueset "Glycoprotein IIb/IIIa Inhibitors": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1045.41\' \n' +
+    'valueset "Graduated compression stockings": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.256\' \n' +
+    'valueset "Gynecological Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.257\'\n' +
+    'valueset "Hemorrhagic Stroke": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.212\'\n' +
+    'valueset "Ischemic Stroke": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.247\'\n' +
+    'valueset "Hip Fracture Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.258\' \n' +
+    'valueset "Hip Replacement Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.259\' \n' +
+    'valueset "Injectable Factor Xa Inhibitor for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.211\' \n' +
+    'valueset "INR": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.213\' \n' +
+    'valueset "Intensive Care Unit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1029.206\' \n' +
+    'valueset "Intermittent pneumatic compression devices": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.214\' \n' +
+    'valueset "Intracranial Neurosurgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.260\' \n' +
+    'valueset "Intravenous route": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.222\' \n' +
+    'valueset "Knee Replacement Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.261\' \n' +
+    'valueset "Low Dose Unfractionated Heparin for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1045.39\' \n' +
+    'valueset "Low Molecular Weight Heparin for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.219\' \n' +
+    'valueset "Low Risk": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.400\' \n' +
+    'valueset "Medical Reason For Not Providing Treatment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.473\' \n' +
+    'valueset "Mental Health Diagnoses": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.105.12.1004\' \n' +
+    'valueset "Obstetrical or Pregnancy Related Conditions": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.263\' \n' +
+    'valueset "Obstetrics VTE": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.264\' \n' +
+    'valueset "Oral Factor Xa Inhibitor for VTE Prophylaxis or VTE Treatment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.134\' \n' +
+    'valueset "Patient Refusal": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.93\' \n' +
+    'valueset "Rivaroxaban for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.50\' \n' +
+    'valueset "Subcutaneous route": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.223\' \n' +
+    'valueset "Unfractionated Heparin": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.218\' \n' +
+    'valueset "Urological Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.272\' \n' +
+    'valueset "Venous foot pumps": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.230\' \n' +
+    'valueset "Venous Thromboembolism": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.279\' \n' +
+    'valueset "Warfarin": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.232\'\n' +
+    '\n' +
+    'code "Risk for venous thromboembolism": \'72136-5\' from "LOINC" display \'Risk for venous thromboembolism\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
+    '\n' +
+    'define "Initial Population":\n' +
+    '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"\n' +
+    '\n' +
+    'define "Denominator":\n' +
+    '  "Initial Population"\n' +
+    '\n' +
+    'define "Numerator":\n' +
+    '  "Encounter with VTE Prophylaxis Received From Day of Start of Hospitalization To Day After Admission or Procedure"\n' +
+    '      union ( "Encounter with Medication Oral Factor Xa Inhibitor Administered on Day of or Day After Admission or Procedure"\n' +
+    '                   intersect ( "Encounter with Prior or Present Diagnosis of Atrial Fibrillation or Prior Diagnosis of VTE"\n' +
+    '                                  union "Encounter with Prior or Present Procedure of Hip or Knee Replacement Surgery"\n' +
+    '                               )\n' +
+    '              )\n' +
+    '      union "Encounter with Low Risk for VTE or Anticoagulant Administered"\n' +
+    '      union "Encounter with No VTE Prophylaxis Due to Medical Reason"\n' +
+    '      union "Encounter with No VTE Prophylaxis Due to Patient Refusal"\n' +
+    '\n' +
+    'define "Pharmacological or Mechanical VTE Prophylaxis Received":\n' +
+    '  ( ["MedicationAdministration": "Low Dose Unfractionated Heparin for VTE Prophylaxis"] VTEMedication\n' +
+    '           where VTEMedication.status =\'completed\'\n' +
+    '                and VTEMedication.dosage.route in "Subcutaneous route"\n' +
+    '    )\n' +
+    '  union (["MedicationAdministration": "Low Molecular Weight Heparin for VTE Prophylaxis"] LMWH where LMWH.status = \'completed\')\n' +
+    '  union (["MedicationAdministration": "Injectable Factor Xa Inhibitor for VTE Prophylaxis"] FactorXa where FactorXa.status = \'completed\')\n' +
+    '  union (["MedicationAdministration": "Warfarin"] Warfarin where Warfarin.status = \'completed\')\n' +
+    '  union (["MedicationAdministration": "Rivaroxaban for VTE Prophylaxis"] Rivaroxaban where Rivaroxaban.status = \'completed\')\n' +
+    '  union (\n' +
+    '          (["Procedure": "Application of Intermittent Pneumatic Compression Devices"] \n' +
+    '           union ["Procedure": "Application of Venous Foot Pumps"] \n' +
+    '           union ["Procedure": "Application of Graduated Compression Stockings"] \n' +
+    '           ) DeviceApplied\n' +
+    '              where DeviceApplied.status = \'completed\'\n' +
+    '         )\n' +
+    '\n' +
+    'define "Encounter with VTE Prophylaxis Received From Day of Start of Hospitalization To Day After Admission or Procedure":\n' +
+    '  ( from\n' +
+    '        VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '        "Pharmacological or Mechanical VTE Prophylaxis Received" VTEProphylaxis\n' +
+    '        where Coalesce(VTEProphylaxis.effective.toInterval(), VTEProphylaxis.performed.toInterval())starts during day of  QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
+    '        return QualifyingEncounter\n' +
+    '    )\n' +
+    '      union ( from\n' +
+    '          VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '          ["Procedure": "General or Neuraxial Anesthesia"] AnesthesiaProcedure,\n' +
+    '          "Pharmacological or Mechanical VTE Prophylaxis Received" VTEProphylaxis\n' +
+    '          where AnesthesiaProcedure.status = \'completed\'\n' +
+    '            and  AnesthesiaProcedure.performed .toInterval() ends 1 day after day of start of QualifyingEncounter.period\n' +
+    '            and Coalesce(VTEProphylaxis.effective.toInterval(), VTEProphylaxis.performed.toInterval()) starts during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
+    '          return QualifyingEncounter\n' +
+    '      )\n' +
+    '\n' +
+    'define "Encounter with Medication Oral Factor Xa Inhibitor Administered on Day of or Day After Admission or Procedure":\n' +
+    '  ( from\n' +
+    '        VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '        ["MedicationAdministration": "Oral Factor Xa Inhibitor for VTE Prophylaxis or VTE Treatment"] FactorXaMedication\n' +
+    '        where FactorXaMedication.status = \'completed\'\n' +
+    '          and FactorXaMedication.effective.toInterval() starts during day of (start of QualifyingEncounter.period).CalendarDayOfOrDayAfter()\n' +
+    '        return QualifyingEncounter\n' +
+    '    )\n' +
+    '      union ( from\n' +
+    '          VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '          ["Procedure": "General or Neuraxial Anesthesia"] AnesthesiaProcedure,\n' +
+    '          ["MedicationAdministration": "Oral Factor Xa Inhibitor for VTE Prophylaxis or VTE Treatment"] FactorXaMedication\n' +
+    '          where FactorXaMedication.status = \'completed\'\n' +
+    '            and AnesthesiaProcedure.status = \'completed\'\n' +
+    '            and AnesthesiaProcedure.performed.toInterval() ends 1 day after day of start of QualifyingEncounter.period\n' +
+    '            and FactorXaMedication.effective.toInterval() starts during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
+    '          return QualifyingEncounter\n' +
+    '      )\n' +
+    '\n' +
+    'define "Encounter with Prior or Present Diagnosis of Atrial Fibrillation or Prior Diagnosis of VTE":\n' +
+    '  ( VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '          with ["Condition": "Atrial Fibrillation or Flutter"] AtrialFibrillation\n' +
+    '            such that AtrialFibrillation.isActive()\n' +
+    '              and AtrialFibrillation.verificationStatus is not null and AtrialFibrillation.verificationStatus  ~ QICoreCommon."confirmed"\n' +
+    '              and AtrialFibrillation.onset.toInterval() starts on or before \n' +
+    '              end of QualifyingEncounter.period\n' +
+    '      )\n' +
+    '        union ( VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '            where  QualifyingEncounter.encounterDiagnosis ().code in "Atrial Fibrillation or Flutter"\n' +
+    '        )\n' +
+    '        union ( VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '            with ["Condition": "Venous Thromboembolism"] VTEDiagnosis\n' +
+    '              such that ( VTEDiagnosis.clinicalStatus  ~ QICoreCommon."inactive"\n' +
+    '                    or VTEDiagnosis.clinicalStatus  ~ QICoreCommon."remission"\n' +
+    '                    or  VTEDiagnosis.clinicalStatus ~ QICoreCommon."resolved"\n' +
+    '              )\n' +
+    '               and VTEDiagnosis.verificationStatus is not null and VTEDiagnosis.verificationStatus ~ QICoreCommon."confirmed"\n' +
+    '              and VTEDiagnosis.onset.toInterval() before start of QualifyingEncounter.period\n' +
+    '        )\n' +
+    '\n' +
+    'define "Encounter with Prior or Present Procedure of Hip or Knee Replacement Surgery":\n' +
+    '    VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '    with ( ["Procedure": "Hip Replacement Surgery"]\n' +
+    '            union ["Procedure": "Knee Replacement Surgery"] ) HipKneeProcedure\n' +
+    '  such that HipKneeProcedure.status = \'completed\'\n' +
+    '        and HipKneeProcedure.performed.toInterval() starts on or before end of QualifyingEncounter.period\n' +
+    '\n' +
+    'define "Encounter with Low Risk for VTE or Anticoagulant Administered":\n' +
+    '  "Low Risk for VTE or Anticoagulant Administered From Day of Start of Hospitalization To Day After Admission"\n' +
+    '      union "Low Risk for VTE or Anticoagulant Administered on Day of or Day After Procedure"\n' +
+    '\n' +
+    'define "Low Risk Indicator For VTE":\n' +
+    '  ( ["Observation": "Risk for venous thromboembolism"] VTERiskAssessment\n' +
+    '      where  VTERiskAssessment.value as Concept in "Low Risk"\n' +
+    '        and VTERiskAssessment.status in { \'final\', \'amended\', \'corrected\' }\n' +
+    '      return {\n' +
+    '        id: VTERiskAssessment.id,\n' +
+    '        LowRiskDatetime: VTERiskAssessment.effective.earliest()\n' +
+    '      }\n' +
+    '  )\n' +
+    '    union ( ["US Core Laboratory Result Observation Profile": "INR"] INRLabTest\n' +
+    '        where  INRLabTest.value as Quantity > 3.0 \n' +
+    '          and INRLabTest.status in { \'final\', \'amended\', \'corrected\' }\n' +
+    '        return  { \n' +
+    '          id: INRLabTest.id, \n' +
+    '          LowRiskDatetime: INRLabTest.issued }\n' +
+    '    )\n' +
+    '    union ( ( ( ["MedicationAdministration": "Unfractionated Heparin"] UnfractionatedHeparin\n' +
+    '          where UnfractionatedHeparin.dosage.route in "Intravenous route"\n' +
+    '      )\n' +
+    '        union ["MedicationAdministration": "Direct Thrombin Inhibitor"]\n' +
+    '        union ["MedicationAdministration": "Glycoprotein IIb/IIIa Inhibitors"] ) AnticoagulantMedication\n' +
+    '        where AnticoagulantMedication.status = \'completed\'\n' +
+    '        return { \n' +
+    '          id: AnticoagulantMedication.id, \n' +
+    '          LowRiskDatetime: start of AnticoagulantMedication.effective.toInterval() }\n' +
+    '    )\n' +
+    '\n' +
+    'define "Low Risk for VTE or Anticoagulant Administered From Day of Start of Hospitalization To Day After Admission":\n' +
+    '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '    with "Low Risk Indicator For VTE" LowRiskForVTE\n' +
+    '      such that LowRiskForVTE.LowRiskDatetime during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
+    '\n' +
+    'define "Low Risk for VTE or Anticoagulant Administered on Day of or Day After Procedure":\n' +
+    '  from\n' +
+    '    VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '    ["Procedure": "General or Neuraxial Anesthesia"] AnesthesiaProcedure,\n' +
+    '    "Low Risk Indicator For VTE" LowRiskForVTE\n' +
+    '    where AnesthesiaProcedure.status = \'completed\'\n' +
+    '      and AnesthesiaProcedure.performed.toInterval() ends 1 day after day of start of QualifyingEncounter.period\n' +
+    '      and LowRiskForVTE.LowRiskDatetime during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
+    '    return QualifyingEncounter\n' +
+    '\n' +
+    'define "Encounter with No VTE Prophylaxis Due to Medical Reason":\n' +
+    '  ( "No VTE Prophylaxis Medication Due to Medical Reason From Day of Start of Hospitalization To Day After Admission"\n' +
+    '    intersect "No Mechanical VTE Prophylaxis Due to Medical Reason From Day of Start of Hospitalization To Day After Admission"\n' +
+    ')\n' +
+    '  union ( "No VTE Prophylaxis Medication Due to Medical Reason on Day of or Day After Procedure"\n' +
+    '      intersect "No Mechanical VTE Prophylaxis Due to Medical Reason on Day of or Day After Procedure"\n' +
+    '  )\n' +
+    '\n' +
+    'define "No VTE Prophylaxis Medication Due to Medical Reason From Day of Start of Hospitalization To Day After Admission":\n' +
+    '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '                with "No VTE Prophylaxis Medication Administered or Ordered" NoVTEMedication\n' +
+    '                  such that NoVTEMedication.MedicationStatusReason in "Medical Reason For Not Providing Treatment"\n' +
+    '                    and NoVTEMedication.authoredOn during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
+    '\n' +
+    'define "No VTE Prophylaxis Medication Administered or Ordered":\n' +
+    '  ( ( [MedicationAdministrationNotDone: "Low Dose Unfractionated Heparin for VTE Prophylaxis"]\n' +
+    '       union [MedicationAdministrationNotDone: "Low Molecular Weight Heparin for VTE Prophylaxis"]\n' +
+    '        union [MedicationAdministrationNotDone: "Injectable Factor Xa Inhibitor for VTE Prophylaxis"]\n' +
+    '        union [MedicationAdministrationNotDone: "Warfarin"]\n' +
+    '        union [MedicationAdministrationNotDone: "Rivaroxaban for VTE Prophylaxis"] ) NoMedicationAdm\n' +
+    '        return {\n' +
+    '          id: NoMedicationAdm.id,\n' +
+    '          MedicationStatusReason: NoMedicationAdm.statusReason,\n' +
+    '          authoredOn: NoMedicationAdm.recorded\n' +
+    '        }\n' +
+    '    )\n' +
+    '      union ( ( ["MedicationNotRequested": "Low Dose Unfractionated Heparin for VTE Prophylaxis"]\n' +
+    '          union ["MedicationNotRequested": "Low Molecular Weight Heparin for VTE Prophylaxis"]\n' +
+    '          union ["MedicationNotRequested": "Injectable Factor Xa Inhibitor for VTE Prophylaxis"]\n' +
+    '          union ["MedicationNotRequested": "Warfarin"]\n' +
+    '          union ["MedicationNotRequested": "Rivaroxaban for VTE Prophylaxis"]) NoMedicationOrder\n' +
+    '          where NoMedicationOrder.intent in { \'order\', \'original-order\', \'reflex-order\', \'filler-order\', \'instance-order\' }\n' +
+    '         return {\n' +
+    '            id: NoMedicationOrder.id,\n' +
+    '            MedicationStatusReason: NoMedicationOrder.reasonCode,\n' +
+    '            authoredOn: NoMedicationOrder.authoredOn\n' +
+    '          }\n' +
+    '      )\n' +
+    '\n' +
+    'define "No Mechanical VTE Prophylaxis Due to Medical Reason From Day of Start of Hospitalization To Day After Admission":\n' +
+    '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '      with "No Mechanical VTE Prophylaxis Performed or Ordered" NoVTEDevice\n' +
+    '      such that NoVTEDevice.requestStatusReason in "Medical Reason For Not Providing Treatment"\n' +
+    '             and  NoVTEDevice.authoredOn during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
+    '\n' +
+    'define "No Mechanical VTE Prophylaxis Performed or Ordered":\n' +
+    '  ( ( [ServiceNotRequested: "Venous foot pumps"]\n' +
+    '      union [ServiceNotRequested: "Intermittent pneumatic compression devices"]\n' +
+    '      union [ServiceNotRequested: "Graduated compression stockings"] ) DeviceNotOrder\n' +
+    '      where DeviceNotOrder.intent in { \'order\', \'original-order\', \'reflex-order\', \'filler-order\', \'instance-order\' }\n' +
+    '      return {\n' +
+    '        id: DeviceNotOrder.id,\n' +
+    '        requestStatusReason: DeviceNotOrder.reasonRefused,\n' +
+    '        authoredOn: DeviceNotOrder.authoredOn\n' +
+    '      }\n' +
+    '  )\n' +
+    '   union ( ([ProcedureNotDone: "Application of Intermittent Pneumatic Compression Devices"] \n' +
+    '                  union [ProcedureNotDone: "Application of Venous Foot Pumps"] \n' +
+    '                  union [ProcedureNotDone: "Application of Graduated Compression Stockings"]) DeviceNotApplied\n' +
+    '        let DeviceNotDoneTiming: DeviceNotApplied.recorded\n' +
+    '        return {\n' +
+    '          id: DeviceNotApplied.id,\n' +
+    '          requestStatusReason: DeviceNotApplied.statusReason,\n' +
+    '          authoredOn: DeviceNotDoneTiming\n' +
+    '        }\n' +
+    '    )\n' +
+    '\n' +
+    'define "No VTE Prophylaxis Medication Due to Medical Reason on Day of or Day After Procedure":\n' +
+    '  from\n' +
+    '      VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '      ["Procedure": "General or Neuraxial Anesthesia"] AnesthesiaProcedure,\n' +
+    '      "No VTE Prophylaxis Medication Administered or Ordered" NoVTEMedication\n' +
+    '      where NoVTEMedication.MedicationStatusReason in "Medical Reason For Not Providing Treatment"\n' +
+    '        and AnesthesiaProcedure.status = \'completed\'\n' +
+    '        and  AnesthesiaProcedure.performed.toInterval() ends 1 day after day of start of QualifyingEncounter.period\n' +
+    '        and NoVTEMedication.authoredOn during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
+    '      return QualifyingEncounter \n' +
+    '\n' +
+    ' define "No Mechanical VTE Prophylaxis Due to Medical Reason on Day of or Day After Procedure":\n' +
+    '  from\n' +
+    '      VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '      ["Procedure": "General or Neuraxial Anesthesia"] AnesthesiaProcedure,\n' +
+    '      "No Mechanical VTE Prophylaxis Performed or Ordered" NoVTEDevice\n' +
+    '      where NoVTEDevice.requestStatusReason in "Medical Reason For Not Providing Treatment"\n' +
+    '        and AnesthesiaProcedure.status = \'completed\'\n' +
+    '        and  AnesthesiaProcedure.performed.toInterval() ends 1 day after day of start of QualifyingEncounter.period\n' +
+    '        and NoVTEDevice.authoredOn during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
+    '      return QualifyingEncounter      \n' +
+    '\n' +
+    'define "Encounter with No VTE Prophylaxis Due to Patient Refusal":\n' +
+    '  "No VTE Prophylaxis Due to Patient Refusal From Day of Start of Hospitalization To Day After Admission"\n' +
+    '     \tunion "No VTE Prophylaxis Due to Patient Refusal on Day of or Day After Procedure"\n' +
+    '\n' +
+    'define "No VTE Prophylaxis Due to Patient Refusal From Day of Start of Hospitalization To Day After Admission":\n' +
+    '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
+    '    with "No Mechanical or Pharmacological VTE Prophylaxis Due to Patient Refusal" PatientRefusal\n' +
+    '    such that PatientRefusal.authoredOn during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
+    '\n' +
+    'define "No Mechanical or Pharmacological VTE Prophylaxis Due to Patient Refusal":\n' +
+    '  ( "No VTE Prophylaxis Medication Administered or Ordered" NoVTEMedication\n' +
+    '                  where NoVTEMedication.MedicationStatusReason in "Patient Refusal"\n' +
+    '              )\n' +
+    '                union ( "No Mechanical VTE Prophylaxis Performed or Ordered" NoVTEDevice\n' +
+    '                    where NoVTEDevice.requestStatusReason in "Patient Refusal"\n' +
+    '                )\n' +
+    '\n' +
+    'define "No VTE Prophylaxis Due to Patient Refusal on Day of or Day After Procedure":\n' +
+    '  from\n' +
+    '      VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
+    '      ["Procedure": "General or Neuraxial Anesthesia"] AnesthesiaProcedure,\n' +
+    '      "No Mechanical or Pharmacological VTE Prophylaxis Due to Patient Refusal" PatientRefusal\n' +
+    '      where AnesthesiaProcedure.status = \'completed\'\n' +
+    '        and QICoreCommon."ToInterval" ( AnesthesiaProcedure.performed ) ends 1 day after day of start of QualifyingEncounter.period\n' +
+    '        and PatientRefusal.authoredOn during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
+    '      return QualifyingEncounter'
+
+
 let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -886,7 +1203,7 @@ describe('Highlighting accurately appears for a single PC measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
- 
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -896,7 +1213,7 @@ describe('Highlighting accurately appears for a single PC measure', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-   })
+    })
 
     afterEach('Logout and Clean up Measures', () => {
 
@@ -1007,7 +1324,7 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')        
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1393,7 +1710,7 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 40000)
-            cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', '/***Population Criteria***/\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )')
+            cy.get(TestCasesPage.tcIPHighlightingDetails).find('[data-statement-name="Initial Population"]').should('contain.text', '\n/***Population Criteria***/\n\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\n')
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
             Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
@@ -1444,7 +1761,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withDuplicateLibraryDefinition, null, false, '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine, null, false, '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcJson)
     })
@@ -1496,13 +1813,13 @@ describe('Highlighting accurately appears for a measure with same Definition in 
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 90000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n' +
                 '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"')
-            cy.get('[data-ref-id="394"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="317"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
             Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 90000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', 'define "Denominator":\n' +
                 '  "Initial Population"')
-            cy.get('[data-ref-id="405"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="328"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 90000)
@@ -1516,7 +1833,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
                 '      union "Encounter with Low Risk for VTE or Anticoagulant Administered"\n' +
                 '      union "Encounter with No VTE Prophylaxis Due to Medical Reason"\n' +
                 '      union "Encounter with No VTE Prophylaxis Due to Patient Refusal"')
-            cy.get('[data-ref-id="1268"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="336"]').should('have.color', '#20744C')
         })
     })
 })
@@ -1668,25 +1985,26 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
 
         // select test case on top of list
         cy.contains('View').click()
 
         //run test case
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
-
-        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 25500)
+        Utilities.waitForElementEnabled(TestCasesPage.runQDMTestCaseBtn, 25500)
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
+
         //examine IP tab results
-        Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
-        cy.get('[data-statement-name="Initial Population"]').should('contain.text', '\ndefine "Initial Population":\n  "Has Qualifying Encounter"\n    and "Has Most Recent Bladder Cancer Tumor Staging is Ta HG, Tis, T1"\n    and  "First Qualifying Bladder Cancer Staging Procedure" is not null\n')
-        cy.get('[data-ref-id="781"]').should('have.color', '#a63b12')
+        Utilities.waitForElementVisible(TestCasesPage.tcCQLHighlightingDetails, 35000)
+        cy.get(TestCasesPage.tcCQLHighlightingDetails).find('[data-statement-name="Initial Population"]').should('contain.text', '\ndefine "Initial Population":\n  "Has Most Recent Bladder Cancer Tumor Staging is Ta HG, Tis, T1"\n    and "Has Qualifying Encounter"\n')
+        cy.get('[data-ref-id="284"]').should('have.color', '#a63b12')
     })
 })
