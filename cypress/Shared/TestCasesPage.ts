@@ -156,6 +156,7 @@ export class TestCasesPage {
     public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
     public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
     public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
+    public static readonly tcCQLHighlightingDetails = '[data-testid="cql-highlighting"]'
     public static readonly tcHLCollapseResultBtn = '[data-testid="ExpandLessIcon"]'
     public static readonly tcHLResultsSection = '[data-testid="results-section"]'
     public static readonly tcDENOMHighlightingDetails = '[data-testid="DENOM-highlighting"]'
