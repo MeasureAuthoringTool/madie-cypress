@@ -831,7 +831,7 @@ export class TestCasesPage {
 
     public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string): void {
 
-        cy.get(this.aceEditor).type('{command}f')
+        cy.get(this.tcSearchIcone).click()
         cy.get('input.ace_search_field').first().type(ValueToBeAdded)
 
         cy.get(this.aceEditor).invoke('text').then(
