@@ -25,7 +25,7 @@ describe('Measure Un Sharing', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.UILogout()
+        OktaLogin.Logout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -83,6 +83,36 @@ describe('Measure Un Sharing', () => {
         cy.get(LandingPage.myMeasuresTab).click()
         cy.get(MeasuresPage.measureListTitles).should('not.contain', newMeasureName)
 
+    })
+
+    it('Verify Shared user can Un share Measure from Shared Measures tab', () => {
+
+        //Share Measure with ALT User
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+
+        //Login as ALT user
+        OktaLogin.AltLogin()
+        cy.get(LandingPage.sharedMeasures).click()
+
+        //Unshare Measure
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        cy.get('[type="checkbox"]').first().click()
+        cy.get('[data-testid="share-action-btn"]').click()
+        cy.get('[data-testid="Unshare-option"]').click()
+
+        //Assert text on the popup screen
+        cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + fileContents + ' with the following users:' + harpUserALT)
+        })
+
+        //Click on Accept button and Un share Measure
+        cy.get(EditMeasurePage.acceptBtn).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully unshared.')
+
+        //Verify Measure is not visible under Shared Measures tab
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        cy.get(MeasuresPage.measureListTitles).should('not.contain', newMeasureName)
     })
 })
 
