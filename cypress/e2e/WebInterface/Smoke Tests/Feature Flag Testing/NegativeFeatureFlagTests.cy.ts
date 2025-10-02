@@ -72,6 +72,7 @@ describe('Qi Core6 option available', () => {
 
     it('Qi-Core v6.0.0 option available while creating New Measures', () => {
 
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
         cy.get(LandingPage.newMeasureButton).click()

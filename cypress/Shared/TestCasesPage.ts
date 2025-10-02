@@ -59,14 +59,14 @@ export class TestCasesPage {
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
-    public static readonly QDMLivingStatus = '[id="demographics-living-status-select-id"]'
+    public static readonly QDMLivingStatus = '[id="demographics-living-status-selector"]'
     public static readonly QDMLivingStatusOPtion = '[data-value="Living"]'
-    public static readonly QDMRace = '[id="demographics-race-select-id"]'
+    public static readonly QDMRace = '[id="demographics-race-selector"]'
 
     // changed label to "sex" - only label text changed, all these selectors are the same 12/30/24
-    public static readonly QDMGender = '[id="demographics-gender-select-id"]'
+    public static readonly QDMGender = '[id="demographics-gender-selector"]'
     public static readonly SelectionOptionChoice = '.MuiList-root'
-    public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
+    public static readonly QDMEthnicity = '[id="demographics-ethnicity-selector"]'
 
     //QDM Test Case Demographics herlper text elements
     public static readonly QDMDOBHelperTxt = '[id="birth-date-helper-text"]'
@@ -869,8 +869,8 @@ export class TestCasesPage {
 
         if (race) {
             cy.get(TestCasesPage.QDMRace).click()
-            Utilities.waitForElementVisible('[data-value="' + race + '"]', 100000)
-            cy.get('[data-value="' + race + '"]').click()
+            Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 100000)
+            cy.get('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]').click()
             cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
         }
 
@@ -882,8 +882,8 @@ export class TestCasesPage {
 
         if (ethnicity) {
             cy.get(TestCasesPage.QDMEthnicity).click()
-            Utilities.waitForElementVisible('[data-value="' + ethnicity + '"]', 100000)
-            cy.get('[data-value="' + ethnicity + '"]').click()
+            Utilities.waitForElementVisible('[data-value="' + ethnicity + '__2.16.840.1.114222.4.11.837"]', 100000)
+            cy.get('[data-value="' + ethnicity + '__2.16.840.1.114222.4.11.837"]').click()
         }
 
         if (dob) {
