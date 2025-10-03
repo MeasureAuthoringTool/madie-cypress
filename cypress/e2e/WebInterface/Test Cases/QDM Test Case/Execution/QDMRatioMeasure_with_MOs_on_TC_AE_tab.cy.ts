@@ -9,7 +9,7 @@ import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
+import { Toasts } from "../../../../../Shared/Toasts"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let measureCQL2RunObservations = MeasureCQL.CQLQDMObservationRun
@@ -261,7 +261,6 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         measureData.mpStartDate = '2023-01-01'
         measureData.mpEndDate = '2024-01-01'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, false)
         OktaLogin.Login()
@@ -269,11 +268,10 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
     afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
+
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropriate fields and sections', () => {
 
         //Click on Edit Measure
@@ -285,28 +283,24 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //fill out group details
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
+         cy.get(EditMeasurePage.measureGroupsTab).click()
+         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get('[data-value="Denominator Observations"]').click()
-        cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
-        cy.get('[data-value="Average"]').click()
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(4).click()
-        cy.get(MeasureGroupPage.numeratorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Average')
+
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get('[data-value="Denominator Observations"]').click()
-        cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
-        cy.get('[data-value="Average"]').click()
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Average')
+
+        Utilities.populationSelect(MeasureGroupPage.numeratorExclusionSelect, 'Denominator Exclusions')
 
         //save group details
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -346,7 +340,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate to the main measures page and edit the measure
         cy.get(Header.measures).click()
@@ -374,6 +368,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.numer1Observation).should('be.visible')
         cy.get(TestCasesPage.numer2Observation).should('not.exist')
     })
+
     it('Non-owner of measure cannot edit observation fields', () => {
 
         //Click on Edit Measure
@@ -386,26 +381,22 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
+
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get('[data-value="Denominator Observations"]').click()
-        cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
-        cy.get('[data-value="Average"]').click()
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(4).click()
-        cy.get(MeasureGroupPage.numeratorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Average')
+
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get('[data-value="Denominator Observations"]').click()
-        cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
-        cy.get('[data-value="Average"]').click()
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(5).click()
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Average')
+
+        Utilities.populationSelect(MeasureGroupPage.numeratorExclusionSelect, 'Denominator Exclusions')
 
         //save group details
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -445,7 +436,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test Case Updated Successfully')
 
         // //log out of MADiE
         // OktaLogin.UILogout()
@@ -455,7 +446,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //edit the measure
         MeasuresPage.actionCenter('edit')
@@ -479,10 +470,9 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.numer0Observation).should('not.be.enabled')
         cy.get(TestCasesPage.numer1Observation).should('not.be.enabled')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.be.enabled')
-        OktaLogin.UILogout()
-
     })
 })
+
 describe('QDM Measure: Test Case: with Observations: Expected / Actual results', () => {
 
     beforeEach('Create Measure', () => {
@@ -495,11 +485,10 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         measureData.mpStartDate = '2023-01-01'
         measureData.mpEndDate = '2025-01-01'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJsonwMOElements, false, false)
         OktaLogin.Login()
-        //Click on Edit Measure
+
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -510,33 +499,28 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
     afterEach('Clean up', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
+
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(14).click()
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(4).click()
+
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(TestCasesPage.SelectionOptionChoice).contains('Denominator Observations').click()
-        cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
-        cy.get(MeasureGroupPage.aggregateFunctionDropdownList).eq(0).click()
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(3).click()
-        cy.get(MeasureGroupPage.numeratorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(15).click()
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Average')
+
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(TestCasesPage.SelectionOptionChoice).contains('Numerator Observations').click()
-        cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
-        cy.get(MeasureGroupPage.aggregateFunctionDropdownList).contains('Sum').click()
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
 
         //save group details
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -573,7 +557,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
 
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test Case Updated Successfully')
 
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
@@ -583,6 +567,5 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(TestCasesPage.denomExclusionActualCheckBox).should('contain.value', '0')
         cy.get(TestCasesPage.numActualCheckBox).should('contain.value', '1')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('contain.value', '1')
-
     })
 })

@@ -260,7 +260,6 @@ export class TestCasesPage {
     public static readonly raceOmbElementTab = '[data-testid="demographics-race-omb"]'
     public static readonly genderDdOnElementTab = '[id="gender-selector"]'
     public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
-    public static readonly bonnieImportTestCaseBtn = '[data-testid="import-test-cases-from-bonnie-button"]'
     public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
     public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
     public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
@@ -296,8 +295,6 @@ export class TestCasesPage {
 
     //import test case
     public static readonly importTestCasesBtn = '[data-testid="import-test-cases-button"]'
-    public static readonly qdmImportTestCasesBtn = '[data-testid="show-import-test-cases-button"]'
-
     public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
     public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
     public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
@@ -313,13 +310,11 @@ export class TestCasesPage {
     public static readonly importTestCaseCancelBtnOnModal = '[data-testid="test-case-import-cancel-btn"]'
     public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
     public static readonly importTestCaseBtn = '[data-testid="import-test-case-btn"]'
-    public static readonly testCaseFileImport = '[data-testid="import-file-input"]'
     public static readonly tcFileDrop = '[data-testid="file-drop-div"]'
     public static readonly tcImportButton = '[data-testid="select-file-button"]'
     public static readonly tcImportError = '[data-testid="test-case-import-error-div"]'
     public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[data-testid="test-case-preview-header"]'
-    public static readonly importTestCaseSuccessMsg = '[data-testid="success-toast"]'
     public static readonly importTestCaseSuccessInfo = '[id="content"]'
 
     //Export Test Cases
@@ -471,28 +466,6 @@ export class TestCasesPage {
         })
 
         cy.get(EditMeasurePage.testCasesTab).click()
-    }
-
-    public static clickQDMImportTestCaseButton(): void {
-
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
-            cy.intercept('PUT', '/api/measures/' + measureID + '/test-cases/imports/qdm').as('testCaseList')
-            //click import button on modal window
-
-            cy.get(this.importTestCaseBtnOnModal).click()
-            //spinner indicating that import progress is busy is shown / is visible
-            cy.get(this.importInProgress).should('be.visible')
-
-            //wait until the import buttong appears on the page, again
-            Utilities.waitForElementVisible(this.qdmImportTestCasesBtn, 50000)
-
-            //list is returned
-            cy.wait('@testCaseList').then(({ response }) => {
-                expect(response.statusCode).to.eq(200)
-            })
-        })
-
-
     }
 
     public static grabValidateTestCaseNumber(testCaseNumber: number): void {
@@ -836,18 +809,6 @@ export class TestCasesPage {
         return user
     }
 
-    public static ImportTestCaseFile(TestCaseFile: string): void {
-
-        //Upload valid Json file
-        cy.get(this.testCaseFileImport).attachFile(TestCaseFile)
-
-        cy.get(this.importTestCaseSuccessMsg).should('contain.text', 'Test Case JSON copied into editor. QI-Core Defaults have been added. Please review and save your Test Case.')
-
-        //Save uploaded Test case
-        cy.get(this.editTestCaseSaveButton).click({ force: true })
-        Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 6500)
-    }
-
     public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string): void {
 
         cy.get(this.tcSearchIcone).click()
@@ -899,7 +860,6 @@ export class TestCasesPage {
             .parent('tr')
             .find('input[type="checkbox"]')
             .check()
-
     }
 
     /*
@@ -965,15 +925,6 @@ export class TestCasesPage {
             case TestCaseAction.shiftDates:
                 // still coming, tbd
                 break
-
         }
-
-    }
-
-    public static checkToastMessageOK(element: string) {
-
-        cy.get(element).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully with warnings in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.', 'Test case updated successfully with errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.', 'Test case updated successfully with errors in JSON'])
-        })
     }
 }
