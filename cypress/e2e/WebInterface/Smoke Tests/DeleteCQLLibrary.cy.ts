@@ -3,13 +3,12 @@ import { Utilities } from "../../../Shared/Utilities"
 import { CQLLibraryPage, EditLibraryActions } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../Shared/Header"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-const libraryName = 'DeleteCQLLibraryTest' + randValue
+const libraryName = 'DeleteCQLLibraryTest' + Date.now()
 const publisher = 'Mayo Clinic'
 
-describe('Delete CQL Library - Library List Page', () => {
+describe('Delete CQL Library', () => {
 
     beforeEach('Create library and Login', () => {
 
@@ -22,7 +21,7 @@ describe('Delete CQL Library - Library List Page', () => {
         OktaLogin.Logout()
     })
 
-    it('Verify Library Owner can Delete Library through Library page Action center on Library list Page', () => {
+    it('Verify Library Owner can Delete Library through Action center on Library list Page', () => {
 
         let ownedCountBefore: number, 
             ownedCountAfter: number, 
@@ -95,24 +94,8 @@ describe('Delete CQL Library - Library List Page', () => {
         //Verify the deleted library is not on All Measures page list
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', libraryName)
     })
-})
 
-describe('Delete CQL Library - Edit Library Page', () => {
-
-    beforeEach('Create library and Login', () => {
-
-        CQLLibraryPage.createCQLLibraryAPI(libraryName, publisher)
-        OktaLogin.Login()
-    })
-
-    afterEach('Logout', () => {
-
-        OktaLogin.Logout()
-    })
-
-    it('Verify Library Owner can Delete Library through Library page Action center on Edit Library Page', () => {
-
-        cy.get(Header.cqlLibraryTab).click()
+    it('Verify Library Owner can Delete Library through Action center on Edit Library Page', () => {
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
