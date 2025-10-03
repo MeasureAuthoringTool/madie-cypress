@@ -7,7 +7,6 @@ import { CQLEditorPage } from "./CQLEditorPage"
 import { SupportedModels } from "./CreateMeasurePage"
 
 export enum EditLibraryActions {
-
     delete,
     version,
     draft,
@@ -27,10 +26,6 @@ export type CreateLibraryOptions = {
 const filePath = 'cypress/fixtures/cqlLibraryId'
 
 export class CQLLibraryPage {
-    // older 2 tabs
-    public static readonly allLibrariesBtn = '[data-testid="all-cql-libraries-tab"]' // all refs removed
-    public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]' // all refs removed
-    // new 3 tabs, with LibrarySearchh = true
     public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
     public static readonly sharedLibrariesTab = '[data-testid="shared-libraries-tab"]'
     public static readonly allLibrariesTab = '[data-testid="all-libraries-tab"]'
@@ -50,9 +45,6 @@ export class CQLLibraryPage {
     public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
     public static readonly LibFilterTextField = '[data-testid="library-search-input"]'
     public static readonly filterByDropdown = '[data-testid="filter-by"]'
-    public static readonly LibFilterSubmitBtn = '[data-testid="library-filter-submit"]'
-    public static readonly LibFilterLabel = '[id="mui-2-label"]'
-    public static readonly LibTableRows = '[data-testid="row-item"]'
     public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly saveCQLLibraryBtn = '[data-testid="continue-button"]'
     public static readonly updateCQLLibraryBtn = '[data-testid="cql-library-save-button"]'
@@ -98,7 +90,6 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryModelQDM = '[data-testid="cql-library-model-option-QDM v5.6"]'
 
     public static createCQLLibrary(CQLLibraryName: string, CQLLibraryPublisher: string): void {
-
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
 
