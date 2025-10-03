@@ -18,7 +18,7 @@ export class CQLLibrariesPage {
 
     //Libraries row 0 elements
     public static readonly cqlLibraryVersionList = '[data-testid="cqlLibrary-button-0_version"]'
-    public static readonly row0_Status = '[data-testid="cqlLibrary-button-0_status"]'
+    public static readonly row0_Status = '[data-testid="cqlLibrary-button-0_draft"]'
     public static readonly row0_ExpandArrow = '[data-testid="cqlLibrary-button-0_expandArrow"]'
 
     //Action Center buttons
@@ -63,7 +63,6 @@ export class CQLLibrariesPage {
             cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
             })
-
         })
         cy.get('[data-testid="CQL Library Details"]').click()
     }
@@ -100,7 +99,6 @@ export class CQLLibrariesPage {
             cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
             })
-
         })
     }
 
@@ -108,7 +106,6 @@ export class CQLLibrariesPage {
 
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
             cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', expectedValue)
-
         })
     }
 
