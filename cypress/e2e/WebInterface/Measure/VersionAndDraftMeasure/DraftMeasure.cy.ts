@@ -6,7 +6,6 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { Toasts } from "../../../../Shared/Toasts"
@@ -28,7 +27,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         newMeasureName = 'DraftVersionValidations' + Date.now() + randValue
         newCqlLibraryName = 'DraftVersionValidationsLib' + Date.now() + randValue
-        //Create New Measure and Measure Group
+
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
 
@@ -179,7 +178,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
-        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
+        Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 30000)
 
         // allow for measures to load, if not already done
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -207,10 +206,15 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         //Search for the Measure using original 4.1.1 Measure name
         cy.log('Search Measure with measure name')
+        Utilities.dropdownSelect(MeasuresPage.filterByDropdown, 'Measure')
         cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
+        
+        // expand to see original
+        cy.get('[data-testid*="_expandArrow"]').click()
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
 
-        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(0).click()
+        // check original measure
+        cy.get('[class="expanded-row"]').find('input[type="checkbox"]').click()
         cy.wait(2000)
         cy.get('[data-testid="draft-action-tooltip"]').should('have.attr', 'aria-label', 'You cannot draft a 4.1.1 measure when a 6.0.0 version is available')
     })
@@ -259,7 +263,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
         cy.log('v6 Draft Created Successfully')
 
-        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
+        Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 30000)
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -321,7 +325,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 })
 
-describe('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () => {
+//skipping due to Stu7 not being active / set to true, yet, in PROD
+describe.skip('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -347,8 +352,8 @@ describe('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () =
 
         OktaLogin.UILogout()
     })
-    //skipping due to Stu7 not being active / set to true, yet, in PROD
-    it.skip('Change model from v6.0.0 - to - v7.0.0 with versioning and drafting but cannot draft from 7.0.0 back down', () => {
+    
+    it('Change model from v6.0.0 - to - v7.0.0 with versioning and drafting but cannot draft from 7.0.0 back down', () => {
 
         updatedMeasuresPageName = 'upgradedTo7' + Date.now()
 
@@ -390,7 +395,7 @@ describe('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () =
         cy.log('v7 Draft Created Successfully')
 
         // version to 2.0.000
-        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
+        Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 30000)
 
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
