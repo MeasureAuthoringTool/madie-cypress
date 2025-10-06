@@ -10,6 +10,7 @@ let CqlLibraryOne: string
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
 const filePath = 'cypress/fixtures/cqlLibraryId'
+const filePath2 = 'cypress/fixtures/cqlLibraryId2'
 
 describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
@@ -20,8 +21,6 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
 
-    // just this 1st test has been prepped for when FF LibrarySearch = true, see references to MAT-5119
-    // as of right now, this version should fail in DEV but pass in TEST
     it('Add Draft to the versioned Library from Owned Libraries', () => {
 
         //Add Draft to Versioned Library
@@ -43,38 +42,25 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         })
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 
-        //once this epic https://jira.cms.gov/browse/MAT-5119, is ready for deployment, the following code can be
-        //uncommented and used
-        // cy.wait('@draft', { timeout: 60000 }).then((request) => {
-        //     cy.writeFile(filePath2, request.response.body.id)
-        // })
-
-        //This check will need to be removed once epic https://jira.cms.gov/browse/MAT-5119 is ready for deployment
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile(filePath, request.response.body.id)
+            cy.writeFile(filePath2, request.response.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
 
-        //once this epic https://jira.cms.gov/browse/MAT-5119, is ready for deployment, the following code can be
-        //uncommented and used
-
-        // cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
-        // cy.get(CQLLibrariesPage.row0_Status).should('contain', 'Draft')
-        //
-        // cy.get(CQLLibrariesPage.row0_ExpandArrow).should('be.visible')
-        // cy.get(CQLLibrariesPage.row0_ExpandArrow).click()
-        //
-        // cy.readFile(filePath).should('exist').then((fileContents) => {
-        //     cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
-        //     cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
-        //     cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
-        //     cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.visible')
-        //     cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.enabled')
-        // })
-
-        //This check will need to be removed once epic https://jira.cms.gov/browse/MAT-5119 is ready for deployment
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
+        cy.get(CQLLibrariesPage.row0_Status).should('contain', 'Draft')
+        
+        cy.get(CQLLibrariesPage.row0_ExpandArrow).should('be.visible')
+        cy.get(CQLLibrariesPage.row0_ExpandArrow).click()
+        
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
+            cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.visible')
+            cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.enabled')
+        })
 
         cy.log('Draft Created Successfully')
 
@@ -85,12 +71,7 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
         cy.setAccessTokenCookie()
 
-
-        //Delete Draft Library after epic https://jira.cms.gov/browse/MAT-5119
-        //Utilities.deleteLibrary(CqlLibraryOne,false, 2)
-
-        //Delete Draft Library before epic https://jira.cms.gov/browse/MAT-5119
-        Utilities.deleteLibrary(CqlLibraryOne)
+        Utilities.deleteLibrary(CqlLibraryOne,false, 2)
     })
 
     it('Add Draft to the versioned Library from Edit Library screen', () => {

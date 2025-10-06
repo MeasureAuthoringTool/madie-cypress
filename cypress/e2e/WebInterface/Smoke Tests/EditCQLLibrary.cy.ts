@@ -2,19 +2,20 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Header } from "../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
+import { Utilities } from "../../../Shared/Utilities"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
-let updatedCQLLibraryName = 'UpdatedTestLibrary' + Date.now()
-let CQLLibraryPublisher = 'SemanticBits'
+const CQLLibraryName = 'SmokeEditLibrary' + Date.now()
+const updatedCQLLibraryName = 'UpdatedSELibrary' + Date.now()
+const CQLLibraryPublisher = 'SemanticBits'
 
-describe('Edit Measure', () => {
-    before('Create Measure', () => {
+describe('Smoke test - Edit CQL Library', () => {
 
-        //Create CQL Library
+    before('Create Library', () => {
+
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
         OktaLogin.Login()
-        cy.reload()
-
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
 
     afterEach('Logout', () => {
@@ -22,19 +23,16 @@ describe('Edit Measure', () => {
     })
 
     it('Edit CQL Library Name and verify the library is updated on CQL Library page', () => {
-        cy.reload()
+
         //Edit CQL Library Name
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
-        cy.get('[id="measures-main-nav-bar-tab"]').click()
-        //Edit CQL Library Name
-        CQLLibrariesPage.clickEditforCreatedLibrary()
-        cy.reload()
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).wait(1000).clear()
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(updatedCQLLibraryName)
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.value', CQLLibraryName)
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type(updatedCQLLibraryName)
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
+            .and('have.text', 'CQL updated successfully')
 
         cy.log('CQL Library Updated Successfully')
 

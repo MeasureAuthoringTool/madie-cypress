@@ -8,6 +8,7 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { Header } from "../../../Shared/Header"
+import { Toasts } from "../../../Shared/Toasts"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
@@ -215,7 +216,7 @@ describe('Measure Association: Validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         Utilities.waitForElementVisible('.toast', 35000)
         cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
-        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 35000)
+        Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 35000)
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {
