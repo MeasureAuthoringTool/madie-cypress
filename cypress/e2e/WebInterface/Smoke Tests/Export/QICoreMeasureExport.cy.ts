@@ -78,7 +78,6 @@ describe('QI-Core Measure Export', () => {
         //Click on Supplemental data tab
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
@@ -223,18 +222,14 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'this is a meta guidance (usage) value -- for the \'Clinical Usage\' field')
 
             //measure group meta data
-            expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\nBasis\t' +
-                'Encounter\nScoring\t[http://terminology.hl7.org/CodeSystem/measure-scoring#proportion: \'Proportion\']' +
-                '\nScoring Unit\t[https://clinicaltables.nlm.nih.gov/#ml: \'ml milliLiters\']\nType\t' +
-                '[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\nRate Aggregation\t\n\n' +
-                'test rA\n\n\nImprovement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase: ' +
-                '\'Increased score indicates improvement\']\nInitial Population\tID: InitialPopulation_1\nDescription:\n\n' +
-                'test IP P\n\nCriteria: Qualifying Encounters\nDenominator\tID: Denominator_1\nDescription:\n\n' +
-                'test d P\n\nCriteria: Qualifying Encounters\nNumerator\tID: Numerator_1\nDescription:\n\ntest n P\n\n' +
-                'Criteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
-                'https://madie.cms.gov/Library/'+ CqlLibraryNameFC + '\nContents\tPopulation Criteria\n' +
-                'Logic Definitions\nTerminology\nDependencies\nData Requirements')
-
+            expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
+                'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
+                'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
+                'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
+                '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
+                'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
+                'https://madie.cms.gov/Library/'+ CqlLibraryNameFC + '\nContents\tPopulation Criteria\nLogic Definitions\n' +
+                'Terminology\nDependencies\nData Requirements')
 
             //Population Criteria
             expect(bodyText).to.include('Population Criteria\n' +
@@ -356,7 +351,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
                 '\n' +
-                'Generated using version 0.4.9 of the sample-content-ig Liquid templates')
+                'Generated using version 0.5.2 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -456,17 +451,14 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'this is a meta guidance (usage) value -- for the \'Clinical Usage\' field')
 
             //measure group meta data
-            expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\nBasis\t' +
-                'Encounter\nScoring\t[http://terminology.hl7.org/CodeSystem/measure-scoring#proportion: \'Proportion\']\n' +
-                'Scoring Unit\t[https://clinicaltables.nlm.nih.gov/#ml: \'ml milliLiters\']\nType\t' +
-                '[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\nRate Aggregation\t\n\n' +
-                'test rA\n\n\nImprovement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase:' +
-                ' \'Increased score indicates improvement\']\nInitial Population\tID: InitialPopulation_1\nDescription:\n\n' +
-                'test IP P\n\nCriteria: Qualifying Encounters\nDenominator\tID: Denominator_1\nDescription:\n\n' +
-                'test d P\n\nCriteria: Qualifying Encounters\nNumerator\tID: Numerator_1\nDescription:\n\n' +
-                'test n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
-                'https://madie.cms.gov/Library/' + CqlLibraryNameFC + '\nContents\tPopulation Criteria\n' +
-                'Logic Definitions\nTerminology\nDependencies\nData Requirements')
+            expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
+                'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
+                'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
+                'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
+                '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
+                'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
+                'https://madie.cms.gov/Library/'+ CqlLibraryNameFC + '\nContents\tPopulation Criteria\nLogic Definitions\n' +
+                'Terminology\nDependencies\nData Requirements')
 
             //Population Criteria
             expect(bodyText).to.include('Population Criteria\n' +
@@ -588,7 +580,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
                 '\n' +
-                'Generated using version 0.4.9 of the sample-content-ig Liquid templates')
+                'Generated using version 0.5.2 of the sample-content-ig Liquid templates')
         })
     })
 })
