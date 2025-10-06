@@ -5,8 +5,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 
 let CQLLibraryName = ''
-let CQLLibraryPublisher = ''
-let model = ''
+const CQLLibraryPublisher = 'SemanticBits'
 
 describe('Create CQL Library', () => {
 
@@ -19,13 +18,11 @@ describe('Create CQL Library', () => {
 
         OktaLogin.Logout()
         Utilities.deleteLibrary(CQLLibraryName)
-
     })
 
     it('Navigate to CQL Library Page and create New QI-Core  CQL Library', () => {
 
         CQLLibraryName = 'QICoreCQLLibrary' + Date.now()
-        CQLLibraryPublisher = 'SemanticBits'
 
         CQLLibraryPage.createCQLLibrary(CQLLibraryName, CQLLibraryPublisher)
     })
@@ -33,12 +30,10 @@ describe('Create CQL Library', () => {
     it('Navigate to CQL Library Page and create New QDM CQL Library', () => {
 
         CQLLibraryName = 'QDMCQLLibrary' + Date.now()
-        CQLLibraryPublisher = 'SemanticBits'
-        model = 'QDM v5.6'
+        const model = 'QDM v5.6'
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
-
-        cy.get(Header.cqlLibraryTab).click().wait(1500)
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
 
@@ -56,6 +51,7 @@ describe('Create CQL Library', () => {
 
         CQLLibraryPage.clickCreateLibraryButton()
         Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
+        
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
