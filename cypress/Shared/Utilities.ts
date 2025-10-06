@@ -535,9 +535,6 @@ export class Utilities {
 
     public static lockControl(type: MadieObject, lockObject: boolean) {
         let action = 'PUT'
-        if (type == MadieObject.Library) {
-            action = 'POST'
-        }
         if (!lockObject) {
             action = 'DELETE'
         }
@@ -586,13 +583,9 @@ export class Utilities {
             case MadieObject.Library:
                 cy.getCookie('accessToken').then((accessToken) => {
                     cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                        let lockUrl = '/api/libraries/' + id + '/lock'
-                        if (!lockObject) {
-                            lockUrl = '/api/libraries/' + id + '/unlock'
-                        }
 
                         cy.request({
-                            url: lockUrl, 
+                            url: '/api/cql-libraries/' + id + '/lock', 
                             headers: {
                                 authorization: 'Bearer ' + accessToken.value,
                             },
