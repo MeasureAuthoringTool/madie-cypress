@@ -1,8 +1,8 @@
-import { Environment } from "../../../../Shared/Environment"
-import { Utilities } from "../../../../Shared/Utilities"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { Header } from "../../../../Shared/Header"
+import {Environment} from "../../../../Shared/Environment"
+import {MadieObject, Utilities} from "../../../../Shared/Utilities"
+import {OktaLogin} from "../../../../Shared/OktaLogin"
+import {MeasuresPage} from "../../../../Shared/MeasuresPage"
+import {Header} from "../../../../Shared/Header"
 
 //Skipping until Feature flag 'Locking' is removed
 describe.skip('Measure Unlock fires when the user logs in & logs out', () => {
@@ -37,7 +37,8 @@ describe.skip('Measure Unlock fires when the user logs in & logs out', () => {
 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
-        Utilities.verifyAllLocksDeleted()
+        Utilities.verifyAllLocksDeleted(MadieObject.Measure)
+        Utilities.verifyAllLocksDeleted(MadieObject.Library)
 
         //Logout 
         cy.get(Header.userProfileSelect).click()
@@ -53,6 +54,7 @@ describe.skip('Measure Unlock fires when the user logs in & logs out', () => {
             expect(lUnlock.response.statusCode).to.eql(200)
         })
 
-        Utilities.verifyAllLocksDeleted()
+        Utilities.verifyAllLocksDeleted(MadieObject.Measure)
+        Utilities.verifyAllLocksDeleted(MadieObject.Library)
     })
 })
