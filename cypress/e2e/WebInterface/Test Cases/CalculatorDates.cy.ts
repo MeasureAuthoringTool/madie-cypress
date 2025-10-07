@@ -27,7 +27,6 @@ const opts: CreateMeasureOptions = {
 }
 const today = dayjs().format('MM/DD/YYYY')
 
-
 describe('Check all variations of calculated dates', () => {
 
     beforeEach('Create Measure and Test Case', () => {
@@ -109,12 +108,51 @@ describe('Check all variations of calculated dates', () => {
         cy.get(TestCasesPage.calculatorTool.close).click()
     })
 
-    it.skip('Check all options in Computed Date tab', () => {
+    it('Check all options in Computed Date tab', () => {
+
+        cy.get(TestCasesPage.calculatorTool.computedDateTab).click()
 
         // verify initial
         cy.contains('Initial Date').should('be.visible')
         cy.contains('Add/Subtract').should('be.visible')
-        cy.contains('Dayys/Weeks/Months/Years').should('be.visible')
+        cy.contains('Days/Weeks/Months/Years').should('be.visible')
         cy.contains('Computed Date Result').should('be.visible')
+
+        cy.get(TestCasesPage.calculatorTool.initialDate).type('02/01/2023')
+
+        cy.get(TestCasesPage.calculatorTool.addRadio).should('be.checked')
+
+        cy.get(TestCasesPage.calculatorTool.dwmyInput).type('2')
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '02/01/2025')
+
+        Utilities.dropdownSelect(TestCasesPage.calculatorTool.dwmyUnitsSelect, 'months')
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '04/01/2023')
+
+        Utilities.dropdownSelect(TestCasesPage.calculatorTool.dwmyUnitsSelect, 'weeks')
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '02/15/2023')
+
+        Utilities.dropdownSelect(TestCasesPage.calculatorTool.dwmyUnitsSelect, 'days')
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '02/03/2023')
+
+        cy.get(TestCasesPage.calculatorTool.subtractRadio).check()
+
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '01/30/2023')
+
+        Utilities.dropdownSelect(TestCasesPage.calculatorTool.dwmyUnitsSelect, 'months')
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '12/01/2022')
+
+        Utilities.dropdownSelect(TestCasesPage.calculatorTool.dwmyUnitsSelect, 'weeks')
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '01/18/2023')
+
+        Utilities.dropdownSelect(TestCasesPage.calculatorTool.dwmyUnitsSelect, 'years')
+        cy.get(TestCasesPage.calculatorTool.calculateDate).click()
+        cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '02/01/2021')
     })
 })
