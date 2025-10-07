@@ -23,6 +23,8 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import { TestCasesPage } from "../Shared/TestCasesPage"
+import { Utilities } from "../Shared/Utilities"
 
 import { Environment } from "../Shared/Environment"
 import '@cypress-audit/lighthouse/commands'
@@ -44,6 +46,13 @@ declare global {
             UMLSAPIKeyLogin()
             lighthouse(thresholds?: Object, lighthouseOptions?: Object, lighthouseConfig?: Object)
             cssType(locator: string, text: string)
+
+            /**
+             * Custom command to edit the test case JSON in the Ace Editor.
+             * @param jsonContent - The JSON string to input.
+             */
+            editTestCaseJSON(jsonContent: string): Chainable<void>;
+
         }
     }
 }
@@ -362,6 +371,16 @@ Cypress.Commands.add('setAccessTokenCookieCAMELCASE', () => {
 Cypress.Commands.add('UMLSAPIKeyLogin', () => {
     return UMLSAPIKeyLogin()
 })
+
+Cypress.Commands.add('editTestCaseJSON', (jsonContent: string) => {
+    Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+    Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
+    cy.get(TestCasesPage.aceEditor).should('exist')
+    cy.get(TestCasesPage.aceEditor).should('be.visible')
+    cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+    cy.get(TestCasesPage.aceEditor).type('{selectAll}{backspace}')
+    cy.get(TestCasesPage.aceEditor).type(jsonContent, { parseSpecialCharSequences: false });
+});
 
 const compareColor = (color: string, property: keyof CSSStyleDeclaration) => (
     targetEle: JQuery

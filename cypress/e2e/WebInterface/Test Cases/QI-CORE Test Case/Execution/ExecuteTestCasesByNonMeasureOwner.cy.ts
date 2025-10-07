@@ -89,7 +89,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
-            cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, {parseSpecialCharSequences: false})
+            cy.editTestCaseJSON(validTestCaseJson)
+
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -156,7 +157,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
-    })
+        })
 
     it('Run / Execute single passing Test Case, on the Test Case details page, where the user is not the owner nor shared' +
         ' -- Run button is available and correct results are provided', () => {
@@ -166,7 +167,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
-            cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
+            cy.editTestCaseJSON(validTestCaseJson)
+
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -237,7 +239,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.tctExpectedActualSubTab).click()
             cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
             cy.get(TestCasesPage.measureActualCheckbox).should('be.checked')
-    })
+        })
 
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning -- when user is not the owner', () => {
 
@@ -250,7 +252,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
         cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
-            
+
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 

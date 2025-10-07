@@ -241,7 +241,8 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.wait(2000)
-        cy.get(TestCasesPage.aceEditor).type(emptyResourceIDTCJson, { parseSpecialCharSequences: false })
+        cy.editTestCaseJSON(emptyResourceIDTCJson)
+
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -325,7 +326,7 @@ describe('JSON Resource ID tests', () => {
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.wait(2000)
-            cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJsonButHasFullUrlExt, { parseSpecialCharSequences: false })
+            cy.editTestCaseJSON(missingResourceIDTCJsonButHasFullUrlExt)
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -339,7 +340,7 @@ describe('JSON Resource ID tests', () => {
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
-    })
+        })
 
     it('JSON missing Resource IDs', () => {
 
@@ -406,7 +407,8 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.wait(2000)
-        cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJson, { parseSpecialCharSequences: false })
+        cy.editTestCaseJSON(missingResourceIDTCJson)
+
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -541,7 +543,8 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.wait(2000)
-        cy.get(TestCasesPage.aceEditor).type(missingMetaProfile, { parseSpecialCharSequences: false })
+        cy.editTestCaseJSON(missingMetaProfile)
+
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -550,7 +553,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.successMsg).should('exist')
         cy.get(TestCasesPage.successMsg).should('be.visible')
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)     
+        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.detailsTab, 27700)
@@ -666,7 +669,8 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).click()
-        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
+        cy.editTestCaseJSON(validTestCaseJson)
+
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')

@@ -122,8 +122,8 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.editTestCaseJSON(TCJsonRace)
 
-        cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.detailsTab).click()
 
@@ -243,8 +243,8 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.editTestCaseJSON(TCJsonRace)
 
-        cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.detailsTab).click()
 
@@ -395,8 +395,8 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.editTestCaseJSON(TCJsonRace)
 
-        cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.detailsTab).click()
 
@@ -566,8 +566,8 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.editTestCaseJSON(TCJsonRace)
 
-        cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.detailsTab).click()
 
