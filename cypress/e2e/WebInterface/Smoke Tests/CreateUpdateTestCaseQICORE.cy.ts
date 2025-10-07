@@ -146,10 +146,9 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
         //Add json to the test case
         TestCasesPage.clickEditforCreatedTestCase()
-        //cy.get(TestCasesPage.jsonTab).click()
 
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 21500)
-        cy.get(TestCasesPage.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
+        cy.editTestCaseJSON(testCaseJson)
 
         cy.get(TestCasesPage.detailsTab).click()
 
