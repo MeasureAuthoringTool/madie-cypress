@@ -387,10 +387,13 @@ export class TestCasesPage {
         differenceResults: '[data-testid="difference-result"]',
         computedDateTab: '[data-testid="computed-date-tab"]',
         initialDate: '[data-testid="initial-date-input"]',
-        addRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:first', //name = mui-101
+        addRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:first',
         subtractRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:last',
         dwmyInput: '[data-testid="precision-number-input"]',
-        dwmyUnitsSelect: '[data-testid="precision-input"]', //same as above?
+        dwmyUnitsSelect: '[data-testid="precision-select"]',
+        calculateDate: '[data-testid="calculate-computed-date"]',
+        computedDateResults: '[data-testid="computed-date-result"]',
+        copyComputedDate: '[data-testid="copy-computed-date"]',
         close: '[data-testid="calculation-close-button"]'
     }
 
