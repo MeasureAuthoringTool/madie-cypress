@@ -130,8 +130,7 @@ export class Utilities {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
-        }
-        else {
+        } else {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
@@ -250,8 +249,7 @@ export class Utilities {
             for (let i in cqlArr) {
                 if (cqlArr[i] == '' || cqlArr[i] == null || cqlArr[i] == undefined) {
                     cy.get(pageResource).type('{enter}')
-                }
-                else {
+                } else {
                     this.textValues.dataLines = cqlArr[i]
                     cy.get(pageResource)
                         .type(this.textValues.dataLines)
@@ -264,26 +262,26 @@ export class Utilities {
     }
 
     public static waitForElementEnabled = (element: string, timeout: number) => {
-        cy.get(element, { timeout: timeout }).should('be.enabled')
+        cy.get(element, {timeout: timeout}).should('be.enabled')
     }
 
     public static waitForElementVisible = (element: string, timeout: number) => {
-        cy.get(element, { timeout: timeout }).should('be.visible')
+        cy.get(element, {timeout: timeout}).should('be.visible')
     }
 
     public static waitForElementToNotExist = (element: string, timeout: number) => {
-        cy.get(element, { timeout: timeout }).should('not.exist')
+        cy.get(element, {timeout: timeout}).should('not.exist')
     }
 
     public static waitForElementDisabled = (element: string, timeout: number) => {
-        cy.get(element, { timeout: timeout }).should('not.be.enabled')
+        cy.get(element, {timeout: timeout}).should('not.be.enabled')
     }
 
     public static waitForElementWriteEnabled = (element: string, timeout: number) => {
-        cy.get(element, { timeout: timeout }).should('exist')
-        cy.get(element, { timeout: timeout }).should('be.visible')
-        cy.get(element, { timeout: timeout }).should('not.be.disabled')
-        cy.get(element, { timeout: timeout }).should('not.have.attr', 'readonly', 'readonly')
+        cy.get(element, {timeout: timeout}).should('exist')
+        cy.get(element, {timeout: timeout}).should('be.visible')
+        cy.get(element, {timeout: timeout}).should('not.be.disabled')
+        cy.get(element, {timeout: timeout}).should('not.have.attr', 'readonly', 'readonly')
     }
 
     public static validationMeasureGroupSaveAll(measureScoreValue: string | string[]): void {
@@ -364,8 +362,7 @@ export class Utilities {
         ) {
             cy.get(dropdownDataElement).wait(250).click().wait(1000)
             cy.get(valueDataElement).wait(250).click().wait(1000)
-        }
-        else if (dropdownDataElement == '[id="improvement-notation-select"]' ||
+        } else if (dropdownDataElement == '[id="improvement-notation-select"]' ||
             dropdownDataElement == MeasureGroupPage.initialPopulationSelect
         ) {
             cy.get(dropdownDataElement)
@@ -375,8 +372,7 @@ export class Utilities {
                 .wait(500)
                 .click()
                 .wait(500)
-        }
-        else {
+        } else {
             Utilities.waitForElementVisible(dropdownDataElement, 50000)
             cy.get(dropdownDataElement)
                 .wait(500)
@@ -432,7 +428,7 @@ export class Utilities {
         cy.wait(2000)
         cy.get(errorElementObject).should('exist')
         cy.get(errorElementObject).should('be.visible')
-        cy.get(errorElementObject).invoke('show').click({ force: true, multiple: true })
+        cy.get(errorElementObject).invoke('show').click({force: true, multiple: true})
         if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
             cy.get(errorContainer).invoke('show').should('contain', errorMsg1)
         }
@@ -443,7 +439,7 @@ export class Utilities {
         if (!timeout) {
             cy.get(TestCasesPage.successMsg).should('have.text', message)
         } else {
-            cy.get(TestCasesPage.successMsg, { timeout }).should('have.text', message)
+            cy.get(TestCasesPage.successMsg, {timeout}).should('have.text', message)
         }
     }
 
@@ -503,8 +499,7 @@ export class Utilities {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
-        }
-        else {
+        } else {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
@@ -533,11 +528,21 @@ export class Utilities {
         })
     }
 
-    public static lockControl(type: MadieObject, lockObject: boolean) {
+    public static lockControl(type: MadieObject, lockObject: boolean, altUser?: boolean) {
         let action = 'PUT'
         if (!lockObject) {
             action = 'DELETE'
         }
+        if (altUser) {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookieALT()
+        } else {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookie()
+        }
+
 
         switch (type) {
 
@@ -545,7 +550,7 @@ export class Utilities {
                 cy.getCookie('accessToken').then((accessToken) => {
                     cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                         cy.request({
-                            url: '/api/measures/' + id + '/measure-lock', 
+                            url: '/api/measures/' + id + '/measure-lock',
                             headers: {
                                 authorization: 'Bearer ' + accessToken.value,
                             },
@@ -565,7 +570,7 @@ export class Utilities {
                             if (!lockObject) {
                                 lockUrl = '/api/test-cases/' + tcId + '/unlock'
                             }
-                            
+
                             cy.request({
                                 url: lockUrl,
                                 headers: {
@@ -585,7 +590,7 @@ export class Utilities {
                     cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
 
                         cy.request({
-                            url: '/api/cql-libraries/' + id + '/lock', 
+                            url: '/api/cql-libraries/' + id + '/lock',
                             headers: {
                                 authorization: 'Bearer ' + accessToken.value,
                             },
@@ -602,34 +607,63 @@ export class Utilities {
         }
     }
 
-    public static verifyAllLocksDeleted() {
+    public static verifyAllLocksDeleted(type: MadieObject, altUser?: boolean) {
         // only works with harpUser now, no current use-case to support altUser
+        if (altUser) {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookieALT()
+        } else {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookie()
+        }
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measures/unlock', 
-                headers: {
-                    authorization: 'Bearer ' + accessToken.value,
-                },
-                method: 'DELETE'
-            }).then((response) => {
-                expect(response.status).to.eql(200)
-                expect(response.body).to.include('No measure locks found for harpId: ' + harpUser)
-                expect(response.body).to.include('No test case locks found for harpId: ' + harpUser)
-            })
-        })
+        switch (type) {
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries/unlock', 
-                headers: {
-                    authorization: 'Bearer ' + accessToken.value,
-                },
-                method: 'DELETE'
-            }).then((response) => {
-                expect(response.status).to.eql(200)
-                expect(response.body).to.include('No library locks found for harpId: ' + harpUser)
-            })
-        })
+            case MadieObject.Measure:
+                cy.getCookie('accessToken').then((accessToken) => {
+                    cy.request({
+                        url: '/api/measures/unlock',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value,
+                        },
+                        method: 'DELETE'
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body).to.include('No measure locks found for harpId: ' + harpUser)
+                        expect(response.body).to.include('No test case locks found for harpId: ' + harpUser)
+                    })
+                })
+                break
+
+            case MadieObject.Library:
+                cy.getCookie('accessToken').then((accessToken) => {
+                    cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                        cy.request({
+                            url: '/api/cql-libraries/unlock',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value,
+                            },
+                            method: 'DELETE'
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            if(altUser) {
+                                expect(response.body).to.include('Delete library locks for harpId: ' + harpUserALT)
+                                expect(response.body).to.include('Deleted library lock for Id: ' + id)
+                            }
+                            else {
+                                // if not altUser, then check for the library lock deletion message
+                                expect(response.body).to.include('Delete library locks for harpId: ' + harpUser)
+                                expect(response.body).to.include('Deleted library lock for Id: ' + id)
+                            }
+                        })
+                    })
+                })
+                break
+
+            default:
+                cy.log('No action. Unsupported type.')
+        }
     }
 }
