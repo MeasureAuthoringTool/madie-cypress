@@ -1,6 +1,7 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
+import {Environment} from "../../../../Shared/Environment"
 
 let measureName = []
 let CqlLibraryName = []
@@ -10,6 +11,7 @@ let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
 let versionIdPath = 'cypress/fixtures/versionId'
 let measureSetIdPath = 'cypress/fixtures/measureSetId'
+const harpUser = Environment.credentials().harpUser
 
 describe('Measure List Pagination', () => {
 
@@ -101,7 +103,7 @@ describe('Measure List Pagination', () => {
                                         "id": "68ac804018f2135a1f3a17d3",
                                         "cmsId": null,
                                         "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
-                                        "owner": "test.ReUser6408",
+                                        "owner": harpUser,
                                         "acls": null
                                     },
                                     "ecqmTitle": "ecqmTitle",
