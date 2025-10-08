@@ -113,7 +113,8 @@ export class EditMeasurePage {
     public static readonly saveMeasureDefinition = '[data-testid="measure-definition-save"]'
     public static readonly createDefinitionBtn = '[data-testid="create-definition-button"]'
     public static readonly definitionTermInput = '[data-testid="measure-definition-term-input"]'
-    public static readonly definitionInput = '[data-testid="genericField-rich-text-editor-content"]'
+    public static readonly defintionEditorField = '[data-testid="definition-rich-text-editor"]'
+    public static readonly definitionInput = '[data-testid="definition-rich-text-editor-content"]'
     public static readonly definitionMetaTable = '[id="measure-meta-data-table"]'
     public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
     public static readonly emptyDefinitionVal = '[data-testid="empty-definitions"]'
@@ -195,6 +196,7 @@ export class EditMeasurePage {
 
     //Description Page
     public static readonly measureGenericFieldRTETextBox = '[data-testid="generic-field-rich-text-editor"]'
+    public static readonly measureRTEPurposeContentField = '[data-testid="genericField-rich-text-editor-content"]'
     public static readonly measureDescriptionSaveButton = '[data-testid="measure-description-save"]'
     public static readonly measureDescriptionSuccessMessage = '[data-testid="measureDescriptionSuccess"]'
 
