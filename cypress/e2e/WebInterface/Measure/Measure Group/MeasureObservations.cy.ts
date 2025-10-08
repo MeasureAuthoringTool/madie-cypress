@@ -130,10 +130,10 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.measureScoringCV).click()
 
         cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select ipp
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select ipp
 
         cy.get(MeasureGroupPage.measurePopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select denom
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
@@ -439,10 +439,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.measureScoringCV).click()
 
         cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select ipp
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select ipp
 
         cy.get(MeasureGroupPage.measurePopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select denom
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
