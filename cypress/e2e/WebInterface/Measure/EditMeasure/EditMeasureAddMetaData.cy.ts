@@ -110,7 +110,7 @@ describe('Edit Measure: Add Meta Data', () => {
         //Purpose
         cy.get(EditMeasurePage.leftPanelPurpose).click()
         Utilities.waitForElementVisible(EditMeasurePage.measureGenericFieldRTETextBox, 50000)
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('This is a purpose.')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.measureRTEPurposeContentField).type('This is a purpose.')
         cy.get(EditMeasurePage.measurePurposeSaveBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.measurePurposeSavedMsg, 50000)
         cy.get(EditMeasurePage.measurePurposeSavedMsg).should('contain.text', 'Measure Purpose Information Saved Successfully')
@@ -136,7 +136,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.createDefinitionBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).type('DefinitionTerm')
-        cy.get(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
+        cy.get(EditMeasurePage.defintionEditorField).find(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
         Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermDefinition details for DefinitionTerm')
@@ -187,15 +187,15 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //Purpose
         cy.get(EditMeasurePage.leftPanelPurpose).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('contain.text', 'This is a purpose.')
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('This is a purpose updated.')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.measureRTEPurposeContentField).should('contain.text', 'This is a purpose.')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.measureRTEPurposeContentField).clear().type('This is a purpose updated.')
         cy.get(EditMeasurePage.measurePurposeSaveBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.measurePurposeSavedMsg, 50000)
         cy.get(EditMeasurePage.measurePurposeSavedMsg).should('contain.text', 'Measure Purpose Information Saved Successfully')
         Utilities.waitForElementToNotExist(EditMeasurePage.measurePurposeSavedMsg, 50000)
         cy.reload()
         Utilities.waitForElementVisible(EditMeasurePage.measureGenericFieldRTETextBox, 50000)
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('contain.text', 'This is a purpose updated.')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.measureRTEPurposeContentField).should('contain.text', 'This is a purpose updated.')
         cy.log('Measure Purpose updated successfully')
 
 
