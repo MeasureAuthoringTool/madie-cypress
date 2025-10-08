@@ -144,10 +144,10 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get('[id="date-of-birth"]').should('have.attr', 'readonly', 'readonly')
-        cy.get('[id="demographics-living-status-select-id"]').should('have.attr', 'readonly', 'readonly')
-        cy.get('[id="demographics-race-select-id"]').should('have.attr', 'readonly', 'readonly')
-        cy.get('[id="demographics-gender-select-id"]').should('have.attr', 'readonly', 'readonly')
-        cy.get('[id="demographics-ethnicity-select-id"]').should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.QDMLivingStatus).should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.QDMRace).should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.QDMGender).should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.QDMEthnicity).should('have.attr', 'readonly', 'readonly')
 
         //Navigate to Details tab
         cy.get(TestCasesPage.detailsTab).click()
@@ -162,8 +162,6 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 })
 
 describe('Create Test Case Validations', () => {
-
-
 
     beforeEach('Login', () => {
         measureName = 'QDMTestMeasure' + Date.now()
