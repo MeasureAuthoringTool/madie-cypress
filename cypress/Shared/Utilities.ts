@@ -262,26 +262,26 @@ export class Utilities {
     }
 
     public static waitForElementEnabled = (element: string, timeout: number) => {
-        cy.get(element, {timeout: timeout}).should('be.enabled')
+        cy.get(element, { timeout: timeout }).should('be.enabled')
     }
 
     public static waitForElementVisible = (element: string, timeout: number) => {
-        cy.get(element, {timeout: timeout}).should('be.visible')
+        cy.get(element, { timeout: timeout }).should('be.visible')
     }
 
     public static waitForElementToNotExist = (element: string, timeout: number) => {
-        cy.get(element, {timeout: timeout}).should('not.exist')
+        cy.get(element, { timeout: timeout }).should('not.exist')
     }
 
     public static waitForElementDisabled = (element: string, timeout: number) => {
-        cy.get(element, {timeout: timeout}).should('not.be.enabled')
+        cy.get(element, { timeout: timeout }).should('not.be.enabled')
     }
 
     public static waitForElementWriteEnabled = (element: string, timeout: number) => {
-        cy.get(element, {timeout: timeout}).should('exist')
-        cy.get(element, {timeout: timeout}).should('be.visible')
-        cy.get(element, {timeout: timeout}).should('not.be.disabled')
-        cy.get(element, {timeout: timeout}).should('not.have.attr', 'readonly', 'readonly')
+        cy.get(element, { timeout: timeout }).should('exist')
+        cy.get(element, { timeout: timeout }).should('be.visible')
+        cy.get(element, { timeout: timeout }).should('not.be.disabled')
+        cy.get(element, { timeout: timeout }).should('not.have.attr', 'readonly', 'readonly')
     }
 
     public static validationMeasureGroupSaveAll(measureScoreValue: string | string[]): void {
@@ -407,7 +407,7 @@ export class Utilities {
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).wait(1000).click()
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
@@ -428,7 +428,7 @@ export class Utilities {
         cy.wait(2000)
         cy.get(errorElementObject).should('exist')
         cy.get(errorElementObject).should('be.visible')
-        cy.get(errorElementObject).invoke('show').click({force: true, multiple: true})
+        cy.get(errorElementObject).invoke('show').click({ force: true, multiple: true })
         if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
             cy.get(errorContainer).invoke('show').should('contain', errorMsg1)
         }
@@ -439,7 +439,7 @@ export class Utilities {
         if (!timeout) {
             cy.get(TestCasesPage.successMsg).should('have.text', message)
         } else {
-            cy.get(TestCasesPage.successMsg, {timeout}).should('have.text', message)
+            cy.get(TestCasesPage.successMsg, { timeout }).should('have.text', message)
         }
     }
 
@@ -648,7 +648,7 @@ export class Utilities {
                             method: 'DELETE'
                         }).then((response) => {
                             expect(response.status).to.eql(200)
-                            if(altUser) {
+                            if (altUser) {
                                 expect(response.body).to.include('Delete library locks for harpId: ' + harpUserALT)
                                 expect(response.body).to.include('Deleted library lock for Id: ' + id)
                             }

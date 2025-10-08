@@ -34,6 +34,10 @@ const measureCQL = QiCore4Cql.reduced_CQL_Multiple_Populations
 describe('Run / Execute Test Case button validations', () => {
 
     beforeEach('Login and Create Measure', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
@@ -439,6 +443,10 @@ describe('Run / Execute Test Case button validations', () => {
 describe('Run / Execute Test case for multiple Population Criteria', () => {
 
     beforeEach('Create measure and login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
@@ -582,6 +590,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 describe('Run / Execute Test case and verify passing percentage and coverage', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
@@ -1011,6 +1023,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 describe('Verify that "Run Test" works with warnings but does not with errors', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
@@ -1021,7 +1037,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).wait(1000).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1099,6 +1115,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+        Utilities.waitForElementVisible(Toasts.errorToast, 90000)
         cy.get(Toasts.errorToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -1121,7 +1138,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         //Verify Highlighting tab before clicking on Run Test button
-        cy.get(TestCasesPage.tcHighlightingTab).click()
+        cy.get(TestCasesPage.tcHighlightingTab).wait(1000).click()
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
         //Click on Execute Test Case button on Edit Test Case page
@@ -1143,6 +1160,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.detailsTab).scrollIntoView()
         cy.get(TestCasesPage.detailsTab).click()
 
+        Utilities.waitForElementVisible(Toasts.generalToast, 90000)
         cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -1258,6 +1276,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+        Utilities.waitForElementVisible(Toasts.generalToast, 90000)
         cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -1282,7 +1301,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //Click on Execute Test Case button on Edit Test Case page
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).wait(1000).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         //refresh test case list page
@@ -1319,6 +1338,10 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 describe('Verify "Run Test Cases" results based on missing/empty group populations are treated as zeroes', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
@@ -1414,9 +1437,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+        Utilities.waitForElementVisible(Toasts.generalToast, 90000)
         cy.get(Toasts.generalToast, { timeout: 8500 }).should('have.text', Toasts.warningOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).wait(1000).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1726,6 +1750,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 describe('Verify multiple IPs on the highlighting tab', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
