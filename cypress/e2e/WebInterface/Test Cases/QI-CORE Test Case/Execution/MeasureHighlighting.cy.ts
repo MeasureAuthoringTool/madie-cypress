@@ -1710,7 +1710,8 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 40000)
-            cy.get(TestCasesPage.tcIPHighlightingDetails).find('[data-statement-name="Initial Population"]').should('contain.text', '\n/***Population Criteria***/\n\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\n')
+            cy.get(TestCasesPage.tcIPHighlightingDetails).find('[data-statement-name="Initial Population"]').should('contain.text', "\n/***Population Criteria***/\ndefine \"Initial Population\":\nexists \"Dementia Encounter During Measurement Period\"\n    and ( Count(\"Qualifying Encounter During Measurement Period\")>= 2 )\n")
+
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
             Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
@@ -1952,13 +1953,9 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
 describe('Verify highlighting occurs on an old versioned measure', () => {
 
     /*
-    Measure formerly called:
-    'Intravesical Bacillus-Calmette-Guerin for Non-Muscle Invasive Bladder CancerFHIR' mode QiCore 4.1.1 v.1.4.000
-    CMS646FHIR 
-    Now called: specificMeasureName below
-    We navigate straight to the measure in this test since the URL should always be the same (except for obvious env. differences)
+    Using measure "Chlamydia Screening in WomenFHIR" version 0.2.000 QI-Core v4.1.1
     */
-    const specificMeasureName = 'Test.CMS646.2023.11.14'
+    const specificMeasureName = 'Chlamydia Screening in WomenFHIR'
     beforeEach('Create measure and login', () => {
 
         OktaLogin.Login()
@@ -1966,11 +1963,14 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
-        cy.get(MeasuresPage.searchInputBox).clear().type('CMS646').type('{enter}')
+        cy.get(MeasuresPage.searchInputBox).clear().type(specificMeasureName).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', specificMeasureName)
+
+        // expand single row to show older versions
+        cy.get('[data-testid*="_expandArrow"]').click().wait(500)
         cy.get(MeasuresPage.measureListTitles)
             .find('[class="table-body measures-list"]')
-            .find('[data-testid="row-item"]').eq(3)
+            .find('[class="expanded-row"]').eq(3)
             .find('[class="qpp-c-button qpp-c-button--outline-filled"]')
             .should('contain', 'View')
             .click()
@@ -1991,20 +1991,19 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
         cy.contains('View').click()
 
         //run test case
-        Utilities.waitForElementEnabled(TestCasesPage.runQDMTestCaseBtn, 25500)
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 45500)
+        cy.get(TestCasesPage.runTestButton).click()
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-
         //examine IP tab results
-        Utilities.waitForElementVisible(TestCasesPage.tcCQLHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcCQLHighlightingDetails).find('[data-statement-name="Initial Population"]').should('contain.text', '\ndefine "Initial Population":\n  "Has Most Recent Bladder Cancer Tumor Staging is Ta HG, Tis, T1"\n    and "Has Qualifying Encounter"\n')
-        cy.get('[data-ref-id="284"]').should('have.color', '#a63b12')
+        Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
+        const expectedHighlightingText = `\ndefine "Initial Population":\n     AgeInYearsAt(date from \n             end of "Measurement Period"\n           )in Interval[16, 24]\n             and Patient.gender = 'female'\n             and exists ( "Qualifying Encounters" )\n             and ( ( "Has Assessments Identifying Sexual Activity" )\n                 or ( "Has Diagnoses Identifying Sexual Activity" )\n                 or ( "Has Active Contraceptive Medications" )\n                 or ( "Has Ordered Contraceptive Medications" )\n                 or ( "Has Laboratory Tests Identifying Sexual Activity" )\n                 or ( "Has Diagnostic Studies Identifying Sexual Activity" )\n                 or ( "Has Procedures Identifying Sexual Activity" )\n             )\n`
+        cy.get(TestCasesPage.tcIPHighlightingDetails).find('[data-statement-name="Initial Population"]').should('contain.text', expectedHighlightingText)
+        cy.get('[data-ref-id="328"]').should('have.color', '#20744c')
+        cy.get('[data-ref-id="612"]').should('have.color', '#a63b12')
     })
 })
