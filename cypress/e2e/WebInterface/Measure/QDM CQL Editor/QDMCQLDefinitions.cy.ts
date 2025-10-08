@@ -1,13 +1,10 @@
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-
-
-
 
 let randValue = null
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -365,7 +362,7 @@ describe('QDM CQL Definitions', () => {
         cy.get('[data-testid="definition-comments-content"]').should('contain.text', 'Updated Test Comment')
     })
 })
-//these tests should be re-visted to make them more streamlined and / or refactored, after bug MAT-8645 is fixed
+
 describe('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
 
     afterEach('Clean up and Logout', () => {
@@ -397,7 +394,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="measure-Base Configuration-save"]').click()
         cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(2000).click()
         cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(2).should('have.attr', 'data-value', 'n').click()
+        cy.get('[data-testid="select-option-measure-group-population"]').eq(6).should('have.attr', 'data-value', 'n').click()
         cy.get('[data-testid="group-form-submit-btn"]').wait(4000).click().wait(4000)
         OktaLogin.UILogout()
         cy.clearAllCookies()
@@ -446,7 +443,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="measure-Base Configuration-save"]').click()
         cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(1000).click()
         cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(2).should('have.attr', 'data-value', 'n').click()
+        cy.get('[data-testid="select-option-measure-group-population"]').eq(6).should('have.attr', 'data-value', 'n').click()
         cy.get('[data-testid="group-form-submit-btn"]').click().wait(1000)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -461,12 +458,10 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         //Add errors to CQL
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}{enter}define \"test\":{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).wait(700).click()
+        Utilities.waitForElementVisible('#content', 60000)
 
         //Navigate to Definitions tab
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.collapseCQLBuilder).wait(1000).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.functionsTab).wait(1000).click()
         cy.get(CQLEditorPage.definitionsTab).wait(1000).click()
         Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 90000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
@@ -498,7 +493,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="measure-Base Configuration-save"]').click()
         cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(1000).click()
         cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(2).should('have.attr', 'data-value', 'n').click()
+        cy.get('[data-testid="select-option-measure-group-population"]').eq(5).should('have.attr', 'data-value', 'n').click()
         cy.get('[data-testid="group-form-submit-btn"]').click().wait(1000)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -528,7 +523,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="measure-Base Configuration-save"]').wait(1000).click().wait(1000)
         cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(1000).click()
         cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(2).should('have.attr', 'data-value', 'n').click()
+        cy.get('[data-testid="select-option-measure-group-population"]').eq(5).should('have.attr', 'data-value', 'n').click()
         cy.get('[data-testid="group-form-submit-btn"]').wait(1000).click().wait(2000)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()

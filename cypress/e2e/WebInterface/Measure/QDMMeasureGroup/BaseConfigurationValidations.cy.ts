@@ -36,169 +36,143 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false, null, null, null)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', null)
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL, false, true, null, null, 1)
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', 1)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true, 1)
     })
 
     it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
         'the save button is not available until all required fields have a value', () => {
-            //navigate to the main measures page
-            cy.get(Header.measures).click()
 
-            MeasuresPage.actionCenter('edit', null)
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
-            //Click on Measure Group tab
-            Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-            cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-            cy.get(EditMeasurePage.measureGroupsTab).click()
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-            //navigate to the criteria section of the PC
-            cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        //confirm Base Config alert message appears
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
 
-            //confirm Base Config alert message appears
-            Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-            cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
 
-            //click on / navigate to the Base Configuration sub-tab
-            cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-            cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+        //validate helper text
+        cy.get(MeasureGroupPage.qdmType).click().focused().blur()
+        cy.get(MeasureGroupPage.qdmScoring).click({force: true})
+        cy.get(MeasureGroupPage.qdmType).click().focused().blur()
+        cy.get(MeasureGroupPage.qdmTypeHelperText).should('contain.text', 'At least one type is required')
+        cy.get(MeasureGroupPage.qdmScoringHelperText).should('contain.text', 'Valid Scoring is required for QDM Measure.')
 
-            //validate helper text
-            cy.get(MeasureGroupPage.qdmType).click().focused().blur()
-            cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-            cy.get(MeasureGroupPage.qdmType).click().focused().blur()
-            cy.get(MeasureGroupPage.qdmTypeHelperText).should('contain.text', 'At least one type is required')
-            cy.get(MeasureGroupPage.qdmScoringHelperText).should('contain.text', 'Valid Scoring is required for QDM Measure.')
+        //validate that 'Yes" radio button is selected / checked
+        cy.contains('label', 'Yes')
+            .nextAll() // select the next element
+            .get(MeasureGroupPage.qdmPatientBasis)
+            .should('have.attr', 'type', 'radio')  // confirm it's type radio
+            .should('be.checked')
 
-            //validate that 'Yes" radio button is selected / checked
-            cy.contains('label', 'Yes')
-                .nextAll() // select the next element
-                .get(MeasureGroupPage.qdmPatientBasis)
-                .should('have.attr', 'type', 'radio')  // confirm it's type radio
-                .should('be.checked')
+        //*check* the 'No' radio button
+        cy.contains('label', 'No')
+            .prevAll() // select the previous element
+            .get(MeasureGroupPage.qdmPatientBasis)
+            .should('have.attr', 'type', 'radio')
+            .check()
 
-            //*check* the 'No' radio button
-            cy.contains('label', 'No')
-                .prevAll() // select the previous element
-                .get(MeasureGroupPage.qdmPatientBasis)
-                .should('have.attr', 'type', 'radio')
-                .check()
+        //verify availability of the discard button and the un-availability of the save button
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
-            //verify availability of the discard button and the un-availability of the save button
-            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
-            cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
+        //discard current changges
+        cy.get(Utilities.DiscardCancelBtn).click()
+        Utilities.clickOnDiscardChanges()
 
-            //discard current changges
-            cy.get(Utilities.DiscardCancelBtn).click()
-            Utilities.clickOnDiscardChanges()
+        //validate that 'Yes" radio button is selected / checked
+        cy.contains('label', 'Yes')
+            .nextAll() // select the next element
+            .get(MeasureGroupPage.qdmPatientBasis)
+            .should('have.attr', 'type', 'radio')  // confirm it's type radio
+            .should('be.checked')
 
-            //validate that 'Yes" radio button is selected / checked
-            cy.contains('label', 'Yes')
-                .nextAll() // select the next element
-                .get(MeasureGroupPage.qdmPatientBasis)
-                .should('have.attr', 'type', 'radio')  // confirm it's type radio
-                .should('be.checked')
+        //validate that a value can be selected for the Type field
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+        cy.get(MeasureGroupPage.qdmScoring).click({force: true})
+        cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
-            //validate that a value can be selected for the Type field
-            cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-            cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-            cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-            cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
+        //verify availability of the discard button and the un-availability of the save button
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
-            //verify availability of the discard button and the un-availability of the save button
-            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
-            cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
+        //validate the values and the selection of the values, for the scoring field
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
 
-            //validate the values and the selection of the values, for the scoring field
-            //select 'Cohort' scoring on measure
-            Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
-            cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
+        //verify availability of the discard and save buttons
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
-            //verify availability of the discard and save buttons
-            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
-            cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
+        //discard current changes
+        cy.get(Utilities.DiscardCancelBtn).click()
+        Utilities.clickOnDiscardChanges()
 
-            //discard current changes
-            cy.get(Utilities.DiscardCancelBtn).click()
-            Utilities.clickOnDiscardChanges()
+        //navigate to the main measures page
+        cy.get(Header.measures).click()
 
-            //navigate to the main measures page
-            cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('edit', null)
 
-            MeasuresPage.actionCenter('edit', null)
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
-            //Click on Measure Group tab
-            Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-            cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-            cy.get(EditMeasurePage.measureGroupsTab).click()
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
 
-            //select 'Cohort' scoring on measure
-            Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
-            cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
+        //verify availability of the discard and save buttons
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
-            //verify availability of the discard and save buttons
-            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
-            cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
+        //validate that a value can be selected for the Type field
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+        cy.get(MeasureGroupPage.qdmScoring).click({force: true})
+        cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
-            //validate that a value can be selected for the Type field
-            cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-            cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-            cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-            cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
+        //Select No for patient Basis
+        cy.contains('label', 'No')
+            .prevAll() // select the previous element
+            .get(MeasureGroupPage.qdmPatientBasis)
+            .should('have.attr', 'type', 'radio')
+            .check()
 
-            //Select No for patient Basis
-            cy.contains('label', 'No')
-                .prevAll() // select the previous element
-                .get(MeasureGroupPage.qdmPatientBasis)
-                .should('have.attr', 'type', 'radio')
-                .check()
+        //verify availability of the discard button and the availability of the save button
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
-            //verify availability of the discard button and the availability of the save button
-            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
-            cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
-
-            //click on the save button and confirm save success message
-            cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-            Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-            cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+        //click on the save button and confirm save success message
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
 
     })
 
     it('Dirty check validation', () => {
         //navigate to the main measures page
-        cy.get(Header.measures).click()
-
-        MeasuresPage.actionCenter('edit')
+        // cy.get(Header.measures).click()
+        //
+        // MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -240,7 +214,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //validate that a value can be selected for the Type field
         cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
         cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
+        cy.get(MeasureGroupPage.qdmScoring).click({force: true})
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
         //verify availability of the discard button and the availability of the save button
@@ -304,7 +278,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //selelct measure type value
         cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
         cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
+        cy.get(MeasureGroupPage.qdmScoring).click({force: true})
 
         //verify availability of the discard and save buttons
         cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
@@ -357,7 +331,30 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             .should('have.attr', 'type', 'radio')  // confirm it's type radio
             .should('be.checked')
     })
-    
+})
+
+describe('Validating Non-owner access to Base Configuration page', () => {
+
+    beforeEach('Create measure and login', () => {
+
+        let altRandValue = (Math.floor((Math.random() * 1000) + 2))
+        altMeasureName = measureName + altRandValue
+        altCqlLibraryName = CqlLibraryName + altRandValue
+
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+        CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL, false, true)
+
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
+    })
+
     it('Non-owner of measure cannot edit any of the Base Configuration fields', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
@@ -368,7 +365,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementEnabled(MeasuresPage.allMeasuresTab, 70000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.enabled')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        MeasuresPage.actionCenter('edit', 1)
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -378,10 +375,9 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        //confirm Base Config alert message apppears
+        //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
-
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
@@ -402,8 +398,8 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 describe('Updates on Base Configuration page', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newMeasureName = measureName + randValue + 5
+    newCqlLibraryName = CqlLibraryName + randValue + 5
 
     beforeEach('Create Measure and login', () => {
 

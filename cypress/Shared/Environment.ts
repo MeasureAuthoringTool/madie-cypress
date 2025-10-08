@@ -43,7 +43,7 @@ export class Environment {
             case 'dev':
 
                 return {
-                    authnUrl: 'https://dev.idp.idm.cms.gov/api/v1/authn',
+                    authnUrl: 'https://test.idp.idm.cms.gov/api/v1/authn',
                     authUri: Cypress.env('DEV_MADIE_AUTHURI'),
                     redirectUri: Cypress.env('DEV_MADIE_REDIRECTURI'),
                     clientId: Cypress.env('DEV_MADIE_CLIENTID')

@@ -1,11 +1,11 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasureActions, EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MadieObject, PermissionActions, Utilities} from "../../../../Shared/Utilities"
-import {Environment} from "../../../../Shared/Environment"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {LandingPage} from "../../../../Shared/LandingPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
+import { Environment } from "../../../../Shared/Environment"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -42,7 +42,7 @@ describe('Measure Un Sharing', () => {
 
         //Un Share Measure
         MeasuresPage.actionCenter('share')
-        cy.get(EditMeasurePage.unshareOption).click({force: true})
+        cy.get(EditMeasurePage.unshareOption).click({ force: true })
         cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.unshareCheckBox).click()
         cy.get(EditMeasurePage.saveUserBtn).click()
@@ -70,7 +70,7 @@ describe('Measure Un Sharing', () => {
 
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
         EditMeasurePage.actionCenter(EditMeasureActions.share)
-        cy.get(EditMeasurePage.unshareOption).click({force: true})
+        cy.get(EditMeasurePage.unshareOption).click({ force: true })
         cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.unshareCheckBox).eq(1).click()
         cy.get(EditMeasurePage.saveUserBtn).click()
@@ -102,9 +102,7 @@ describe('Measure Un Sharing', () => {
 
         //Assert text on the popup screen
         cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + fileContents + ' with the following users:' + harpUserALT)
-        })
+        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + newMeasureName + ' with the following users:' + harpUserALT)
 
         //Click on Accept button and Un share Measure
         cy.get(EditMeasurePage.acceptBtn).click()

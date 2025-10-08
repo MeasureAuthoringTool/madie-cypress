@@ -16,6 +16,7 @@
         "node_modules/cypress",
         "cypress/**/*.ts",
         "cypress/support/commands.ts",
-        "**/*.ts"
+        "**/*.ts",
+        "cypress"
     ]
 }
