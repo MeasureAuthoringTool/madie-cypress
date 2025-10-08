@@ -162,7 +162,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
-        cy.get('[data-value="Other Race"]').click()
+        cy.get('[data-value="Other Race__2.16.840.1.114222.4.11.836"]').click()
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 90000)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
