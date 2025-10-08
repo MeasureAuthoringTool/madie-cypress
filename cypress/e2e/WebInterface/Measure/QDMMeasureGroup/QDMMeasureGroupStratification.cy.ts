@@ -167,7 +167,7 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
 
         //validate that a value can be selected for the Type field
-        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').wait(750).click()
         cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
         cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
