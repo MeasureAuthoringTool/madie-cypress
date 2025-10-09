@@ -182,7 +182,7 @@ describe('QDM Test case Attribute validations', () => {
 
         // remove ethnicity from Demographics section
         cy.get(TestCasesPage.QDMEthnicity).click()
-        Utilities.waitForElementVisible('[data-value="Not Hispanic or Latino"]', 60000)
+        Utilities.waitForElementVisible('[data-value="Not Hispanic or Latino__2.16.840.1.114222.4.11.837"]', 60000)
         cy.get('[data-testid="dash-option"]').click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
