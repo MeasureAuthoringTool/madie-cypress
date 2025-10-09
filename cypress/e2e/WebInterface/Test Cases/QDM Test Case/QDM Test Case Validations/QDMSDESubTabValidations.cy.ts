@@ -290,7 +290,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
     })
 
-    it('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
+    it.only('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
 
         MeasuresPage.actionCenter('edit')
 
@@ -354,7 +354,13 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.enterPatientDemographics('', '', '', 'Male (finding)', 'Colombian')
+        //Update Demographics values to match new value sets
+        cy.get(TestCasesPage.QDMGender).click()
+        Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 100000)
+        cy.get(TestCasesPage.SelectionOptionChoice).contains('Male (finding)').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        Utilities.waitForElementVisible('[data-value="Colombian__2.16.840.1.114222.4.11.877"]', 100000)
+        cy.get('[data-value="Colombian__2.16.840.1.114222.4.11.877"]').click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
