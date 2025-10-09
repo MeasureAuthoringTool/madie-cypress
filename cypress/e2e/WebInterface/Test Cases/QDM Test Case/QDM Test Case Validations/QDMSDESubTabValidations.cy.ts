@@ -355,12 +355,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Update Demographics values to match new value sets
-        cy.get(TestCasesPage.QDMGender).click()
-        Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 100000)
-        cy.get(TestCasesPage.SelectionOptionChoice).contains('Male (finding)').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        Utilities.waitForElementVisible('[data-value="Colombian__2.16.840.1.114222.4.11.877"]', 100000)
-        cy.get('[data-value="Colombian__2.16.840.1.114222.4.11.877"]').click()
+        TestCasesPage.enterPatientDemographics('', '', '', 'Male (finding)', 'Colombian')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
