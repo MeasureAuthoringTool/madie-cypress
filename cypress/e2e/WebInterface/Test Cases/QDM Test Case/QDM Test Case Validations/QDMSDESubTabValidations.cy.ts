@@ -1,5 +1,4 @@
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
 import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
@@ -354,6 +353,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
+        //Update Demographics values to match new value sets
         TestCasesPage.enterPatientDemographics('', '', '', 'Male (finding)', 'Colombian')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
