@@ -290,7 +290,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
     })
 
-    it.only('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
+    it('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
 
         MeasuresPage.actionCenter('edit')
 
