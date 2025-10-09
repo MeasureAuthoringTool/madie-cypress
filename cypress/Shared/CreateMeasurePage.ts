@@ -65,15 +65,17 @@ export class CreateMeasurePage {
 
         //saving measureID to file to use later
         cy.wait('@' + alias).then(({ response }) => {
+            const currentUser = Cypress.env('selectedUser')
             expect(response.statusCode).to.eq(201)
-            cy.writeFile('cypress/fixtures/measureId', response.body.id)
-            cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-            cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
         })
     }
 
     public static clickCreateDraftButton(): void {
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
+        const currentUser = Cypress.env('selectedUser')
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureID) => {
 
 
             let alias = 'draft' + (Date.now() + 1).toString()
@@ -84,8 +86,9 @@ export class CreateMeasurePage {
 
             //saving measureID to file to use later
             cy.wait('@' + alias).then(({ response }) => {
+                const currentUser = Cypress.env('selectedUser')
                 expect(response.statusCode).to.eq(201)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
             })
         })
 
@@ -125,11 +128,16 @@ export class CreateMeasurePage {
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
         measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
-        let user = ''
+        const currentUser = Cypress.env('selectedUser')
         const now = require('dayjs')
+        let user = ''
 
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
+        }
+
+        if (currentUser === 'harpUserALT') {
+            altUser = true
         }
 
         let ecqmTitle = 'eCQMTitle4QICore'
@@ -269,18 +277,19 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
+                let currentUser = Cypress.env('selectedUser')
                 if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
-                    cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
-                    cy.log('MeasureSetId is ' + response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response.body.measureSetId)
+                    cy.log(currentUser + ' MeasureSetId is ' + response.body.measureSetId)
 
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                    cy.log('MeasureSetId is ' + response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+                    cy.log(currentUser + ' MeasureSetId is ' + response.body.measureSetId)
                 }
 
             })
@@ -432,20 +441,21 @@ export class CreateMeasurePage {
                     }
                 }
             }).then((response) => {
+                const currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
-                    cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response.body.measureSetId)
                     cy.log('MeasureSetId is ' + response.body.measureSetId)
 
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
                     cy.log('MeasureSetId is ' + response.body.measureSetId)
                 }
 
@@ -598,20 +608,21 @@ export class CreateMeasurePage {
                     }
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
-                    cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response.body.measureSetId)
                     cy.log('MeasureSetId is ' + response.body.measureSetId)
 
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
                     cy.log('MeasureSetId is ' + response.body.measureSetId)
                 }
 
@@ -622,6 +633,8 @@ export class CreateMeasurePage {
 
     public static CreateQDMMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
+
+        const currentUser = Cypress.env('selectedUser')
 
         let user = ''
         const now = require('dayjs')
@@ -637,6 +650,10 @@ export class CreateMeasurePage {
         }
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
+        }
+
+        if (currentUser === 'harpUserALT') {
+            altUser = true
         }
 
         if (altUser) {
@@ -707,19 +724,19 @@ export class CreateMeasurePage {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 if (((twoMeasures === false) || (twoMeasures === undefined) || (twoMeasures === null)) && (measureNumber > 0)) {
-                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response.body.versionId)
                 }
                 else if (((twoMeasures === false) || (twoMeasures === undefined) || (twoMeasures === null)) && (measureNumber === 0)) {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
                 }
                 else if ((twoMeasures === true) && (measureNumber === 0)) {
-                    cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId2', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId2', response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId2', response.body.versionId)
                 }
 
             })
@@ -812,19 +829,20 @@ export class CreateMeasurePage {
                     }
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 if (CreateMeasureOptions.measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/measureId' + CreateMeasureOptions.measureNumber, response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId' + CreateMeasureOptions.measureNumber, response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/versionId' + CreateMeasureOptions.measureNumber, response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + CreateMeasureOptions.measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + CreateMeasureOptions.measureNumber, response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + CreateMeasureOptions.measureNumber, response.body.versionId)
 
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
                 }
 
             })
@@ -955,19 +973,20 @@ export class CreateMeasurePage {
                     }
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
 
                 if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response.body.versionId)
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
                 }
             })
         })
@@ -1019,18 +1038,19 @@ export class CreateMeasurePage {
                     method: 'POST',
                     body: clonedMeasure
                 }).then((response) => {
+                    let currentUser = Cypress.env('selectedUser')
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
 
                     if (measureNumber > 0) {
-                        cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
-                        cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
-                        cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response.body.id)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response.body.measureSetId)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response.body.versionId)
                     }
                     else {
-                        cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                        cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                        cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
                     }
                 })
             }) 

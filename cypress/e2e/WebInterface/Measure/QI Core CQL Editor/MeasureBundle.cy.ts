@@ -46,7 +46,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
     })
 
     it('Log into the UI and save Measure CQL so the cqlErrors flag will update to true', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -72,7 +72,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         //log into backend
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
@@ -124,7 +124,7 @@ describe('Bundle returns elmXML', () => {
     })
 
     it('Upon saving CQL from the UI, GET Bundle request returns elm xml', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -151,7 +151,7 @@ describe('Bundle returns elmXML', () => {
 
         //send GET Bundle request and verify response includes elm xml value
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -201,7 +201,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
     })
 
     it('Measure bundle end point returns scoring type for multiple Measure groups', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -249,7 +249,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         cy.setAccessTokenCookie()
         //send GET Bundle request and verify response includes elm xml value
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -302,7 +302,7 @@ describe('Measure bundle end point returns stratifications', () => {
     })
 
     it('Measure bundle end point returns stratifications for Cohort Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -359,7 +359,7 @@ describe('Measure bundle end point returns stratifications', () => {
 
         //send GET Bundle request and verify response includes elm xml value
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -387,7 +387,7 @@ describe('Measure bundle end point returns stratifications', () => {
     })
 
     it('Measure bundle end point returns stratifications for Continuous Variable Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -459,7 +459,7 @@ describe('Measure bundle end point returns stratifications', () => {
 
         //send GET Bundle request and verify response includes elm xml value
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -490,7 +490,7 @@ describe('Measure bundle end point returns stratifications', () => {
     })
 
     it('Measure bundle end point returns stratifications for Proportion Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -561,7 +561,7 @@ describe('Measure bundle end point returns stratifications', () => {
 
         //send GET Bundle request and verify response includes elm xml value
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -614,7 +614,7 @@ describe('Verify the criteria reference for measure observations', () => {
     })
 
     it('Measure bundle end point returns criteria reference for CV measure observations and is equal to measure population id', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -685,7 +685,7 @@ describe('Verify the criteria reference for measure observations', () => {
 
         //send GET Bundle request and verify response includes elm xml value
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -705,7 +705,7 @@ describe('Verify the criteria reference for measure observations', () => {
     })
 
     it('Measure bundle end point returns criteria reference for Ratio measure observations and is equal to measure population id', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -771,7 +771,7 @@ describe('Verify the criteria reference for measure observations', () => {
 
         //send GET Bundle request and verify response includes elm xml value
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',

@@ -24,9 +24,9 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Successful Measure sharing', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/acls',
                     headers: {
@@ -56,9 +56,9 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Verify error message when wrong API key is provided', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/acls',
@@ -86,9 +86,9 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Verify error message when the Measure does not exist in MADiE', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id+5 + '/acls',
@@ -117,9 +117,9 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Get details of Measure shared with', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/admin/measures/sharedWith?measureids=' + id,
                     headers: {
@@ -140,9 +140,9 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Verify error Message when Non Measure owner tried to get details of Measure Shared with', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/admin/measures/sharedWith?measureids=' + id,

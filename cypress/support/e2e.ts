@@ -42,3 +42,18 @@ Cypress.on('test:after:run', (test, runnable) => {
         })
     }
 })
+
+
+before(() => {
+    cy.task('getAvailableUser').then((user) => {
+        expect(user).to.not.be.null;
+        Cypress.env('selectedUser', user)
+    })
+})
+
+afterEach(() => {
+    const user = Cypress.env('selectedUser')
+    if (user) {
+        cy.task('releaseUser', user)
+    }
+})

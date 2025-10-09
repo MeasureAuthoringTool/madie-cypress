@@ -38,11 +38,11 @@ describe('Create New Measure with very long name', () => {
     })
 
     it('Create QI Core 4.1.1 Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
         cy.get(Header.mainMadiePageButton).click()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_measureName"]', 90000)
             cy.get('[data-testid="measure-name-' + fileContents + '_measureName"]').should('have.text', measureName.slice(0, 120) + 'Show more')
 

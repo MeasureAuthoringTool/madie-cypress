@@ -179,6 +179,7 @@ describe('CQL Library Validations -- User ownership', () => {
     })
 
     it('Owner is not the user and the library details are viewed via a View button and Library cannot be edited', () => {
+        const currentUser = Cypress.env('selectedUser')
         //log in as user that does not own the Library
         OktaLogin.Login()
 
@@ -196,7 +197,7 @@ describe('CQL Library Validations -- User ownership', () => {
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
             cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('exist')
             cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid=view-cql-library-button-' + fileContents + ']', 3500)

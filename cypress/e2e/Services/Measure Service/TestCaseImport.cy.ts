@@ -67,12 +67,13 @@ describe('Test Case Import', () => {
     })
 
     it('Success Scenario: Import single test case and over ride existing test case', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCasePId').should('exist').then((patientId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
@@ -95,12 +96,12 @@ describe('Test Case Import', () => {
     })
 
     it('Measure\'s populations do not match the population in the file that is being imported', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases/imports',
@@ -122,13 +123,13 @@ describe('Test Case Import', () => {
     })
 
     it('Unable to Import when Test Case Json is not valid', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCasePId').should('exist').then((patientId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
@@ -152,13 +153,13 @@ describe('Test Case Import', () => {
     })
 
     it('Non Measure owner unable to Import Test cases', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCasePId').should('exist').then((patientId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
@@ -202,10 +203,10 @@ describe('Test Case import for versioned Measure', () => {
     })
 
     it("Able to Import Test Cases for Versioned Measures", () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -223,8 +224,8 @@ describe('Test Case import for versioned Measure', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCasePId').should('exist').then((patientId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
@@ -267,12 +268,13 @@ describe('Multiple Test Case Import', () => {
     })
 
     it('Multiple test case files are not supported', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCasePId').should('exist').then((patientId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',

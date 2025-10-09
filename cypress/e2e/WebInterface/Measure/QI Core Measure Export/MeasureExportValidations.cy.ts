@@ -61,10 +61,11 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z"
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
         })
         OktaLogin.Login()
@@ -88,8 +89,8 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
-
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        let currentUser = Cypress.env('selectedUser')
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
 
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
@@ -123,7 +124,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
     // run this and check modal for message
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
@@ -132,7 +133,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
         cy.get(Header.measures).click()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
@@ -145,7 +146,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Update Measure CQL with errors
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -158,7 +159,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
         cy.get(Header.measures).click()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
@@ -194,10 +195,10 @@ describe('Error Message on Measure Export when the Measure does not have Populat
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.get(Header.measures).click()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
@@ -227,7 +228,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
     })
 
     it('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.get(Header.measures).click()
 
         MeasuresPage.actionCenter('edit')
@@ -239,7 +240,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         cy.get(EditMeasurePage.errorMessage).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
 
         cy.get(Header.measures).click()
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
@@ -276,10 +277,10 @@ describe('Error Message on Measure Export when the PC does not have Improvement 
     })
 
     it('Verify Error Message on Measure Export when Population Criteria does not have IN set', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         // based on CreateProportionMeasureGroupAPI, but hardcoded values for this test
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -332,7 +333,7 @@ describe('Error Message on Measure Export when the PC does not have Improvement 
 
         OktaLogin.Login()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')

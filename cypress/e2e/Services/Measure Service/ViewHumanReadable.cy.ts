@@ -41,9 +41,9 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
     })
 
     it('View Measure Human Readable for Qi Core Draft Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/humanreadable/' + id,
                     headers: {
@@ -82,10 +82,10 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
     })
 
     it('View Measure Human Readable for Qi Core Versioned Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -100,7 +100,7 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/humanreadable/' + id,
                     headers: {
@@ -145,9 +145,9 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
     })
 
     it('View Measure Human Readable for QDM Draft Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/humanreadable/' + id,
                     headers: {
@@ -200,10 +200,10 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
 
     //MAT-8548
     it('Successful export of a versioned QDM Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //version measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -219,7 +219,7 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
 
         //export measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/humanreadable/' + id,
                     method: 'GET',
@@ -258,9 +258,9 @@ describe('Measure Service: Verify error message when there is no Population Crit
     })
 
     it('Verify error message when there is no Population Criteria for QDM Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/humanreadable/' + id,

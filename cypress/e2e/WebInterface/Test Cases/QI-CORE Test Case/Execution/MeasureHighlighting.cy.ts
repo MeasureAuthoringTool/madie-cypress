@@ -11,6 +11,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const now = Date.now()
+let currentUser = Cypress.env('selectedUser')
 let measureName = 'TestMeasure' + now
 let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
@@ -22,9 +23,9 @@ const measureCQLResults = MeasureCQL.CQLHLResults_value
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const tcDFNJson = TestCaseJson.tcJson_value
 const tcResultJson = TestCaseJson.tcResultsJson
-const measureGroupPath = 'cypress/fixtures/groupId'
-const measureSecondGroupPath = 'cypress/fixtures/groupId2'
-const measurePath = 'cypress/fixtures/measureId'
+const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+const measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
+const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
 let measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine = 'library Library7027567898767 version \'0.0.000\'\n' +
     '\n' +
@@ -1094,7 +1095,7 @@ describe('Measure Highlighting', () => {
     })
 
     it('Execute single Test Case and verify Measure highlighting', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.intercept('/api/terminology/value-sets/expansion/fhir').as('expansion')
 
         //Create Measure Group
@@ -1774,7 +1775,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
     })
 
     it('Highlighting is accurate when measure & included library both have definitions with the same name', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -1808,7 +1809,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-        cy.readFile('cypress/fixtures/measureGroupId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureGroupId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 90000)
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 90000)

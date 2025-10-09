@@ -122,7 +122,7 @@ describe('Measure Sharing', () => {
     })
 
     it('Verify Measure owner can share Measure from Action centre share button and shred user is able to edit Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
 
@@ -145,7 +145,7 @@ describe('Measure Sharing', () => {
         cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
 
         //Delete button disabled for shared owner
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
@@ -201,6 +201,7 @@ describe('Measure Sharing', () => {
     })
 
     it('Action centre share button disabled for Non Measure Owner', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
@@ -212,7 +213,7 @@ describe('Measure Sharing', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', newMeasureName)
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
@@ -273,10 +274,10 @@ describe('Measure Sharing - Multiple instances', () => {
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
-        let filePath = 'cypress/fixtures/measureId'
+        let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Version the Measure
         MeasuresPage.actionCenter('version')

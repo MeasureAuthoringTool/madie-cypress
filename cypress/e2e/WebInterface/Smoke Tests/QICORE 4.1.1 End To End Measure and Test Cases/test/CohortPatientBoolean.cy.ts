@@ -1,29 +1,28 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL";
 
-let measureName = 'CohortEpisodeWithStrat' + Date.now()
-let CqlLibraryName = 'CohortEpisodeWithStrat' + Date.now()
+let measureName = 'CohortPatientBoolean' + Date.now()
+let CqlLibraryName = 'CohortPatientBoolean' + Date.now()
+let measureCQL = MeasureCQL.QICORE_CQL_CohortPatientBoolean
 let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
-let measureCQL = QiCore4Cql.EpisodeWithStrat
+let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
-//MAT-7727
-describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () => {
+describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
-            '2022-01-01', '2023-01-01')
+            '2012-01-01', '2012-12-31')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
@@ -37,34 +36,23 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it('End to End Cohort Episode w/ Stratification, Pass Result', () => {
+    it('End to End Cohort Patient Boolean, Pass Result', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        MeasureGroupPage.setMeasureGroupType()
-
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Encounter')
-        cy.get(MeasureGroupPage.popBasisOption).click()
+        Utilities.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-
-        cy.get(MeasureGroupPage.stratificationTab).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratificaction 1')
-        cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
         cy.get(MeasureGroupPage.reportingTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
@@ -82,17 +70,16 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
 
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('exist')
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.enabled')
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.visible')
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
+        cy.get(TestCasesPage.testCaseIPPExpected).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
 
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
@@ -111,5 +98,6 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+
     })
 })

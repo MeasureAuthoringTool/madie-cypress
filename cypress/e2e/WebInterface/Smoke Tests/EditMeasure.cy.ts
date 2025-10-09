@@ -15,7 +15,7 @@ let mpEndDate = now().format('YYYY-MM-DD')
 describe('Edit Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.setAccessTokenCookie()
 
         //Create Measure with out Steward and Developer
@@ -38,9 +38,9 @@ describe('Edit Measure', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
         })
         OktaLogin.Login()

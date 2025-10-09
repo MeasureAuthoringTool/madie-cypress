@@ -415,9 +415,10 @@ export class MeasureGroupPage {
     }
 
     public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
+        const currentUser = Cypress.env('selectedUser')
         let user = ''
         let measurePath = ''
-        let measureGroupPath = 'cypress/fixtures/measureGroupId'
+        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId'
         let measureScoring = 'Proportion'
 
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
@@ -436,10 +437,10 @@ export class MeasureGroupPage {
             measureNumber = 0
         }
         if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/measureId' + measureNumber
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
         else {
-            measurePath = 'cypress/fixtures/measureId'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
 
         //Add Measure Group to the Measure
@@ -522,6 +523,7 @@ export class MeasureGroupPage {
     }
 
     public static CreateRatioMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?: string, PopDenomP?: string, popBasis?: string): string {
+        const currentUser = Cypress.env('selectedUser')
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
@@ -539,13 +541,13 @@ export class MeasureGroupPage {
             user = Environment.credentials().harpUser
         }
         if (twoMeasureGroups === true) {
-            measurePath = 'cypress/fixtures/measureId2'
-            measureGroupPath = 'cypress/fixtures/groupId2'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
+            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
             //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
         }
         else {
-            measurePath = 'cypress/fixtures/measureId'
-            measureGroupPath = 'cypress/fixtures/groupId'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         }
 
         //Add Measure Group to the Measure
@@ -606,22 +608,30 @@ export class MeasureGroupPage {
     }
 
     public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
+
+        const currentUser = Cypress.env('selectedUser')
+
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Cohort'
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
-            measurePath = 'cypress/fixtures/measureId'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
 
 
         if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/measureId' + measureNumber
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
+
+        if (currentUser === 'harpUserALT') {
+            altUser = true
+        }
+
         if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
@@ -631,11 +641,11 @@ export class MeasureGroupPage {
             user = Environment.credentials().harpUser
         }
         if (twoMeasureGroups === true) {
-            measureGroupPath = 'cypress/fixtures/groupId2'
+            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
             //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
         }
         else {
-            measureGroupPath = 'cypress/fixtures/groupId'
+            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         }
 
         //Add Measure Group to the Measure
@@ -692,6 +702,7 @@ export class MeasureGroupPage {
     }
 
     public static CreateCohortMeasureGroupWithoutTypeAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string): string {
+        let currentUser = Cypress.env('selectedUser')
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
@@ -707,13 +718,13 @@ export class MeasureGroupPage {
             user = Environment.credentials().harpUser
         }
         if (twoMeasureGroups === true) {
-            measurePath = 'cypress/fixtures/measureId2'
-            measureGroupPath = 'cypress/fixtures/groupId2'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
+            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
             //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
         }
         else {
-            measurePath = 'cypress/fixtures/measureId'
-            measureGroupPath = 'cypress/fixtures/groupId'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         }
 
         //Add Measure Group to the Measure
@@ -762,10 +773,11 @@ export class MeasureGroupPage {
         numeratorObservation?: MeasureObservations,
         cvPopulations?: CVGroups
     ): string {
+        let currentUser = Cypress.env('selectedUser')
         let user = ''
         let observations = []
-        let measurePath = 'cypress/fixtures/measureId'
-        let measureGroupPath = 'cypress/fixtures/groupId'
+        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         const numUuid = uuidv4()
         const denomUuid = uuidv4()
         if (denominatorObservation) {
@@ -939,7 +951,8 @@ export class MeasureGroupPage {
     }
 
     public static addStratificationDataAPI(stratificationData: Array<Stratification>) {
-        const measurePath = 'cypress/fixtures/measureId'
+        let currentUser = Cypress.env('selectedUser')
+        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {

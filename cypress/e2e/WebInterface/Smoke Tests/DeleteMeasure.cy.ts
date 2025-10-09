@@ -68,14 +68,14 @@ describe('Delete Measure ownership validation', () => {
     })
 
     it('Verify Non Measure Owner can not Delete Measure through Action center', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Verify the Measure is not on My Measures Page List
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureTwo)
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 

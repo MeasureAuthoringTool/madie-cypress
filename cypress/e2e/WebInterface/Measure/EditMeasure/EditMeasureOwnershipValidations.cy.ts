@@ -122,7 +122,7 @@ describe('Read only for measure, measure group, and test cases that user does no
     })
 
     it('Test Cases are read / view only', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //navigate to the all measures tab
         Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
@@ -139,7 +139,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.checkTestCase(1)
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((fileContents) => {
 
             //confirm that view button for test case is available and click on the view button
             cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('have.text', 'View')

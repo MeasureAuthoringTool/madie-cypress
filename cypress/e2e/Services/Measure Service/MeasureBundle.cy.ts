@@ -96,7 +96,7 @@ let PopNumex = 'numeratorExclusion'
 describe('Proportion Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
     beforeEach('Create Measure and set access token', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -115,7 +115,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         //Utilities.UpdateMeasureAddMetaDataAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
@@ -199,9 +199,9 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -255,11 +255,11 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm Measure meta data is present', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((versionId) => {
-                    cy.readFile('cypress/fixtures/groupId').should('exist').then((groupId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/versionId').should('exist').then((versionId) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/groupId').should('exist').then((groupId) => {
 
                         //Add Meta data to the Measure
                         cy.request({
@@ -377,9 +377,9 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm Library.identifier, Library.publisher, and Library.title are present', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
 
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
@@ -425,9 +425,9 @@ describe('Measure Observation Validation', () => {
     })
 
     it('Backend user cannot create or add a Measure Observation if one is not defined in the CQL', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
@@ -493,7 +493,7 @@ describe('Measure Observation Validation', () => {
 describe('CV Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
     before('Create Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -510,7 +510,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
 
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
 
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
@@ -582,9 +582,9 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -649,9 +649,10 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
                     'measureSetId': uuidv4()
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
         })
     })
@@ -663,9 +664,9 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
     })
 
     it('Measure Bundle end point returns 409 when there is no elmJson for the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/bundle',
@@ -684,7 +685,7 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
 describe('Measure Bundle end point returns nothing with Measure CQL missing FHIRHelpers include line', () => {
 
     before('Create Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -698,7 +699,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
@@ -768,8 +769,9 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -837,9 +839,9 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
 
     })
     it('Get Measure bundle resource will return details of measure, regardless if the request is comfing from the owner / creator of the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -878,9 +880,9 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
 
     })
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/bundle',
@@ -931,9 +933,9 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
     })
 
     it('Get Measure bundle data from madie-fhir-service and verify that non-boolean value returns as "Encounter"', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -1020,12 +1022,13 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
                     ]
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
         })
         OktaLogin.Login()
@@ -1051,9 +1054,9 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
     })
 
     it('Get Measure bundle data and verify that the Supplemental data elements and Risk Adjustment variables are added', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
@@ -1091,9 +1094,9 @@ describe('Measure bundle end point returns Measure Population Description', () =
     })
 
     it('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
 
                 cy.request({
                     url: '/api/measures/' + id + '/groups',

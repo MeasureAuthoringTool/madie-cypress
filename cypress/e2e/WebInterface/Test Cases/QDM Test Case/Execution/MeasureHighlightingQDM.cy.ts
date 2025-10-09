@@ -63,8 +63,9 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
     })
 
     it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs -- "Definitions Used" is present', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measurePath = 'cypress/fixtures/measureId'
+        let currentUser = Cypress.env('selectedUser')
+        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         cy.get(Header.measures).click()
         //Click on Edit Measure
@@ -153,8 +154,9 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
     })
 
     it('QDM: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measurePath = 'cypress/fixtures/measureId'
+        let currentUser = Cypress.env('selectedUser')
+        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         cy.get(Header.measures).click()
         //Click on Edit Measure
@@ -254,8 +256,9 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
     })
 
     it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC and will show Test case Results', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measurePath = 'cypress/fixtures/measureId'
+        let currentUser = Cypress.env('selectedUser')
+        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         cy.get(Header.measures).click()
         //Click on Edit Measure
@@ -361,9 +364,10 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
 
     })
     it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measureSecondGroupPath = 'cypress/fixtures/groupId2'
-        let measurePath = 'cypress/fixtures/measureId'
+        let currentUser = Cypress.env('selectedUser')
+        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+        let measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
+        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         cy.get(Header.measures).click()
         //Click on Edit Measure

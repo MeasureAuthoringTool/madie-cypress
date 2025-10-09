@@ -90,9 +90,9 @@ describe('Measure Versioning', () => {
     })
 
     it('Successful Measure Versioning', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -108,13 +108,13 @@ describe('Measure Versioning', () => {
     })
 
     it('Non Measure owner unable to version Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -148,9 +148,9 @@ describe('Version Measure without CQL', () => {
     })
 
     it('User can not version Measure if there is no CQL', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -201,14 +201,15 @@ describe('Version Measure with invalid CQL', () => {
 
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.errors[0]).to.include('ERRORS_ELM_JSON')
 
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
         })
     })
@@ -220,9 +221,9 @@ describe('Version Measure with invalid CQL', () => {
     })
 
     it('User can not version Measure if the CQL has errors', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -259,9 +260,9 @@ describe('Version Measure with invalid test case Json', () => {
     })
 
     it('User can version Measure if the Test case Json has errors', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -306,11 +307,11 @@ describe('Edit validations for versioned Measure', () => {
     })
 
     it('Verify error messages when user try to edit Measure details, Measure Groups or Test cases for versioned Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.log('Version the Measure')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/versionId').should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
@@ -392,7 +393,7 @@ describe('Edit validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on editing Test case')
-                    cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testcaseid) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testcaseid) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
@@ -445,11 +446,11 @@ describe('Delete validations for versioned Measure', () => {
     })
 
     it('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.log('Version the Measure')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/versionId').should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
@@ -488,7 +489,7 @@ describe('Delete validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on delete Measure group')
-                    cy.readFile('cypress/fixtures/measureGroupId').should('exist').then((groupId) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/measureGroupId').should('exist').then((groupId) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/groups/' + groupId,
@@ -527,7 +528,7 @@ describe('Delete validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on delete Test case')
-                    cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testcaseid) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testcaseid) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,

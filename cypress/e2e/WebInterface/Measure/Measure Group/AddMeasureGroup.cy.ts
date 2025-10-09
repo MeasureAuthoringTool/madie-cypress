@@ -5,8 +5,8 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-
-let filePath = 'cypress/fixtures/measureId'
+let currentUser = Cypress.env('selectedUser')
+let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 let measureName = 'AddMeasureGroup' + Date.now()
 let CqlLibraryName1 = 'AddMeasureGroupLib' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL

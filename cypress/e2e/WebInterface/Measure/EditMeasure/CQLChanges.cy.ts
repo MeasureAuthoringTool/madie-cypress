@@ -44,6 +44,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
     it('Updating CQL to be erroneous, after initial CQL, PC, and Test Case has been setup, causes errors and the errors' +
         ' flag to be set to the mismatch flag. Correcting the CQL removes the errors flag', () => {
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -142,7 +143,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log into backend
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
@@ -182,7 +183,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log into backend
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
@@ -199,6 +200,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
     it('Updating CQL to be errorneous, after initial CQL, PC, and Test Case has been setup, causes errors and the errors' +
         ' flag to be set to the mismatch flag. Correcting the PC selections to match CQL expectations removes the errors flag', () => {
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -299,7 +301,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log into backend
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
@@ -337,7 +339,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log into backend
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {

@@ -121,6 +121,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     })
 
     it('User receives "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
+        let currentUser = Cypress.env('selectedUser')
         let versionNumber = '1.0.000'
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -149,7 +150,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         Utilities.waitForElementToNotExist(TestCasesPage.discardChangesConfirmationBody, 20000)
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
         MeasuresPage.actionCenter('version')
@@ -310,14 +311,14 @@ describe('Non Measure owner unable to create Version', () => {
     })
 
     it('Verify Version button is not visible for non Measure owner', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)

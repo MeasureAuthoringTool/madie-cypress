@@ -56,11 +56,12 @@ describe('Measure Service: QDM Measure', () => {
                     },
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
                 expect(response.body.rateAggregation).to.eql('Aggregation')
                 expect(response.body.improvementNotation).to.eql('Increased score indicates improvement')
                 expect(response.body.improvementNotationDescription).to.eql('This is a description for when the IN is set to \"Increased score indicates improvement\"')
@@ -103,11 +104,12 @@ describe('Measure Service: QDM Measure', () => {
                     },
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
                 expect(response.body.baseConfigurationTypes[0]).to.eql('Efficiency')
                 expect(response.body.baseConfigurationTypes[1]).to.eql('Outcome')
                 expect(response.body.baseConfigurationTypes[2]).to.eql('Process')
@@ -164,6 +166,7 @@ describe('Measure Service: QDM Measure', () => {
                     ]
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 expect(response.body.supplementalData[0].definition).to.eql('supplementalDataDefinition')
@@ -174,9 +177,9 @@ describe('Measure Service: QDM Measure', () => {
                 expect(response.body.riskAdjustments[0].description).to.eql('riskAdjustmentDescription')
                 expect(response.body.riskAdjustments[1].definition).to.eql('riskAdjustmentDefinition2')
                 expect(response.body.riskAdjustments[1].description).to.eql('riskAdjustmentDescription2')
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
 
         })
@@ -201,10 +204,10 @@ describe('QDM Measure: Transmission format', () => {
     })
 
     it('Add Transmission format to the QDM Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/versionId').should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {

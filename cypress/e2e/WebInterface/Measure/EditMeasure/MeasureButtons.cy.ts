@@ -369,7 +369,7 @@ describe('Share measure from the Edit Measure page', () => {
     })
 
     it('Verify Measure owner can share QDM 5.6 Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
@@ -394,7 +394,7 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', measureQDM)
 
         //Delete button disabled for shared owner
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()

@@ -404,10 +404,11 @@ export class TestCasesPage {
     //digit into the function call. If no value is given for this optional parameter, then it will assume the
     //value needs to be 1 -- the first entry in the table.
     public static grabElementId(eleTableEntry?: number): void {
+        const currentUser = Cypress.env('selectedUser')
         let attrData = ''
         let elemid = ''
         let elementId = []
-        let elementIdPath = 'cypress/fixtures/elementId'
+        let elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
         if (eleTableEntry === null || eleTableEntry === undefined) {
             eleTableEntry = 1
         }
@@ -434,10 +435,11 @@ export class TestCasesPage {
         the primary use-case for grabTestCaseId would be to prep for using testCaseAction()
     */
     public static grabTestCaseId(testCaseNumber: number): void {
+        const currentUser = Cypress.env('selectedUser')
         // ToDo: expand to allow option for testCaseId2
 
         let testCaseId: string
-        const testCaseIdPath = 'cypress/fixtures/testCaseId'
+        const testCaseIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId'
 
         cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
             .parent('tr')
@@ -450,10 +452,10 @@ export class TestCasesPage {
     }
 
     public static clickCreateTestCaseButton(): void {
-
+        const currentUser = Cypress.env('selectedUser')
         //setup for grabbing the measure create call
         let measureID = null
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
             measureID = id
             cy.intercept('POST', '/api/measures/' + measureID + '/test-cases').as('testcase')
             cy.get(this.createTestCaseSaveButton).should('exist')
@@ -463,7 +465,7 @@ export class TestCasesPage {
             //saving testCaseId to file to use later
             cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
                 expect(response.statusCode).to.eq(201)
-                cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
                 cy.log(response.body.message)
             })
         })
@@ -500,7 +502,8 @@ export class TestCasesPage {
     //indicates one of the available actions that can be done on an element(ie: Edit, Clone, Delete)
     //**NOTE**: Before this function can be called, the grabElementId(eleTableEntry) function must be called, first.
     public static qdmTestCaseElementAction(action: string): void {
-        let elementIdPath = 'cypress/fixtures/elementId'
+        const currentUser = Cypress.env('selectedUser')
+        let elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
         cy.readFile(elementIdPath).should('exist').then((fileContents) => {
             cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
             cy.scrollTo(0, 500)
@@ -657,12 +660,13 @@ export class TestCasesPage {
     }
 
     public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+        const currentUser = Cypress.env('selectedUser')
         let testCasePIdPath = ''
         if (secondTestCase) {
-            testCasePIdPath = 'cypress/fixtures/testCaseId2'
+            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId2'
         }
         else {
-            testCasePIdPath = 'cypress/fixtures/testCaseId'
+            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId'
         }
 
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
@@ -677,9 +681,16 @@ export class TestCasesPage {
 
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
         let user = ''
-        let measurePath = 'cypress/fixtures/measureId'
+        let currentUser = Cypress.env('selectedUser')
+        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let testCasePath = ''
         let testCasePIdPath = ''
+        if ((altUser === undefined) || (altUser === null)) {
+            altUser = false
+        }
+        if (currentUser === 'harpUserALT') {
+            altUser = true
+        }
         if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
@@ -690,25 +701,25 @@ export class TestCasesPage {
         }
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
-            measurePath = 'cypress/fixtures/measureId'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
         if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/measureId' + measureNumber
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
         if (secondMeasure === true) {
-            measurePath = 'cypress/fixtures/measureId2'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
             //testCasePIdPath = 'cypress/fixtures/measureId2'
         }
         else {
             measurePath = measurePath
         }
         if (twoTestCases === true) {
-            testCasePath = 'cypress/fixtures/testCaseId2'
-            testCasePIdPath = 'cypress/fixtures/testCasePId2'
+            testCasePath = 'cypress/fixtures/'+ currentUser + '/testCaseId2'
+            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCasePId2'
         }
         else {
-            testCasePath = 'cypress/fixtures/testCaseId'
-            testCasePIdPath = 'cypress/fixtures/testCasePId'
+            testCasePath = 'cypress/fixtures/'+ currentUser + '/testCaseId'
+            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCasePId'
         }
 
         //Add Test Case to the Measure
@@ -748,9 +759,18 @@ export class TestCasesPage {
     }
 
     public static CreateQDMTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
+        let currentUser = Cypress.env('selectedUser')
         let user = ''
-        let measurePath = 'cypress/fixtures/measureId'
+        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let testCasePath = ''
+
+        if ((altUser === undefined) || (altUser === null)) {
+            altUser = false
+        }
+        if (currentUser === 'harpUserALT') {
+            altUser = true
+        }
+
         if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
@@ -760,20 +780,20 @@ export class TestCasesPage {
             user = Environment.credentials().harpUser
         }
         if (twoTestCases === true) {
-            testCasePath = 'cypress/fixtures/testCaseId2'
+            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
         }
         else {
-            testCasePath = 'cypress/fixtures/testCaseId'
+            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
         }
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
-            measurePath = 'cypress/fixtures/measureId'
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
 
 
         if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/measureId' + measureNumber
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
         //Add Test Case to the Measure
@@ -864,7 +884,7 @@ export class TestCasesPage {
         set of checkmarks for your test scenario
     */
     public static actionCenter(action: TestCaseAction) {
-
+        let currentUser = Cypress.env('selectedUser')
         switch (action) {
 
             case TestCaseAction.clone:
@@ -888,7 +908,7 @@ export class TestCasesPage {
 
                 cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
 
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                     Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
                     cy.get('[data-testid="measure-name-' + id + '_select"]')
                         .find('input')

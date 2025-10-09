@@ -51,7 +51,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
     })
 
     it('Shift all Test Case dates to the future using the tab in left menu', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -89,8 +89,8 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
         //Validate if the Measurement period start date is updated for first Test case
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
@@ -110,8 +110,8 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
         //Validate if the Measurement period start date is updated for second Test case
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId2').should('exist').then((testCaseId2) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId2,
                         headers: {
@@ -131,7 +131,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
     })
 
     it('Shift single test case dates to the past using the action center option', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -166,8 +166,8 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
         //Validate if the Measurement period start date is updated for first Test case
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {

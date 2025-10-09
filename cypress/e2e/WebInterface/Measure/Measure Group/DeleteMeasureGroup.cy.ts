@@ -118,6 +118,7 @@ describe('Validate Measure Group deletion functionality', () => {
     })
 
     it('Test Cases still loads after all groups are deleted', () => {
+        let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -154,12 +155,12 @@ describe('Validate Measure Group deletion functionality', () => {
 
         TestCasesPage.checkTestCase(1)
         //confirm test case is still present on measure
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((fileContents) => {
             cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
             cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']', { timeout: 80000 }).click()
         })
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((mId) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((tId) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((mId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((tId) => {
                 cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/' + tId, [])
             })
         })

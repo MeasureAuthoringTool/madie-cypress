@@ -10,6 +10,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { Toasts } from "../../../../Shared/Toasts"
 
+let currentUser = Cypress.env('selectedUser')
 let updatedMeasuresPageName = ''
 let updatedMeasuresPageNameSecond = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -17,7 +18,7 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 const cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
 const cohortMeasureCQLSix = MeasureCQL.CQL_For_Cohort_Six
-const filePath = 'cypress/fixtures/measureId'
+const filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 const versionNumberFirst = '1.0.000'
 const versionNumberSecond = '2.0.000'
 

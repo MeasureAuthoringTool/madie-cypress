@@ -10,8 +10,8 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 import { Toasts } from "../../../../../Shared/Toasts"
-
-const measureId = 'cypress/fixtures/measureId'
+let currentUser = Cypress.env('selectedUser')
+const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
 const testCase1: TestCase = {
     title: 'Test Case 1',
     description: 'Description 1',

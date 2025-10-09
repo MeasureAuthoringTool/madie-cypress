@@ -148,7 +148,7 @@ describe('Test Case Expected Measure Group population values based on initial me
 
     it('Validate Population Values are reset on all test cases that exist under a measure group, after the score ' +
         'unit value is saved / updated', () => {
-
+        let currentUser = Cypress.env('selectedUser')
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
             //navigate to CQL Editor page / tab
@@ -253,7 +253,7 @@ describe('Test Case Expected Measure Group population values based on initial me
                 'details for this group updated successfully.')
 
 
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.intercept('GET', '/api/measures/' + fileContents + '/test-cases').as('testCase')
 
                 //navigate back to the test case tab

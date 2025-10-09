@@ -33,6 +33,7 @@ const measureData: CreateMeasureOptions = {}
 
 describe('Test Case population values based on Measure Group population definitions', () => {
     beforeEach('Create Measure and measure group', () => {
+        let currentUser = Cypress.env('selectedUser')
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
         TCName = 'TCName' + randTCNameValue
 
@@ -59,7 +60,7 @@ describe('Test Case population values based on Measure Group population definiti
 
         //create group
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -95,8 +96,8 @@ describe('Test Case population values based on Measure Group population definiti
         })
         //create test case
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/groupId').should('exist').then((groupIdFc) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/groupId').should('exist').then((groupIdFc) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases',
                         headers: {
@@ -153,13 +154,14 @@ describe('Test Case population values based on Measure Group population definiti
                             }]
                         }
                     }).then((response) => {
+                        let currentUser = Cypress.env('selectedUser')
                         expect(response.status).to.eql(201)
                         expect(response.body.id).to.be.exist
                         expect(response.body.series).to.eql(TCSeries)
                         expect(response.body.title).to.eql(TCTitle)
                         expect(response.body.description).to.eql(TCDescription)
                         expect(response.body.json).to.be.exist
-                        cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
                     })
                 })
             })
@@ -173,9 +175,10 @@ describe('Test Case population values based on Measure Group population definiti
 
     })
     it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
@@ -234,13 +237,14 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
     })
 
     it('Create Test Case', () => {
+        let currentUser = Cypress.env('selectedUser')
         let randValue = (Math.floor((Math.random() * 2000) + 3))
         let title = 'test case title  - _'
         let series = 'test case series  - _'
         let description = 'DENOME pass Test HB - _'
         //Add Test Case to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
@@ -255,6 +259,7 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
                         "json": TCJson,
                     }
                 }).then((response) => {
+                    let currentUser = Cypress.env('selectedUser')
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
                     expect(response.body.series).to.eql(series)
@@ -262,18 +267,18 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
                     expect(response.body.description).to.eql(description)
                     expect(response.body.json).to.be.exist
                     expect(response.body.json).to.eql(TCJson)
-                    cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
                 })
             })
         })
     })
 
     it('Edit Test Case', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testcaseid) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testcaseid) => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
                         headers: {
@@ -296,7 +301,7 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
                         expect(response.body.series).to.eql("WhenBP120")
                         expect(response.body.title).to.eql(TCTitle)
                         expect(response.body.json).to.be.exist
-                        cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
                     })
                 })
             })
@@ -338,9 +343,9 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Create Test Case: Description more than 250 characters', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
@@ -366,10 +371,10 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Edit Test Case: Description more than 250 characters', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
@@ -397,9 +402,9 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Create Test Case: Title more than 250 characters', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
@@ -426,9 +431,9 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Create Test Case: Series more than 250 characters', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
@@ -488,14 +493,14 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
     })
 
     it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testcaseid) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testcaseid) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
@@ -546,9 +551,9 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         cy.setAccessTokenCookie()
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -587,11 +592,12 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     })
 
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases/list',

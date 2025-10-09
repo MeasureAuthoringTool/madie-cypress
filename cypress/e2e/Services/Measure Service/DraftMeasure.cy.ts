@@ -8,13 +8,14 @@ import { Utilities } from "../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
+let currentUser = Cypress.env('selectedUser')
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
-let mIdFilePath = 'cypress/fixtures/measureId'
-let mSetIdPath = 'cypress/fixtures/measureSetId'
-let mVersionIdPath = 'cypress/fixtures/versionId'
+let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
+let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
+let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 const now = require('dayjs')
 let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
@@ -48,9 +49,9 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('Add Draft to the Versioned measure', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -89,8 +90,9 @@ describe('Version and Draft CQL Library', () => {
                             }
 
                         }).then((response) => {
+                            const currentUser = Cypress.env('selectedUser')
                             expect(response.status).to.eql(201)
-                            cy.writeFile('cypress/fixtures/draftId', response.body.id)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/draftId', response.body.id)
                         })
                     })
                 })
@@ -100,9 +102,9 @@ describe('Version and Draft CQL Library', () => {
 
     it('User cannot create a draft when a draft already exists, per measure', () => {
         let newerMeasureName = ''
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -234,9 +236,10 @@ describe('Draftable API end point tests', () => {
     })
     it('Draftable end point return measure set id that was used in request and false if another measure, in that measure family, is in a draft status', () => {
         let newerMeasureName = ''
+        const currentUser = Cypress.env('selectedUser')
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -276,15 +279,17 @@ describe('Draftable API end point tests', () => {
                             }
 
                         }).then((response) => {
+                            const currentUser = Cypress.env('selectedUser')
                             expect(response.status).to.eql(201)
-                            cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                         })
                     })
                 })
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=minor',
                     headers: {
@@ -351,9 +356,10 @@ describe('Draftable API end point tests', () => {
     })
     it('Draftable end point return measure set id that was used in request and true if the measure is versioned, regardless of version type (major, minor, or patch)', () => {
         let newerMeasureName = ''
+        const currentUser = Cypress.env('selectedUser')
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -409,15 +415,17 @@ describe('Draftable API end point tests', () => {
                             }
 
                         }).then((response) => {
+                            const currentUser = Cypress.env('selectedUser')
                             expect(response.status).to.eql(201)
-                            cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                         })
                     })
                 })
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=minor',
                     headers: {
@@ -472,15 +480,17 @@ describe('Draftable API end point tests', () => {
                             }
 
                         }).then((response) => {
+                            const currentUser = Cypress.env('selectedUser')
                             expect(response.status).to.eql(201)
-                            cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                         })
                     })
                 })
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=patch',
                     headers: {

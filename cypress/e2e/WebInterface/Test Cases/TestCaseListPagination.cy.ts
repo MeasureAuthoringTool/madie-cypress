@@ -27,7 +27,7 @@ let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\
 describe('Test Case List Pagination', () => {
 
     beforeEach('Create Measure, Test Cases and Login', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
 
         for (let i = 0; i <= 15; i++) {
@@ -38,7 +38,7 @@ describe('Test Case List Pagination', () => {
             TCDescription [i] = 'TCDescription' + i
 
             cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases',
                         headers: {

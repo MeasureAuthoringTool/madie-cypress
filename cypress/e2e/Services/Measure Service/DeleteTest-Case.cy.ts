@@ -37,14 +37,15 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
     })
 
     it('Delete test Case - Success scenario - New Delete End Point', () => {
+        const currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
-                    cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             url: '/api/measures/' + measureId + '/test-cases',
                             method: 'DELETE',
@@ -66,8 +67,8 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
@@ -83,8 +84,8 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId2').should('exist').then((testCaseId2) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId2,
@@ -103,12 +104,13 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
     })
 
     it('Delete test Case - user has had measure shared with them', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         //Share Measure with ALT User
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/acls',
                     headers: {
@@ -140,9 +142,9 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
-                    cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             url: '/api/measures/' + measureId + '/test-cases',
                             method: 'DELETE',
@@ -162,8 +164,8 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
                 })
             })
             cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                    cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + id + '/test-cases/' + testCaseId,
@@ -179,8 +181,8 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
                 })
             })
             cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                    cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + id + '/test-cases/' + testCaseId2,

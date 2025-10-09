@@ -34,7 +34,7 @@ describe('Create Test Case with a very long name', () => {
     })
 
     it('Create and Update Test Case for Qi Core Version 4.1.1 Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -43,7 +43,7 @@ describe('Create Test Case with a very long name', () => {
         const shortTitle = 'Title for Automation test case number one  - Very very long Show more'
         TestCasesPage.grabValidateTestCaseTitleAndSeries(shortTitle, testCaseSeries)
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then(fileContents => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then(fileContents => {
             Utilities.waitForElementVisible('[data-testid="test-case-title-' + fileContents + '-toggle-button"]', 55000)
             const showMoreToggle = '[data-testid="test-case-title-' + fileContents + '-toggle-button"]'
             cy.get(showMoreToggle).click()

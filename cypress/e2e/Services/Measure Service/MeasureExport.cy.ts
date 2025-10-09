@@ -69,7 +69,7 @@ const measureData: CreateMeasureOptions = {}
 describe('QI-Core Measure Export', () => {
 
     beforeEach('Create Measure and set access token', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -84,7 +84,7 @@ describe('QI-Core Measure Export', () => {
         OktaLogin.Logout()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
@@ -141,9 +141,10 @@ describe('QI-Core Measure Export', () => {
                         "improvementNotation": "Increased score indicates improvement"
                     }
                 }).then((response) => {
+                    const currentUser = Cypress.env('selectedUser')
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/groupId', response.body.id)
                 })
             })
         })
@@ -158,9 +159,9 @@ describe('QI-Core Measure Export', () => {
     })
 
     it('Confirm the export end point returns a contentType of "application/zip" for QI-Core Measure', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
@@ -196,9 +197,9 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/exports',
@@ -235,9 +236,9 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/exports',
@@ -273,9 +274,9 @@ describe('Error Message on Measure Export when the Measure does not have Populat
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/exports',
@@ -325,9 +326,10 @@ describe('Error Message on Measure Export when the Measure does not have Steward
                     }
                 }
             }).then((response) => {
+                const currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
 
         })
@@ -340,9 +342,9 @@ describe('Error Message on Measure Export when the Measure does not have Steward
     })
 
     it('Verify error message on Measure Export when the Measure does not have Steward and Developer', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/exports',
@@ -405,9 +407,10 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                     }
                 }
             }).then((response) => {
+                const currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
 
         })
@@ -420,9 +423,9 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/exports',
@@ -475,9 +478,9 @@ describe('QDM Measure Export', () => {
     })
 
     it('Successful QDM Measure Export', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',

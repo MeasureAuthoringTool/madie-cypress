@@ -58,45 +58,87 @@ export class OktaLogin {
     }
 
 
-    public static Login() {
+    // public static Login() {
+    //
+    //     sessionStorage.clear()
+    //     cy.clearAllCookies()
+    //     cy.clearLocalStorage()
+    //     cy.setAccessTokenCookie()
+    //
+    //     cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
+    //
+    //     cy.get(this.usernameInput, { timeout: 110000 }).should('be.enabled')
+    //     cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
+    //     cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
+    //     cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
+    //     cy.get(this.usernameInput).type(Environment.credentials().harpUser)
+    //     cy.get(this.passwordInput).type(Environment.credentials().password)
+    //     cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
+    //     cy.get(this.signInButton, { timeout: 110000 }).should('be.visible')
+    //
+    //     //setup for grabbing the measure create call
+    //     cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+    //
+    //     cy.get(this.signInButton).click()
+    //
+    //     cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
+    //
+    //         if (response.statusCode === 200) {
+    //             //do nothing
+    //         }
+    //         else {
+    //             umlsLoginForm.UMLSLogin()
+    //         }
+    //
+    //     })
+    //     cy.get(LandingPage.newMeasureButton).should('be.visible')
+    //     cy.log('Login Successful')
+    // }
 
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
-        cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
+    public static Login(): void {
+            const user = Cypress.env('selectedUser')
 
-        cy.get(this.usernameInput, { timeout: 110000 }).should('be.enabled')
-        cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
-        cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
-        cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
-        cy.get(this.usernameInput).type(Environment.credentials().harpUser)
-        cy.get(this.passwordInput).type(Environment.credentials().password)
-        cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
-        cy.get(this.signInButton, { timeout: 110000 }).should('be.visible')
+            sessionStorage.clear()
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
 
-        //setup for grabbing the measure create call
-        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+            cy.visit('/login', {onBeforeLoad: (win) => win.sessionStorage.clear()})
 
-        cy.get(this.signInButton).click()
-
-        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-
-            if (response.statusCode === 200) {
-                //do nothing
+            if (user === 'harpUser') {
+                cy.setAccessTokenCookie()
+                cy.get(this.usernameInput).type(Environment.credentials().harpUser)
+                cy.get(this.passwordInput).type(Environment.credentials().password)
+            } else {
+                cy.setAccessTokenCookieALT()
+                cy.get(this.usernameInput).type(Environment.credentials().harpUserALT)
+                cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
             }
-            else {
-                umlsLoginForm.UMLSLogin()
-            }
 
-        })
-        cy.get(LandingPage.newMeasureButton).should('be.visible')
-        cy.log('Login Successful')
+            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+
+            cy.get(this.signInButton).click()
+
+            cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
+
+                if (response.statusCode === 200) {
+                    //do nothing
+                }
+                else {
+                    umlsLoginForm.UMLSLogin()
+                }
+
+            })
+
+            cy.get(LandingPage.newMeasureButton).should('be.visible')
+            cy.log('Login Successful')
+
+            // Store selected user for release
+            Cypress.env('selectedUser', user)
     }
 
 
-    public static Logout(): void {
+        public static Logout(): void {
 
 
         //commenting out all the logout until logout issue MAT-4520 is resolved

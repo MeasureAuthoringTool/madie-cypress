@@ -98,7 +98,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
     })
 
     it('Export icon is present and enables correctly', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
         cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Test cases must be executed prior to exporting.')
 
@@ -114,7 +114,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
         let qrdaButton: string
         let excelButton: string
-        cy.readFile('cypress/fixtures/measureId').then(measureId => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
 
             qrdaButton = 'button[data-testid="export-qrda-' + measureId + '"]'
             excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
@@ -190,6 +190,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
     })
 
     it('Export icon is present and it enables correctly', () => {
+        let currentUser = Cypress.env('selectedUser')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.actionCenterDelete).should('be.disabled')
@@ -206,7 +207,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 
         let qrdaButton: string
         let excelButton: string
-        cy.readFile('cypress/fixtures/measureId').then(measureId => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
 
             qrdaButton = 'button[data-testid="export-qrda-' + measureId + '"]'
             excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
@@ -288,6 +289,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
     })
 
     it('Non-owner sees Export icon; it enables correctly', () => {
+        let currentUser = Cypress.env('selectedUser')
         // checks that delete, clone, shift dates are not present at all
         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
@@ -302,7 +304,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
 
         let qrdaButton: string
         let excelButton: string
-        cy.readFile('cypress/fixtures/measureId').then(measureId => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
 
             qrdaButton = 'button[data-testid="export-qrda-' + measureId + '"]'
             excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
