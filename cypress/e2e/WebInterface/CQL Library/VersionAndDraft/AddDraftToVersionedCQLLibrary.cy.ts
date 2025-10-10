@@ -9,8 +9,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 let CqlLibraryOne: string
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
-const filePath = 'cypress/fixtures/cqlLibraryId'
-const filePath2 = 'cypress/fixtures/cqlLibraryId2'
+
 
 describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
@@ -22,7 +21,9 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     })
 
     it('Add Draft to the versioned Library from Owned Libraries', () => {
-
+        let currentUser = Cypress.env('selectedUser')
+        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
+        const filePath2 = 'cypress/fixtures/' + currentUser + '/cqlLibraryId2'
         //Add Draft to Versioned Library
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -75,6 +76,8 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     })
 
     it('Add Draft to the versioned Library from Edit Library screen', () => {
+        let currentUser = Cypress.env('selectedUser')
+        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.clearAllSessionStorage({ log: true })

@@ -473,6 +473,7 @@ export class Utilities {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(path).should('exist').then((id) => {
                 cy.request({
+                    failOnStatusCode: false,
                     url: '/api/' + urlPath + '/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
@@ -491,6 +492,7 @@ export class Utilities {
                         "action": action
                     }
                 }).then((response) => {
+                    console.log(response)
                     expect(response.status).to.eql(200)
                     if (action === PermissionActions.GRANT) {
                         expect(response.body[0].userId).to.eql(user)
@@ -508,7 +510,12 @@ export class Utilities {
 
     public static deleteLibrary(libraryName: string, altUser?: boolean, libraryNumber?: number) {
 
-        let libraryPath = 'cypress/fixtures/cqlLibraryId'
+        const currentUser = Cypress.env('selectedUser')
+        let libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
+
+        if (currentUser === 'harpUserALT') {
+            altUser = true
+        }
 
         if (altUser) {
             cy.clearAllCookies()
@@ -521,7 +528,7 @@ export class Utilities {
         }
 
         if (libraryNumber > 0) {
-            libraryPath = 'cypress/fixtures/cqlLibraryId' + libraryNumber
+            libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
 
         cy.getCookie('accessToken').then((accessToken) => {
