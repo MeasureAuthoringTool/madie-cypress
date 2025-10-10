@@ -13,9 +13,12 @@ cypress.env.json
 # reports - don't need these in the repo
 mochawesome.json
 mochawesome-report/
-
+runner-results/
 
 # files for local processing
+cypress/plugins/userLock.json
+cypress/fixtures/harpUser/*
+cypress/fixtures/harpUserALT/*
 cypress/fixtures/cqlLibraryId
 cypress/fixtures/cqlLibraryId*
 cypress/fixtures/draftId
