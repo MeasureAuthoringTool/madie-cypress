@@ -860,8 +860,22 @@ export class TestCasesPage {
 
         if (ethnicity) {
             cy.get(TestCasesPage.QDMEthnicity).click()
-            Utilities.waitForElementVisible('[data-value="' + ethnicity + '__2.16.840.1.114222.4.11.837"]', 100000)
-            cy.get('[data-value="' + ethnicity + '__2.16.840.1.114222.4.11.837"]').click()
+
+            const ethnicityOne = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.837"]`
+            const ethnicityTwo = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.877"]`
+
+            cy.get('body', { timeout: 10000 }).then(($body: JQuery<HTMLElement>) => {
+                if ($body.find(ethnicityOne).length > 0) {
+                    Utilities.waitForElementVisible(ethnicityOne, 100000)
+                    cy.get(ethnicityOne).click()
+                } else if ($body.find(ethnicityTwo).length > 0) {
+                    Utilities.waitForElementVisible(ethnicityTwo, 100000)
+                    cy.get(ethnicityTwo).click()
+                } else {
+                    throw new Error('No matching ethnicity element found in the DOM.')
+                }
+            })
+
         }
 
         if (dob) {
@@ -880,7 +894,7 @@ export class TestCasesPage {
     }
 
     /*
-        actionCenter() assumes that you have already applied the correct 
+        actionCenter() assumes that you have already applied the correct
         set of checkmarks for your test scenario
     */
     public static actionCenter(action: TestCaseAction) {
@@ -892,16 +906,16 @@ export class TestCasesPage {
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(maxCaseNumber => {
-                        originalCount = Number(maxCaseNumber)
-                    })
+                    originalCount = Number(maxCaseNumber)
+                })
 
                 cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
                 Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(newMaxNumber => {
-                        expect(originalCount + 1).eq(Number(newMaxNumber))
-                    })
+                    expect(originalCount + 1).eq(Number(newMaxNumber))
+                })
                 break
 
             case TestCaseAction.copyToMeasure:
