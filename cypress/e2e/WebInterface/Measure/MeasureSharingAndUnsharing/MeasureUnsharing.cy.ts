@@ -101,6 +101,7 @@ describe('Measure Un Sharing', () => {
         cy.get('[data-testid="Unshare-option"]').click()
 
         //Assert text on the popup screen
+        Utilities.waitForElementVisible('.MuiBox-root', 60000)
         cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
         cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + newMeasureName + ' with the following users:' + harpUserALT)
 
