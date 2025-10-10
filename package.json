@@ -11,6 +11,7 @@
 		"cy:run": "cypress run --env configFile=dev --browser chrome --headed",
         "cy:run:test:headed": "NO_COLOR=1 cypress run --env configFile=test --browser chrome --headed",
 		"cy:parallel:test": "cypress-parallel -s cy:run:test:headed -t 2 -d 'cypress/e2e/WebInterface/Smoke Tests/QICORE 4.1.1 End To End Measure and Test Cases/test/*.cy.ts'",
+        "cy:parallel:test:ui:smoketests": "cypress-parallel -s cy:run:test:headed -t 2 -d 'cypress/e2e/WebInterface/Smoke Tests/**/*.cy.ts'",
         "cy:parallel:testQDM": "cypress-parallel -s cy:run:test:headed -t 2 -d 'cypress/e2e/WebInterface/Smoke Tests/QDM  End To End Measure/*.cy.ts'",
 		"compile": "tsc --noEmit",
 		"combine:reports": "npx mochawesome-merge 'cypress/results/*.json' > mochawesome.json",
