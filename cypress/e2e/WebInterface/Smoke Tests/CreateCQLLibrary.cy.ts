@@ -28,7 +28,7 @@ describe('Create CQL Library', () => {
     })
 
     it('Navigate to CQL Library Page and create New QDM CQL Library', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         CQLLibraryName = 'QDMCQLLibrary' + Date.now()
         const model = 'QDM v5.6'
 
@@ -56,7 +56,7 @@ describe('Create CQL Library', () => {
         cy.get(Header.cqlLibraryTab).click()
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
             cy.get('[data-testid=cqlLibrary-button-' + fileContents + '-model-content]').should('contain', model)
 
         })

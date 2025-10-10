@@ -39,11 +39,11 @@ describe('CQL Library Transfer', () => {
     it('Verify transferred CQL Library is viewable under Owned Libraries tab', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
+        cy.setAccessTokenCookieALT()
+        let currentUser = Cypress.env('selectedUser')
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {

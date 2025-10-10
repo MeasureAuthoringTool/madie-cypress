@@ -10,6 +10,7 @@ import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
+let currentUser = Cypress.env('selectedUser')
 let measureName = ''
 let newMeasureName = ''
 let CQLLibraryName = ''
@@ -25,7 +26,7 @@ let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
 let measureCQL = MeasureCQL.SBTEST_CQL
 let eCQMTitle = 'eCQMTitle'
-let versionIdPath = 'cypress/fixtures/versionId'
+let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 const adminAPIKey = Environment.credentials().adminApiKey
 
@@ -70,10 +71,11 @@ describe('Measure Service: QICore Measure', () => {
                     },
                 }
             }).then((response) => {
+                const currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
 
         })
@@ -120,6 +122,7 @@ describe('Measure Service: QICore Measure', () => {
                     "riskAdjustmentDescription": "RiskAdjustment Description"
                 }
             }).then((response) => {
+                const currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 expect(response.body.supplementalData[0].definition).to.eql('supplementalDataDefinition')
@@ -128,8 +131,8 @@ describe('Measure Service: QICore Measure', () => {
                 expect(response.body.riskAdjustments[0].definition).to.eql('riskAdjustmentDefinition')
                 expect(response.body.riskAdjustments[1].definition).to.eql('riskAdjustmentDefinition2')
                 expect(response.body.riskAdjustmentDescription).to.eql('RiskAdjustment Description')
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
 
         })
@@ -682,12 +685,13 @@ describe('Measure Service: Update Delete Flag', () => {
     })
     //update / delete measure
     it('Update / delete measure', () => {
+        const currentUser = Cypress.env('selectedUser')
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
                     cy.readFile(versionIdPath).should('exist').then((vId) => {
                         cy.request({
                             url: '/api/measures/' + id,
@@ -738,7 +742,7 @@ describe('Measure Service: Update Delete Flag', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
@@ -766,7 +770,7 @@ describe('Measure Service: Update Delete Flag', () => {
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -819,7 +823,7 @@ describe('Measure Service: Update Delete Flag', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
@@ -842,7 +846,7 @@ describe('Measure Service: Update Delete Flag', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(versionIdPath).should('exist').then((vId) => {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '1',
@@ -903,8 +907,8 @@ describe('Measure Service: Update Delete Flag', () => {
         TestCasesPage.CreateTestCaseAPI(title, series, description, TCJson)
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
                     cy.readFile(versionIdPath).should('exist').then((vId) => {
                         cy.request({
                             url: '/api/measures/' + id,
@@ -956,7 +960,7 @@ describe('Measure Service: Update Delete Flag', () => {
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
@@ -973,8 +977,8 @@ describe('Measure Service: Update Delete Flag', () => {
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
@@ -1030,8 +1034,8 @@ describe('Delete QI-Core Measure with admin API Key', () => {
 
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/versionId').should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
@@ -1048,7 +1052,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
 
         //Delete Versioned Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
@@ -1064,7 +1068,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
@@ -1085,7 +1089,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
 
         //Delete Draft Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
@@ -1101,7 +1105,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
@@ -1121,7 +1125,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
     it('Verify Error Message when Non Measure owner try to Delete Qi Core Measure', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/admin/measures/' + id,
@@ -1176,7 +1180,7 @@ describe('Delete QDM Measure with admin API Key', () => {
 
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -1192,7 +1196,7 @@ describe('Delete QDM Measure with admin API Key', () => {
 
         //Delete Versioned Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
@@ -1208,7 +1212,7 @@ describe('Delete QDM Measure with admin API Key', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
@@ -1229,7 +1233,7 @@ describe('Delete QDM Measure with admin API Key', () => {
 
         //Delete Draft Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
@@ -1245,7 +1249,7 @@ describe('Delete QDM Measure with admin API Key', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
@@ -1263,7 +1267,7 @@ describe('Delete QDM Measure with admin API Key', () => {
     it('Verify Error Message when Non Measure owner try to Delete QDM Measure', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/admin/measures/' + id,

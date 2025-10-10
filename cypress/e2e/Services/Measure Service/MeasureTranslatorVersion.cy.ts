@@ -58,11 +58,11 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
     })
 
     it('Get Translator version for QI-Core Measure', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //Get Translator Version for Draft Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
 
                     cy.request({
                         url: '/api/fhir/translator-version?draft=true',
@@ -146,11 +146,11 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
     })
 
     it('Get Translator version for QDM Measure', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //Get Translator Version for Draft Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
 
                     cy.request({
                         url: '/api/qdm/translator-version?draft=true',

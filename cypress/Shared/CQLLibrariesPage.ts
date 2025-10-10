@@ -41,10 +41,11 @@ export class CQLLibrariesPage {
     public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
     public static clickEditforCreatedLibrary(libraryNumber?: number): void {
-        let filePath = 'cypress/fixtures/cqlLibraryId'
+        const currentUser = Cypress.env('selectedUser')
+        let filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
         if (libraryNumber) {
-            filePath = 'cypress/fixtures/cqlLibraryId' + libraryNumber
+            filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -68,10 +69,11 @@ export class CQLLibrariesPage {
     }
     
     public static clickViewforCreatedLibrary(libraryNumber?: number, altUserAction?: boolean): void {
-        let filePath = 'cypress/fixtures/cqlLibraryId'
+        const currentUser = Cypress.env('selectedUser')
+        let filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
         if (libraryNumber) {
-            filePath = 'cypress/fixtures/cqlLibraryId' + libraryNumber
+            filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
         if (altUserAction === true) {
             //Navigate to CQL Library Page
@@ -103,14 +105,15 @@ export class CQLLibrariesPage {
     }
 
     public static validateCQLLibraryName(expectedValue: string): void {
-
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        const currentUser = Cypress.env('selectedUser')
+        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
             cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', expectedValue)
         })
     }
 
     public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        const currentUser = Cypress.env('selectedUser')
+        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
 
             cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]')
                 .should('contain.text', expectedValue)

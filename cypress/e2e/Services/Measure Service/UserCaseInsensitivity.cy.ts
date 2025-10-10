@@ -21,6 +21,7 @@ describe('Measure Service: Create Measure', function () {
     })
 
     it('Create New Measure, with user name typed in regular case', function () {
+        let currentUser = Cypress.env('selectedUser')
         measureName = 'TestMeasure' + Date.now() + randValue
         CQLLibraryName = 'TestCql' + Date.now() + randValue
         //create measure
@@ -42,11 +43,12 @@ describe('Measure Service: Create Measure', function () {
                     "measurementPeriodEnd": mpEndDate
                 }
             }).then(function (response) {
+                let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
         })
         //log in as same user but typed in camel case and confirm that measure can be retrieved and the created by user is the same
@@ -54,7 +56,7 @@ describe('Measure Service: Create Measure', function () {
         cy.clearLocalStorage()
         cy.setAccessTokenCookieCAMELCASE()
         cy.getCookie('accessToken').then(function (accessToken) {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then(function (id) {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then(function (id) {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {

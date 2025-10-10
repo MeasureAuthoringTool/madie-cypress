@@ -23,7 +23,6 @@ export type CreateLibraryOptions = {
     publisher?: string
 }
 
-const filePath = 'cypress/fixtures/cqlLibraryId'
 
 export class CQLLibraryPage {
     public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
@@ -141,6 +140,11 @@ export class CQLLibraryPage {
         if ((cql === undefined) || (cql === null)) {
             cql = ""
         }
+        const currentUser = Cypress.env('selectedUser')
+
+        if (currentUser === 'harpUserALT') {
+            altUser = true
+        }
 
         if (altUser) {
             cy.setAccessTokenCookieALT()
@@ -174,10 +178,10 @@ export class CQLLibraryPage {
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
                 if (twoLibraries === true) {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2', response.body.id)
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
                 }
 
             })
@@ -186,7 +190,12 @@ export class CQLLibraryPage {
     }
 
     public static createAPICQLLibraryWithValidCQL(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
+        const currentUser = Cypress.env('selectedUser')
         let user = ''
+
+        if (currentUser === 'harpUserALT') {
+            altUser = true
+        }
 
         if (altUser) {
             cy.setAccessTokenCookieALT()
@@ -223,10 +232,10 @@ export class CQLLibraryPage {
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
                 if (twoLibraries === true) {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2', response.body.id)
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
                 }
 
             })
@@ -244,6 +253,9 @@ export class CQLLibraryPage {
     }
 
     public static versionLibraryAPI(expectedVersionNumber: string) {
+
+        const currentUser = Cypress.env('selectedUser')
+        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(filePath).should('exist').then((cqlLibraryId) => {
@@ -332,6 +344,11 @@ export class CQLLibraryPage {
 
         let user: string, description: string, publisher: string, cql: string, cqlErrors = false
 
+        const currentUser = Cypress.env('selectedUser')
+        if (currentUser === 'harpUserALT') {
+            options.altUser = true
+        }
+
         if (options &&  options.altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
@@ -384,10 +401,10 @@ export class CQLLibraryPage {
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(libraryName)
                 if (options && options.libraryNumber) {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId' + options.libraryNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId' + options.libraryNumber, response.body.id)
                 }
                 else {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
                 }
             })
         })

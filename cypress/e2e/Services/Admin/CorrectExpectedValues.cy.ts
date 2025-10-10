@@ -43,7 +43,7 @@ describe('Admin API - Reset test case expected values', () => {
     })
 
     it('Reset test case expected values of current draft back to state from last version of the measure', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         // establish original measure - measureId
         CreateMeasurePage.CreateQICoreMeasureAPI(measure.name, measure.libraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'boolean')
@@ -61,8 +61,8 @@ describe('Admin API - Reset test case expected values', () => {
         // set expected value "true" on test case
         let updatedTestCase: TestCase
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((tcId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + tcId,
@@ -73,7 +73,7 @@ describe('Admin API - Reset test case expected values', () => {
                     }).then((response) => {
                         expect(response.status).to.eql(200)
 
-                        cy.readFile('cypress/fixtures/groupId').should('exist').then((gId) => {
+                        cy.readFile('cypress/fixtures/' + currentUser + '/groupId').should('exist').then((gId) => {
 
                             const tcExpectedValue: GroupPopulation = {
                                 "groupId": gId,
@@ -112,7 +112,7 @@ describe('Admin API - Reset test case expected values', () => {
 
         // version measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -129,9 +129,9 @@ describe('Admin API - Reset test case expected values', () => {
 
         // create draft
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureAID) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((mSetId) => {
-                    cy.readFile('cypress/fixtures/versionId').should('exist').then((mVersionId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureAID) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((mSetId) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/versionId').should('exist').then((mVersionId) => {
                         cy.request({
                             url: '/api/measures/' + measureAID + '/draft',
                             method: 'POST',
@@ -154,10 +154,10 @@ describe('Admin API - Reset test case expected values', () => {
 
                         }).then((response) => {
                             expect(response.status).to.eql(201)
-                            cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-                            cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
-                            cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
-                            cy.writeFile('cypress/fixtures/testCaseId2', response.body.testCases[0].id)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId2', response.body.id)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/versionId2', response.body.versionId)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId2', response.body.measureSetId)
+                            cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId2', response.body.testCases[0].id)
                         })
                     })
                 })
@@ -173,8 +173,8 @@ describe('Admin API - Reset test case expected values', () => {
         // get testcase data on draft measure
         let testCaseResponse: TestCase
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId2').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((tcId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId2').should('exist').then((tcId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + tcId,
@@ -208,7 +208,7 @@ describe('Admin API - Reset test case expected values', () => {
 
         // hit admin endpoint to reset draft measure's tc to versioned measure values
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId,
@@ -220,7 +220,7 @@ describe('Admin API - Reset test case expected values', () => {
                     expect(response.status).to.eql(200)
                     const versionedMeasure: Measure = response.body
 
-                    cy.readFile('cypress/fixtures/measureId2').should('exist').then((measureId2) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId2) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/admin/measures/' + measureId2,
@@ -240,8 +240,8 @@ describe('Admin API - Reset test case expected values', () => {
 
         // verify original (measureId) expected values (true) are same on measureId2
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId2').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((tcId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId2').should('exist').then((tcId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + tcId,

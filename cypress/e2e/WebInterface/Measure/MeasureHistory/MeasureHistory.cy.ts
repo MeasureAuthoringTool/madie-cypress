@@ -68,7 +68,7 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
     })
 
     it('Verify that Create and Delete CMS ID actions are recorded in Measure History', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Generate CMS ID
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
@@ -96,9 +96,9 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/cmsId').should('exist').then((cmsId) => {
-                    cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
                         cy.request({
                             url: '/api/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
                             method: 'DELETE',
@@ -305,7 +305,7 @@ describe.skip('Measure History - Associate Measure actions', () => {
     })
 
     it('Verify that Associate Measure actions are recorded in Measure History', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
@@ -321,8 +321,8 @@ describe.skip('Measure History - Associate Measure actions', () => {
 
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((qdmId1) => {
-                cy.readFile('cypress/fixtures/measureId1').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((qdmId1) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qicoreId1) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',

@@ -78,7 +78,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 
     it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 
@@ -97,7 +97,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
 
         //intercept draft id once measure is drafted
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
         })
         cy.get(MeasuresPage.createDraftContinueBtn).click()
@@ -105,7 +105,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
             cy.writeFile('cypress/fixtures/measureDraftId', request.response.body.id)
         })
         cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
-        cy.readFile('cypress/fixtures/measureDraftId').should('exist').then((fileDraftContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureDraftId').should('exist').then((fileDraftContents) => {
             cy.reload(true)
             cy.scrollTo('top')
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileDraftContents + ']', 30000)

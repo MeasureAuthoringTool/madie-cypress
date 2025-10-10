@@ -38,9 +38,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Update Measure details', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -93,9 +93,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Verify Supplemental Data Elements and Risk Adjustment Variables are added to Update Measure Model', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -176,9 +176,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Save CQL to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -231,9 +231,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Measure Steward to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -294,9 +294,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Description to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -349,9 +349,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Copyright to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -404,9 +404,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Disclaimer to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -459,9 +459,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Rationale to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -514,9 +514,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Author to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -569,9 +569,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Guidance to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -624,9 +624,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Risk Adjustment to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -679,7 +679,7 @@ describe('Measure Service: Edit Measure', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -732,7 +732,7 @@ describe('Measure Service: Edit Measure', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -787,9 +787,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Meta Data Endorser Fields to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -854,9 +854,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add scoring precision value to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -919,9 +919,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Intended Venue to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -983,9 +983,9 @@ describe('Measure Service: Edit Measure', () => {
     })
 
     it('Add Purpose to the measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
@@ -1052,14 +1052,14 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
     })
 
     it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -1134,9 +1134,9 @@ describe('Edit Measure Validations', () => {
     })
 
     it('Verify error message when the measure name is empty', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 //Verify error message when the measure name is empty
                 cy.request({
                     failOnStatusCode: false,
@@ -1187,9 +1187,9 @@ describe('Edit Measure Validations', () => {
     })
 
     it('Verify error message when the measure name does not contain at least 1 letter', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -1243,9 +1243,9 @@ describe('Edit Measure Validations', () => {
     })
 
     it('Verify error message when the measure name contains underscore', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -1299,9 +1299,9 @@ describe('Edit Measure Validations', () => {
     })
 
     it('Verify error message when the measure name is over 500 characters', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -1376,9 +1376,9 @@ describe('Measurement Period Validations', () => {
     })
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -1412,9 +1412,9 @@ describe('Measurement Period Validations', () => {
     })
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -1447,9 +1447,9 @@ describe('Measurement Period Validations', () => {
     })
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -1483,9 +1483,9 @@ describe('Measurement Period Validations', () => {
     })
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,

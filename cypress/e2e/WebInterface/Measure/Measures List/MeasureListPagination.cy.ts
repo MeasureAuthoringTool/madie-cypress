@@ -2,15 +2,15 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import {Environment} from "../../../../Shared/Environment"
-
+let currentUser = Cypress.env('selectedUser')
 let measureName = []
 let CqlLibraryName = []
 let measureIds = []
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
-let versionIdPath = 'cypress/fixtures/versionId'
-let measureSetIdPath = 'cypress/fixtures/measureSetId'
+let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
+let measureSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
 const harpUser = Environment.credentials().harpUser
 
 describe('Measure List Pagination', () => {
@@ -50,9 +50,9 @@ describe('Measure List Pagination', () => {
                         expect(response.body.id).to.be.exist
                         measureIds[i] = response.body.id
                         fileContents = fileContents + measureIds[i] + ','
-                        cy.writeFile('cypress/fixtures/measureId', fileContents)
-                        cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                        cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', fileContents)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
 
                     })
                 })
@@ -68,7 +68,7 @@ describe('Measure List Pagination', () => {
 
         let idsList = ''
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.readFile(versionIdPath).should('exist').then((vId) => {
                 cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
 

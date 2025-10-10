@@ -122,9 +122,9 @@ describe('Measure Versioning', () => {
 
 
     it('UnSuccessful Measure Versioning when measure does not have population criteria', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -140,6 +140,7 @@ describe('Measure Versioning', () => {
         })
     })
     it('Successful Measure Versioning', () => {
+        let currentUser = Cypress.env('selectedUser')
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -152,7 +153,7 @@ describe('Measure Versioning', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
@@ -186,13 +187,13 @@ describe('Measure Version : Non Measure owner validation', () => {
     })
 
     it('Non Measure owner unable to version Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -236,9 +237,9 @@ describe('Version Measure without CQL', () => {
     })
 
     it('User can not version Measure if there is no CQL', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
@@ -294,9 +295,9 @@ describe('Version Measure with invalid CQL', () => {
     })
 
     it('User can not version Measure if the CQL has errors', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',

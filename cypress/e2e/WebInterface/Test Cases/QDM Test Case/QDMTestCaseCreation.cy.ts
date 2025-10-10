@@ -10,10 +10,11 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
 import { umlsLoginForm } from "../../../../Shared/umlsLoginForm"
 
+let currentUser = Cypress.env('selectedUser')
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let measurePath = 'cypress/fixtures/measureId'
+let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 let mCQLForElementsValidation = MeasureCQL.QDMTestCaseCQLFullElementSection
 let CQLSimple_for_QDM = MeasureCQL.QDMSimpleCQL
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest

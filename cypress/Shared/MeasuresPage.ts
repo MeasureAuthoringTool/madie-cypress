@@ -108,7 +108,8 @@ export class MeasuresPage {
     }
 
     public static validateMeasureName(expectedValue: string): void {
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        let currentUser = Cypress.env('selectedUser')
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
 
             let element = cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
             element.parent().should('contain', expectedValue)
@@ -117,7 +118,8 @@ export class MeasuresPage {
     }
 
     public static validateVersionNumber(versionNumber: string): void {
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        let currentUser = Cypress.env('selectedUser')
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
             //cy.reload()
@@ -127,15 +129,17 @@ export class MeasuresPage {
 
     public static actionCenter(action: string, measureNumber?: number, options?: MeasureActionOptions): void {
 
+        const currentUser = Cypress.env('selectedUser')
+        cy.log('Current User: ' + currentUser)
         //There is a prerequsite that you have a measure created and measure ID stored to a file
-        let filePath = 'cypress/fixtures/measureId'
+        let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
         }
 
         if (measureNumber > 0) {
-            filePath = 'cypress/fixtures/measureId' + measureNumber
+            filePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 60000)
@@ -219,7 +223,7 @@ export class MeasuresPage {
             case 'associatemeasure': {
 
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
-                cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
                     Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
                     Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)

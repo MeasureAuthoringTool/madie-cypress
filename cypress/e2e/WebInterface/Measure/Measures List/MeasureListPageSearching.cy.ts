@@ -41,8 +41,8 @@ let newMeasureName = ''
 let tempCqlLibName = ''
 let QDMmeasureName = 'QDMMeasureSearch' + Date.now()
 let QDMCqlLibraryName = 'QDMMeasureSearchLib' + Date.now()
-
-let measureSetFilePath = 'cypress/fixtures/measureSetId'
+let currentUser = Cypress.env('selectedUser')
+let measureSetFilePath = 'cypress/fixtures/' + currentUser + '/measureSetId'
 
 
 describe('Measure List Page Searching', () => {

@@ -8,13 +8,14 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 
+let currentUser = Cypress.env('selectedUser')
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
 const harpUserALT = Environment.credentials().harpUserALT
 const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'
-const filePath = 'cypress/fixtures/cqlLibraryId'
+const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
 describe('Delete CQL Library Validations - Library List page', () => {
 
@@ -43,13 +44,13 @@ describe('Delete CQL Library Validations - Library List page', () => {
     })
 
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //Transfer Library to the ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
@@ -116,6 +117,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
+        const currentUser = Cypress.env('selectedUser')
         //Version Library
         cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
@@ -125,7 +127,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
@@ -208,13 +210,13 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     })
 
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //Transfer Library to the ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
@@ -286,6 +288,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
+        const currentUser = Cypress.env('selectedUser')
         //Version Library
         cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
@@ -295,7 +298,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {

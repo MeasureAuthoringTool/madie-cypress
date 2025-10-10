@@ -31,7 +31,7 @@ describe('Qi Core Measure Reference', () => {
     })
 
     it('Add and Edit Qi Core Measure reference', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Add Measure Reference
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelReference).click()
@@ -41,7 +41,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="referenceText-rich-text-editor-content"]').type('Measure Reference')
 
         //intercept reference id once reference is created
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.intercept('PUT', '/api/measures/' + fileContents).as('references')
         })
         cy.get(EditMeasurePage.saveButton).click()

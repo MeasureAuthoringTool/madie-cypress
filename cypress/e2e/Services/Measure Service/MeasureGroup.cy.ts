@@ -35,13 +35,13 @@ describe('Measure Service: Measure Group Endpoints', () => {
 
     })
     it('Create Proportion measure group', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -86,7 +86,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
     })
 
     it('Update measure group to Ratio', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
@@ -94,7 +94,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         let measureTstScoring = 'Ratio'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
@@ -145,13 +145,13 @@ describe('Measure Service: Measure Group Endpoints', () => {
     })
 
     it('Add UCUM Scoring unit to the Measure Group', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -201,13 +201,13 @@ describe('Measure Service: Measure Group Endpoints', () => {
     })
 
     it('Update UCUM Scoring unit for the Measure Group', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -257,14 +257,14 @@ describe('Measure Service: Measure Group Endpoints', () => {
     })
 
     it('Add Second Initial Population for Ratio Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let SecondPopInPop = 'numeratorExclusion'
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -319,7 +319,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
     })
 
     it('Add and Delete Second Initial Population for Ratio Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let SecondPopInPop = 'numeratorExclusion'
         let PopIniPop = 'ipp'
         let PopNum = 'num'
@@ -327,7 +327,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -382,7 +382,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
@@ -451,10 +451,10 @@ describe('Measure Populations', () => {
     })
 
     it('Verify that 400 level response is returned when Population Basis is not included, when trying to create a group', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = ''
         let measureScoring = 'Proportion'
-        measurePath = 'cypress/fixtures/measureId'
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -515,10 +515,10 @@ describe('Measure Populations', () => {
     })
 
     it('Measure group created successfully when the population basis match with population return type', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = ''
         let measureScoring = 'Proportion'
-        measurePath = 'cypress/fixtures/measureId'
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -580,10 +580,10 @@ describe('Measure Populations', () => {
     })
 
     it('Verify error message when the population basis does not match with population return type', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = ''
         let measureScoring = 'Proportion'
-        measurePath = 'cypress/fixtures/measureId'
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -670,13 +670,13 @@ describe('Measure Observations', () => {
     })
 
     it('Add Measure Observations for Ratio Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -749,12 +749,12 @@ describe('Measure Observations', () => {
     })
 
     it('Add Measure Observations for Continuous Variable Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopDenom = 'denom'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -824,10 +824,10 @@ describe('Measure Stratifications', () => {
     })
 
     it('Measure group created successfully when the population basis match with Stratification return type', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = ''
         let measureScoring = 'Proportion'
-        measurePath = 'cypress/fixtures/measureId'
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -905,10 +905,10 @@ describe('Measure Stratifications', () => {
     })
 
     it('Verify error message when the population basis does not match with Stratification return type', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = ''
         let measureScoring = 'Proportion'
-        measurePath = 'cypress/fixtures/measureId'
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -984,10 +984,10 @@ describe('Measure Stratifications', () => {
     })
 
     it('Verify error message when the populations are missing IDs', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = ''
         let measureScoring = 'Proportion'
-        measurePath = 'cypress/fixtures/measureId'
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -1068,12 +1068,12 @@ describe('Measure Stratifications', () => {
     })
 
     it('Add, Edit and Delete  multiple Stratification Associations for the Measure group', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = ''
         let measureScoring = 'Proportion'
-        measurePath = 'cypress/fixtures/measureId'
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let stratificationIdPath = 'cypress/fixtures/stratificationId'
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+        let stratificationIdPath = 'cypress/fixtures/' + currentUser + '/stratificationId'
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -1160,7 +1160,7 @@ describe('Measure Stratifications', () => {
         })
         //Add Stratification and Associations to Measure group
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.readFile(measureGroupPath).should('exist').then((measureGroupId) => {
                     cy.request({
                         url: 'api/measures/' + fileContents + '/groups/' + measureGroupId + '/stratification',
@@ -1188,7 +1188,7 @@ describe('Measure Stratifications', () => {
         })
         //Edit Stratification
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.readFile(measureGroupPath).should('exist').then((measureGroupId) => {
                     cy.readFile(stratificationIdPath).should('exist').then((stratificationId) => {
                         cy.request({
@@ -1218,7 +1218,7 @@ describe('Measure Stratifications', () => {
         })
         //Delete Stratification
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.readFile(measureGroupPath).should('exist').then((measureGroupId) => {
                     cy.readFile(stratificationIdPath).should('exist').then((stratificationId) => {
                         cy.request({
@@ -1256,7 +1256,7 @@ describe('Creating a group / PC with description for various fields', () => {
 
     })
     it('Description is added to all fields are saved -- no second IP', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
@@ -1264,7 +1264,7 @@ describe('Creating a group / PC with description for various fields', () => {
 
         //if descriptions are added, they are returned and saved to the database
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -1351,7 +1351,7 @@ describe('Creating a group / PC with description for various fields', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
@@ -1440,14 +1440,14 @@ describe('Creating a group / PC with description for various fields', () => {
 
     })
     it('Description is added to all fields are saved -- second IP', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopNum = 'num'
         let PopDenom = 'denom'
         let NumExc = 'numeratorExclusion'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -1542,7 +1542,7 @@ describe('Creating a group / PC with description for various fields', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
@@ -1638,12 +1638,12 @@ describe('Creating a group / PC with description for various fields', () => {
         })
     })
     it('Description is added to all fields are saved -- CV Score -- Measure Population', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
         let PopDenom = 'denom'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
@@ -1698,7 +1698,7 @@ describe('Creating a group / PC with description for various fields', () => {
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',

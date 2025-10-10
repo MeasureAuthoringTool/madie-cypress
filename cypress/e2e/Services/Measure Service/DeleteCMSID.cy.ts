@@ -53,14 +53,14 @@ describe('Delete CMS ID for QI-Core Measure', () => {
 
     })
     it('Verify that the CMS ID deleted successfully for QDM Measure', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/cmsId').should('exist').then((cmsId) => {
-                    cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
                         cy.request({
                             url: '/api/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
                             method: 'DELETE',
@@ -80,13 +80,13 @@ describe('Delete CMS ID for QI-Core Measure', () => {
     })
 
     it('Verify Error Message when Non Measure Owner tries to delete CMS ID', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/cmsId').should('exist').then((cmsId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
                         method: 'DELETE',

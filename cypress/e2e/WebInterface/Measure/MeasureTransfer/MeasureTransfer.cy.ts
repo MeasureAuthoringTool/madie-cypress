@@ -12,10 +12,10 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
 import { Toasts } from "../../../../Shared/Toasts"
 
-const now = Date.now()
-const measureName = 'MeasureTransfer' + now
-const cqlLibraryName = 'MeasureTransferLib' + now
-const randomMeasureName = 'TransferedMeasure' + now
+
+const measureName = 'MeasureTransfer'
+const cqlLibraryName = 'MeasureTransferLib'
+const randomMeasureName = 'TransferedMeasure'
 
 const versionNumber = '1.0.000'
 const harpUserALT = Environment.credentials().harpUserALT
@@ -33,8 +33,10 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
     */
 
     beforeEach('Create Measure and Set Access Token', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let currentUser = Cypress.env('selectedUser')
+        cy.log('Current User: ' + currentUser)
+        let now = Date.now()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName+ now, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -44,6 +46,9 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    })
+    afterEach('clean up', () => {
+        Cypress.env('selectedUser', 'harpUser')
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are Transferred to the new owner', () => {
@@ -65,9 +70,11 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.intercept('/api/measures/*/draft').as('drafted')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(randomMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
+
+        let currentUser = Cypress.env('selectedUser')
         cy.wait('@drafted').then(int => {
             // capture measureId of new draft
-            cy.writeFile('cypress/fixtures/measureId1', int.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int.response.body.id)
         })
         cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
@@ -91,7 +98,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         // ALT User now owns both measures in the measureSet
         cy.get(MeasuresPage.measureListTitles).should('contain', randomMeasureName)
         
-        cy.readFile('cypress/fixtures/measureId1').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_expandArrow"]').click().wait(1000)
             cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
         })
@@ -102,7 +109,6 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
     })
 
     it('Verify Transfer button disabled for non Measure owner', () => {
-
         //Login as ALT User
         OktaLogin.AltLogin()
 
@@ -110,7 +116,8 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         //Select the Measure
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        let currentUser = Cypress.env('selectedUser')
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
@@ -122,6 +129,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
 
         //Logout and Delete Measure with Regular user
         OktaLogin.UILogout()
+        Cypress.env('selectedUser', 'harpUser')
         Utilities.deleteMeasure()
     })
 })
@@ -135,7 +143,8 @@ describe('Delete Test Case with Transferred user', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let now = Date.now()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -151,7 +160,7 @@ describe('Delete Test Case with Transferred user', () => {
     })
 
     afterEach('Clean up', () => {
-
+        //Cypress.env('selectedUser', 'harpUser')
         OktaLogin.UILogout()
         Utilities.deleteMeasure(null, null, false, true)
     })
@@ -159,6 +168,7 @@ describe('Delete Test Case with Transferred user', () => {
     it('Verify Test Case can be deleted by the new owner after transfer', () => {
 
         //Login as Alt User
+        //Cypress.env('selectedUser', 'harpUserALT')
         OktaLogin.AltLogin()
         MeasuresPage.actionCenter('edit')
 

@@ -128,10 +128,10 @@ describe('Measure Association: Validations', () => {
     })
 
     it('Association: QDM -> Qi Core measure: Validations', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //validation test: only one measure is selected
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/cms-id-association?qiCoreMeasureId=&qdmMeasureId=' + id + '&copyMetaData=true',
@@ -151,8 +151,8 @@ describe('Measure Association: Validations', () => {
 
         //validation test: must be different models
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((qdmId1) => {
-                cy.readFile('cypress/fixtures/measureId3').should('exist').then((qdmId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((qdmId1) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((qdmId2) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qdmId2 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',
@@ -173,8 +173,8 @@ describe('Measure Association: Validations', () => {
 
         //validation test: QDM measure must contain CMS id
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((qdmId1) => {
-                cy.readFile('cypress/fixtures/measureId2').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((qdmId1) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((qicoreId1) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',
@@ -219,8 +219,8 @@ describe('Measure Association: Validations', () => {
         Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 35000)
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {
-                cy.readFile('cypress/fixtures/measureId2').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qdmId2) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((qicoreId1) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
@@ -254,8 +254,8 @@ describe('Measure Association: Validations', () => {
 
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {
-                cy.readFile('cypress/fixtures/measureId3').should('exist').then((qicoreId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qdmId2) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((qicoreId2) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId2 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
@@ -296,8 +296,8 @@ describe('Measure Association: Validations', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {
-                cy.readFile('cypress/fixtures/measureId4').should('exist').then((qicoreId4) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qdmId2) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((qicoreId4) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId4 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
@@ -378,6 +378,7 @@ describe('Measure Association: Validations', () => {
     })
 
     it('Association: QDM -> Qi Core measure: Successful Association', () => {
+        let currentUser = Cypress.env('selectedUser')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
@@ -393,8 +394,8 @@ describe('Measure Association: Validations', () => {
 
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((qdmId1) => {
-                cy.readFile('cypress/fixtures/measureId1').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((qdmId1) => {
+                cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qicoreId1) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',

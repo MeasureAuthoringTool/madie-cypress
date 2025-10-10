@@ -88,7 +88,7 @@ describe('Copy QDM Test Cases', () => {
 
     })
     it('Copy QDM Test Case to another QDM Measure', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit', 1)
 
@@ -107,7 +107,7 @@ describe('Copy QDM Test Cases', () => {
 
         //Copy Test case
         cy.get(TestCasesPage.actionCenterCopyToMeasure).click()
-        cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').check()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').should('be.checked')
         })
@@ -165,7 +165,7 @@ describe('Copy Qi Core Test Cases', () => {
 
     })
     it('Copy Qi Core Test Case to another Qi Core Measure', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit', 1)
 
@@ -184,7 +184,7 @@ describe('Copy Qi Core Test Cases', () => {
 
         //Copy Test case
         cy.get(TestCasesPage.actionCenterCopyToMeasure).click()
-        cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').check()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').should('be.checked')
         })

@@ -11,10 +11,9 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-
-
 const fs = require('fs-extra')
 const path = require('path')
+const lockFilePath = path.join(__dirname, 'userLock.json')
 const unzipper = require('unzipper')
 const { removeDirectory } = require('cypress-delete-downloads-folder')
 const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
@@ -65,6 +64,33 @@ module.exports = (on, config) => {
     });
     on('task', {
       removeDirectory
+    })
+    on('task', {
+        getAvailableUser() {
+            let lock = {};
+            if (fs.existsSync(lockFilePath)) {
+                lock = JSON.parse(fs.readFileSync(lockFilePath))
+            }
+
+            if (!lock.harpUser) {
+                lock.harpUser = true;
+                fs.writeFileSync(lockFilePath, JSON.stringify(lock))
+                return 'harpUser';
+            } else if (!lock.harpUserALT) {
+                lock.harpUserALT = true;
+                fs.writeFileSync(lockFilePath, JSON.stringify(lock))
+                return 'harpUserALT';
+            } else {
+                return null;
+            }
+        },
+
+        releaseUser(user) {
+            let lock = JSON.parse(fs.readFileSync(lockFilePath))
+            lock[user] = false;
+            fs.writeFileSync(lockFilePath, JSON.stringify(lock))
+            return null;
+        }
     })
     on('file:preprocessor', browserify(options))
     return getConfigurationByFile(file)

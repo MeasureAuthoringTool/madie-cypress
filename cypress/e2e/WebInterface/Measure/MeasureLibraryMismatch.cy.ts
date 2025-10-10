@@ -5,10 +5,11 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
+let currentUser = Cypress.env('selectedUser')
 const now = Date.now()
 const measureName = 'MismatchMeasure' + now
 const libraryName = 'MismatchMeasureLib' + now
-const measurePath = 'cypress/fixtures/measureId'
+const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
 /*
     Disclaimer: these tests are relying on existing, commonly used libraries 

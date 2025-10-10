@@ -358,14 +358,14 @@ describe('Non Measure owner unable to create Version', () => {
     })
 
     it('Verify Version button is not visible for non Measure owner', () => {
-
+        let currentUser = Cypress.env('selectedUser')
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')

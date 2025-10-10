@@ -10,6 +10,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header";
 import { Toasts } from "../../../../Shared/Toasts"
 
+let currentUser = Cypress.env('selectedUser')
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
 let versionNumber = '1.0.000'
@@ -17,7 +18,7 @@ let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.ProportionEpisode_PASS
-let filePath = 'cypress/fixtures/measureId'
+let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -111,7 +112,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
     })
 
     it('Versioned Measure: Create New Test Case, delete is enabled', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
 

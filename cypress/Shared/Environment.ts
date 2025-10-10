@@ -7,10 +7,10 @@ export class Environment {
         switch (Cypress.env('environment')) {
             case 'dev': {
                 return {
-                    harpUser: Cypress.env('DEV_USERNAME'),
-                    password: Cypress.env('DEV_PASSWORD'),
-                    harpUserALT: Cypress.env('DEV_ALT_USERNAME'),
-                    passwordALT: Cypress.env('DEV_ALT_PASSWORD'),
+                    harpUser: Cypress.env('TEST_USERNAME'),
+                    password: Cypress.env('TEST_PASSWORD'),
+                    harpUserALT: Cypress.env('TEST_ALT_USERNAME'),
+                    passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     adminApiKey: Cypress.env('DEV_ADMIN_API_KEY')
                 }
@@ -44,9 +44,9 @@ export class Environment {
 
                 return {
                     authnUrl: 'https://test.idp.idm.cms.gov/api/v1/authn',
-                    authUri: Cypress.env('DEV_MADIE_AUTHURI'),
-                    redirectUri: Cypress.env('DEV_MADIE_REDIRECTURI'),
-                    clientId: Cypress.env('DEV_MADIE_CLIENTID')
+                    authUri: Cypress.env('TEST_MADIE_AUTHURI'),
+                    redirectUri: Cypress.env('TEST_MADIE_REDIRECTURI'),
+                    clientId: Cypress.env('TEST_MADIE_CLIENTID')
                 }
 
             case 'test':
