@@ -747,6 +747,8 @@ export class CreateMeasurePage {
 
     public static CreateQDMMeasureWithBaseConfigurationFieldsAPI(CreateMeasureOptions: CreateMeasureOptions): string {
 
+        const currentUser = Cypress.env('selectedUser')
+
         let user = ''
         const now = require('dayjs')
         let ecqmTitle = 'eCQMTitle4QDM'
@@ -778,6 +780,12 @@ export class CreateMeasurePage {
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
+        }
+        if (currentUser === 'harpUserALT') {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
         }
 
         //Create New Measure
@@ -829,7 +837,6 @@ export class CreateMeasurePage {
                     }
                 }
             }).then((response) => {
-                let currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
