@@ -278,8 +278,6 @@ describe('QDM CQL Parameters', () => {
 
         //Navigate to Parameters tab
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.collapseCQLBuilder).wait(1000).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.parametersTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
