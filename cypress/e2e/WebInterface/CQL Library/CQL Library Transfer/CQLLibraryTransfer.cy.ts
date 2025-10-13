@@ -24,9 +24,10 @@ describe('CQL Library Transfer', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
     })
 
     afterEach('LogOut', () => {
@@ -37,9 +38,11 @@ describe('CQL Library Transfer', () => {
 
 
     it('Verify transferred CQL Library is viewable under Owned Libraries tab', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookieALT()
+
         let currentUser = Cypress.env('selectedUser')
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {
@@ -69,12 +72,13 @@ describe('CQL Library Transfer', () => {
 
     it('Verify CQL Library can be edited by the transferred user', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
@@ -88,7 +92,10 @@ describe('CQL Library Transfer', () => {
                 })
             })
         })
-
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         //Login as ALT User
         OktaLogin.AltLogin()
 
@@ -110,8 +117,9 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
     beforeEach('Create Library and Set Access Token', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
     })
 
@@ -145,6 +153,10 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         //Logout as Regular user and Login as ALT user to verify ownership
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
@@ -167,6 +179,10 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
     it('Verify CQL Library owner can transfer Library from Action centre transfer button on Edit Library page', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
         //Login as Regular user and transfer Library to ALT user
         OktaLogin.Login()
 
@@ -189,6 +205,10 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         //Logout as Regular user and Login as ALT user to verify ownership
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
@@ -202,7 +222,10 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
     })
 
     it('Verify Transfer button disabled for non Library owner', () => {
-
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         //Login as ALT User
         OktaLogin.AltLogin()
 
@@ -237,8 +260,9 @@ describe('CQL Library Transfer - Multiple instances', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
 
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -278,12 +302,12 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
         //intercept draft id once library is drafted
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
         })
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/cqlLibraryId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request.response.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
@@ -291,12 +315,13 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.log('Draft Created Successfully')
 
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
@@ -310,7 +335,10 @@ describe('CQL Library Transfer - Multiple instances', () => {
                 })
             })
         })
-
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
