@@ -1,7 +1,7 @@
 import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
-import {CQLLibraryPage, EditLibraryActions} from "../../../../Shared/CQLLibraryPage"
+import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -26,8 +26,8 @@ describe('CQL Library Sharing', () => {
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the Library
-        cy.setAccessTokenCookie()
+        cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
     })
 
     afterEach('LogOut', () => {
@@ -82,10 +82,10 @@ describe('CQL Library Sharing - Multiple instances', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
 
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the Library
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
     })
@@ -124,18 +124,19 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
         //intercept draft id once library is drafted
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
         })
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/cqlLibraryId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request.response.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
-
         //Share Library with ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -164,7 +165,9 @@ describe('Remove user\'s share access from a library', () => {
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
+
 
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 
@@ -179,6 +182,10 @@ describe('Remove user\'s share access from a library', () => {
     })
 
     it('After removing access, user can no longer edit the library', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
 
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
@@ -210,6 +217,10 @@ describe('Remove user\'s share access from a library', () => {
 describe('Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -234,7 +245,7 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         //Share Library with ALT user
         CQLLibrariesPage.cqlLibraryActionCenter('share')
-        cy.get(CQLLibrariesPage.shareOption).click({force: true})
+        cy.get(CQLLibrariesPage.shareOption).click({ force: true })
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
 
@@ -281,7 +292,7 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         //Share Library with ALT user
         CQLLibraryPage.actionCenter(EditLibraryActions.share)
-        cy.get(CQLLibrariesPage.shareOption).click({force: true})
+        cy.get(CQLLibrariesPage.shareOption).click({ force: true })
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
 
@@ -295,6 +306,10 @@ describe('Share CQL Library using Action Center buttons', () => {
     })
 
     it('Action centre share button disabled for Non Library Owner', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
 
         //Login as Alt User
         OktaLogin.AltLogin()
@@ -321,7 +336,7 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         //Share Library with ALT user
         CQLLibrariesPage.cqlLibraryActionCenter('share')
-        cy.get(CQLLibrariesPage.shareOption).click({force: true})
+        cy.get(CQLLibrariesPage.shareOption).click({ force: true })
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
 
@@ -340,6 +355,10 @@ describe('Share CQL Library using Action Center buttons', () => {
 describe('Share CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -386,12 +405,14 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
         //intercept draft id once library is drafted
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
         })
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/cqlLibraryId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request.response.body.id)
         })
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
@@ -400,7 +421,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
-        cy.get(CQLLibrariesPage.shareOption).click({force: true})
+        cy.get(CQLLibrariesPage.shareOption).click({ force: true })
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
 
         //Verify information text on share screen
@@ -417,6 +438,11 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         Utilities.waitForElementVisible('.MuiAlert-message', 60000)
         cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
 
         //Login as ALT User and verify both Draft and Versioned Library are shared
         OktaLogin.AltLogin()

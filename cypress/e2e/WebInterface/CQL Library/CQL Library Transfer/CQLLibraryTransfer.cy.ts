@@ -1,10 +1,10 @@
 import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
-import {CQLLibraryPage, EditLibraryActions} from "../../../../Shared/CQLLibraryPage"
+import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage";
+import { MeasuresPage } from "../../../../Shared/MeasuresPage";
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
