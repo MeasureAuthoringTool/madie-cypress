@@ -19,8 +19,8 @@ const testCase: TestCase = {
     group: 'SBTestSeries',
     json: TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 }
-const testCasePIdPath = 'cypress/fixtures/testCasePId'
-const testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
+const testCasePIdPath = 'cypress/fixtures/harpUser/testCasePId'
+const testCasePIdPathSecnD = 'cypress/fixtures/harpUser/testCasePId2'
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip'
@@ -78,7 +78,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
             cy.readFile(zipPath).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
-                .and('contain',patientId, 'README.txt')
+                .and('contain', patientId, 'README.txt')
         })
     })
 
@@ -146,7 +146,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
 
             // read testcase json
-            const testCasePath = path.join(downloadsFolder, patientId,  'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+            const testCasePath = path.join(downloadsFolder, patientId, 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
             cy.readFile(testCasePath).then(testCaseJson => {
 
                 const measureReport = testCaseJson.entry.find(entries => {
@@ -220,7 +220,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
     })
 
     it('Non-owner of Measure: Export All QI-Core Test cases', () => {
-        
+
         OktaLogin.AltLogin()
 
         cy.reload()
