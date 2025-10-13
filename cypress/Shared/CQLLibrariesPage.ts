@@ -67,7 +67,7 @@ export class CQLLibrariesPage {
         })
         cy.get('[data-testid="CQL Library Details"]').click()
     }
-    
+
     public static clickViewforCreatedLibrary(libraryNumber?: number, altUserAction?: boolean): void {
         const currentUser = Cypress.env('selectedUser')
         let filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
@@ -131,13 +131,15 @@ export class CQLLibrariesPage {
         if ((libraryNumber === undefined) || (libraryNumber === null)) {
 
             Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
-            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         }
 
         if ((libraryNumber > 0)) {
 
             Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]', 500000)
-            cy.get('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            cy.get('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         }
 
         switch ((action.valueOf()).toString().toLowerCase()) {
