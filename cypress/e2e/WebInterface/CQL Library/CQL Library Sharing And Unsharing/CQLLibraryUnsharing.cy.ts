@@ -4,9 +4,7 @@ import { Environment } from "../../../../Shared/Environment"
 import { Header } from "../../../../Shared/Header"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
-import {LandingPage} from "../../../../Shared/LandingPage";
-import {MeasuresPage} from "../../../../Shared/MeasuresPage";
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage";
+import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
