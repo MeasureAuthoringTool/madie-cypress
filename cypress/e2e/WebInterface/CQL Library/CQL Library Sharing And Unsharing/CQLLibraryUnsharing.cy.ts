@@ -4,6 +4,7 @@ import { Environment } from "../../../../Shared/Environment"
 import { Header } from "../../../../Shared/Header"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
+import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -69,7 +70,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        cy.get('[class="cql-library-table"]').should('not.contain', newCQLLibraryName)
     })
 
     it('Verify CQL Library owner can un share Library from Edit Library page Action centre share button', () => {
@@ -109,8 +110,38 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        cy.get('[class="cql-library-table"]').should('not.contain', newCQLLibraryName)
 
+    })
+
+    it('Verify Shared user can Un share Library from Shared Libraries tab', () => {
+
+        //Share Library with ALT User
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+
+        //Login as ALT user
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
+
+        //Unshare Library
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+        cy.get('[type="checkbox"]').first().click()
+        cy.get('[data-testid="share-action-btn"]').click()
+        cy.get('[data-testid="Unshare-option"]').click()
+
+        //Assert text on the popup screen
+        Utilities.waitForElementVisible('.MuiBox-root', 60000)
+        cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
+        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + newCQLLibraryName + ' with the following users:' + harpUserALT)
+
+        //Click on Accept button and Un share Library
+        cy.get(EditMeasurePage.acceptBtn).click()
+        cy.get('[class="MuiAlert-message css-127h8j3"]').should('contain.text', 'The Library(s) were successfully unshared.')
+
+        //Verify Library is not visible under Shared Libraries tab
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', newCQLLibraryName)
     })
 })
 
@@ -137,12 +168,15 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
 
         const versionNumber = '1.0.000'
+        const currentUser = Cypress.env('selectedUser')
+        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
+
         //Version CQL Library
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Draft Library
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile(filePath).should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
@@ -202,7 +236,7 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         Utilities.waitForElementVisible('[class="cql-library-table"]', 60000)
-        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        cy.get('[class="cql-library-table"]').should('not.contain', newCQLLibraryName)
         cy.get('[class="cql-library-table"]').should('not.contain', updatedCQLLibraryName)
     })
 })
