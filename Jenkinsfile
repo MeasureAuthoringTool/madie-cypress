@@ -94,6 +94,7 @@ pipeline{
                     post {
                         always{
                              sh '''
+			     export XDG_RUNTIME_DIR=/run/user/$(id -u)
                              cd /app/cypress
                              npm run combine:reports
                              npm run generateOne:report
