@@ -45,6 +45,10 @@ describe('Test case list page - Action Center icons for measure owner', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json,)
         TestCasesPage.CreateQDMTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, true)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -158,6 +162,10 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json,)
         TestCasesPage.CreateQDMTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, true)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -253,6 +261,10 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json,)
         TestCasesPage.CreateQDMTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, true)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -275,6 +287,11 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
+
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
