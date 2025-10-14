@@ -44,7 +44,7 @@ Cypress.on('test:after:run', (test, runnable) => {
 })
 
 
-before(() => {
+beforeEach(() => {
     cy.task('getAvailableUser').then((user) => {
         expect(user).to.not.be.null;
         Cypress.env('selectedUser', user)
