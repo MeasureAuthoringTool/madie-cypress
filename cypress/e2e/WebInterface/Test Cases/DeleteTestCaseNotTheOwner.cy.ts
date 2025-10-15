@@ -53,35 +53,34 @@ describe('Delete Test Case', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Delete single Test Case - Success scenario', () => {
+    it('Verify Non owner of the Measure unable to delete Test Case', () => {
 
         TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
 
-        cy.get(TestCasesPage.deleteAllTestCasesBtn).should('not.exist')
-        cy.get(TestCasesPage.exportTestCasesBtn).should('not.exist')
+        OktaLogin.UILogout()
+
+        //Login as Alt User
+        OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        cy.get(MeasuresPage.allMeasuresTab).click({ force: true })
+
+        MeasuresPage.actionCenter("edit")
+
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.checkTestCase(1)
-        cy.get(TestCasesPage.actionCenterDelete).click()
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
+        cy.get(TestCasesPage.importTestCaseBtn).should('not.exist')
+        cy.get(TestCasesPage.newTestCaseButton).should('not.exist')
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
-        cy.get(CQLEditorPage.deleteContinueButton).click()
+        cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
 
-        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
-    })
-
-    it('Delete multiple Test Cases - Success scenario', () => {
-
-        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
-        TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
-
-        TestCasesPage.checkTestCase(1)
-        TestCasesPage.checkTestCase(2)
-        cy.get(TestCasesPage.actionCenterDelete).click()
-
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase2.title + ', ' + testCase1.title + '?')
-        cy.get(CQLEditorPage.deleteContinueButton).click()
-
-        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
-        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase2.title)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.reportsButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        
+        cy.contains('View').should('be.visible')
     })
 })
