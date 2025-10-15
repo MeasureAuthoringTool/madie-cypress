@@ -34,6 +34,7 @@ describe('Create CQL Library', () => {
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
+        cy.get('[data-testid="loading-state"]').should('not.exist')
 
         Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
 

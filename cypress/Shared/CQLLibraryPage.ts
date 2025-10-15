@@ -90,6 +90,8 @@ export class CQLLibraryPage {
 
     public static createCQLLibrary(CQLLibraryName: string, CQLLibraryPublisher: string): void {
 
+        const currentUser = Cypress.env('selectedUser')
+
         cy.get(Header.cqlLibraryTab).should('be.visible')
 
         cy.get(Header.cqlLibraryTab).click().wait(1500)
@@ -113,7 +115,7 @@ export class CQLLibraryPage {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
 
             cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', CQLLibraryName)
             cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-model-content"]').should('contain', 'QI-Core')
@@ -122,7 +124,7 @@ export class CQLLibraryPage {
     }
 
     public static clickCreateLibraryButton(): void {
-
+        const currentUser = Cypress.env('selectedUser')
         let alias = 'library' + (Date.now().valueOf() + 1).toString()
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/cql-libraries').as(alias)
@@ -131,7 +133,7 @@ export class CQLLibraryPage {
         //saving measureID to file to use later
         cy.wait('@' + alias).then(({ response }) => {
             expect(response.statusCode).to.eq(201)
-            cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
         })
     }
 

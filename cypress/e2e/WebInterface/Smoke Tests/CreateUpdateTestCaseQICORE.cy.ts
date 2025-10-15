@@ -8,6 +8,7 @@ import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import {Header} from "../../../Shared/Header";
 
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
@@ -88,7 +89,7 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
     })
 })
 
-describe('Create and Update Test Case for Qi Core 6 Measure', () => {
+describe.only('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     beforeEach('Create Qi Core 6 Measure and login', () => {
 
@@ -110,8 +111,11 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit', null)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
