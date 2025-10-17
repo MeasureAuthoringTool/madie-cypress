@@ -859,6 +859,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions, measureNumber?: number): string {
+        const currentUser = Cypress.env('selectedUser')
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
@@ -937,6 +938,10 @@ export class CreateMeasurePage {
         cy.clearAllCookies()
         cy.clearLocalStorage()
 
+        if (currentUser === 'harpUserALT') {
+            optionalParams.altUser = true
+        }
+
         if (optionalParams && optionalParams.altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
@@ -980,7 +985,6 @@ export class CreateMeasurePage {
                     }
                 }
             }).then((response) => {
-                let currentUser = Cypress.env('selectedUser')
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
