@@ -14,6 +14,10 @@ const versionNumber = '1.0.000'
 describe('Delete CQL Library: Tests covering Libraries that are in draft and versioned states as well as when user is the owner, when user has had Library transferred to them, and when the user is neither the owner nor has had the Library transferred to them', () => {
 
     beforeEach('Set Access Token', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
@@ -24,8 +28,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id,
@@ -45,9 +50,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         //set local user that does not own the measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id,
                     headers: {
@@ -65,8 +71,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
@@ -83,8 +90,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
+            cy.clearAllSessionStorage({ log: true })
             cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                     cy.request({
                         url: '/api/cql-libraries/' + id,
                         headers: {
@@ -103,13 +111,15 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id,
@@ -128,13 +138,15 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id,
@@ -153,8 +165,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
@@ -171,13 +184,15 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
+            cy.clearAllSessionStorage({ log: true })
             CQLLibraryPage.versionLibraryAPI(versionNumber)
 
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
+            cy.clearAllSessionStorage({ log: true })
             cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/cql-libraries/' + id,
@@ -198,11 +213,12 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Draft Versioned Library
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
@@ -225,6 +241,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 url: '/api/cql-libraries/' + CQLLibraryName + '/delete-all-versions',
@@ -240,7 +257,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             })
         })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -259,9 +276,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + CQLLibraryName + '/delete-all-versions',
@@ -277,9 +295,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
                 })
             })
         })
-        
+
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'GET',
