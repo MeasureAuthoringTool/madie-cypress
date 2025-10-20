@@ -38,10 +38,10 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
     it('Delete test Case - Success scenario - New Delete End Point', () => {
         const currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
@@ -59,7 +59,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
                         }).then((response) => {
                             expect(response.status).to.eql(200)
-                            expect(response.body).to.eql('Successfully deleted provided test cases')
+                            expect(response.body).to.eql('Successfully deleted test cases: ' + testCaseId + ', ' + testCaseId2)
                         })
                     })
                 })
@@ -158,7 +158,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
                         }).then((response) => {
                             expect(response.status).to.eql(200)
-                            expect(response.body).to.eql('Successfully deleted provided test cases')
+                            expect(response.body).to.eql('Successfully deleted test cases: ' + testCaseId + ', ' + testCaseId2)
                         })
                     })
                 })
