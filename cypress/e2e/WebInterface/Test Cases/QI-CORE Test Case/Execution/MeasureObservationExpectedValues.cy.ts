@@ -10,12 +10,12 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Toasts } from "../../../../../Shared/Toasts"
 
 const now = Date.now()
-let measureName = 'MOExpectedValues' + now
-let CqlLibraryName = 'TestLibrary' + now
-let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + now
-let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_Valid
+const measureName = 'MOExpectedValues' + now
+const CqlLibraryName = 'TestLibrary' + now
+const testCaseTitle = 'Title for Auto Test'
+const testCaseDescription = 'DENOMFail' + now
+const testCaseSeries = 'SBTestSeries'
+const testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 describe('Measure Observation Expected values', () => {
 
@@ -29,7 +29,7 @@ describe('Measure Observation Expected values', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate and save Measure observation for CV measure', () => {
@@ -66,7 +66,6 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.measureObservationRow).clear().type('1.3')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
                
         //Assert saved observation values
