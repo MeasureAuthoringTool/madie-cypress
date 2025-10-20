@@ -5,8 +5,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-let currentUser = Cypress.env('selectedUser')
-let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
+
 let measureName = 'AddMeasureGroup' + Date.now()
 let CqlLibraryName1 = 'AddMeasureGroupLib' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
@@ -28,6 +27,9 @@ describe('Validate Measure Group additions', () => {
     })
 
     it('Able to add complete group to a measure whom already has a group and previous group is not affected', () => {
+
+        let currentUser = Cypress.env('selectedUser')
+        let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
