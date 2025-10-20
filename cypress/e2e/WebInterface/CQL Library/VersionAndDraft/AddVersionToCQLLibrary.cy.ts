@@ -78,6 +78,8 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
 
         cy.contains('View').click()
 
-        cy.get(CQLLibraryPage.actionCenterButton).should('not.exist')
+        //Version button should not exist
+        cy.get(CQLLibraryPage.actionCenterButton).click()
+        cy.get(CQLLibrariesPage.actionCenterVersionBtn).should('not.exist')
     })
 })
