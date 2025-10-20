@@ -17,6 +17,7 @@ describe('Edit CQL Library', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         //Create CQL Library with Regular User
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
@@ -31,6 +32,7 @@ describe('Edit CQL Library', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
 
@@ -39,7 +41,7 @@ describe('Edit CQL Library', () => {
         updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
@@ -68,7 +70,7 @@ describe('Edit CQL Library', () => {
         updatedCQLLibraryName = " "
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -94,7 +96,7 @@ describe('Edit CQL Library', () => {
         updatedCQLLibraryName = 'Test_Measure'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -120,7 +122,7 @@ describe('Edit CQL Library', () => {
         updatedCQLLibraryName = 'testMeasure'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -146,7 +148,7 @@ describe('Edit CQL Library', () => {
         updatedCQLLibraryName = 'Test  Measure'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -172,7 +174,7 @@ describe('Edit CQL Library', () => {
         updatedCQLLibraryName = '1234565'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -198,7 +200,7 @@ describe('Edit CQL Library', () => {
         updatedCQLLibraryName = 'Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -227,7 +229,7 @@ describe('Edit CQL Library', () => {
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId2,
