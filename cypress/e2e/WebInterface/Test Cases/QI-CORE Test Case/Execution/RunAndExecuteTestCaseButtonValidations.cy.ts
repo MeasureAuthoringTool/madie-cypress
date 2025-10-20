@@ -469,7 +469,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     })
 
     it('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
-        let measureGroupPath = 'cypress/fixtures/measureGroupId'
+        const currentUser = Cypress.env('selectedUser')
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId'
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -656,7 +657,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
@@ -683,7 +683,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.editTestCaseJSON(validTestCaseJson)
-
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1157,11 +1156,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView()
-        cy.get(TestCasesPage.detailsTab).click()
-
-        Utilities.waitForElementVisible(Toasts.generalToast, 90000)
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
+        cy.get(Toasts.generalToast, { timeout: 16500 }).should('have.text', Toasts.warningOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1276,8 +1271,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        Utilities.waitForElementVisible(Toasts.generalToast, 90000)
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
+        cy.get(Toasts.generalToast, { timeout: 16500 }).should('have.text', Toasts.errorOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1300,7 +1294,6 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         //Click on Execute Test Case button on Edit Test Case page
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).wait(1000).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
@@ -1744,7 +1737,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-        })
+    })
 })
 
 describe('Verify multiple IPs on the highlighting tab', () => {
@@ -1774,7 +1767,8 @@ describe('Verify multiple IPs on the highlighting tab', () => {
     })
 
     it('Multiple IPs appear on the highlighting test case tab', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
+        const currentUser = Cypress.env('selectedUser')
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1830,7 +1824,6 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.editTestCaseJSON(validTestCaseJson)
-
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
