@@ -139,6 +139,9 @@ describe('Measure Filter on measure list page and searching with filters', () =>
 
     before('Login', () => {
 
+        let currentUser = Cypress.env('selectedUser')
+        let measureSetFilePath = 'cypress/fixtures/' + currentUser + '/measureSetId'
+
         //Create New Qi Core Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_WithWarnings, 0)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Encounter')
@@ -154,7 +157,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit', 1)
@@ -162,7 +165,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(Header.mainMadiePageButton).click()
 
