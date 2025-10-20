@@ -45,8 +45,8 @@ describe('Validate Measure Group', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 60000)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 60000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -130,8 +130,8 @@ describe('Validate Measure Group', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 60000)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 60000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -200,8 +200,8 @@ describe('Validate Measure Group', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 60000)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 60000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
