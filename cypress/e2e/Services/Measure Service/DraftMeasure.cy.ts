@@ -8,14 +8,11 @@ import { Utilities } from "../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-let currentUser = Cypress.env('selectedUser')
+//let currentUser = Cypress.env('selectedUser')
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
-let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
-let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
-let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 const now = require('dayjs')
 let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
@@ -26,6 +23,10 @@ let measureName = 'TestMeasure' + Date.now()
 describe('Version and Draft CQL Library', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -49,7 +50,17 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('Add Draft to the Versioned measure', () => {
-        const currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.env('selectedUser')
+        let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
+        let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
+
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
@@ -101,8 +112,17 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('User cannot create a draft when a draft already exists, per measure', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+
+        let currentUser = Cypress.env('selectedUser')
+        let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
+        let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         let newerMeasureName = ''
-        const currentUser = Cypress.env('selectedUser')
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
@@ -190,7 +210,10 @@ describe('Version and Draft CQL Library', () => {
 describe('Draftable API end point tests', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
@@ -210,12 +233,19 @@ describe('Draftable API end point tests', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
     it('Draftable end point return measure set id that was used in request and false if the measure is not version', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
+        let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
+        let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
                 cy.request({
@@ -236,8 +266,14 @@ describe('Draftable API end point tests', () => {
     })
     it('Draftable end point return measure set id that was used in request and false if another measure, in that measure family, is in a draft status', () => {
         let newerMeasureName = ''
-        const currentUser = Cypress.env('selectedUser')
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
+        let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
+        let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
@@ -279,7 +315,7 @@ describe('Draftable API end point tests', () => {
                             }
 
                         }).then((response) => {
-                            const currentUser = Cypress.env('selectedUser')
+                            currentUser = Cypress.env('selectedUser')
                             expect(response.status).to.eql(201)
                             cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                         })
@@ -356,8 +392,14 @@ describe('Draftable API end point tests', () => {
     })
     it('Draftable end point return measure set id that was used in request and true if the measure is versioned, regardless of version type (major, minor, or patch)', () => {
         let newerMeasureName = ''
-        const currentUser = Cypress.env('selectedUser')
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
+        let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
+        let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
