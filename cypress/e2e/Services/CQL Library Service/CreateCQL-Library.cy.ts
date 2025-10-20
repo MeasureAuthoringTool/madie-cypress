@@ -99,10 +99,11 @@ describe('CQL Library Service: Create CQL Library', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'GET',
