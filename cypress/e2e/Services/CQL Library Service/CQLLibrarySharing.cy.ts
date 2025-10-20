@@ -12,6 +12,10 @@ let harpUser = Environment.credentials().harpUser
 describe('CQL Library Sharing Service', () => {
 
     beforeEach('Create CQL Library', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -27,7 +31,7 @@ describe('CQL Library Sharing Service', () => {
     it('Get details of CQL Library shared with', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/sharedWith?measureids=' + id,
                     headers: {
@@ -51,6 +55,10 @@ describe('CQL Library Sharing Service', () => {
 describe('CQL Library sharing Validations', () => {
 
     beforeEach('Create CQL Library', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
@@ -61,7 +69,7 @@ describe('CQL Library sharing Validations', () => {
     it('Verify error message when wrong API key is provided', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id + '/acls',
@@ -91,7 +99,7 @@ describe('CQL Library sharing Validations', () => {
     it('Verify error message when the CQL Library does not exist in MADiE', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id + 5 + 'z' + '/acls',
@@ -123,7 +131,7 @@ describe('CQL Library sharing Validations', () => {
     it('Verify error Message when Non Measure owner tried to get details of CQL Library Shared with', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/sharedWith?measureids=' + id,
