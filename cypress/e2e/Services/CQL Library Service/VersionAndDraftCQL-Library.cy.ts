@@ -17,9 +17,10 @@ const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
 describe('Version and Draft CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
     })
 
     before('Create CQL Library', () => {
@@ -92,7 +93,7 @@ describe('Version and Draft CQL Library', () => {
     it('Add Draft to the Versioned Library', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
@@ -118,8 +119,9 @@ describe('Version and Draft CQL Library', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/version/' + cqlLibraryId2 + '?isMajor=true',
@@ -140,8 +142,10 @@ describe('Version and Draft CQL Library', () => {
 describe('Draft and Version Validations', () => {
 
     beforeEach('Set Access Token and create CQL Library', () => {
-
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CqlLibraryOne = 'TestLibraryOne' + Date.now()
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
@@ -154,7 +158,7 @@ describe('Draft and Version Validations', () => {
 
         //Edit Library Name after versioned
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -202,7 +206,10 @@ describe('Version CQL Library without CQL', () => {
 
     before('Set Access Token and create CQL Library', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CqlLibraryOne = 'CQLLibraryWithoutCQL' + Date.now()
         CQLLibraryPage.createCQLLibraryAPI(CqlLibraryOne, CQLLibraryPublisher)
@@ -212,7 +219,7 @@ describe('Version CQL Library without CQL', () => {
 
         //Add Version to the CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
@@ -234,17 +241,20 @@ describe('Version CQL Library with invalid CQL', () => {
 
     before('Set Access Token and create CQL Library', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CqlLibraryOne = 'CQLLibraryWithInvalidCQL' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})           
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true })
     })
 
     it('User can not version the CQL library if the CQL has errors', () => {
 
         //Add Version to the CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
