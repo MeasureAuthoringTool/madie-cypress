@@ -11,7 +11,6 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const now = Date.now()
-let currentUser = Cypress.env('selectedUser')
 let measureName = 'TestMeasure' + now
 let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
@@ -23,9 +22,6 @@ const measureCQLResults = MeasureCQL.CQLHLResults_value
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const tcDFNJson = TestCaseJson.tcJson_value
 const tcResultJson = TestCaseJson.tcResultsJson
-const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-const measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
-const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
 let measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine = 'library Library7027567898767 version \'0.0.000\'\n' +
     '\n' +
@@ -1096,6 +1092,8 @@ describe('Measure Highlighting', () => {
 
     it('Execute single Test Case and verify Measure highlighting', () => {
         const currentUser = Cypress.env('selectedUser')
+        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         cy.intercept('/api/terminology/value-sets/expansion/fhir').as('expansion')
 
         //Create Measure Group
@@ -1223,6 +1221,9 @@ describe('Highlighting accurately appears for a single PC measure', () => {
     })
 
     it('Verify highlighting for a measure with a single PC', () => {
+        const currentUser = Cypress.env('selectedUser')
+        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -1335,6 +1336,10 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
     })
 
     it('Verify highlighting for a measure with multiple PCs', () => {
+        const currentUser = Cypress.env('selectedUser')
+        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+        const measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -1506,6 +1511,9 @@ describe('Highlighting tab shows Results, Definitions, Functions, and Unused sec
     })
 
     it('Verify tabs in the highlighting sub-menu', () => {
+        const currentUser = Cypress.env('selectedUser')
+        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -1641,6 +1649,9 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
     })
 
     it('Result section starts expanded with content and can be collapsed', () => {
+        const currentUser = Cypress.env('selectedUser')
+        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -1865,6 +1876,9 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
     })
 
     it('Execute Test Case on a newly versioned measure; verify Measure highlighting happens', () => {
+        const currentUser = Cypress.env('selectedUser')
+        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
 
         OktaLogin.Login()
 
