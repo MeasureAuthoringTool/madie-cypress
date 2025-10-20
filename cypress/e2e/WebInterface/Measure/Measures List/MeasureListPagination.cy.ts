@@ -2,20 +2,21 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import {Environment} from "../../../../Shared/Environment"
-let currentUser = Cypress.env('selectedUser')
+
 let measureName = []
 let CqlLibraryName = []
 let measureIds = []
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
-let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
-let measureSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
 const harpUser = Environment.credentials().harpUser
 
 describe('Measure List Pagination', () => {
 
     before('Create Measures and Login', () => {
+
+        let currentUser = Cypress.env('selectedUser')
+        let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 
         cy.setAccessTokenCookie()
 
@@ -63,6 +64,10 @@ describe('Measure List Pagination', () => {
     })
 
     after('Cleanup Measures and Logout', () => {
+
+        let currentUser = Cypress.env('selectedUser')
+        let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
+        let measureSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
 
         cy.setAccessTokenCookie()
 
