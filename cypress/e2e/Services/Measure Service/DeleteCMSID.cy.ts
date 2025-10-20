@@ -40,7 +40,7 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
             cmsId = val.toString().valueOf()
-            cy.writeFile('cypress/fixtures/cmsId', cmsId)
+            cy.writeFile('cypress/fixtures/harpUser/cmsId', cmsId)
         })
         cy.log('CMS ID Generated successfully')
 
