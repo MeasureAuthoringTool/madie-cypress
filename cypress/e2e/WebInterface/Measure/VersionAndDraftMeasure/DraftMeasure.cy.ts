@@ -10,7 +10,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { Toasts } from "../../../../Shared/Toasts"
 
-let currentUser = Cypress.env('selectedUser')
+
 let updatedMeasuresPageName = ''
 let updatedMeasuresPageNameSecond = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -18,7 +18,7 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 const cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
 const cohortMeasureCQLSix = MeasureCQL.CQL_For_Cohort_Six
-const filePath = 'cypress/fixtures/' + currentUser + '/measureId'
+
 const versionNumberFirst = '1.0.000'
 const versionNumberSecond = '2.0.000'
 
@@ -28,6 +28,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         newMeasureName = 'DraftVersionValidations' + Date.now() + randValue
         newCqlLibraryName = 'DraftVersionValidationsLib' + Date.now() + randValue
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
@@ -50,6 +54,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 
     it('Add Draft to the versioned measure', () => {
+
+        let currentUser = Cypress.env('selectedUser')
+        const filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
@@ -105,6 +112,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 
+
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -141,6 +149,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 
     it('Tooltip appears and user is unable to draft a 4.1.1 of a measure that has a 6.0.0 on measureSet', () => {
+
 
         updatedMeasuresPageName = 'updatedDVValidations' + Date.now()
 
@@ -209,7 +218,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.log('Search Measure with measure name')
         Utilities.dropdownSelect(MeasuresPage.filterByDropdown, 'Measure')
         cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
-        
+
         // expand to see original
         cy.get('[data-testid*="_expandArrow"]').click()
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
@@ -221,6 +230,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 
     it('Change / update model from v4.1.1 - to - v6.0.0 with versioning and drafting but cannot draft from 6.0.0 - to - 4.1.1', () => {
+
 
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
         updatedMeasuresPageNameSecond = 'UpdatedTestMeasures2' + Date.now()
@@ -330,6 +340,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 describe.skip('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         newMeasureName = 'DraftTo7Measure' + Date.now()
         newCqlLibraryName = 'DraftTo7Lib' + Date.now()
@@ -353,8 +367,12 @@ describe.skip('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0',
 
         OktaLogin.UILogout()
     })
-    
+
     it('Change model from v6.0.0 - to - v7.0.0 with versioning and drafting but cannot draft from 7.0.0 back down', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         updatedMeasuresPageName = 'upgradedTo7' + Date.now()
 
