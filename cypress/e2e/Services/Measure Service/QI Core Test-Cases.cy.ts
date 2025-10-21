@@ -55,7 +55,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     beforeEach('Set Access Token', () => {
@@ -63,6 +63,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
     afterEach('Clean up', () => {
@@ -75,8 +76,9 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -104,6 +106,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
 
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
@@ -136,6 +139,11 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 
 describe('Test Case population values based on Measure Group population definitions', () => {
     before('Create Measure and measure group', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
@@ -269,8 +277,10 @@ describe('Test Case population values based on Measure Group population definiti
     })
     beforeEach('Set Access Token', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-
+        cy.clearAllSessionStorage({ log: true })
     })
 
     after('Clean up', () => {
@@ -283,6 +293,8 @@ describe('Test Case population values based on Measure Group population definiti
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -311,6 +323,11 @@ describe('Test Case population values based on Measure Group population definiti
         })
     })
     it('Test Case population value check boxes match that of the measure group definition -- optional population is removed', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureIdFc) => {
                 cy.request({
@@ -364,6 +381,7 @@ describe('Test Case population values based on Measure Group population definiti
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -392,6 +410,11 @@ describe('Test Case population values based on Measure Group population definiti
         })
     })
     it('Test Case population value check boxes match that of the measure group definition -- optional population is added', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
@@ -554,6 +577,11 @@ describe('Measure Service: Test Case Endpoints', () => {
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     beforeEach('Create Measure, group, and test case', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
@@ -686,7 +714,10 @@ describe('Measure Service: Test Case Endpoints', () => {
 
     beforeEach('Set Access Token', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
 
@@ -697,6 +728,11 @@ describe('Measure Service: Test Case Endpoints', () => {
     })
 
     it('Create Test Case', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
         let randValue = (Math.floor((Math.random() * 2000) + 3))
         let title = 'test case title create'
         let series = 'test case series create'
@@ -733,6 +769,11 @@ describe('Measure Service: Test Case Endpoints', () => {
     })
 
     it('Edit Test Case', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
@@ -767,6 +808,11 @@ describe('Measure Service: Test Case Endpoints', () => {
     })
 
     it('Get All Test Cases', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -786,6 +832,11 @@ describe('Measure Service: Test Case Endpoints', () => {
     })
 
     it('Get a specific test case', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
@@ -815,6 +866,10 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
 
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
@@ -822,7 +877,10 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
 
     beforeEach('Set Access Token', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
 
@@ -833,6 +891,11 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Create Test Case: Description more than 250 characters', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -861,6 +924,11 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Edit Test Case: Description more than 250 characters', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -892,6 +960,11 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Create Test Case: Title more than 250 characters', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -921,6 +994,11 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Create Test Case: Series more than 250 characters', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -962,7 +1040,10 @@ describe('Test Case Json Validations', () => {
 
     beforeEach('Set Access Token', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
 
@@ -973,6 +1054,11 @@ describe('Test Case Json Validations', () => {
     })
 
     it('Enter Valid Test Case Json', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1000,6 +1086,11 @@ describe('Test Case Json Validations', () => {
     })
 
     it('Enter Invalid Test Case Json and Verify Error Message', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1028,6 +1119,11 @@ describe('Test Case Json Validations', () => {
     })
 
     it('Enter Patient XML and Verify Error Message', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1056,6 +1152,11 @@ describe('Test Case Json Validations', () => {
     })
 
     it('Verify test case errors flag when json has errors', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1099,7 +1200,10 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
 
     beforeEach('Set Access Token', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
 
@@ -1110,6 +1214,11 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
     })
 
     it('Bad Access Token', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1136,6 +1245,11 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
 
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
     beforeEach('Create Measure and measure group', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
@@ -1206,6 +1320,8 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
@@ -1263,6 +1379,11 @@ describe('Duplicate Test Case Title and Group validations', () => {
     })
 
     it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1294,6 +1415,8 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+        let currentUser = Cypress.env('selectedUser')
         //Create second Test case
         TestCasesPage.CreateTestCaseAPI('SecondTCTitle', 'SecondTCSeries', 'SecondTCDescription', null, false, true)
 
