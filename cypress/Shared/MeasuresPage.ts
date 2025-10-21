@@ -205,6 +205,7 @@ export class MeasuresPage {
                 Utilities.waitForElementVisible('[data-testid="version-action-btn"]', 90000)
                 cy.get('[data-testid="version-action-btn"]').should('be.visible')
                 cy.get('[data-testid="version-action-btn"]').click()
+                Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 390000)
 
                 break
             }
