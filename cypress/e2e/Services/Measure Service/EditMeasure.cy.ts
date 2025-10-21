@@ -27,7 +27,10 @@ describe('Measure Service: Edit Measure', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
 

@@ -120,7 +120,7 @@ export class Utilities {
     }
 
     public static deleteMeasure(measureName?: string, cqlLibraryName?: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
-        const currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.env('selectedUser')
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
