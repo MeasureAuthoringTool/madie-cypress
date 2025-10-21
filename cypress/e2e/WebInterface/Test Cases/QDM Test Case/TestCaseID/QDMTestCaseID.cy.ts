@@ -10,8 +10,7 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 import { Toasts } from "../../../../../Shared/Toasts"
-let currentUser = Cypress.env('selectedUser')
-const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
+
 const testCase1: TestCase = {
     title: 'Test Case 1',
     description: 'Description 1',
@@ -34,6 +33,9 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
     beforeEach('Create Measure', () => {
 
+
+        let currentUser = Cypress.env('selectedUser')
+        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureData: CreateMeasureOptions = {
             ecqmTitle: measureQDMManifestName,
             cqlLibraryName: CqlLibraryName,
@@ -78,6 +80,9 @@ describe('QDM Test Case sorting by Test Case number', () => {
     })
 
     it('QDM Test Case number and sorting behavior', () => {
+
+        let currentUser = Cypress.env('selectedUser')
+        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -179,6 +184,9 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
     it('QDM Test Case number appears on cloned test case', () => {
 
+        let currentUser = Cypress.env('selectedUser')
+        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
+
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -227,6 +235,8 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     beforeEach('Create Measure, Test case & Login', () => {
 
+        let currentUser = Cypress.env('selectedUser')
+        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureData: CreateMeasureOptions = {
             ecqmTitle: measureQDMManifestName,
             cqlLibraryName: CqlLibraryName,
@@ -323,6 +333,8 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
     beforeEach('Create Measure', () => {
 
+        let currentUser = Cypress.env('selectedUser')
+        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureData: CreateMeasureOptions = {
             ecqmTitle: qdmMeasureName,
             cqlLibraryName: qdmCqlLibraryName,
