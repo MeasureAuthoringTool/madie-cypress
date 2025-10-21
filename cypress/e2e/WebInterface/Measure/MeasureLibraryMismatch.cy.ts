@@ -5,11 +5,10 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-let currentUser = Cypress.env('selectedUser')
 const now = Date.now()
 const measureName = 'MismatchMeasure' + now
 const libraryName = 'MismatchMeasureLib' + now
-const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+let measurePath = ''
 
 /*
     Disclaimer: these tests are relying on existing, commonly used libraries 
@@ -19,6 +18,11 @@ const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 */
 
 describe('Mismatch between measure model and library model -- error state', () => {
+
+    before(() => {
+        const currentUser = Cypress.env('selectedUser')
+        measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+    })
 
     afterEach('Logout and Clean up Measure', () => {
 
