@@ -35,12 +35,26 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
         //Create New Measure and Measure Group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 390000)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 390000)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -50,7 +64,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Add Draft to the versioned measure', () => {
@@ -78,6 +92,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 
     it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
+
         let currentUser = Cypress.env('selectedUser')
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
@@ -100,9 +115,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
         })
-        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.get(MeasuresPage.createDraftContinueBtn).wait(2000).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/measureDraftId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureDraftId', request.response.body.id)
         })
         cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
         cy.readFile('cypress/fixtures/' + currentUser + '/measureDraftId').should('exist').then((fileDraftContents) => {
@@ -156,7 +171,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + updatedMeasuresPageName + '?')
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Verify Draft measure CQL, Group and Test case', () => {

@@ -36,7 +36,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         let currentUser = Cypress.env('selectedUser')
         cy.log('Current User: ' + currentUser)
         let now = Date.now()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName+ now, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -82,7 +82,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         //Share Measure with ALT User
         MeasuresPage.actionCenter('transfer', 1)
         //Verify message on the transfer pop up screen
-        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following measure(s). All versions and drafts will be transferred, so only the most recent measure name appears here.')
+        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the following measure(s). All versions and drafts will be transferred. So only the most recent measure name appears here.This action cannot be undone.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
         OktaLogin.UILogout()
@@ -97,7 +97,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
 
         // ALT User now owns both measures in the measureSet
         cy.get(MeasuresPage.measureListTitles).should('contain', randomMeasureName)
-        
+
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_expandArrow"]').click().wait(1000)
             cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
@@ -150,10 +150,10 @@ describe('Delete Test Case with Transferred user', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         MeasuresPage.actionCenter('edit')
-        
+
         EditMeasurePage.actionCenter(EditMeasureActions.transfer)
         //Verify message on the transfer pop up screen
-        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following measure(s). All versions and drafts will be transferred, so only the most recent measure name appears here.')
+        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the following measure(s). All versions and drafts will be transferred. So only the most recent measure name appears here.This action cannot be undone.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
         OktaLogin.UILogout()
