@@ -85,7 +85,7 @@ describe('Measure Un Sharing', () => {
 
     })
 
-    it('Verify Shared user can Un share Measure from Shared Measures tab', () => {
+    it('Verify Shared user can Un share Measure from themself on Shared Measures tab', () => {
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)

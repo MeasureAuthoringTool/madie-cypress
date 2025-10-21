@@ -114,7 +114,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
 
     })
 
-    it('Verify Shared user can Un share Library from Shared Libraries tab', () => {
+    it('Verify Shared user can Un share Library from themself on Shared Libraries tab', () => {
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
