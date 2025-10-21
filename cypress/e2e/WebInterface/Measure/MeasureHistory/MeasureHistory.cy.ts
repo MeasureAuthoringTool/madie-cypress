@@ -29,8 +29,7 @@ measureData.measureScoring = 'Cohort'
 measureData.patientBasis = 'true'
 measureData.measureCql = measureCQL
 
-//Skipping until Feature flag MeasureHistory is removed
-describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing Actions', () => {
+describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Actions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -44,7 +43,7 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify that Measure Create and Update actions are recorded in Measure History', () => {
@@ -81,7 +80,7 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
             const cmsId = val.toString().valueOf()
-            cy.writeFile('cypress/fixtures/cmsId', cmsId)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cmsId', cmsId)
             cy.log('CMS ID Generated successfully: ' + cmsId)
         })
 
@@ -158,7 +157,6 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
         //Un Share Measure
         EditMeasurePage.actionCenter(EditMeasureActions.share)
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.unshareCheckBox).click()
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.acceptBtn).click()
@@ -175,8 +173,7 @@ describe.skip('Measure History - Create, Update, CMS ID, Sharing and Unsharing A
     })
 })
 
-//Skipping until Feature flag MeasureHistory is removed
-describe.skip('Measure History - Version and Draft actions', () => {
+describe('Measure History - Version and Draft actions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -198,7 +195,7 @@ describe.skip('Measure History - Version and Draft actions', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify that Measure Version and Draft actions are recorded in Measure History', () => {
@@ -211,6 +208,7 @@ describe.skip('Measure History - Version and Draft actions', () => {
 
         //Go to Measure History and verify that Measure Version action is recorded
         EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)
+        cy.get('[data-testid="measure-history-header"]').should('contain.text', measureData.ecqmTitle + '(Version 1.0.000)')
         cy.get(MeasuresPage.userActionRow).should('contain.text', 'VERSIONED_MAJOR')
         cy.get(MeasuresPage.harpIdRow).should('contain.text', harpUser)
         cy.get(MeasuresPage.additionalActionRow).should('contain.text', 'Versioned to 1.0.000')
@@ -225,6 +223,7 @@ describe.skip('Measure History - Version and Draft actions', () => {
 
         //Go to Measure History and verify that Measure Draft action is recorded
         EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)
+        cy.get('[data-testid="measure-history-header"]').should('contain.text', measureData.ecqmTitle + '(Version 1.0.000)Draft')
         cy.get(MeasuresPage.userActionRow).should('contain.text', 'DRAFTED')
         cy.get(MeasuresPage.harpIdRow).should('contain.text', harpUser)
         cy.get(MeasuresPage.additionalActionRow).should('contain.text', 'Draft created from version 1.0.000')
@@ -232,8 +231,7 @@ describe.skip('Measure History - Version and Draft actions', () => {
     })
 })
 
-//Skipping until Feature flag MeasureHistory is removed
-describe.skip('Measure History - Associate Measure actions', () => {
+describe('Measure History - Associate Measure actions', () => {
 
 
     let measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
