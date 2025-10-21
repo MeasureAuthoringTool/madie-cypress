@@ -787,6 +787,12 @@ export class CreateMeasurePage {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
+        else {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -1064,7 +1070,7 @@ export class CreateMeasurePage {
                         cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
                     }
                 })
-            }) 
+            })
         })
     }
 }
