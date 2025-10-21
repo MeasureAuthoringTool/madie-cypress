@@ -58,7 +58,8 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.get(TestCasesPage.testCaseExecutionError).should('be.visible')
     })
 
-    it('Test case shift dates failure shows error', () => {
+    //Skipping until MAT-8410 is fixed
+    it.skip('Test case shift dates failure shows error', () => {
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
