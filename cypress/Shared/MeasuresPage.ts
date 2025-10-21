@@ -157,7 +157,7 @@ export class MeasuresPage {
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').click().wait(2000)
-                    Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 390000)
+                    Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 90000)
 
                 })
                 break
@@ -205,7 +205,7 @@ export class MeasuresPage {
                 Utilities.waitForElementVisible('[data-testid="version-action-btn"]', 90000)
                 cy.get('[data-testid="version-action-btn"]').should('be.visible')
                 cy.get('[data-testid="version-action-btn"]').click()
-                Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 390000)
+                Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 90000)
 
                 break
             }
