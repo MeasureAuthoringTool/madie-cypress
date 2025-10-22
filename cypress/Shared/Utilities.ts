@@ -631,6 +631,8 @@ export class Utilities {
     }
 
     public static verifyAllLocksDeleted(type: MadieObject, altUser?: boolean) {
+
+        const currentUser = Cypress.env('selectedUser')
         // only works with harpUser now, no current use-case to support altUser
         if (altUser) {
             cy.clearAllCookies()
@@ -646,16 +648,28 @@ export class Utilities {
 
             case MadieObject.Measure:
                 cy.getCookie('accessToken').then((accessToken) => {
-                    cy.request({
-                        url: '/api/measures/unlock',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value,
-                        },
-                        method: 'DELETE'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body).to.include('No measure locks found for harpId: ' + harpUser)
-                        expect(response.body).to.include('No test case locks found for harpId: ' + harpUser)
+                    cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+                        cy.request({
+                            url: '/api/measures/unlock',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value,
+                            },
+                            method: 'DELETE'
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            if (altUser) {
+                                expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUserALT)
+                                expect(response.body[1]).to.include('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUserALT)
+                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUserALT)
+                                expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUserALT)
+                            }
+                            else {
+                                expect(response.body[0]).to.eql('Delete measure locks for harpId: ' + harpUser)
+                                expect(response.body[1]).to.eql('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUser)
+                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUser)
+                                expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUser)
+                            }
+                        })
                     })
                 })
                 break
@@ -673,12 +687,12 @@ export class Utilities {
                             expect(response.status).to.eql(200)
                             if (altUser) {
                                 expect(response.body).to.include('Delete library locks for harpId: ' + harpUserALT)
-                                expect(response.body).to.include('Deleted library lock for Id: ' + id)
+                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUser)
                             }
                             else {
                                 // if not altUser, then check for the library lock deletion message
                                 expect(response.body).to.include('Delete library locks for harpId: ' + harpUser)
-                                expect(response.body).to.include('Deleted library lock for Id: ' + id)
+                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUser)
                             }
                         })
                     })
