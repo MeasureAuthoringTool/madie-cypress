@@ -17,8 +17,8 @@ describe('Measure List Page Sort by Columns', () => {
 
         OktaLogin.UILogout()
     })
-    //skipping test until MAT-8868 is fixed
-    it.skip('Measure sorting by columns on All Measures tab', () => {
+
+    it('Measure sorting by columns on All Measures tab', () => {
 
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=ASC').as('sort')
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureName&direction=DESC').as('sort2')
