@@ -283,4 +283,23 @@ export class MeasuresPage {
             default: { }
         }
     }
+
+    public static selectMeasure(measureNumber?: number): void {
+        const currentUser = Cypress.env('selectedUser')
+
+        if (!measureNumber) {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
+
+                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+            })
+        }
+        else {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber).then(measureId => {
+
+                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+            })
+        }
+    }
 }
