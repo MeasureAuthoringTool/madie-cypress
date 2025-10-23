@@ -27,6 +27,7 @@ export class CQLLibrariesPage {
     public static readonly actionCenterDraftBtn = '[data-testid="draft-action-btn"]'
     public static readonly actionCenterShareBtn = '[data-testid="share-action-btn"]'
     public static readonly actionCenterTransferBtn = '[data-testid="transfer-action-btn"]'
+    public static readonly actionCenterHistoryBtn = '[data-testid="HistoryIcon"]'
 
     //Share/Un share Library
     public static readonly shareOption = '[data-testid="Share With-option"]'
@@ -176,6 +177,13 @@ export class CQLLibrariesPage {
                 cy.get(this.actionCenterTransferBtn).should('be.visible')
                 cy.get(this.actionCenterTransferBtn).should('be.enabled')
                 cy.get(this.actionCenterTransferBtn).click()
+
+                break
+            }
+            case 'viewHistory': {
+                cy.get(this.actionCenterHistoryBtn).should('be.visible')
+                cy.get(this.actionCenterHistoryBtn).should('be.enabled')
+                cy.get(this.actionCenterHistoryBtn).click()
 
                 break
             }

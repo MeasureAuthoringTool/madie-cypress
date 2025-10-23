@@ -5,18 +5,20 @@ import { v4 as uuidv4 } from 'uuid'
 import { CQLLibrariesPage } from "./CQLLibrariesPage"
 import { CQLEditorPage } from "./CQLEditorPage"
 import { SupportedModels } from "./CreateMeasurePage"
+import {MeasureRow} from "./MeasuresPage"
 
 export enum EditLibraryActions {
     delete,
     version,
     draft,
     share,
-    transfer
+    transfer,
+    viewHistory
 }
 
 export type CreateLibraryOptions = {
     cql?: string,
-    cqlErrors?: boolean, 
+    cqlErrors?: boolean,
     description?: string,
     altUser?: boolean,
     libraryNumber?: number,
@@ -75,6 +77,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
     public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
+    public static readonly actionCenterHistory = '[data-testid="History"]'
 
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
@@ -223,7 +226,8 @@ export class CQLLibraryPage {
                         "\n" +
                         "using QICore version '4.1.1'\n" +
                         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-                        "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'",
+                        "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'\n" +
+                        "context Patient",
                     "librarySetId": uuidv4(),
                     "description": "description",
                     "publisher": CQLLibraryPublisher,
@@ -338,6 +342,14 @@ export class CQLLibraryPage {
 
                 break
             }
+            case EditLibraryActions.viewHistory: {
+
+                cy.get(this.actionCenterHistory).should('be.visible')
+                cy.get(this.actionCenterHistory).should('be.enabled')
+                cy.get(this.actionCenterHistory).click()
+
+                break
+            }
             default: { }
         }
     }
@@ -411,5 +423,33 @@ export class CQLLibraryPage {
             })
         })
         return user
+    }
+
+    public static checkFirstRow(expectedData: MeasureRow) {
+        cy.wait(1100)
+
+        cy.get('.table-body tr').first().then(firstRow => {
+
+            if (expectedData.name) {
+                cy.wrap(firstRow.children().eq(1)).should('have.text', expectedData.name)
+            }
+            if (expectedData.version) {
+                cy.wrap(firstRow.children().eq(2)).should('have.text', expectedData.version)
+            }
+            if (expectedData.status) {
+                cy.wrap(firstRow.children().eq(3)).should('have.text', expectedData.status)
+            }
+            if (expectedData.model) {
+                cy.wrap(firstRow.children().eq(4)).should('have.text', expectedData.model)
+            }
+            if (expectedData.shared) {
+                cy.wrap(firstRow.children().eq(5)).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
+            }
+            if (expectedData.updated) {
+                cy.wrap(firstRow.children().eq(6)).should('have.text', expectedData.updated)
+            }
+
+        })
+
     }
 }
