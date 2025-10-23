@@ -52,7 +52,7 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
     })
 
-    it('Verify that Measure Sharing and Unsharing actions are recorded in Library History', () => {
+    it('Verify that Library Sharing and Unsharing actions are recorded in Library History', () => {
 
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
