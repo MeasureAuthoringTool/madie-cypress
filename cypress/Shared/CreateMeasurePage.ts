@@ -130,7 +130,7 @@ export class CreateMeasurePage {
         measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
         const currentUser = Cypress.env('selectedUser')
-        cy.log('VASILE the current user is ' + currentUser)
+
         const now = require('dayjs')
         let user = ''
 
