@@ -109,10 +109,15 @@ export class OktaLogin {
                 cy.setAccessTokenCookie()
                 cy.get(this.usernameInput).type(Environment.credentials().harpUser)
                 cy.get(this.passwordInput).type(Environment.credentials().password)
-            } else {
-                cy.setAccessTokenCookieALT()
-                cy.get(this.usernameInput).type(Environment.credentials().harpUserALT)
-                cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
+            } else if (user === 'harpUser2') {
+                cy.setAccessTokenCookie2()
+                cy.get(this.usernameInput).type(Environment.credentials().harpUser2)
+                cy.get(this.passwordInput).type(Environment.credentials().password2)
+            }
+            else if (user === 'harpUser3') {
+                cy.setAccessTokenCookie3()
+                cy.get(this.usernameInput).type(Environment.credentials().harpUser3)
+                cy.get(this.passwordInput).type(Environment.credentials().password3)
             }
 
             cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
@@ -183,4 +188,40 @@ export class OktaLogin {
             }
         })
     }
+
+
+    public static setupUserSession(altUser: boolean, currentUser: string) {
+        let user: string
+
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+
+        if (altUser) {
+            cy.setAccessTokenCookieALT();
+            user = Environment.credentials().harpUserALT;
+            Cypress.env('selectedUser', 'harpUserALT');
+        } else {
+            switch (currentUser) {
+                case 'harpUser':
+                    cy.setAccessTokenCookie();
+                    user = Environment.credentials().harpUser;
+                    break;
+                case 'harpUser2':
+                    cy.log('we hit number 2')
+                    cy.setAccessTokenCookie2();
+                    user = Environment.credentials().harpUser2;
+                    break;
+                case 'harpUser3':
+                    cy.setAccessTokenCookie3();
+                    user = Environment.credentials().harpUser3;
+                    break;
+                default:
+                    throw new Error(`Unknown user type: ${currentUser}`);
+            }
+        }
+
+        return user;
+    }
+
 }

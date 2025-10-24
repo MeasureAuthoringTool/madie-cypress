@@ -6,6 +6,7 @@ import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Stratification } from "@madie/madie-models"
+import {OktaLogin} from "./OktaLogin";
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -632,17 +633,10 @@ export class MeasureGroupPage {
             altUser = true
         }
 
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser)
+
         if (twoMeasureGroups === true) {
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
-            //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
         }
         else {
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'

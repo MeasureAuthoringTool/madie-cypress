@@ -6,6 +6,7 @@ import { CQLLibrariesPage } from "./CQLLibrariesPage"
 import { CQLEditorPage } from "./CQLEditorPage"
 import { SupportedModels } from "./CreateMeasurePage"
 import {MeasureRow} from "./MeasuresPage"
+import {OktaLogin} from "./OktaLogin"
 
 export enum EditLibraryActions {
     delete,
@@ -147,18 +148,7 @@ export class CQLLibraryPage {
         }
         const currentUser = Cypress.env('selectedUser')
 
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
-
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser)
 
         //Create New CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
@@ -198,18 +188,7 @@ export class CQLLibraryPage {
         const currentUser = Cypress.env('selectedUser')
         let user = ''
 
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
-
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser)
 
         //Create New CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
@@ -359,18 +338,9 @@ export class CQLLibraryPage {
         let user: string, description: string, publisher: string, cql: string, cqlErrors = false
 
         const currentUser = Cypress.env('selectedUser')
-        if (currentUser === 'harpUserALT') {
-            options.altUser = true
-        }
 
-        if (options &&  options.altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(options.altUser, currentUser)
+
         if (options && options.description) {
             description = options.description
         }

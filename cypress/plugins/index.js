@@ -76,10 +76,14 @@ module.exports = (on, config) => {
                 lock.harpUser = true;
                 fs.writeFileSync(lockFilePath, JSON.stringify(lock))
                 return 'harpUser';
-            } else if (!lock.harpUserALT) {
-                lock.harpUserALT = true;
+            } else if (!lock.harpUser2) {
+                lock.harpUser2 = true;
                 fs.writeFileSync(lockFilePath, JSON.stringify(lock))
-                return 'harpUserALT';
+                return 'harpUser2';
+            } else if (!lock.harpUser3) {
+                lock.harpUser3 = true;
+                fs.writeFileSync(lockFilePath, JSON.stringify(lock))
+                return 'harpUser3';
             } else {
                 return null;
             }

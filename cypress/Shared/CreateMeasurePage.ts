@@ -4,6 +4,7 @@ import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
 import { Measure } from "@madie/madie-models"
+import {OktaLogin} from "./OktaLogin"
 const now = require('dayjs')
 
 export enum SupportedModels {
@@ -129,15 +130,12 @@ export class CreateMeasurePage {
         measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
         const currentUser = Cypress.env('selectedUser')
+        cy.log('VASILE the current user is ' + currentUser)
         const now = require('dayjs')
         let user = ''
 
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
-        }
-
-        if (currentUser === 'harpUserALT') {
-            altUser = true
         }
 
         let ecqmTitle = 'eCQMTitle4QICore'
@@ -155,47 +153,7 @@ export class CreateMeasurePage {
             measureNumber = 0
         }
 
-        if (altUser) {
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
-        /*         if (CreateMeasureOptions.mpStartDate === undefined) {
-                    CreateMeasureOptions.mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
-                }
-        
-                if (CreateMeasureOptions.mpEndDate === undefined) {
-                    CreateMeasureOptions.mpEndDate = now().format('YYYY-MM-DD')
-                }
-                if ((CreateMeasureOptions.measureNumber === undefined) || (CreateMeasureOptions.measureNumber === null)) {
-                    CreateMeasureOptions.measureNumber = 0
-                }
-        
-                if ((CreateMeasureOptions.description === undefined) || (CreateMeasureOptions.description === null)) {
-                    CreateMeasureOptions.description = 'SemanticBits' + Date.now()
-                }
-        
-                if (CreateMeasureOptions.altUser) {
-                    cy.clearAllCookies()
-                    cy.clearLocalStorage()
-                    cy.setAccessTokenCookieALT()
-                    user = Environment.credentials().harpUserALT
-                }
-                else {
-                    cy.clearAllCookies()
-                    cy.clearLocalStorage()
-                    cy.setAccessTokenCookie()
-                    user = Environment.credentials().harpUser
-                } */
+        user = OktaLogin.setupUserSession(altUser, currentUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -274,7 +232,6 @@ export class CreateMeasurePage {
                     }
                 }
             }).then((response) => {
-                console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 let currentUser = Cypress.env('selectedUser')
@@ -656,20 +613,7 @@ export class CreateMeasurePage {
             altUser = true
         }
 
-        if (altUser) {
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -948,14 +892,7 @@ export class CreateMeasurePage {
             optionalParams.altUser = true
         }
 
-        if (optionalParams && optionalParams.altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(optionalParams.altUser, currentUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {

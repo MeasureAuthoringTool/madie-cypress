@@ -4,6 +4,7 @@ import { Utilities } from "./Utilities"
 import dateTimeISO = CypressCommandLine.dateTimeISO
 import { CQLEditorPage } from "./CQLEditorPage"
 import { MeasuresPage } from "./MeasuresPage"
+import {OktaLogin} from "./OktaLogin";
 
 export type TestCase = {
     title: string,
@@ -688,17 +689,9 @@ export class TestCasesPage {
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
         }
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+
+        user = OktaLogin.setupUserSession(altUser, currentUser)
+
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -767,18 +760,9 @@ export class TestCasesPage {
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
         }
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
 
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser)
+
         if (twoTestCases === true) {
             testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
         }

@@ -3,12 +3,17 @@ export class Environment {
      * We set our environment variables here in this class
      */
 
-    public static credentials = (): { harpUser: string, password: string, harpUserALT: string, passwordALT: string, umls_API_KEY: string, adminApiKey: string } => {
+    public static credentials = (): { harpUser: string, password: string,harpUser2: string,
+        password2: string,harpUser3: string, password3: string, harpUserALT: string, passwordALT: string, umls_API_KEY: string, adminApiKey: string } => {
         switch (Cypress.env('environment')) {
             case 'dev': {
                 return {
                     harpUser: Cypress.env('TEST_USERNAME'),
                     password: Cypress.env('TEST_PASSWORD'),
+                    harpUser2: Cypress.env('TEST_USERNAME2'),
+                    password2: Cypress.env('TEST_PASSWORD2'),
+                    harpUser3: Cypress.env('TEST_USERNAME3'),
+                    password3: Cypress.env('TEST_PASSWORD3'),
                     harpUserALT: Cypress.env('TEST_ALT_USERNAME'),
                     passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
@@ -19,22 +24,26 @@ export class Environment {
                 return {
                     harpUser: Cypress.env('TEST_USERNAME'),
                     password: Cypress.env('TEST_PASSWORD'),
+                    harpUser2: Cypress.env('TEST_USERNAME2'),
+                    password2: Cypress.env('TEST_PASSWORD2'),
+                    harpUser3: Cypress.env('TEST_USERNAME3'),
+                    password3: Cypress.env('TEST_PASSWORD3'),
                     harpUserALT: Cypress.env('TEST_ALT_USERNAME'),
                     passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    adminApiKey: Cypress.env('TEST_ADMIN_API_KEY')
+                    adminApiKey: Cypress.env('DEV_ADMIN_API_KEY')
                 }
             }
-            case 'impl': {
-                return {
-                    harpUser: Cypress.env('IMPL_USERNAME'),
-                    password: Cypress.env('IMPL_PASSWORD'),
-                    harpUserALT: Cypress.env('IMPL_ALT_USERNAME'),
-                    passwordALT: Cypress.env('IMPL_ALT_PASSWORD'),
-                    umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    adminApiKey: Cypress.env('IMPL_ADMIN_API_KEY')
-                }
-            }
+            // case 'impl': {
+            //     return {
+            //         harpUser: Cypress.env('IMPL_USERNAME'),
+            //         password: Cypress.env('IMPL_PASSWORD'),
+            //         harpUserALT: Cypress.env('IMPL_ALT_USERNAME'),
+            //         passwordALT: Cypress.env('IMPL_ALT_PASSWORD'),
+            //         umls_API_KEY: Cypress.env('VSAC_API_KEY'),
+            //         adminApiKey: Cypress.env('IMPL_ADMIN_API_KEY')
+            //     }
+            // }
         }
     }
 
