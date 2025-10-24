@@ -4,6 +4,7 @@ import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "./Environment"
 import { Measure } from "@madie/madie-models"
+import {OktaLogin} from "./OktaLogin";
 
 const adminApiKey = Environment.credentials().adminApiKey
 const harpUser = Environment.credentials().harpUser
@@ -130,19 +131,9 @@ export class Utilities {
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
         }
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
 
-        if (altUser) {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-        } else {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
-        }
+        OktaLogin.setupUserSession(altUser, currentUser)
+
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
@@ -194,21 +185,8 @@ export class Utilities {
             measureNumber = 0
         }
 
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser)
 
-        if (altUser) {
-            user = Environment.credentials().harpUserALT
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-        } else {
-            user = Environment.credentials().harpUser
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
-        }
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
@@ -513,19 +491,7 @@ export class Utilities {
         const currentUser = Cypress.env('selectedUser')
         let libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
-
-        if (altUser) {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-        } else {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
-        }
+        OktaLogin.setupUserSession(altUser, currentUser)
 
         if (libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
