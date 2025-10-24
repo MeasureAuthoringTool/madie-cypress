@@ -12,6 +12,7 @@ let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = Environment.credentials().harpUserALT
 let harpUser = Environment.credentials().harpUser
 let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
+const adminApiKey = Environment.credentials().adminApiKey
 
 describe('Library History - Create, Update, Sharing and Unsharing Actions', () => {
 
@@ -154,6 +155,70 @@ describe('Library History - Version and Draft actions', () => {
         cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'DRAFTED')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
         cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Draft created from version 1.0.000')
+
+    })
+})
+
+describe('Library History - Transfer action', () => {
+
+    beforeEach('Create Library and Set Access Token', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newCQLLibraryName = CQLLibraryName + randValue + randValue + 4
+        updatedCQLLibraryName = newCQLLibraryName + 'Updated'
+
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
+    })
+
+    afterEach('Log out and Clean up', () => {
+
+        OktaLogin.Logout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        Utilities.deleteLibrary(newCQLLibraryName, true)
+    })
+
+    it('Verify that Transfer Library action is recorded in Library History', () => {
+
+        let currentUser = Cypress.env('selectedUser')
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
+
+        //Transfer Library to ALT User
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminApiKey
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
+                })
+            })
+        })
+
+        //Login as ALT user and verify History
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
+        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+
+        //Go to Library History and verify that Transfer Library is recorded
+        CQLLibrariesPage.cqlLibraryActionCenter('viewHistory')
+        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'OWNERSHIP_TRANSFER')
+        cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
+
+        cy.get('[data-testid="library-history-1_additionalActionMessage"]').should('contain.text', 'Transferred from ' + harpUser + ' to ' + harpUserALT)
 
     })
 })
