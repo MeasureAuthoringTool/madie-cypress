@@ -8,6 +8,7 @@ const xlsx = require('xlsx')
 export default defineConfig({
   env: { parseSpecialCharSequences: false },
   chromeWebSecurity: false,
+  modifyObstructiveCode: false,
   pageLoadTimeout: 100000,
   defaultCommandTimeout: 50000,
   video: false,
