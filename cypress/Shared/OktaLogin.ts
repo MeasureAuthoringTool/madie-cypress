@@ -31,17 +31,17 @@ export class OktaLogin {
 
         if (currentAltUser === 'altHarpUser') {
             cy.setAccessTokenCookieALT()
-            cy.get(this.usernameInput).type(Environment.credentials().harpUser)
-            cy.get(this.passwordInput).type(Environment.credentials().password)
+            cy.get(this.usernameInput).type(Environment.credentials().altHarpUser)
+            cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
         } else if (currentAltUser === 'altHarpUser2') {
             cy.setAccessTokenCookieALT2()
-            cy.get(this.usernameInput).type(Environment.credentials().harpUser2)
-            cy.get(this.passwordInput).type(Environment.credentials().password2)
+            cy.get(this.usernameInput).type(Environment.credentials().altHarpUser2)
+            cy.get(this.passwordInput).type(Environment.credentials().passwordALT2)
         }
         else if (currentAltUser === 'altHarpUser3') {
             cy.setAccessTokenCookieALT3()
-            cy.get(this.usernameInput).type(Environment.credentials().harpUser3)
-            cy.get(this.passwordInput).type(Environment.credentials().password3)
+            cy.get(this.usernameInput).type(Environment.credentials().altHarpUser3)
+            cy.get(this.passwordInput).type(Environment.credentials().passwordALT3)
         }
 
         //setup for grabbing the measure create call

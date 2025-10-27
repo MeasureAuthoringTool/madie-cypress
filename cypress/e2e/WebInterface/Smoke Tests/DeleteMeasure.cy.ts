@@ -61,9 +61,9 @@ describe('Delete Measure ownership validation', () => {
 
         OktaLogin.UILogout()
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         Utilities.deleteMeasure(measureTwo, CqlLibraryTwo)
     })
 
