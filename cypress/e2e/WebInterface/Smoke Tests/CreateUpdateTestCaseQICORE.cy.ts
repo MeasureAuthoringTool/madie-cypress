@@ -8,7 +8,6 @@ import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import {Header} from "../../../Shared/Header";
 
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
@@ -60,7 +59,7 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
 
     afterEach('Logout and delete measure', () => {
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Create and Update Test Case for Qi Core Version 4.1.1 Measure', () => {
@@ -89,14 +88,9 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
     })
 })
 
-describe.only('Create and Update Test Case for Qi Core 6 Measure', () => {
+describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     beforeEach('Create Qi Core 6 Measure and login', () => {
-
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: qiCore6MeasureCQL })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
@@ -106,12 +100,12 @@ describe.only('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     afterEach('Logout and delete measure', () => {
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
 
-        MeasuresPage.actionCenter('edit', null)
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -150,6 +144,9 @@ describe.only('Create and Update Test Case for Qi Core 6 Measure', () => {
 
         //Add json to the test case
         TestCasesPage.clickEditforCreatedTestCase()
+
+        Utilities.waitForElementVisible(TestCasesPage.testCaseAvailableElementTab, 21500)
+        cy.get(TestCasesPage.topJsonTab).click()
 
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 21500)
         cy.editTestCaseJSON(testCaseJson)
