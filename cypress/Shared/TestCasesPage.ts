@@ -24,6 +24,8 @@ export enum TestCaseAction {
 
 export class TestCasesPage {
     //Qi Core 6
+    public static readonly topElementsTab = '[data-testid="elements-tab"]'
+    public static readonly topJsonTab = '[data-testid="json-tab"]'
     public static readonly testCaseAvailableElementTab = '[data-testid="available-tab"]'
     public static readonly testCaseAddedElementTab = '[data-testid="added-tab"]'
     public static readonly elementActionBtn = '[id="basic-button"]'
@@ -690,7 +692,7 @@ export class TestCasesPage {
             altUser = false
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser)
+        user = OktaLogin.setupUserSession(altUser, currentUser, Cypress.env('selectedAltUser'))
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
@@ -761,7 +763,7 @@ export class TestCasesPage {
             altUser = false
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser)
+        user = OktaLogin.setupUserSession(altUser, currentUser, Cypress.env('selectedAltUser'))
 
         if (twoTestCases === true) {
             testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
