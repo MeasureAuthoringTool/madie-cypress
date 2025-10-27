@@ -14,8 +14,8 @@ import { Header } from "../../../../Shared/Header"
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
-let harpUser = Environment.credentials().harpUser
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUser = OktaLogin.getUser()
+let harpUserALT = OktaLogin.getAltUser()
 let measureSharingAPIKey = Environment.credentials().adminApiKey
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest

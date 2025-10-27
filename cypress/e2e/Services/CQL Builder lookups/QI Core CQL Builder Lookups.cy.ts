@@ -1,4 +1,5 @@
 import { QiCore4Cql } from "../../../Shared/FHIRMeasuresCQL"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 const cql = QiCore4Cql.EpisodeWithStrat
 
@@ -6,7 +7,9 @@ describe('CQL Builder Lookups: QI Core', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     it('Verify QI Core CQL is parsed correctly', () => {

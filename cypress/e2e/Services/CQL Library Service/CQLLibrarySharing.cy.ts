@@ -1,17 +1,23 @@
 import { Environment } from "../../../Shared/Environment"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let adminApiKey = Environment.credentials().adminApiKey
-let harpUserALT = Environment.credentials().harpUserALT
-let harpUser = Environment.credentials().harpUser
+let harpUserALT = ''
+let harpUser = ''
 
 describe('CQL Library Sharing Service', () => {
 
     beforeEach('Create CQL Library', () => {
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -55,10 +61,11 @@ describe('CQL Library Sharing Service', () => {
 describe('CQL Library sharing Validations', () => {
 
     beforeEach('Create CQL Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
@@ -67,9 +74,9 @@ describe('CQL Library sharing Validations', () => {
     })
 
     it('Verify error message when wrong API key is provided', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id + '/acls',
@@ -97,9 +104,9 @@ describe('CQL Library sharing Validations', () => {
     })
 
     it('Verify error message when the CQL Library does not exist in MADiE', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id + 5 + 'z' + '/acls',
@@ -129,9 +136,9 @@ describe('CQL Library sharing Validations', () => {
 
 
     it('Verify error Message when Non Measure owner tried to get details of CQL Library Shared with', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/sharedWith?measureids=' + id,

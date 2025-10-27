@@ -1,20 +1,17 @@
 import {Environment} from "../../../Shared/Environment"
 import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let adminApiKey = Environment.credentials().adminApiKey
 let CQLLibraryName = 'TestCqlLibrary' + Date.now()
 let CQLLibraryPublisher = 'SemanticBits'
 let libraryCQL = MeasureCQL.ICFCleanTestQICore
-let harpUser = Environment.credentials().harpUser
+let harpUser = ''
 
 describe('Verify Library usage and Delete Library', () => {
 
     before('Create CQL Library', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         //Create CQL Library
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher, false, false, libraryCQL)
@@ -22,9 +19,9 @@ describe('Verify Library usage and Delete Library', () => {
 
     beforeEach('Set Access token', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
     })
 

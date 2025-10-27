@@ -14,6 +14,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 const lockFilePath = path.join(__dirname, 'userLock.json')
+const altLockFilePath = path.join(__dirname, 'altUserLock.json')
 const unzipper = require('unzipper')
 const { removeDirectory } = require('cypress-delete-downloads-folder')
 const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
@@ -93,6 +94,38 @@ module.exports = (on, config) => {
             let lock = JSON.parse(fs.readFileSync(lockFilePath))
             lock[user] = false;
             fs.writeFileSync(lockFilePath, JSON.stringify(lock))
+            return null;
+        }
+    })
+
+    on('task', {
+        getAvailableAltUser() {
+            let lock = {};
+            if (fs.existsSync(altLockFilePath)) {
+                lock = JSON.parse(fs.readFileSync(altLockFilePath))
+            }
+
+            if (!lock.altHarpUser) {
+                lock.altHarpUser = true;
+                fs.writeFileSync(altLockFilePath, JSON.stringify(lock))
+                return 'altHarpUser';
+            } else if (!lock.altHarpUser2) {
+                lock.altHarpUser2 = true;
+                fs.writeFileSync(altLockFilePath, JSON.stringify(lock))
+                return 'altHarpUser2';
+            } else if (!lock.altHarpUser3) {
+                lock.altHarpUser3 = true;
+                fs.writeFileSync(altLockFilePath, JSON.stringify(lock))
+                return 'altHarpUser3';
+            } else {
+                return null;
+            }
+        },
+
+        releaseAltUser(user) {
+            let lock = JSON.parse(fs.readFileSync(altLockFilePath))
+            lock[user] = false;
+            fs.writeFileSync(altLockFilePath, JSON.stringify(lock))
             return null;
         }
     })

@@ -12,7 +12,7 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
 let randomCQLLibraryName = 'TransferTestCQLLibrary' + randValue + 5
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = OktaLogin.getAltUser()
 let versionNumber = '1.0.000'
 const adminApiKey = Environment.credentials().adminApiKey
 

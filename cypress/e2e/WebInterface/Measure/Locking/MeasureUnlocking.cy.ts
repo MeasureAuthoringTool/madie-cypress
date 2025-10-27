@@ -8,7 +8,7 @@ import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 const measureName = 'TestMeasure' + Date.now() + randValue
 const cqlLibraryName = 'TestMeasure' + Date.now() + randValue
-const harpUserALT = Environment.credentials().harpUserALT
+const harpUserALT = OktaLogin.getAltUser()
 
 //Skipping until Feature flag 'Locking' is removed
 describe.skip('Measure Locking Validations', () => {

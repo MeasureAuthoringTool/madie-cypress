@@ -21,22 +21,28 @@ export class OktaLogin {
     public static readonly backFromReset = '[data-se="cancel"]'
 
     public static AltLogin() {
+        const currentAltUser = Cypress.env('selectedAltUser')
 
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
 
         cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
 
-        cy.get(this.usernameInput, { timeout: 110000 }).should('be.enabled')
-        cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
-        cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
-        cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
-        cy.get(this.usernameInput).type(Environment.credentials().harpUserALT)
-        cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
-        cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
-        cy.get(this.signInButton, { timeout: 110000 }).should('be.visible')
+        if (currentAltUser === 'altHarpUser') {
+            cy.setAccessTokenCookieALT()
+            cy.get(this.usernameInput).type(Environment.credentials().harpUser)
+            cy.get(this.passwordInput).type(Environment.credentials().password)
+        } else if (currentAltUser === 'altHarpUser2') {
+            cy.setAccessTokenCookieALT2()
+            cy.get(this.usernameInput).type(Environment.credentials().harpUser2)
+            cy.get(this.passwordInput).type(Environment.credentials().password2)
+        }
+        else if (currentAltUser === 'altHarpUser3') {
+            cy.setAccessTokenCookieALT3()
+            cy.get(this.usernameInput).type(Environment.credentials().harpUser3)
+            cy.get(this.passwordInput).type(Environment.credentials().password3)
+        }
 
         //setup for grabbing the measure create call
         cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
@@ -56,44 +62,6 @@ export class OktaLogin {
         cy.get(LandingPage.newMeasureButton).should('be.visible')
         cy.log('Login Successful')
     }
-
-
-    // public static Login() {
-    //
-    //     sessionStorage.clear()
-    //     cy.clearAllCookies()
-    //     cy.clearLocalStorage()
-    //     cy.setAccessTokenCookie()
-    //
-    //     cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
-    //
-    //     cy.get(this.usernameInput, { timeout: 110000 }).should('be.enabled')
-    //     cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
-    //     cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
-    //     cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
-    //     cy.get(this.usernameInput).type(Environment.credentials().harpUser)
-    //     cy.get(this.passwordInput).type(Environment.credentials().password)
-    //     cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
-    //     cy.get(this.signInButton, { timeout: 110000 }).should('be.visible')
-    //
-    //     //setup for grabbing the measure create call
-    //     cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
-    //
-    //     cy.get(this.signInButton).click()
-    //
-    //     cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-    //
-    //         if (response.statusCode === 200) {
-    //             //do nothing
-    //         }
-    //         else {
-    //             umlsLoginForm.UMLSLogin()
-    //         }
-    //
-    //     })
-    //     cy.get(LandingPage.newMeasureButton).should('be.visible')
-    //     cy.log('Login Successful')
-    // }
 
 
     public static Login(): void {
@@ -190,7 +158,7 @@ export class OktaLogin {
     }
 
 
-    public static setupUserSession(altUser: boolean, currentUser: string) {
+    public static setupUserSession(altUser: boolean, currentUser: string, currentAltUser: string) {
         let user: string
 
         sessionStorage.clear()
@@ -198,30 +166,77 @@ export class OktaLogin {
         cy.clearLocalStorage()
 
         if (altUser) {
-            cy.setAccessTokenCookieALT();
-            user = Environment.credentials().harpUserALT;
-            Cypress.env('selectedUser', 'harpUserALT');
+            switch (currentAltUser) {
+                case 'altHarpUser':
+                    cy.setAccessTokenCookie();
+                    user = Environment.credentials().altHarpUser
+                    break
+                case 'altHarpUser2':
+                    cy.setAccessTokenCookie2()
+                    user = Environment.credentials().altHarpUser2
+                    break
+                case 'altHarpUser3':
+                    cy.setAccessTokenCookie3()
+                    user = Environment.credentials().altHarpUser3
+                    break
+                default:
+                    throw new Error(`Unknown user type: ${currentAltUser}`)
+            }
         } else {
             switch (currentUser) {
                 case 'harpUser':
                     cy.setAccessTokenCookie();
-                    user = Environment.credentials().harpUser;
-                    break;
+                    user = Environment.credentials().harpUser
+                    break
                 case 'harpUser2':
-                    cy.log('we hit number 2')
-                    cy.setAccessTokenCookie2();
-                    user = Environment.credentials().harpUser2;
+                    cy.setAccessTokenCookie2()
+                    user = Environment.credentials().harpUser2
                     break;
                 case 'harpUser3':
                     cy.setAccessTokenCookie3();
                     user = Environment.credentials().harpUser3;
-                    break;
+                    break
                 default:
-                    throw new Error(`Unknown user type: ${currentUser}`);
+                    throw new Error(`Unknown user type: ${currentUser}`)
             }
         }
 
-        return user;
+        return user
     }
 
+    public static getUser(altUser: boolean, currentUser: string, currentAltUser: string) {
+        let user: string
+
+        if (altUser) {
+            switch (currentAltUser) {
+                case 'altHarpUser':
+                    user = Environment.credentials().altHarpUser
+                    break
+                case 'altHarpUser2':
+                    user = Environment.credentials().altHarpUser2
+                    break
+                case 'altHarpUser3':
+                    user = Environment.credentials().altHarpUser3
+                    break
+                default:
+                    throw new Error(`Unknown user type: ${currentAltUser}`)
+            }
+        } else {
+            switch (currentUser) {
+                case 'harpUser':
+                    user = Environment.credentials().harpUser
+                    break
+                case 'harpUser2':
+                    user = Environment.credentials().harpUser2
+                    break;
+                case 'harpUser3':
+                    user = Environment.credentials().harpUser3;
+                    break
+                default:
+                    throw new Error(`Unknown user type: ${currentUser}`)
+            }
+        }
+
+        return user
+    }
 }

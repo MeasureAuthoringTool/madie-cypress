@@ -1,3 +1,5 @@
+import {OktaLogin} from "../../../Shared/OktaLogin";
+
 export { }
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 
@@ -6,7 +8,9 @@ describe('CQL Translation Service', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
     })
 

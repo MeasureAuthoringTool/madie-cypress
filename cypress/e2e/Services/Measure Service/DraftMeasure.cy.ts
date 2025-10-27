@@ -1,4 +1,3 @@
-import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
@@ -8,7 +7,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-//let currentUser = Cypress.env('selectedUser')
+
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
@@ -17,16 +16,16 @@ const now = require('dayjs')
 let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
 let elmJson = "{\"library\":{\"identifier\":{\"id\":\"SimpleFhirMeasureLib\",\"version\":\"0.0.004\"},\"schemaIdentifier\":{\"id\":\"urn:hl7-org:elm\",\"version\":\"r1\"},\"usings\":{\"def\":[{\"localIdentifier\":\"System\",\"uri\":\"urn:hl7-org:elm-types:r1\"},{\"localId\":\"1\",\"locator\":\"2:1-2:26\",\"localIdentifier\":\"FHIR\",\"uri\":\"http://hl7.org/fhir\",\"version\":\"4.0.1\",\"annotation\":[{\"type\":\"Annotation\",\"s\":{\"r\":\"1\",\"s\":[{\"value\":[\"\",\"using \"]},{\"s\":[{\"value\":[\"FHIR\"]}]},{\"value\":[\" version \",\"'4.0.1'\"]}]}}]}]},\"includes\":{\"def\":[{\"localId\":\"2\",\"locator\":\"3:1-3:56\",\"localIdentifier\":\"FHIRHelpers\",\"path\":\"FHIRHelpers\",\"version\":\"4.1.000\",\"annotation\":[{\"type\":\"Annotation\",\"s\":{\"r\":\"2\",\"s\":[{\"value\":[\"\",\"include \"]},{\"s\":[{\"value\":[\"FHIRHelpers\"]}]},{\"value\":[\" version \",\"'4.0.001'\",\" called \",\"FHIRHelpers\"]}]}}]}]},\"parameters\":{\"def\":[{\"localId\":\"5\",\"locator\":\"4:1-4:49\",\"accessLevel\":\"Public\",\"annotation\":[{\"type\":\"Annotation\",\"s\":{\"r\":\"5\",\"s\":[{\"value\":[\"\",\"parameter \",\"'Measurement Period'\",\" \"]},{\"r\":\"4\",\"s\":[{\"value\":[\"Interval<\"]},{\"r\":\"3\",\"s\":[{\"value\":[\"DateTime\"]}]},{\"value\":[\">\"]}]}]}}],\"parameterTypeSpecifier\":{\"localId\":\"4\",\"locator\":\"4:32-4:49\",\"type\":\"IntervalTypeSpecifier\",\"pointType\":{\"localId\":\"3\",\"locator\":\"4:41-4:48\",\"name\":\"{urn:hl7-org:elm-types:r1}DateTime\",\"type\":\"NamedTypeSpecifier\"}}}]},\"contexts\":{\"def\":[{\"locator\":\"5:1-5:15\",\"name\":\"Patient\"}]},\"statements\":{\"def\":[{\"locator\":\"5:1-5:15\",\"name\":\"Patient\",\"context\":\"Patient\",\"expression\":{\"type\":\"SingletonFrom\",\"operand\":{\"locator\":\"5:1-5:15\",\"dataType\":\"{http://hl7.org/fhir}Patient\",\"templateId\":\"http://hl7.org/fhir/StructureDefinition/Patient\",\"type\":\"Retrieve\"}}}]}},\"externalErrors\":[]}"
-let harpUser = Environment.credentials().harpUser
+let harpUser = ''
 let measureName = 'TestMeasure' + Date.now()
 
 describe('Version and Draft CQL Library', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -56,10 +55,8 @@ describe('Version and Draft CQL Library', () => {
         let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -112,12 +109,10 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('User cannot create a draft when a draft already exists, per measure', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
-        let currentUser = Cypress.env('selectedUser')
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
         let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
@@ -210,10 +205,11 @@ describe('Version and Draft CQL Library', () => {
 describe('Draftable API end point tests', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
@@ -231,18 +227,15 @@ describe('Draftable API end point tests', () => {
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
     it('Draftable end point return measure set id that was used in request and false if the measure is not version', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
-        let currentUser = Cypress.env('selectedUser')
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
         let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
@@ -266,11 +259,11 @@ describe('Draftable API end point tests', () => {
     })
     it('Draftable end point return measure set id that was used in request and false if another measure, in that measure family, is in a draft status', () => {
         let newerMeasureName = ''
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
-        let currentUser = Cypress.env('selectedUser')
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
         let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
@@ -315,7 +308,7 @@ describe('Draftable API end point tests', () => {
                             }
 
                         }).then((response) => {
-                            currentUser = Cypress.env('selectedUser')
+                            let currentUser = Cypress.env('selectedUser')
                             expect(response.status).to.eql(201)
                             cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                         })
@@ -394,9 +387,11 @@ describe('Draftable API end point tests', () => {
         let newerMeasureName = ''
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.clearAllSessionStorage({ log: true })
-        let currentUser = Cypress.env('selectedUser')
+
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
         let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'

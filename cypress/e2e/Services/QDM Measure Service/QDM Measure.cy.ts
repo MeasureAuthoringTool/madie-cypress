@@ -2,11 +2,12 @@ import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let measureName = ''
 let CQLLibraryName = ''
 let QDMModel = 'QDM v5.6'
-let harpUser = Environment.credentials().harpUser
+let harpUser = ''
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
@@ -17,7 +18,9 @@ describe('Measure Service: QDM Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
     afterEach('Clean up', () => {
 
@@ -195,7 +198,9 @@ describe('QDM Measure: Transmission format', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CQLLibraryName)
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Delete Measure', () => {

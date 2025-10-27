@@ -10,7 +10,7 @@ let cqlLibraryName = 'TestCql' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedMeasureName = ''
 let updatedCQLLibraryName = ''
-const harpUser = Environment.credentials().harpUserALT
+let harpUser = ''
 const measureCQL = MeasureCQL.SBTEST_CQL
 const model = 'QI-Core v4.1.1'
 const versionIdPath = 'cypress/fixtures/versionId'
@@ -27,9 +27,10 @@ describe('Measure Service: Edit Measure', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         cy.clearAllSessionStorage({ log: true })
 
     })

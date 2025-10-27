@@ -18,7 +18,7 @@ const cqlLibraryName = 'MeasureTransferLib'
 const randomMeasureName = 'TransferedMeasure'
 
 const versionNumber = '1.0.000'
-const harpUserALT = Environment.credentials().harpUserALT
+const harpUserALT = OktaLogin.getAltUser()
 const measureCQL = MeasureCQL.SBTEST_CQL
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const testCaseTitle = 'Title for Auto Test'

@@ -28,9 +28,9 @@ describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
@@ -105,9 +105,7 @@ describe('Measure Association: Validations', () => {
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         QiCoreMeasureName0 = 'ProportionPatientMN0' + Date.now() + randValue + 2 + randValue
         QiCoreCqlLibraryName0 = 'ProportionPatientLN0' + Date.now() + randValue + 3 + randValue
@@ -273,9 +271,8 @@ describe('Measure Association: Validations', () => {
             })
         })
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
         QiCoreMeasureNameAlt = QiCoreMeasureName1 + 4 + randValue
         QiCoreCqlLibraryNameAlt = QiCoreCqlLibraryName1 + 5 + randValue
 
@@ -292,9 +289,7 @@ describe('Measure Association: Validations', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qdmId2) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((qicoreId4) => {
@@ -321,9 +316,9 @@ describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
@@ -351,9 +346,7 @@ describe('Measure Association: Validations', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         QiCoreMeasureName1 = 'ProportionPatientMN1' + Date.now() + randValue + 4 + randValue
         QiCoreCqlLibraryName1 = 'ProportionPatientLN1' + Date.now() + randValue + 5 + randValue
@@ -372,9 +365,7 @@ describe('Measure Association: Validations', () => {
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     it('Association: QDM -> Qi Core measure: Successful Association', () => {

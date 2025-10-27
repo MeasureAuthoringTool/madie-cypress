@@ -4,7 +4,9 @@ export class Environment {
      */
 
     public static credentials = (): { harpUser: string, password: string,harpUser2: string,
-        password2: string,harpUser3: string, password3: string, harpUserALT: string, passwordALT: string, umls_API_KEY: string, adminApiKey: string } => {
+        password2: string,harpUser3: string, password3: string, altHarpUser: string, altHarpUser2: string,
+        altHarpUser3: string, passwordALT: string, passwordALT2: string, passwordALT3: string,  umls_API_KEY: string,
+        adminApiKey: string } => {
         switch (Cypress.env('environment')) {
             case 'dev': {
                 return {
@@ -14,8 +16,12 @@ export class Environment {
                     password2: Cypress.env('TEST_PASSWORD2'),
                     harpUser3: Cypress.env('TEST_USERNAME3'),
                     password3: Cypress.env('TEST_PASSWORD3'),
-                    harpUserALT: Cypress.env('TEST_ALT_USERNAME'),
+                    altHarpUser: Cypress.env('TEST_ALT_USERNAME'),
+                    altHarpUser2: Cypress.env('TEST_ALT_USERNAME2'),
+                    altHarpUser3: Cypress.env('TEST_ALT_USERNAME3'),
                     passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
+                    passwordALT2: Cypress.env('TEST_ALT_PASSWORD2'),
+                    passwordALT3: Cypress.env('TEST_ALT_PASSWORD3'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     adminApiKey: Cypress.env('DEV_ADMIN_API_KEY')
                 }
@@ -28,8 +34,12 @@ export class Environment {
                     password2: Cypress.env('TEST_PASSWORD2'),
                     harpUser3: Cypress.env('TEST_USERNAME3'),
                     password3: Cypress.env('TEST_PASSWORD3'),
-                    harpUserALT: Cypress.env('TEST_ALT_USERNAME'),
+                    altHarpUser: Cypress.env('TEST_ALT_USERNAME'),
+                    altHarpUser2: Cypress.env('TEST_ALT_USERNAME2'),
+                    altHarpUser3: Cypress.env('TEST_ALT_USERNAME3'),
                     passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
+                    passwordALT2: Cypress.env('TEST_ALT_PASSWORD2'),
+                    passwordALT3: Cypress.env('TEST_ALT_PASSWORD3'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     adminApiKey: Cypress.env('DEV_ADMIN_API_KEY')
                 }

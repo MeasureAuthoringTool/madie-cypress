@@ -9,7 +9,7 @@ import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = OktaLogin.getAltUser()
 let measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Un Sharing', () => {

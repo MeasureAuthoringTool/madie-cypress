@@ -1,17 +1,18 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
-let harpUser = Environment.credentials().harpUser
+let harpUser = ''
 
 describe('CQL Library Service: Create CQL Library', () => {
 
     it('Create QI-Core CQL Library, successful creation', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false,currentUser, currentAltUser)
+
         let setId = uuidv4()
 
         CQLLibraryName = 'QICoreCqlLibrary' + Date.now()
@@ -41,9 +42,9 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Create QDM CQL Library, successful creation', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false,currentUser, currentAltUser)
 
         CQLLibraryName = 'QDMCqlLibrary' + Date.now()
 
@@ -72,10 +73,10 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get All CQL Libraries', () => {
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false,currentUser, currentAltUser)
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 url: '/api/cql-libraries/searches',
@@ -96,14 +97,13 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get specific CQL Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false,currentUser, currentAltUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'GET',
@@ -120,9 +120,10 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get All CQL Libraries created by logged in User', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -158,13 +159,13 @@ describe('CQL Library Name validations', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     it('Validation Error: CQL Library Name empty', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
 
         CQLLibraryName = " "
 
@@ -190,9 +191,6 @@ describe('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name has special characters', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = 'Test_Measure'
 
@@ -217,9 +215,6 @@ describe('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name does not start with an Upper Case letter', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = 'testMeasure'
 
@@ -244,9 +239,6 @@ describe('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name contains spaces', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = 'Test  Measure'
 
@@ -271,9 +263,6 @@ describe('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name has only numbers', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = '1234565'
 
@@ -298,9 +287,6 @@ describe('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name has more than 255 characters', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = 'Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw'
 
@@ -325,9 +311,6 @@ describe('CQL Library Name validations', () => {
     })
 
     it('Validation Error: Duplicate CQL Library Name', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = apiCQLLibraryName
 
@@ -356,13 +339,12 @@ describe('CQL Library Model Validations', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     it('Validation Error: CQL Library Model empty', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
@@ -387,9 +369,6 @@ describe('CQL Library Model Validations', () => {
     })
 
     it('Validation Error: Invalid CQL Library Model', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 

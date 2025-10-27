@@ -13,8 +13,8 @@ import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
-let harpUser = Environment.credentials().harpUser
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUser = ''
+let harpUserALT = ''
 let measureTwo = 'MeasureTwo' + Date.now()
 let cqlLibraryTwo = 'LibraryTwo' + Date.now()
 let testCaseTitle = 'FAIL'
@@ -62,9 +62,11 @@ let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'
 describe('Measure Versioning', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
     })
 
@@ -108,10 +110,10 @@ describe('Measure Versioning', () => {
     })
 
     it('Non Measure owner unable to version Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -175,9 +177,9 @@ describe('Version Measure with invalid CQL', () => {
         newMeasureName = measureName + 3 + randValue
         newCQLLibraryName = cqlLibraryName + 3 + randValue
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -440,9 +442,9 @@ describe('Delete validations for versioned Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     it('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {

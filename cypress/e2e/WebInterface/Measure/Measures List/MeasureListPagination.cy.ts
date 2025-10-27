@@ -9,7 +9,7 @@ let measureIds = []
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
-const harpUser = Environment.credentials().harpUser
+const harpUser = OktaLogin.getUser()
 
 describe('Measure List Pagination', () => {
 

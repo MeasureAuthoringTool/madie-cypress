@@ -24,7 +24,7 @@ const options: CreateMeasureOptions = {
 
 //let measureCQL6 = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = OktaLogin.getAltUser()
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()

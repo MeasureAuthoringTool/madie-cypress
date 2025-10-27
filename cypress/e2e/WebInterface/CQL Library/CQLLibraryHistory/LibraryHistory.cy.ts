@@ -9,8 +9,8 @@ let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = Environment.credentials().harpUserALT
-let harpUser = Environment.credentials().harpUser
+let harpUserALT = OktaLogin.getAltUser()
+let harpUser = OktaLogin.getUser()
 let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
 const adminApiKey = Environment.credentials().adminApiKey
 

@@ -1,11 +1,11 @@
 import { Utilities } from "../../../Shared/Utilities"
-import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let measureName = ''
 let CQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
-let harpUser = Environment.credentials().harpUser
+let harpUser = ''
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
@@ -14,7 +14,9 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 
 describe('Measure Service: Create Measure', function () {
     beforeEach('Set Access Token', function () {
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
     after('Clean up', function () {
         Utilities.deleteMeasure(measureName, CQLLibraryName)

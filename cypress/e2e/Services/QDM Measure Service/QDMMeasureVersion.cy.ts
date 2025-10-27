@@ -9,8 +9,8 @@ import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
-let harpUser = Environment.credentials().harpUser
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUser = ''
+let harpUserALT = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCQLLibraryName = ''
@@ -90,9 +90,10 @@ describe('Measure Versioning', () => {
     newCQLLibraryName = cqlLibraryName + 1 + randValue
 
     before('Create Measure', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCQLLibraryName
@@ -187,10 +188,10 @@ describe('Measure Version : Non Measure owner validation', () => {
     })
 
     it('Non Measure owner unable to version Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.setupUserSession(true, currentUser, currentAltUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -225,9 +226,10 @@ describe('Version Measure without CQL', () => {
         measureData.measureCql = null
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
     })
     after('Clean up', () => {
@@ -264,9 +266,10 @@ describe('Version Measure with invalid CQL', () => {
         newMeasureName = measureName + 3 + randValue
         newCQLLibraryName = cqlLibraryName + 3 + randValue
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCQLLibraryName
@@ -283,9 +286,8 @@ describe('Version Measure with invalid CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
     })
 
     after('Clean up', () => {

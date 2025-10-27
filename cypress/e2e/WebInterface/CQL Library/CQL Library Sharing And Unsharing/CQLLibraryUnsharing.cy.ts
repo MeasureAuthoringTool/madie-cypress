@@ -9,7 +9,7 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = OktaLogin.getAltUser()
 let updatedCQLLibraryName = ''
 
 describe('Un Share CQL Library using Action Center buttons', () => {

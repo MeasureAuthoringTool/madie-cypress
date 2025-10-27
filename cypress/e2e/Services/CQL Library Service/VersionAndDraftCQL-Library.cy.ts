@@ -3,12 +3,13 @@ import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
 import { LibraryCQL } from "../../../Shared/LibraryCQL"
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
 let updatedCqlLibraryName = 'UpdatedTestLibrary' + Date.now()
-const harpUser = Environment.credentials().harpUser
-const harpUserALT = Environment.credentials().harpUserALT
+let harpUser = ''
+let harpUserALT = ''
 const model = 'QI-Core v4.1.1'
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
@@ -17,10 +18,10 @@ const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
 describe('Version and Draft CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
     })
 
     before('Create CQL Library', () => {
@@ -40,9 +41,9 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('User can not draft CQL Library if the CQL Library naming validations fail', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
@@ -65,9 +66,9 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('User can not draft CQL Library if the CQL Library name is empty', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
@@ -91,9 +92,9 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('Add Draft to the Versioned Library', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
@@ -116,12 +117,12 @@ describe('Version and Draft CQL Library', () => {
 
     it('Verify non Library owner unable to create Version', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/version/' + cqlLibraryId2 + '?isMajor=true',
@@ -142,10 +143,11 @@ describe('Version and Draft CQL Library', () => {
 describe('Draft and Version Validations', () => {
 
     beforeEach('Set Access Token and create CQL Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CqlLibraryOne = 'TestLibraryOne' + Date.now()
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
@@ -153,12 +155,13 @@ describe('Draft and Version Validations', () => {
 
     it('Verify the CQL Library updates are restricted after Version is created', () => {
 
+        const currentUser = Cypress.env('selectedUser')
         //Add Version to the CQL Library
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Edit Library Name after versioned
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -206,20 +209,20 @@ describe('Version CQL Library without CQL', () => {
 
     before('Set Access Token and create CQL Library', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CqlLibraryOne = 'CQLLibraryWithoutCQL' + Date.now()
         CQLLibraryPage.createCQLLibraryAPI(CqlLibraryOne, CQLLibraryPublisher)
     })
 
     it('User can not version CQL Library if there is no CQL', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //Add Version to the CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
@@ -241,20 +244,20 @@ describe('Version CQL Library with invalid CQL', () => {
 
     before('Set Access Token and create CQL Library', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CqlLibraryOne = 'CQLLibraryWithInvalidCQL' + Date.now()
         CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true })
     })
 
     it('User can not version the CQL library if the CQL has errors', () => {
-
+        const currentUser = Cypress.env('selectedUser')
         //Add Version to the CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
