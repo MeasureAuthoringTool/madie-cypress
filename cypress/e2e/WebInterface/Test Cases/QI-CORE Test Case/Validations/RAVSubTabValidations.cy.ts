@@ -91,8 +91,6 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.wait('@callstacks', { timeout: 120000 })
-
         //Execute test case
         cy.get(TestCasesPage.runTestButton).click()
         Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 9500)

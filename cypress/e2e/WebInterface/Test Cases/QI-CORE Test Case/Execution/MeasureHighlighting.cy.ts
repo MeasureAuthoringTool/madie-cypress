@@ -1161,9 +1161,6 @@ describe('Measure Highlighting', () => {
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
-
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
@@ -1269,9 +1266,6 @@ describe('Highlighting accurately appears for a single PC measure', () => {
 
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1425,9 +1419,6 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
-
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
@@ -1560,9 +1551,6 @@ describe('Highlighting tab shows Results, Definitions, Functions, and Unused sec
 
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1698,9 +1686,6 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
-
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
@@ -1806,9 +1791,6 @@ describe('Highlighting accurately appears for a measure with same Definition in 
 
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 137000 })
 
         //run test case
         cy.get(TestCasesPage.runTestButton).should('be.visible')
