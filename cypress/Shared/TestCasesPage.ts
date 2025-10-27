@@ -663,6 +663,7 @@ export class TestCasesPage {
     }
 
     public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+
         const currentUser = Cypress.env('selectedUser')
         let testCasePIdPath = ''
         if (secondTestCase) {
@@ -679,6 +680,9 @@ export class TestCasesPage {
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').click()
         })
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 140000 })
 
     }
 

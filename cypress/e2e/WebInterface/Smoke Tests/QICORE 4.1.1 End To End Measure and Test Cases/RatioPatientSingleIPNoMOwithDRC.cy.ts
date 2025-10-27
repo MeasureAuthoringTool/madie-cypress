@@ -133,9 +133,6 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
-
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
@@ -184,9 +181,6 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

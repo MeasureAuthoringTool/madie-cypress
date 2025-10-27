@@ -63,9 +63,6 @@ describe('Test Case sorting by Test Case number', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
-
         cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #1: Test Series 1 - Test Case 1')
 
         TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group, testCase2.json)
@@ -113,8 +110,6 @@ describe('Test Case sorting by Test Case number', () => {
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList)
 
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.wait('@callstacks', { timeout: 120000 })
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
         cy.get(TestCasesPage.testCaseTitle).click()

@@ -76,9 +76,6 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
-
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')

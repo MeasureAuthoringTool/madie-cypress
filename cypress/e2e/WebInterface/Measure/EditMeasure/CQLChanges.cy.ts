@@ -248,13 +248,11 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //Click on RunTest Button
-        cy.wait('@callstacks', { timeout: 120000 })
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 21500)
