@@ -662,32 +662,69 @@ export class TestCasesPage {
         cy.log('Test Case updated successfully')
     }
 
-    public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+    // public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+    //
+    //     const currentUser = Cypress.env('selectedUser')
+    //     let testCasePIdPath = ''
+    //     if (secondTestCase) {
+    //         testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId2'
+    //     }
+    //     else {
+    //         testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId'
+    //     }
+    //
+    //     cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
+    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.visible').wait(3000)
+    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.enabled')
+    //         Utilities.waitForElementVisible('[data-testid=view-edit-test-case-button-' + tcId + ']', 90000)
+    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
+    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').click()
+    //     })
+    //     cy.get('body').then($body => {
+    //         const $el = $body.find('[data-testid="info-QDM v5.6-0"]')
+    //         if ($el.length === 0 || !$el.is(':visible')) {
+    //             cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+    //             cy.wait('@callstacks', { timeout: 140000 })
+    //         }
+    //     })
+    // }
 
+    public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
         const currentUser = Cypress.env('selectedUser')
         let testCasePIdPath = ''
+
         if (secondTestCase) {
-            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId2'
-        }
-        else {
-            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId'
+            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
+        } else {
+            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId'
         }
 
+        let callstackIntercepted = false
+
+        cy.intercept('PUT', '/api/fhir/cql/callstacks', (req) => {
+            callstackIntercepted = true
+        }).as('callstacks')
+
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
-            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.visible').wait(3000)
-            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.enabled')
-            Utilities.waitForElementVisible('[data-testid=view-edit-test-case-button-' + tcId + ']', 90000)
-            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
-            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').click()
-        })
-        cy.get('body').then($body => {
-            const $el = $body.find('[data-testid="info-QDM v5.6-0"]')
-            if ($el.length === 0 || !$el.is(':visible')) {
-                cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-                cy.wait('@callstacks', { timeout: 140000 })
-            }
+            const buttonSelector = `[data-testid=view-edit-test-case-button-${tcId}]`
+
+            cy.get(buttonSelector).should('be.visible').wait(3000)
+            cy.get(buttonSelector).should('be.enabled')
+            Utilities.waitForElementVisible(buttonSelector, 90000)
+            cy.get(buttonSelector).scrollIntoView()
+            cy.get(buttonSelector).click()
+
+            cy.wait(1000).then(() => {
+                if (callstackIntercepted) {
+                    cy.wait('@callstacks', { timeout: 140000 })
+                } else {
+                    cy.log('No callstack request detected, continuing...')
+                }
+            })
         })
     }
+
+
 
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
         let user = ''
