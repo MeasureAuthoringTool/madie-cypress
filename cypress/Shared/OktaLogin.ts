@@ -230,7 +230,7 @@ export class OktaLogin {
                     user = Environment.credentials().harpUser2
                     break;
                 case 'harpUser3':
-                    user = Environment.credentials().harpUser3;
+                    user = Environment.credentials().harpUser3
                     break
                 default:
                     throw new Error(`Unknown user type: ${currentUser}`)

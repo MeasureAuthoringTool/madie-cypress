@@ -14,8 +14,8 @@ import { Header } from "../../../../Shared/Header"
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
-let harpUser = OktaLogin.getUser()
-let harpUserALT = OktaLogin.getAltUser()
+let harpUser = ''
+let harpUserALT = ''
 let measureSharingAPIKey = Environment.credentials().adminApiKey
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
@@ -32,6 +32,10 @@ measureData.measureCql = measureCQL
 describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Actions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
@@ -40,9 +44,6 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
@@ -177,6 +178,11 @@ describe('Measure History - Version and Draft actions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
@@ -192,9 +198,6 @@ describe('Measure History - Version and Draft actions', () => {
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
@@ -252,9 +255,10 @@ describe('Measure History - Associate Measure actions', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         //Create New QDM Measure
         //0
@@ -269,9 +273,8 @@ describe('Measure History - Associate Measure actions', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create new QI Core measure
         //1
@@ -288,17 +291,12 @@ describe('Measure History - Associate Measure actions', () => {
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(measureQDMManifestName1, QDMCqlLibraryName1)
     })
 

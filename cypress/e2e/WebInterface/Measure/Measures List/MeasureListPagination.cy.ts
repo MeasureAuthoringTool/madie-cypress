@@ -9,16 +9,17 @@ let measureIds = []
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
-const harpUser = OktaLogin.getUser()
+let harpUser = ''
 
 describe('Measure List Pagination', () => {
 
     before('Create Measures and Login', () => {
 
-        let currentUser = Cypress.env('selectedUser')
-        let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
-        cy.setAccessTokenCookie()
+        let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 
         let fileContents = ''
 
@@ -69,7 +70,8 @@ describe('Measure List Pagination', () => {
         let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         let measureSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         let idsList = ''
 

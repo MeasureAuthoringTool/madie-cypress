@@ -9,15 +9,18 @@ let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = OktaLogin.getAltUser()
-let harpUser = OktaLogin.getUser()
+let harpUserALT = ''
+let harpUser = ''
 let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
 const adminApiKey = Environment.credentials().adminApiKey
 
 describe('Library History - Create, Update, Sharing and Unsharing Actions', () => {
 
     beforeEach('Create Library and Login', () => {
-
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
@@ -28,9 +31,6 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -110,6 +110,10 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 describe('Library History - Version and Draft actions', () => {
 
     beforeEach('Create Library and Set Access Token', () => {
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 4
@@ -162,6 +166,10 @@ describe('Library History - Version and Draft actions', () => {
 describe('Library History - Transfer action', () => {
 
     beforeEach('Create Library and Set Access Token', () => {
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 4
@@ -173,20 +181,13 @@ describe('Library History - Transfer action', () => {
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         Utilities.deleteLibrary(newCQLLibraryName, true)
     })
 
     it('Verify that Transfer Library action is recorded in Library History', () => {
 
         let currentUser = Cypress.env('selectedUser')
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {

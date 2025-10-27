@@ -7,8 +7,8 @@ import { Measure } from "@madie/madie-models"
 import {OktaLogin} from "./OktaLogin"
 
 const adminApiKey = Environment.credentials().adminApiKey
-const harpUser = OktaLogin.getUser()
-const harpUserALT = OktaLogin.getAltUser()
+let harpUser = ''
+let harpUserALT = ''
 
 export enum PermissionActions {
     GRANT = 'GRANT',
@@ -603,17 +603,12 @@ export class Utilities {
 
     public static verifyAllLocksDeleted(type: MadieObject, altUser?: boolean) {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        // only works with harpUser now, no current use-case to support altUser
-        if (altUser) {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-        } else {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
-        }
+        OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         switch (type) {
 
