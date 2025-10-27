@@ -680,10 +680,13 @@ export class TestCasesPage {
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').click()
         })
-
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 140000 })
-
+        cy.get('body').then($body => {
+            const $el = $body.find('[data-testid="info-QDM v5.6-0"]')
+            if ($el.length === 0 || !$el.is(':visible')) {
+                cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+                cy.wait('@callstacks', { timeout: 140000 })
+            }
+        })
     }
 
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
