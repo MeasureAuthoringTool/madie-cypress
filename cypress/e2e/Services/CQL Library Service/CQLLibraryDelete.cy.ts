@@ -2,22 +2,24 @@ import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = ''
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
-let harpUser = Environment.credentials().harpUser
+let harpUser = ''
 const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'
 
 describe('Delete CQL Library: Tests covering Libraries that are in draft and versioned states as well as when user is the owner, when user has had Library transferred to them, and when the user is neither the owner nor has had the Library transferred to them', () => {
 
     beforeEach('Set Access Token', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
@@ -25,10 +27,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     })
 
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -47,10 +48,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
     it('Delete CQL Library - Draft Library - user is the owner of the Library', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         //set local user that does not own the measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
@@ -68,10 +68,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     })
 
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -87,10 +86,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
                 })
             })
 
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-            cy.clearAllSessionStorage({ log: true })
+            OktaLogin.setupUserSession(true, currentUser, currentAltUser)
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                     cy.request({
@@ -108,16 +104,12 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     })
 
     it('Delete CQL Library - Versioned Library - user does not own nor has Library been shared with user', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -135,16 +127,12 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     })
 
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -162,10 +150,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -180,17 +167,12 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
                     expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
-
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-            cy.clearAllSessionStorage({ log: true })
+            const currentAltUser = Cypress.env('selectedAltUser')
+            const currentUser = Cypress.env('selectedUser')
+            OktaLogin.setupUserSession(false, currentUser, currentAltUser)
             CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-            cy.clearAllSessionStorage({ log: true })
+            OktaLogin.setupUserSession(true, currentUser, currentAltUser)
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                     cy.request({
@@ -210,11 +192,11 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
     it('Delete all Versions of the CQL Library - user is the owner of the Library', () => {
         //Version Library
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
+
 
         //Draft Versioned Library
         cy.getCookie('accessToken').then((accessToken) => {
@@ -238,10 +220,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
                 })
             })
         })
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 url: '/api/cql-libraries/' + CQLLibraryName + '/delete-all-versions',
@@ -274,10 +254,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
     it('Delete all Versions of the CQL Library - user does not own nor has Library been shared with user', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({

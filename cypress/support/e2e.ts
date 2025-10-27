@@ -49,11 +49,19 @@ before(() => {
         expect(user).to.not.be.null;
         Cypress.env('selectedUser', user)
     })
+    cy.task('getAvailableAltUser').then((altUser) => {
+        expect(altUser).to.not.be.null;
+        Cypress.env('selectedAltUser', altUser)
+    })
 })
 
 after(() => {
     const user = Cypress.env('selectedUser')
+    const altUser = Cypress.env('selectedAltUser')
     if (user) {
         cy.task('releaseUser', user)
+    }
+    if (altUser) {
+        cy.task('releaseAltUser', altUser)
     }
 })

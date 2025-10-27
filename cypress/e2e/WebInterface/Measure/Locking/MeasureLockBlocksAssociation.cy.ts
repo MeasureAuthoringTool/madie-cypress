@@ -8,12 +8,11 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
 import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
-import { Environment } from "../../../../Shared/Environment"
 
 const now = Date.now()
 const qdmMeasureName = 'LockBlockQDM' + now
 const qicoreMeasureName = 'LockBlockQicore' + now
-const harpUserALT = Environment.credentials().harpUserALT
+const harpUserALT = OktaLogin.getAltUser()
 const qdmManifestTestCQL = QdmCql.qdmCQLManifestTest
 const measureCQLPFTests = QiCore4Cql.CQL_Populations
 

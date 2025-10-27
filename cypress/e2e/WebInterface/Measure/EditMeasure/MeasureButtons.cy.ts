@@ -22,7 +22,7 @@ let measureQICore = ''
 let measureQDM = ''
 let qdmCQLLibrary = ''
 let qiCoreCQLLibrary = ''
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = OktaLogin.getAltUser()
 
 const measureData: CreateMeasureOptions = {}
 

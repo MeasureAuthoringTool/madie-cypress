@@ -1,4 +1,3 @@
-import { Environment } from "../../../../Shared/Environment"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
@@ -17,7 +16,7 @@ let cqlLibraryName = 'TestCql' + Date.now()
 let updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
 let updatedMeasureName = measureName + 'someUpdate'
 let updatedMeasuresPageName = ''
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -31,6 +30,10 @@ describe('Measure Sharing', () => {
     let newCqlLibraryName = cqlLibraryName + randValue
 
     beforeEach('Create Measure and Set Access Token', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -53,8 +56,9 @@ describe('Measure Sharing', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    it('Verify shared Measure is viewable under Shared Measure tab', () => {
-
+    it.only('Verify shared Measure is viewable under Shared Measure tab', () => {
+cy.log(harpUserALT)
+        cy.pause()
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
@@ -231,6 +235,10 @@ describe('Measure Sharing - Multiple instances', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         OktaLogin.Login()
@@ -330,6 +338,10 @@ describe('Delete Test Case with Shared user', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
@@ -369,6 +381,10 @@ describe('Delete Test Case with Shared user', () => {
 describe('Remove user\'s share access from a measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 

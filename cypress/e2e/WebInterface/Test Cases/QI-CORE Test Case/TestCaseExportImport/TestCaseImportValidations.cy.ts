@@ -9,12 +9,11 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
-import { Environment } from "../../../../../Shared/Environment"
 import { Toasts } from "../../../../../Shared/Toasts"
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
-const harpUserALT = Environment.credentials().harpUserALT
+const harpUserALT = OktaLogin.getAltUser()
 
 const measureName = 'ImportValidations' + Date.now()
 let CqlLibraryName = 'ImportValidationsLib' + Date.now()

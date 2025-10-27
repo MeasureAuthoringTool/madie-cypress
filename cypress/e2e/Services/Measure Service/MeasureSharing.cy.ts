@@ -2,17 +2,23 @@ import {MeasureCQL} from "../../../Shared/MeasureCQL"
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import {Utilities} from "../../../Shared/Utilities"
 import {Environment} from "../../../Shared/Environment"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureSharingAPIKey = Environment.credentials().adminApiKey
-let harpUserALT = Environment.credentials().harpUserALT
-let harpUser = Environment.credentials().harpUser
+let harpUserALT = ''
+let harpUser = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Sharing Service', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })

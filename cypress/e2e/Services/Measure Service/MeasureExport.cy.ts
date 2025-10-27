@@ -148,7 +148,8 @@ describe('QI-Core Measure Export', () => {
                 })
             })
         })
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
 
@@ -301,7 +302,9 @@ describe('Error Message on Measure Export when the Measure does not have Steward
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create Measure with out Steward and Developer
         cy.getCookie('accessToken').then((accessToken) => {
@@ -369,7 +372,9 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create Measure with out Steward and Developer
         cy.getCookie('accessToken').then((accessToken) => {
@@ -456,7 +461,9 @@ describe('QDM Measure Export', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = qdmMeasureCQL
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)

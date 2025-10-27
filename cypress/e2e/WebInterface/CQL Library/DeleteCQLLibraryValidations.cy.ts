@@ -11,7 +11,7 @@ import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 let currentUser = Cypress.env('selectedUser')
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
-const harpUserALT = Environment.credentials().harpUserALT
+const harpUserALT = OktaLogin.getAltUser()
 const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'

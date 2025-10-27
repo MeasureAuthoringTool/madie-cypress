@@ -26,11 +26,10 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
 
     beforeEach('Create QI-Core Measure and Set Access Token', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllLocalStorage()
-        cy.clearAllSessionStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreCqlLibraryName, qicoreMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -45,11 +44,8 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
         cy.log('Updated CQL name, on measure, is ' + qicoreCqlLibraryName)
         OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllLocalStorage()
-        cy.clearAllSessionStorage()
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     after('Delete Versioned Measure', () => {
@@ -117,11 +113,10 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = qdmMeasureCQL
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllLocalStorage()
-        cy.clearAllSessionStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -133,11 +128,8 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllLocalStorage()
-        cy.clearAllSessionStorage()
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     after('Delete Versioned Measure', () => {

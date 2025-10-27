@@ -147,8 +147,9 @@ export class CQLLibraryPage {
             cql = ""
         }
         const currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
 
-        user = OktaLogin.setupUserSession(altUser, currentUser)
+        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
 
         //Create New CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
@@ -186,9 +187,11 @@ export class CQLLibraryPage {
 
     public static createAPICQLLibraryWithValidCQL(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
         const currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+
         let user = ''
 
-        user = OktaLogin.setupUserSession(altUser, currentUser)
+        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
 
         //Create New CQL Library
         cy.getCookie('accessToken').then((accessToken) => {
@@ -338,8 +341,9 @@ export class CQLLibraryPage {
         let user: string, description: string, publisher: string, cql: string, cqlErrors = false
 
         const currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
 
-        user = OktaLogin.setupUserSession(options.altUser, currentUser)
+        user = OktaLogin.setupUserSession(options.altUser, currentUser, currentAltUser)
 
         if (options && options.description) {
             description = options.description

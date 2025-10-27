@@ -31,7 +31,9 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Clean up', () => {
@@ -72,7 +74,9 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Clean up', () => {
@@ -135,7 +139,9 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Clean up', () => {
@@ -248,7 +254,9 @@ describe('Measure Service: Verify error message when there is no Population Crit
         measureData.measureCql = qdmMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Clean up', () => {

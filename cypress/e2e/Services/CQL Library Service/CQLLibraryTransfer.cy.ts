@@ -1,16 +1,21 @@
 import {Environment} from "../../../Shared/Environment"
 import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let adminApiKey = Environment.credentials().adminApiKey
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = ''
 
 describe('CQL Library Transfer Service', () => {
 
     beforeEach('Create CQL Library', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -28,6 +33,10 @@ describe('CQL Library Transfer Validations', () => {
 
     beforeEach('Create CQL Library', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
 
@@ -36,8 +45,9 @@ describe('CQL Library Transfer Validations', () => {
 
     it('Verify error message when wrong API key is provided', () => {
 
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id + '/acls',
@@ -67,8 +77,9 @@ describe('CQL Library Transfer Validations', () => {
 
     it('Verify error message when the CQL Library does not exist in MADiE', () => {
 
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id + 25 + '/acls',

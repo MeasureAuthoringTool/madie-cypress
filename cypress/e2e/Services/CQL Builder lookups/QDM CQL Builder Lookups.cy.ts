@@ -1,4 +1,5 @@
 import { Utilities } from "../../../Shared/Utilities"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let cql= 'library CohortListQDMPositiveEncounterPerformed1723119423497 version \'0.0.000\'\n' +
     '\n' +
@@ -135,7 +136,9 @@ describe('CQL Builder Lookups: QDM', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     it('Verify QDM CQL is parsed correctly', () => {

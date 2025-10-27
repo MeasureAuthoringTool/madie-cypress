@@ -416,7 +416,9 @@ export class MeasureGroupPage {
     }
 
     public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
-        const currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+
         let user = ''
         let measurePath = ''
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId'
@@ -426,16 +428,19 @@ export class MeasureGroupPage {
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Surgical Absence of Cervix' }
         if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
         if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+
+        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+
         if (measureNumber === undefined || measureNumber === null) {
             measureNumber = 0
+        }
+
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
+        }
+        else {
+            currentUser = Cypress.env('selectedUser')
         }
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
@@ -524,7 +529,9 @@ export class MeasureGroupPage {
     }
 
     public static CreateRatioMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?: string, PopDenomP?: string, popBasis?: string): string {
-        const currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
@@ -533,13 +540,15 @@ export class MeasureGroupPage {
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Surgical Absence of Cervix' }
         if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
         if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
+
+        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
         }
         else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
+            currentUser = Cypress.env('selectedUser')
         }
         if (twoMeasureGroups === true) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
@@ -610,7 +619,8 @@ export class MeasureGroupPage {
 
     public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
 
-        const currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
 
         let user = ''
         let measurePath = ''
@@ -629,11 +639,15 @@ export class MeasureGroupPage {
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
 
-        if (currentUser === 'harpUserALT') {
-            altUser = true
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
 
-        user = OktaLogin.setupUserSession(altUser, currentUser)
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
+        }
+        else {
+            currentUser = Cypress.env('selectedUser')
+        }
 
         if (twoMeasureGroups === true) {
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
@@ -697,19 +711,23 @@ export class MeasureGroupPage {
 
     public static CreateCohortMeasureGroupWithoutTypeAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string): string {
         let currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Cohort'
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
+
+        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
         }
         else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
+            currentUser = Cypress.env('selectedUser')
         }
         if (twoMeasureGroups === true) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
@@ -767,7 +785,15 @@ export class MeasureGroupPage {
         numeratorObservation?: MeasureObservations,
         cvPopulations?: CVGroups
     ): string {
-        let currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+        let currentUser = ''
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
+        }
+        else {
+            currentUser = Cypress.env('selectedUser')
+        }
         let user = ''
         let observations = []
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -862,14 +888,7 @@ export class MeasureGroupPage {
             }
         }
 
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
+        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -945,7 +964,8 @@ export class MeasureGroupPage {
     }
 
     public static addStratificationDataAPI(stratificationData: Array<Stratification>) {
-        let currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedUser')
+
         const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         cy.getCookie('accessToken').then((accessToken) => {

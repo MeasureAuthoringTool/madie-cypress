@@ -8,12 +8,17 @@ import { Environment } from "../../../Shared/Environment"
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureSharingAPIKey = Environment.credentials().adminApiKey
-let harpUser = Environment.credentials().harpUser
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUser = ''
+let harpUserALT = ''
 
 describe('Delete CMS ID for QI-Core Measure', () => {
 
     before('Login', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let cmsId: string
 
@@ -53,10 +58,11 @@ describe('Delete CMS ID for QI-Core Measure', () => {
 
     })
     it('Verify that the CMS ID deleted successfully for QDM Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
@@ -80,10 +86,11 @@ describe('Delete CMS ID for QI-Core Measure', () => {
     })
 
     it('Verify Error Message when Non Measure Owner tries to delete CMS ID', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {

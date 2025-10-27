@@ -2,6 +2,7 @@ import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -32,10 +33,11 @@ describe('QI-Core Single Test Case Export', () => {
     })
 
     it('Export single QI-Core Test case', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
@@ -59,10 +61,10 @@ describe('QI-Core Single Test Case Export', () => {
     })
 
     it('Non-owner of Measure: Export single QI-Core Test case', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
@@ -106,10 +108,10 @@ describe('QI-Core Multiple Test Case Export', () => {
     })
 
     it('Export All QI-Core Test cases', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
@@ -134,10 +136,10 @@ describe('QI-Core Multiple Test Case Export', () => {
     })
 
     it('Non-owner of Measure: Export All QI-Core Test cases', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {

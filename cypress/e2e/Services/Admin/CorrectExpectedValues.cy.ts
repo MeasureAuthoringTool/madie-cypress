@@ -24,16 +24,17 @@ const measure = {
 }
 const measureCQL = QiCore4Cql.CQL_Populations.replace('TestLibrary4664', measure.name)
 const testCase = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
-const harpUser = Environment.credentials().harpUser
+let harpUser = ''
 const adminAPIKey = Environment.credentials().adminApiKey
 
 describe('Admin API - Reset test case expected values', () => {
 
     beforeEach('Set Access Token', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
     })
 
     afterEach('Clean up', () => {

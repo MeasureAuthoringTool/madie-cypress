@@ -1,24 +1,20 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
 let CQLLibraryPublisher = 'SemanticBits'
 let CqlLibraryTwo = ''
-let harpUser = Environment.credentials().harpUserALT
+let harpUserALT = ''
 
 describe('Edit CQL Library', () => {
 
     before('Create Measure', () => {
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
-
         //Create CQL Library with Regular User
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 
@@ -29,19 +25,19 @@ describe('Edit CQL Library', () => {
     })
 
     beforeEach('Set Access Token', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
     })
 
     it('Edit CQL Library : Successful Update', () => {
 
         updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
-
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
@@ -67,10 +63,12 @@ describe('Edit CQL Library', () => {
 
     it('Validation Error: Edit CQL Library Name empty', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+
         updatedCQLLibraryName = " "
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -93,10 +91,12 @@ describe('Edit CQL Library', () => {
 
     it('Validation Error: Edit CQL Library Name has special characters', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+
         updatedCQLLibraryName = 'Test_Measure'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -119,10 +119,12 @@ describe('Edit CQL Library', () => {
 
     it('Validation Error: Edit CQL Library Name does not start with an Upper Case letter', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+
         updatedCQLLibraryName = 'testMeasure'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -145,10 +147,12 @@ describe('Edit CQL Library', () => {
 
     it('Validation Error: Edit CQL Library Name contains spaces', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+
         updatedCQLLibraryName = 'Test  Measure'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -171,10 +175,12 @@ describe('Edit CQL Library', () => {
 
     it('Validation Error: Edit CQL Library Name has only numbers', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+
         updatedCQLLibraryName = '1234565'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -197,10 +203,12 @@ describe('Edit CQL Library', () => {
 
     it('Validation Error: Edit CQL Library Name has more than 64 characters', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+
         updatedCQLLibraryName = 'Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId,
@@ -223,13 +231,14 @@ describe('Edit CQL Library', () => {
 
     it('Verify non Library owner unable to Edit CQL Library', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+
         updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId2) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + cqlLibraryId2,
@@ -245,7 +254,7 @@ describe('Edit CQL Library', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot modify resource CQL Library with id: ' + cqlLibraryId2)
+                    expect(response.body.message).to.eql('User ' + harpUserALT + ' cannot modify resource CQL Library with id: ' + cqlLibraryId2)
 
                 })
             })

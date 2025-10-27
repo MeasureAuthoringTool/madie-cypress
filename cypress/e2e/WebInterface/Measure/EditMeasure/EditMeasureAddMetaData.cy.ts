@@ -16,7 +16,7 @@ let CqlLibraryName = 'MeasureDefsLib' + now
 let newCqlLibraryName = ''
 let newMeasureName = ''
 const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = OktaLogin.getAltUser()
 
 describe('Edit Measure: Add Meta Data', () => {
 

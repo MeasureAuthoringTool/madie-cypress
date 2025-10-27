@@ -9,9 +9,8 @@ import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import { Environment } from "../../../Shared/Environment"
 
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = ''
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -33,13 +32,12 @@ const measureData: CreateMeasureOptions = {}
 
 describe('Test Case population values based on Measure Group population definitions', () => {
     beforeEach('Create Measure and measure group', () => {
-        let currentUser = Cypress.env('selectedUser')
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
         TCName = 'TCName' + randTCNameValue
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryName
@@ -56,7 +54,7 @@ describe('Test Case population values based on Measure Group population definiti
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //create group
         cy.getCookie('accessToken').then((accessToken) => {
@@ -166,7 +164,8 @@ describe('Test Case population values based on Measure Group population definiti
                 })
             })
         })
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
     })
     afterEach('Clean up', () => {
@@ -212,9 +211,9 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
     before('Create Measure', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryNameDeux
@@ -227,7 +226,11 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
     })
 
     beforeEach('Set Token', () => {
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
     })
 
     after('Clean up', () => {
@@ -314,9 +317,9 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
 
     before('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         measureName = 'QDMTestMeasure' + Date.now()
         CQLLibraryName = 'QDMTestCql' + Date.now()
@@ -329,11 +332,14 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     beforeEach('Set Token', () => {
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     after('Clean up', () => {
@@ -464,9 +470,10 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
     before('Create Measure', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryNameDeux
@@ -484,7 +491,8 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
         //create test case
@@ -493,10 +501,9 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
     })
 
     it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -529,9 +536,9 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     beforeEach('Create Measure and measure group', () => {
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
         TCName = 'TCName' + randTCNameValue
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryName
@@ -548,10 +555,11 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        let currentUser = Cypress.env('selectedUser')
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
@@ -592,10 +600,10 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     })
 
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({

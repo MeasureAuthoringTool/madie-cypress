@@ -2,6 +2,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
@@ -14,7 +15,9 @@ describe('Measure Service: Measure Group Endpoints', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     after('Clean up', () => {
@@ -441,7 +444,9 @@ describe('Measure Populations', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, popMeasureCQL)
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Clean up', () => {
@@ -649,7 +654,9 @@ describe('Measure Observations', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     after('Clean up', () => {
@@ -814,7 +821,9 @@ describe('Measure Stratifications', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, stratMeasureCQL)
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
     })
 
     afterEach('Clean up', () => {

@@ -8,7 +8,7 @@ import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utili
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = Environment.credentials().harpUserALT
+let harpUserALT = OktaLogin.getAltUser()
 
 //skipping until the LibraryListCheckboxes feature flag is removed
 describe('CQL Library Sharing', () => {
