@@ -12,13 +12,17 @@ import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 const now = Date.now()
 const qdmMeasureName = 'LockBlockQDM' + now
 const qicoreMeasureName = 'LockBlockQicore' + now
-const harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 const qdmManifestTestCQL = QdmCql.qdmCQLManifestTest
 const measureCQLPFTests = QiCore4Cql.CQL_Populations
 
 describe('Measure Association is not allowed when QiCore measure is locked', () => {
 
     beforeEach('Create measures', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         // need QiCore measure in measureId
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreMeasureName, measureCQLPFTests)

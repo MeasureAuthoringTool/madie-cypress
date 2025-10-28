@@ -22,17 +22,13 @@ let measureQICore = ''
 let measureQDM = ''
 let qdmCQLLibrary = ''
 let qiCoreCQLLibrary = ''
-let harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 
 const measureData: CreateMeasureOptions = {}
 
 describe('Delete measure on the measure edit page', () => {
 
     beforeEach('Create Measure', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
@@ -123,10 +119,6 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         measureData.ecqmTitle = measureQDM
         measureData.cqlLibraryName = qdmCQLLibrary
         measureData.measureScoring = 'Proportion'
@@ -194,10 +186,6 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
@@ -252,10 +240,6 @@ describe('Export measure on the Edit Measure page', () => {
     deleteDownloadsFolderBeforeEach()
 
     before(() => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date
@@ -339,9 +323,10 @@ describe('Share measure from the Edit Measure page', () => {
 
     before(() => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         const date = Date.now()
         measureQDM = 'QDMShareMeasure' + date
@@ -516,10 +501,6 @@ describe('Dirty Check Validations', () => {
 
     before('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 7 + randValue
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 7 + randValue
@@ -594,10 +575,6 @@ describe('Dirty Check Validations', () => {
 describe('View measure Human Readable on the Edit Measure page', () => {
 
     before(() => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date

@@ -1,4 +1,3 @@
-import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
@@ -12,7 +11,7 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedCQLLibraryName = ''
 let randomCQLLibraryName = 'TestCQLLibrary' + randValue + 5
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 let versionNumber = '1.0.000'
 
 describe('CQL Library Sharing', () => {
@@ -24,10 +23,9 @@ describe('CQL Library Sharing', () => {
         updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.setupUserSession(true, currentUser, currentAltUser)
     })
 
     afterEach('LogOut', () => {
@@ -82,10 +80,10 @@ describe('CQL Library Sharing - Multiple instances', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
 
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
     })
@@ -138,10 +136,9 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
         //Share Library with ALT User
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the Library
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
@@ -163,10 +160,10 @@ describe('Remove user\'s share access from a library', () => {
 
     beforeEach('Create library and Set Access Token', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
 
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
@@ -182,10 +179,6 @@ describe('Remove user\'s share access from a library', () => {
     })
 
     it('After removing access, user can no longer edit the library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
 
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
@@ -217,10 +210,10 @@ describe('Remove user\'s share access from a library', () => {
 describe('Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -306,10 +299,6 @@ describe('Share CQL Library using Action Center buttons', () => {
     })
 
     it('Action centre share button disabled for Non Library Owner', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
 
         //Login as Alt User
         OktaLogin.AltLogin()
@@ -355,10 +344,10 @@ describe('Share CQL Library using Action Center buttons', () => {
 describe('Share CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -438,11 +427,6 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         Utilities.waitForElementVisible('.MuiAlert-message', 60000)
         cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
 
         //Login as ALT User and verify both Draft and Versioned Library are shared
         OktaLogin.AltLogin()

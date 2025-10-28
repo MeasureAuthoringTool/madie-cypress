@@ -16,7 +16,7 @@ let CqlLibraryName = 'MeasureDefsLib' + now
 let newCqlLibraryName = ''
 let newMeasureName = ''
 const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
-let harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 
 describe('Edit Measure: Add Meta Data', () => {
 
@@ -418,6 +418,10 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
     newCqlLibraryName = CqlLibraryName + randValue + 8
 
     beforeEach('Create Measure', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
