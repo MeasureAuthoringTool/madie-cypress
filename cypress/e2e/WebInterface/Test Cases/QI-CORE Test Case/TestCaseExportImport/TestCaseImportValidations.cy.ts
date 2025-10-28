@@ -13,7 +13,7 @@ import { Toasts } from "../../../../../Shared/Toasts"
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
-const harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 
 const measureName = 'ImportValidations' + Date.now()
 let CqlLibraryName = 'ImportValidationsLib' + Date.now()
@@ -37,6 +37,10 @@ describe('Test Case Import: functionality tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         CqlLibraryName = 'ImportValidation1Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
@@ -53,17 +57,15 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
@@ -117,7 +119,10 @@ describe('Test Case Import: functionality tests', () => {
         OktaLogin.UILogout()
 
         //Share Measure with ALT User
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -205,6 +210,10 @@ describe('Test Case Import validations for versioned Measures', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         CqlLibraryName = 'ImportValidation2Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
@@ -257,12 +266,8 @@ describe('Test Case Import validations for versioned Measures', () => {
     it('Measure is in VERSIONED status: measure has been shared with user: import button is available', () => {
 
         OktaLogin.UILogout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         //Share Measure with ALT User
-        cy.setAccessTokenCookie()
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -445,18 +450,13 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
     afterEach('Logout and Clean up Measures', () => {
         OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
         Utilities.deleteMeasure(measureName + 'b', CqlLibraryName, true)
     })
 
     it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         CqlLibraryName = 'TestLibrary6' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean', 2)
@@ -558,17 +558,12 @@ describe('Test case uniqueness error validation', () => {
 
     afterEach('Logout and Clean up Measures', () => {
         OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })
 
     it('Export existing test case, then delete the existing test case, then create new test case with previous series and title and, then, attempt to import previously exported test case: verify uniqueness error', () => {
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, false, false, false)
 
@@ -680,17 +675,12 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
     afterEach('Logout and Clean up Measures', () => {
         OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })
 
     it('Importing two new test cases with the pc not matching on the measure in which the test cases is being imported into', () => {
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         CqlLibraryName = 'TestLibrary6' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)

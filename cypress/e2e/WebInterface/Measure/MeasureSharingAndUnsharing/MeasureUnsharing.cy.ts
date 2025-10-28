@@ -9,7 +9,7 @@ import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
-let harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Un Sharing', () => {
@@ -20,15 +20,16 @@ describe('Measure Un Sharing', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 

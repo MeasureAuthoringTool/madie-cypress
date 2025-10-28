@@ -24,7 +24,7 @@ const options: CreateMeasureOptions = {
 
 //let measureCQL6 = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
-let harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -41,10 +41,6 @@ let cqlLibraryName = 'TestLibrary' + Date.now()
 describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
 
     before('Create Measure', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
@@ -312,9 +308,9 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
     before('Create Measure', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
@@ -331,14 +327,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-
-    })
-
-    beforeEach('Set Access Token', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
     })
 
@@ -483,10 +471,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
     before('Create Measure', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
@@ -502,14 +486,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-
-    })
-
-    beforeEach('Set Access Token', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
     })
 
@@ -597,10 +573,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Mexican')
         OktaLogin.Logout()
 
-        // share measure
-        cy.clearCookies()
-        cy.clearLocalStorage()
-
         OktaLogin.AltLogin()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20000)
@@ -625,7 +597,6 @@ describe.skip('QI-Core Test Case Element tab tests', () => {
     beforeEach('Create Measure, Measure Group and Test Case', () => {
 
         //Create New Measure
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null, null, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -680,7 +651,6 @@ describe.skip('QI-Core 6 Test Case Element tab tests', () => {
     beforeEach('Create Measure, Measure Group and Test Case', () => {
 
         //Create New Measure
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, options)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()

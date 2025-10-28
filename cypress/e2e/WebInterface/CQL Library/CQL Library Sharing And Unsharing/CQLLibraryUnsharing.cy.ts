@@ -9,16 +9,16 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 let updatedCQLLibraryName = ''
 
 describe('Un Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -30,9 +30,9 @@ describe('Un Share CQL Library using Action Center buttons', () => {
 
         OktaLogin.UILogout()
         cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -59,11 +59,6 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         Utilities.waitForElementVisible('[class="MuiAlert-message css-127h8j3"]', 60000)
         cy.get('[class="MuiAlert-message css-127h8j3"]').should('contain.text', 'The Library(s) were successfully unshared.')
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
-
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
@@ -74,10 +69,9 @@ describe('Un Share CQL Library using Action Center buttons', () => {
     })
 
     it('Verify CQL Library owner can un share Library from Edit Library page Action centre share button', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Share CQL Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -99,10 +93,6 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.acceptBtn).click()
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(s) were successfully unshared.')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
 
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
@@ -148,10 +138,10 @@ describe('Un Share CQL Library using Action Center buttons', () => {
 describe('Un Share CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -198,10 +188,6 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
         })
         //Share CQL Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
 
         OktaLogin.Login()
 
@@ -224,10 +210,6 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
 
         Utilities.waitForElementVisible('[class="MuiAlert-message css-127h8j3"]', 60000)
         cy.get('[class="MuiAlert-message css-127h8j3"]').should('contain.text', 'The Library(s) were successfully unshared.')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-        cy.clearAllSessionStorage({ log: true })
 
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()

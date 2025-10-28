@@ -18,7 +18,7 @@ const cqlLibraryName = 'MeasureTransferLib'
 const randomMeasureName = 'TransferedMeasure'
 
 const versionNumber = '1.0.000'
-const harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 const measureCQL = MeasureCQL.SBTEST_CQL
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const testCaseTitle = 'Title for Auto Test'
@@ -33,8 +33,10 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
     */
 
     beforeEach('Create Measure and Set Access Token', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.log('Current User: ' + currentUser)
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
         let now = Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
@@ -88,10 +90,6 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         OktaLogin.UILogout()
 
         //Login as ALT User
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
@@ -129,7 +127,8 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
 
         //Logout and Delete Measure with Regular user
         OktaLogin.UILogout()
-        Cypress.env('selectedUser', 'harpUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         Utilities.deleteMeasure()
     })
 })
@@ -142,6 +141,10 @@ describe('Delete Test Case with Transferred user', () => {
     */
 
     beforeEach('Create Measure and Set Access Token', () => {
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         let now = Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
@@ -168,7 +171,6 @@ describe('Delete Test Case with Transferred user', () => {
     it('Verify Test Case can be deleted by the new owner after transfer', () => {
 
         //Login as Alt User
-        //Cypress.env('selectedUser', 'harpUserALT')
         OktaLogin.AltLogin()
         MeasuresPage.actionCenter('edit')
 

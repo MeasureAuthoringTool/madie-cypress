@@ -8,7 +8,7 @@ import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utili
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 
 //skipping until the LibraryListCheckboxes feature flag is removed
 describe('CQL Library Sharing', () => {
@@ -19,10 +19,10 @@ describe('CQL Library Sharing', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the Library
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
     })
 
     afterEach('LogOut', () => {
@@ -32,10 +32,6 @@ describe('CQL Library Sharing', () => {
 
 
     it('Verify check box for CQL Libraries appear and can be checked / used', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the Library
-        cy.setAccessTokenCookie()
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)

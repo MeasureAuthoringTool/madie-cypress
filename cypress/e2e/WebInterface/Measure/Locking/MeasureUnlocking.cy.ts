@@ -8,12 +8,15 @@ import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 const measureName = 'TestMeasure' + Date.now() + randValue
 const cqlLibraryName = 'TestMeasure' + Date.now() + randValue
-const harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 
 //Skipping until Feature flag 'Locking' is removed
 describe.skip('Measure Locking Validations', () => {
 
     before('Create Measure', () => {
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
     })
@@ -29,19 +32,7 @@ describe.skip('Measure Locking Validations', () => {
         cy.intercept('/api/cql-libraries/unlock').as('libraryUnlock')
 
         //Login 
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-        cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
-
-        cy.get(OktaLogin.usernameInput, { timeout: 110000 }).should('be.enabled')
-        cy.get(OktaLogin.usernameInput).type(Environment.credentials().harpUser)
-        cy.get(OktaLogin.passwordInput, { timeout: 110000 }).should('be.enabled')
-        cy.get(OktaLogin.passwordInput).type(Environment.credentials().password)
-        cy.get(OktaLogin.signInButton, { timeout: 110000 }).should('be.enabled')
-        cy.get(OktaLogin.signInButton).click()
+        OktaLogin.Login()
 
         cy.wait('@measureUnlock', { timeout: 20000 }).then(mUnlock => {
             expect(mUnlock.response.statusCode).to.eql(200)
@@ -57,10 +48,7 @@ describe.skip('Measure Locking Validations', () => {
         Utilities.verifyAllLocksDeleted(MadieObject.Library)
 
         //Logout 
-        cy.get(Header.userProfileSelect).click()
-        Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 15000)
-        cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
-        Utilities.waitForElementVisible(OktaLogin.usernameInput, 45000)
+        OktaLogin.UILogout()
 
         cy.wait('@measureUnlock', { timeout: 20000 }).then(mUnlock => {
             expect(mUnlock.response.statusCode).to.eql(200)
@@ -99,7 +87,8 @@ describe.skip('Measure Locking Validations', () => {
         cy.get('.MuiTooltip-tooltip').should('contain.text', 'Unable to version measure. Locked while being edited by ' + harpUserALT)
 
         //Delete Library Locks
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
         Utilities.verifyAllLocksDeleted(MadieObject.Measure, true)
     })
 })

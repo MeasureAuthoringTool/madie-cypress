@@ -11,7 +11,7 @@ import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 let currentUser = Cypress.env('selectedUser')
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
-const harpUserALT = OktaLogin.getAltUser()
+let harpUserALT = ''
 const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'
@@ -23,7 +23,10 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
         //Create CQL Library with Regular User
        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
@@ -44,11 +47,11 @@ describe('Delete CQL Library Validations - Library List page', () => {
     })
 
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
-        const currentUser = Cypress.env('selectedUser')
+
         //Transfer Library to the ALT User
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -84,8 +87,6 @@ describe('Delete CQL Library Validations - Library List page', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        cy.clearCookies()
-        cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
@@ -99,14 +100,12 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
         //Version Library
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Login as Regular User
-        cy.clearCookies()
-        cy.clearLocalStorage()
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
 
@@ -119,13 +118,10 @@ describe('Delete CQL Library Validations - Library List page', () => {
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
         const currentUser = Cypress.env('selectedUser')
         //Version Library
-        cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Transfer Library to ALT User
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -153,14 +149,14 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
         //Version Library
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        cy.clearCookies()
-        cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
@@ -177,6 +173,11 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
     beforeEach('Set Access Token', () => {
 
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
         //Create CQL Library with Regular User
@@ -192,10 +193,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
 
         //Login as ALT User
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
+
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesTab).click()
@@ -209,11 +207,11 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     })
 
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
-        const currentUser = Cypress.env('selectedUser')
+
         //Transfer Library to the ALT User
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -229,10 +227,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
                 })
             })
         })
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
+
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
@@ -251,10 +246,6 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
@@ -266,17 +257,10 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
         //Version Library
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
 
-        cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Login as Regular User
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
 
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -289,13 +273,9 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
         const currentUser = Cypress.env('selectedUser')
         //Version Library
-        cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Transfer Library to ALT User
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -312,10 +292,6 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
             })
         })
         //Login as ALT User
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
 
@@ -327,18 +303,11 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
         //Version Library
         cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
