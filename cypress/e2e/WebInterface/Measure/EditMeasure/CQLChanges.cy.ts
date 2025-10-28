@@ -141,7 +141,8 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log out of UI
         OktaLogin.Logout()
         //log into backend
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
@@ -181,7 +182,8 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log out of UI
         OktaLogin.Logout()
         //log into backend
-        cy.setAccessTokenCookie()
+
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
@@ -297,7 +299,9 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log out of UI
         OktaLogin.Logout()
         //log into backend
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
@@ -335,7 +339,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //log out of UI
         OktaLogin.Logout()
         //log into backend
-        cy.setAccessTokenCookie()
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({

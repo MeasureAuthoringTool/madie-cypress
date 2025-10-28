@@ -24,10 +24,6 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         altMeasureName = measureName + altRandValue
         altCqlLibraryName = CqlLibraryName + altRandValue
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
-
         measureData.ecqmTitle = altMeasureName
         measureData.cqlLibraryName = altCqlLibraryName
         measureData.measureScoring = measureScoring

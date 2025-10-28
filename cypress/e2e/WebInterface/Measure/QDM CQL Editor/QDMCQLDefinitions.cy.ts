@@ -397,10 +397,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="select-option-measure-group-population"]').eq(6).should('have.attr', 'data-value', 'n').click()
         cy.get('[data-testid="group-form-submit-btn"]').wait(4000).click().wait(4000)
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

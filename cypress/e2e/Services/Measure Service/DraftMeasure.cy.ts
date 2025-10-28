@@ -44,7 +44,6 @@ describe('Version and Draft CQL Library', () => {
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
         OktaLogin.Logout()
-        cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
 
@@ -385,12 +384,10 @@ describe('Draftable API end point tests', () => {
     })
     it('Draftable end point return measure set id that was used in request and true if the measure is versioned, regardless of version type (major, minor, or patch)', () => {
         let newerMeasureName = ''
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
+
         const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        cy.clearAllSessionStorage({ log: true })
 
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'

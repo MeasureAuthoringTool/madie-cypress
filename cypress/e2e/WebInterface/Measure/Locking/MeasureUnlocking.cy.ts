@@ -68,7 +68,8 @@ describe.skip('Measure Locking Validations', () => {
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Lock Measure with ALT User
-        cy.setAccessTokenCookieALT()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
         Utilities.lockControl(MadieObject.Measure, true, true)
 
         //Login as Regular user
@@ -87,7 +88,6 @@ describe.skip('Measure Locking Validations', () => {
         cy.get('.MuiTooltip-tooltip').should('contain.text', 'Unable to version measure. Locked while being edited by ' + harpUserALT)
 
         //Delete Library Locks
-        const currentAltUser = Cypress.env('selectedAltUser')
         OktaLogin.setupUserSession(true, currentUser, currentAltUser)
         Utilities.verifyAllLocksDeleted(MadieObject.Measure, true)
     })

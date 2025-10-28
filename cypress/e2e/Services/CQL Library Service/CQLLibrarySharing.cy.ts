@@ -15,13 +15,9 @@ describe('CQL Library Sharing Service', () => {
     beforeEach('Create CQL Library', () => {
         const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1

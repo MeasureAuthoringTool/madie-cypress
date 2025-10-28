@@ -50,15 +50,11 @@ describe('Measure Sharing', () => {
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    it.only('Verify shared Measure is viewable under Shared Measure tab', () => {
-cy.log(harpUserALT)
-        cy.pause()
+    it('Verify shared Measure is viewable under Shared Measure tab', () => {
+
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
@@ -206,9 +202,6 @@ cy.log(harpUserALT)
 
     it('Action centre share button disabled for Non Measure Owner', () => {
         let currentUser = Cypress.env('selectedUser')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
 
         //Login
         OktaLogin.AltLogin()
@@ -315,10 +308,6 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the measure
-        cy.setAccessTokenCookie()
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
@@ -353,10 +342,6 @@ describe('Delete Test Case with Shared user', () => {
     })
 
     it('Verify Test Case can be deleted by the shared user', () => {
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the measure
-        cy.setAccessTokenCookie()
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
@@ -395,9 +380,6 @@ describe('Remove user\'s share access from a measure', () => {
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
