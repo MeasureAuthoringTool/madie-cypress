@@ -10,19 +10,26 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Header } from "../../../../Shared/Header"
+import {TestCaseJson} from "../../../../Shared/TestCaseJson"
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestCql' + Date.now()
-let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
+const measureName = 'TestMeasure' + Date.now()
+const cqlLibraryName = 'TestCql' + Date.now()
+const measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let harpUser = ''
 let harpUserALT = ''
-let measureSharingAPIKey = Environment.credentials().adminApiKey
-let measureCQLPFTests = MeasureCQL.CQL_Populations
-let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
+const measureSharingAPIKey = Environment.credentials().adminApiKey
+const measureCQLPFTests = MeasureCQL.CQL_Populations
+const qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
+const qiCoreMeasureCQL = MeasureCQL.SBTEST_CQL
+const testCaseTitle = 'Title for Auto Test'
+const testCaseDescription = 'DENOMFail' + Date.now()
+const testCaseSeries = 'SBTestSeries'
+const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
+const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip'
+const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
 const measureData: CreateMeasureOptions = {}
-
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+const randValue = (Math.floor((Math.random() * 1000) + 1))
 measureData.ecqmTitle = measureName + randValue
 measureData.cqlLibraryName = cqlLibraryName + randValue
 measureData.measureScoring = 'Cohort'
@@ -341,5 +348,59 @@ describe('Measure History - Associate Measure actions', () => {
         EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)
         cy.get(MeasuresPage.userActionRow).should('contain.text', 'ASSOCIATED')
         cy.get(MeasuresPage.harpIdRow).should('contain.text', harpUser)
+    })
+})
+
+describe('Measure History - Qi Core Export Test case Action', () => {
+
+    deleteDownloadsFolderBeforeAll()
+    deleteDownloadsFolderBeforeEach()
+
+    beforeEach('Create Measure and Set Access Token', () => {
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, qiCoreMeasureCQL)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+        OktaLogin.Login()
+    })
+
+    afterEach('Log out and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+    })
+
+    it('Verify that Export Qi Core Test case Action is recorded in Measure History', () => {
+
+        //Export Test Case
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
+
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // export
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
+
+        cy.readFile(zipPath).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        //Go to Measure History and verify that Create and Update actions are recorded
+        EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)
+        cy.get('[data-testid="measure-history-cell-0_actionType"]').should('contain.text', 'EXPORTED_TESTCASES')
+        cy.get('[data-testid="measure-history-cell-0_performedBy"]').should('contain.text', harpUser)
+
     })
 })
