@@ -38,7 +38,9 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
     before('Create New Measure and Login', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create Measure with out Steward and Developer
         cy.getCookie('accessToken').then((accessToken) => {

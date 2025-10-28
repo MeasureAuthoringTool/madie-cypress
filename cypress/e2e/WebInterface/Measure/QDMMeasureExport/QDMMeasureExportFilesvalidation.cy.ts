@@ -33,10 +33,7 @@ describe('Verify QDM Measure Export file contents', () => {
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
@@ -47,10 +44,6 @@ describe('Verify QDM Measure Export file contents', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
@@ -70,10 +63,6 @@ describe('Verify QDM Measure Export file contents', () => {
 
     after('Clean up', () => {
 
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
@@ -108,10 +97,6 @@ describe('QDM Measure Export, Not the Owner', () => {
 
     before('Create New Measure and Login', () => {
 
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
@@ -122,19 +107,13 @@ describe('QDM Measure Export, Not the Owner', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     after('Clean up', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
@@ -158,10 +137,6 @@ describe('Successful QDM Measure Export with versioned measure', () => {
 
     before('Create New Measure and Login', () => {
 
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
@@ -172,10 +147,6 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)

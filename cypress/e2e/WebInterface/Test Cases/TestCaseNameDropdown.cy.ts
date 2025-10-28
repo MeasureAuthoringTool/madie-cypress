@@ -24,10 +24,6 @@ describe('Test Case UI quality of life features', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
@@ -40,9 +36,6 @@ describe('Test Case UI quality of life features', () => {
     afterEach('Clean up', () => {
 
         OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })

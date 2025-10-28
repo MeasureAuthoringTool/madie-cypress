@@ -26,10 +26,6 @@ const measureData: CreateMeasureOptions = {}
 describe('Non Boolean Population basis Expected values', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
         measureName = 'QDMTestMeasure' + Date.now()
         CqlLibraryName = 'TestLibrary' + Date.now()

@@ -1093,10 +1093,6 @@ describe('Measure bundle end point returns Measure Population Description', () =
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
 

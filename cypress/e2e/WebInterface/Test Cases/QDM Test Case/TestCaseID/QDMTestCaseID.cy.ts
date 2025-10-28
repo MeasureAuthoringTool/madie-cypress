@@ -45,10 +45,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
             mpStartDate: '2025-01-01',
             mpEndDate: '2025-12-31'
         }
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')

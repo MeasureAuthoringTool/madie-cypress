@@ -15,8 +15,10 @@ let mpEndDate = now().format('YYYY-MM-DD')
 describe('Edit Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.setAccessTokenCookie()
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         //Create Measure with out Steward and Developer
         cy.getCookie('accessToken').then((accessToken) => {
