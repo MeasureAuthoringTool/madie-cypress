@@ -28,10 +28,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         newMeasureName = 'DraftVersionValidations' + Date.now() + randValue
         newCqlLibraryName = 'DraftVersionValidationsLib' + Date.now() + randValue
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
@@ -340,10 +336,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 describe.skip('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
 
         newMeasureName = 'DraftTo7Measure' + Date.now()
         newCqlLibraryName = 'DraftTo7Lib' + Date.now()
@@ -369,10 +361,6 @@ describe.skip('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0',
     })
 
     it('Change model from v6.0.0 - to - v7.0.0 with versioning and drafting but cannot draft from 7.0.0 back down', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
 
         updatedMeasuresPageName = 'upgradedTo7' + Date.now()
 

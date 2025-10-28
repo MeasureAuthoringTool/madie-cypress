@@ -23,10 +23,6 @@ const measureCQLPFTests = QiCore4Cql.reduced_CQL_Multiple_Populations
 describe('Ability to run valid test cases whether or not the user is the owner of the measure or if the measure has not been shared with the user', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null, true)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
@@ -122,10 +118,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             //logout as ALT user and, then, log in as non-alt user
             OktaLogin.Logout()
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
+
             OktaLogin.Login()
 
             cy.get(LandingPage.allMeasuresTab).click()
@@ -202,10 +195,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             //logout as ALT user and, then, log in as non-alt user
             OktaLogin.Logout()
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
+
             OktaLogin.Login()
 
             cy.get(LandingPage.allMeasuresTab).click()
@@ -285,10 +275,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         //logout as ALT user and, then, log in as non-alt user
         OktaLogin.Logout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         OktaLogin.Login()
 
         cy.get(LandingPage.allMeasuresTab).click()

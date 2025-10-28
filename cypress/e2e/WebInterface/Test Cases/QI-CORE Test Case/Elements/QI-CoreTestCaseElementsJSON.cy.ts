@@ -58,12 +58,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
         OktaLogin.Logout()
     })
 
-    beforeEach('Set Access Token', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-    })
 
     after('Clean up', () => {
 
@@ -155,10 +149,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
     before('Create Measure', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
@@ -174,14 +164,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-
-    })
-
-    beforeEach('Set Access Token', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
     })
 
@@ -412,11 +394,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Dominican')
         cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Mexican')
         OktaLogin.Logout()
-
-        // share measure
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         //share measure
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)

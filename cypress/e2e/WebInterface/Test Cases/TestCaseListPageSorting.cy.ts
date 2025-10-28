@@ -27,10 +27,6 @@ describe('Sort by each of the test case list page\'s columns', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)

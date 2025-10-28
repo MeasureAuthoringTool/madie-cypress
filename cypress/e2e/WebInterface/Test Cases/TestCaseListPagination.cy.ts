@@ -68,8 +68,6 @@ describe('Test Case List Pagination', () => {
 
     afterEach('Delete Measure', () => {
 
-        cy.setAccessTokenCookie()
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
