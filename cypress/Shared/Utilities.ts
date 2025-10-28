@@ -522,21 +522,16 @@ export class Utilities {
     }
 
     public static lockControl(type: MadieObject, lockObject: boolean, altUser?: boolean) {
-        let currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+
+
         let action = 'PUT'
         if (!lockObject) {
             action = 'DELETE'
         }
-        if (altUser) {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
-        } else {
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
-        }
 
+        OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
 
         switch (type) {
 
@@ -581,7 +576,7 @@ export class Utilities {
 
             case MadieObject.Library:
                 cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
 
                         cy.request({
                             url: '/api/cql-libraries/' + id + '/lock',
@@ -642,7 +637,7 @@ export class Utilities {
 
             case MadieObject.Library:
                 cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                    cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                         cy.request({
                             url: '/api/cql-libraries/unlock',
                             headers: {

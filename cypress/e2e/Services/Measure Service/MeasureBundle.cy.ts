@@ -931,7 +931,6 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-        cy.setAccessTokenCookie()
     })
 
     afterEach('Clean up', () => {
@@ -981,7 +980,10 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
 
     beforeEach('Create Measure, Measure Group and Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,

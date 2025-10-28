@@ -163,7 +163,7 @@ describe('Delete Test Case with Transferred user', () => {
     })
 
     afterEach('Clean up', () => {
-        //Cypress.env('selectedUser', 'harpUser')
+
         OktaLogin.UILogout()
         Utilities.deleteMeasure(null, null, false, true)
     })

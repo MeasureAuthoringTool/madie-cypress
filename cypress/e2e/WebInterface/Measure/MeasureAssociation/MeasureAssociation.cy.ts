@@ -41,10 +41,6 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
@@ -297,9 +293,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         QiCoreMeasureNameAlt = 'QiCoreMeasureNameAlt' + 4 + randValue
         QiCoreCqlLibraryNameAlt = 'ProportionPatientLN0' + 4 + randValue
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+
         //validation test: both measures the user is not the owner of
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, 5, true)
 
@@ -313,14 +307,9 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(5, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 350000)
@@ -350,10 +339,6 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 describe('Measure Association: Transferring meta data and CMS ID from QDM to QI Core measure, using Qi Core 4.1.1', () => {
 
     beforeEach('Create Measure', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
@@ -592,10 +577,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
     beforeEach('Create Measure', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure4QiCore600' + Date.now() + randValue + 8 + randValue
@@ -854,9 +835,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         QiCoreMeasureNameAlt = 'QiCoreMeasureNameAlt' + 4 + randValue
         QiCoreCqlLibraryNameAlt = 'ProportionPatientLN0' + 4 + randValue
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+
         //validation test: both measures the user is not the owner of
         let measureQICore3 = 'QICore600Measure3' + Date.now() + randValue + 9 + randValue
         CreateMeasurePage.CreateMeasureAPI(measureQICore3, measureQICore3, SupportedModels.qiCore6, options, 5)
@@ -872,9 +851,6 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(5, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         cy.clearAllCookies()
@@ -911,9 +887,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
     beforeEach('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
@@ -940,9 +914,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 2)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 2)
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')

@@ -8,7 +8,6 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Environment } from "../../../../../Shared/Environment"
 import { Header } from "../../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()

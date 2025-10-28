@@ -168,15 +168,15 @@ export class OktaLogin {
         if (altUser) {
             switch (currentAltUser) {
                 case 'altHarpUser':
-                    cy.setAccessTokenCookie();
+                    cy.setAccessTokenCookieALT()
                     user = Environment.credentials().altHarpUser
                     break
                 case 'altHarpUser2':
-                    cy.setAccessTokenCookie2()
+                    cy.setAccessTokenCookieALT2()
                     user = Environment.credentials().altHarpUser2
                     break
                 case 'altHarpUser3':
-                    cy.setAccessTokenCookie3()
+                    cy.setAccessTokenCookieALT3()
                     user = Environment.credentials().altHarpUser3
                     break
                 default:
@@ -185,7 +185,7 @@ export class OktaLogin {
         } else {
             switch (currentUser) {
                 case 'harpUser':
-                    cy.setAccessTokenCookie();
+                    cy.setAccessTokenCookie()
                     user = Environment.credentials().harpUser
                     break
                 case 'harpUser2':
@@ -193,8 +193,8 @@ export class OktaLogin {
                     user = Environment.credentials().harpUser2
                     break;
                 case 'harpUser3':
-                    cy.setAccessTokenCookie3();
-                    user = Environment.credentials().harpUser3;
+                    cy.setAccessTokenCookie3()
+                    user = Environment.credentials().harpUser3
                     break
                 default:
                     throw new Error(`Unknown user type: ${currentUser}`)

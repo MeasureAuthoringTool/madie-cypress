@@ -59,8 +59,6 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
-
         const measureOptions: CreateMeasureOptions = {
             measureCql: qdmMeasureCQL,
             measureScoring: 'Cohort',
@@ -113,7 +111,6 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         measureData.ecqmTitle = measureName + randValue
         measureData.cqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
@@ -178,7 +175,6 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         measureData.ecqmTitle = measureName + randValue
         measureData.cqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
@@ -220,7 +216,6 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         measureData.ecqmTitle = measureName + randValue
         measureData.cqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Numerator')
 

@@ -66,11 +66,6 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.log('Draft Created Successfully')
 
         OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-
-        cy.setAccessTokenCookie()
 
         Utilities.deleteLibrary(CqlLibraryOne,false, 2)
     })
@@ -78,11 +73,6 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     it('Add Draft to the versioned Library from Edit Library screen', () => {
         let currentUser = Cypress.env('selectedUser')
         const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-
-        cy.setAccessTokenCookie()
         //intercept draft id once library is drafted
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
@@ -103,12 +93,6 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.log('Draft Created Successfully')
         OktaLogin.UILogout()
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-
-        cy.setAccessTokenCookie()
-
         //Delete Draft Library
         Utilities.deleteLibrary(CqlLibraryOne)
     })
@@ -116,11 +100,6 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     it('Non Measure Owner unable to add Draft to the versioned Library using Action Center Buttons', () => {
 
         //Verify that the Draft button is disabled for Non Measure owner
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-
-        cy.setAccessTokenCookieALT()
 
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)

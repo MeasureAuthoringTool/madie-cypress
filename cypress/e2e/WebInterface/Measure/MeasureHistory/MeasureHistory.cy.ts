@@ -99,9 +99,6 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
         cy.get(MeasuresPage.additionalActionRow).should('contain.text', 'Created CMS ID')
 
         //Delete CMS ID
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
