@@ -15,9 +15,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     after('Clean up', () => {
@@ -444,9 +442,7 @@ describe('Measure Populations', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, popMeasureCQL)
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     afterEach('Clean up', () => {
@@ -654,9 +650,7 @@ describe('Measure Observations', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false, )
     })
 
     after('Clean up', () => {
@@ -821,9 +815,7 @@ describe('Measure Stratifications', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, stratMeasureCQL)
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     afterEach('Clean up', () => {

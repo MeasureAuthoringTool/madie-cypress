@@ -15,10 +15,8 @@ describe('Measure Sharing Service', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })

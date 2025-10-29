@@ -24,10 +24,9 @@ describe('CQL Library Transfer', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
     })
 
     afterEach('LogOut', () => {
@@ -38,9 +37,9 @@ describe('CQL Library Transfer', () => {
 
 
     it('Verify transferred CQL Library is viewable under Owned Libraries tab', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(true)
 
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {
@@ -70,9 +69,7 @@ describe('CQL Library Transfer', () => {
 
     it('Verify CQL Library can be edited by the transferred user', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {
@@ -91,7 +88,7 @@ describe('CQL Library Transfer', () => {
             })
         })
 
-        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(true)
         //Login as ALT User
         OktaLogin.AltLogin()
 
@@ -113,9 +110,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
     beforeEach('Create Library and Set Access Token', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     it('Verify CQL Library owner can transfer Library from Action centre transfer button on Owned Libraries page', () => {
@@ -171,9 +166,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
     it('Verify CQL Library owner can transfer Library from Action centre transfer button on Edit Library page', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         //Login as Regular user and transfer Library to ALT user
         OktaLogin.Login()

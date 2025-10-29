@@ -63,10 +63,8 @@ describe('Measure Versioning', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
     })
 
@@ -111,9 +109,8 @@ describe('Measure Versioning', () => {
 
     it('Non Measure owner unable to version Measure', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(true)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -177,9 +174,7 @@ describe('Version Measure with invalid CQL', () => {
         newMeasureName = measureName + 3 + randValue
         newCQLLibraryName = cqlLibraryName + 3 + randValue
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -442,9 +437,7 @@ describe('Delete validations for versioned Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     it('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {

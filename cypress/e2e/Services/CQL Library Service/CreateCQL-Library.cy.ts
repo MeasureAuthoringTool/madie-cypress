@@ -9,9 +9,8 @@ let harpUser = ''
 describe('CQL Library Service: Create CQL Library', () => {
 
     it('Create QI-Core CQL Library, successful creation', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false,currentUser, currentAltUser)
+
+        harpUser = OktaLogin.setupUserSession(false)
 
         let setId = uuidv4()
 
@@ -42,9 +41,8 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Create QDM CQL Library, successful creation', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false,currentUser, currentAltUser)
+
+        harpUser = OktaLogin.setupUserSession(false)
 
         CQLLibraryName = 'QDMCqlLibrary' + Date.now()
 
@@ -73,9 +71,8 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get All CQL Libraries', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false,currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -98,9 +95,8 @@ describe('CQL Library Service: Create CQL Library', () => {
 
     it('Get specific CQL Library', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false,currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
@@ -121,9 +117,7 @@ describe('CQL Library Service: Create CQL Library', () => {
 
     it('Get All CQL Libraries created by logged in User', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -159,9 +153,7 @@ describe('CQL Library Name validations', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     it('Validation Error: CQL Library Name empty', () => {
@@ -339,9 +331,7 @@ describe('CQL Library Model Validations', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     it('Validation Error: CQL Library Model empty', () => {

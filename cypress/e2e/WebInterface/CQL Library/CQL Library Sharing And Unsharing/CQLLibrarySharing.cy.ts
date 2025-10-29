@@ -23,9 +23,8 @@ describe('CQL Library Sharing', () => {
         updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+
+        harpUserALT = OktaLogin.setupUserSession(true)
     })
 
     afterEach('LogOut', () => {
@@ -80,10 +79,9 @@ describe('CQL Library Sharing - Multiple instances', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
 
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
     })
@@ -136,9 +134,8 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
         //Share Library with ALT User
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
@@ -160,10 +157,8 @@ describe('Remove user\'s share access from a library', () => {
 
     beforeEach('Create library and Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
 
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
@@ -210,10 +205,9 @@ describe('Remove user\'s share access from a library', () => {
 describe('Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -344,10 +338,9 @@ describe('Share CQL Library using Action Center buttons', () => {
 describe('Share CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1

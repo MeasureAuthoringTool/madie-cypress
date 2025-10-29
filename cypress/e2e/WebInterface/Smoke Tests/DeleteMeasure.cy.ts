@@ -60,10 +60,6 @@ describe('Delete Measure ownership validation', () => {
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         Utilities.deleteMeasure(measureTwo, CqlLibraryTwo)
     })
 

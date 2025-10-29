@@ -18,9 +18,7 @@ describe('Measure Service: QDM Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false)
     })
     afterEach('Clean up', () => {
 
@@ -198,9 +196,7 @@ describe('QDM Measure: Transmission format', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CQLLibraryName)
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     afterEach('Delete Measure', () => {

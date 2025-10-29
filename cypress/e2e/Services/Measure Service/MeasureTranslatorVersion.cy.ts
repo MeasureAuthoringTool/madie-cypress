@@ -26,9 +26,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
 
     beforeEach('Create QI-Core Measure and Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreCqlLibraryName, qicoreMeasureCQL)
         OktaLogin.Login()
@@ -45,7 +43,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
         OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     after('Delete Versioned Measure', () => {
@@ -113,9 +111,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = qdmMeasureCQL
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
@@ -129,7 +125,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     after('Delete Versioned Measure', () => {

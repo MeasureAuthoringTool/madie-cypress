@@ -187,8 +187,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                 })
             })
         })
-        const currentAltUser = Cypress.env('selectedAltUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
 
@@ -417,9 +416,7 @@ describe('Measure Observation Validation', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     after('Clean up', () => {
@@ -574,9 +571,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
     })
 
@@ -632,9 +627,7 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -837,9 +830,8 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
     })
 
     beforeEach('Set Access Token', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
     })
 
     after('Clean up', () => {
@@ -880,9 +872,7 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
     })
 
@@ -980,9 +970,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
 
     beforeEach('Create Measure, Measure Group and Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({

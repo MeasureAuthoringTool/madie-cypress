@@ -23,10 +23,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         //Create CQL Library with Regular User
        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
@@ -49,9 +47,9 @@ describe('Delete CQL Library Validations - Library List page', () => {
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
 
         //Transfer Library to the ALT User
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -100,9 +98,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
         //Version Library
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Login as Regular User
@@ -149,9 +146,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
         //Version Library
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Share Library with ALT User
@@ -173,10 +169,8 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
@@ -209,9 +203,9 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
 
         //Transfer Library to the ALT User
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({

@@ -15,9 +15,8 @@ describe('Measure List Pagination', () => {
 
     before('Create Measures and Login', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 
@@ -70,8 +69,7 @@ describe('Measure List Pagination', () => {
         let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         let measureSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false)
 
         let idsList = ''
 

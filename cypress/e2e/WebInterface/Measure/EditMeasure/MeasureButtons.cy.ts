@@ -323,10 +323,8 @@ describe('Share measure from the Edit Measure page', () => {
 
     before(() => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         const date = Date.now()
         measureQDM = 'QDMShareMeasure' + date

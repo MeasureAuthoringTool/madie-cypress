@@ -417,7 +417,6 @@ export class MeasureGroupPage {
 
     public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
         let currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
 
         let user = ''
         let measurePath = ''
@@ -429,7 +428,7 @@ export class MeasureGroupPage {
         if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
         if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         if (measureNumber === undefined || measureNumber === null) {
             measureNumber = 0
@@ -541,7 +540,7 @@ export class MeasureGroupPage {
         if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
         if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         if (altUser)
         {
@@ -620,7 +619,6 @@ export class MeasureGroupPage {
     public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
 
         let currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
 
         let user = ''
         let measurePath = ''
@@ -639,7 +637,7 @@ export class MeasureGroupPage {
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         if (altUser)
         {
@@ -711,7 +709,7 @@ export class MeasureGroupPage {
 
     public static CreateCohortMeasureGroupWithoutTypeAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string): string {
         let currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
+
 
         let user = ''
         let measurePath = ''
@@ -720,7 +718,7 @@ export class MeasureGroupPage {
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         if (altUser)
         {
@@ -785,7 +783,7 @@ export class MeasureGroupPage {
         numeratorObservation?: MeasureObservations,
         cvPopulations?: CVGroups
     ): string {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         let currentUser = ''
         if (altUser)
         {
@@ -888,7 +886,7 @@ export class MeasureGroupPage {
             }
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {

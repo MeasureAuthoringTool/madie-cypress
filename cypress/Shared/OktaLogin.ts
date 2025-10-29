@@ -158,8 +158,11 @@ export class OktaLogin {
     }
 
 
-    public static setupUserSession(altUser: boolean, currentUser: string, currentAltUser: string) {
+    public static setupUserSession(altUser: boolean) {
         let user: string
+
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
 
         sessionStorage.clear()
         cy.clearAllCookies()
@@ -204,8 +207,10 @@ export class OktaLogin {
         return user
     }
 
-    public static getUser(altUser: boolean, currentUser: string, currentAltUser: string) {
+    public static getUser(altUser: boolean) {
         let user: string
+        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentUser = Cypress.env('selectedUser')
 
         if (altUser) {
             switch (currentAltUser) {

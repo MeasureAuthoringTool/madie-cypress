@@ -122,7 +122,6 @@ export class Utilities {
 
     public static deleteMeasure(measureName?: string, cqlLibraryName?: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
         let currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
 
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         if ((measureNumber === undefined) || (measureNumber === null)) {
@@ -134,7 +133,7 @@ export class Utilities {
             altUser = false
         }
 
-        OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(altUser)
 
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
@@ -181,14 +180,13 @@ export class Utilities {
 
     public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
         const currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
         let user = ''
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
@@ -492,11 +490,10 @@ export class Utilities {
     public static deleteLibrary(libraryName: string, altUser?: boolean, libraryNumber?: number) {
 
         const currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
 
         let libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
-        OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(altUser)
 
         if (libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
@@ -522,7 +519,7 @@ export class Utilities {
     }
 
     public static lockControl(type: MadieObject, lockObject: boolean, altUser?: boolean) {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
 
 
@@ -531,7 +528,7 @@ export class Utilities {
             action = 'DELETE'
         }
 
-        OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(altUser)
 
         switch (type) {
 
@@ -598,12 +595,11 @@ export class Utilities {
 
     public static verifyAllLocksDeleted(type: MadieObject, altUser?: boolean) {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(altUser)
 
-        harpUser = OktaLogin.getUser(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         switch (type) {
 

@@ -27,11 +27,8 @@ describe('Measure Service: Edit Measure', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
-        cy.clearAllSessionStorage({ log: true })
+        harpUser = OktaLogin.setupUserSession(false)
 
     })
 

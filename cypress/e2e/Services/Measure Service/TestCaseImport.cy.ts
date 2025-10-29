@@ -67,9 +67,9 @@ describe('Test Case Import', () => {
     })
 
     it('Success Scenario: Import single test case and over ride existing test case', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -97,9 +97,9 @@ describe('Test Case Import', () => {
     })
 
     it('Measure\'s populations do not match the population in the file that is being imported', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -124,9 +124,9 @@ describe('Test Case Import', () => {
     })
 
     it('Unable to Import when Test Case Json is not valid', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -154,10 +154,10 @@ describe('Test Case Import', () => {
     })
 
     it('Non Measure owner unable to Import Test cases', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -191,9 +191,8 @@ describe('Test Case import for versioned Measure', () => {
 
         newMeasureName = measureName + randValue + 5
         newCQLLibraryName = cqlLibraryName + randValue + 5
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         OktaLogin.Login()
@@ -208,9 +207,9 @@ describe('Test Case import for versioned Measure', () => {
     })
 
     it("Able to Import Test Cases for Versioned Measures", () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -227,7 +226,7 @@ describe('Test Case import for versioned Measure', () => {
             })
         })
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -274,9 +273,9 @@ describe('Multiple Test Case Import', () => {
     })
 
     it('Multiple test case files are not supported', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {

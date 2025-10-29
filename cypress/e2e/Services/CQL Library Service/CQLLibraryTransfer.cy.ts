@@ -13,9 +13,7 @@ describe('CQL Library Transfer Service', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
@@ -33,9 +31,7 @@ describe('CQL Library Transfer Validations', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true)
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5

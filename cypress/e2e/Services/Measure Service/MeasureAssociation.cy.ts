@@ -28,9 +28,7 @@ describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
@@ -101,7 +99,7 @@ describe('Measure Association: Validations', () => {
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         QiCoreMeasureName0 = 'ProportionPatientMN0' + Date.now() + randValue + 2 + randValue
         QiCoreCqlLibraryName0 = 'ProportionPatientLN0' + Date.now() + randValue + 3 + randValue
@@ -267,8 +265,7 @@ describe('Measure Association: Validations', () => {
             })
         })
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(true)
         QiCoreMeasureNameAlt = QiCoreMeasureName1 + 4 + randValue
         QiCoreCqlLibraryNameAlt = QiCoreCqlLibraryName1 + 5 + randValue
 
@@ -285,7 +282,7 @@ describe('Measure Association: Validations', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qdmId2) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((qicoreId4) => {
@@ -312,9 +309,7 @@ describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
@@ -342,7 +337,7 @@ describe('Measure Association: Validations', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         QiCoreMeasureName1 = 'ProportionPatientMN1' + Date.now() + randValue + 4 + randValue
         QiCoreCqlLibraryName1 = 'ProportionPatientLN1' + Date.now() + randValue + 5 + randValue
@@ -361,7 +356,7 @@ describe('Measure Association: Validations', () => {
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     it('Association: QDM -> Qi Core measure: Successful Association', () => {

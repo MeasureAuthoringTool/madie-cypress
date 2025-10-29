@@ -14,9 +14,8 @@ let harpUserALT = ''
 describe.skip('Measure Locking Validations', () => {
 
     before('Create Measure', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
+        harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
     })
@@ -69,7 +68,7 @@ describe.skip('Measure Locking Validations', () => {
 
         //Lock Measure with ALT User
         const currentAltUser = Cypress.env('selectedAltUser')
-        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(true)
         Utilities.lockControl(MadieObject.Measure, true, true)
 
         //Login as Regular user
@@ -88,7 +87,7 @@ describe.skip('Measure Locking Validations', () => {
         cy.get('.MuiTooltip-tooltip').should('contain.text', 'Unable to version measure. Locked while being edited by ' + harpUserALT)
 
         //Delete Library Locks
-        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(true)
         Utilities.verifyAllLocksDeleted(MadieObject.Measure, true)
     })
 })

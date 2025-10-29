@@ -7,9 +7,7 @@ describe('CQL Builder Lookups: QI Core', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
 
     it('Verify QI Core CQL is parsed correctly', () => {

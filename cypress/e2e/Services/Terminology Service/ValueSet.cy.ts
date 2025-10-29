@@ -6,9 +6,7 @@ describe('Terminology Service: Value Set', () => {
 
     beforeEach('Set Access Token and tgt', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
         cy.UMLSAPIKeyLogin()
     })
 
@@ -58,9 +56,7 @@ describe('Terminology Service: Value Set: Authentication', () => {
 
     beforeEach('Set Access Token and tgt', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
         cy.UMLSAPIKeyLogin()
     })
 

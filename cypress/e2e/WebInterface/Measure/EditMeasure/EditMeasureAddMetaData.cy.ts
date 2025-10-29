@@ -419,9 +419,7 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
 
     beforeEach('Create Measure', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true)
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
