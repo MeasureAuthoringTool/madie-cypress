@@ -19,10 +19,9 @@ describe('CQL Library Sharing', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
     })
 
     afterEach('LogOut', () => {

@@ -289,9 +289,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
     before('Create Measure', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true)
 
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()

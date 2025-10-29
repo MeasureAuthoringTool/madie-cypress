@@ -736,7 +736,7 @@ export class TestCasesPage {
             altUser = false
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, Cypress.env('selectedAltUser'))
+        user = OktaLogin.setupUserSession(altUser)
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
@@ -807,7 +807,7 @@ export class TestCasesPage {
             altUser = false
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, Cypress.env('selectedAltUser'))
+        user = OktaLogin.setupUserSession(altUser)
 
         if (twoTestCases === true) {
             testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'

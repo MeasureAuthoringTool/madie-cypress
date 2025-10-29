@@ -17,9 +17,7 @@ const measureData: CreateMeasureOptions = {}
 describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryName
@@ -37,7 +35,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
     afterEach('Clean up', () => {
 
@@ -89,9 +87,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryName
@@ -109,7 +105,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
 
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
     })
     afterEach('Clean up', () => {
 

@@ -20,9 +20,7 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
 
     beforeEach('Create measures', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true)
 
         // need QiCore measure in measureId
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreMeasureName, measureCQLPFTests)

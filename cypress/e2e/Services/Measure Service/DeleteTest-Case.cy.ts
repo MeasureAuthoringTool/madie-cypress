@@ -39,9 +39,8 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
     it('Delete test Case - Success scenario - New Delete End Point', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -105,10 +104,10 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
     })
 
     it('Delete test Case - user has had measure shared with them', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
         //Share Measure with ALT User
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -141,7 +140,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         })
 
         //set local user that does not own the measure
-        OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(true)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {

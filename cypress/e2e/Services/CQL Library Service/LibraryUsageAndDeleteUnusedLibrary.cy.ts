@@ -19,9 +19,7 @@ describe('Verify Library usage and Delete Library', () => {
 
     beforeEach('Set Access token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false)
 
     })
 

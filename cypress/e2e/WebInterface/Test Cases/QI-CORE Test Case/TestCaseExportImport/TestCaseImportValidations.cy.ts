@@ -37,9 +37,7 @@ describe('Test Case Import: functionality tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true)
 
         CqlLibraryName = 'ImportValidation1Lib' + Date.now()
 
@@ -62,10 +60,6 @@ describe('Test Case Import: functionality tests', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
@@ -119,9 +113,7 @@ describe('Test Case Import: functionality tests', () => {
         OktaLogin.UILogout()
 
         //Share Measure with ALT User
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
@@ -210,9 +202,7 @@ describe('Test Case Import validations for versioned Measures', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.getUser(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.getUser(true)
 
         CqlLibraryName = 'ImportValidation2Lib' + Date.now()
 

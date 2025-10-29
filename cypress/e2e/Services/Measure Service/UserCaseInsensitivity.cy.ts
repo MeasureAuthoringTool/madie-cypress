@@ -14,9 +14,8 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 
 describe('Measure Service: Create Measure', function () {
     beforeEach('Set Access Token', function () {
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+
+        harpUser = OktaLogin.setupUserSession(false)
     })
     after('Clean up', function () {
         Utilities.deleteMeasure(measureName, CQLLibraryName)

@@ -129,9 +129,6 @@ export class CreateMeasurePage {
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
         measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
-        const currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
-
         const now = require('dayjs')
         let user = ''
 
@@ -154,7 +151,7 @@ export class CreateMeasurePage {
             measureNumber = 0
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -293,7 +290,7 @@ export class CreateMeasurePage {
             measureNumber = 0
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -407,9 +404,6 @@ export class CreateMeasurePage {
     public static CreateQICoreMeasureAPIWithNoMeasureDesc(measureName: string, CqlLibraryName: string, measureCQL?: string,
         measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
-        const currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
-
         let user = ''
         const now = require('dayjs')
 
@@ -432,7 +426,7 @@ export class CreateMeasurePage {
             measureNumber = 0
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -547,7 +541,6 @@ export class CreateMeasurePage {
         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
 
         const currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
 
         let user = ''
         const now = require('dayjs')
@@ -569,7 +562,7 @@ export class CreateMeasurePage {
             altUser = true
         }
 
-        user = OktaLogin.setupUserSession(altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -657,9 +650,6 @@ export class CreateMeasurePage {
 
     public static CreateQDMMeasureWithBaseConfigurationFieldsAPI(CreateMeasureOptions: CreateMeasureOptions): string {
 
-        const currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
-
         let user = ''
         const now = require('dayjs')
         let ecqmTitle = 'eCQMTitle4QDM'
@@ -680,7 +670,7 @@ export class CreateMeasurePage {
             CreateMeasureOptions.description = '<p>SemanticBits</p>'
         }
 
-        user = OktaLogin.setupUserSession(CreateMeasureOptions.altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(CreateMeasureOptions.altUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -764,7 +754,6 @@ export class CreateMeasurePage {
 
     public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions, measureNumber?: number): string {
         const currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
@@ -847,7 +836,7 @@ export class CreateMeasurePage {
             optionalParams.altUser = true
         }
 
-        user = OktaLogin.setupUserSession(optionalParams.altUser, currentUser, currentAltUser)
+        user = OktaLogin.setupUserSession(optionalParams.altUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {

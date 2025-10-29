@@ -23,9 +23,7 @@ describe('Version and Draft CQL Library', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false)
 
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -53,9 +51,7 @@ describe('Version and Draft CQL Library', () => {
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
         let mVersionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 
-
-        const currentAltUser = Cypress.env('selectedAltUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -108,9 +104,9 @@ describe('Version and Draft CQL Library', () => {
     })
 
     it('User cannot create a draft when a draft already exists, per measure', () => {
-        const currentAltUser = Cypress.env('selectedAltUser')
+
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
@@ -205,9 +201,7 @@ describe('Draftable API end point tests', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        harpUser = OktaLogin.setupUserSession(false)
 
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -226,14 +220,12 @@ describe('Draftable API end point tests', () => {
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
         OktaLogin.UILogout()
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
     it('Draftable end point return measure set id that was used in request and false if the measure is not version', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
@@ -259,9 +251,8 @@ describe('Draftable API end point tests', () => {
     it('Draftable end point return measure set id that was used in request and false if another measure, in that measure family, is in a draft status', () => {
         let newerMeasureName = ''
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
@@ -385,9 +376,8 @@ describe('Draftable API end point tests', () => {
     it('Draftable end point return measure set id that was used in request and true if the measure is versioned, regardless of version type (major, minor, or patch)', () => {
         let newerMeasureName = ''
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         let mIdFilePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let mSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'

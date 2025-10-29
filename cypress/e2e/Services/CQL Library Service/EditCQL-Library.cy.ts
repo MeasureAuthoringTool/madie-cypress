@@ -26,9 +26,7 @@ describe('Edit CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
     })
 
@@ -231,9 +229,8 @@ describe('Edit CQL Library', () => {
 
     it('Verify non Library owner unable to Edit CQL Library', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        harpUserALT = OktaLogin.setupUserSession(true, currentUser, currentAltUser)
+        harpUserALT = OktaLogin.setupUserSession(true)
 
         updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
 

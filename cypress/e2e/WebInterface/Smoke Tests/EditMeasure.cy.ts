@@ -16,9 +16,8 @@ describe('Edit Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false, currentUser, currentAltUser)
+        OktaLogin.setupUserSession(false)
 
         //Create Measure with out Steward and Developer
         cy.getCookie('accessToken').then((accessToken) => {
