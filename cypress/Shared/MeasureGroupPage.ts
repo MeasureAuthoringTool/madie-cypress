@@ -416,7 +416,14 @@ export class MeasureGroupPage {
     }
 
     public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = ''
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
+        }
+        else {
+            currentUser = Cypress.env('selectedUser')
+        }
 
         let user = ''
         let measurePath = ''
@@ -429,17 +436,10 @@ export class MeasureGroupPage {
         if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
 
         user = OktaLogin.setupUserSession(altUser)
+        cy.log('Current user is: ' + user)
 
         if (measureNumber === undefined || measureNumber === null) {
             measureNumber = 0
-        }
-
-        if (altUser)
-        {
-            currentUser = Cypress.env('selectedAltUser')
-        }
-        else {
-            currentUser = Cypress.env('selectedUser')
         }
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber

@@ -728,7 +728,7 @@ export class TestCasesPage {
 
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
         let user = ''
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = ''
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let testCasePath = ''
         let testCasePIdPath = ''
@@ -737,6 +737,13 @@ export class TestCasesPage {
         }
 
         user = OktaLogin.setupUserSession(altUser)
+        cy.log('Current user is: ' + user)
+
+        if (altUser) {
+            currentUser = Cypress.env('selectedAltUser')
+        } else {
+            currentUser = Cypress.env('selectedUser')
+        }
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
@@ -747,7 +754,6 @@ export class TestCasesPage {
         }
         if (secondMeasure === true) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
-            //testCasePIdPath = 'cypress/fixtures/measureId2'
         }
         else {
             measurePath = measurePath

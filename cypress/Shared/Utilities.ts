@@ -121,16 +121,18 @@ export class Utilities {
     }
 
     public static deleteMeasure(measureName?: string, cqlLibraryName?: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = ''
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
+        }
+        else {
+            currentUser = Cypress.env('selectedUser')
+        }
 
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
-        }
-
-
-        if ((altUser === undefined) || (altUser === null)) {
-            altUser = false
         }
 
         OktaLogin.setupUserSession(altUser)
