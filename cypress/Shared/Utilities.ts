@@ -441,41 +441,48 @@ export class Utilities {
         let path: string
         let urlPath: string
 
+        // doing this for backwards compatibility now - this should be refactored in the future
         if (objectType === MadieObject.Library) {
             path = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
-            urlPath = 'cql-libraries'
+            if (action === PermissionActions.GRANT) {
+                urlPath = 'cql-libraries/share'
+            } else {
+                urlPath = 'cql-libraries/unshare'   
+            }
         } else {
             path = 'cypress/fixtures/' + currentUser + '/measureId'
-            urlPath = 'measures'
+             if (action === PermissionActions.GRANT) {
+                urlPath = 'measures/shared'
+            } else {
+                urlPath = '/measures/unshared'  
+            }
         }
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(path).should('exist').then((id) => {
+            cy.readFile(path).should('exist').then((mId) => {
+
+               const users = new Array()
+               users.push(user)
+
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/' + urlPath + '/' + id + '/acls',
+                    url: '/api/' + urlPath,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': adminApiKey
                     },
                     method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": user,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": action
-                    }
+                    body: { [mId] : users } 
+                    // Note: these brackets don't make this an array.
+                    // This syntax is needed for keys of an object to force it to honor the value
                 }).then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(200)
                     if (action === PermissionActions.GRANT) {
-                        expect(response.body[0].userId).to.eql(user)
-                        expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
+                        expect(response.body[mId][0].roles).to.include("SHARED_WITH")
+                        expect(response.body[mId][0].userId).to.eq(user)
+                    } else {
+                        expect(response.body[mId]).to.eql([])
                     }
                 })
             })
