@@ -6,7 +6,8 @@ import { EditMeasurePage } from "./EditMeasurePage"
 export type MeasureActionOptions = {
     exportForPublish?: boolean,
     versionType?: string,
-    updateModelVersion?: boolean
+    updateModelVersion?: boolean,
+    altUser?: boolean
 }
 
 export type MeasureRow = {
@@ -122,15 +123,20 @@ export class MeasuresPage {
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
-            //cy.reload()
             cy.get('[data-testid="measure-name-' + fileContents + '_version"]').should('contain', versionNumber)
         })
     }
 
     public static actionCenter(action: string, measureNumber?: number, options?: MeasureActionOptions): void {
 
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = ''
+        if (options && options.altUser) {
+            currentUser = Cypress.env('selectedAltUser')
+        } else {
+            currentUser = Cypress.env('selectedUser')
+        }
         cy.log('Current User: ' + currentUser)
+
         //There is a prerequsite that you have a measure created and measure ID stored to a file
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 

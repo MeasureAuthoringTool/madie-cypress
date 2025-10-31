@@ -152,6 +152,7 @@ export class CreateMeasurePage {
         }
 
         user = OktaLogin.setupUserSession(altUser)
+        cy.log('Current user is: ' + user)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {

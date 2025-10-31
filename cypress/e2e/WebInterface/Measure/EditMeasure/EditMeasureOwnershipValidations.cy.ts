@@ -22,8 +22,11 @@ describe('Read only for measure, measure group, and test cases that user does no
     beforeEach('Create Measure, Measure Group, and Test Case with alt userLogin', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, null, true)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+        TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, false, true)
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+        MeasuresPage.actionCenter('edit', null, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -31,16 +34,13 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
 
-        TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, false, true)
         OktaLogin.Login()
     })
 
     afterEach('Logout and clean up', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
     })
 
@@ -48,19 +48,15 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         //page loads
         cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 30000)
-        Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 30000)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //edit the measure that was not created by logged-in user
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', null, { altUser: true }) // this seems wrong, but is needed to get the right measure
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
         cy.get(EditMeasurePage.readOnlyMPStartDt).should('have.attr', 'readonly', 'readonly')
@@ -94,7 +90,6 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[class="rich-text-editor_read_only"]').should('exist')
 
-
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
         cy.get(EditMeasurePage.createDefinitionBtn).should('be.disabled')
@@ -102,16 +97,15 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     it('CQL value on the measure CQL Editor tab cannot be changed', () => {
 
-        //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
-        cy.get(LandingPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
-        //edit the measure that was not created by current owner
-        MeasuresPage.actionCenter('edit')
+        //navigate to the all measures tab
+        cy.get(LandingPage.allMeasuresTab).should('be.visible')
+        cy.get(LandingPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+
+        //edit the measure that was not created by logged-in user
+        MeasuresPage.actionCenter('edit', null, { altUser: true })
 
         //confirm that the CQL Editor tab is available and click on it
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
@@ -122,17 +116,18 @@ describe('Read only for measure, measure group, and test cases that user does no
     })
 
     it('Test Cases are read / view only', () => {
-        let currentUser = Cypress.env('selectedUser')
-        //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
-        cy.get(LandingPage.allMeasuresTab).click()
-        cy.reload()
+        // since altUser created the measure & tc
+        let currentUser = Cypress.env('selectedAltUser')
+        
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
-        //edit the measure that was not created by logged in owner
-        MeasuresPage.actionCenter('edit')
+        //navigate to the all measures tab
+        cy.get(LandingPage.allMeasuresTab).should('be.visible')
+        cy.get(LandingPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+
+        //edit the measure that was not created by logged-in user
+        MeasuresPage.actionCenter('edit', null, { altUser: true })
 
         //confirm that the test case tab is available and click on it
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -160,19 +155,15 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         //page loads
         cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 30000)
-        Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 30000)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
-        //edit the measure group that was not created by logged in owner
-        MeasuresPage.actionCenter('edit')
+        //edit the measure that was not created by logged-in user
+        MeasuresPage.actionCenter('edit', null, { altUser: true })
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Verify that the Add Population Criteria button is not shown
@@ -182,7 +173,6 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get('[id="measure-group-type"]').should('have.attr', 'readonly', 'readonly')
         cy.get('[id="populationBasis"]').should('have.attr', 'readonly', 'readonly')
         cy.get('[id="scoring-select"]').should('have.attr', 'readonly', 'readonly')
-        //<textarea rows="1" readonly="" id="scoring-unit-text-input" placeholder="UCUM Code or Name" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">ml</textarea>
         cy.get('[id="scoring-unit-text-input"]').should('have.attr', 'readonly', 'readonly')
 
         //Population fields are read only
@@ -206,7 +196,6 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         //Reporting fields are read only
         cy.get(MeasureGroupPage.reportingTab).click()
-        //<textarea rows="1" readonly="" id="rateAggregation" name="rateAggregation" placeholder="-" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">-</textarea>
         cy.get('[data-testid="rich-text-editor-content"]').should('not.exist')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('have.attr', 'readonly', 'readonly')
     })
