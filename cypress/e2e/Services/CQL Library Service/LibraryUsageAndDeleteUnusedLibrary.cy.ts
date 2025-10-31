@@ -1,7 +1,7 @@
 import {Environment} from "../../../Shared/Environment"
 import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let adminApiKey = Environment.credentials().adminApiKey
 let CQLLibraryName = 'TestCqlLibrary' + Date.now()
