@@ -1,26 +1,22 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
 import {OktaLogin} from "../../../Shared/OktaLogin"
+import {Utilities} from "../../../Shared/Utilities"
 
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
 let CQLLibraryPublisher = 'SemanticBits'
-let CqlLibraryTwo = ''
 let harpUserALT = ''
 
 describe('Edit CQL Library', () => {
 
-    before('Create Measure', () => {
+    CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
-        CQLLibraryName = 'TestCqlLibrary' + Date.now()
+    before('Create CQL Library', () => {
+
         //Create CQL Library with Regular User
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
-
-        //Create CQL Library with Alternate User
-        CqlLibraryTwo = 'TestLibrary2' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryTwo, CQLLibraryPublisher, true, true)
 
     })
 
@@ -225,6 +221,22 @@ describe('Edit CQL Library', () => {
                 })
             })
         })
+    })
+})
+
+describe('Edi CQL Library - Ownership Validations', () => {
+
+    before('Create CQL Library', () => {
+
+    CQLLibraryName = 'TestCqlLibrary' + Date.now()
+    //Create CQL Library with Regular User
+    CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+
+    })
+
+    after('Delete CQL Library', () => {
+
+        Utilities.deleteLibrary(CQLLibraryName)
     })
 
     it('Verify non Library owner unable to Edit CQL Library', () => {
