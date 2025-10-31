@@ -41,7 +41,7 @@ export class Environment {
                     passwordALT2: Cypress.env('TEST_ALT_PASSWORD2'),
                     passwordALT3: Cypress.env('TEST_ALT_PASSWORD3'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    adminApiKey: Cypress.env('DEV_ADMIN_API_KEY')
+                    adminApiKey: Cypress.env('TEST_ADMIN_API_KEY')
                 }
             }
             // case 'impl': {
