@@ -1,6 +1,5 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
 import { LibraryCQL } from "../../../Shared/LibraryCQL"
 import {OktaLogin} from "../../../Shared/OktaLogin"
@@ -120,10 +119,10 @@ describe('Version and Draft CQL Library', () => {
         OktaLogin.setupUserSession(true)
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/cql-libraries/version/' + cqlLibraryId2 + '?isMajor=true',
+                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
                     method: 'PUT',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -131,7 +130,7 @@ describe('Version and Draft CQL Library', () => {
 
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.eql('User ' + harpUserALT + ' cannot modify resource CQL Library with id: ' + cqlLibraryId2)
+                    expect(response.body.message).to.eql('User ' + harpUserALT + ' cannot modify resource CQL Library with id: ' + cqlLibraryId)
                 })
             })
         })
