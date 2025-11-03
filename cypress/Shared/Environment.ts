@@ -3,10 +3,12 @@ export class Environment {
      * We set our environment variables here in this class
      */
 
-    public static credentials = (): { harpUser: string, password: string,harpUser2: string,
-        password2: string,harpUser3: string, password3: string, altHarpUser: string, altHarpUser2: string,
-        altHarpUser3: string, passwordALT: string, passwordALT2: string, passwordALT3: string,  umls_API_KEY: string,
-        adminApiKey: string } => {
+    public static credentials = (): {
+        harpUser: string, password: string, harpUser2: string,
+        password2: string, harpUser3: string, password3: string, altHarpUser: string, altHarpUser2: string,
+        altHarpUser3: string, passwordALT: string, passwordALT2: string, passwordALT3: string, umls_API_KEY: string,
+        adminApiKey: string
+    } => {
         switch (Cypress.env('environment')) {
             case 'dev': {
                 return {

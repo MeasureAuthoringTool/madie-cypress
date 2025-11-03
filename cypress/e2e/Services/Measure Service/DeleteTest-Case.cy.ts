@@ -4,7 +4,7 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin";
 
 let measureSharingAPIKey = Environment.credentials().adminApiKey
 let harpUserALT = ''
@@ -16,9 +16,10 @@ let testCaseSeries = 'SBTestSeriesP'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let randValue = (Math.floor((Math.random() * 1000) + 1))
+let harpUser = ''
 
 
-describe('Delete test Case: Newer end point / url that takes an list array of test case ids', () => {
+describe('Delete test Case: Newer end point / url that takes an list array of test case ids - simple delete', () => {
 
     let newMeasureName = measureName + randValue
     let newCQLLibraryName = CqlLibraryName + randValue
@@ -102,11 +103,26 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         })
 
     })
+})
+
+describe('Delete test Case: Newer end point / url that takes an list array of test case ids - user has had measure shared with them', () => {
+
+    let newMeasureName = measureName + randValue
+    let newCQLLibraryName = CqlLibraryName + randValue
+    beforeEach('Create Measure, Group, Test Case and set access token', () => {
+        //Create Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQLPFTests)
+        //Create Test case
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'a', testCaseDescription + ' a', testCaseSeries + 'a', testCaseJson, false, false, false)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b', testCaseDescription + ' b', testCaseSeries + 'b', testCaseJson, false, true, false)
+
+    })
 
     it('Delete test Case - user has had measure shared with them', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
+        harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
         //Share Measure with ALT User
 

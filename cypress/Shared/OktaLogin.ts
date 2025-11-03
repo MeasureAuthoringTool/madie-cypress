@@ -65,53 +65,54 @@ export class OktaLogin {
 
 
     public static Login(): void {
-            const user = Cypress.env('selectedUser')
+        const user = Cypress.env('selectedUser')
 
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
 
-            cy.visit('/login', {onBeforeLoad: (win) => win.sessionStorage.clear()})
+        cy.visit('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() })
 
-            if (user === 'harpUser') {
-                cy.setAccessTokenCookie()
-                cy.get(this.usernameInput).type(Environment.credentials().harpUser)
-                cy.get(this.passwordInput).type(Environment.credentials().password)
-            } else if (user === 'harpUser2') {
-                cy.setAccessTokenCookie2()
-                cy.get(this.usernameInput).type(Environment.credentials().harpUser2)
-                cy.get(this.passwordInput).type(Environment.credentials().password2)
+        if (user === 'harpUser') {
+            cy.setAccessTokenCookie()
+            cy.get(this.usernameInput).type(Environment.credentials().harpUser)
+            cy.get(this.passwordInput).type(Environment.credentials().password)
+        } else if (user === 'harpUser2') {
+            cy.setAccessTokenCookie2()
+            cy.get(this.usernameInput).type(Environment.credentials().harpUser2)
+            cy.get(this.passwordInput).type(Environment.credentials().password2)
+        }
+        else if (user === 'harpUser3') {
+            cy.setAccessTokenCookie3()
+            cy.get(this.usernameInput).type(Environment.credentials().harpUser3)
+            cy.get(this.passwordInput).type(Environment.credentials().password3)
+        }
+
+        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+
+        cy.get(this.signInButton).click()
+
+        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
+
+            if (response.statusCode === 200) {
+                //do nothing
             }
-            else if (user === 'harpUser3') {
-                cy.setAccessTokenCookie3()
-                cy.get(this.usernameInput).type(Environment.credentials().harpUser3)
-                cy.get(this.passwordInput).type(Environment.credentials().password3)
+            else {
+                umlsLoginForm.UMLSLogin()
             }
 
-            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+        })
 
-            cy.get(this.signInButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
+        cy.log('Login Successful')
 
-            cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-
-                if (response.statusCode === 200) {
-                    //do nothing
-                }
-                else {
-                    umlsLoginForm.UMLSLogin()
-                }
-
-            })
-
-            cy.get(LandingPage.newMeasureButton).should('be.visible')
-            cy.log('Login Successful')
-
-            // Store selected user for release
-            Cypress.env('selectedUser', user)
+        // Store selected user for release
+        Cypress.env('selectedUser', user)
     }
 
 
-        public static Logout(): void {
+    public static Logout(): void {
 
 
         //commenting out all the logout until logout issue MAT-4520 is resolved
@@ -167,6 +168,7 @@ export class OktaLogin {
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
 
         if (altUser) {
             switch (currentAltUser) {
