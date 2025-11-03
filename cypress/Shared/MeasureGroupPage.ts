@@ -618,7 +618,14 @@ export class MeasureGroupPage {
 
     public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
 
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = ''
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
+        }
+        else {
+            currentUser = Cypress.env('selectedUser')
+        }
 
         let user = ''
         let measurePath = ''
@@ -629,7 +636,6 @@ export class MeasureGroupPage {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
 
-
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
@@ -638,14 +644,6 @@ export class MeasureGroupPage {
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
 
         user = OktaLogin.setupUserSession(altUser)
-
-        if (altUser)
-        {
-            currentUser = Cypress.env('selectedAltUser')
-        }
-        else {
-            currentUser = Cypress.env('selectedUser')
-        }
 
         if (twoMeasureGroups === true) {
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
