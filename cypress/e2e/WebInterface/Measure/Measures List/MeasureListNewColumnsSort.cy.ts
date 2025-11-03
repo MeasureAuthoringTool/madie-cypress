@@ -53,7 +53,7 @@ describe('Measure List Page Sort by Columns', () => {
         MeasuresPage.checkFirstRow({ name: '\t Test.CMS334.emm' })
         cy.contains('.header-button', 'Measure').click()
         cy.wait('@sort2')
-        MeasuresPage.checkFirstRow({ name: 'Zoom In Information' })
+        MeasuresPage.checkFirstRow({ name: 'tillertest' })
 
         // sort by version
         cy.contains('.header-button', 'Version').click()
@@ -61,7 +61,7 @@ describe('Measure List Page Sort by Columns', () => {
         MeasuresPage.checkFirstRow({ version: '0.0.000' })
         cy.contains('.header-button', 'Version').click()
         cy.wait('@sort4')
-        MeasuresPage.checkFirstRow({ version: '15.1.000' })
+        MeasuresPage.checkFirstRow({ version: '15.1.001' })
 
         // sort by status
         cy.contains('.header-button', 'Status').click()
