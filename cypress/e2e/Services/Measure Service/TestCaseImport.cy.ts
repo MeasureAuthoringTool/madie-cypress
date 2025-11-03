@@ -14,6 +14,7 @@ import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
 let measureCQL = MeasureCQL.SBTEST_CQL
+let harpUser = ''
 let harpUserALT = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -51,6 +52,13 @@ let TCJson_Invalid = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "ver
 describe('Test Case Import', () => {
 
     beforeEach('Create Measure and measure group', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        OktaLogin.setupUserSession(false)
+        harpUser = OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         newMeasureName = measureName + randValue + 4
         newCQLLibraryName = cqlLibraryName + randValue + 4
@@ -152,12 +160,33 @@ describe('Test Case Import', () => {
             })
         })
     })
+})
+
+describe('Test Case Import -- Non Measure owner validation', () => {
+
+    beforeEach('Create Measure and measure group', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        OktaLogin.setupUserSession(false)
+        harpUser = OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
+
+        newMeasureName = measureName + randValue + 4
+        newCQLLibraryName = cqlLibraryName + randValue + 4
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+
+        TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
+    })
 
     it('Non Measure owner unable to Import Test cases', () => {
 
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false)
-        harpUserALT = OktaLogin.getUser(true)
+        OktaLogin.setupUserSession(true)
+
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
