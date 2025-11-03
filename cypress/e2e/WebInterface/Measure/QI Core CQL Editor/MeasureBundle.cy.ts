@@ -7,11 +7,11 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
-let measureName = 'MeasureName ' + Date.now()
-let CqlLibraryName = 'CQLLibraryName' + Date.now()
+const measureName = 'MeasureBundle ' + Date.now()
+const CqlLibraryName = 'MeasureBundleLib' + Date.now()
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = MeasureCQL.ICFCleanTest_CQL
 
 describe('Measure Bundle end point returns cqlErrors as true', () => {
 
@@ -21,8 +21,9 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -30,25 +31,16 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
-
-
-        OktaLogin.Login()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')   
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Log into the UI and save Measure CQL so the cqlErrors flag will update to true', () => {
         let currentUser = Cypress.env('selectedUser')
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -83,13 +75,9 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.cqlErrors).to.equal(true)
-
-
                 })
-
             })
         })
-
     })
 })
 
@@ -101,8 +89,9 @@ describe('Bundle returns elmXML', () => {
 
     beforeEach('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -111,22 +100,15 @@ describe('Bundle returns elmXML', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
-
-        OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
+        Utilities.deleteMeasure()
     })
 
     it('Upon saving CQL from the UI, GET Bundle request returns elm xml', () => {
         let currentUser = Cypress.env('selectedUser')
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -178,8 +160,9 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
 
     beforeEach('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -188,22 +171,15 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
-
-        OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
+        Utilities.deleteMeasure()
     })
 
     it('Measure bundle end point returns scoring type for multiple Measure groups', () => {
         let currentUser = Cypress.env('selectedUser')
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -278,9 +254,6 @@ describe('Measure bundle end point returns stratifications', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.setAccessTokenCookie()
-
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -291,20 +264,15 @@ describe('Measure bundle end point returns stratifications', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-
-        OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
+        Utilities.deleteMeasure()
     })
 
     it('Measure bundle end point returns stratifications for Cohort Measure', () => {
         let currentUser = Cypress.env('selectedUser')
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -388,15 +356,13 @@ describe('Measure bundle end point returns stratifications', () => {
 
     it('Measure bundle end point returns stratifications for Continuous Variable Measure', () => {
         let currentUser = Cypress.env('selectedUser')
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -491,8 +457,6 @@ describe('Measure bundle end point returns stratifications', () => {
 
     it('Measure bundle end point returns stratifications for Proportion Measure', () => {
         let currentUser = Cypress.env('selectedUser')
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -601,16 +565,13 @@ describe('Verify the criteria reference for measure observations', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.setAccessTokenCookie()
-
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
+        Utilities.deleteMeasure()
     })
 
     it('Measure bundle end point returns criteria reference for CV measure observations and is equal to measure population id', () => {
@@ -625,7 +586,7 @@ describe('Verify the criteria reference for measure observations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
