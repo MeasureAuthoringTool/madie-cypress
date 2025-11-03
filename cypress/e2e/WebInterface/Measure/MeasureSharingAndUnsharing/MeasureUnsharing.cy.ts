@@ -2,7 +2,6 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
-import { Environment } from "../../../../Shared/Environment"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { LandingPage } from "../../../../Shared/LandingPage"
@@ -28,6 +27,7 @@ describe('Measure Un Sharing', () => {
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
+        OktaLogin.setupUserSession(false)
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
