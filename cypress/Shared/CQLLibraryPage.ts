@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { CQLLibrariesPage } from "./CQLLibrariesPage"
 import { CQLEditorPage } from "./CQLEditorPage"
 import { SupportedModels } from "./CreateMeasurePage"
-import {MeasureRow} from "./MeasuresPage"
-import {OktaLogin} from "./OktaLogin"
+import { MeasureRow } from "./MeasuresPage"
+import { OktaLogin } from "./OktaLogin"
 
 export enum EditLibraryActions {
     delete,
