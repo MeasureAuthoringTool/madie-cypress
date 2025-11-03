@@ -11,6 +11,7 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedMeasureName = ''
 let updatedCQLLibraryName = ''
 let harpUser = ''
+let harpUserALT = ''
 const measureCQL = MeasureCQL.SBTEST_CQL
 const model = 'QI-Core v4.1.1'
 const versionIdPath = 'cypress/fixtures/versionId'
@@ -1045,7 +1046,10 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
     updatedMeasureName = measureName + 1 + randValue
     updatedCQLLibraryName = cqlLibraryName + 1 + randValue
 
+
     beforeEach('Create Measure and Set Access Token', () => {
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL)
@@ -1053,9 +1057,8 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
     })
 
     it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.clearCookies()
-        cy.clearLocalStorage()
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true)
         OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -1108,7 +1111,8 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(403)
-                        expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + id)
+                        expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + id)
+                        //' + harpUser + ' 
                     })
                 })
             })
