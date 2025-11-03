@@ -23,10 +23,18 @@ let measureQDMManifestName0 = ''
 let QDMCqlLibraryName0 = ''
 let measureQDMManifestName1 = ''
 let QDMCqlLibraryName1 = ''
+let harpUser = ''
+let harpUserALT = ''
 
 describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         OktaLogin.setupUserSession(false)
 
@@ -120,7 +128,9 @@ describe('Measure Association: Validations', () => {
     })
 
     it('Association: QDM -> Qi Core measure: Validations', () => {
-        let currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false)
         //validation test: only one measure is selected
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -271,8 +281,9 @@ describe('Measure Association: Validations', () => {
 
         //validation test: both measures the user is not the owner of
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, 4, true)
+        OktaLogin.setupUserSession(true)
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', 4)
+        MeasuresPage.actionCenter('edit', 4, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -281,11 +292,11 @@ describe('Measure Association: Validations', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(4, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((qdmId2) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((qicoreId4) => {
+                cy.readFile('cypress/fixtures/' + currentAltUser + '/measureId4').should('exist').then((qicoreId4) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId4 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
@@ -302,12 +313,23 @@ describe('Measure Association: Validations', () => {
                 })
             })
         })
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
     })
 })
 
 describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.wait(1000)
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         OktaLogin.setupUserSession(false)
 
@@ -321,7 +343,8 @@ describe('Measure Association: Validations', () => {
             patientBasis: 'false',
             measureCql: qdmManifestTestCQL,
             mpStartDate: '2025-01-01',
-            mpEndDate: '2025-12-31'
+            mpEndDate: '2025-12-31',
+            altUser: false
         }
 
         //Create New QDM Measure
@@ -344,8 +367,9 @@ describe('Measure Association: Validations', () => {
         //Create new QI Core measure
         //1
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 1)
+        OktaLogin.setupUserSession(false)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -360,13 +384,15 @@ describe('Measure Association: Validations', () => {
     })
 
     it('Association: QDM -> Qi Core measure: Successful Association', () => {
-        let currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        MeasuresPage.actionCenter('edit', 0)
+        Utilities.waitForElementVisible(EditMeasurePage.generateCmsIdButton, 90000)
+        cy.get(EditMeasurePage.generateCmsIdButton).wait(3700).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
-        cy.get(EditMeasurePage.cmsIDDialogCancel).click()
+        cy.get(EditMeasurePage.cmsIDDialogCancel).wait(3700).click()
         cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
@@ -393,5 +419,9 @@ describe('Measure Association: Validations', () => {
                 })
             })
         })
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
     })
 })

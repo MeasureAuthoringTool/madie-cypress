@@ -137,6 +137,7 @@ export class MeasuresPage {
         }
         cy.log('Current User: ' + currentUser)
 
+
         //There is a prerequsite that you have a measure created and measure ID stored to a file
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
