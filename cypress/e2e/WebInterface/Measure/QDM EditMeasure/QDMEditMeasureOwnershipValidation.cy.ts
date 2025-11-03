@@ -29,18 +29,18 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL
-        measureData.altUser = true
+        measureData.altUser = false
 
-        //Create QDM Measure, PC and Test Case with ALT user
+        //Create QDM Measure, PC and Test Case with Regular user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
-        OktaLogin.Login()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        OktaLogin.AltLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, false)
     })
 
     it('Fields on Population criteria page are not editable by Non Measure Owner', () => {
@@ -51,7 +51,7 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 70000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 70000)
 
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
