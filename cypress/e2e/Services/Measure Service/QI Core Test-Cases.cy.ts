@@ -1258,7 +1258,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     })
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedAltUser')
         OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
