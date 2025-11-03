@@ -6,10 +6,10 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -63,8 +63,7 @@ describe('Measure Versioning', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        harpUser = OktaLogin.setupUserSession(false)
-        harpUserALT = OktaLogin.getUser(true)
+        OktaLogin.setupUserSession(false)
 
     })
 
@@ -72,6 +71,13 @@ describe('Measure Versioning', () => {
 
         newMeasureName = measureName + 1 + randValue
         newCQLLibraryName = cqlLibraryName + 1 + randValue
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        OktaLogin.setupUserSession(false)
+        harpUser = OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         OktaLogin.Login()
@@ -80,17 +86,18 @@ describe('Measure Versioning', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
 
         //Create second Measure with Alt User
+        OktaLogin.setupUserSession(true)
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, cqlLibraryTwo, measureCQL, 2, true)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 2)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp', 'boolean', 2)
 
     })
 
     it('Successful Measure Versioning', () => {
-        let currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
@@ -109,8 +116,8 @@ describe('Measure Versioning', () => {
 
     it('Non Measure owner unable to version Measure', () => {
 
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(true)
+        const currentUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -123,7 +130,7 @@ describe('Measure Versioning', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
+                    expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
                 })
             })
         })
@@ -137,6 +144,8 @@ describe('Version Measure without CQL', () => {
 
         newMeasureName = measureName + 2 + randValue
         newCQLLibraryName = cqlLibraryName + 2 + randValue
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName)
     })
@@ -147,7 +156,8 @@ describe('Version Measure without CQL', () => {
     })
 
     it('User can not version Measure if there is no CQL', () => {
-        let currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
@@ -218,7 +228,8 @@ describe('Version Measure with invalid CQL', () => {
     })
 
     it('User can not version Measure if the CQL has errors', () => {
-        let currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
