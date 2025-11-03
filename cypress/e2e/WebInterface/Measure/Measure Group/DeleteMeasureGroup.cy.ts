@@ -37,7 +37,6 @@ describe('Validate Measure Group deletion functionality', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureOne, newCqlLibraryName)
-
     })
 
     it('Delete button brings up confirmation modal and clicking yes, removes the existing Measure group', () => {
@@ -114,7 +113,6 @@ describe('Validate Measure Group deletion functionality', () => {
 
         cy.get(MeasureGroupPage.numeratorSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix')
-
     })
 
     it('Test Cases still loads after all groups are deleted', () => {
@@ -183,9 +181,7 @@ describe('Ownership test when deleting groups', () => {
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.UILogout()
-
         Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "ALT", false, true, 1)
-
     })
 
     it('User can only delete groups from a measure that they own', () => {
@@ -200,7 +196,7 @@ describe('Ownership test when deleting groups', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', measureTwo)
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('view', 1)
+        MeasuresPage.actionCenter('view', 1, { altUser: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
