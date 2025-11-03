@@ -337,14 +337,14 @@ describe('Validating Non-owner access to Base Configuration page', () => {
         altMeasureName = measureName + altRandValue
         altCqlLibraryName = CqlLibraryName + altRandValue
 
-        CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL, false, true)
+        CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL)
 
-        OktaLogin.Login()
+        OktaLogin.AltLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
+        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName)
     })
 
     it('Non-owner of measure cannot edit any of the Base Configuration fields', () => {
@@ -504,7 +504,7 @@ describe('Updates on Base Configuration page', () => {
             .nextAll() // select the next element
             .get(MeasureGroupPage.qdmPatientBasis)
             .should('have.attr', 'type', 'radio')  // confirm it's type radio
-            .should('be.checked')
+            .should('be.checked').wait(1000)
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
