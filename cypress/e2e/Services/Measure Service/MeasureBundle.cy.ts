@@ -816,16 +816,18 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
     newCqlLibraryName = 'TestCqlLibraryName' + randValue
     let measureCQL = MeasureCQL.CQL_Multiple_Populations
 
-    before('Create Measure', () => {
 
+    before('Create Measure', () => {
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupUserSession(true)
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, null, true)
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', null, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
     })
 
@@ -840,7 +842,7 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
 
     })
     it('Get Measure bundle resource will return details of measure, regardless if the request is comfing from the owner / creator of the measure', () => {
-        let currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
