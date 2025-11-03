@@ -111,6 +111,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
         OktaLogin.setupUserSession(false)
+        harpUserALT = OktaLogin.getUser(true)
     })
 
     it('Verify CQL Library owner can transfer Library from Action centre transfer button on Owned Libraries page', () => {
@@ -127,7 +128,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         CQLLibrariesPage.cqlLibraryActionCenter('transfer')
 
         //Verify message on the transfer pop up screen
-        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following library(s). All versions and drafts will be transferred, so only the most recent library name appears here.')
+        cy.get('.transfer-dialog-info-text > :nth-child(1)').should('contain.text', 'You are about to Transfer ownership of the following library(s). All versions and drafts will be transferred. So only the most recent library name appears here.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
 
         //Select Retain Share Access checkbox
@@ -181,7 +182,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         CQLLibraryPage.actionCenter(EditLibraryActions.transfer)
 
         //Verify message on the transfer pop up screen
-        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer the following library(s). All versions and drafts will be transferred, so only the most recent library name appears here.')
+        cy.get('.transfer-dialog-info-text > :nth-child(1)').should('contain.text', 'You are about to Transfer ownership of the following library(s). All versions and drafts will be transferred. So only the most recent library name appears here.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
 
