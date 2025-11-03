@@ -109,19 +109,19 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = measureQDMCQL
         measureData.measureNumber = null
-        measureData.altUser = true
+        measureData.altUser = false
 
         //Create QDM Measure, PC and Test Case with ALT user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, true, 'Initial Population', 'Initial Population', 'Initial Population')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
-        OktaLogin.Login()
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
+        OktaLogin.AltLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
+        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName)
     })
 
     it('Fields on Test Case page are not editable by Non Measure Owner', () => {
