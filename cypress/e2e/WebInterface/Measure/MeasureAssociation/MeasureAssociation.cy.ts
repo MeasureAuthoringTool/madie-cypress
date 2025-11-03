@@ -129,11 +129,12 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
     afterEach('Log Out', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Association: QDM -> Qi Core measure: Validations', () => {
         let currentUser = Cypress.env('selectedUser')
+        let currentAltUser = Cypress.env('selectedAltUser')
         //validation test: only one measure is selected
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
@@ -296,9 +297,10 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
         //validation test: both measures the user is not the owner of
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, 5, true)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(5, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', 5)
+        MeasuresPage.actionCenter('edit', 5, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -308,15 +310,14 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
 
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(5, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-
         OktaLogin.Login()
 
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 350000)
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId5').should('exist').then((measureId) => {
+        // need altUser here, they are the measure owner
+        cy.readFile('cypress/fixtures/' + currentAltUser + '/measureId5').should('exist').then((measureId) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
@@ -483,6 +484,11 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
+    })
+
+    afterEach('Log Out', () => {
+
+        OktaLogin.UILogout()
     })
 
     it('Association: QDM -> Qi Core measure: Copying meta data and CMS Id from QDM - to - QI Core measure; also validating the \'are you sure\' modal / dialog window', () => {
@@ -668,11 +674,13 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
     afterEach('Log Out', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Association: QDM -> Qi Core 6.0.0 measure: Validations', () => {
         let currentUser = Cypress.env('selectedUser')
+        let currentAltUser = Cypress.env('selectedAltUser')
+
         const options: CreateMeasureOptions = {
             measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean,
             altUser: true
@@ -743,7 +751,6 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
-        cy.reload()
 
         //validation test: Qi Core 6.0.0 measure must be in draft status
         MeasuresPage.actionCenter('version', 4)
@@ -839,10 +846,10 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         //validation test: both measures the user is not the owner of
         let measureQICore3 = 'QICore600Measure3' + Date.now() + randValue + 9 + randValue
         CreateMeasurePage.CreateMeasureAPI(measureQICore3, measureQICore3, SupportedModels.qiCore6, options, 5)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 5)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population', null, 5)
 
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', 5)
+        MeasuresPage.actionCenter('edit', 5, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -853,16 +860,14 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         OktaLogin.UILogout()
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(5, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         OktaLogin.Login()
 
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 350000)
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId5').should('exist').then((measureId) => {
+        cy.readFile('cypress/fixtures/' + currentAltUser + '/measureId5').should('exist').then((measureId) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
@@ -886,8 +891,6 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 describe('Measure Association: Transferring meta data and CMS ID from QDM to QI Core 6.0.0 measure, using Qi Core 6.0.0', () => {
 
     beforeEach('Create Measure', () => {
-
-
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
@@ -1023,6 +1026,11 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         cy.get(Header.mainMadiePageButton).click()
 
+    })
+
+    afterEach('Log Out', () => {
+
+        OktaLogin.UILogout()
     })
 
     it('Association: QDM -> Qi Core 6.0.0 measure: Copying meta data and CMS Id from QDM - to - QI Core 6.0.0 measure; also validating the \'are you sure\' modal / dialog window', () => {
