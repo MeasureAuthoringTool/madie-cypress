@@ -754,13 +754,14 @@ export class CreateMeasurePage {
     }
 
     public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions, measureNumber?: number): string {
-        const currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.env('selectedUser')
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
         }
 
         let user,
+            altUser = false,
             mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD'),
             mpEndDate = now().format('YYYY-MM-DD'),
             ecqmTitle = 'AutoTestTitle',
@@ -770,6 +771,9 @@ export class CreateMeasurePage {
             measureScoring,
             measureMetadata
 
+        if (optionalParams && optionalParams.altUser) {
+            altUser = optionalParams.altUser
+        }
         if (optionalParams && optionalParams.mpStartDate) {
             mpStartDate = optionalParams.mpStartDate
         }
@@ -829,15 +833,11 @@ export class CreateMeasurePage {
             }
         }
 
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-
         if (currentUser === 'harpUserALT') {
-            optionalParams.altUser = true
+            altUser = true
         }
 
-        user = OktaLogin.setupUserSession(optionalParams.altUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -877,8 +877,7 @@ export class CreateMeasurePage {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
 
-                let currentUser = ''
-                if (optionalParams.altUser)
+                if (altUser)
                 {
                     currentUser = Cypress.env('selectedAltUser')
                 }
