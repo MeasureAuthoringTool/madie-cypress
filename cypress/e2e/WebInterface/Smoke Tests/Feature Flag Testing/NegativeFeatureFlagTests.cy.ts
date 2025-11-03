@@ -17,7 +17,6 @@ let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
-let cqlLibraryName = 'TestLibrary' + Date.now()
 let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 const now = require('dayjs')
@@ -34,10 +33,9 @@ describe('QI Core: Elements tab is not present', () => {
         cy.setAccessTokenCookie()
 
         measureName = 'TestMeasure' + Date.now()
-        cqlLibraryName = 'TestCql' + Date.now()
+        CqlLibraryName = 'TestCql' + Date.now()
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLAlt)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
     })
@@ -45,8 +43,7 @@ describe('QI Core: Elements tab is not present', () => {
     after('Log out and Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('QI Core Test Case edit page: Ensure / verify that the Elements tab does not exist on the QI Core Test Case edit page', () => {
@@ -94,22 +91,20 @@ describe('Qi Core6 option available', () => {
 //"qiCoreElementsTab": false
 describe('QI Core v6: UI Elements Builder tab is not shown', () => {
 
-    afterEach('Clean up', () => {
+    before('Set up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-    })
-
-    it('UI Elements Builder not shown on test cases for 6.0.0 measures', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6)
-
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure()
+    })
+
+    it('UI Elements Builder not shown on test cases for 6.0.0 measures', () => {
 
         MeasuresPage.actionCenter('edit')
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
@@ -125,7 +120,6 @@ describe('QI Core v6: UI Elements Builder tab is not shown', () => {
         // assert that blank editor field is there
         cy.get(TestCasesPage.aceEditorJsonInput).should('be.empty')
     })
-
 })
 
 // "QICoreIncludeSDEValues": false
@@ -150,14 +144,12 @@ describe('Qi Core Test Case Include SDE sub-tab / feature', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify that SDE sub-tab is not available', () => {
@@ -173,7 +165,5 @@ describe('Qi Core Test Case Include SDE sub-tab / feature', () => {
 
         //confirm that the SDE sub-tab is disabled / not available
         Utilities.waitForElementToNotExist(TestCasesPage.qdmSDESubTab, 35000)
-
-
     })
 })
