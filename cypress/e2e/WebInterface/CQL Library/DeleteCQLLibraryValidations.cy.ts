@@ -11,6 +11,7 @@ import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 let currentUser = Cypress.env('selectedUser')
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
+let harpUser = ''
 let harpUserALT = ''
 const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const adminApiKey = Environment.credentials().adminApiKey
@@ -27,7 +28,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         harpUserALT = OktaLogin.getUser(true)
 
         //Create CQL Library with Regular User
-       CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
     })
 
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
@@ -295,12 +296,14 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
+        const currentUser = Cypress.env('selectedUser')
         //Version Library
-        cy.clearAllCookies()
+        OktaLogin.setupUserSession(false)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+        OktaLogin.setupUserSession(true)
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
