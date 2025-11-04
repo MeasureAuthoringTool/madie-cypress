@@ -38,7 +38,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', null)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{end}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(Header.mainMadiePageButton).click()
@@ -55,13 +55,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        cy.get(EditMeasurePage.testCasesTab).wait(2500).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
