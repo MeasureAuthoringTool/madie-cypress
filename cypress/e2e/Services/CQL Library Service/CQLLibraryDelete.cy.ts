@@ -2,7 +2,7 @@ import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -160,7 +160,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
                 })
             })
 
-            OktaLogin.setupUserSession(false)
+            OktaLogin.setupUserSession(true)
             CQLLibraryPage.versionLibraryAPI(versionNumber)
 
             OktaLogin.setupUserSession(true)

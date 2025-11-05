@@ -24,9 +24,9 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        OktaLogin.AltLogin()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -74,7 +74,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(null, null, false, true)
+        Utilities.deleteMeasure(null, null)
     })
 
     it('Run / Execute single passing Test Case, on the Test Case list page, where the user is not the owner nor shared' +
@@ -116,10 +116,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.tcHighlightingTab).click()
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
-            //logout as ALT user and, then, log in as non-alt user
+            //logout as Regular user and, then, log in as ALT user
             OktaLogin.Logout()
 
-            OktaLogin.Login()
+            OktaLogin.AltLogin()
 
             cy.get(LandingPage.allMeasuresTab).click()
 
@@ -193,10 +193,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.tcHighlightingTab).click()
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
-            //logout as ALT user and, then, log in as non-alt user
+            //logout as Regular user and, then, log in as Alt user
             OktaLogin.Logout()
 
-            OktaLogin.Login()
+            OktaLogin.AltLogin()
 
             cy.get(LandingPage.allMeasuresTab).click()
 
@@ -273,10 +273,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(TestCasesPage.tcHighlightingTab).click()
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
-        //logout as ALT user and, then, log in as non-alt user
+        //logout as Regular user and, then, log in as Alt user
         OktaLogin.Logout()
 
-        OktaLogin.Login()
+        OktaLogin.AltLogin()
 
         cy.get(LandingPage.allMeasuresTab).click()
         cy.reload()

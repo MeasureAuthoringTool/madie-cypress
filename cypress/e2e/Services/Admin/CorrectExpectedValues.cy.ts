@@ -24,17 +24,14 @@ const measure = {
 }
 const measureCQL = QiCore4Cql.CQL_Populations.replace('TestLibrary4664', measure.name)
 const testCase = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
-let harpUser = ''
 const adminAPIKey = Environment.credentials().adminApiKey
+let harpUser = ''
 
 describe('Admin API - Reset test case expected values', () => {
 
     beforeEach('Set Access Token', () => {
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.setupUserSession(false, currentUser, currentAltUser)
-
+        harpUser = OktaLogin.setupUserSession(false)
     })
 
     afterEach('Clean up', () => {
@@ -57,7 +54,7 @@ describe('Admin API - Reset test case expected values', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
         // set expected value "true" on test case
         let updatedTestCase: TestCase

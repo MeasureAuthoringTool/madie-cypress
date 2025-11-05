@@ -47,7 +47,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
-    it.only('Verify all instances in the Measure set (Version and Draft) are Transferred to the new owner', () => {
+    it('Verify all instances in the Measure set (Version and Draft) are Transferred to the new owner', () => {
 
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
@@ -90,15 +90,14 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         // ALT User now owns both measures in the measureSet
         cy.get(MeasuresPage.measureListTitles).should('contain', randomMeasureName)
 
+        currentUser = Cypress.env('selectedUser')
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_expandArrow"]').click().wait(1000)
             cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
         })
 
         OktaLogin.UILogout()
-
-        Utilities.deleteMeasure(null, null, false, true, 1)
-        //Utilities.deleteVersionedMeasure(measureName, cqlLibraryName, false, true)
+        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName, false, true)
     })
 
     it('Verify Transfer button disabled for non Measure owner', () => {
@@ -158,7 +157,7 @@ describe('Delete Test Case with Transferred user', () => {
     afterEach('Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(null, null, false, true)
+
     })
 
     it('Verify Test Case can be deleted by the new owner after transfer', () => {
