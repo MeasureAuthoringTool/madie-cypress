@@ -1,12 +1,12 @@
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -39,7 +39,6 @@ describe('QDM Test Cases : Export Test Case', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = qdmMeasureCQL
 
-        //Create New Measure and Test case
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -50,10 +49,8 @@ describe('QDM Test Cases : Export Test Case', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Successful QRDA Export for QDM Test Cases', () => {
@@ -106,7 +103,6 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.readFile(path.join(downloadsFolder, 'html/1_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'qrda/2_SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'qrda/1_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')).should('exist')
-
     })
 
     it('Export Test Case button is disabled until Test cases are executed', () => {
@@ -151,14 +147,13 @@ describe('Export Test cases by Non Measure Owner', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = qdmMeasureCQL
 
-        //Create New Measure and Test case
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
+
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -171,18 +166,17 @@ describe('Export Test cases by Non Measure Owner', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Non Measure Owner should be able to Export Test cases', () => {
 
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -200,7 +194,6 @@ describe('Export Test cases by Non Measure Owner', () => {
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
-
     })
 })
 
