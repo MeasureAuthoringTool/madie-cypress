@@ -3,7 +3,7 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import { Utilities } from "../../../../Shared/Utilities"
+import {MadieObject, PermissionActions, Utilities} from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage";
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
@@ -230,6 +230,33 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
+    it('Verify Transfer button does not exist for shared user on Edit Library page', () => {
+
+        //Share Library with ALT User
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
+
+        Utilities.waitForElementVisible(CQLLibraryPage.sharedLibrariesTab, 60000)
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+
+        //Navigate to Edit Library page
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        cy.get(CQLLibraryPage.actionCenterButton).click()
+        cy.get(CQLLibraryPage.actionCenterTransfer).should('not.exist')
+
+        //Logout and Delete Measure with Regular user
+        OktaLogin.UILogout()
+        Utilities.deleteLibrary(newCQLLibraryName)
+    })
 })
 
 describe('CQL Library Transfer - Multiple instances', () => {

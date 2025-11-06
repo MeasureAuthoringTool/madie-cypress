@@ -57,10 +57,10 @@ export class CQLLibrariesPage {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
 
-            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').should('exist')
-            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=edit-cql-library-button-' + fileContents + ']', 4500)
-            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').wait(2000).click()
+            cy.get('[data-testid=cql-library-action-' + fileContents + ']').should('exist')
+            cy.get('[data-testid=cql-library-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=cql-library-action-' + fileContents + ']', 4500)
+            cy.get('[data-testid=cql-library-action-' + fileContents + ']').wait(2000).click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
