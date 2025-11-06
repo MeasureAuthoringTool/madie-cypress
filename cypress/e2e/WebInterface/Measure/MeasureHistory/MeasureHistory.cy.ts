@@ -8,28 +8,28 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseAction, TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Header } from "../../../../Shared/Header"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
 const measureName = 'TestMeasure' + Date.now()
 const cqlLibraryName = 'TestCql' + Date.now()
 const measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
-let harpUser = ''
-let harpUserALT = ''
-const measureSharingAPIKey = Environment.credentials().adminApiKey
 const measureCQLPFTests = MeasureCQL.CQL_Populations
 const qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const qiCoreMeasureCQL = MeasureCQL.SBTEST_CQL
-const testCaseTitle = 'Title for Auto Test'
-const testCaseDescription = 'DENOMFail' + Date.now()
-const testCaseSeries = 'SBTestSeries'
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
+const measureSharingAPIKey = Environment.credentials().adminApiKey
+const testCaseTitle = 'Title for Auto Test'
+const testCaseDescription = 'DENOMFail'
+const testCaseSeries = 'SBTestSeries'
 const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip'
-const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
-
 const measureData: CreateMeasureOptions = {}
 const randValue = (Math.floor((Math.random() * 1000) + 1))
+let harpUser = ''
+let harpUserALT = ''
+
 measureData.ecqmTitle = measureName + randValue
 measureData.cqlLibraryName = cqlLibraryName + randValue
 measureData.measureScoring = 'Cohort'
@@ -49,8 +49,8 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Verify that Measure Create and Update actions are recorded in Measure History', () => {
@@ -198,7 +198,7 @@ describe('Measure History - Version and Draft actions', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
@@ -235,8 +235,7 @@ describe('Measure History - Version and Draft actions', () => {
     })
 })
 
-describe('Measure History - Associate Measure actions', () => {
-
+describe('Measure History - Associate Measure and Export Measure actions', () => {
 
     let measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
     let QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
@@ -264,22 +263,21 @@ describe('Measure History - Associate Measure actions', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
+
+         //Create new QI Core measure
+        //1
+        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 1)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+        cy.get(Header.mainMadiePageButton).click()
 
-
-        OktaLogin.setupUserSession(false)
-
-        //Create new QI Core measure
-        //1
-        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 1)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -287,21 +285,18 @@ describe('Measure History - Associate Measure actions', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-
-        OktaLogin.setupUserSession(false)
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureQDMManifestName1, QDMCqlLibraryName1)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(null, null, false, false, 1)
     })
 
     it('Verify that Associate Measure actions are recorded in Measure History', () => {
         let currentUser = Cypress.env('selectedUser')
-        OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
@@ -341,6 +336,19 @@ describe('Measure History - Associate Measure actions', () => {
         cy.get(MeasuresPage.userActionRow).should('contain.text', 'ASSOCIATED')
         cy.get(MeasuresPage.harpIdRow).should('contain.text', harpUser)
     })
+
+    it('Verify that Export Measure actions are recorded in Measure History', () => {
+
+        MeasuresPage.actionCenter('export')
+        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', {timeout: 5500})
+
+        MeasuresPage.actionCenter('viewhistory')
+
+        cy.get('[data-testid="measure-history-header"]').should('contain.text', qdmMeasure.ecqmTitle + '(Version 0.0.000)Draft')
+        cy.get(MeasuresPage.userActionRow).should('contain.text', 'EXPORTED_MEASURE')
+        cy.get(MeasuresPage.harpIdRow).should('contain.text', harpUser)
+        cy.get(MeasuresPage.additionalActionRow).should('contain.text', '-')
+    })
 })
 
 describe('Measure History - Qi Core Export Test case Action', () => {
@@ -360,8 +368,8 @@ describe('Measure History - Qi Core Export Test case Action', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Verify that Export Qi Core Test case Action is recorded in Measure History', () => {
@@ -393,5 +401,75 @@ describe('Measure History - Qi Core Export Test case Action', () => {
         cy.get('[data-testid="measure-history-cell-0_actionType"]').should('contain.text', 'EXPORTED_TESTCASES')
         cy.get('[data-testid="measure-history-cell-0_performedBy"]').should('contain.text', harpUser)
 
+    })
+})
+
+describe('Measure History - QDM Export Test case Action', () => {
+
+    deleteDownloadsFolderBeforeAll()
+    deleteDownloadsFolderBeforeEach()
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
+
+        const qdmMeasureName = 'QDMTestCaseExportHistory' + Date.now()
+        const qdmLibName = 'QDMTestCaseExportHistoryLib' + Date.now()
+
+        const qdmMeasure: CreateMeasureOptions = {
+            ecqmTitle: qdmMeasureName,
+            cqlLibraryName: qdmLibName,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1')
+
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+    })
+
+    afterEach('Log out and Clean up', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
+    })
+
+    it('Verify that Export QDM Test case Action is recorded in Measure History', () => {
+        let currentUser = Cypress.env('selectedUser')
+
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 45000)
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 45000)
+        
+        // export
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
+
+            cy.get(TestCasesPage.actionCenterExport).click()
+            const excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
+            cy.get(excelButton).should('be.visible').click()
+        })
+        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM-TestCases.xlsx', {timeout: 5500})
+
+        //Go to Measure History and verify that Export Test cases actions are recorded
+        EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)
+        cy.get('[data-testid="measure-history-cell-0_actionType"]').should('contain.text', 'EXPORTED_TESTCASES')
+        cy.get('[data-testid="measure-history-cell-0_performedBy"]').should('contain.text', harpUser)
     })
 })
