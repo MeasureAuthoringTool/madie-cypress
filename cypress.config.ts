@@ -27,7 +27,7 @@ export default defineConfig({
     inline: true,
   },
   retries: {
-    runMode: 1,
+    runMode: 2,
     openMode: 0,
   },
   screenshotsFolder: 'mochawesome-report/assets',
