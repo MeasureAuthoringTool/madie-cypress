@@ -250,6 +250,117 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
     })
 
+    it('Run / Execute Invalid Test case when the Execute Invalid Test case option is enabled', () => {
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        Utilities.setMeasureGroupType()
+
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
+        cy.contains(testCase.group).click()
+
+        TestCasesPage.clickCreateTestCaseButton()
+
+        //Verify created test case Title and Series exists on Test Cases Page
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
+
+        cy.log('Test Case created successfully')
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Add json to the test case
+        TestCasesPage.enterErroneousJson(invalidTestCaseJson)
+
+        //Save edited / updated to test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 12500)
+        cy.get(Toasts.errorToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
+        cy.log('JSON added to test case successfully')
+
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to Execute Options page and enable Execute test cases regardless of validation status option
+        cy.get('[data-testid="nav-link-execution-options"]').click()
+        cy.get('[data-testid="execute-invalid-test-cases"]').click()
+        cy.get('[data-testid="execution-options-save"]').click()
+        cy.get('[class="toast success"]').should('contain.text', 'Test Case Configuration Updated Successfully')
+        Utilities.waitForElementToNotExist('[class="toast success"]', 70000)
+
+        //Navigate back to Test case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Verify warning message
+        cy.get('[data-testid="warn-title"]').should('contain.text', 'Execution of invalid test cases is enabled. You may receive inaccurate pass/fail results. You can update this setting in Execution Configuration tab.')
+
+        //Verify execution status on Test Case list page
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+    })
+
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
