@@ -24,6 +24,9 @@ RUN \
 # install aws cli
 RUN apt-get update && apt-get install -y awscli
 
+# install other tools
+RUN apt-get update && apt-get install -y jq
+
 COPY ./cypress ./cypress
 COPY ./cypress.config.ts ./cypress.config.ts
 COPY ./tsconfig.json ./tsconfig.json
