@@ -812,6 +812,9 @@ export class TestCasesPage {
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
         }
+        else {
+            currentUser = Cypress.env('selectedAltUser')
+        }
 
         user = OktaLogin.setupUserSession(altUser)
 
