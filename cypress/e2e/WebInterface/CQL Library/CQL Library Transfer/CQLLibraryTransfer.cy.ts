@@ -25,13 +25,12 @@ describe('CQL Library Transfer', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
 
-        OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
     })
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteLibrary(null, true)
     })
 
@@ -39,7 +38,7 @@ describe('CQL Library Transfer', () => {
     it('Verify transferred CQL Library is viewable under Owned Libraries tab', () => {
 
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(true)
+        OktaLogin.setupUserSession(false)
 
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {

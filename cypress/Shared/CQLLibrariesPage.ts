@@ -41,8 +41,17 @@ export class CQLLibrariesPage {
     public static readonly unshareCheckBox = '.PrivateSwitchBase-input'
     public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
-    public static clickEditforCreatedLibrary(libraryNumber?: number): void {
-        const currentUser = Cypress.env('selectedUser')
+    public static clickEditforCreatedLibrary(libraryNumber?: number, altUser?:boolean): void {
+        let currentUser = ''
+        if (altUser)
+        {
+            currentUser = Cypress.env('selectedAltUser')
+        }
+        else
+        {
+            currentUser = Cypress.env('selectedUser')
+        }
+
         let filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
         if (libraryNumber) {
@@ -57,10 +66,10 @@ export class CQLLibrariesPage {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
 
-            cy.get('[data-testid=cql-library-action-' + fileContents + ']').should('exist')
-            cy.get('[data-testid=cql-library-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=cql-library-action-' + fileContents + ']', 4500)
-            cy.get('[data-testid=cql-library-action-' + fileContents + ']').wait(2000).click()
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('exist')
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="edit-cql-library-button-' + fileContents + '"]', 4500)
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').wait(2000).click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
