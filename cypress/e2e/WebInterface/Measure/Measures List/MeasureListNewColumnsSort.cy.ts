@@ -61,7 +61,7 @@ describe('Measure List Page Sort by Columns', () => {
         MeasuresPage.checkFirstRow({ version: '0.0.000' })
         cy.contains('.header-button', 'Version').click()
         cy.wait('@sort4')
-        MeasuresPage.checkFirstRow({ version: '15.1.001' })
+        MeasuresPage.checkFirstRow({ version: '15.2.000' })
 
         // sort by status
         cy.contains('.header-button', 'Status').click()
