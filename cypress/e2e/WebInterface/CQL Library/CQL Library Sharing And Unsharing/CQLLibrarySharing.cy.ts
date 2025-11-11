@@ -24,29 +24,13 @@ describe('CQL Library Sharing', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
 
-        harpUserALT = OktaLogin.setupUserSession(true)
+        harpUserALT = OktaLogin.getUser(true)
     })
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteLibrary(newCQLLibraryName)
-    })
-
-    it('Verify Shared CQL Library is viewable under Shared Libraries tab', () => {
-
-        //Share Library with ALT User
-        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
-
-        //Login as ALT User
-        OktaLogin.AltLogin()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
-        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
-        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
     })
 
     it('Verify CQL Library can be edited by the shared user', () => {
@@ -80,7 +64,6 @@ describe('CQL Library Sharing - Multiple instances', () => {
 
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
 
-        OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()

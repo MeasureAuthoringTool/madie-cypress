@@ -146,7 +146,6 @@ export class CQLLibraryPage {
         if ((cql === undefined) || (cql === null)) {
             cql = ""
         }
-        const currentUser = Cypress.env('selectedUser')
 
         user = OktaLogin.setupUserSession(altUser)
 
@@ -169,9 +168,14 @@ export class CQLLibraryPage {
                     //"programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
+                let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
+                if (altUser)
+                {
+                    currentUser = Cypress.env('selectedAltUser')
+                }
                 if (twoLibraries === true) {
                     cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2', response.body.id)
                 }
