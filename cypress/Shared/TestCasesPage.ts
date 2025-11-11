@@ -124,6 +124,13 @@ export class TestCasesPage {
     public static readonly saveRAVOption = '[data-testid="rav-save"]'
     public static readonly discardRavChangesOption = '[data-testid="cancel-button"]'
 
+    //Execution Options sub tab
+    public static readonly executionOptionsSubTab = '[data-testid="nav-link-execution-options"]'
+    public static readonly executeInvalidTestCasesCheckBox = '[data-testid="execute-invalid-test-cases"]'
+    public static readonly saveExecutionOptionsBtn = '[data-testid="execution-options-save"]'
+    public static readonly executionOptionsSuccessMsg = '[class="toast success"]'
+    public static readonly executionOptionsToastMsg = '[data-testid="warn-title"]'
+
     //Test case QRDA Export
     public static readonly testcaseQRDAExportBtn = '[data-testid="export-action-icon"]'
     public static readonly successMsg = '.toast'
