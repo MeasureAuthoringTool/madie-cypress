@@ -2,7 +2,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import {MeasureActionOptions, MeasuresPage} from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 
 let harpUserALT = ''
+let harpUser = ''
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -29,6 +30,7 @@ let TCDescription = 'DENOMFail1651609688032'
 let TCJson = TestCaseJson.QDMTestCaseJson
 
 const measureData: CreateMeasureOptions = {}
+const editOptions: MeasureActionOptions = {}
 
 describe('Test Case population values based on Measure Group population definitions', () => {
     beforeEach('Create Measure and measure group', () => {
@@ -464,38 +466,38 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
     let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
     before('Create Measure', () => {
 
-        OktaLogin.setupUserSession(false)
-        harpUserALT = OktaLogin.getUser(true)
+        harpUser = OktaLogin.getUser(false)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryNameDeux
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'true'
         measureData.measureCql = booleanPatientBasisQDM_CQL
+        measureData.altUser = true
 
         //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        editOptions.altUser = true
+
+        OktaLogin.AltLogin()
+        MeasuresPage.actionCenter('edit', null, editOptions)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
 
-        OktaLogin.setupUserSession(false)
-
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
         //create test case
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false,true)
 
     })
 
     it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
 
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(true)
+        const currentUser = Cypress.env('selectedAltUser')
+        OktaLogin.setupUserSession(false)
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -517,13 +519,14 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(403)
-                        expect(response.body.message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
+                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
                     })
                 })
             })
         })
     })
 })
+
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
     beforeEach('Create Measure and measure group', () => {
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
@@ -537,6 +540,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'true'
         measureData.measureCql = booleanPatientBasisQDM_CQL
+        measureData.altUser = false
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
