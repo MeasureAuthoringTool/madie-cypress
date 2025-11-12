@@ -11,6 +11,7 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
+let longTcTitle = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345dfghjkljhgfhjkldvdjhgskdfhdkjf6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrst'
 let testCaseSeries = 'SBTestSeries'
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n' +
@@ -106,6 +107,44 @@ describe('Clone Invalid Qi Core Test Case', () => {
 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
+
+    })
+})
+
+
+describe('Clone Qi Core Test Case validations', () => {
+
+    before('Create measure and login', () => {
+
+        //Create Qi Core Measure, PC and Test Case
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
+        TestCasesPage.CreateTestCaseAPI(longTcTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and Clean up Measures', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Clone button disabled when the Test case title is more than 226 characters', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page and delete Json
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
+
+        //Assert tool tip
+        cy.get('[data-testid="clone-tooltip"]').trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip').should('contain.text', 'The test case title is too long to clone')
 
     })
 })
