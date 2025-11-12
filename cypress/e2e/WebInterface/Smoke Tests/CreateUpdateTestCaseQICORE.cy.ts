@@ -96,6 +96,13 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
 
         OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
     afterEach('Logout and delete measure', () => {
@@ -105,58 +112,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
 
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.newTestCaseButton).click()
-
-        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
-        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
-
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
-        cy.get('#test-case-series-option-0').click()
-
-        TestCasesPage.clickCreateTestCaseButton()
-
-        //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
-
-        cy.log('Test Case created successfully')
-
-        //Add json to the test case
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        Utilities.waitForElementVisible(TestCasesPage.testCaseAvailableElementTab, 21500)
-        cy.get(TestCasesPage.topJsonTab).click()
-
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 21500)
-        cy.editTestCaseJSON(testCaseJson)
-
-        cy.get(TestCasesPage.detailsTab).click()
-
-        //Save edited / updated to test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
-        cy.log('JSON added to test case successfully')
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         //Verify Last Saved Date on Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -165,5 +121,6 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
+
     })
 })
