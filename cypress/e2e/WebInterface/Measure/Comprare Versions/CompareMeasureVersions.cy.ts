@@ -1,0 +1,95 @@
+import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import {OktaLogin} from "../../../../Shared/OktaLogin"
+import {Utilities} from "../../../../Shared/Utilities"
+import {MeasuresPage} from "../../../../Shared/MeasuresPage"
+import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import {Header} from "../../../../Shared/Header"
+import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+
+let measureName = 'TestMeasure' + Date.now()
+const cqlLibraryName = 'TestCql' + Date.now()
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const measureData: CreateMeasureOptions = {}
+const randValue = (Math.floor((Math.random() * 1000) + 1))
+
+measureData.ecqmTitle = measureName + randValue
+measureData.cqlLibraryName = cqlLibraryName + randValue
+measureData.measureCql = measureCQL
+
+//Skipping until feature flag 'CompareMeasureVersions' is removed
+describe.skip('Compare Measure Versions', () => {
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureData.ecqmTitle, measureData.cqlLibraryName, measureData.measureCql)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    })
+
+    afterEach('Log out and Clean up', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
+    })
+
+    it('Compare two Versions of a Measure', () => {
+
+        let  updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
+        let currentUser = Cypress.env('selectedUser')
+
+        cy.get(Header.measures).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        //Version Measure
+        MeasuresPage.actionCenter('version')
+
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
+        MeasuresPage.validateVersionNumber('1.0.000')
+        cy.log('Version Created Successfully')
+
+        //Add Draft to Versioned Measure
+        MeasuresPage.actionCenter('draft')
+        cy.intercept('/api/measures/*/draft').as('drafted')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+
+        cy.wait('@drafted').then(int => {
+            // capture measureId of new draft
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int.response.body.id)
+        })
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
+
+        cy.log('Draft Created Successfully')
+
+        //Check Draft Measure
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((draftMeasureId) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + draftMeasureId + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + draftMeasureId + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)
+            cy.get('[data-testid="measure-name-' + draftMeasureId + '_select"]').find('[type="checkbox"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + draftMeasureId + '_select"]').find('[type="checkbox"]').check()
+            cy.get('[data-testid="measure-name-' + draftMeasureId + '_expandArrow"]').click().wait(1000)
+        })
+
+        //Check Versioned Measure
+        cy.get('.expanded-row > :nth-child(1)').click()
+
+        cy.get('[data-testid="compare-versions-action-btn"]').should('be.enabled')
+        cy.get('[data-testid="compare-versions-action-tooltip"]').trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip').should('contain.text', 'Compare Measure Versions')
+
+    })
+})
