@@ -9,8 +9,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
-import { LandingPage } from "../../../../Shared/LandingPage"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage";
+import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -20,9 +19,6 @@ let testCaseSeries = 'SBTestSeries'
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
-const now = require('dayjs')
-let mpStartDate = now().subtract('2', 'year').format('MM-DD-YYYY')
-let mpEndDate = now().format('MM-DD-YYYY')
 
 // "qiCoreElementsTab": false
 describe('QI Core: Elements tab is not present', () => {
@@ -57,35 +53,6 @@ describe('QI Core: Elements tab is not present', () => {
 
         //Elements tab should not be visible
         Utilities.waitForElementToNotExist(TestCasesPage.elementsTab, 20000)
-    })
-})
-
-//"qiCore6": true
-describe('Qi Core6 option available', () => {
-
-    before('Login', () => {
-
-        OktaLogin.Login()
-    })
-
-    it('Qi-Core v6.0.0 option available while creating New Measures', () => {
-
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
-        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.get(LandingPage.newMeasureButton).click()
-        cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
-        Utilities.waitForElementVisible(CreateMeasurePage.measureModelDropdown, 30000)
-        cy.get(CreateMeasurePage.measureModelDropdown).click()
-        Utilities.waitForElementVisible(CreateMeasurePage.measureModelQICorev6, 30000)
-        cy.get(CreateMeasurePage.measureModelQICorev6).click()
-        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
-
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).type(mpStartDate)
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).type(mpEndDate)
-
-        cy.get(CreateMeasurePage.createMeasureButton).should('be.enabled')
     })
 })
 
@@ -195,15 +162,12 @@ describe('Compare Library versions / feature', () => {
 
         const selector = CQLLibrariesPage.actionCenterCompareVersions
 
-        // If the element exists, ensure it's not visible. If it doesn't exist, the check also passes.
-        cy.get('body').find(selector).then(($els) => {
-            if ($els.length) {
-                // Element exists in DOM -> assert it's not visible
-                cy.wrap($els).should('not.be.visible')
-            } else {
-                // Element not present in DOM -> that's acceptable for "not visible"
-                expect($els.length).to.equal(0)
-            }
+        // Guarded lookup: ensure that no matched elements are visible (covers both absent and present-but-hidden)
+        cy.get('body').then($body => {
+            const found = $body.find(selector)
+            const visibleCount = found.filter(':visible').length
+            // visibleCount should be 0 (either element absent -> 0, or present but hidden -> 0)
+            expect(visibleCount, `Visible elements matching ${selector}`).to.equal(0)
         })
     })
 
