@@ -28,6 +28,7 @@ export class CQLLibrariesPage {
     public static readonly actionCenterShareBtn = '[data-testid="share-action-btn"]'
     public static readonly actionCenterTransferBtn = '[data-testid="transfer-action-btn"]'
     public static readonly actionCenterHistoryBtn = '[data-testid="library-history-action-btn"]'
+    public static readonly actionCenterCompareVersions = '[data-testid="compare-versions-action-btn"]'
 
     //Share/Un share Library
     public static readonly shareOption = '[data-testid="Share With-option"]'
