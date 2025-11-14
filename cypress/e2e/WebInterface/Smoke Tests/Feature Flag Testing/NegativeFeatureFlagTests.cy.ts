@@ -10,6 +10,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
 import { LandingPage } from "../../../../Shared/LandingPage"
+import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -166,4 +167,44 @@ describe('Qi Core Test Case Include SDE sub-tab / feature', () => {
         //confirm that the SDE sub-tab is disabled / not available
         Utilities.waitForElementToNotExist(TestCasesPage.qdmSDESubTab, 35000)
     })
+})
+
+// "CompareLibraryVersions": false
+describe('Compare Library versions / feature', () => {
+
+    beforeEach('Login', () => {
+
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout', () => {
+
+        OktaLogin.UILogout()
+    })
+
+    it('Verify that Compare Libraries Action button is not visible', () => {
+
+        // Navigate to CQL Libraries page to ensure the action center would be present if enabled
+        cy.get(Header.cqlLibraryTab).should('exist')
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
+
+        // Wait briefly for the page to render action center area (keep this short to avoid flakiness)
+        cy.wait(1000)
+
+        const selector = CQLLibrariesPage.actionCenterCompareVersions
+
+        // If the element exists, ensure it's not visible. If it doesn't exist, the check also passes.
+        cy.get('body').find(selector).then(($els) => {
+            if ($els.length) {
+                // Element exists in DOM -> assert it's not visible
+                cy.wrap($els).should('not.be.visible')
+            } else {
+                // Element not present in DOM -> that's acceptable for "not visible"
+                expect($els.length).to.equal(0)
+            }
+        })
+    })
+
 })
