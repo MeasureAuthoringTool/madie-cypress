@@ -1914,9 +1914,6 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 120000 })
-
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
