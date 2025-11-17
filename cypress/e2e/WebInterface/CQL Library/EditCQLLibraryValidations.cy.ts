@@ -4,7 +4,7 @@ import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../Shared/Header"
 import { Utilities } from "../../../Shared/Utilities"
 import { umlsLoginForm } from "../../../Shared/umlsLoginForm"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -27,6 +27,7 @@ describe('Edit CQL Library validations', () => {
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
+        Utilities.deleteLibrary(newCQLLibraryName)
     })
 
     it('CQL Library edit page level validations on the CQL Library name, error messaging and accessibility of the save button', () => {
@@ -145,17 +146,18 @@ describe('CQL Library Validations -- User ownership', () => {
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
         CQLLibraryNameAlt = 'TestLibrary' + Date.now() + randValue
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt, false, true)
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt)
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
+        Utilities.deleteLibrary(CQLLibraryNameAlt)
     })
 
     it('Owner is the same as current user, library will appear in, both, "All Libraries" and "My Libraries" default / stand-alone lists', () => {
         //log in as user that does not own the Library
-        OktaLogin.AltLogin()
+        OktaLogin.Login()
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -180,8 +182,8 @@ describe('CQL Library Validations -- User ownership', () => {
 
     it('Owner is not the user and the library details are viewed via a View button and Library cannot be edited', () => {
         const currentUser = Cypress.env('selectedUser')
-        //log in as user that does not own the Library
-        OktaLogin.Login()
+        //log in as user that own the Library
+        OktaLogin.AltLogin()
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -197,13 +199,7 @@ describe('CQL Library Validations -- User ownership', () => {
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('exist')
-            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=view-cql-library-button-' + fileContents + ']', 3500)
-            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').click()
-
-        })
+        CQLLibrariesPage.clickViewforCreatedLibrary()
 
         cy.contains('You are not the owner of the CQL Library. Only owner can edit it.').should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'readonly')
