@@ -141,18 +141,18 @@ describe('CQL Library Search Validations -- User ownership', () => {
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
         CQLLibraryNameAlt = 'TestLibrary' + Date.now() + randValue
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt, false, true)
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt)
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteLibrary(CQLLibraryName, true)
+        Utilities.deleteLibrary(CQLLibraryName)
     })
 
     it('Owner is different than current user, library will only appear in "All Libraries" searched list', () => {
         //log in as user that does not own the Library
-        OktaLogin.Login()
+        OktaLogin.AltLogin()
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -196,8 +196,9 @@ describe('CQL Library Search Validations -- User ownership', () => {
     })
 
     it('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
-        //log in as user that does not own the Library
-        OktaLogin.AltLogin()
+
+        //log in as user that own the Library
+        OktaLogin.Login()
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
