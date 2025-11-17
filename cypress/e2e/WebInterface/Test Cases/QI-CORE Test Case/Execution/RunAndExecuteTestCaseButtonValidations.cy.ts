@@ -342,7 +342,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
     })
 
-    it.only('Test case Json validated upon clicking Run Test button before Test Case is saved', () => {
+    it('Test case Json validated upon clicking Run Test button before Test Case is saved', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
