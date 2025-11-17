@@ -1857,7 +1857,7 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
         Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
     })
 
-    it.only('Execute Test Case on a newly versioned measure; verify Measure highlighting happens', () => {
+    it('Execute Test Case on a newly versioned measure; verify Measure highlighting happens', () => {
         const currentUser = Cypress.env('selectedUser')
         const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
