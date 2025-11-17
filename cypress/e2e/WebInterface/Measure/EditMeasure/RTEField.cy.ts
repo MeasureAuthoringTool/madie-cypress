@@ -28,7 +28,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false, 0)
     })
 
     it('Verify the entry, save and the resulting HTML text formatting that in the RTE field', () => {
@@ -36,7 +36,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         let description = 'description'
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, { altUser: false })
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -67,7 +67,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         let description = 'description'
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, { altUser: false })
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -137,13 +137,13 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false, 0)
     })
 
     it('Verify the ability to embed a table into a RTE field as well as to add and remove columns and rows', () => {
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, { altUser: false })
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
