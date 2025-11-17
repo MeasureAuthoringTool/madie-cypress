@@ -133,13 +133,10 @@ export class MeasuresPage {
         let filePath = ''
         if (options && options.altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        } else if (options && options.altUser === false) {
+        } else  {
             currentUser = Cypress.env('selectedUser')
         }
         cy.log('Current User: ' + currentUser)
-
-
-
 
         if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
             measureNumber = 0
