@@ -5,29 +5,29 @@ import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
-import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin";
 import { MeasuresPage } from "../../../Shared/MeasuresPage";
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage";
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestLibrary' + Date.now()
-let measureCQL = MeasureCQL.SBTEST_CQL
+const measureName = 'TestMeasure' + Date.now()
+const cqlLibraryName = 'TestLibrary' + Date.now()
+const measureCQL = MeasureCQL.SBTEST_CQL
 let harpUser = ''
 let harpUserALT = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCQLLibraryName = ''
 
-let TCSeries = 'SBTestSeries'
-let TCTitle = 'test case title'
-let TCDescription = 'DENOMFail1651609688032'
-let secondTCSeries = 'ICFTestSeries'
-let secondTCTitle = 'ICF test case title'
-let secondTCDescription = 'DENOMPass1651609688032'
-let TCJson = TestCaseJson.TestCaseJson_Valid
-let ImportTCJon = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
+const TCSeries = 'SBTestSeries'
+const TCTitle = 'test case title'
+const TCDescription = 'DENOMFail1651609688032'
+const secondTCSeries = 'ICFTestSeries'
+const secondTCTitle = 'ICF test case title'
+const secondTCDescription = 'DENOMPass1651609688032'
+const TCJson = TestCaseJson.TestCaseJson_Valid
+const TCJson_Invalid_PatientID = TestCaseJson.TestCaseJson_with_warnings
+const ImportTCJon = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
     ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +
     ' "resource": { "id":"1", "resourceType": "Encounter", "meta": {' +
     ' "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter",' +
@@ -37,8 +37,7 @@ let ImportTCJon = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versio
     ' "status": "finished","class": { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],"period": { "start": "2021-01-01T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2d5722cf-6051-4f8c-9af7-8732cdd17b8d", "resourceType": "Patient","text": { "status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>\"}, "meta": { "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"}, "identifier":' +
     ' [ { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", ' +
     ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ] } ],"gender": "female","birthDate": "2000-10-11"} } ] }'
-let TCJson_Invalid_PatientID = TestCaseJson.TestCaseJson_with_warnings
-let TCJson_Invalid = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
+const TCJson_Invalid = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
     ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +
     ' "resource": { "id":"1", "resourceType": "Encounter", "meta": {' +
     ' "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter",' +
@@ -52,13 +51,8 @@ let TCJson_Invalid = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "ver
 describe('Test Case Import', () => {
 
     beforeEach('Create Measure and measure group', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
+
         OktaLogin.setupUserSession(false)
-        harpUser = OktaLogin.setupUserSession(false)
-        harpUserALT = OktaLogin.getUser(true)
 
         newMeasureName = measureName + randValue + 4
         newCQLLibraryName = cqlLibraryName + randValue + 4
@@ -71,14 +65,13 @@ describe('Test Case Import', () => {
 
     afterEach('Clean up measures', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Success Scenario: Import single test case and over ride existing test case', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -93,7 +86,6 @@ describe('Test Case Import', () => {
                         body: [{
                             "patientId": patientId,
                             "json": ImportTCJon
-
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -149,7 +141,6 @@ describe('Test Case Import', () => {
                         body: [{
                             "patientId": patientId,
                             "json": TCJson_Invalid
-
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -165,13 +156,8 @@ describe('Test Case Import', () => {
 describe('Test Case Import -- Non Measure owner validation', () => {
 
     beforeEach('Create Measure and measure group', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
+
         OktaLogin.setupUserSession(false)
-        harpUser = OktaLogin.setupUserSession(false)
-        harpUserALT = OktaLogin.getUser(true)
 
         newMeasureName = measureName + randValue + 4
         newCQLLibraryName = cqlLibraryName + randValue + 4
@@ -182,11 +168,16 @@ describe('Test Case Import -- Non Measure owner validation', () => {
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
 
+    afterEach(() => {
+        
+        Utilities.deleteMeasure()
+    })
+
+
     it('Non Measure owner unable to Import Test cases', () => {
 
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(true)
-
+        harpUserALT = OktaLogin.setupUserSession(true)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -201,7 +192,6 @@ describe('Test Case Import -- Non Measure owner validation', () => {
                         body: [{
                             "patientId": patientId,
                             "json": ImportTCJon
-
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -224,21 +214,26 @@ describe('Test Case import for versioned Measure', () => {
         OktaLogin.setupUserSession(false)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
-        TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
+    })
+
+    afterEach(() => {
+
+        Utilities.deleteMeasure()
     })
 
     it("Able to Import Test Cases for Versioned Measures", () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
+
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -255,8 +250,6 @@ describe('Test Case import for versioned Measure', () => {
             })
         })
 
-        OktaLogin.setupUserSession(false)
-
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
@@ -270,7 +263,6 @@ describe('Test Case import for versioned Measure', () => {
                         body: [{
                             "patientId": patientId,
                             "json": ImportTCJon
-
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -298,7 +290,7 @@ describe('Multiple Test Case Import', () => {
 
     afterEach('Clean up measures', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Multiple test case files are not supported', () => {
