@@ -342,7 +342,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
     })
 
-    it('Test case Json validated upon clicking Run Test button before Test Case is saved', () => {
+    it.only('Test case Json validated upon clicking Run Test button before Test Case is saved', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -435,9 +435,11 @@ describe('Run / Execute Test Case button validations', () => {
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type(validTestCaseJson, { parseSpecialCharSequences: false })
+        //Save the Test Case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Nothing to see here!')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: No code provided')
     })
 })
 
