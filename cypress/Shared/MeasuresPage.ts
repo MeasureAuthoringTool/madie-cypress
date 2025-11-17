@@ -130,25 +130,28 @@ export class MeasuresPage {
     public static actionCenter(action: string, measureNumber?: number, options?: MeasureActionOptions): void {
 
         let currentUser = ''
+        let filePath = ''
         if (options && options.altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        } else {
+        } else if (options && options.altUser === false) {
             currentUser = Cypress.env('selectedUser')
         }
         cy.log('Current User: ' + currentUser)
 
 
-        //There is a prerequsite that you have a measure created and measure ID stored to a file
-        let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
-        if ((measureNumber === undefined) || (measureNumber === null)) {
+
+        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
             measureNumber = 0
+            filePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
 
         if (measureNumber > 0) {
             filePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
+        cy.log('File path is ' + filePath)
         cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.log('File contents is ' + fileContents)
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
