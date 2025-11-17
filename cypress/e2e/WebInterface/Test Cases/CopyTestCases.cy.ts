@@ -8,27 +8,26 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { Header } from "../../../Shared/Header"
 
-let testCaseDescription = 'DENOMFail' + Date.now()
+
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
+let secondMeasureName = 'SecondMeasure' + Date.now()
+let secondLibraryName = 'SecondLibrary' + Date.now()
 let testCaseTitle = 'test case title' + Date.now()
 let testCaseSeries = 'SBTestSeries' + Date.now()
+let testCaseDescription = 'DENOMFail' + Date.now()
 let measureCQLQDM = MeasureCQL.SBTEST_QDM_CQL
-let measureCQL = MeasureCQL.SBTEST_CQL
 let qiCoreMeasureCQL = MeasureCQL.CQL_Populations
 let measureScoring = 'Cohort'
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let secondMeasureName = 'SecondMeasure' + Date.now()
-let secondLibraryName = 'SecondLibrary' + Date.now()
+
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 const measureDataQDM: CreateMeasureOptions = {}
 const measureDataQDM2: CreateMeasureOptions = {}
-
-//const measureDataQiCore: CreateMeasureOptions = {}
-//const measureDataQiCore2: CreateMeasureOptions = {}
 
 describe('Copy QDM Test Cases', () => {
 
@@ -47,18 +46,8 @@ describe('Copy QDM Test Cases', () => {
 
         //Create QDM Measure, PC and Test Case
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureDataQDM)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 1)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 1)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, null, false, false, 1)
-
 
         //Create 2nd QDM Measure
         measureDataQDM2.ecqmTitle = secondMeasureName + randValue
@@ -69,7 +58,17 @@ describe('Copy QDM Test Cases', () => {
         measureDataQDM2.measureNumber = 2
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureDataQDM2)
+
         OktaLogin.Login()
+        MeasuresPage.actionCenter('edit', 1)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
+
         MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -77,16 +76,14 @@ describe('Copy QDM Test Cases', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        OktaLogin.Login()
-
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
     })
+
     it('Copy QDM Test Case to another QDM Measure', () => {
         const currentUser = Cypress.env('selectedUser')
         //click on Edit button to edit measure
@@ -111,7 +108,6 @@ describe('Copy QDM Test Cases', () => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').check()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').should('be.checked')
         })
-
     })
 })
 
@@ -123,29 +119,24 @@ describe('Copy Qi Core Test Cases', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        /*         measureDataQiCore.ecqmTitle = newMeasureName
-                measureDataQiCore.cqlLibraryName = newCqlLibraryName
-                measureDataQiCore.measureScoring = measureScoring
-                measureDataQiCore.measureCql = measureCQL
-                measureDataQiCore.measureNumber = 1 */
-
         //Create Qi Core Measure, PC and Test Case
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, qiCoreMeasureCQL, 1)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean', 1)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, false, false, 1)
+        
+        //Create 2nd Qi Core Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(secondMeasureName, secondLibraryName, qiCoreMeasureCQL, 2)
+
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 1/*measureDataQiCore.measureNumber*/)
+        MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        cy.get(Header.mainMadiePageButton).click()
 
-        //Create 2nd Qi Core Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(secondMeasureName, secondLibraryName, qiCoreMeasureCQL, 2)
-        OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -153,17 +144,14 @@ describe('Copy Qi Core Test Cases', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        OktaLogin.Login()
-
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
-
-
+        OktaLogin.UILogout()
     })
+
     it('Copy Qi Core Test Case to another Qi Core Measure', () => {
         const currentUser = Cypress.env('selectedUser')
         //click on Edit button to edit measure
@@ -188,7 +176,6 @@ describe('Copy Qi Core Test Cases', () => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').check()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').should('be.checked')
         })
-
     })
 })
 
