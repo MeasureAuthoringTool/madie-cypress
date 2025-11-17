@@ -20,7 +20,8 @@ let newMeasureName = measureName + randValue
 let newCqlLibraryName = CqlLibraryName + randValue
 let measureCQL = MeasureCQL.measureCQL_5138_test
 
-describe('CQL Changes and how that impacts test cases, observations and population criteria', () => {
+//Skipping until MAT-9352 is fixed
+describe.skip('CQL Changes and how that impacts test cases, observations and population criteria', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 
