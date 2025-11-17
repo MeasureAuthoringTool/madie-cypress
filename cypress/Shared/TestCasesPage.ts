@@ -816,7 +816,7 @@ export class TestCasesPage {
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         let testCasePath = ''
 
-        if ((altUser === undefined) || (altUser === null) || (altUser === false)) {
+        if (!altUser || altUser === undefined) {
             altUser = false
             currentUser = Cypress.env('selectedUser')
         }
