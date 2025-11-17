@@ -41,7 +41,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -53,23 +53,14 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs -- "Definitions Used" is present', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        cy.get(Header.measures).click()
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -130,6 +121,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -137,30 +129,18 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
-        OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('QDM: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        cy.get(Header.measures).click()
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -233,7 +213,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -241,28 +221,18 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC and will show Test case Results', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        cy.get(Header.measures).click()
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -313,7 +283,6 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
                 '      union ["Encounter, Performed": "Dementia"]')
         })
 
-
         // verify Results arrow is shown
         cy.contains('Results').should('have.descendants', 'svg')
         //Verify Test case Execution Results
@@ -341,7 +310,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -350,28 +319,20 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
 
     })
+
     it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        cy.get(Header.measures).click()
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -397,7 +358,6 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        //
         Utilities.waitForElementVisible(MeasureGroupPage.addMeasureGroupButton, 35000)
         cy.get(MeasureGroupPage.addMeasureGroupButton).scrollIntoView().click({ force: true })
 
