@@ -4,7 +4,7 @@ import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "./Environment"
 import { Measure } from "@madie/madie-models"
-import {OktaLogin} from "./OktaLogin"
+import { OktaLogin } from "./OktaLogin"
 
 const adminApiKey = Environment.credentials().adminApiKey
 let harpUser = ''
@@ -122,8 +122,7 @@ export class Utilities {
 
     public static deleteMeasure(measureName?: string, cqlLibraryName?: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
         let currentUser = ''
-        if (altUser)
-        {
+        if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
         else {
@@ -131,8 +130,9 @@ export class Utilities {
         }
 
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        if ((measureNumber === undefined) || (measureNumber === null)) {
+        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
             measureNumber = 0
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
 
         OktaLogin.setupUserSession(altUser)
@@ -449,22 +449,22 @@ export class Utilities {
             if (action === PermissionActions.GRANT) {
                 urlPath = 'cql-libraries/share'
             } else {
-                urlPath = 'cql-libraries/unshare'   
+                urlPath = 'cql-libraries/unshare'
             }
         } else {
             path = 'cypress/fixtures/' + currentUser + '/measureId'
-             if (action === PermissionActions.GRANT) {
+            if (action === PermissionActions.GRANT) {
                 urlPath = 'measures/shared'
             } else {
-                urlPath = '/measures/unshared'  
+                urlPath = '/measures/unshared'
             }
         }
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(path).should('exist').then((mId) => {
 
-               const users = new Array()
-               users.push(user)
+                const users = new Array()
+                users.push(user)
 
                 cy.request({
                     failOnStatusCode: false,
@@ -474,7 +474,7 @@ export class Utilities {
                         'api-key': adminApiKey
                     },
                     method: 'PUT',
-                    body: { [mId] : users } 
+                    body: { [mId]: users }
                     // Note: these brackets don't make this an array.
                     // This syntax is needed for keys of an object to force it to honor the value
                 }).then((response) => {
