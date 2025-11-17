@@ -131,7 +131,6 @@ export class Utilities {
 
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
-            measureNumber = 0
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
 

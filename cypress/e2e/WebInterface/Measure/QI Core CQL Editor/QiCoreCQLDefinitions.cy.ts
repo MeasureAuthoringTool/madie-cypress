@@ -131,7 +131,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Search for Qi-Core CQL Definitions Expression Editor Name Options', () => {
@@ -431,7 +431,7 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     // skipping for now: manual tests are fine, Cypress cannot trigger this error box for some reason?
@@ -496,7 +496,7 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
