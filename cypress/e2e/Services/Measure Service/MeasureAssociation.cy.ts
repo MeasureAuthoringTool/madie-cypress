@@ -26,6 +26,7 @@ let QDMCqlLibraryName1 = ''
 let harpUser = ''
 let harpUserALT = ''
 
+
 describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
@@ -48,20 +49,24 @@ describe('Measure Association: Validations', () => {
             patientBasis: 'false',
             measureCql: qdmManifestTestCQL,
             mpStartDate: '2025-01-01',
-            mpEndDate: '2025-12-31'
+            mpEndDate: '2025-12-31',
+            measureNumber: 0,
+            altUser: false
         }
 
         //Create New QDM Measure
         //0
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure0)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, qdmMeasure0)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(1000)
         OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+
+        OktaLogin.setupUserSession(false)
 
         measureQDMManifestName0 = 'QDMManifestTestMN0' + Date.now() + randValue + 6 + randValue
         QDMCqlLibraryName0 = 'QDMManifestTestLN0' + Date.now() + randValue + 7 + randValue
@@ -74,14 +79,22 @@ describe('Measure Association: Validations', () => {
             measureCql: qdmManifestTestCQL,
             mpStartDate: '2025-01-01',
             mpEndDate: '2025-12-31',
-            measureNumber: 1
+            measureNumber: 1,
+            altUser: false
         }
+
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        OktaLogin.setupUserSession(false)
 
         //Create Second QDM Measure
         //1
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 1)
+        MeasuresPage.actionCenter('edit', 1, qdmMeasure1)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -90,13 +103,29 @@ describe('Measure Association: Validations', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC0', 'QDMManifestTCGroup0', 'QDMManifestTC0', '', false, false, 1)
 
+        OktaLogin.setupUserSession(false)
+
         QiCoreMeasureName1 = 'ProportionPatientMN1' + Date.now() + randValue + 4 + randValue
         QiCoreCqlLibraryName1 = 'ProportionPatientLN1' + Date.now() + randValue + 5 + randValue
+
+        const qiCoreMeasure2: CreateMeasureOptions = {
+            cqlLibraryName: QiCoreCqlLibraryName1,
+            measureCql: measureCQLPFTests,
+            measureNumber: 2,
+            altUser: false
+        }
+
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        OktaLogin.setupUserSession(false)
         //Create new QI Core measure
         //2
-        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 2)
+        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 2, false)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 2)
+        MeasuresPage.actionCenter('edit', 2, qiCoreMeasure2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -111,11 +140,26 @@ describe('Measure Association: Validations', () => {
 
         QiCoreMeasureName0 = 'ProportionPatientMN0' + Date.now() + randValue + 2 + randValue
         QiCoreCqlLibraryName0 = 'ProportionPatientLN0' + Date.now() + randValue + 3 + randValue
+
+        const qiCoreMeasure3: CreateMeasureOptions = {
+            cqlLibraryName: QiCoreCqlLibraryName0,
+            measureCql: measureCQLPFTests,
+            measureNumber: 3,
+            altUser: false
+        }
+
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        OktaLogin.setupUserSession(false)
+
         //Create second QI Core measure
         //3
-        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName0, QiCoreCqlLibraryName0, measureCQLPFTests, 3)
+        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName0, QiCoreCqlLibraryName0, measureCQLPFTests, 3, false)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 3)
+        MeasuresPage.actionCenter('edit', 3, qiCoreMeasure3)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -130,6 +174,29 @@ describe('Measure Association: Validations', () => {
     it('Association: QDM -> Qi Core measure: Validations', () => {
         const currentUser = Cypress.env('selectedUser')
         const currentAltUser = Cypress.env('selectedAltUser')
+        const qdmMeasure1: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName0,
+            cqlLibraryName: QDMCqlLibraryName0,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31',
+            measureNumber: 1,
+            altUser: false
+        }
+        const qiCoreMeasure2: CreateMeasureOptions = {
+            cqlLibraryName: QiCoreCqlLibraryName1,
+            measureCql: measureCQLPFTests,
+            measureNumber: 2,
+            altUser: false
+        }
+        const qiCoreMeasure3: CreateMeasureOptions = {
+            cqlLibraryName: QiCoreCqlLibraryName0,
+            measureCql: measureCQLPFTests,
+            measureNumber: 3,
+            altUser: false
+        }
         OktaLogin.setupUserSession(false)
         //validation test: only one measure is selected
         cy.getCookie('accessToken').then((accessToken) => {
@@ -196,7 +263,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: Qi Core measure must be in draft status
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 1)
+        MeasuresPage.actionCenter('edit', 1, qdmMeasure1)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -208,7 +275,7 @@ describe('Measure Association: Validations', () => {
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.actionCenter('version', 2)
+        MeasuresPage.actionCenter('version', 2, qiCoreMeasure2)
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
@@ -242,7 +309,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: Qi Core measure must NOT contain CMS id
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 3)
+        MeasuresPage.actionCenter('edit', 3, qiCoreMeasure3)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -279,11 +346,18 @@ describe('Measure Association: Validations', () => {
         QiCoreMeasureNameAlt = QiCoreMeasureName1 + 4 + randValue
         QiCoreCqlLibraryNameAlt = QiCoreCqlLibraryName1 + 5 + randValue
 
+        const qiCoreMeasure4: CreateMeasureOptions = {
+            cqlLibraryName: QiCoreCqlLibraryNameAlt,
+            measureCql: measureCQLPFTests,
+            measureNumber: 4,
+            altUser: true
+        }
+
         //validation test: both measures the user is not the owner of
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, 4, true)
         OktaLogin.setupUserSession(true)
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', 4, { altUser: true })
+        MeasuresPage.actionCenter('edit', 4, qiCoreMeasure4)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -353,7 +427,7 @@ describe('Measure Association: Validations', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, qdmMeasure)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -364,12 +438,20 @@ describe('Measure Association: Validations', () => {
 
         QiCoreMeasureName1 = 'ProportionPatientMN1' + Date.now() + randValue + 4 + randValue
         QiCoreCqlLibraryName1 = 'ProportionPatientLN1' + Date.now() + randValue + 5 + randValue
+
+        const qiCoreMeasure1b: CreateMeasureOptions = {
+            cqlLibraryName: QiCoreCqlLibraryName1,
+            measureCql: measureCQLPFTests,
+            measureNumber: 1,
+            altUser: false
+        }
+
         //Create new QI Core measure
         //1
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 1)
         OktaLogin.setupUserSession(false)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 1)
+        MeasuresPage.actionCenter('edit', 1, qiCoreMeasure1b)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -386,8 +468,18 @@ describe('Measure Association: Validations', () => {
     it('Association: QDM -> Qi Core measure: Successful Association', () => {
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
+        const qdmMeasure: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName1,
+            cqlLibraryName: QDMCqlLibraryName1,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31',
+            altUser: false
+        }
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', 0)
+        MeasuresPage.actionCenter('edit', 0, qdmMeasure)
         Utilities.waitForElementVisible(EditMeasurePage.generateCmsIdButton, 90000)
         cy.get(EditMeasurePage.generateCmsIdButton).wait(3700).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)

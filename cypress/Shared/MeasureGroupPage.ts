@@ -6,7 +6,7 @@ import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Stratification } from "@madie/madie-models"
-import {OktaLogin} from "./OktaLogin";
+import { OktaLogin } from "./OktaLogin";
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -417,11 +417,10 @@ export class MeasureGroupPage {
 
     public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
         let currentUser = ''
-        if (altUser)
-        {
+        if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
-        else {
+        else if (altUser === false) {
             currentUser = Cypress.env('selectedUser')
         }
 
@@ -438,14 +437,12 @@ export class MeasureGroupPage {
         user = OktaLogin.setupUserSession(altUser)
         cy.log('Current user is: ' + user)
 
-        if (measureNumber === undefined || measureNumber === null) {
+        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
             measureNumber = 0
-        }
-        if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
-        }
-        else {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        }
+        else if ((measureNumber > 0)) {
+            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
         //Add Measure Group to the Measure
@@ -542,8 +539,7 @@ export class MeasureGroupPage {
 
         user = OktaLogin.setupUserSession(altUser)
 
-        if (altUser)
-        {
+        if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
         else {
@@ -619,8 +615,7 @@ export class MeasureGroupPage {
     public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
 
         let currentUser = ''
-        if (altUser)
-        {
+        if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
         else {
@@ -718,8 +713,7 @@ export class MeasureGroupPage {
 
         user = OktaLogin.setupUserSession(altUser)
 
-        if (altUser)
-        {
+        if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
         else {
@@ -783,8 +777,7 @@ export class MeasureGroupPage {
     ): string {
 
         let currentUser = ''
-        if (altUser)
-        {
+        if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
         else {

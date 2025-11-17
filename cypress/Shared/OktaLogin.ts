@@ -187,7 +187,7 @@ export class OktaLogin {
                 default:
                     throw new Error(`Unknown user type: ${currentAltUser}`)
             }
-        } else {
+        } else if (altUser === false) {
             switch (currentUser) {
                 case 'harpUser':
                     cy.setAccessTokenCookie()

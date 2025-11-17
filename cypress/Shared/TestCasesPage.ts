@@ -4,7 +4,7 @@ import { Utilities } from "./Utilities"
 import dateTimeISO = CypressCommandLine.dateTimeISO
 import { CQLEditorPage } from "./CQLEditorPage"
 import { MeasuresPage } from "./MeasuresPage"
-import {OktaLogin} from "./OktaLogin";
+import { OktaLogin } from "./OktaLogin";
 
 export type TestCase = {
     title: string,
@@ -766,12 +766,12 @@ export class TestCasesPage {
             measurePath = measurePath
         }
         if (twoTestCases === true) {
-            testCasePath = 'cypress/fixtures/'+ currentUser + '/testCaseId2'
-            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCasePId2'
+            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
+            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId2'
         }
         else {
-            testCasePath = 'cypress/fixtures/'+ currentUser + '/testCaseId'
-            testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCasePId'
+            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
+            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
         }
 
         //Add Test Case to the Measure
@@ -818,8 +818,10 @@ export class TestCasesPage {
 
         if (!altUser || altUser === undefined) {
             altUser = false
+            currentUser = Cypress.env('selectedUser')
         }
         else {
+            altUser = true
             currentUser = Cypress.env('selectedAltUser')
         }
 
@@ -832,7 +834,7 @@ export class TestCasesPage {
             testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
         }
 
-        if ((measureNumber === undefined) || (measureNumber === null)) {
+        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
             measureNumber = 0
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
@@ -952,16 +954,16 @@ export class TestCasesPage {
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(maxCaseNumber => {
-                    originalCount = Number(maxCaseNumber)
-                })
+                        originalCount = Number(maxCaseNumber)
+                    })
 
                 cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
                 Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(newMaxNumber => {
-                    expect(originalCount + 1).eq(Number(newMaxNumber))
-                })
+                        expect(originalCount + 1).eq(Number(newMaxNumber))
+                    })
                 break
 
             case TestCaseAction.copyToMeasure:
