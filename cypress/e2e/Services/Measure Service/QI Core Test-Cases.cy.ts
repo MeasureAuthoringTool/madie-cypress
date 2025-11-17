@@ -9,12 +9,10 @@ import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-let currentUser = Cypress.env('selectedUser')
 let harpUserALT = ''
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 let TCJsonRace_Update = TestCaseJson.TCJsonRaceOMBRaceDetailed_Update
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
-let testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -43,8 +41,6 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
-
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -61,13 +57,11 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
     beforeEach('Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
-        harpUserALT = OktaLogin.getUser(true)
-
     })
+
     afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Attempt to enter valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
@@ -93,13 +87,12 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
-                    cy.writeFile(testCasePath, response.body.id)
+                    cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
                 })
             })
         })
 
-
-        OktaLogin.setupUserSession(true)
+        harpUserALT = OktaLogin.setupUserSession(true)
 
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
@@ -131,11 +124,11 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 })
 
 describe('Test Case population values based on Measure Group population definitions', () => {
+
     before('Create Measure and measure group', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
@@ -266,6 +259,7 @@ describe('Test Case population values based on Measure Group population definiti
             })
         })
     })
+
     beforeEach('Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
@@ -274,13 +268,12 @@ describe('Test Case population values based on Measure Group population definiti
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
+
     it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -308,6 +301,7 @@ describe('Test Case population values based on Measure Group population definiti
             })
         })
     })
+
     it('Test Case population value check boxes match that of the measure group definition -- optional population is removed', () => {
 
         const currentUser = Cypress.env('selectedUser')
@@ -355,15 +349,12 @@ describe('Test Case population values based on Measure Group population definiti
                             "Outcome"
                         ]
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.id).to.be.exist
                 })
             })
         })
-
-        OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -391,6 +382,7 @@ describe('Test Case population values based on Measure Group population definiti
             })
         })
     })
+
     it('Test Case population value check boxes match that of the measure group definition -- optional population is added', () => {
 
         const currentUser = Cypress.env('selectedUser')
@@ -554,6 +546,7 @@ describe('Test Case population values based on Measure Group population definiti
 })
 
 describe('Measure Service: Test Case Endpoints', () => {
+
     let randValue = (Math.floor((Math.random() * 2000) + 3))
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     beforeEach('Create Measure, group, and test case', () => {
@@ -561,7 +554,6 @@ describe('Measure Service: Test Case Endpoints', () => {
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
@@ -672,7 +664,6 @@ describe('Measure Service: Test Case Endpoints', () => {
                                         "expected": false,
                                         "actual": false
                                     }
-
                                 ]
                             }]
                         }
@@ -690,16 +681,15 @@ describe('Measure Service: Test Case Endpoints', () => {
         })
     })
 
-    beforeEach('Set Access Token', () => {
+    // beforeEach('Set Access Token', () => {
 
-        OktaLogin.setupUserSession(false)
+    //     OktaLogin.setupUserSession(false)
 
-    })
+    // })
 
     afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryNameDeux)
-
     })
 
     it('Create Test Case', () => {
@@ -746,7 +736,6 @@ describe('Measure Service: Test Case Endpoints', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-
 
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
@@ -838,20 +827,17 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
         cqlLibraryName = 'TestCql' + Date.now()
         OktaLogin.setupUserSession(false)
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
     })
 
     beforeEach('Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
-
     })
 
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Create Test Case: Description more than 250 characters', () => {
@@ -990,27 +976,23 @@ describe('Test Case Json Validations', () => {
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
     })
 
     beforeEach('Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
-
     })
 
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Enter Valid Test Case Json', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1034,7 +1016,6 @@ describe('Test Case Json Validations', () => {
                 })
             })
         })
-
     })
 
     it('Enter Invalid Test Case Json and Verify Error Message', () => {
@@ -1127,7 +1108,6 @@ describe('Test Case Json Validations', () => {
                     expect(response.body.hapiOperationOutcome.outcomeResponse.issue[0].diagnostics).to.eql('HAPI-1814: Incorrect resource type found, expected "Bundle" but found "Account"')
                     expect(response.body.validResource).to.eql(false)
                 })
-
             })
         })
     })
@@ -1140,27 +1120,18 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
-    })
-
-    beforeEach('Set Access Token', () => {
-
-        OktaLogin.setupUserSession(false)
-
     })
 
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Bad Access Token', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1186,6 +1157,7 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
 })
 
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
+
     beforeEach('Create Measure and measure group', () => {
 
         const currentUser = Cypress.env('selectedUser')
@@ -1247,15 +1219,13 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                 })
             })
         })
-
-
     })
 
     afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
+
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
 
         const currentUser = Cypress.env('selectedUser')
@@ -1276,7 +1246,6 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                         "series": TCSeries,
                         "description": TCDescription,
                         "json": TCJson,
-
                     },
                     {
                         "name": TCName + '2',
@@ -1284,7 +1253,6 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                         "series": TCSeries,
                         "description": TCDescription,
                         "json": TCJson,
-
                     },
                     {
                         "name": TCName + '3',
@@ -1292,7 +1260,6 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                         "series": TCSeries,
                         "description": TCDescription,
                         "json": TCJson,
-
                     },]
                 }).then((response) => {
                     expect(response.status).to.eql(403)
@@ -1300,7 +1267,6 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
             })
         })
     })
-
 })
 
 describe('Duplicate Test Case Title and Group validations', () => {
@@ -1309,12 +1275,11 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription)
-
     })
+
     afterEach('Cleanup', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
