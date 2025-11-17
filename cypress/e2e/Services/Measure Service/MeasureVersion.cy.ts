@@ -1,7 +1,6 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { Environment } from "../../../Shared/Environment"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
@@ -10,27 +9,25 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+const now = require('dayjs')
+const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+const mpEndDate = now().format('YYYY-MM-DD')
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestCql' + Date.now()
-let harpUser = ''
-let harpUserALT = ''
-let measureTwo = 'MeasureTwo' + Date.now()
-let cqlLibraryTwo = 'LibraryTwo' + Date.now()
-let testCaseTitle = 'FAIL'
-let testCaseDescription = 'FAIL' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let measureCQL_ProportionMeasure = MeasureCQL.CQL_Multiple_Populations
-let validTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
-let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+const measureName = 'TestMeasure' + Date.now()
+const cqlLibraryName = 'TestCql' + Date.now()
+const testCaseTitle = 'FAIL'
+const testCaseDescription = 'test case description'
+const testCaseSeries = 'SBTestSeries'
+const measureCQL_ProportionMeasure = MeasureCQL.CQL_Multiple_Populations
+const validTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
+const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
+const randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCQLLibraryName = ''
-const now = require('dayjs')
-let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
+let harpUser = ''
+let harpUserALT = ''
 
-let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
+const measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using FHIR version \'4.0.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
@@ -43,7 +40,7 @@ let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'define \"num\":\n' +
     'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
 
-let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
+const measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' \n' +
     'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4\' \n' +
@@ -64,36 +61,21 @@ describe('Measure Versioning', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
-
     })
 
     before('Create Measure', () => {
 
         newMeasureName = measureName + 1 + randValue
         newCQLLibraryName = cqlLibraryName + 1 + randValue
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-        OktaLogin.setupUserSession(false)
-        harpUser = OktaLogin.setupUserSession(false)
-        harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-
-        //Create second Measure with Alt User
-        OktaLogin.setupUserSession(true)
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, cqlLibraryTwo, measureCQL, 2, true)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp', 'boolean', 2)
-
     })
 
     it('Successful Measure Versioning', () => {
@@ -116,8 +98,8 @@ describe('Measure Versioning', () => {
 
     it('Non Measure owner unable to version Measure', () => {
 
-        const currentUser = Cypress.env('selectedAltUser')
-        OktaLogin.setupUserSession(false)
+        const currentUser = Cypress.env('selectedUser') // using measure in before()
+        harpUserALT = OktaLogin.setupUserSession(true) // auth as altUser, with no access
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -130,11 +112,10 @@ describe('Measure Versioning', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
+                    expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
                 })
             })
         })
-
     })
 })
 
@@ -145,14 +126,13 @@ describe('Version Measure without CQL', () => {
         newMeasureName = measureName + 2 + randValue
         newCQLLibraryName = cqlLibraryName + 2 + randValue
         harpUser = OktaLogin.getUser(false)
-        harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName)
     })
+
     after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
     })
 
     it('User can not version Measure if there is no CQL', () => {
@@ -224,7 +204,6 @@ describe('Version Measure with invalid CQL', () => {
     after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
     })
 
     it('User can not version Measure if the CQL has errors', () => {
@@ -256,15 +235,14 @@ describe('Version Measure with invalid test case Json', () => {
         newCQLLibraryName = cqlLibraryName + 4 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
     })
 
     it('User can version Measure if the Test case Json has errors', () => {
@@ -296,22 +274,20 @@ describe('Edit validations for versioned Measure', () => {
         newCQLLibraryName = cqlLibraryName + 5 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '',
+            'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-        ////'','', 'Qualifying Encounters','',
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
     })
 
     after('Clean up', () => {
 
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
-
     })
 
     it('Verify error messages when user try to edit Measure details, Measure Groups or Test cases for versioned Measure', () => {
@@ -435,15 +411,14 @@ describe('Delete validations for versioned Measure', () => {
         newCQLLibraryName = cqlLibraryName + 6 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
     })
 
     beforeEach('Set Access Token', () => {
