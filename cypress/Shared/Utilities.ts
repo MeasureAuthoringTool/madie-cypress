@@ -502,7 +502,7 @@ export class Utilities {
 
         let libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
-        OktaLogin.setupUserSession(altUser)
+        OktaLogin.setupUserSession(false)
 
         if (libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
