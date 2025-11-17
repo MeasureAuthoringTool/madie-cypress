@@ -16,7 +16,8 @@ let harpUserALT = ''
 const qdmManifestTestCQL = QdmCql.qdmCQLManifestTest
 const measureCQLPFTests = QiCore4Cql.CQL_Populations
 
-describe('Measure Association is not allowed when QiCore measure is locked', () => {
+//Skipping until Feature flag 'Locking' is removed
+describe.skip('Measure Association is not allowed when QiCore measure is locked', () => {
 
     beforeEach('Create measures', () => {
 
