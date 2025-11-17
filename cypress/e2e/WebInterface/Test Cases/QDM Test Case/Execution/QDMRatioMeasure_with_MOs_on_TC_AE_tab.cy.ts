@@ -20,6 +20,8 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.QDMTestCaseJson
 let QDMTCJsonwMOElements = TestCaseJson.QDMTCJsonwMOElements
+let harpUser = ''
+let harpUserALT = ''
 let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients version \'3.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -252,6 +254,14 @@ const measureData: CreateMeasureOptions = {}
 describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
 
     beforeEach('Create Measure', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
+
+        OktaLogin.setupUserSession(false)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
@@ -260,6 +270,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         measureData.measureCql = measureCQL
         measureData.mpStartDate = '2023-01-01'
         measureData.mpEndDate = '2024-01-01'
+        measureData.measureNumber = 0
+        measureData.altUser = false
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, false)
@@ -269,13 +281,13 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     afterEach('Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropriate fields and sections', () => {
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, measureData)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -283,8 +295,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //fill out group details
-         cy.get(EditMeasurePage.measureGroupsTab).click()
-         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
@@ -344,7 +356,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //navigate to the main measures page and edit the measure
         cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, measureData)
 
         //navigate to the test case and the E/A sub-tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -372,7 +384,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     it('Non-owner of measure cannot edit observation fields', () => {
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, measureData)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -442,14 +454,20 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         // OktaLogin.UILogout()
 
         //log into MADiE as a different user
-        cy.clearCookies()
+        sessionStorage.clear()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
+
+        OktaLogin.setupUserSession(true)
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //edit the measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, measureData)
 
         //click on the test case main tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -476,6 +494,14 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 describe('QDM Measure: Test Case: with Observations: Expected / Actual results', () => {
 
     beforeEach('Create Measure', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        harpUser = OktaLogin.getUser(false)
+        harpUserALT = OktaLogin.getUser(true)
+
+        OktaLogin.setupUserSession(false)
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
@@ -484,12 +510,14 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         measureData.measureCql = measureCQL2RunObservations
         measureData.mpStartDate = '2023-01-01'
         measureData.mpEndDate = '2025-01-01'
+        measureData.measureNumber = 0
+        measureData.altUser = false
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJsonwMOElements, false, false)
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, measureData)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -499,7 +527,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
     afterEach('Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(CqlLibraryName, CqlLibraryName, false, false, 0)
     })
 
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
