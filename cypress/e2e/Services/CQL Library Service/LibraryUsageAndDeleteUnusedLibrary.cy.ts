@@ -1,7 +1,7 @@
-import {Environment} from "../../../Shared/Environment"
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { Environment } from "../../../Shared/Environment"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let adminApiKey = Environment.credentials().adminApiKey
 let CQLLibraryName = 'TestCqlLibrary' + Date.now()
@@ -13,15 +13,15 @@ describe('Verify Library usage and Delete Library', () => {
 
     before('Create CQL Library', () => {
 
-        //Create CQL Library
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher, false, false, libraryCQL)
     })
 
     beforeEach('Set Access token', () => {
 
         harpUser = OktaLogin.setupUserSession(false)
-
     })
+
+    // last test deletes as part of its process, no need for after()
 
     it('Verify Library usage within other CQL Library', () => {
 
@@ -36,18 +36,20 @@ describe('Verify Library usage and Delete Library', () => {
                 console.log(response)
                 expect(response.status).to.eql(200)
 
-                let i= 1
-                let pass = 'false'
-                while (i < 97) {
-                    if( response.body[i].name == 'QDMSmokeTestLibrary0228') {
-                        pass = 'true'
-                        break
-                    }
-                    else {
-                        i++
-                    }
+                type responseObject = {
+                    name: string,
+                    owner: string,
+                    version: object
                 }
-                expect(pass).to.eql('true')
+                let libraryPresent = false
+
+                const responses = response.body as Array<responseObject>
+                responses.forEach(library => {
+                    if(  library.name == 'PBDPalliativeCareQDM' ) {
+                        libraryPresent = true
+                    }
+                })
+                expect(libraryPresent).to.be.true
             })
         })
     })
