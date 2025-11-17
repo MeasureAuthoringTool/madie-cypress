@@ -59,8 +59,8 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
             cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
             cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
             cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
-            cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.visible')
-            cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.visible')
+            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.enabled')
         })
 
         cy.log('Draft Created Successfully')
