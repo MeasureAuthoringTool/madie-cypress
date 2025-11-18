@@ -1,4 +1,4 @@
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
@@ -28,11 +28,13 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQL
+        measureData.measureNumber = 0
+        measureData.altUser = false
 
         //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, measureData)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -47,13 +49,13 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
     afterEach('Logout and Clean up Measures', () => {
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
 
     })
     it('Add Quantity attribute to the Test case and Edit from Elements table', () => {
 
         cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 0, measureData)
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -151,6 +153,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //Add Code to the Element
         cy.get(TestCasesPage.codeSystemSelector).click()
+        Utilities.waitForElementVisible(TestCasesPage.codeLOINCValue, 99000)
         cy.get(TestCasesPage.codeLOINCValue).click()
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-14463-4"]').click()
