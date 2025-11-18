@@ -43,7 +43,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Episode Encounter, Pass Result', () => {
