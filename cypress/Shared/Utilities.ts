@@ -134,16 +134,15 @@ export class Utilities {
             measureNumber = 0
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
-
-        OktaLogin.setupUserSession(altUser)
-
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
-        if (deleteSecondMeasure) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
+        if (altUser === undefined || altUser === null) {
+            altUser = false
         }
+
+        OktaLogin.setupUserSession(altUser)
 
         let measureData: Measure
         cy.getCookie('accessToken').then((accessToken) => {
