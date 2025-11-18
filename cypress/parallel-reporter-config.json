@@ -9,6 +9,6 @@
         "inline": true
     },
   "cypressParallelSimpleSpecReporterJsReporterOptions": {
-    "reportDir": "runner-results"
+    "reportDir": "cypress/runner-results"
   }
 }
