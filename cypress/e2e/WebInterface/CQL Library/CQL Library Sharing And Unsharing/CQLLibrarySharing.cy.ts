@@ -335,7 +335,8 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
     afterEach('LogOut', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteLibrary(updatedCQLLibraryName)
+        OktaLogin.setupUserSession(true)
+        Utilities.deleteLibrary(updatedCQLLibraryName, true)
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
