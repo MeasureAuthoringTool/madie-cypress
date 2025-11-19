@@ -417,6 +417,11 @@ export class MeasureGroupPage {
 
     public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
         let currentUser = ''
+
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
+
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
