@@ -17,16 +17,17 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         let currentUser = Cypress.env('selectedUser')
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
+        harpUser = OktaLogin.setupUserSession(false)
 
         let cmsId: string
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, null, null, false)
 
         OktaLogin.Login()
 
         //Generate CMS ID
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', null, { altUser: false })
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
         cy.get(EditMeasurePage.generateCmsIdButton).should('be.enabled')
         cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
@@ -43,7 +44,7 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
             cmsId = val.toString().valueOf()
-            cy.writeFile('cypress/fixtures/'+currentUser+'/cmsId', cmsId)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cmsId', cmsId)
         })
         cy.log('CMS ID Generated successfully')
 
@@ -53,7 +54,7 @@ describe('Delete CMS ID for QI-Core Measure', () => {
     after('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName, null, null)
 
     })
     it('Verify that the CMS ID deleted successfully for QDM Measure', () => {
