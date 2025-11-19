@@ -351,6 +351,11 @@ export class CQLLibraryPage {
 
         user = OktaLogin.setupUserSession(options.altUser)
 
+        if (options.altUser === undefined || options.altUser === null)
+        {
+            options.altUser = false
+        }
+
         if (options && options.description) {
             description = options.description
         }
@@ -372,6 +377,8 @@ export class CQLLibraryPage {
         if (options && options.cqlErrors) {
             cqlErrors = true
         }
+
+        user = OktaLogin.setupUserSession(options.altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
