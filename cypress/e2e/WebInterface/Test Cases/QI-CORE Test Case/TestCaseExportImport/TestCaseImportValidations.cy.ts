@@ -441,11 +441,11 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
     afterEach('Logout and Clean up Measures', () => {
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
-        Utilities.deleteMeasure(measureName + 'b', CqlLibraryName, true)
+        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(measureName + 'b', CqlLibraryName,null,null, 2)
     })
 
-    it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
+    it.only('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
 
         CqlLibraryName = 'TestLibrary6' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)
