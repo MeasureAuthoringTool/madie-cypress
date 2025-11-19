@@ -37,7 +37,7 @@ describe('Admin API - Reset test case expected values', () => {
     afterEach('Clean up', () => {
 
         Utilities.deleteVersionedMeasure(measure.name, measure.libraryName)
-        Utilities.deleteMeasure(measure.name, measure.libraryName, true)
+        Utilities.deleteMeasure(measure.name, measure.libraryName, false, false, 2)
     })
 
     it('Reset test case expected values of current draft back to state from last version of the measure', () => {
