@@ -782,6 +782,11 @@ export class MeasureGroupPage {
     ): string {
 
         let currentUser = ''
+
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
+
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }

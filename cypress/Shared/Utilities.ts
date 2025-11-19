@@ -186,6 +186,10 @@ export class Utilities {
             measureNumber = 0
         }
 
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
+
         user = OktaLogin.setupUserSession(altUser)
 
         if (measureNumber > 0) {
