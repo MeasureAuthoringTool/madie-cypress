@@ -198,6 +198,11 @@ export class CQLLibraryPage {
 
         let user = ''
 
+        if (altUser === undefined || altUser === null)
+        {
+            altUser = false
+        }
+
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New CQL Library
