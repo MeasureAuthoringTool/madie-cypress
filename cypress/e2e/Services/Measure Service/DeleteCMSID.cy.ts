@@ -22,12 +22,12 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         let cmsId: string
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, null, null, false)
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName)
 
         OktaLogin.Login()
 
         //Generate CMS ID
-        MeasuresPage.actionCenter('edit', null, { altUser: false })
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
         cy.get(EditMeasurePage.generateCmsIdButton).should('be.enabled')
         cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
@@ -54,7 +54,7 @@ describe('Delete CMS ID for QI-Core Measure', () => {
     after('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName, null, null)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
     it('Verify that the CMS ID deleted successfully for QDM Measure', () => {
