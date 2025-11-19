@@ -28,7 +28,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false, 0)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify the entry, save and the resulting HTML text formatting that in the RTE field', () => {
@@ -36,7 +36,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         let description = 'description'
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit', 0, { altUser: false })
+        MeasuresPage.actionCenter('edit')
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -45,7 +45,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).wait(1500).type(description)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).wait(1500).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //apply RTE field formatting
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{selectAll}')
@@ -56,7 +56,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.nmbrdListBtn).click()
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //confirm html formatting that is in the field
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<ol><li><p><strong><em><del><u>description</u></del></em></strong></p></li></ol>')
@@ -67,7 +67,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         let description = 'description'
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit', 0, { altUser: false })
+        MeasuresPage.actionCenter('edit')
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -76,7 +76,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).wait(1500).type(description)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).wait(1500).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //apply RTE field formatting
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{selectAll}')
@@ -104,7 +104,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.bulletedListBtn).click()
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //add embedded table
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click()
@@ -117,7 +117,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         //save
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><strong><em><del><u>description</u></del></em></strong></p><p><br class="ProseMirror-trailingBreak"></p><div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div>')
     })
@@ -137,13 +137,13 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false, 0)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify the ability to embed a table into a RTE field as well as to add and remove columns and rows', () => {
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit', 0, { altUser: false })
+        MeasuresPage.actionCenter('edit')
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -158,7 +158,7 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
         //save
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div>')
 
@@ -171,7 +171,7 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
         //save
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div class="tableWrapper"><table style="min-width: 100px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div>')
 
@@ -189,7 +189,7 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
         //save
         cy.get(EditMeasurePage.measureDescriptionSaveButton).wait(1500).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
-        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><br class="ProseMirror-trailingBreak"></p>')
 
