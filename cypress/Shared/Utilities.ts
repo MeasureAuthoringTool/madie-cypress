@@ -509,6 +509,11 @@ export class Utilities {
         if (libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
+        if (altUser === undefined || altUser === null)
+        {
+            altUser = false
+        }
+        OktaLogin.setupUserSession(altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(libraryPath).should('exist').then((id) => {
