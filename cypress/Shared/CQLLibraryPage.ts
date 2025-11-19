@@ -147,6 +147,11 @@ export class CQLLibraryPage {
             cql = ""
         }
 
+        if (altUser === undefined || altUser === null)
+        {
+            altUser = false
+        }
+
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New CQL Library
