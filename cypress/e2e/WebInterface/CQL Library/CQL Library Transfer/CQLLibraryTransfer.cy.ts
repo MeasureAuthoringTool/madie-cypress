@@ -4,7 +4,7 @@ import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import {MadieObject, PermissionActions, Utilities} from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage";
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -31,7 +31,8 @@ describe('CQL Library Transfer', () => {
     afterEach('LogOut', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteLibrary(null, true)
+        OktaLogin.setupUserSession(true)
+        Utilities.deleteLibrary(CQLLibraryName, true)
     })
 
 
@@ -274,6 +275,8 @@ describe('CQL Library Transfer - Multiple instances', () => {
     afterEach('LogOut', () => {
 
         OktaLogin.Logout()
+        OktaLogin.setupUserSession(true)
+        Utilities.deleteLibrary(null, true)
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Transferred to the new owner', () => {
