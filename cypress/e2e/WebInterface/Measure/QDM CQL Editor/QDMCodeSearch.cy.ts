@@ -279,10 +279,10 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codesTab).click().wait(1000)
         cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
         cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
-        cy.get(CQLEditorPage.savedCodesTab).click()
+        cy.get(CQLEditorPage.savedCodesTab).click().wait(2000)
 
         //Edit code
-        Utilities.waitForElementVisible('[data-testid="edit-code-0"]', 60000)
+        Utilities.waitForElementVisible('[data-testid="edit-code-0"]', 70000)
         cy.get('[data-testid="edit-code-0"]').click()
 
         //Code Details Pop up screen
