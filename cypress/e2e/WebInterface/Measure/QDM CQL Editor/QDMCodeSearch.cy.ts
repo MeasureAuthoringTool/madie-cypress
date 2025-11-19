@@ -249,7 +249,7 @@ describe('QDM Code Search fields', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
-    it.only('Edit Code with Suffix and Version from Saved Codes Grid', () => {
+    it('Edit Code with Suffix and Version from Saved Codes Grid', () => {
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
