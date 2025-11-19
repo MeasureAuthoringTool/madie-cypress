@@ -624,6 +624,9 @@ export class MeasureGroupPage {
     public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
 
         let currentUser = ''
+        if ((altUser === undefined) || (altUser === null)) {
+            altUser = false
+        }
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }

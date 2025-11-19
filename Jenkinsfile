@@ -118,7 +118,7 @@ pipeline{
             npm run generateOne:report
             tar -czf /app/mochawesome-report-${BUILD_NUMBER}.tar.gz -C /app/mochawesome-report/ .
             cp /app/mochawesome-report-${BUILD_NUMBER}.tar.gz ${WORKSPACE}/
-            cat runner-results/*.json | jq -s '[ .[] |  select(.failures > 0) | .file ]' > failures-${BUILD_NUMBER}.txt
+            cat /app/runner-results/*.json | jq -s '[ .[] |  select(.failures > 0) | .file ]' > failures-${BUILD_NUMBER}.txt
             cp failures-${BUILD_NUMBER}.txt ${WORKSPACE}/
             '''
           archiveArtifacts artifacts: "mochawesome-report-${BUILD_NUMBER}.tar.gz, failures-${BUILD_NUMBER}.txt"

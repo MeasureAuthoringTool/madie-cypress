@@ -17,6 +17,7 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         let currentUser = Cypress.env('selectedUser')
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
+        harpUser = OktaLogin.setupUserSession(false)
 
         let cmsId: string
 
@@ -43,7 +44,7 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
             cmsId = val.toString().valueOf()
-            cy.writeFile('cypress/fixtures/'+currentUser+'/cmsId', cmsId)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cmsId', cmsId)
         })
         cy.log('CMS ID Generated successfully')
 
