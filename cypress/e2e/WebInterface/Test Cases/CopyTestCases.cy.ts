@@ -1,6 +1,6 @@
 import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { TestCaseAction, TestCasesPage } from "../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
@@ -177,5 +177,64 @@ describe('Copy Qi Core Test Cases', () => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"] > input').should('be.checked')
         })
     })
+
+    it('Copy test cases skips test cases that would go over 250 character title limit', () => {
+        
+        // Target measure needs to have duplicate named tc as original, and tc title must be 226+ characters
+        const longTitle = 'LoremIpsumDolorSitAmetConsecteturAdipiscingElitSedDoEiusmodTemporIncididuntULaboreEtDoloreMagnaAliquaUtEnimAdMinim'
+        const currentUser = Cypress.env('selectedUser')
+        // start - M1 with 1 regular tc, M2 with no tc
+    
+        // step - add tc with long name to M1 and M2
+        MeasuresPage.actionCenter('edit', 2)
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).click()
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('PASS').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(longTitle + longTitle)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('very long title tc')
+        cy.get(TestCasesPage.createTestCaseSaveButton).wait(3000).click()
+
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
+
+        MeasuresPage.actionCenter('edit', 1)
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).click()
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('PASS').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(longTitle + longTitle)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('very long title tc')
+        cy.get(TestCasesPage.createTestCaseSaveButton).wait(3000).click()
+
+        // step - on M1, copy both tc to M2
+        Utilities.checkAll()
+
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
+
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((id) => {
+            Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+            cy.get('[data-testid="measure-name-' + id + '_select"]')
+                .find('input')
+                .focus()
+                .check()
+        })
+        cy.get(TestCasesPage.copyToSave).scrollIntoView().click()
+
+        // step - verify warning about tc2 not copying
+        cy.get('[data-testid="warn-title"]').should('contain.text', '1 test cases were copied successfully. The following 1 test cases could not be copied because the test cases are duplicates and the title is too long to copy.')
+
+        // step - verify tc1 did copy onto M2
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
+
+        MeasuresPage.actionCenter('edit', 2)
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+    })
 })
+
 
