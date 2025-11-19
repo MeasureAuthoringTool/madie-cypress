@@ -145,6 +145,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         Utilities.waitForElementVisible(TestCasesPage.discardChangesConfirmationBody, 20000)
 
         cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'You have test cases that are invalid.')
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should('not.contain.text', 'Test cases cannot be edited after being versioned')
 
         cy.get(TestCasesPage.versionMeasurewithTCErrorsCancel).click()
 
