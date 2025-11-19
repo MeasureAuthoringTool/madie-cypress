@@ -1,14 +1,11 @@
 {
   "reporterEnabled":"mochawesome, cypress-parallel/json-stream.reporter.js, cypress-parallel/simple-spec.reporter.js",
-    "mochawesomeReporterOptions":{
-        "reportDir":"cypress/results",
-        "overwrite": false,
-        "html": false,
-        "timestamp": "mmddyyyy_HHMMss",
-        "json": true,
-        "inline": true
-    },
-  "cypressParallelSimpleSpecReporterJsReporterOptions": {
-    "reportDir": "cypress/runner-results"
+  "mochawesomeReporterOptions":{
+    "reportDir":"cypress/results",
+    "overwrite": false,
+    "html": false,
+    "timestamp": "mmddyyyy_HHMMss",
+    "json": true,
+    "inline": true
   }
 }
