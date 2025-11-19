@@ -147,8 +147,7 @@ export class CQLLibraryPage {
             cql = ""
         }
 
-        if (altUser === undefined || altUser === null)
-        {
+        if (altUser === undefined || altUser === null) {
             altUser = false
         }
 
@@ -177,8 +176,7 @@ export class CQLLibraryPage {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (altUser)
-                {
+                if (altUser) {
                     currentUser = Cypress.env('selectedAltUser')
                 }
                 if (twoLibraries === true) {
@@ -197,6 +195,10 @@ export class CQLLibraryPage {
         const currentUser = Cypress.env('selectedUser')
 
         let user = ''
+
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
 
         user = OktaLogin.setupUserSession(altUser)
 
@@ -351,8 +353,7 @@ export class CQLLibraryPage {
 
         user = OktaLogin.setupUserSession(options.altUser)
 
-        if (options.altUser === undefined || options.altUser === null)
-        {
+        if (options.altUser === undefined || options.altUser === null) {
             options.altUser = false
         }
 
