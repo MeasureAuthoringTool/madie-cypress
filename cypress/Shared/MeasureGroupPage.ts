@@ -542,6 +542,10 @@ export class MeasureGroupPage {
         if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
         if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
 
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
+
         user = OktaLogin.setupUserSession(altUser)
 
         if (altUser) {
