@@ -169,7 +169,7 @@ describe('Test Case Import -- Non Measure owner validation', () => {
     })
 
     afterEach(() => {
-        
+
         Utilities.deleteMeasure()
     })
 
@@ -222,11 +222,6 @@ describe('Test Case import for versioned Measure', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-    })
-
-    afterEach(() => {
-
-        Utilities.deleteMeasure()
     })
 
     it("Able to Import Test Cases for Versioned Measures", () => {
