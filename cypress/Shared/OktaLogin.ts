@@ -1,8 +1,8 @@
 import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { umlsLoginForm } from "./umlsLoginForm"
-import { Utilities } from "./Utilities";
-import { Header } from "./Header";
+import { Utilities } from "./Utilities"
+import { Header } from "./Header"
 
 //MADiE OKTA Login Class
 export class OktaLogin {
@@ -66,6 +66,7 @@ export class OktaLogin {
 
     public static Login(): void {
         const user = Cypress.env('selectedUser')
+        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig')
 
         sessionStorage.clear()
         cy.clearAllCookies()
@@ -73,6 +74,10 @@ export class OktaLogin {
         cy.clearAllSessionStorage({ log: true })
 
         cy.visit('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() })
+
+        cy.wait('@serviceConfig', { timeout: 15000 }).then(config => {
+            cy.writeFile('cypress/fixtures/featureFlags', config.response.body.features)
+        })
 
         if (user === 'harpUser') {
             cy.setAccessTokenCookie()

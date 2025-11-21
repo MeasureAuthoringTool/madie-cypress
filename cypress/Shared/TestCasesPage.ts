@@ -564,7 +564,7 @@ export class TestCasesPage {
 
     }
 
-    public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson?: string): void {
+    public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson?: string, handleElementsTab?: boolean): void {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -597,9 +597,20 @@ export class TestCasesPage {
         cy.log('Test Case created successfully')
 
         if (testCaseJson) {
+
             //edit test test case
             this.clickEditforCreatedTestCase()
-            //Add json to the test case
+
+            // check ff & handle possible extra tab showing
+            cy.readFile('cypress/fixtures/featureFlags').then(flags => {
+                const ff = JSON.parse(flags)
+
+                if (ff.qiCoreElementsTab && handleElementsTab) {
+                    cy.get(TestCasesPage.jsonTab).click()
+                }
+            })
+            
+            // modify testcase JSON
             Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
@@ -654,6 +665,7 @@ export class TestCasesPage {
         cy.get(TestCasesPage.createTestCaseGroupInput).clear()
         cy.get(TestCasesPage.createTestCaseGroupInput).wait(1000).type(updatedTestCaseSeries).type('{enter}')
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         //Wait for the save button to become unavailable
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
 

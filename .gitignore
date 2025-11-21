@@ -18,6 +18,7 @@ runner-results/
 # files for local processing
 cypress/plugins/userLock.json
 cypress/plugins/altUserLock.json
+cypress/fixtures/featureFlags
 cypress/fixtures/harpUser/*
 cypress/fixtures/harpUserALT/*
 cypress/fixtures/altHarpUser/*
