@@ -93,6 +93,7 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
 
         //Upload valid Json file via drag and drop
         // this file was generated post 2.2.0, with the QMIG STU5 naming structure
+        // MAT-9275 - this export is a transaction bundle & will be transformed to a collection
         cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/Multiple-MO-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
@@ -110,6 +111,10 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
 
         TestCasesPage.grabTestCaseId(1)
         TestCasesPage.clickEditforCreatedTestCase()
+
+        // on tc JSON, validate type = collection & no use of request (required for transaction)
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', '"type": "collection"')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain.text', 'request')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.runTestButton).click()
