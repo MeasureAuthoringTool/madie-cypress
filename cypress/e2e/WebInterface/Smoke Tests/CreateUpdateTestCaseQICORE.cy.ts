@@ -13,8 +13,8 @@ const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
 dayjs.extend(utc)
 const timestamp = Date.now()
-const measureName = 'TestMeasure' + timestamp
-const CqlLibraryName = 'TestLibrary' + timestamp
+const measureName = 'CUTCQiCore' + timestamp
+const CqlLibraryName = 'CUTCQiCoreLib' + timestamp
 const testCaseTitle = 'Title for Auto Test'
 const testCaseDescription = 'DENOMFail' + timestamp
 const testCaseSeries = 'SBTestSeries'
