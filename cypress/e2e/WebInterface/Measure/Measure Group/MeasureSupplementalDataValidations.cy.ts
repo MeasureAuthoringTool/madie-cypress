@@ -7,11 +7,16 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import {TestCaseJson} from "../../../../Shared/TestCaseJson"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureCQL = MeasureCQL.zipfileExportQICore
-
+let testCaseTitle = 'Title for Auto Test'
+let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseSeries = 'SBTestSeries'
+let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
 describe('Validations between Supplemental Data Elements with the CQL definitions', () => {
 
@@ -19,7 +24,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'ipp', 'boolean')
-        
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
 
@@ -72,6 +77,16 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+
+        //Verify that the Run Test button is disabled
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
+
+        //navigate to the edit test case age and make sure alert concerning SA appears
+        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get('[data-testid="test-case-alerts"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+
+        //Verify that the Run Test button is disabled
+        cy.get(TestCasesPage.runTestButton).should('be.disabled')
     })
 
     it('Fixing SD to point to something that is, now, in CQL, resolves alert.', () => {

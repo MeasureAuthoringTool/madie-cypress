@@ -13,8 +13,8 @@ const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
 dayjs.extend(utc)
 const timestamp = Date.now()
-const measureName = 'TestMeasure' + timestamp
-const CqlLibraryName = 'TestLibrary' + timestamp
+const measureName = 'CUTCQiCore' + timestamp
+const CqlLibraryName = 'CUTCQiCoreLib' + timestamp
 const testCaseTitle = 'Title for Auto Test'
 const testCaseDescription = 'DENOMFail' + timestamp
 const testCaseSeries = 'SBTestSeries'
@@ -38,8 +38,7 @@ const qiCore6MeasureCQL = 'library QICoreTestLibrary1733500481375 version \'0.0.
     'context Patient\n' +
     'define "Surgical Absence of Cervix":\n' +
     '\t[Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy\n' +
-    '\t\twhere NoCervixHysterectomy.status = \'completed\'\n' +
-    '\t\t'
+    '\t\twhere NoCervixHysterectomy.status = \'completed\'\n'
 
 describe('Create and Update Test Case for Qi Core 4 Measure', () => {
 
@@ -74,7 +73,6 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
     })
-
 
     it('Verify last saved time stamp for Test case', () => {
 
@@ -112,7 +110,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, true)
 
         //Verify Last Saved Date on Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -121,6 +119,5 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
-
     })
 })

@@ -131,7 +131,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         cy.get(MeasureGroupPage.CQLPCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
         //navigate to the TC tab and verify mismatch message appears and the execute test case button is disabled
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
+        cy.get('[data-testid="test-case-alerts"]').should('contain.text', '2 errors were foundOne or more Population Criteria has a mismatch with CQL return types. Please check the population criteria tab to update.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
         TestCasesPage.clickEditforCreatedTestCase()
         //navigate into the test case and verify that the Run Test Case button is also disabled
@@ -286,9 +286,9 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //navigate to the PC tab and verify mismatch message appears
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.CQLPCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
-        //navigate to the TC tab and verify mismatch message appears and the exectue test case button is disabled
+        //navigate to the TC tab and verify mismatch message appears and the execute test case button is disabled
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
+        cy.get('[data-testid="test-case-alerts"]').should('contain.text', '2 errors were foundOne or more Population Criteria has a mismatch with CQL return types. Please check the population criteria tab to update.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
         TestCasesPage.clickEditforCreatedTestCase()
         //navigate into the test case and verify that the Run Test Case button is also disabled
