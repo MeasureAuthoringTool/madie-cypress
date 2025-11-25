@@ -7,9 +7,10 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {Header} from "../../../../Shared/Header"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+import {Toasts} from "../../../../Shared/Toasts"
 
-let measureName = 'TestMeasure' + Date.now()
-const cqlLibraryName = 'TestCql' + Date.now()
+let measureName = 'CompareMeasureVersion' + Date.now()
+const cqlLibraryName = 'CompareMeasureVersion' + Date.now()
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const measureData: CreateMeasureOptions = {}
 const randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -43,7 +44,7 @@ describe.skip('Compare Measure Versions', () => {
 
     it('Compare two Versions of a Measure', () => {
 
-        let  updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
+        let  updatedMeasureName = 'Updated' + measureName + Date.now()
         let currentUser = Cypress.env('selectedUser')
 
         cy.get(Header.measures).click()
@@ -57,21 +58,21 @@ describe.skip('Compare Measure Versions', () => {
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.successToast, { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
 
         //Add Draft to Versioned Measure
         MeasuresPage.actionCenter('draft')
         cy.intercept('/api/measures/*/draft').as('drafted')
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
 
         cy.wait('@drafted').then(int => {
             // capture measureId of new draft
             cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int.response.body.id)
         })
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
+        cy.get(Toasts.successToast, { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
         cy.log('Draft Created Successfully')
 
@@ -87,9 +88,16 @@ describe.skip('Compare Measure Versions', () => {
         //Check Versioned Measure
         cy.get('.expanded-row > :nth-child(1)').click()
 
-        cy.get('[data-testid="compare-versions-action-btn"]').should('be.enabled')
+        //Click on Compare Versions button
+        cy.get(MeasuresPage.compareVersionsBtn).should('be.enabled')
         cy.get('[data-testid="compare-versions-action-tooltip"]').trigger('mouseover')
         cy.get('.MuiTooltip-tooltip').should('contain.text', 'Compare Measure Versions')
+        cy.get(MeasuresPage.compareVersionsBtn).click()
 
+        //Verify Popup Screen
+        cy.get(MeasuresPage.compareVersionsPopupTitle).should('contain.text', 'Compare Measure Versions')
+        cy.get('[data-testid="measure-name"]').should('contain.text', updatedMeasureName)
+        cy.get(MeasuresPage.compareVersionsCqlTab).should('contain.text', 'CQL')
+        cy.get(MeasuresPage.compareVersionsHRTab).should('contain.text', 'Human Readable')
     })
 })

@@ -51,6 +51,12 @@ export class MeasuresPage {
     public static readonly harpIdRow = '[data-testid="measure-history-cell-0_performedBy"]'
     public static readonly additionalActionRow = '[data-testid="measure-history-cell-0_additionalActionMessage"]'
 
+    //Compare Measure Versions
+    public static readonly compareVersionsBtn = '[data-testid="compare-versions-action-btn"]'
+    public static readonly compareVersionsPopupTitle = '#draggable-dialog-title'
+    public static readonly compareVersionsCqlTab = '[data-testid="cql-tab"]'
+    public static readonly compareVersionsHRTab = '[data-testid="human-readable-tab"]'
+
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
     public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'
