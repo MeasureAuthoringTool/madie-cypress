@@ -1,18 +1,16 @@
 import { Utilities } from "../../../Shared/Utilities"
-import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+const now = require('dayjs')
+const mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
+const mpEndDate = now().format('YYYY-MM-DD')
+const eCQMTitle = 'eCQMTitle'
+const QDMModel = 'QDM v5.6'
 
 let measureName = ''
 let CQLLibraryName = ''
-let QDMModel = 'QDM v5.6'
 let harpUser = ''
-const now = require('dayjs')
-let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
-let eCQMTitle = 'eCQMTitle'
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 
 describe('Measure Service: QDM Measure', () => {
 
@@ -20,16 +18,16 @@ describe('Measure Service: QDM Measure', () => {
 
         harpUser = OktaLogin.setupUserSession(false)
     })
+
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CQLLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Create QDM Measure, successful creation', () => {
 
-        measureName = 'QDMMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
+        measureName = 'SuccessQDMCreate' + Date.now()
+        CQLLibraryName = 'SuccessQDMCreateLib' + Date.now()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -58,11 +56,12 @@ describe('Measure Service: QDM Measure', () => {
                 }
             }).then((response) => {
                 let currentUser = Cypress.env('selectedUser')
-                expect(response.status).to.eql(201)
-                expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+
+                expect(response.status).to.eql(201)
+                expect(response.body.createdBy).to.eql(harpUser)
                 expect(response.body.rateAggregation).to.eql('Aggregation')
                 expect(response.body.improvementNotation).to.eql('Increased score indicates improvement')
                 expect(response.body.improvementNotationDescription).to.eql('This is a description for when the IN is set to \"Increased score indicates improvement\"')
@@ -73,8 +72,8 @@ describe('Measure Service: QDM Measure', () => {
 
     it('Base Configuration fields - QDM Measure', () => {
 
-        measureName = 'QDMMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
+        measureName = 'BaseConfigCreation' + Date.now()
+        CQLLibraryName = 'BaseConfigCreationLib' + Date.now()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -106,24 +105,24 @@ describe('Measure Service: QDM Measure', () => {
                 }
             }).then((response) => {
                 let currentUser = Cypress.env('selectedUser')
-                expect(response.status).to.eql(201)
-                expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+
+                expect(response.status).to.eql(201)
+                expect(response.body.createdBy).to.eql(harpUser)
                 expect(response.body.baseConfigurationTypes[0]).to.eql('Efficiency')
                 expect(response.body.baseConfigurationTypes[1]).to.eql('Outcome')
                 expect(response.body.baseConfigurationTypes[2]).to.eql('Process')
                 expect(response.body.patientBasis).to.eql(true)
             })
-
         })
     })
 
     it('Verify Supplemental Data Elements and Risk Adjustment Variables are added to create Measure Model - QDM', () => {
 
-        measureName = 'TestMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
+        measureName = 'QdmSdeRav' + Date.now()
+        CQLLibraryName = 'QdmSdeRavLib' + Date.now()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -168,6 +167,10 @@ describe('Measure Service: QDM Measure', () => {
                 }
             }).then((response) => {
                 let currentUser = Cypress.env('selectedUser')
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
+
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 expect(response.body.supplementalData[0].definition).to.eql('supplementalDataDefinition')
@@ -178,20 +181,15 @@ describe('Measure Service: QDM Measure', () => {
                 expect(response.body.riskAdjustments[0].description).to.eql('riskAdjustmentDescription')
                 expect(response.body.riskAdjustments[1].definition).to.eql('riskAdjustmentDefinition2')
                 expect(response.body.riskAdjustments[1].description).to.eql('riskAdjustmentDescription2')
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
-
         })
-
     })
 })
 
 describe('QDM Measure: Transmission format', () => {
 
-    measureName = 'QDMMeasure' + Date.now() + randValue
-    CQLLibraryName = 'TestCql' + Date.now() + randValue
+    measureName = 'QDMTransmissionFormat' + Date.now()
+    CQLLibraryName = 'QDMTransmissionFormatLib' + Date.now()
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -201,7 +199,7 @@ describe('QDM Measure: Transmission format', () => {
 
     afterEach('Delete Measure', () => {
 
-        Utilities.deleteMeasure(measureName, CQLLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Add Transmission format to the QDM Measure', () => {
@@ -224,7 +222,11 @@ describe('QDM Measure: Transmission format', () => {
                             "measureScoring": "Ratio",
                             "versionId": vId,
                             "measureSetId": uuidv4(),
-                            "measureMetaData": { "experimental": false, "draft": true, "transmissionFormat": "Test Transmission format" },
+                            "measureMetaData": { 
+                                "experimental": false, 
+                                "draft": true, 
+                                "transmissionFormat": "Test Transmission format"
+                            },
                             "reviewMetaData": {
                                 "approvalDate": null,
                                 "lastReviewDate": null
@@ -253,7 +255,10 @@ describe('QDM Measure: Transmission format', () => {
                     }).then((response) => {
                         expect(response.status).to.eql(200)
                         expect(response.body.measureMetaData.transmissionFormat).to.eql('Test Transmission format')
-                        cy.log('Transmission Format added successfully')
+
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
+                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
                     })
                 })
             })

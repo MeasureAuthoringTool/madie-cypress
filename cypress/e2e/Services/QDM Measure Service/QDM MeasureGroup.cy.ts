@@ -7,14 +7,15 @@ import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestLibrary' + Date.now()
-let measureScoring = 'Cohort'
-let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
+const measureName = 'MeasureGroupService' + Date.now()
+const cqlLibraryName = 'MeasureGroupServiceLib' + Date.now()
+const measureScoring = 'Cohort'
+const booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
 const measureData: CreateMeasureOptions = {}
 
 describe('Validations: Population Criteria: Return Types -- Boolean', () => {
+
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
         OktaLogin.setupUserSession(false)
@@ -33,14 +34,11 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-
-        OktaLogin.setupUserSession(false)
     })
+
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Attempt to use a non-boolean population critieria value for a patient basis that expecting boolean', () => {
@@ -85,6 +83,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 })
 
 describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
+
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
         OktaLogin.setupUserSession(false)
@@ -103,14 +102,11 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-
-        OktaLogin.setupUserSession(false)
     })
+
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Attempt to use a boolean population critieria value for a patient basis that expecting non-boolean', () => {
