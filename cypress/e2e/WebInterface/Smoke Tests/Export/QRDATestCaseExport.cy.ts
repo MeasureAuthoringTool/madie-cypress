@@ -9,8 +9,9 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
-let measureName = 'QDMTestMeasure' + Date.now()
-let CqlLibraryName = 'QDMCQLLibrary' + Date.now()
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+let measureName = 'QDMTestMeasure' + Date.now() + randValue
+let CqlLibraryName = 'QDMCQLLibrary' + Date.now() + randValue
 let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
 let anotherTestCaseTitle = 'PDxNotPsych60MinsDepart2nd'
 let testCaseDescription = 'IPPStrat1Pass' + Date.now()
@@ -99,10 +100,10 @@ describe('QDM Test Cases : Export Test Case', () => {
 
         //Verify all files exist in exported zip file
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'html/2_SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'html/1_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'qrda/2_SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'qrda/1_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'html/SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'html/SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'qrda/SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'qrda/SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')).should('exist')
     })
 
     it('Export Test Case button is disabled until Test cases are executed', () => {
