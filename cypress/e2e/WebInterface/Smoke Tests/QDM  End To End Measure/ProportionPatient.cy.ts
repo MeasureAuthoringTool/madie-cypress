@@ -222,7 +222,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('01/26/2012 08:00 AM', '01/26/2012 08:15 AM')
         //add Code
-        QDMElements.addCode('HCPCSLevelII', 'G0438')
+        QDMElements.addCode('HCPCS', 'G0438')
         // Enter attribute and its type
         QDMElements.enterAttribute('Length Of Stay', 'Quantity')
         //enter quantity type
