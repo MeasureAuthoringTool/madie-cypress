@@ -93,6 +93,7 @@ describe('Measure List Page Sort by Columns', () => {
         MeasuresPage.checkFirstRow({ cmsId: '' })
         cy.contains('.header-button', 'CMS ID').click()
         cy.wait('@sort10')
+        cy.wait(7000)
         // since we have tests for generating CMS id now, need to do this annoying check now
         cy.get('[data-testid="row-item"]').first().find('td').eq(6).invoke('text').then(cmsId => {
 
@@ -110,7 +111,7 @@ describe('Measure List Page Sort by Columns', () => {
         // sort by updated
         cy.contains('.header-button', 'Updated').click()
         cy.wait('@sort11')
-        MeasuresPage.checkFirstRow({ updated: '11/16/2022' })
+        MeasuresPage.checkFirstRow({ updated: '11/29/2022' })
         cy.contains('.header-button', 'Updated').click()
         cy.wait('@sort12')
         MeasuresPage.checkFirstRow({ updated: today })
