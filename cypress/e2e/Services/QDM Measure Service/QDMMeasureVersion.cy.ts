@@ -1,30 +1,27 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
-import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestCql' + Date.now()
+let measureName = 'QDMVersionService' + Date.now()
+let cqlLibraryName = 'QDMVersionServiceLib' + Date.now()
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 let harpUser = ''
 let harpUserALT = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCQLLibraryName = ''
 
 const measureData: CreateMeasureOptions = {}
 
 let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
+    'using QDM version \'5.6\'\n\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient\n' +
     'define "SDE Ethnicity":\n' +
@@ -43,44 +40,35 @@ let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     '\ttrue'
 
 let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
-
-    'using QDM version \'5.6\'\n' +
-    '\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
-    '\n' +
-    'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\' \n' +
-    '\n' +
-    'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2289\' \n' +
-    'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\' \n' +
-    'valueset "Body temperature": \'urn:oid:2.16.840.1.113762.1.4.1045.152\' \n' +
-    'valueset "Body weight": \'urn:oid:2.16.840.1.113762.1.4.1045.159\' \n' +
-    'valueset "Creatinine lab test": \'urn:oid:2.16.840.1.113883.3.666.5.2363\' \n' +
-    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\' \n' +
-    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
-    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
-    'valueset "Glucose lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.134\' \n' +
-    'valueset "Heart Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.149\' \n' +
-    'valueset "Hematocrit lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\' \n' +
-    'valueset "Medicare Advantage payer": \'urn:oid:2.16.840.1.113762.1.4.1104.12\' \n' +
-    'valueset "Medicare FFS payer": \'urn:oid:2.16.840.1.113762.1.4.1104.10\' \n' +
-    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\' \n' +
-    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
-    'valueset "Oxygen Saturation by Pulse Oximetry": \'urn:oid:2.16.840.1.113762.1.4.1045.151\' \n' +
-    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
-    '\n' +
-    'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\' \n' +
+    'using QDM version \'5.6\'\n\n' +
+    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n\n' +
+    'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n\n' +
+    'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2289\'\n' +
+    'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\'\n' +
+    'valueset "Body temperature": \'urn:oid:2.16.840.1.113762.1.4.1045.152\'\n' +
+    'valueset "Body weight": \'urn:oid:2.16.840.1.113762.1.4.1045.159\'\n' +
+    'valueset "Creatinine lab test": \'urn:oid:2.16.840.1.113883.3.666.5.2363\'\n' +
+    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "Glucose lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.134\'\n' +
+    'valueset "Heart Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.149\'\n' +
+    'valueset "Hematocrit lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\'\n' +
+    'valueset "Medicare Advantage payer": \'urn:oid:2.16.840.1.113762.1.4.1104.12\'\n' +
+    'valueset "Medicare FFS payer": \'urn:oid:2.16.840.1.113762.1.4.1104.10\'\n' +
+    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Oxygen Saturation by Pulse Oximetry": \'urn:oid:2.16.840.1.113762.1.4.1045.151\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n\n' +
+    'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\'\n' +
     'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\' \n' +
-    'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\' \n' +
-    'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\' \n' +
-    'valueset "White blood cells count lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\' \n' +
-    '\n' +
-    'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\'\n' +
+    'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\'\n' +
+    'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\'\n' +
+    'valueset "White blood cells count lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\'\n\n' +
+    'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "Denominator": \'\'\n' +
     '\t  "Initial Population"'
 
@@ -112,16 +100,11 @@ describe('Measure Versioning', () => {
     })
 
     after('Clean up', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
 
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
     })
 
-
-
-    it('UnSuccessful Measure Versioning when measure does not have population criteria', () => {
+    it('Unsuccessful Measure Versioning when measure does not have population criteria', () => {
         let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -139,11 +122,10 @@ describe('Measure Versioning', () => {
             })
         })
     })
+
     it('Successful Measure Versioning', () => {
+        
         let currentUser = Cypress.env('selectedUser')
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -152,6 +134,7 @@ describe('Measure Versioning', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.request({
@@ -183,7 +166,6 @@ describe('Measure Version : Non Measure owner validation', () => {
         measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-
     })
 
     it('Non Measure owner unable to version Measure', () => {
@@ -207,7 +189,6 @@ describe('Measure Version : Non Measure owner validation', () => {
                 })
             })
         })
-
     })
 })
 
@@ -228,12 +209,11 @@ describe('Version Measure without CQL', () => {
 
         harpUser = OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
-
     })
+
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('User can not version Measure if there is no CQL', () => {
@@ -256,7 +236,6 @@ describe('Version Measure without CQL', () => {
     })
 })
 
-
 describe('Version Measure with invalid CQL', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
@@ -273,7 +252,6 @@ describe('Version Measure with invalid CQL', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL_WithParsingAndVSACErrors
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -281,15 +259,11 @@ describe('Version Measure with invalid CQL', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        OktaLogin.setupUserSession(false)
-
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('User can not version Measure if the CQL has errors', () => {

@@ -1,6 +1,4 @@
-import {OktaLogin} from "../../../Shared/OktaLogin";
-
-export { }
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 describe('Terminology Service: Value Set', () => {
 
@@ -79,9 +77,7 @@ describe('Terminology Service: Value Set: Authentication', () => {
                 expect(response.isOkStatusCode).to.eql(false)
                 expect(response.headers["www-authenticate"]).contains('Bearer error=\"invalid_token\"')
             })
-
         })
-
     })
 })
 
