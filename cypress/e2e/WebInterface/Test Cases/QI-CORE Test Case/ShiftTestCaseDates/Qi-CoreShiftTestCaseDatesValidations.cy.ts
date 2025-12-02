@@ -47,7 +47,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Shift all Test Case dates to the future using the tab in left menu', () => {
@@ -202,7 +202,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Shift test case date error message, when test case is erroroneous, on the Test Case Data', () => {
@@ -240,9 +240,9 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
         Utilities.waitForElementVisible(TestCasesPage.executionContextWarning, 50000)
         cy.get(TestCasesPage.executionContextWarning).should('contain.text', 'The following Test Case dates could not be shifted. Please try again. If the issue continues, please contact helpdesk.SBTestSeriesError - Erroring Test case')
-
     })
 
+    //fail
     it('Shift test case date error message, when test case is erroroneous, through the Action center buttons', () => {
 
         //Click on Edit Measure
