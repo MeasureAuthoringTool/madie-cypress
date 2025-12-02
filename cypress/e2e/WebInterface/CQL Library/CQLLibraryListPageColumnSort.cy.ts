@@ -1,9 +1,9 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {Utilities} from "../../../Shared/Utilities"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {SupportedModels} from "../../../Shared/CreateMeasurePage"
-import {Header} from "../../../Shared/Header"
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { Utilities } from "../../../Shared/Utilities"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { SupportedModels } from "../../../Shared/CreateMeasurePage"
+import { Header } from "../../../Shared/Header"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 
 const dayjs = require('dayjs')
 const today = dayjs().format('M/D/YYYY')
@@ -58,7 +58,7 @@ describe('CQL Library List Page Sort by Columns', () => {
         CQLLibraryPage.checkFirstRow({ name: 'AAO21' })
         cy.contains('.col-header', 'Library').click()
         cy.wait('@sort2')
-        CQLLibraryPage.checkFirstRow({ name: 'ViewMyCqlLibs' })
+        CQLLibraryPage.checkFirstRow({ name: 'VersioningLib1764617416868' })
 
         // sort by version
         cy.contains('.col-header', 'Version').click()
@@ -66,7 +66,7 @@ describe('CQL Library List Page Sort by Columns', () => {
         CQLLibraryPage.checkFirstRow({ version: '0.0.000' })
         cy.contains('.col-header', 'Version').click()
         cy.wait('@sort4')
-        CQLLibraryPage.checkFirstRow({ version: '10.1.000' })
+        CQLLibraryPage.checkFirstRow({ version: '10.3.000' })
 
         // sort by status
         cy.contains('.col-header', 'Status').click()
