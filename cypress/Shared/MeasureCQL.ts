@@ -148,8 +148,7 @@ export class MeasureCQL {
         '  [\"Patient Characteristic Sex\": \"ONC Administrative Sex\"]\n' +
         '\n' +
         'define \"Denominator Exclusions\":\n' +
-        '  TJC.\"Ischemic Stroke Encounters with Discharge Disposition\"\n' +
-        '    union TJC.\"Encounter with Comfort Measures during Hospitalization\"\n' +
+        'true' +
         '\n' +
         'define \"Encounter with Pharmacological Contraindications for Antithrombotic Therapy at Discharge\":\n' +
         '  TJC.\"Ischemic Stroke Encounter\" IschemicStrokeEncounter\n' +
