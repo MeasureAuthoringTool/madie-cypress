@@ -211,7 +211,7 @@ export class TestCasesPage {
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
-    public static readonly testCaseExecutionError = '[data-testid="execution_context_loading_errors"]'
+    public static readonly testCaseExecutionError = '[data-testid="generic-fail-text-list"]'
     public static readonly runTestButton = '[data-testid="run-test-case-button"]'
     public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
     public static readonly testCaseListPassingPercTab = '[data-testid="passing-tab"]'
