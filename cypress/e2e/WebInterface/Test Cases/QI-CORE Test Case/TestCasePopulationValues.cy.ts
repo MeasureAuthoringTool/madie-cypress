@@ -30,8 +30,8 @@ describe('Test Case Expected Measure Group population values based on initial me
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Verify the Test Case Populations when Measure group is not added', () => {
@@ -81,7 +81,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-        })
+    })
 
     it('Validate notification that a reset of population values, on test cases, will occur once the completed ' +
         'save / update of the scoring value is executed', () => {
@@ -143,8 +143,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
             cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('not.exist')
-
-        })
+    })
 
     it('Validate Population Values are reset on all test cases that exist under a measure group, after the score ' +
         'unit value is saved / updated', () => {
@@ -171,7 +170,6 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(MeasureGroupPage.popBasis).click()
             cy.get(MeasureGroupPage.popBasis).type('Procedure')
             cy.get(MeasureGroupPage.popBasisOption).click()
-
 
             Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
@@ -264,7 +262,6 @@ describe('Test Case Expected Measure Group population values based on initial me
                 cy.wait('@testCase').then(({ response }) => {
                     expect(response.statusCode).to.eq(200)
                 })
-
             })
             TestCasesPage.clickEditforCreatedTestCase()
 
@@ -276,8 +273,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             //confirm that check boxes that were checked are no longer checked
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
-
-        })
+    })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group -- required populations', () => {
 
@@ -378,13 +374,12 @@ describe('Test Case Population dependencies', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(Header.mainMadiePageButton).click()
-
     })
 
     after('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Test Case population dependencies for Proportion Measures', () => {
@@ -523,7 +518,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group', () => {

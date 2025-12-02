@@ -83,7 +83,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //navigate to the edit test case age and make sure alert concerning SA appears
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get('[data-testid="test-case-alerts"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get('[data-testid="test-case-alerts"]').should('contain.text', '2 errors were foundSupplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.')
 
         //Verify that the Run Test button is disabled
         cy.get(TestCasesPage.runTestButton).should('be.disabled')
