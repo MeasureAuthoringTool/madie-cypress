@@ -329,7 +329,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click().wait(1000)
+        cy.get(CQLEditorPage.codesTab).click().wait(2000)
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
@@ -384,7 +384,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click().wait(1000)
+        cy.get(CQLEditorPage.codesTab).click().wait(2000)
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
