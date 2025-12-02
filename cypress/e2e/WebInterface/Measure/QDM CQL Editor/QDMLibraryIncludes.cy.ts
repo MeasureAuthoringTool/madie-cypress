@@ -87,7 +87,7 @@ describe('QDM Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'UATVTEQDM0.1.000YaHu1257View / ApplyVTEQDM9.0.000YaHu1257View / ApplyVTEQDM8.3.000YaHu1257View / ApplyVTEQDM8.2.000YaHu1257View / ApplyVTEQDM8.1.000YaHu1257View / Apply')
+        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'UATVTEQDM0.1.000YaHu1257View / ApplyVTEQDM9.1.000YaHu1257View / ApplyVTEQDM9.0.000YaHu1257View / ApplyVTEQDM8.3.000YaHu1257View / ApplyVTEQDM8.2.000YaHu1257View / Apply')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -108,7 +108,7 @@ describe('QDM Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('VTE')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'UATVTEQDM0.1.000YaHu1257View / ApplyVTEQDM9.0.000YaHu1257View / ApplyVTEQDM8.3.000YaHu1257View / ApplyVTEQDM8.2.000YaHu1257View / ApplyVTEQDM8.1.000YaHu1257View / Apply')
+        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'UATVTEQDM0.1.000YaHu1257View / ApplyVTEQDM9.1.000YaHu1257View / ApplyVTEQDM9.0.000YaHu1257View / ApplyVTEQDM8.3.000YaHu1257View / ApplyVTEQDM8.2.000YaHu1257View / Apply')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
