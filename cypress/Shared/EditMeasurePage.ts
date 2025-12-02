@@ -114,7 +114,7 @@ export class EditMeasurePage {
     public static readonly createDefinitionBtn = '[data-testid="create-definition-button"]'
     public static readonly definitionTermInput = '[data-testid="measure-definition-term-input"]'
     public static readonly defintionEditorField = '[data-testid="definition-rich-text-editor"]'
-    public static readonly definitionInput = '[data-testid="definition-rich-text-editor-content"]'//'[data-testid="genericField-rich-text-editor-content"]'
+    public static readonly definitionInput = '[data-testid="definition-rich-text-editor-content"]'
     public static readonly definitionMetaTable = '[id="measure-meta-data-table"]'
     public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
     public static readonly emptyDefinitionVal = '[data-testid="empty-definitions"]'
