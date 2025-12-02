@@ -21,6 +21,11 @@ const measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
+/*
+    After MAT-9275 and MAT-9276, we will always force our bundle types to be "collection" while
+    within Madie.
+*/
+
 describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or Collection', () => {
 
     deleteDownloadsFolderBeforeEach()
@@ -33,8 +38,8 @@ describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or C
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Export single QI-Core Test case by Non Measure Owner: Transaction', () => {
@@ -134,8 +139,8 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Export single QI-Core Test case Transaction bundle and Import to the same Measure', () => {
@@ -179,7 +184,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
     })
 
     it('Export single QI-Core Test case Collection bundle and Import to the same Measure', () => {
@@ -262,8 +267,8 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Export multiple QI-Core Test cases Transaction bundle and Import to the same Measure', () => {
@@ -310,7 +315,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -318,7 +323,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
     })
 
     it('Export multiple QI-Core Test cases Collection bundle and Import to the same Measure', () => {
