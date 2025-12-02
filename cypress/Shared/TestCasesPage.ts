@@ -58,7 +58,7 @@ export class TestCasesPage {
     public static readonly shiftSpecificTestCasesCancelBtn = '[data-testid="shift-dates-cancel-button"]'
     public static readonly shiftSpecificTestCasesSaveBtn = '[data-testid="shift-dates-save-button"]'
     public static readonly TestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
-    public static readonly executionContextWarning = '[data-testid="execution_context_loading_warning"]'
+    public static readonly executionContextWarning = '[data-testid="warn-title"]'
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
@@ -212,6 +212,7 @@ export class TestCasesPage {
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
     public static readonly testCaseExecutionError = '[data-testid="generic-fail-text-list"]'
+    public static readonly testCaseSyntaxError = '[data-testid="test-case-alerts"]'
     public static readonly runTestButton = '[data-testid="run-test-case-button"]'
     public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
     public static readonly testCaseListPassingPercTab = '[data-testid="passing-tab"]'

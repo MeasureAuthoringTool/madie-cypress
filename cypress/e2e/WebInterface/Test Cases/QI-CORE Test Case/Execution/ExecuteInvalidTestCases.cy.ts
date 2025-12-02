@@ -1,10 +1,10 @@
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {TestCase, TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
 const now = Date.now()
 const measureName = 'TestMeasure' + now
@@ -14,15 +14,11 @@ const testCase: TestCase = {
     description: 'DENOMFail' + now,
     group: 'SBTestSeries'
 }
-let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
@@ -137,7 +133,7 @@ describe('Run / Execute Invalid Test Cases', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -168,7 +164,7 @@ describe('Run / Execute Invalid Test Cases', () => {
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get('[data-testid="execution_context_loading_errors"]').should('contain.text', 'Some test cases could not be executed due to syntax errors in their definitions. Please review and correct the syntax issues, then try running the tests again.')
+        cy.get(TestCasesPage.testCaseSyntaxError).should('contain.text', 'Some test cases could not be executed due to syntax errors in their definitions. Please review and correct the syntax issues, then try running the tests again.')
     })
 
     it('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
