@@ -94,7 +94,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Apply different Library with duplicate Alias
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('fhir')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionCDSConnectCommonsForFHIRv4010.1.000pauld@mitre.orgView / ApplyFHIRCommon4.3.000julietrubiniView / ApplyFHIRCommon4.2.000julietrubiniView / ApplyFHIRCommon4.1.000julietrubiniView / ApplyFHIRCommon4.0.000julietrubiniView / ApplyItems per page 5.Items per page5​1 - 5 of 201234')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionCDSConnectCommonsForFHIRv4010.1.000pauld@mitre.orgView / ApplyFHIRCommon4.3.000julietrubiniView / ApplyFHIRCommon4.2.000julietrubiniView / ApplyFHIRCommon4.1.000julietrubiniView / ApplyFHIRCommon4.0.000julietrubiniView / ApplyItems per page 5.Items per page5​1 - 5 of 191234')
         cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
         cy.get('[data-testid="apply-button"]').click()
