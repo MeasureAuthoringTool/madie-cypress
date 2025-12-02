@@ -369,7 +369,7 @@ describe('Validating Non-owner access to Base Configuration page', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process before continuing')
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
