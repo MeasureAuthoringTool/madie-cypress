@@ -136,6 +136,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.createDefinitionBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).type('DefinitionTerm')
+        //<div contenteditable="true" role="textbox" tabindex="0" id="definition" data-testid="definition-rich-text-editor-content" aria-invalid="undefined" aria-labelledby="definition-label" aria-describedby="undefined" aria-multiline="true" aria-required="true" classname="" translate="no" class="tiptap ProseMirror"><p><br class="ProseMirror-trailingBreak"></p></div>
         cy.get(EditMeasurePage.defintionEditorField).find(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
         Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
         cy.get(EditMeasurePage.saveButton).click()
