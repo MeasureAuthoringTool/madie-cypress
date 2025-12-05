@@ -1,13 +1,13 @@
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Toasts} from "../../../../Shared/Toasts"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Toasts } from "../../../../Shared/Toasts"
 
 let measureName = 'CompareMeasureVersion' + Date.now()
 const cqlLibraryName = 'CompareMeasureVersion' + Date.now()
@@ -40,11 +40,12 @@ describe.skip('Compare Measure Versions', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
+        Utilities.deleteMeasure(null, null, false, false, 1)
     })
 
     it('Compare two Versions of a Measure', () => {
 
-        let  updatedMeasureName = 'Updated' + measureName + Date.now()
+        let updatedMeasureName = 'Updated' + measureName + Date.now()
         let currentUser = Cypress.env('selectedUser')
 
         cy.get(Header.measures).click()
@@ -95,9 +96,17 @@ describe.skip('Compare Measure Versions', () => {
         cy.get(MeasuresPage.compareVersionsBtn).click()
 
         //Verify Popup Screen
-        cy.get(MeasuresPage.compareVersionsPopupTitle).should('contain.text', 'Compare Measure Versions')
+        cy.contains('h2', 'Compare Measure Versions').should('be.visible')
         cy.get('[data-testid="measure-name"]').should('contain.text', updatedMeasureName)
         cy.get(MeasuresPage.compareVersionsCqlTab).should('contain.text', 'CQL')
         cy.get(MeasuresPage.compareVersionsHRTab).should('contain.text', 'Human Readable')
+
+        // temporary - can look for real CQL once it's there
+        cy.get('[data-testid="panel-content-old"]').should('contain.text', 'CQL coming soon')
+
+        cy.get(MeasuresPage.compareVersionsHRTab).click()
+
+        // very basic check that HR will display - Utilities.waitForElementVisible won't work here with nesting
+        cy.contains('eCQMTitle4QICore', { timeout: 12500 }).should('be.visible')
     })
 })
