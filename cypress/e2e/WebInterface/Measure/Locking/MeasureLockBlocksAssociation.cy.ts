@@ -16,8 +16,7 @@ let harpUserALT = ''
 const qdmManifestTestCQL = QdmCql.qdmCQLManifestTest
 const measureCQLPFTests = QiCore4Cql.CQL_Populations
 
-//Skipping until Feature flag 'Locking' is removed
-describe.skip('Measure Association is not allowed when QiCore measure is locked', () => {
+describe('Measure Association is not allowed when QiCore measure is locked', () => {
 
     beforeEach('Create measures', () => {
 
@@ -90,6 +89,9 @@ describe.skip('Measure Association is not allowed when QiCore measure is locked'
 
         cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.disabled')
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Unable to associate measures. Locked while being edited by ' + harpUserALT)
+
+        //Delete Measure Locks
+        Utilities.verifyAllLocksDeleted(MadieObject.Measure, true)
     })
 
     // we can't do this scenario right now - we'd need a big refactor or enhancement for handling access tokens
