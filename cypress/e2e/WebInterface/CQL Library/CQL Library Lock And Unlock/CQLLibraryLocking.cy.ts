@@ -10,8 +10,7 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserAlt = ''
 
-//Skipping until Feature flag 'Locking' is removed
-describe.skip('CQL Library Locking Validations', () => {
+describe('CQL Library Locking Validations', () => {
 
     beforeEach('Create CQL Library', () => {
 
