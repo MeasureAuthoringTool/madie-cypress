@@ -643,36 +643,32 @@ export class TestCasesPage {
 
         cy.get(this.detailsTab).click()
 
-        //Edit / Update test case title
-
         cy.get(this.testCaseTitle).should('exist')
         cy.get(this.testCaseTitle).should('be.visible')
         cy.get(this.testCaseTitle).should('be.enabled')
-        cy.get(this.testCaseTitle).focus()
 
-        cy.get(this.testCaseTitle).clear()
 
-        cy.get(this.testCaseTitle).invoke('val', '')
+        cy.get(this.testCaseTitle).clear().type(updatedTestCaseTitle)
 
-        cy.get(this.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear().type(updatedTestCaseDescription)
 
-        //cy.get(this.testCaseTitle).clear()
-        cy.get(this.testCaseTitle).type(updatedTestCaseTitle)
-        //Update Test Case Description
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).type(updatedTestCaseDescription)
-        //Update Test Case Series
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseGroupInput, 3500)
         cy.get(TestCasesPage.createTestCaseGroupInput).clear()
-        cy.get(TestCasesPage.createTestCaseGroupInput).wait(1000).type(updatedTestCaseSeries).type('{enter}')
+            .type(updatedTestCaseSeries)
+            .wait(1000)
+            .type('{enter}')
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').click()
+
         //Wait for the save button to become unavailable
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         cy.get(this.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'])
         })
+
+        // ToDo: find something to wait on here instead of the hard wait
+        cy.wait(14500)
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -681,33 +677,6 @@ export class TestCasesPage {
 
         cy.log('Test Case updated successfully')
     }
-
-    // public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
-    //
-    //     const currentUser = Cypress.env('selectedUser')
-    //     let testCasePIdPath = ''
-    //     if (secondTestCase) {
-    //         testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId2'
-    //     }
-    //     else {
-    //         testCasePIdPath = 'cypress/fixtures/'+ currentUser + '/testCaseId'
-    //     }
-    //
-    //     cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
-    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.visible').wait(3000)
-    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.enabled')
-    //         Utilities.waitForElementVisible('[data-testid=view-edit-test-case-button-' + tcId + ']', 90000)
-    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
-    //         cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').click()
-    //     })
-    //     cy.get('body').then($body => {
-    //         const $el = $body.find('[data-testid="info-QDM v5.6-0"]')
-    //         if ($el.length === 0 || !$el.is(':visible')) {
-    //             cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-    //             cy.wait('@callstacks', { timeout: 140000 })
-    //         }
-    //     })
-    // }
 
     public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
         const currentUser = Cypress.env('selectedUser')
