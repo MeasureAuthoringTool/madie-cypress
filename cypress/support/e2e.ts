@@ -46,11 +46,11 @@ Cypress.on('test:after:run', (test, runnable) => {
 
 before(() => {
     cy.task('getAvailableUser').then((user) => {
-        expect(user).to.not.be.null;
+        expect(user, 'No users available').to.not.be.null;
         Cypress.env('selectedUser', user)
     })
     cy.task('getAvailableAltUser').then((altUser) => {
-        expect(altUser).to.not.be.null;
+        expect(altUser, 'No altUsers available').to.not.be.null;
         Cypress.env('selectedAltUser', altUser)
     })
 })

@@ -1,8 +1,6 @@
-import {Environment} from "../../../../Shared/Environment"
 import {MadieObject, Utilities} from "../../../../Shared/Utilities"
 import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {Header} from "../../../../Shared/Header"
 import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -10,8 +8,7 @@ const measureName = 'TestMeasure' + Date.now() + randValue
 const cqlLibraryName = 'TestMeasure' + Date.now() + randValue
 let harpUserALT = ''
 
-//Skipping until Feature flag 'Locking' is removed
-describe.skip('Measure Locking Validations', () => {
+describe('Measure Locking Validations', () => {
 
     before('Create Measure', () => {
 

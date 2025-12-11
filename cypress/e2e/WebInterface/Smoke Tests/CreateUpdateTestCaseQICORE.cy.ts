@@ -13,6 +13,9 @@ const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
 dayjs.extend(utc)
 const timestamp = Date.now()
+const todaysDate = dayjs(timestamp).format('MM/DD/YYYY')
+// matches date & hour, allowing slack for test time to cross minute boundaries
+const utcTime = dayjs(timestamp).utc().format('MM/DD/YYYYHH')
 const measureName = 'CUTCQiCore' + timestamp
 const CqlLibraryName = 'CUTCQiCoreLib' + timestamp
 const testCaseTitle = 'Title for Auto Test'
@@ -23,10 +26,6 @@ const updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseD
 const updatedTestCaseSeries = 'CMSTestSeries'
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
-const now = require('dayjs')
-const todaysDate = now().format('MM/DD/YYYY')
-// Convert timestamp to UTC
-const utcTime = dayjs(timestamp).utc().format('MM/DD/YYYYHH')
 
 const qiCore6MeasureCQL = 'library QICoreTestLibrary1733500481375 version \'0.0.000\'\n' +
     'using QICore version \'6.0.0\'\n' +
@@ -72,15 +71,7 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
-    })
 
-    it('Verify last saved time stamp for Test case', () => {
-
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
-        //Verify Last Saved Date on Test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        // Asserting on last saved hour only since there is a difference between time saved and the actual time
         cy.get(TestCasesPage.lastSavedDate).should('contain.text', utcTime)
         cy.get(TestCasesPage.lastSavedDate).should('contain.text', 'UTC')
     })
@@ -119,5 +110,8 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
+
+        cy.get(TestCasesPage.lastSavedDate).should('contain.text', utcTime)
+        cy.get(TestCasesPage.lastSavedDate).should('contain.text', 'UTC')
     })
 })
