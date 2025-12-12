@@ -23,16 +23,16 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2022-12-31')
-
         TestCasesPage.CreateTestCaseAPI(testCaseTitlePass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -82,9 +82,8 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('End to End Ratio Episode Two IPs w/ MOs Pass Result', () => {

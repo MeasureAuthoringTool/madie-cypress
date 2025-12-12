@@ -3,7 +3,7 @@ import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMea
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
@@ -18,7 +18,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6,
             { measureCql: measureCQL, mpStartDate: '2026-01-01', mpEndDate: '2026-12-31' })
 
@@ -27,8 +26,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
     after('Logout', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
     })
 
     it('End to End Proportion Episode Measure, Pass Result', () => {
@@ -37,7 +35,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -143,7 +141,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
-
     })
 })
 

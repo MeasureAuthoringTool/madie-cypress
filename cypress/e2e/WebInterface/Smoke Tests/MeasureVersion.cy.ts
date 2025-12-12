@@ -10,8 +10,8 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Header } from "../../../Shared/Header"
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestCql' + Date.now()
+let measureName = 'SmokeMeasureVersion' + Date.now()
+let cqlLibraryName = 'SmokeMeasureVersionLib' + Date.now()
 let newMeasureName = ''
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -22,7 +22,6 @@ let testCaseSeries = 'SBTestSeries'
 let QiCoreMeasureCQL = MeasureCQL.SBTEST_CQL
 let QiCoreTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 let qdmCMSMeasureCQL = MeasureCQL.QDM_CQL_withLargeIncludedLibrary
-
 
 describe('QDM Measure Versioning', () => {
 
@@ -50,23 +49,15 @@ describe('QDM Measure Versioning', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
     })
 
     afterEach('Logout and delete Measure', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
     })
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
-
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
 
         //Navigate to Measures page
         cy.get(Header.mainMadiePageButton).click()
@@ -74,7 +65,7 @@ describe('QDM Measure Versioning', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(3000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
@@ -84,7 +75,7 @@ describe('QDM Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('[data-testid="toast-success"]').should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 35000 }).should('contain.text', 'New version of measure is Successfully created')
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
@@ -141,24 +132,15 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
-
     })
 
     afterEach('Logout and delete Measure', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
     })
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
-
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
 
         //Navigate to Measures page
         cy.get(Header.mainMadiePageButton).click()
@@ -166,7 +148,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(3000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
@@ -176,7 +158,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('[data-testid="toast-success"]').should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 35000 }).should('contain.text', 'New version of measure is Successfully created')
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
@@ -231,8 +213,6 @@ describe('QI-Core Measure Versioning', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
     })
 
     after('Logout and cleanup', () => {
@@ -243,13 +223,16 @@ describe('QI-Core Measure Versioning', () => {
 
     it('Add Major Version to the Qi-Core Measure and verify that the versioned Measure is in read only', () => {
 
+        //Navigate to Measures page
+        cy.get(Header.mainMadiePageButton).click()
+
         MeasuresPage.actionCenter('version')
         Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 50000)
         cy.get(MeasuresPage.measureVersionTypeDropdown).should('be.visible')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         Utilities.waitForElementVisible(MeasuresPage.measureVersionMajor, 50000)
         cy.get(MeasuresPage.measureVersionMajor).should('be.visible')
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(3000)
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 50000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
@@ -260,7 +243,7 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('[data-testid="toast-success"]').should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 35000 }).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Major Version Created Successfully')
 

@@ -7,7 +7,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
 
 let measureName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
@@ -31,7 +30,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -112,7 +111,6 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(500).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-
 
         //Element - Encounter:Performed: Encounter Inpatient
         //add Element
@@ -302,6 +300,5 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
-
     })
 })

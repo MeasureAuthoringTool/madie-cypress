@@ -16,73 +16,51 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeSingleIPNoMO_IPP_PASS
 let testCaseJsonMultipleEpisodesPass = TestCaseJson.RatioEpisodeSingleIPNoMO_MultipleEpisodes_PASS
-let measureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
-    'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'\n' +
-    '\n' +
+    'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'\n\n' +
     'valueset "Emergency Department Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.292\'\n' +
-    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n' +
-    '\n' +
+    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
     'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n' +
-    'code "Emergency": \'EMER\' from "ActCode" display \'Emergency\'\n' +
-    '\n' +
+    'code "Emergency": \'EMER\' from "ActCode" display \'Emergency\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population 1":\n' +
     '   [Encounter: "Encounter Inpatient"] InptEncounter\n' +
-    '     where InptEncounter.status = \'finished\'\n' +
-    '\n' +
+    '     where InptEncounter.status = \'finished\'\n\n' +
     'define "Denominator":\n' +
     '    "Initial Population 1" IP\n' +
-    '      where IP.period ends during day of "Measurement Period"\n' +
-    '        \n' +
+    '      where IP.period ends during day of "Measurement Period"\n\n' +
     'define "Denominator Exclusions":\n' +
     '    Denominator Denom\n' +
-    '        where Global."LengthInDays"(Denom.period) > 120\n' +
-    '\n' +
+    '        where Global."LengthInDays"(Denom.period) > 120\n\n' +
     'define "Numerator":\n' +
     '    "Denominator" Denom\n' +
-    '        where Denom.priority ~ "Unscheduled (qualifier value)"\n' +
-    '\n' +
+    '        where Denom.priority ~ "Unscheduled (qualifier value)"\n\n' +
     'define "Numerator Exclusions":\n' +
     '    Numerator Numer\n' +
     '        where Numer.class ~ "Emergency"'
 
 describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
-    before('Create Measure and Test Case', () => {
+    beforeEach('Create Measure and Test Case', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2022-12-31')
-
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
-
+   
         OktaLogin.Login()
-    })
-
-    after('Clean up', () => {
-
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-    })
-
-    it('End to End Cohort Ratio Episode Single IP w/o MO, IPP Pass Result', () => {
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -113,6 +91,15 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+    })
+
+    afterEach('Clean up', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
+    })
+
+    it('End to End Cohort Ratio Episode Single IP w/o MO, IPP Pass Result', () => {
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -156,6 +143,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitleMultipleEpisodesPass, testCaseDescription, testCaseSeries, testCaseJsonMultipleEpisodesPass)
 
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
