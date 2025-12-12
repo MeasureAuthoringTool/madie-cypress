@@ -1,29 +1,25 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'CohortEpisodeEncounter' + Date.now()
+let measureName = 'ExamineCohortEpisodeEncounter' + Date.now()
 let CqlLibraryName = 'CohortEpisodeEncounter' + Date.now()
 let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 
-let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
@@ -33,16 +29,14 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
-
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -52,7 +46,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -88,14 +82,13 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
 
-        cy.get(TestCasesPage.detailsTab).click()
+     //   cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -108,12 +101,13 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+      //  cy.get(TestCasesPage.executeTestCaseButton).focus()
+      //  cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+       // cy.get(TestCasesPage.executeTestCaseButton).click()
+       Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 9500)
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
 })

@@ -32,7 +32,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

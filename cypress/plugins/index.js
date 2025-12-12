@@ -31,14 +31,11 @@ function unzipFile (zipFile, path) {
 
   readStream.pipe(unzipper.Extract({path: `${path}`}))
 }
-const browserify = require('@cypress/browserify-preprocessor')
+
 
 module.exports = (on, config) => {
   const file = config.env.configFile
-  const options = {
-    ...browserify.defaultOptions,
-    typescript: require.resolve('typescript')
-  }
+
     on('task', {
       log(message) {
         console.log(message)
@@ -129,6 +126,6 @@ module.exports = (on, config) => {
             return null;
         }
     })
-    on('file:preprocessor', browserify(options))
+
     return getConfigurationByFile(file)
   }

@@ -6,7 +6,6 @@ const fs = require('fs-extra')
 const xlsx = require('xlsx')
 
 export default defineConfig({
-  env: { parseSpecialCharSequences: false },
   chromeWebSecurity: false,
   modifyObstructiveCode: false,
   pageLoadTimeout: 100000,
@@ -25,10 +24,6 @@ export default defineConfig({
     timestamp: 'mmddyyyy_HHMMss',
     json: true,
     inline: true,
-  },
-  retries: {
-    runMode: 1,
-    openMode: 0,
   },
   screenshotsFolder: 'mochawesome-report/assets',
   e2e: {
