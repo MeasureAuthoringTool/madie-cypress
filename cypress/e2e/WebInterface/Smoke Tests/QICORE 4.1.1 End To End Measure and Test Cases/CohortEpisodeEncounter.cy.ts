@@ -8,7 +8,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'ExamineCohortEpisodeEncounter' + Date.now()
+let measureName = 'CohortEpisodeEncounter' + Date.now()
 let CqlLibraryName = 'CohortEpisodeEncounter' + Date.now()
 let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
@@ -85,8 +85,6 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-
-     //   cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
 
@@ -103,11 +101,8 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-      //  cy.get(TestCasesPage.executeTestCaseButton).focus()
-      //  cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-       // cy.get(TestCasesPage.executeTestCaseButton).click()
-       Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 9500)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 9500)
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
 })
