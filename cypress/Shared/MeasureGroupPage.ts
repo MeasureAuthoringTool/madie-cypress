@@ -1,10 +1,9 @@
 import { MeasuresPage } from "./MeasuresPage"
 import { EditMeasurePage } from "./EditMeasurePage"
 import { CQLEditorPage } from "./CQLEditorPage"
-import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
-import { v4 as uuidv4 } from 'uuid'
+import { UUIDTypes, v4 as uuidv4 } from 'uuid'
 import { Stratification } from "@madie/madie-models"
 import { OktaLogin } from "./OktaLogin";
 
@@ -46,9 +45,9 @@ export type CVGroups = {
 }
 export type MeasureObservations = {
     aggregateMethod: string,
-    criteriaReference?: uuidv4,
+    criteriaReference?: UUIDTypes,
     definition: string,
-    id?: uuidv4,
+    id?: UUIDTypes,
     description?: string
 }
 

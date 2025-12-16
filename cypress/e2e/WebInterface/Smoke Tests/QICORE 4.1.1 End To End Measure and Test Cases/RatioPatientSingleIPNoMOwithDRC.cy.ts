@@ -16,58 +16,41 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioPatientSingleIPNoMO_IPP_PASS
 let testCaseJsonDrcPass = TestCaseJson.RatioPatientSingleIPNoMO_DRC_PASS
-let measureCQL = 'library RatioPatientSingleIPNoMO version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library RatioPatientSingleIPNoMO version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
-    'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'\n' +
-    '\n' +
+    'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'\n\n' +
     'valueset "Emergency Department Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.292\'\n' +
-    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n' +
-    '\n' +
+    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
     'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n' +
-    'code "Emergency": \'EMER\' from "ActCode" display \'Emergency\'\n' +
-    '\n' +
+    'code "Emergency": \'EMER\' from "ActCode" display \'Emergency\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population 1":\n' +
-    '   exists "Inpatient Encounters"\n' +
-    '\n' +
+    '   exists "Inpatient Encounters"\n\n' +
     'define "Denominator":\n' +
-    '    exists "Inpatient Encounters Ends During MP"\n' +
-    '        \n' +
+    '    exists "Inpatient Encounters Ends During MP"\n\n' +
     'define "Denominator Exclusions":\n' +
-    '    exists "Inpatient Encounters Ends During MP GT 120 Days"\n' +
-    '\n' +
+    '    exists "Inpatient Encounters Ends During MP GT 120 Days"\n\n' +
     'define "Numerator":\n' +
-    '    exists "Unscheduled Inpatient Encounters Ends During MP"\n' +
-    '\n' +
+    '    exists "Unscheduled Inpatient Encounters Ends During MP"\n\n' +
     'define "Numerator Exclusions":\n' +
-    '    exists "Unscheduled Emergency Inpatient Encounters Ends During MP"\n' +
-    '\n' +
+    '    exists "Unscheduled Emergency Inpatient Encounters Ends During MP"\n\n' +
     'define "Inpatient Encounters":\n' +
     '  [Encounter: "Encounter Inpatient"] InptEncounter\n' +
-    '      where InptEncounter.status = \'finished\'\n' +
-    '\n' +
+    '      where InptEncounter.status = \'finished\'\n\n' +
     'define "Inpatient Encounters Ends During MP":\n' +
     '  "Inpatient Encounters" IE\n' +
-    '        where IE.period ends during day of "Measurement Period"\n' +
-    '\n' +
+    '        where IE.period ends during day of "Measurement Period"\n\n' +
     'define "Inpatient Encounters Ends During MP GT 120 Days":\n' +
     '  "Inpatient Encounters Ends During MP" IE\n' +
-    '        where Global."LengthInDays"(IE.period) > 120\n' +
-    '\n' +
+    '        where Global."LengthInDays"(IE.period) > 120\n\n' +
     'define "Unscheduled Inpatient Encounters Ends During MP":\n' +
     '  "Inpatient Encounters Ends During MP" IE\n' +
-    '        where IE.priority ~ "Unscheduled (qualifier value)"\n' +
-    '\n' +
+    '        where IE.priority ~ "Unscheduled (qualifier value)"\n\n' +
     'define "Unscheduled Emergency Inpatient Encounters Ends During MP":\n' +
     '  "Unscheduled Inpatient Encounters Ends During MP" IE\n' +
     '        where IE.class ~ "Emergency"'
@@ -78,17 +61,14 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2022-12-31')
-
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
-
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, IPP Pass Result', () => {
@@ -97,7 +77,7 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 

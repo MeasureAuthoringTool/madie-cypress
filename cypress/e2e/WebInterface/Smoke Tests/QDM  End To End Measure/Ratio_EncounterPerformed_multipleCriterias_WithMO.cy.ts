@@ -14,70 +14,53 @@ const CqlLibraryName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + now
 const firstTestCaseTitle = 'Test Case'
 const testCaseDescription = 'Test Case' + now
 const testCaseSeries = 'SBTestSeries'
-const measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStratifications version \'0.0.000\'\n' +
-    '\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
-    'valueset "Active Bleeding": \'urn:oid:2.16.840.1.113762.1.4.1206.28\' \n' +
-    'valueset "Acute Inpatient": \'urn:oid:2.16.840.1.113762.1.4.1182.118\' \n' +
-    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\' \n' +
-    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
-    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
-    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\' \n' +
-    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
-    'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
-    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+const measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStratifications version \'0.0.000\'\n\n' +
+    'using QDM version \'5.6\'\n\n' +
+    'valueset "Active Bleeding": \'urn:oid:2.16.840.1.113762.1.4.1206.28\'\n' +
+    'valueset "Acute Inpatient": \'urn:oid:2.16.840.1.113762.1.4.1182.118\'\n' +
+    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "SDE Ethnicity":\n' +
-    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
-    '\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
     'define "SDE Payer":\n' +
-    '  ["Patient Characteristic Payer": "Payer Type"]\n' +
-    '\n' +
+    '  ["Patient Characteristic Payer": "Payer Type"]\n\n' +
     'define "SDE Race":\n' +
-    '  ["Patient Characteristic Race": "Race"]\n' +
-    '\n' +
+    '  ["Patient Characteristic Race": "Race"]\n\n' +
     'define "SDE Sex":\n' +
-    '    ["Patient Characteristic Sex": "CMS Sex"]\n' +
-    '\n' +
+    '    ["Patient Characteristic Sex": "CMS Sex"]\n\n' +
     'define "Initial Population":\n' +
-    '  "Qualifying Encounters"\n' +
-    '\n' +
+    '  "Qualifying Encounters"\n\n' +
     'define "Qualifying Encounters":\n' +
     '  ( ["Encounter, Performed": "Encounter Inpatient"]\n' +
     '    union ["Encounter, Performed": "Emergency Department Visit"]\n' +
     '    union ["Encounter, Performed": "Acute Inpatient"]\n' +
     '    union ["Encounter, Performed": "Active Bleeding"]\n' +
     '    union ["Encounter, Performed": "Observation Services"] ) Encounter\n' +
-    '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
-    '\n' +
+    '    where Encounter.relevantPeriod ends during "Measurement Period"\n\n' +
     'define "Denominator":\n' +
     '  ["Encounter, Performed": "Acute Inpatient"] AcuteInpatient\n' +
-    '    where AcuteInpatient.lengthOfStay > 10 days\n' +
-    '\n' +
+    '    where AcuteInpatient.lengthOfStay > 10 days\n\n' +
     'define "Numerator":\n' +
     '  ["Encounter, Performed": "Active Bleeding"] ActiveBleeding\n' +
-    '    where ActiveBleeding.relevantPeriod overlaps day of "Measurement Period"\n' +
-    '    \n' +
+    '    where ActiveBleeding.relevantPeriod overlaps day of "Measurement Period"\n\n' +
     'define "Denominator 2":\n' +
     '  ["Encounter, Performed": "Encounter Inpatient"] EncounterInpatient\n' +
-    '    where EncounterInpatient.lengthOfStay > 15 days\n' +
-    '\n' +
+    '    where EncounterInpatient.lengthOfStay > 15 days\n\n' +
     'define "Numerator 2":\n' +
     '  ["Encounter, Performed": "Emergency Department Visit"] EmergencyDepartmentVisit\n' +
-    '    where EmergencyDepartmentVisit.lengthOfStay > 15 days\n' +
-    '\n' +
+    '    where EmergencyDepartmentVisit.lengthOfStay > 15 days\n\n' +
     'define function "Denominator Observation"(Encounter "Encounter, Performed" ):\n' +
-    '  duration in hours of Encounter.relevantPeriod\n' +
-    '\n' +
+    '  duration in hours of Encounter.relevantPeriod\n\n' +
     'define function "Numerator Observation"(Encounter "Encounter, Performed" ):\n' +
-    '  duration in hours of Encounter.relevantPeriod\n' +
-    '\n'
+    '  duration in hours of Encounter.relevantPeriod'
 
 describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO', () => {
 
@@ -86,13 +69,12 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2024-01-01', '2024-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-
         OktaLogin.Login()
     })
 
     after('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -110,7 +92,6 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //Base Config Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //click on / navigate to the Base Configuration sub-tab
@@ -131,8 +112,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
@@ -157,8 +137,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
         //adding second group
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
@@ -183,8 +162,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
         //Add Supplemental Data Elements
         MeasureGroupPage.includeSdeData()
@@ -283,8 +261,8 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).type('4')
         cy.get(TestCasesPage.testCaseDENOMExpected).eq(0).type('1')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('4')
@@ -292,8 +270,8 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).clear().type('2')
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).type('4')
         cy.get(TestCasesPage.testCaseDENOMExpected).eq(1).type('1')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('24')
@@ -313,10 +291,8 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //Execute Test case on Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
 
