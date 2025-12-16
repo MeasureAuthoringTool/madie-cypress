@@ -208,6 +208,28 @@ describe('Create Test Case Validations', () => {
             'than 250 characters.')
     })
 
+    it('Group has more than 250 characters', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(twoFiftyTwoCharacters)
+        cy.contains('Add').click()
+        cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.testCaseGroupInlineError).contains('Test Case Group cannot be more ' +
+            'than 250 characters.')
+    })
+
     it('Create Test Case without a title', () => {
 
         //Click on Edit Measure
@@ -279,6 +301,29 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
+            'than 250 characters.')
+    })
+
+    it('Group more than 250 characters', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Click on Edit for Test Case
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.createTestCaseGroupInput).clear()
+
+        //Update Test Case Group with more than 250 characters
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(twoFiftyTwoCharacters, { delay: 0 })
+        cy.contains('Add').click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.testCaseGroupInlineError).contains('Test Case Group cannot be more ' +
             'than 250 characters.')
     })
 
