@@ -207,6 +207,7 @@ export class TestCasesPage {
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
 
     public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
+    public static readonly testCaseGroupInlineError = '[data-testid="test-case-series-helper-text"]'
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
