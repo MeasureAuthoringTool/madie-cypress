@@ -276,7 +276,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click().wait(1000)
+        cy.get(CQLEditorPage.codesTab).click().wait(1500)
         cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
         cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
         cy.get(CQLEditorPage.savedCodesTab).click().wait(2000)
