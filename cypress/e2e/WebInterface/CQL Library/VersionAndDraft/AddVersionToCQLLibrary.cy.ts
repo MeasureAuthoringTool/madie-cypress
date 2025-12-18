@@ -13,7 +13,7 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
-        CqlLibraryOne = 'VersioningLib' + Date.now()
+        CqlLibraryOne = 'AddLibraryVersion' + Date.now()
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
         OktaLogin.Login()
     })
