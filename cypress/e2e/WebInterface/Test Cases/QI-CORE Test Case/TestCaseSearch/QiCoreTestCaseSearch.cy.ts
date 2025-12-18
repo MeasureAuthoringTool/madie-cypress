@@ -9,9 +9,8 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
-
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'QiCoreTCSearch' + Date.now()
+let CqlLibraryName = 'QiCoreTCSearchLib' + Date.now()
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -21,8 +20,6 @@ let measureCQL = MeasureCQL.CQL_Multiple_Populations.replace('TestLibrary4664', 
 let testCaseTitle2nd = 'Second TC - Title for Auto Test'
 let testCaseDescription2nd = 'SecondTC-DENOMFail' + Date.now()
 let testCaseSeries2nd = 'SecondTC-SBTestSeries'
-const now = require('dayjs')
-let todaysDate = now().format('MM/DD/YYYY')
 
 describe('Non Boolean Population Basis Expected values', () => {
 
@@ -30,20 +27,16 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
-
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
-
 
     it('Qi Core Test Case search and filter functionality', () => {
         //Click on Edit Measure
@@ -121,8 +114,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow, 5000)
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
 
-
-        //running test cases on the test case list page runs all test wheither they are in the search results or not
+        // after a search, executing tests cases only runs matching test cases
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         cy.get(TestCasesPage.tcSearchInput).type('Second TC - Title')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
@@ -131,19 +123,20 @@ describe('Non Boolean Population Basis Expected values', () => {
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         //clicking on running the test case
         cy.get(TestCasesPage.executeTestCaseButton).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 25000)
 
-        //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
+        //verify the results row - only 1 test case, and it passed
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd)
+            .should('contain.text', '(UTC)Edit')
 
         //clear search to show all test cases
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
 
-        //verify the results row
+        // verify the results rows - 2 test cases shown, 1 pass, 1 n/a
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd)
             .should('contain.text', '(UTC)Edit')
 
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1PassSBTestSeriesTitle for Auto Test' + testCaseDescription)
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription)
             .should('contain.text', '(UTC)Edit')
     })
 })
