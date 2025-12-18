@@ -148,7 +148,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow, 5000)
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
 
-        //running test cases on the test case list page runs all test whether they are in the search results or not
+        // after a search, executing tests cases only runs matching test cases
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         cy.get(TestCasesPage.tcSearchInput).type('QDMManifestTC')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
@@ -163,8 +163,8 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         //clear search to show all test cases
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
 
-        //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate)
+        // verify the results rows - no run on 1 test, results on other
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate)
         cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate)
     })
 })
