@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://impl-madie.hcqis.org",
+  "baseUrl": "https://impl.madie.internal.cms.gov",
   "screenshotsFolder": "mochawesome-report/assets",
   "numTestsKeptInMemory": 1,
   "env": {
