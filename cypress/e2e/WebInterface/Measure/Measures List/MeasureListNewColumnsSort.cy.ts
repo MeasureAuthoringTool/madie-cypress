@@ -97,7 +97,7 @@ describe('Measure List Page Sort by Columns', () => {
         // since we have tests for generating CMS id now, need to do this annoying check now
         cy.get('[data-testid="row-item"]').first().find('td').eq(6).invoke('text').then(cmsId => {
 
-            const greatestProdId = 1321 // we can periodically update this I guess?
+            const greatestProdId = 1350 // we can periodically update this I guess?
             if (cmsId.toString().length < 5) {
                 const idNumber = Number(cmsId)
                 expect(idNumber).to.be.greaterThan(greatestProdId)
