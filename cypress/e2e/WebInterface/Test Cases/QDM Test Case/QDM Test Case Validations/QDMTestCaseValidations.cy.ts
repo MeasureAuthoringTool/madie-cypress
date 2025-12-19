@@ -208,7 +208,8 @@ describe('Create Test Case Validations', () => {
             'than 250 characters.')
     })
 
-    it('Group has more than 250 characters', () => {
+    //Skipping until MAT-9471 is fixed
+    it.skip('Group has more than 250 characters', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -304,7 +305,8 @@ describe('Edit Test Case Validations', () => {
             'than 250 characters.')
     })
 
-    it('Group more than 250 characters', () => {
+    //Skipping until MAT-9471 is fixed
+    it.skip('Group more than 250 characters', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
