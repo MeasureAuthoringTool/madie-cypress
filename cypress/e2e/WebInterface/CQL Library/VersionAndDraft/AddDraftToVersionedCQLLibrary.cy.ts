@@ -105,7 +105,7 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesTab).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click().wait(1000)
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
