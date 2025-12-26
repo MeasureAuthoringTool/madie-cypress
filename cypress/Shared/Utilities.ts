@@ -660,7 +660,7 @@ export class Utilities {
                             expect(response.status).to.eql(200)
                             if (altUser) {
                                 expect(response.body).to.include('Delete library locks for harpId: ' + harpUserALT)
-                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUser)
+                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUserALT)
                             }
                             else {
                                 // if not altUser, then check for the library lock deletion message
