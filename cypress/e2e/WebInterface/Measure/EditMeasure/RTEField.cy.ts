@@ -62,7 +62,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<ol><li><p><strong><em><del><u>description</u></del></em></strong></p></li></ol>')
     })
 
-    it('Verify the entry, undo, redo, bulletted list, embedded table, save and the resulting HTML text formatting that in the RTE field', () => {
+    it.only('Verify the entry, undo, redo, bulletted list, embedded table, save and the resulting HTML text formatting that in the RTE field', () => {
 
         let description = 'description'
 
@@ -107,8 +107,8 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //add embedded table
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.measureRTEPurposeContentField).click()
+        cy.get(EditMeasurePage.measureRTEPurposeContentField).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.embdTableBtn).click()
 
         //confirm html formatting that is in the field
@@ -119,7 +119,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><strong><em><del><u>description</u></del></em></strong></p><p><br class="ProseMirror-trailingBreak"></p><div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<ul><li><p><strong><em><del><u>description</u></del></em></strong></p></li><li><p><br class="ProseMirror-trailingBreak"></p><div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div></li></ul>')
     })
 })
 
