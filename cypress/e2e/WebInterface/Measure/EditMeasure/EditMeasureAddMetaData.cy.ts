@@ -7,7 +7,6 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Ut
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Environment } from "../../../../Shared/Environment"
 
 const now = Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -375,7 +374,7 @@ describe('Generate CMS ID for QDM Measure', () => {
 
     after('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -429,7 +428,7 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
