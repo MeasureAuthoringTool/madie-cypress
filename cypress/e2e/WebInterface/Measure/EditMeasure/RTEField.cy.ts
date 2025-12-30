@@ -62,7 +62,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<ol><li><p><strong><em><del><u>description</u></del></em></strong></p></li></ol>')
     })
 
-    it.only('Verify the entry, undo, redo, bulletted list, embedded table, save and the resulting HTML text formatting that in the RTE field', () => {
+    it('Verify the entry, undo, redo, bulletted list, embedded table, save and the resulting HTML text formatting that in the RTE field', () => {
 
         let description = 'description'
 
