@@ -370,6 +370,7 @@ describe('Share measure from the Edit Measure page', () => {
 
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+        OktaLogin.UILogout()
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -443,6 +444,7 @@ describe('Share measure from the Edit Measure page', () => {
 
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+        OktaLogin.UILogout()
 
         //Login as ALT User
         OktaLogin.AltLogin()

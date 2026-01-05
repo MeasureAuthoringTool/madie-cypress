@@ -73,7 +73,7 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
     afterEach('Clean up', () => {
 
         Utilities.deleteMeasure()
-        Utilities.deleteMeasure(null, null, true)
+        Utilities.deleteMeasure(null, null, true, false, 2)
     })
 
     it('When QiCore measure is locked & lock is visible, the action center button is disabled with message tooltip', () => {

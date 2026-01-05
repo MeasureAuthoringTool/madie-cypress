@@ -1,7 +1,6 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
-import {Environment} from "../../../../Shared/Environment"
 
 let measureName = []
 let CqlLibraryName = []
@@ -100,6 +99,7 @@ describe('Measure List Pagination', () => {
                                     "model": 'QI-Core v4.1.1',
                                     "versionId": vId,
                                     "measureSetId": measureSetId,
+                                    "cql": "",
                                     "reviewMetaData": {
                                         "approvalDate": null,
                                         "lastReviewDate": null
@@ -112,6 +112,7 @@ describe('Measure List Pagination', () => {
                                         "acls": null
                                     },
                                     "ecqmTitle": "ecqmTitle",
+                                    "createdBy": harpUser,
                                     "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                                     "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
                                     "testCaseConfiguration": {
@@ -126,6 +127,8 @@ describe('Measure List Pagination', () => {
                                     "improvementNotationDescription": null,
 
                                     "active": false,
+                                    "measureLock": null,
+                                    "hasLockedTestCases": false
                                 }
 
                             }).then((response) => {

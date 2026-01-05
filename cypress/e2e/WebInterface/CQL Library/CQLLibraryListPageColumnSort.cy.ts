@@ -58,7 +58,7 @@ describe('CQL Library List Page Sort by Columns', () => {
         CQLLibraryPage.checkFirstRow({ name: 'AAO21' })
         cy.contains('.col-header', 'Library').click()
         cy.wait('@sort2')
-        CQLLibraryPage.checkFirstRow({ name: 'VersioningLib1764617416868' })
+        CQLLibraryPage.checkFirstRow({ name: 'VTEv72' })
 
         // sort by version
         cy.contains('.col-header', 'Version').click()

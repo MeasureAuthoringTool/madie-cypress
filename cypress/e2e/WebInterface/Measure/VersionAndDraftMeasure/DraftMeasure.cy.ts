@@ -147,7 +147,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     it('Tooltip appears and user is unable to draft a 4.1.1 of a measure that has a 6.0.0 on measureSet', () => {
 
 
-        updatedMeasuresPageName = 'updatedDVValidations' + Date.now()
+        updatedMeasuresPageName = 'UpdatedDVValidations' + Date.now()
 
         MeasuresPage.actionCenter('version')
 
