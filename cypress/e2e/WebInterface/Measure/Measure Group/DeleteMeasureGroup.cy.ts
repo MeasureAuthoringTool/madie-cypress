@@ -39,8 +39,7 @@ describe('Validate Measure Group deletion functionality', () => {
         Utilities.deleteMeasure(measureOne, newCqlLibraryName)
     })
 
-    //Skipping until MAT-9480 is fixed
-    it.skip('Delete button brings up confirmation modal and clicking yes, removes the existing Measure group', () => {
+    it('Delete button brings up confirmation modal and clicking yes, removes the existing Measure group', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -116,8 +115,7 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix')
     })
 
-    //Skipping until MAT-9480 is fixed
-    it.skip('Test Cases still loads after all groups are deleted', () => {
+    it('Test Cases still loads after all groups are deleted', () => {
         let currentUser = Cypress.env('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
