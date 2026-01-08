@@ -611,7 +611,7 @@ export class TestCasesPage {
                     cy.get(TestCasesPage.jsonTab).click()
                 }
             })
-            
+
             // modify testcase JSON
             Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
@@ -670,7 +670,8 @@ export class TestCasesPage {
 
         // ToDo: find something to wait on here instead of the hard wait
         cy.wait(14500)
-
+        cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 90000)
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Verify edited / updated test case Title and Series exists on Test Cases Page
