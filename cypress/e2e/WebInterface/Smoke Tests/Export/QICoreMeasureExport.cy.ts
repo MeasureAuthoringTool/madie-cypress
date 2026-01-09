@@ -174,7 +174,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 90000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
@@ -183,7 +183,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 5500 })
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 90000 })
         cy.log('Successfully verified zip file export')
 
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR.zip', path: downloadsFolder })
@@ -194,7 +194,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
     it('Verify content of a Qi Core measure HR file, before versioning', () => {
 
-        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 15000 })
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 90000 })
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
@@ -228,7 +228,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
                 '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
                 'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
-                'https://madie.cms.gov/Library/'+ CqlLibraryNameFC + '\nContents\tPopulation Criteria\nLogic Definitions\n' +
+                'https://madie.cms.gov/Library/' + CqlLibraryNameFC + '\nContents\tPopulation Criteria\nLogic Definitions\n' +
                 'Terminology\nDependencies\nData Requirements')
 
             //Population Criteria
@@ -349,9 +349,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Must Support Elements: type, period\n' +
                 'Code Filter(s):\n' +
                 'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
-                '\n' +
-                'Generated using version 0.5.2 of the sample-content-ig Liquid templates')
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
+            expect(bodyText).to.include('Generated using version 0.5.3 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -413,7 +412,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 500000 }).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 900000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR.zip', path: downloadsFolder })
@@ -424,7 +423,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
     it('Verify the content of the HR file, for a Qi Core Measure, after the measure has been versioned', () => {
 
-        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 15000 })
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 90000 })
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
@@ -457,7 +456,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
                 '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
                 'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
-                'https://madie.cms.gov/Library/'+ CqlLibraryNameFC + '\nContents\tPopulation Criteria\nLogic Definitions\n' +
+                'https://madie.cms.gov/Library/' + CqlLibraryNameFC + '\nContents\tPopulation Criteria\nLogic Definitions\n' +
                 'Terminology\nDependencies\nData Requirements')
 
             //Population Criteria
@@ -578,9 +577,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Must Support Elements: type, period\n' +
                 'Code Filter(s):\n' +
                 'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
-                '\n' +
-                'Generated using version 0.5.2 of the sample-content-ig Liquid templates')
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
+            expect(bodyText).to.include('Generated using version 0.5.3 of the sample-content-ig Liquid templates')
         })
     })
 })

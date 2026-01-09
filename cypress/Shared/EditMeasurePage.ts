@@ -27,7 +27,7 @@ export class EditMeasurePage {
     public static readonly measureDetailsTab = '[data-testid=measure-details-tab]'
     public static readonly cqlEditorTab = '[data-testid=cql-editor-tab]'
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'
-    public static readonly testCasesTab = '[data-testid=patients-tab]'
+    public static readonly testCasesTab = '[data-testid="patients-tab"]'
     public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
     public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
