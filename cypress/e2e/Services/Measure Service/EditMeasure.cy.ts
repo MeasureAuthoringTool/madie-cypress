@@ -14,7 +14,8 @@ let harpUser = ''
 let harpUserALT = ''
 const measureCQL = MeasureCQL.SBTEST_CQL
 const model = 'QI-Core v4.1.1'
-const versionIdPath = 'cypress/fixtures/versionId'
+let versionIdPath = ''
+
 
 const now = require('dayjs')
 let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
@@ -41,6 +42,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Update Measure details', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -55,10 +57,20 @@ describe('Measure Service: Edit Measure', () => {
                             "measureName": updatedMeasureName,
                             "cqlLibraryName": updatedCQLLibraryName,
                             "model": model,
+                            "cql": "",
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
-                            "measureMetaData": { "experimental": false, "draft": true },
+                            "measureSetId": uuidv4(),
+                            'measureMetaData': {
+                                "experimental": false,
+                                "steward": {
+                                    "name": "SemanticBits",
+                                    "id": "64120f265de35122e68dac40",
+                                    "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                                    "url": "https://semanticbits.com/"
+                                }, "draft": true
+                            },
                             "reviewMetaData": {
                                 "approvalDate": null,
                                 "lastReviewDate": null
@@ -71,8 +83,8 @@ describe('Measure Service: Edit Measure', () => {
                                 "acls": null
                             },
                             "ecqmTitle": "ecqmTitle",
-                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
-                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
                             "testCaseConfiguration": {
                                 "id": null,
                                 "sdeIncluded": null
@@ -83,7 +95,6 @@ describe('Measure Service: Edit Measure', () => {
                             "rateAggregation": null,
                             "improvementNotation": null,
                             "improvementNotationDescription": null,
-                            "measureSetId": uuidv4()
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -96,6 +107,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Verify Supplemental Data Elements and Risk Adjustment Variables are added to Update Measure Model', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -110,6 +122,7 @@ describe('Measure Service: Edit Measure', () => {
                             "measureName": updatedMeasureName,
                             "cqlLibraryName": updatedCQLLibraryName,
                             "model": model,
+                            "cql": "",
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "measureMetaData": { "experimental": false, "draft": true },
@@ -179,6 +192,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Save CQL to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -234,6 +248,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Measure Steward to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -297,6 +312,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Description to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -352,6 +368,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Copyright to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -407,6 +424,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Disclaimer to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -462,6 +480,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Rationale to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -517,6 +536,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Author to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -572,6 +592,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Guidance to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -627,6 +648,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Risk Adjustment to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -790,6 +812,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Meta Data Endorser Fields to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -857,6 +880,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add scoring precision value to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -922,6 +946,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Intended Venue to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -936,6 +961,7 @@ describe('Measure Service: Edit Measure', () => {
                             "measureName": updatedMeasureName,
                             "cqlLibraryName": updatedCQLLibraryName,
                             "model": model,
+                            "cql": "",
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
@@ -986,6 +1012,7 @@ describe('Measure Service: Edit Measure', () => {
 
     it('Add Purpose to the measure', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -1058,6 +1085,7 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
 
     it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
         const currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         OktaLogin.setupUserSession(true)
         OktaLogin.AltLogin()
         //set local user that does not own the measure
@@ -1192,6 +1220,7 @@ describe('Edit Measure Validations', () => {
 
     it('Verify error message when the measure name does not contain at least 1 letter', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -1248,6 +1277,7 @@ describe('Edit Measure Validations', () => {
 
     it('Verify error message when the measure name contains underscore', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -1304,6 +1334,7 @@ describe('Edit Measure Validations', () => {
 
     it('Verify error message when the measure name is over 500 characters', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -1381,6 +1412,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -1417,6 +1449,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
@@ -1452,6 +1485,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
         let currentUser = Cypress.env('selectedUser')
+        versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
