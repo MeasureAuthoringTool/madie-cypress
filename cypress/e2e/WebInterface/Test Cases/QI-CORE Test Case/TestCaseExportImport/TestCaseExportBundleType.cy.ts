@@ -8,6 +8,7 @@ import { TestCaseAction, TestCasesPage } from "../../../../../Shared/TestCasesPa
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 const timestamp = Date.now()
 const now = require('dayjs')
@@ -133,6 +134,13 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
 
         MeasuresPage.actionCenter('edit')
 
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
     })
@@ -184,7 +192,11 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        /* 
+            note: With https://jira.cms.gov/browse/MAT-9275 this seems like 
+            it should be collection, but that story is scoped to only QiiCore 6+
+        */
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
     })
 
     it('Export single QI-Core Test case Collection bundle and Import to the same Measure', () => {
@@ -315,7 +327,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -323,7 +335,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
     })
 
     it('Export multiple QI-Core Test cases Collection bundle and Import to the same Measure', () => {
