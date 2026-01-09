@@ -9,7 +9,6 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Toasts } from "../../../../../Shared/Toasts"
 
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = Date.now()
@@ -41,20 +40,13 @@ describe('MADIE Zip Test Case Import', () => {
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
         TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, false, true)
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('MADIE Zip Test Case Import', () => {
@@ -63,7 +55,7 @@ describe('MADIE Zip Test Case Import', () => {
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -86,11 +78,8 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
-
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
-
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -111,9 +100,8 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
-
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //export test case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -191,9 +179,8 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
-
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -214,9 +201,9 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //export test case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -249,8 +236,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.contains('ICU LOS < 1 day').should('be.visible')
 
         //Click on the Copy button and verify success msg
-        cy.get('[data-testid="copy-button"]').should('exist')
-        cy.get('[data-testid="copy-button"]').click()
+        cy.get('[data-testid="copy-button"]').first().should('exist').click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Copied to clipboard!')
     })
 })

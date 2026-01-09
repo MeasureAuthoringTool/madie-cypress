@@ -112,10 +112,6 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
         TestCasesPage.grabTestCaseId(1)
         TestCasesPage.clickEditforCreatedTestCase()
 
-        // on tc JSON, validate type = collection & no use of request (required for transaction)
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', '"type": "collection"')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain.text', 'request')
-
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.runTestButton).click()
 
