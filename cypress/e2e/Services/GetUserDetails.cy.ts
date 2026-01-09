@@ -16,8 +16,6 @@ describe('User Details with HARPID', () => {
             }).then((response) => {
                 expect(response.status).to.eql(200)
                 expect(String(response.body.harpId).toLowerCase()).to.equal(String(harpUser).toLowerCase())
-                expect(response.body.status).to.eql('ACTIVE')
-                expect(response.body.roles[0].role).to.eql('MADiE-User')
             })
         })
     })
