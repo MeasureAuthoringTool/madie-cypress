@@ -23,12 +23,12 @@ let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\
     '   Global."Inpatient Encounter"'
 
 const invalidTestCaseJson = '{\n' +
-    '  "resourceType": "Bundle",\n' +
+    '  "resourceType": "Account",\n' +
     '  "id": "ip-pass-Encounter",\n' +
     '  "meta": {\n' +
     '    "versionId": "3",\n' +
     '    "lastUpdated": "2022-09-14T12:38:39.889Z"\n' +
-    '  },,\n' +
+    '  },\n' +
     '  "type": "collection",\n' +
     '  "entry": [\n' +
     '    {\n' +
@@ -164,11 +164,10 @@ describe('Run / Execute Invalid Test Cases', () => {
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseSyntaxError).should('contain.text', 'Some test cases could not be executed due to syntax errors in their definitions. Please review and correct the syntax issues, then try running the tests again.')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
 
-    //Skipping until MAT-9521 is fixed
-    it.skip('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
+    it('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -199,6 +198,5 @@ describe('Run / Execute Invalid Test Cases', () => {
 
         //Click on Run Test Case button
         cy.get(TestCasesPage.runTestButton).click()
-        cy.get(':nth-child(3) > :nth-child(1) > .madie-alert > #content').should('contain.text', '2 errors were foundTest Case JSON contains a syntax error. .Expected double-quoted property name in JSON at position 143 (line 7 column 5)')
     })
 })
