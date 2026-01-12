@@ -250,7 +250,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
+        cy.get(Toasts.errorToast).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -334,7 +334,7 @@ describe('JSON Resource ID tests', () => {
 
             cy.get(TestCasesPage.errorToastMsg).should('exist')
             cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-            cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
+            cy.get('.toast').should('have.text', 'Test case updated successfully with errors in JSON')
 
             cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -416,7 +416,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
+        cy.get(Toasts.errorToast).should('have.text', 'Test case updated successfully with errors in JSON')
     })
 
     it('JSON has Resource IDs duplicated for different resources', () => {
@@ -494,7 +494,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
+        cy.get(Toasts.errorToast).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -553,7 +553,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.successMsg).should('exist')
         cy.get(TestCasesPage.successMsg).should('be.visible')
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get('.toast').should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.detailsTab, 27700)
