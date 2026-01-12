@@ -106,12 +106,11 @@ export class MeasuresPage {
             if (expectedData.cmsId) {
                 cy.wrap(firstRow.children().eq(6)).should('have.text', expectedData.cmsId)
             }
+            // if owner is needed, position 7
             if (expectedData.updated) {
-                cy.wrap(firstRow.children().eq(7)).should('have.text', expectedData.updated)
+                cy.wrap(firstRow.children().eq(8)).should('have.text', expectedData.updated)
             }
-
         })
-
     }
 
     public static validateMeasureName(expectedValue: string): void {
