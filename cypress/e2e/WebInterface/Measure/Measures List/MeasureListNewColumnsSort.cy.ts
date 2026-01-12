@@ -97,12 +97,12 @@ describe('Measure List Page Sort by Columns', () => {
         // since we have tests for generating CMS id now, need to do this annoying check now
         cy.get('[data-testid="row-item"]').first().find('td').eq(6).invoke('text').then(cmsId => {
 
-            const greatestProdId = 1350 // we can periodically update this I guess?
+            const greatestProdId = 1332 // we can periodically update this I guess?
             if (cmsId.toString().length < 5) {
                 const idNumber = Number(cmsId)
                 expect(idNumber).to.be.greaterThan(greatestProdId)
             } else {
-                const fhirNumber = cmsId.slice(0, -4)
+                const fhirNumber = Number(cmsId.slice(0, -4))
                 expect(fhirNumber).to.be.greaterThan(greatestProdId)
                 expect(cmsId).to.have.string('FHIR')
             }
@@ -184,11 +184,11 @@ describe('Measure List Page Sort by Columns', () => {
         cy.get('.measures-list tr').first().then(firstRow => {
             // save name & date of this measure
             secondMeasureName = cy.wrap(firstRow.children().eq(1)).text().toString()
-            secondDate = cy.wrap(firstRow.children().eq(7)).text().toString()
+            secondDate = cy.wrap(firstRow.children().eq(8)).text().toString()
 
             // verify that name & date have changed from default
             cy.wrap(firstRow.children().eq(1)).should('not.have.text', originalMeasureName)
-            cy.wrap(firstRow.children().eq(7)).should('not.have.text', today)
+            cy.wrap(firstRow.children().eq(8)).should('not.have.text', today)
         })
 
         // sort 2
@@ -199,7 +199,7 @@ describe('Measure List Page Sort by Columns', () => {
             // verify that name & date are different from both previous measures
             cy.wrap(firstRow.children().eq(1)).should('not.have.text', originalMeasureName)
                 .and('not.have.text', secondMeasureName)
-            cy.wrap(firstRow.children().eq(7)).should('not.have.text', today)
+            cy.wrap(firstRow.children().eq(8)).should('not.have.text', today)
                 .and('not.have.text', secondDate)
         })
 
@@ -210,7 +210,7 @@ describe('Measure List Page Sort by Columns', () => {
         MeasuresPage.checkFirstRow({ name: originalMeasureName, updated: today })
     })
 
-    it('Sort is not allowed on checkbox column, action button column, or expansion column', () => {
+    it('Sort is not allowed on checkbox column, action button column, owner column, or expansion column', () => {
 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -220,10 +220,11 @@ describe('Measure List Page Sort by Columns', () => {
 
             // checkbox
             cy.wrap(headerRow.children().eq(0).find('button')).should('not.have.class', 'header-button')
+            // owner does not even have a sub-element like button to check
             // action button
-            cy.wrap(headerRow.children().eq(8).find('button')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(9).find('button')).should('not.have.class', 'header-button')
             // expansion button
-            cy.wrap(headerRow.children().eq(9).find('span')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(10).find('span')).should('not.have.class', 'header-button')
         })
     })
 })
