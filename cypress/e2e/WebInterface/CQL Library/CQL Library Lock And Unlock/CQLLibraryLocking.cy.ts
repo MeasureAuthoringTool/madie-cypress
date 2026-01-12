@@ -1,8 +1,8 @@
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MadieObject, Utilities} from "../../../../Shared/Utilities"
-import {Header} from "../../../../Shared/Header"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MadieObject, Utilities } from "../../../../Shared/Utilities"
+import { Header } from "../../../../Shared/Header"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
