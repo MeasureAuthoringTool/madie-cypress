@@ -26,7 +26,7 @@ describe('Measure Un Sharing', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         OktaLogin.setupUserSession(false)
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })

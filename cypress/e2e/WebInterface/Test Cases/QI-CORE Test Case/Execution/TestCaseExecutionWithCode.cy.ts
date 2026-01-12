@@ -29,8 +29,8 @@ describe('Test Case Execution with codes', () => {
 
     after('Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Verify Test Case Execution for the CQL that uses codes', () => {
@@ -50,7 +50,7 @@ describe('Test Case Execution with codes', () => {
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Palliative Care in the Measurement Period')
@@ -83,7 +83,7 @@ describe('Test Case Execution with codes', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
        
         cy.get(EditMeasurePage.testCasesTab).click()
 
