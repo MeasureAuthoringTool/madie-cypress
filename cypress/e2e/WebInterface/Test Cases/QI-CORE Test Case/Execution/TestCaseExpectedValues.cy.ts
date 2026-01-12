@@ -30,7 +30,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify if the scoring type is changed, Test Case Expected values are cleared for that group', () => {
@@ -56,7 +56,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
        
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -104,7 +104,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
 
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -235,8 +235,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseDENEXExpected).check().should('be.checked')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
        
         //Navigate to Measure Group page and add Numerator Exclusion & delete Denominator Exclusion
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -428,6 +427,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)         
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')       
     })
 })
