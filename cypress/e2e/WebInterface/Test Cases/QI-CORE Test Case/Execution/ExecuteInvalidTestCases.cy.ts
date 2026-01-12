@@ -167,7 +167,8 @@ describe('Run / Execute Invalid Test Cases', () => {
         cy.get(TestCasesPage.testCaseSyntaxError).should('contain.text', 'Some test cases could not be executed due to syntax errors in their definitions. Please review and correct the syntax issues, then try running the tests again.')
     })
 
-    it('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
+    //Skipping until MAT-9521 is fixed
+    it.skip('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
