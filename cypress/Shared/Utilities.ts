@@ -509,8 +509,7 @@ export class Utilities {
         if (libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
-        if (altUser === undefined || altUser === null)
-        {
+        if (altUser === undefined || altUser === null) {
             altUser = false
         }
         OktaLogin.setupUserSession(altUser)
@@ -633,13 +632,13 @@ export class Utilities {
                             if (altUser) {
                                 expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUserALT)
                                 expect(response.body[1]).to.include('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUserALT)
-                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUserALT)
+                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUserALT || 'Delete library locks for harpId: ' + harpUserALT)
                                 expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUserALT)
                             }
                             else {
                                 expect(response.body[0]).to.eql('Delete measure locks for harpId: ' + harpUser)
                                 expect(response.body[1]).to.eql('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUser)
-                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUser)
+                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUser || 'Delete library locks for harpId: ' + harpUser)
                                 expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUser)
                             }
                         })
