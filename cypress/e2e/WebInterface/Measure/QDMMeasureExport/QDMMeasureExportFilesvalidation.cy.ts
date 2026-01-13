@@ -78,12 +78,7 @@ describe('Verify QDM Measure Export file contents', () => {
     it('Verify content of the XML / HQMF file, for a QDM Measure', () => {
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).then((xmlData) => {
-            // Parse the XML data
-            xml2js.parseString(xmlData, (err, result) => {
-                if (err) {
-                    throw new Error('Failed to parse XML file')
-                }
-                // Validate the value of the <text> tag
+            cy.task('parseXML', xmlData).then((result: any) => {
                 const textValue = result['QualityMeasureDocument']['text'][0]['$']['value']
                 expect(textValue).to.equal(description)
             })
