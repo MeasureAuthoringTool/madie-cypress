@@ -1964,7 +1964,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
         cy.get('[data-testid*="_expandArrow"]').click().wait(500)
         cy.get(MeasuresPage.measureListTitles)
             .find('[class="table-body measures-list"]')
-            .find('[class="expanded-row"]').eq(3)
+            .find('[class="expanded-row"]').eq(4)
             .find('[class="qpp-c-button qpp-c-button--outline-filled"]')
             .should('contain', 'View')
             .click()
