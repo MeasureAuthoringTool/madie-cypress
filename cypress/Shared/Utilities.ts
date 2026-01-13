@@ -610,6 +610,10 @@ export class Utilities {
 
     public static verifyAllLocksDeleted(type: MadieObject, altUser?: boolean) {
 
+        if (!altUser) {
+            altUser = false
+        }
+
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(altUser)
 
@@ -631,14 +635,14 @@ export class Utilities {
                             expect(response.status).to.eql(200)
                             if (altUser) {
                                 expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUserALT)
-                                expect(response.body[1]).to.include('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUserALT)
-                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUserALT || 'Delete library locks for harpId: ' + harpUserALT)
+                                expect(response.body[1]).to.be.oneOf(['Deleted measure lock: ' + measureId, 'No measure locks found for harpId: ' + harpUserALT])
+                                expect(response.body[2]).to.be.oneOf(['Delete test case locks for harpId: ' + harpUserALT, 'Delete library locks for harpId: ' + harpUserALT])
                                 expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUserALT)
                             }
                             else {
-                                expect(response.body[0]).to.eql('Delete measure locks for harpId: ' + harpUser)
-                                expect(response.body[1]).to.eql('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUser)
-                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUser || 'Delete library locks for harpId: ' + harpUser)
+                                expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUser)
+                                expect(response.body[1]).to.be.oneOf(['Deleted measure lock: ' + measureId, 'No measure locks found for harpId: ' + harpUser])
+                                expect(response.body[2]).to.be.oneOf(['Delete test case locks for harpId: ' + harpUser, 'Delete library locks for harpId: ' + harpUser])
                                 expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUser)
                             }
                         })
@@ -658,13 +662,13 @@ export class Utilities {
                         }).then((response) => {
                             expect(response.status).to.eql(200)
                             if (altUser) {
-                                expect(response.body).to.include('Delete library locks for harpId: ' + harpUserALT)
-                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUserALT)
+                                expect(response.body[0]).to.include('Delete library locks for harpId: ' + harpUserALT)
+                                expect(response.body[1]).to.be.oneOf(['Deleted library lock for Id: ' + id, 'No library locks found for harpId: ' + harpUserALT])
                             }
                             else {
                                 // if not altUser, then check for the library lock deletion message
-                                expect(response.body).to.include('Delete library locks for harpId: ' + harpUser)
-                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUser)
+                                expect(response.body[0]).to.include('Delete library locks for harpId: ' + harpUser)
+                                expect(response.body[1]).to.be.oneOf(['Deleted library lock for Id: ' + id, 'No library locks found for harpId: ' + harpUser])
                             }
                         })
                     })
