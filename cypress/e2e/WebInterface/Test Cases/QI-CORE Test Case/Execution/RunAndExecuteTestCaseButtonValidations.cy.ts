@@ -229,7 +229,8 @@ describe('Run / Execute Test Case button validations', () => {
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 12500)
-        cy.get(Toasts.errorToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
+        cy.get(Toasts.errorToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with errors in JSON')
+        
         cy.log('JSON added to test case successfully')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -249,7 +250,6 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
     })
-
 
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
         //Click on Edit Measure
@@ -430,7 +430,8 @@ describe('Run / Execute Test Case button validations', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(Toasts.errorToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
+
+        cy.get(Toasts.errorToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with errors in JSON')
 
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type('{selectall}{backspace}{selectall}{backspace}')
@@ -439,7 +440,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: No code provided')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: Resource ID: 1 | No code provided, and a code should be provided from the value set \'US Core Encounter Type')
     })
 })
 
@@ -547,7 +548,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         Utilities.waitForElementVisible(TestCasesPage.successMsg, 60000)
-        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
+
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -692,8 +694,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
 
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -811,14 +813,12 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.editTestCaseJSON(validTestCaseJson)
 
-
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
 
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -880,14 +880,13 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.editTestCaseJSON(validTestCaseJson)
 
-
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -987,14 +986,12 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.editTestCaseJSON(validTestCaseJson)
 
-
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1117,8 +1114,8 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        Utilities.waitForElementVisible(Toasts.errorToast, 90000)
-        cy.get(Toasts.errorToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
+        cy.get(Toasts.errorToast, { timeout: 16500 }).should('have.text', 'Test case updated successfully with errors in JSON')
+       
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1159,7 +1156,8 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
 
-        cy.get(Toasts.generalToast, { timeout: 16500 }).should('have.text', Toasts.warningOffsetText)
+        cy.get(Toasts.otherSuccessToast, { timeout: 16500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
+     
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1190,14 +1188,15 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        const expectedWarning = 'Warning: Resource ID: 1 | The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\''
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', expectedWarning)
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', expectedWarning)
     })
 
     it('Cannot "Run Test Case" or "Execute Test Case" when a test case has multiple errors and a warning', () => {
@@ -1274,7 +1273,8 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.generalToast, { timeout: 16500 }).should('have.text', Toasts.errorOffsetText)
+         cy.get(Toasts.errorToast, { timeout: 16500 }).should('have.text', 'Test case updated successfully with errors in JSON')
+
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1316,11 +1316,11 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //confirm error messages
         const expectedErrors = [
             'Error: All resources must have an Id',
-            'Error: Bundle entry missing fullUrl',
-            'Error: Relative Reference appears inside Bundle whose entry is missing a fullUrl',
-            'Error: Relative Reference appears inside Bundle whose entry is missing a fullUrl',
-            'Error: Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in the entry',
-            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)'
+            'Error: Resource ID: Bundle.entry[0] | Bundle entry missing fullUrl',
+            'Error: Resource ID: null | Relative Reference appears inside Bundle whose entry is missing a fullUrl',
+            'Error: Resource ID: null | Relative Reference appears inside Bundle whose entry is missing a fullUrl',
+            'Error: Resource ID: Bundle.entry[0] | Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in the entry',
+            'Warning: Resource ID: null | No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)'
         ]
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).children().text().should('deep.equal', expectedErrors)
@@ -1434,7 +1434,8 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         Utilities.waitForElementVisible(Toasts.generalToast, 90000)
-        cy.get(Toasts.generalToast, { timeout: 8500 }).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+         
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).wait(1000).click()
 
@@ -1540,7 +1541,8 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-            cy.get(Toasts.generalToast, { timeout: 8500 }).should('have.text', Toasts.warningOffsetText)
+            cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
+
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 

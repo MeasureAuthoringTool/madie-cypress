@@ -63,7 +63,8 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.measureObservationRow).clear().type('1.3')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+       // cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+       cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
                
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -177,7 +178,7 @@ describe('Measure observation expected result', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Measure Observation expected result for CV measure', () => {
