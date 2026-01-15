@@ -2,7 +2,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin";
 
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
@@ -10,6 +10,10 @@ let measureScoring = 'Proportion'
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let popMeasureCQL = MeasureCQL.SBTEST_CQL
+let currentUser = null
+let PopIniPop = ''
+let PopNum = ''
+let PopDenom = ''
 
 describe('Measure Service: Measure Group Endpoints', () => {
 
@@ -432,6 +436,201 @@ describe('Measure Service: Measure Group Endpoints', () => {
     })
 })
 
+describe('Measure Service: Edit Measure group / Population Criteria: composite score', () => {
+    beforeEach('Set Access Token', () => {
+
+        OktaLogin.setupUserSession(false)
+    })
+    before('Create Measure', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+        let measureCQL = "library CQLLibraryName1662121072763538 version '0.0.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  true\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n\n\n\n"
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, true)
+
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+
+    it('Add Population Criteria Data: composite score value of "All-or-nothing", to the measure', () => {
+        currentUser = Cypress.env('selectedUser')
+        PopIniPop = 'ipp'
+        PopNum = 'num'
+        PopDenom = 'denom'
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": measureScoring,
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNum
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenom
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ],
+                        "scoringUnit": {
+                            "label": "ml milliLiters",
+                        },
+                        "populationBasis": "Boolean",
+                        "compositeScoring": "All-or-nothing"
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Proportion')
+                    expect(response.body.compositeScoring).to.eql('All-or-nothing')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[1].definition).to.eql('num')
+                    expect(response.body.populations[2].definition).to.eql('denom')
+                })
+            })
+        })
+    })
+
+    it('Add Population Criteria Data: composite score value of "Opportunity", to the measure', () => {
+        currentUser = Cypress.env('selectedUser')
+        PopIniPop = 'ipp'
+        PopNum = 'num'
+        PopDenom = 'denom'
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": measureScoring,
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNum
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenom
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ],
+                        "scoringUnit": {
+                            "label": "ml milliLiters",
+                        },
+                        "populationBasis": "Boolean",
+                        "compositeScoring": "Opportunity"
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Proportion')
+                    expect(response.body.compositeScoring).to.eql('Opportunity')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[1].definition).to.eql('num')
+                    expect(response.body.populations[2].definition).to.eql('denom')
+                })
+            })
+        })
+    })
+
+    it('Add Population Criteria Data: composite score value of "Linear", to the measure', () => {
+        currentUser = Cypress.env('selectedUser')
+        PopIniPop = 'ipp'
+        PopNum = 'num'
+        PopDenom = 'denom'
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": measureScoring,
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNum
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenom
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ],
+                        "scoringUnit": {
+                            "label": "ml milliLiters",
+                        },
+                        "populationBasis": "Boolean",
+                        "compositeScoring": "Linear"
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Proportion')
+                    expect(response.body.compositeScoring).to.eql('Linear')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[1].definition).to.eql('num')
+                    expect(response.body.populations[2].definition).to.eql('denom')
+                })
+            })
+        })
+    })
+
+
+})
+
 describe('Measure Populations', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
@@ -650,7 +849,7 @@ describe('Measure Observations', () => {
 
     beforeEach('Set Access Token', () => {
 
-        OktaLogin.setupUserSession(false, )
+        OktaLogin.setupUserSession(false,)
     })
 
     after('Clean up', () => {

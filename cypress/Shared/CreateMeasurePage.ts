@@ -126,14 +126,18 @@ export class CreateMeasurePage {
         cy.log('Measure created successfully')
     }
 
-    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
+    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string, compositeValue?: boolean,
+        measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
         const now = require('dayjs')
         let user = ''
 
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
+        }
+
+        if ((compositeValue === undefined) || (compositeValue === null)) {
+            compositeValue = false
         }
 
         let ecqmTitle = 'eCQMTitle4QICore'
@@ -222,7 +226,8 @@ export class CreateMeasurePage {
                                 "referenceText": "<p>Text 3</p>",
                                 "referenceType": "Justification"
                             }
-                        ]
+                        ],
+                        "composite": compositeValue
                     },
                     'programUseContext': {
                         "code": "mips",
