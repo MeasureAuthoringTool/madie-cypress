@@ -1,11 +1,11 @@
 import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
-import {CQLLibraryPage, EditLibraryActions} from "../../../../Shared/CQLLibraryPage"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
-import {Header} from "../../../../Shared/Header"
+import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { Header } from "../../../../Shared/Header"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
+let CQLLibraryName = 'HistoryLibrary' + Date.now()
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let CQLLibraryPublisher = 'SemanticBits'
@@ -29,7 +29,7 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -45,9 +45,9 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
         //Go to Library History and verify that Create and Update actions are recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'CREATED')
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'UPDATED')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'UPDATED')
+        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'CREATED')
         cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
 
     })
@@ -75,10 +75,10 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
         //Go to Library History and verify that Library Sharing is recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'SHARED')
-        cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'SHARED')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
 
-        cy.get('[data-testid="library-history-1_additionalActionMessage"]').should('contain.text', 'Shared with - ' + harpUserALT)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Shared with - ' + harpUserALT)
 
         //Close History popup
         cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
@@ -99,10 +99,9 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
         //Go to Library History and verify that Library Unsharing is recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[data-testid="library-history-2_actionType"]').should('contain.text', 'UNSHARED')
-        cy.get('[data-testid="library-history-2_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-2_additionalActionMessage"]').should('contain.text', 'Unshared with - ' + harpUserALT)
-
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'UNSHARED')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Unshared with - ' + harpUserALT)
     })
 })
 
@@ -137,9 +136,9 @@ describe('Library History - Version and Draft actions', () => {
         //Go to Library History and verify that Library Version action is recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
         cy.get('[class="header-info"]').should('contain.text', newCQLLibraryName + ' (Version 1.0.000)')
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'VERSIONED_MAJOR')
-        cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-1_additionalActionMessage"]').should('contain.text', 'Versioned to 1.0.000')
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'VERSIONED_MAJOR')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Versioned to 1.0.000')
 
         //Close History popup
         cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
@@ -157,7 +156,6 @@ describe('Library History - Version and Draft actions', () => {
         cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'DRAFTED')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
         cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Draft created from version 1.0.000')
-
     })
 })
 
@@ -177,8 +175,7 @@ describe('Library History - Transfer action', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
         Utilities.deleteLibrary(newCQLLibraryName, true)
     })
 
@@ -213,10 +210,8 @@ describe('Library History - Transfer action', () => {
 
         //Go to Library History and verify that Transfer Library is recorded
         CQLLibrariesPage.cqlLibraryActionCenter('viewHistory')
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'OWNERSHIP_TRANSFER')
-        cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
-
-        cy.get('[data-testid="library-history-1_additionalActionMessage"]').should('contain.text', 'Transferred from ' + harpUser + ' to ' + harpUserALT)
-
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'OWNERSHIP_TRANSFER')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Transferred from ' + harpUser + ' to ' + harpUserALT)
     })
 })
