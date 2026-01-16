@@ -9,13 +9,13 @@ import { Header } from "../../../../Shared/Header"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Toasts } from "../../../../Shared/Toasts"
 
-let measureName = 'CompareMeasureVersion' + Date.now()
+let measureName = 'CompareMeasureVersion'
 const cqlLibraryName = 'CompareMeasureVersion' + Date.now()
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const measureData: CreateMeasureOptions = {}
 const randValue = (Math.floor((Math.random() * 1000) + 1))
 
-measureData.ecqmTitle = measureName + randValue
+measureData.ecqmTitle = measureName
 measureData.cqlLibraryName = cqlLibraryName + randValue
 measureData.measureCql = measureCQL
 
@@ -97,13 +97,14 @@ describe.skip('Compare Measure Versions', () => {
 
         //Verify Popup Screen
         cy.contains('h2', 'Compare Measure Versions').should('be.visible')
-        cy.get('[data-testid="measure-name"]').should('contain.text', updatedMeasureName)
+        cy.get('[data-testid="measure-name"]').should('contain.text', '-- ' + measureName + ' ++ ' + updatedMeasureName)
         cy.get(MeasuresPage.compareVersionsCqlTab).should('contain.text', 'CQL')
         cy.get(MeasuresPage.compareVersionsHRTab).should('contain.text', 'Human Readable')
 
-        // temporary - can look for real CQL once it's there
-        cy.get('[data-testid="panel-content-old"]').should('contain.text', 'CQL coming soon')
+        //Verify CQL Comparison
+        cy.get('[class="react-diff-n9mfsc-code-fold-content"]').click()
 
+        //Verify HR Comparison
         cy.get(MeasuresPage.compareVersionsHRTab).click()
 
         // very basic check that HR will display - Utilities.waitForElementVisible won't work here with nesting
