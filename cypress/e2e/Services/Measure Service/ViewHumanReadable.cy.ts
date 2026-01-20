@@ -38,13 +38,6 @@ const actionOptions: MeasureActionOptions = {
     altUser: false
 }
 
-
-//
-
-//const measureCQL = QiCore4Cql.CQL_Populations.replace('TestLibrary4664', measure.name)
-
-//
-
 describe('Measure Service: View Human Readable for Qi Core Draft Measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
