@@ -9,7 +9,8 @@ import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
 let measureName = ''
 let CqlLibraryName = ''
 
-describe('Create Composite Measure', () => {
+//Skipping until Feature flag 'QICoreCompositeMeasure' is turned on
+describe.skip('Create Composite Measure', () => {
 
     beforeEach('Login', () => {
         OktaLogin.Login()
