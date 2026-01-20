@@ -161,7 +161,7 @@ export class CreateMeasurePage {
 
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
 
-        cy.log('Measure created successfully')
+        cy.log('Composite Measure created successfully')
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
