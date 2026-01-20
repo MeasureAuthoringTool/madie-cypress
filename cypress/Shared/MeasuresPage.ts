@@ -123,9 +123,18 @@ export class MeasuresPage {
         })
     }
 
-    public static validateVersionNumber(versionNumber: string): void {
+    public static validateVersionNumber(versionNumber: string, measureNumber?: number): void {
+        let filePath = ''
         let currentUser = Cypress.env('selectedUser')
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
+        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
+            measureNumber = 0
+            filePath = 'cypress/fixtures/' + currentUser + '/measureId'
+        }
+
+        if (measureNumber > 0) {
+            filePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
+        }
+        cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
             cy.get('[data-testid="measure-name-' + fileContents + '_version"]').should('contain', versionNumber)
@@ -138,7 +147,7 @@ export class MeasuresPage {
         let filePath = ''
         if (options && options.altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        } else  {
+        } else {
             currentUser = Cypress.env('selectedUser')
         }
         cy.log('Current User: ' + currentUser)
