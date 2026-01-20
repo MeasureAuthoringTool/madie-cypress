@@ -126,8 +126,8 @@ export class CreateMeasurePage {
         cy.log('Measure created successfully')
     }
 
-    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string, compositeValue?: boolean,
-        measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
+    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
+        measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, compositeValue?: boolean /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
         const now = require('dayjs')
         let user = ''
