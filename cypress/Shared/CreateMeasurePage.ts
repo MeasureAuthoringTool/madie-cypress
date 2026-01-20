@@ -1,4 +1,3 @@
-import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
@@ -9,6 +8,12 @@ const now = require('dayjs')
 
 export enum SupportedModels {
     QDM = 'QDM v5.6',
+    qiCore4 = 'QI-Core v4.1.1',
+    qiCore6 = 'QI-Core v6.0.0',
+    qiCore7 = 'QI-Core v7.0.0'
+}
+
+export enum SupportedCompositeModels {
     qiCore4 = 'QI-Core v4.1.1',
     qiCore6 = 'QI-Core v6.0.0',
     qiCore7 = 'QI-Core v7.0.0'
@@ -54,7 +59,8 @@ export class CreateMeasurePage {
     public static readonly measurementPeriodEndDateError = '[data-testid=create-measure-period-end-helper-text]'
     public static readonly editMeasurementPeriodEndDateError = '[data-testid=measurement-period-end-helper-text]'
     public static readonly editMeasurementPeriodStartDateError = '[data-testid=measurement-period-start-helper-text]'
-
+    public static readonly compositeMeasureCheckbox = '[data-testid="composite"]'
+    public static readonly compositeScoringSelect ='#composite-scoring'
 
     public static clickCreateMeasureButton(): void {
 
@@ -124,6 +130,38 @@ export class CreateMeasurePage {
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
 
         cy.log('Measure created successfully')
+    }
+
+    public static CreateCompositeMeasure(measureName: string, CqlLibraryName: string, model: SupportedCompositeModels, mpStartDate?: string, mpEndDate?: string): void {
+
+        const now = require('dayjs')
+
+        if (mpStartDate === undefined) {
+            mpStartDate = now().subtract('1', 'year').format('MM/DD/YYYY')
+        }
+
+        if (mpEndDate === undefined) {
+            mpEndDate = now().format('MM/DD/YYYY')
+        }
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
+        cy.get(LandingPage.newMeasureButton).wait(2000).click()
+        cy.get(this.measureNameTextbox).type(measureName)
+        cy.get(this.measureModelDropdown).click()
+        cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]').contains(model).click()
+        cy.get(this.compositeMeasureCheckbox).click()
+        cy.get(this.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
+        cy.get(this.cqlLibraryNameTextbox).type(CqlLibraryName)
+
+        cy.get(CreateMeasurePage.measurementPeriodStartDate).type(mpStartDate)
+        cy.get(CreateMeasurePage.measurementPeriodEndDate).type(mpEndDate)
+
+        this.clickCreateMeasureButton()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        cy.get(MeasuresPage.measureListTitles).should('be.visible')
+
+        cy.log('Composite Measure created successfully')
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
