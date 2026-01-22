@@ -6,8 +6,14 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-
+import { 
+    CVGroups, 
+    MeasureGroupPage, 
+    MeasureGroups, 
+    MeasureScoring, 
+    MeasureType, 
+    PopulationBasis 
+} from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'CVEpisodeWithMO' + Date.now()
 let CqlLibraryName = 'CVEpisodeWithMO' + Date.now()
@@ -44,8 +50,26 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
+        // backwards compatability - declare this empty, then in CreateMeasureGroupAPI 
+        // the CVGroups values will overwrite it all
+        const pops: MeasureGroups = {
+            initialPopulation: '',
+            numerator: '',
+            denominator: ''
+        }
+        const cvPops: CVGroups = {
+            initialPopulation: 'Initial Population',
+            measurePopulation: 'Measure Population',
+            observation: {
+                aggregateMethod: 'Maximum',
+                definition: 'Measure Observation'
+            }
+        }
+
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2023-01-01', '2023-12-31')
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.ContinousVariable, 
+            pops, false, null, null, cvPops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -54,7 +78,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
     after('Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End CV Episode Measure with MO, Pass Result', () => {
@@ -66,34 +90,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
-
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Encounter')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Continuous Variable')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Measure Population')
-        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'Measure Observation')
-        Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
-
-        cy.get(MeasureGroupPage.reportingTab).click()
-        cy.get(MeasureGroupPage.improvementNotationSelect).click()
-        cy.contains('Increased score indicates improvement').click()
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 8500)
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -103,9 +100,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).click()
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
@@ -120,14 +115,8 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })

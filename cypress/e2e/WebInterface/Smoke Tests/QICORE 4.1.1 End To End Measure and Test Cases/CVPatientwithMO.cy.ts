@@ -6,8 +6,15 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { 
+    CVGroups, 
+    MeasureGroupPage, 
+    MeasureGroups, 
+    MeasureScoring, 
+    MeasureType, 
+    PopulationBasis 
+} from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'CVPatientWithMO' + Date.now()
 let CqlLibraryName = 'CVPatientWithMO' + Date.now()
@@ -19,10 +26,28 @@ let testCaseJson = TestCaseJson.CVPatientWithMO_PASS
 
 describe('Measure Creation and Testing: CV Patient With MO', () => {
 
+    // backwards compatability - declare this empty, then in CreateMeasureGroupAPI 
+    // the CVGroups values will overwrite it all
+    const pops: MeasureGroups = {
+        initialPopulation: '',
+        numerator: '',
+        denominator: ''
+    }
+    const cvPops: CVGroups = {
+        initialPopulation: 'Initial Population 1',
+        measurePopulation: 'Initial Population 1',
+        observation: {
+            aggregateMethod: 'Maximum',
+            definition: 'Measure Observation'
+        }
+    }
+
     before('Create Measure, Test Case and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-01', '2012-12-31')
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.ContinousVariable, 
+                        pops, false, null, null, cvPops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
@@ -30,8 +55,7 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
     after('Clean up', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End CV Patient with MO, Pass Result', () => {
@@ -45,31 +69,6 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
 
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
-        cy.get(MeasureGroupPage.initialPopulationSelect).focus()
-        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population 1')
-        cy.get(MeasureGroupPage.measurePopulationSelect).focus()
-        Utilities.populationSelect(MeasureGroupPage.measurePopulationSelect, 'Initial Population 1')
-        cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get('[data-value="Measure Observation"]').click()
-        cy.get(MeasureGroupPage.cvAggregateFunction).click()
-        cy.get('[data-value="Maximum"]').click()
-
-        cy.get(MeasureGroupPage.reportingTab).click()
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -78,9 +77,7 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).click()
         cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).check().should('be.checked')
@@ -95,14 +92,8 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })
