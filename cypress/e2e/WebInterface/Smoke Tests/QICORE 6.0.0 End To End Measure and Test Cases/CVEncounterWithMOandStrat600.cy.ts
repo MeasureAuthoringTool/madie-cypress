@@ -66,7 +66,7 @@ const strats: Array<Stratification> = [
     }
 ]
 
-describe.skip('Measure Creation and Testing: CV Patient Measure With Stratification', () => {
+describe('Measure Creation and Testing: CV Patient Measure With Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
@@ -105,12 +105,8 @@ describe.skip('Measure Creation and Testing: CV Patient Measure With Stratificat
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-      //  cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
-        //.check().should('be.checked')
         cy.get(TestCasesPage.measureObservationRow).clear().type('125')
-
-        //goood til here - strata not showing
 
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
         cy.get(TestCasesPage.measurePopulationStratificationExpectedValue).type('1')
@@ -122,17 +118,11 @@ describe.skip('Measure Creation and Testing: CV Patient Measure With Stratificat
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should('contain.text', 'Test case updated successfully!MADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
-        //.should('contain.text', Toasts.successOffsetText)
+        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })

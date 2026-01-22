@@ -25,14 +25,11 @@ const measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
     'default Interval[@2023-01-01T00:00:00.0, @2024-01-01T00:00:00.0)\n' +
     'context Patient\n' +
     'define "Initial Population":\n' +
-    'exists "Qualifying Encounters"\n' +
-    '\n' +
+    'exists "Qualifying Encounters"\n\n' +
     'define "IPP2":\n' +
-    'exists "Qualifying Completed Encounters"\n' +
-    '\n' +
+    'exists "Qualifying Completed Encounters"\n\n' +
     'define "Denominator":\n' +
-    '"Initial Population"\n' +
-    '\n' +
+    '"Initial Population"\n\n' +
     'define "Numerator":\n' +
     '"IPP2"\n' +
     'define "Qualifying Encounters":\n' +
@@ -40,23 +37,18 @@ const measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
     '[Encounter: "Office Visit"]\n' +
     'union [Encounter: "Annual Wellness Visit"]\n' +
     ') ValidEncounter\n' +
-    'where ValidEncounter.period during "Measurement Period"\n' +
-    '\n' +
+    'where ValidEncounter.period during "Measurement Period"\n\n' +
     'define "Qualifying Completed Encounters":\n' +
     '(\n' +
     '[Encounter: "Office Visit"]\n' +
     'union [Encounter: "Annual Wellness Visit"]\n' +
     ') ValidEncounter\n' +
     'where ValidEncounter.period during "Measurement Period"\n' +
-    'and ValidEncounter.status = \'finished\'\n' +
-    '\n' +
-    '\n' +
+    'and ValidEncounter.status = \'finished\'\n\n' +
     'define function "MObsAge"():\n' +
-    'CalculateAgeInYearsAt(Patient.birthDate, date from start of "Measurement Period")\n' +
-    '\n' +
+    'CalculateAgeInYearsAt(Patient.birthDate, date from start of "Measurement Period")\n\n' +
     'define function "MOFemale"():\n' +
-    'Patient.gender = \'female\'\n' +
-    '\n' +
+    'Patient.gender = \'female\'\n\n' +
     'define function "MOMale"():\n' +
     'Patient.gender = \'male\''
 

@@ -6,7 +6,13 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { 
+    MeasureGroupPage, 
+    MeasureGroups, 
+    MeasureScoring, 
+    MeasureType, 
+    PopulationBasis 
+} from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
@@ -41,10 +47,17 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n\n' +
 
 describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
+    const pops: MeasureGroups = {
+        initialPopulation: 'Initial Population',
+        denominator: 'Denominator',
+        numerator: 'Numerator'
+    }
+
     before('Create Measure, Test Case and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2023-01-01', '2023-12-31')
+            MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -66,32 +79,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
-
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Encounter')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Proportion')
-        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-
-        cy.get(MeasureGroupPage.reportingTab).click()
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -100,29 +87,19 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).click()
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
 
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
             'with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
