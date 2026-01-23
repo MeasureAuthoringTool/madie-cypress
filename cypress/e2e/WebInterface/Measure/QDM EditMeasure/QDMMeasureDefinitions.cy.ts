@@ -16,8 +16,8 @@ describe('QDM Measure Definition', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        newMeasureName = 'QDMDefTerms' + Date.now() + randValue
+        newCqlLibraryName = 'QDMDefTermsLib' + Date.now() + randValue
 
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
@@ -27,12 +27,13 @@ describe('QDM Measure Definition', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Add QDM Measure Definitions', () => {
@@ -42,7 +43,7 @@ describe('QDM Measure Definition', () => {
         cy.get(EditMeasurePage.leftPanelDefinition).click()
         cy.get(EditMeasurePage.definitionInput).type('Measure Definition')
         cy.get(EditMeasurePage.saveMeasureDefinition).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Information Saved Successfully')
+        cy.get(EditMeasurePage.successMessage, { timeout: 11500 }).should('contain.text', 'Measure Definition Information Saved Successfully')
     })
 
     it('Discard changes button', () => {
@@ -61,8 +62,8 @@ describe('QDM Measure Definition ownership validation', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        newMeasureName = 'QDMDefTermsAltUser' + Date.now() + randValue
+        newCqlLibraryName = 'QDMDefTermsAltUserLib' + Date.now() + randValue
 
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
@@ -77,13 +78,14 @@ describe('QDM Measure Definition ownership validation', () => {
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Non Measure owner unable to add Measure Definition', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+
         MeasuresPage.actionCenter('edit')
 
         //Navigate to References page

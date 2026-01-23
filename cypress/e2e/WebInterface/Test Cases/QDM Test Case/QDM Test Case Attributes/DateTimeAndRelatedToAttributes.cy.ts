@@ -1,11 +1,10 @@
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -106,8 +105,8 @@ describe('Test Case Attributes', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQL
 
-        //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -118,31 +117,20 @@ describe('Test Case Attributes', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population')
-        OktaLogin.Login()
-
-        //adding supplemental data
-        MeasuresPage.actionCenter('edit')
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         MeasureGroupPage.includeSdeData()
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Add Date Time attribute to the Test case', () => {
-
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -170,9 +158,6 @@ describe('Test Case Attributes', () => {
     })
 
     it('Add Related To attribute to the Test case', () => {
-
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
