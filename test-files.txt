@@ -1,0 +1,8 @@
+cypress/e2e/Services/Admin/CorrectExpectedValues.cy.ts
+cypress/e2e/Services/CQL Builder lookups/QI Core CQL Builder Lookups.cy.ts
+cypress/e2e/Services/CQL Library Service/CQLLibraryDelete.cy.ts
+cypress/e2e/Services/CQL Library Service/CQLLibrarySharing.cy.ts
+cypress/e2e/Services/CQL Library Service/CQLLibraryTransfer.cy.ts
+cypress/e2e/Services/CQL Library Service/CreateCQL-Library.cy.ts
+cypress/e2e/Services/CQL Library Service/EditCQL-Library.cy.ts
+
