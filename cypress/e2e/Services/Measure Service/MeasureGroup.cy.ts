@@ -2,7 +2,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import { OktaLogin } from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
@@ -449,7 +449,7 @@ describe('Measure Service: Edit Measure group / Population Criteria: composite s
         let measureCQL = "library CQLLibraryName1662121072763538 version '0.0.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  true\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n\n\n\n"
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, null, false, '2022-01-01', '2023-01-01', true)
 
     })
 
