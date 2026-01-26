@@ -5,14 +5,13 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Toasts } from "../../../../Shared/Toasts"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Header } from "../../../../Shared/Header"
 
-let qdmMeasureName = 'QDMTestMeasure' + Date.now()
-let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
+let qdmMeasureName = 'QDMExportFiles' + Date.now()
+let qdmCqlLibraryName = 'QDMExportFilesLib' + Date.now()
 let versionNumber = '1.0.000'
 
-const xml2js = require('xml2js')
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
@@ -34,8 +33,8 @@ describe('Verify QDM Measure Export file contents', () => {
 
     before('Create New Measure and Login', () => {
 
-        //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 90000)
         MeasuresPage.actionCenter('edit')
@@ -43,17 +42,13 @@ describe('Verify QDM Measure Export file contents', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
 
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
-
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 90000)
-        MeasuresPage.actionCenter('export')
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 90000 }).should('exist')
         cy.log('Successfully verified zip file export')
+
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM.zip', path: downloadsFolder })
             .then(results => {
@@ -63,7 +58,7 @@ describe('Verify QDM Measure Export file contents', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify files, their types and the contents of the HR file, for QDM Measure', () => {
@@ -92,8 +87,8 @@ describe('QDM Measure Export, Not the Owner', () => {
 
     before('Create New Measure and Login', () => {
 
-        //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         MeasuresPage.actionCenter('edit')
@@ -102,14 +97,14 @@ describe('QDM Measure Export, Not the Owner', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Non Measure owner able to Export QDM Measure', () => {
@@ -132,8 +127,8 @@ describe('Successful QDM Measure Export with versioned measure', () => {
 
     before('Create New Measure and Login', () => {
 
-        //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         MeasuresPage.actionCenter('edit')
@@ -141,23 +136,12 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
+
+        cy.get(Header.mainMadiePageButton).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-
-        //version measure
-        MeasuresPage.actionCenter('version')
-
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-
-        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
+         
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
@@ -179,8 +163,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.html')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.xml')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'cql/MATGlobalCommonFunctionsQDM-1.0.000.cql')).should('exist')
-
-        cy.readFile(path.join(downloadsFolder, 'resources/MATGlobalCommonFunctionsQDM-1.0.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/MATGlobalCommonFunctionsQDM-1.0.000.json')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'resources/MATGlobalCommonFunctionsQDM-1.0.000.xml')).should('exist')
     })
 })

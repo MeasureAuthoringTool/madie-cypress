@@ -48,7 +48,6 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Group Creation
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -83,7 +82,6 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusions")
         Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
@@ -130,9 +128,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
 
@@ -190,9 +186,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).type('2')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
         cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
@@ -203,11 +197,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Execute Test case on Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
