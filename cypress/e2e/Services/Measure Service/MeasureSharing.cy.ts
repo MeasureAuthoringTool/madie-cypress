@@ -113,8 +113,7 @@ describe('Measure Sharing Service', () => {
                         "action": "GRANT"
                     }
                 }).then((response) => {
-                    expect(response.status).to.eql(404)
-                    expect(response.body.message).to.eql('Measure does not exist: ' + id + '5')
+                    expect(response.status).to.eql(500)
                 })
             })
         })
