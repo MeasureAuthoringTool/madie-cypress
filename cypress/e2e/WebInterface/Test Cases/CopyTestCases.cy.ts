@@ -150,6 +150,8 @@ describe('Copy Qi Core Test Cases', () => {
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false, 1)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, true, false, 2)
     })
 
     it('Copy Qi Core Test Case to another Qi Core Measure', () => {
