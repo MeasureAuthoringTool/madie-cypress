@@ -396,6 +396,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
