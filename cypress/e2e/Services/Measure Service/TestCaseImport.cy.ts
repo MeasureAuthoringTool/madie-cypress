@@ -10,8 +10,8 @@ import { MeasuresPage } from "../../../Shared/MeasuresPage";
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage";
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
 
-const measureName = 'TestMeasure' + Date.now()
-const cqlLibraryName = 'TestLibrary' + Date.now()
+const measureName = 'ImportServiceTest' + Date.now()
+const cqlLibraryName = 'ImportServiceTestLib' + Date.now()
 const measureCQL = MeasureCQL.SBTEST_CQL
 let harpUser = ''
 let harpUserALT = ''
@@ -89,7 +89,7 @@ describe('Test Case Import', () => {
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].successful).to.eql(true)
+                        expect(response.body.outcomes[0].successful).to.eql(true)
                     })
                 })
             })
@@ -116,8 +116,8 @@ describe('Test Case Import', () => {
                     }]
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body[0].message).to.eql('the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
-                    expect(response.body[0].successful).to.eql(true)
+                    expect(response.body.outcomes[0].message).to.eql('the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
+                    expect(response.body.outcomes[0].successful).to.eql(true)
                 })
             })
         })
@@ -144,8 +144,8 @@ describe('Test Case Import', () => {
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].message).to.eql('Error while processing Test Case JSON.  Please make sure Test Case JSON is valid.')
-                        expect(response.body[0].successful).to.eql(false)
+                        expect(response.body.outcomes[0].message).to.eql('Error while processing Test Case JSON.  Please make sure Test Case JSON is valid.')
+                        expect(response.body.outcomes[0].successful).to.eql(false)
                     })
                 })
             })
@@ -159,8 +159,8 @@ describe('Test Case Import -- Non Measure owner validation', () => {
 
         OktaLogin.setupUserSession(false)
 
-        newMeasureName = measureName + randValue + 4
-        newCQLLibraryName = cqlLibraryName + randValue + 4
+        newMeasureName = measureName + randValue + 2
+        newCQLLibraryName = cqlLibraryName + randValue + 2
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
@@ -172,7 +172,6 @@ describe('Test Case Import -- Non Measure owner validation', () => {
 
         Utilities.deleteMeasure()
     })
-
 
     it('Non Measure owner unable to Import Test cases', () => {
 
@@ -195,8 +194,8 @@ describe('Test Case Import -- Non Measure owner validation', () => {
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + id)
-                        expect(response.body[0].successful).to.eql(false)
+                        expect(response.body.outcomes[0].message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + id)
+                        expect(response.body.outcomes[0].successful).to.eql(false)
                     })
                 })
             })
@@ -261,7 +260,7 @@ describe('Test Case import for versioned Measure', () => {
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].successful).to.eql(true)
+                        expect(response.body.outcomes[0].successful).to.eql(true)
                     })
                 })
             })
@@ -315,13 +314,11 @@ describe('Multiple Test Case Import', () => {
                         ]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].message).to.eql('Multiple test case files are not supported. Please make sure only one JSON file is in the folder.')
-                        expect(response.body[0].successful).to.eql(false)
+                        expect(response.body.outcomes[0].message).to.eql('Multiple test case files are not supported. Please make sure only one JSON file is in the folder.')
+                        expect(response.body.outcomes[0].successful).to.eql(false)
                     })
                 })
             })
         })
     })
 })
-
-
