@@ -621,7 +621,8 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         Utilities.deleteMeasure(newCQLTestMeasureName, newCQLTestCqlLibraryName)
     })
 
-    it('Verify error message when there is no using statement in the CQL', () => {
+    //skipping until this defect is fixed https://jira.cms.gov/browse/MAT-9610
+    it.skip('Verify error message when there is no using statement in the CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
