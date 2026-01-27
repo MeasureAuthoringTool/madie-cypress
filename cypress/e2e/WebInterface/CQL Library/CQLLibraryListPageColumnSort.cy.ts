@@ -156,7 +156,7 @@ describe('CQL Library List Page Sort by Columns', () => {
             // checkbox
             cy.wrap(headerRow.children().eq(0).find('button')).should('not.have.class', 'header-button')
             // action button
-            cy.wrap(headerRow.children().eq(7).find('button')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(8).find('button')).should('not.have.class', 'header-button')
         })
     })
 })
