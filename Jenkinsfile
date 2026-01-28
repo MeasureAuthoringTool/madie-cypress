@@ -1,4 +1,3 @@
-
 pipeline{
   agent {
     label 'dev-madie'
@@ -68,13 +67,16 @@ pipeline{
   stages {
     stage('ECR Login'){
       steps{
-        sh 'aws --profile ${PROFILE} ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com'
+        sh '''
+          aws --profile ${PROFILE} ecr get-login-password --region us-east-1 \
+          | docker login --username AWS --password-stdin ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com
+        '''
       }
     }
 
     stage('Build Cypress Container'){
       when{
-        expression { BUILD_CONTAINER == 'yes' }
+        expression { params.BUILD_CONTAINER == 'yes' }
       }
       steps{
         sh '''
@@ -88,13 +90,13 @@ pipeline{
     stage('Run Tests') {
       agent {
         docker {
-          image "${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
+          image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
           args "-u 0 -v $HOME/.npm:/.npm"
           reuseNode true
         }
       }
       steps {
-        slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${TEST_SCRIPT} Tests Started")
+        slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
         catchError(buildResult: 'FAILURE') {
           sh '''
             cd /app/cypress
@@ -107,127 +109,26 @@ pipeline{
       post {
         always{
           sh '''
-            # NOTE: We only extract the initial failure list here in newline-separated format.
-            # We DO NOT build reports here anymore.
+            # Extract initial failures as one-file-per-line
             export XDG_RUNTIME_DIR=/run/user/$(id -u)
             cd /app/cypress
 
-            # Extract initial failures as "one file path per line"
-            # Reads the JSON result files produced by the initial run.
-            cat /app/runner-results/*.json 2>/dev/null \
-              | jq -r 'select(.failures > 0) | .file' \
-              | sed '/^null$/d' \
-              > failures-${BUILD_NUMBER}.txt || true
-
-            cp failures-${BUILD_NUMBER}.txt ${WORKSPACE}/ || true
+            # Some runs may not produce runner-results; avoid breaking the build
+            if ls /app/runner-results/*.json >/dev/null 2>&1; then
+              cat /app/runner-results/*.json \
+                | jq -r 'select(.failures > 0) | .file' \
+                | sed '/^null$/d' \
+                > failures-${BUILD_NUMBER}.txt
+              cp failures-${BUILD_NUMBER}.txt ${WORKSPACE}/ || true
+            else
+              # Create an empty failure file so downstream logic is consistent
+              : > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
+            fi
           '''
-          archiveArtifacts artifacts: "failures-${BUILD_NUMBER}.txt", onlyIfSuccessful: false
+          archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
         }
       }
     }
 
     stage('Re-run Failures Twice') {
       when {
-        expression { fileExists("failures-${BUILD_NUMBER}.txt") }
-      }
-      agent {
-        docker {
-          image "${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
-          args "-u 0 -v $HOME/.npm:/.npm"
-          reuseNode true
-        }
-      }
-      steps {
-        sh """
-          set -e
-          echo '==============================='
-          echo '      FIRST RERUN START        '
-          echo '==============================='
-
-          cd /app/cypress
-
-          # Prepare test-files from the initial failure list
-          cp ${WORKSPACE}/failures-${BUILD_NUMBER}.txt test-files.txt
-
-          # Reset runner results so we only capture RERUN #1 output
-          rm -rf /app/runner-results/* || true
-          mkdir -p /app/runner-results
-
-          echo 'Running test:specific:files:parallel (First Rerun)'
-          npm run test:specific:files:parallel || true
-
-          echo '==============================='
-          echo ' Extracting NEW failures (R1)  '
-          echo '==============================='
-
-          # Extract failures for rerun #1 in newline-separated format
-          cat /app/runner-results/*.json 2>/dev/null \
-            | jq -r 'select(.failures > 0) | .file' \
-            | sed '/^null$/d' \
-            > failures-rerun1-${BUILD_NUMBER}.txt || true
-
-          cp failures-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/ || true
-
-          # If no failures after RERUN #1, skip RERUN #2
-          if [ ! -s failures-rerun1-${BUILD_NUMBER}.txt ]; then
-              echo 'No failures left after first rerun – skipping second rerun.'
-              exit 0
-          fi
-
-          echo '==============================='
-          echo '      SECOND RERUN START       '
-          echo '==============================='
-
-          # Use NEW failures for RERUN #2
-          cp ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt test-files.txt
-
-          # Reset runner results for clean RERUN #2 capture
-          rm -rf /app/runner-results/* || true
-          mkdir -p /app/runner-results
-
-          echo 'Running test:specific:files:parallel (Second Rerun)'
-          npm run test:specific:files:parallel || true
-
-          echo '==============================='
-          echo '     SECOND RERUN COMPLETE     '
-          echo '==============================='
-        """
-      }
-    }
-
-    stage('Reports') {
-      agent {
-        docker {
-          image "${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
-          args "-u 0 -v $HOME/.npm:/.npm"
-          reuseNode true
-        }
-      }
-      steps {
-        sh '''
-          export XDG_RUNTIME_DIR=/run/user/$(id -u)
-          cd /app/cypress
-          npm run combine:reports
-          npm run generateOne:report
-          tar -czf /app/mochawesome-report-${BUILD_NUMBER}.tar.gz -C /app/mochawesome-report/ .
-          cp /app/mochawesome-report-${BUILD_NUMBER}.tar.gz ${WORKSPACE}/ || true
-        '''
-        archiveArtifacts artifacts: "mochawesome-report-${BUILD_NUMBER}.tar.gz, failures-${BUILD_NUMBER}.txt, failures-rerun1-${BUILD_NUMBER}.txt", onlyIfSuccessful: false
-      }
-    }
-  }
-  post {
-    success{
-      slackSend(color: "#00ff00", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${TEST_SCRIPT} Tests Finished")
-    }
-    failure{
-      sh 'echo fail'
-      slackSend(color: "#ff0000", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${TEST_SCRIPT} You have Test failures or a bad build, please review report attached to jenkins build")
-    }
-
-    // Clean after build
-    always {
-      cleanWs()
-    }
-  }
-}
