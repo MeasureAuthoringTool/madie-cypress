@@ -116,7 +116,19 @@ pipeline {
         }
       }
       steps {
+        // Ensure dependencies exist in ${WORKSPACE} (needed for cypress-parallel)
+        sh '''
+          cd ${WORKSPACE}
+          if [ ! -d node_modules ]; then
+            echo "Installing dependencies in ${WORKSPACE} ..."
+            npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+          else
+            echo "Using existing node_modules in ${WORKSPACE}"
+          fi
+        '''
+
         slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
+
         catchError(buildResult: 'FAILURE') {
           sh '''
             cd ${WORKSPACE}
@@ -125,6 +137,7 @@ pipeline {
             echo $?
           '''
         }
+
         // Extract initial failures (newline-separated) from runner-results if present
         sh '''
           cd ${WORKSPACE}
@@ -137,11 +150,13 @@ pipeline {
             : > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
           fi
         '''
-        // Ensure artifacts exist even if empty
+
+        // Ensure the two rerun failure files exist (even if empty), so we can always archive them
         sh '''
           : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
         '''
+
         archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
@@ -155,6 +170,7 @@ pipeline {
         }
       }
       steps {
+        // Reuse node_modules created in previous stage (it's in ${WORKSPACE}, which is mounted)
         sh '''
           set -e
           cd ${WORKSPACE}
@@ -207,6 +223,7 @@ pipeline {
             : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
           fi
         '''
+
         // Publish all three failure lists regardless of emptiness
         archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
@@ -221,6 +238,7 @@ pipeline {
         }
       }
       steps {
+        // node_modules already in ${WORKSPACE}
         sh '''
           cd ${WORKSPACE}
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
