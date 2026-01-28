@@ -119,27 +119,30 @@ pipeline {
         slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
         catchError(buildResult: 'FAILURE') {
           sh '''
-            cd /app/cypress
+            cd ${WORKSPACE}
             npm run delete:reports
             npm run $TEST_SCRIPT
             echo $?
           '''
         }
-        // Extract initial failures as newline-separated paths for reruns
+        // Extract initial failures (newline-separated) from runner-results if present
         sh '''
-          export XDG_RUNTIME_DIR=/run/user/$(id -u)
-          cd /app/cypress
-          if ls /app/runner-results/*.json >/dev/null 2>&1; then
-            cat /app/runner-results/*.json \
+          cd ${WORKSPACE}
+          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+            cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
               | sed '/^null$/d' \
-              > failures-${BUILD_NUMBER}.txt
-            cp failures-${BUILD_NUMBER}.txt ${WORKSPACE}/ || true
+              > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
           else
             : > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
           fi
         '''
-        archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        // Ensure artifacts exist even if empty
+        sh '''
+          : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+          : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+        '''
+        archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
 
@@ -154,42 +157,58 @@ pipeline {
       steps {
         sh '''
           set -e
+          cd ${WORKSPACE}
 
-          # Skip reruns if no failures from the first run
           if [ ! -s ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ]; then
             echo "No initial failures found. Skipping reruns."
             exit 0
           fi
 
           echo '=== RERUN #1 ==='
-          cd /app/cypress
-          cp ${WORKSPACE}/failures-${BUILD_NUMBER}.txt test-files.txt
-          rm -rf /app/runner-results/* || true
-          mkdir -p /app/runner-results
+          # Clear and write test-files.txt
+          : > ${WORKSPACE}/test-files.txt
+          cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
+
+          rm -rf ${WORKSPACE}/runner-results/* || true
+          mkdir -p ${WORKSPACE}/runner-results
           npm run test:specific:files:parallel || true
 
           echo '=== Collect NEW failures after RERUN #1 ==='
-          if ls /app/runner-results/*.json >/dev/null 2>&1; then
-            cat /app/runner-results/*.json \
+          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+            cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
               | sed '/^null$/d' \
-              > failures-rerun1-${BUILD_NUMBER}.txt
+              > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           else
-            : > failures-rerun1-${BUILD_NUMBER}.txt
+            : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           fi
-          cp failures-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/ || true
 
-          if [ ! -s failures-rerun1-${BUILD_NUMBER}.txt ]; then
+          if [ ! -s ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ]; then
             echo 'No failures left after first rerun – skipping second rerun.'
             exit 0
           fi
 
           echo '=== RERUN #2 ==='
-          cp ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt test-files.txt
-          rm -rf /app/runner-results/* || true
-          mkdir -p /app/runner-results
+          # Clear and write test-files.txt again
+          : > ${WORKSPACE}/test-files.txt
+          cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
+
+          rm -rf ${WORKSPACE}/runner-results/* || true
+          mkdir -p ${WORKSPACE}/runner-results
           npm run test:specific:files:parallel || true
+
+          echo '=== Collect NEW failures after RERUN #2 ==='
+          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+            cat ${WORKSPACE}/runner-results/*.json \
+              | jq -r 'select(.failures > 0) | .file' \
+              | sed '/^null$/d' \
+              > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+          else
+            : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+          fi
         '''
+        // Publish all three failure lists regardless of emptiness
+        archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
 
@@ -203,14 +222,17 @@ pipeline {
       }
       steps {
         sh '''
-          export XDG_RUNTIME_DIR=/run/user/$(id -u)
-          cd /app/cypress
-          npm run combine:reports
-          npm run generateOne:report
-          tar -czf /app/mochawesome-report-${BUILD_NUMBER}.tar.gz -C /app/mochawesome-report/ .
-          cp /app/mochawesome-report-${BUILD_NUMBER}.tar.gz ${WORKSPACE}/ || true
+          cd ${WORKSPACE}
+          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+            npm run combine:reports
+            npm run generateOne:report
+            tar -czf ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
+          else
+            echo "No mochawesome JSON found under ${WORKSPACE}/cypress/results; skipping report generation."
+            : > ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz || true
+          fi
         '''
-        archiveArtifacts artifacts: "mochawesome-report-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        archiveArtifacts artifacts: "mochawesome-report-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
   }
