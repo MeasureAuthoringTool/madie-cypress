@@ -125,7 +125,7 @@ pipeline {
             echo $?
           '''
         }
-        // Extract initial failures as newline-separated paths
+        // Extract initial failures as newline-separated paths for reruns
         sh '''
           export XDG_RUNTIME_DIR=/run/user/$(id -u)
           cd /app/cypress
@@ -155,6 +155,7 @@ pipeline {
         sh '''
           set -e
 
+          # Skip reruns if no failures from the first run
           if [ ! -s ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ]; then
             echo "No initial failures found. Skipping reruns."
             exit 0
@@ -219,3 +220,11 @@ pipeline {
       slackSend(color: "#00ff00", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} Tests Finished")
     }
     failure {
+      sh 'echo fail'
+      slackSend(color: "#ff0000", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} You have Test failures or a bad build, please review report attached to jenkins build")
+    }
+    always {
+      cleanWs()
+    }
+  }
+}
