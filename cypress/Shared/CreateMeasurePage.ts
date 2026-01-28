@@ -949,7 +949,12 @@ export class CreateMeasurePage {
     }
 
     public static CloneMeasureAPI(existingId: string, newName: string, newLibrraryName: string, overrideOptions?: CreateMeasureOptions) {
-        let measureNumber
+        let measureNumber, useAltUser = false
+
+        if (overrideOptions && overrideOptions.altUser) {
+            useAltUser = true
+        }
+        OktaLogin.setupUserSession(useAltUser)
 
         // example of configuring options
         if (overrideOptions && overrideOptions.measureNumber) {
