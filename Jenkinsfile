@@ -27,75 +27,62 @@ pipeline {
       name: 'TEST_SCRIPT'
     )
     choice(name: 'BUILD_CONTAINER', description: 'Rebuild Cypress Container?', choices: ['no','yes'])
+    choice(name: 'FORCE_REPORTER', description: 'If cypress reporter is misconfigured, force mochawesome via CLI?', choices: ['no','yes'])
   }
 
   environment {
     AWS_ACCOUNT = credentials('HCQIS_dev')
-
-    // ---------- DEV creds ----------
-    CYPRESS_DEV_USERNAME            = credentials('CYPRESS_TEST_USERNAME')
-    CYPRESS_DEV_USERNAME2           = credentials('CYPRESS_TEST_USERNAME2')
-    CYPRESS_DEV_USERNAME3           = credentials('CYPRESS_TEST_USERNAME3')
-    CYPRESS_DEV_PASSWORD            = credentials('CYPRESS_TEST_PASSWORD')
-    CYPRESS_DEV_PASSWORD2           = credentials('CYPRESS_TEST_PASSWORD2')
-    CYPRESS_DEV_PASSWORD3           = credentials('CYPRESS_TEST_PASSWORD3')
-    CYPRESS_DEV_ALT_USERNAME        = credentials('CYPRESS_TEST_ALT_USERNAME')
-    CYPRESS_DEV_ALT_USERNAME2       = credentials('CYPRESS_TEST_ALT_USERNAME2')
-    CYPRESS_DEV_ALT_USERNAME3       = credentials('CYPRESS_TEST_ALT_USERNAME3')
-    CYPRESS_DEV_ALT_PASSWORD        = credentials('CYPRESS_TEST_ALT_PASSWORD')
-    CYPRESS_DEV_ALT_PASSWORD2       = credentials('CYPRESS_TEST_ALT_PASSWORD2')
-    CYPRESS_DEV_ALT_PASSWORD3       = credentials('CYPRESS_TEST_ALT_PASSWORD3')
-    CYPRESS_DEV_MEASURESHARING_API_KEY    = credentials('CYPRESS_DEV_MEASURESHARING_API_KEY')
+    CYPRESS_DEV_USERNAME           = credentials('CYPRESS_TEST_USERNAME')
+    CYPRESS_DEV_USERNAME2          = credentials('CYPRESS_TEST_USERNAME2')
+    CYPRESS_DEV_USERNAME3          = credentials('CYPRESS_TEST_USERNAME3')
+    CYPRESS_DEV_PASSWORD           = credentials('CYPRESS_TEST_PASSWORD')
+    CYPRESS_DEV_PASSWORD2          = credentials('CYPRESS_TEST_PASSWORD2')
+    CYPRESS_DEV_PASSWORD3          = credentials('CYPRESS_TEST_PASSWORD3')
+    CYPRESS_DEV_ALT_USERNAME       = credentials('CYPRESS_TEST_ALT_USERNAME')
+    CYPRESS_DEV_ALT_USERNAME2      = credentials('CYPRESS_TEST_ALT_USERNAME2')
+    CYPRESS_DEV_ALT_USERNAME3      = credentials('CYPRESS_TEST_ALT_USERNAME3')
+    CYPRESS_DEV_ALT_PASSWORD       = credentials('CYPRESS_TEST_ALT_PASSWORD')
+    CYPRESS_DEV_ALT_PASSWORD2      = credentials('CYPRESS_TEST_ALT_PASSWORD2')
+    CYPRESS_DEV_ALT_PASSWORD3      = credentials('CYPRESS_TEST_ALT_PASSWORD3')
+    CYPRESS_DEV_MEASURESHARING_API_KEY   = credentials('CYPRESS_DEV_MEASURESHARING_API_KEY')
     CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY')
-    CYPRESS_DEV_ADMIN_API_KEY       = credentials('CYPRESS_DEV_ADMIN_API_KEY')
-
-    // ---------- TEST creds ----------
-    CYPRESS_TEST_USERNAME           = credentials('CYPRESS_TEST_USERNAME')
-    CYPRESS_TEST_USERNAME2          = credentials('CYPRESS_TEST_USERNAME2')
-    CYPRESS_TEST_USERNAME3          = credentials('CYPRESS_TEST_USERNAME3')
-    CYPRESS_TEST_PASSWORD           = credentials('CYPRESS_TEST_PASSWORD')
-    CYPRESS_TEST_PASSWORD2          = credentials('CYPRESS_TEST_PASSWORD2')
-    CYPRESS_TEST_PASSWORD3          = credentials('CYPRESS_TEST_PASSWORD3')
-    CYPRESS_TEST_ALT_USERNAME       = credentials('CYPRESS_TEST_ALT_USERNAME')
-    CYPRESS_TEST_ALT_USERNAME2      = credentials('CYPRESS_TEST_ALT_USERNAME2')
-    CYPRESS_TEST_ALT_USERNAME3      = credentials('CYPRESS_TEST_ALT_USERNAME3')
-    CYPRESS_TEST_ALT_PASSWORD       = credentials('CYPRESS_TEST_ALT_PASSWORD')
-    CYPRESS_TEST_ALT_PASSWORD2      = credentials('CYPRESS_TEST_ALT_PASSWORD2')
-    CYPRESS_TEST_ALT_PASSWORD3      = credentials('CYPRESS_TEST_ALT_PASSWORD3')
+    CYPRESS_DEV_ADMIN_API_KEY      = credentials('CYPRESS_DEV_ADMIN_API_KEY')
+    CYPRESS_TEST_USERNAME          = credentials('CYPRESS_TEST_USERNAME')
+    CYPRESS_TEST_USERNAME2         = credentials('CYPRESS_TEST_USERNAME2')
+    CYPRESS_TEST_USERNAME3         = credentials('CYPRESS_TEST_USERNAME3')
+    CYPRESS_TEST_PASSWORD          = credentials('CYPRESS_TEST_PASSWORD')
+    CYPRESS_TEST_PASSWORD2         = credentials('CYPRESS_TEST_PASSWORD2')
+    CYPRESS_TEST_PASSWORD3         = credentials('CYPRESS_TEST_PASSWORD3')
+    CYPRESS_TEST_ALT_USERNAME      = credentials('CYPRESS_TEST_ALT_USERNAME')
+    CYPRESS_TEST_ALT_USERNAME2     = credentials('CYPRESS_TEST_ALT_USERNAME2')
+    CYPRESS_TEST_ALT_USERNAME3     = credentials('CYPRESS_TEST_ALT_USERNAME3')
+    CYPRESS_TEST_ALT_PASSWORD      = credentials('CYPRESS_TEST_ALT_PASSWORD')
+    CYPRESS_TEST_ALT_PASSWORD2     = credentials('CYPRESS_TEST_ALT_PASSWORD2')
+    CYPRESS_TEST_ALT_PASSWORD3     = credentials('CYPRESS_TEST_ALT_PASSWORD3')
     CYPRESS_TEST_MEASURESHARING_API_KEY   = credentials('CYPRESS_TEST_MEASURESHARING_API_KEY')
     CYPRESS_TEST_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_TEST_DELETEMEASUREADMIN_API_KEY')
-    CYPRESS_TEST_ADMIN_API_KEY      = credentials('CYPRESS_TEST_ADMIN_API_KEY')
-
-    // ---------- IMPL creds ----------
-    CYPRESS_IMPL_USERNAME           = credentials('CYPRESS_IMPL_USERNAME')
-    CYPRESS_IMPL_PASSWORD           = credentials('CYPRESS_IMPL_PASSWORD')
-    CYPRESS_IMPL_ALT_USERNAME       = credentials('CYPRESS_IMPL_ALT_USERNAME')
-    CYPRESS_IMPL_ALT_PASSWORD       = credentials('CYPRESS_IMPL_ALT_PASSWORD')
-    CYPRESS_IMPL_MEASURESHARING_API_KEY   = credentials('CYPRESS_IMPL_MEASURESHARING_API_KEY')
+    CYPRESS_TEST_ADMIN_API_KEY     = credentials('CYPRESS_TEST_ADMIN_API_KEY')
+    CYPRESS_IMPL_USERNAME          = credentials('CYPRESS_IMPL_USERNAME')
+    CYPRESS_IMPL_PASSWORD          = credentials('CYPRESS_IMPL_PASSWORD')
+    CYPRESS_IMPL_ALT_USERNAME      = credentials('CYPRESS_IMPL_ALT_USERNAME')
+    CYPRESS_IMPL_ALT_PASSWORD      = credentials('CYPRESS_IMPL_ALT_PASSWORD')
+    CYPRESS_VSAC_API_KEY           = credentials('CYPRESS_VSAC_API_KEY')
+    CYPRESS_DEV_MADIE_CLIENTID     = credentials('CYPRESS_DEV_MADIE_CLIENTID')
+    CYPRESS_DEV_MADIE_CODECHALLENGE= credentials('CYPRESS_DEV_MADIE_CODECHALLENGE')
+    CYPRESS_DEV_MADIE_REDIRECTURI  = credentials('CYPRESS_DEV_MADIE_REDIRECTURI')
+    CYPRESS_DEV_MADIE_AUTHURI      = credentials('CYPRESS_DEV_MADIE_AUTHURI')
+    CYPRESS_MADIE_CODEVERIFIER     = credentials('CYPRESS_MADIE_CODEVERIFIER')
+    CYPRESS_TEST_MADIE_CLIENTID    = credentials('CYPRESS_TEST_MADIE_CLIENTID')
+    CYPRESS_TEST_MADIE_REDIRECTURI = credentials('CYPRESS_TEST_MADIE_REDIRECTURI')
+    CYPRESS_TEST_MADIE_AUTHURI     = credentials('CYPRESS_TEST_MADIE_AUTHURI')
+    CYPRESS_IMPL_MADIE_CLIENTID    = credentials('CYPRESS_IMPL_MADIE_CLIENTID')
+    CYPRESS_IMPL_MADIE_REDIRECTURI = credentials('CYPRESS_IMPL_MADIE_REDIRECTURI')
+    CYPRESS_IMPL_MADIE_AUTHURI     = credentials('CYPRESS_IMPL_MADIE_AUTHURI')
+    CYPRESS_IMPL_MEASURESHARING_API_KEY  = credentials('CYPRESS_IMPL_MEASURESHARING_API_KEY')
     CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY')
-    CYPRESS_IMPL_ADMIN_API_KEY      = credentials('CYPRESS_IMPL_ADMIN_API_KEY')
-
-    // ---------- VSAC ----------
-    CYPRESS_VSAC_API_KEY            = credentials('CYPRESS_VSAC_API_KEY')
-
-    // ---------- MADiE OAuth (DEV/TEST/IMPL) ----------
-    CYPRESS_DEV_MADIE_CLIENTID      = credentials('CYPRESS_DEV_MADIE_CLIENTID')
-    CYPRESS_DEV_MADIE_CODECHALLENGE = credentials('CYPRESS_DEV_MADIE_CODECHALLENGE')
-    CYPRESS_DEV_MADIE_REDIRECTURI   = credentials('CYPRESS_DEV_MADIE_REDIRECTURI')
-    CYPRESS_DEV_MADIE_AUTHURI       = credentials('CYPRESS_DEV_MADIE_AUTHURI')
-    CYPRESS_MADIE_CODEVERIFIER      = credentials('CYPRESS_MADIE_CODEVERIFIER')
-
-    CYPRESS_TEST_MADIE_CLIENTID     = credentials('CYPRESS_TEST_MADIE_CLIENTID')
-    CYPRESS_TEST_MADIE_REDIRECTURI  = credentials('CYPRESS_TEST_MADIE_REDIRECTURI')
-    CYPRESS_TEST_MADIE_AUTHURI      = credentials('CYPRESS_TEST_MADIE_AUTHURI')
-
-    CYPRESS_IMPL_MADIE_CLIENTID     = credentials('CYPRESS_IMPL_MADIE_CLIENTID')
-    CYPRESS_IMPL_MADIE_REDIRECTURI  = credentials('CYPRESS_IMPL_MADIE_REDIRECTURI')
-    CYPRESS_IMPL_MADIE_AUTHURI      = credentials('CYPRESS_IMPL_MADIE_AUTHURI')
-
-    // ---------- Misc ----------
-    CYPRESS_REPORT_BUCKET           = credentials('CYPRESS_REPORT_BUCKET')
-    NODE_OPTIONS                    = credentials('NODE_OPTIONS')
+    CYPRESS_IMPL_ADMIN_API_KEY     = credentials('CYPRESS_IMPL_ADMIN_API_KEY')
+    CYPRESS_REPORT_BUCKET          = credentials('CYPRESS_REPORT_BUCKET')
+    NODE_OPTIONS                   = credentials('NODE_OPTIONS')
     PROFILE = 'dev-madie'
   }
 
@@ -130,7 +117,7 @@ pipeline {
         }
       }
       steps {
-        // Ensure node_modules in ${WORKSPACE}
+        // Ensure dependencies exist in ${WORKSPACE} (cypress-parallel, merge tools, etc.)
         sh '''
           cd ${WORKSPACE}
           if [ ! -d node_modules ]; then
@@ -146,14 +133,21 @@ pipeline {
         catchError(buildResult: 'FAILURE') {
           sh '''
             cd ${WORKSPACE}
-            # Clean prior run JSONs once at the start (keep results across reruns)
+            # Prepare reporter args (optional override)
+            if [ "${FORCE_REPORTER}" = "yes" ]; then
+              REPORTER_ARGS='--reporter mochawesome --reporter-options "reportDir=cypress/results,overwrite=false,html=false,json=true"'
+            else
+              REPORTER_ARGS=''
+            fi
+
             npm run delete:reports
-            npm run $TEST_SCRIPT
+            # Pass reporter args via npm-run extra args (after --)
+            npm run $TEST_SCRIPT -- $REPORTER_ARGS
             echo $?
           '''
         }
 
-        // Initial failures for rerun #1 (newline-separated)
+        // Extract initial failures (newline-separated) from runner-results if present
         sh '''
           cd ${WORKSPACE}
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -164,7 +158,10 @@ pipeline {
           else
             : > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
           fi
-          # Pre-create rerun files so they always publish
+        '''
+
+        // Ensure the two rerun failure files exist (even if empty), so we can always archive them
+        sh '''
           : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
         '''
@@ -182,6 +179,7 @@ pipeline {
         }
       }
       steps {
+        // Reuse node_modules created in previous stage (it's in ${WORKSPACE}, which is mounted)
         sh '''
           set -e
           cd ${WORKSPACE}
@@ -191,16 +189,23 @@ pipeline {
             exit 0
           fi
 
+          # Build reporter args (optional override)
+          if [ "${FORCE_REPORTER}" = "yes" ]; then
+            REPORTER_ARGS='--reporter mochawesome --reporter-options "reportDir=cypress/results,overwrite=false,html=false,json=true"'
+          else
+            REPORTER_ARGS=''
+          fi
+
           echo '=== RERUN #1 ==='
-          # Do NOT delete cypress/results here; we merge all runs at the end
+          # Clear and write test-files.txt
           : > ${WORKSPACE}/test-files.txt
           cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
 
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel || true
+          npm run test:specific:files:parallel -- $REPORTER_ARGS || true
 
-          # Failures for RERUN #2
+          echo '=== Collect NEW failures after RERUN #1 ==='
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
@@ -211,19 +216,20 @@ pipeline {
           fi
 
           if [ ! -s ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ]; then
-            echo 'No failures left after RERUN #1 – skipping RERUN #2.'
+            echo 'No failures left after first rerun – skipping second rerun.'
             exit 0
           fi
 
           echo '=== RERUN #2 ==='
+          # Clear and write test-files.txt again
           : > ${WORKSPACE}/test-files.txt
           cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
 
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel || true
+          npm run test:specific:files:parallel -- $REPORTER_ARGS || true
 
-          # Remaining failures after RERUN #2
+          echo '=== Collect NEW failures after RERUN #2 ==='
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
@@ -234,11 +240,12 @@ pipeline {
           fi
         '''
 
+        // Publish all three failure lists regardless of emptiness
         archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
 
-    stage('Reports (single merged)') {
+    stage('Reports') {
       agent {
         docker {
           image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
@@ -247,15 +254,15 @@ pipeline {
         }
       }
       steps {
-        // Merge *all* JSONs across all runs & build one HTML bundle
+        // node_modules already in ${WORKSPACE}
         sh '''
           cd ${WORKSPACE}
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
-            npx mochawesome-merge 'cypress/results/*.json' > mochawesome.json
-            npx marge mochawesome.json --reportDir ${WORKSPACE}/mochawesome-report --reportFilename index.html
-            tar -czf ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report .
+            npm run combine:reports
+            npm run generateOne:report
+            tar -czf ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
           else
-            echo "No mochawesome JSON found; skipping report generation."
+            echo "No mochawesome JSON found under ${WORKSPACE}/cypress/results; skipping report generation."
             : > ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz || true
           fi
         '''
@@ -264,50 +271,15 @@ pipeline {
     }
   }
 
-  // Single, final Slack summary (plain text; robust)
   post {
+    success {
+      slackSend(color: "#00ff00", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} Tests Finished")
+    }
+    failure {
+      sh 'echo fail'
+      slackSend(color: "#ff0000", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} You have Test failures or a bad build, please review report attached to jenkins build")
+    }
     always {
-      script {
-        try {
-          String ws = env.WORKSPACE
-          String bn = env.BUILD_NUMBER
-
-          def readList = { String p -> fileExists(p) ? readFile(p).readLines().findAll { it?.trim() } : [] }
-          List<String> l0 = readList("${ws}/failures-${bn}.txt")
-          List<String> l1 = readList("${ws}/failures-rerun1-${bn}.txt")
-          List<String> l2 = readList("${ws}/failures-rerun2-${bn}.txt")
-
-          int c0 = l0.size(), c1 = l1.size(), c2 = l2.size()
-
-          boolean passed = (c0 == 0) || (c0 > 0 && c1 == 0) || (c1 > 0 && c2 == 0)
-
-          String outcome =
-            (c0 == 0) ? "✅ Passed on the initial run." :
-            (c1 == 0) ? "✅ Passed after the 1st rerun. (initial: ${c0})" :
-            (c2 == 0) ? "✅ Passed after the 2nd rerun. (initial: ${c0}, after rerun1: ${c1})"
-                       : "❌ Still failing after the 2nd rerun."
-
-          String msg = """\
-${passed ? "All test cases passed" : "Failures remain after 2nd rerun"}
-Outcome: ${outcome}
-
-Counts:
-• Initial failures: ${c0}
-• After rerun #1:  ${c1}
-• After rerun #2:  ${c2}
-
-Report:
-• ${env.BUILD_URL}artifact/mochawesome-report-${bn}.tar.gz
-
-${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
-""".stripIndent()
-
-          currentBuild.result = passed ? 'SUCCESS' : 'FAILURE'
-          slackSend(color: passed ? "#36a64f" : "#ff0000", message: msg)
-        } catch (e) {
-          echo "Post summary/Slack failed: ${e}"
-        }
-      }
       cleanWs()
     }
   }
