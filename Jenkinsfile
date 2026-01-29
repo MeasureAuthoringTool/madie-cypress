@@ -43,7 +43,7 @@ pipeline {
     CYPRESS_DEV_ALT_PASSWORD       = credentials('CYPRESS_TEST_ALT_PASSWORD')
     CYPRESS_DEV_ALT_PASSWORD2      = credentials('CYPRESS_TEST_ALT_PASSWORD2')
     CYPRESS_DEV_ALT_PASSWORD3      = credentials('CYPRESS_TEST_ALT_PASSWORD3')
-    CYPRESS_DEV_MEASURESHARING_API_KEY   = credentials('CYPRESS_DEV_MEASURESHARING_API_KEY')
+    CYPRESS_DEV_MEASURESHARING_API_KEY    = credentials('CYPRESS_DEV_MEASURESHARING_API_KEY')
     CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY')
     CYPRESS_DEV_ADMIN_API_KEY      = credentials('CYPRESS_DEV_ADMIN_API_KEY')
     CYPRESS_TEST_USERNAME          = credentials('CYPRESS_TEST_USERNAME')
@@ -116,7 +116,7 @@ pipeline {
         }
       }
       steps {
-        // Ensure dependencies exist in ${WORKSPACE} (needed for cypress-parallel)
+        // Ensure dependencies in ${WORKSPACE} (for cypress-parallel & reporters)
         sh '''
           cd ${WORKSPACE}
           if [ ! -d node_modules ]; then
@@ -132,13 +132,13 @@ pipeline {
         catchError(buildResult: 'FAILURE') {
           sh '''
             cd ${WORKSPACE}
-            npm run delete:reports
+            npm run delete:reports            # clean result JSONs for a clean initial report
             npm run $TEST_SCRIPT
             echo $?
           '''
         }
 
-        // Extract initial failures (newline-separated) from runner-results if present
+        // Initial failures for reruns (newline-separated)
         sh '''
           cd ${WORKSPACE}
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -151,13 +151,26 @@ pipeline {
           fi
         '''
 
-        // Ensure the two rerun failure files exist (even if empty), so we can always archive them
+        // Initial report bundle
+        sh '''
+          cd ${WORKSPACE}
+          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+            npm run combine:reports
+            npx marge mochawesome.json --reportDir ${WORKSPACE}/mochawesome-initial --reportFilename index.html
+            tar -czf ${WORKSPACE}/mochawesome-initial-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-initial .
+          else
+            echo "No mochawesome JSON for initial run; skipping initial report generation."
+            : > ${WORKSPACE}/mochawesome-initial-${BUILD_NUMBER}.tar.gz || true
+          fi
+        '''
+
+        // Pre-create empty rerun files so they always archive
         sh '''
           : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
         '''
 
-        archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
 
@@ -170,62 +183,81 @@ pipeline {
         }
       }
       steps {
-        // Reuse node_modules created in previous stage (it's in ${WORKSPACE}, which is mounted)
         sh '''
           set -e
           cd ${WORKSPACE}
 
           if [ ! -s ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ]; then
             echo "No initial failures found. Skipping reruns."
-            exit 0
-          fi
-
-          echo '=== RERUN #1 ==='
-          # Clear and write test-files.txt
-          : > ${WORKSPACE}/test-files.txt
-          cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
-
-          rm -rf ${WORKSPACE}/runner-results/* || true
-          mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel || true
-
-          echo '=== Collect NEW failures after RERUN #1 ==='
-          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-            cat ${WORKSPACE}/runner-results/*.json \
-              | jq -r 'select(.failures > 0) | .file' \
-              | sed '/^null$/d' \
-              > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           else
-            : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-          fi
+            echo '=== RERUN #1 ==='
+            npm run delete:reports
 
-          if [ ! -s ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ]; then
-            echo 'No failures left after first rerun – skipping second rerun.'
-            exit 0
-          fi
+            : > ${WORKSPACE}/test-files.txt
+            cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
 
-          echo '=== RERUN #2 ==='
-          # Clear and write test-files.txt again
-          : > ${WORKSPACE}/test-files.txt
-          cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
+            rm -rf ${WORKSPACE}/runner-results/* || true
+            mkdir -p ${WORKSPACE}/runner-results
+            npm run test:specific:files:parallel || true
 
-          rm -rf ${WORKSPACE}/runner-results/* || true
-          mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel || true
+            # Collect failures after rerun #1
+            if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+              cat ${WORKSPACE}/runner-results/*.json \
+                | jq -r 'select(.failures > 0) | .file' \
+                | sed '/^null$/d' \
+                > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+            else
+              : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+            fi
 
-          echo '=== Collect NEW failures after RERUN #2 ==='
-          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-            cat ${WORKSPACE}/runner-results/*.json \
-              | jq -r 'select(.failures > 0) | .file' \
-              | sed '/^null$/d' \
-              > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-          else
-            : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+            # Bundle rerun1 report
+            if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+              npm run combine:reports
+              npx marge mochawesome.json --reportDir ${WORKSPACE}/mochawesome-rerun1 --reportFilename index.html
+              tar -czf ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-rerun1 .
+            else
+              echo "No mochawesome JSON for rerun1; skipping rerun1 report."
+              : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
+            fi
+
+            if [ -s ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ]; then
+              echo '=== RERUN #2 ==='
+              npm run delete:reports
+
+              : > ${WORKSPACE}/test-files.txt
+              cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
+
+              rm -rf ${WORKSPACE}/runner-results/* || true
+              mkdir -p ${WORKSPACE}/runner-results
+              npm run test:specific:files:parallel || true
+
+              # Collect failures after rerun #2
+              if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+                cat ${WORKSPACE}/runner-results/*.json \
+                  | jq -r 'select(.failures > 0) | .file' \
+                  | sed '/^null$/d' \
+                  > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+              else
+                : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+              fi
+
+              # Bundle rerun2 report
+              if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+                npm run combine:reports
+                npx marge mochawesome.json --reportDir ${WORKSPACE}/mochawesome-rerun2 --reportFilename index.html
+                tar -czf ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-rerun2 .
+              else
+                echo "No mochawesome JSON for rerun2; skipping rerun2 report."
+                : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
+              fi
+            else
+              # ensure rerun2 tar exists even if rerun2 did not run
+              : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
+            fi
           fi
         '''
 
-        // Publish all three failure lists regardless of emptiness
-        archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        archiveArtifacts artifacts: "mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
 
@@ -238,32 +270,90 @@ pipeline {
         }
       }
       steps {
-        // node_modules already in ${WORKSPACE}
-        sh '''
-          cd ${WORKSPACE}
-          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
-            npm run combine:reports
-            npm run generateOne:report
-            tar -czf ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
-          else
-            echo "No mochawesome JSON found under ${WORKSPACE}/cypress/results; skipping report generation."
-            : > ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz || true
-          fi
-        '''
-        archiveArtifacts artifacts: "mochawesome-report-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        // Nothing to generate here; we bundled per-run reports already.
+        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
   }
 
+  // --- Single, final Slack decision & cleanup ---
   post {
-    success {
-      slackSend(color: "#00ff00", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} Tests Finished")
-    }
-    failure {
-      sh 'echo fail'
-      slackSend(color: "#ff0000", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} You have Test failures or a bad build, please review report attached to jenkins build")
-    }
     always {
+      script {
+        // File paths
+        def f0 = "${env.WORKSPACE}/failures-${env.BUILD_NUMBER}.txt"
+        def f1 = "${env.WORKSPACE}/failures-rerun1-${env.BUILD_NUMBER}.txt"
+        def f2 = "${env.WORKSPACE}/failures-rerun2-${env.BUILD_NUMBER}.txt"
+        // Ensure they exist
+        sh ": > '${f0}'; : > '${f1}'; : > '${f2}'"
+
+        // Counts
+        int c0 = (sh(script: "wc -l < '${f0}' | tr -d ' '", returnStdout: true).trim() ?: '0') as Integer
+        int c1 = (sh(script: "wc -l < '${f1}' | tr -d ' '", returnStdout: true).trim() ?: '0') as Integer
+        int c2 = (sh(script: "wc -l < '${f2}' | tr -d ' '", returnStdout: true).trim() ?: '0') as Integer
+
+        // Pass/fail rule
+        boolean passed = (c0 == 0) || (c0 > 0 && c1 == 0) || (c1 > 0 && c2 == 0)
+
+        // Title/message & color
+        String title = passed ? "All test cases passed" : "Failures remain after 2nd rerun"
+        String how =
+          (c0 == 0) ? "✅ Passed on the initial run." :
+          (c1 == 0) ? "✅ Passed after the 1st rerun. (initial: ${c0})" :
+                      (c2 == 0) ? "✅ Passed after the 2nd rerun. (initial: ${c0}, after rerun1: ${c1})"
+                                : "❌ Still failing after the 2nd rerun."
+        String color = passed ? "#36a64f" : "#ff0000"
+
+        // Artifact URLs
+        def artUrl = { fn -> "${env.BUILD_URL}artifact/${fn}" }
+        String urlInit = artUrl("mochawesome-initial-${env.BUILD_NUMBER}.tar.gz")
+        String urlR1   = artUrl("mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz")
+        String urlR2   = artUrl("mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz")
+
+        // Top N failing specs after rerun #2
+        int TOP_N = 10
+        String tail2 = readFile(file: f2)
+        List<String> topList = tail2.readLines().findAll{ it?.trim() }.take(TOP_N)
+        String topJoined = topList ? topList.join('\n') : 'None 🎉'
+        // Escape for JSON
+        topJoined = topJoined
+          .replace("\\", "\\\\")
+          .replace("\n", "\\n")
+          .replace("\"", "\\\"")
+
+        // Build Slack attachment JSON (classic attachments)
+        String attachments = """
+        [
+          {
+            "fallback": "${env.JOB_NAME} #${env.BUILD_NUMBER}: ${title}",
+            "color": "${color}",
+            "title": "${env.JOB_NAME} #${env.BUILD_NUMBER}: ${title}",
+            "title_link": "${env.BUILD_URL}",
+            "fields": [
+              { "title": "Outcome",             "value": "${how}",                        "short": false },
+              { "title": "Initial failures",    "value": "${c0}",                         "short": true  },
+              { "title": "After rerun #1",      "value": "${c1}",                         "short": true  },
+              { "title": "After rerun #2",      "value": "${c2}",                         "short": true  },
+              { "title": "Reports",             "value": "<${urlInit}|initial> | <${urlR1}|rerun1> | <${urlR2}|rerun2>", "short": false },
+              { "title": "Top failing specs (after rerun #2)", "value": "${topJoined}",  "short": false }
+            ],
+            "footer": "MADiE CI",
+            "ts": ${System.currentTimeMillis()/1000L}
+          }
+        ]
+        """.stripIndent().trim()
+
+        // Set final build result
+        currentBuild.result = passed ? 'SUCCESS' : 'FAILURE'
+
+        // Send exactly ONE Slack message
+        slackSend(
+          color: color,
+          attachments: attachments
+        )
+      }
+
+      // Clean workspace last
       cleanWs()
     }
   }
