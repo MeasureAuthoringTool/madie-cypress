@@ -1,49 +1,81 @@
 {
   "name": "madie-cypress",
-  "description": "automated cypress tests for MADiE",
-  "longDescription": "",
-  "status": "",
+  "version": "1.0.0",
+  "description": "Cypress end-to-end testing automation suite for the MADiE (Measure Authoring Development Integrated Environment) application.",
+  "longDescription": "This repository contains the comprehensive Cypress testing framework for MADiE (Measure Authoring Development Integrated Environment), a CMS healthcare quality measure authoring tool. The test suite provides automated end-to-end testing capabilities for the MADiE web interface, ensuring quality assurance across multiple environments. Built with Cypress and integrated with IntelliJ IDE, the framework supports environment-specific configurations, secure credential management through environment variables, and generates detailed Mochawesome reports for test results. The suite validates critical healthcare measure authoring workflows and integrates with HARP authentication for secure testing in development and other environments.",
+  "status": "Production",
   "permissions": {
-    "license": [
-      {
-        "name": "",
-        "URL": ""
-      }
-    ],
-    "usageType": "",
-    "exemptionText": ""
+      "licenses": [
+          {
+              "name": "CC0-1.0",
+              "URL": "https://github.com/CMSgov/madie-cypress/blob/main/LICENSE"
+          }
+      ],
+      "usageType": [
+          "openSource"
+      ],
+      "exemptionText": null
   },
-  "organization": "",
-  "repositoryURL": "https://github.com/MeasureAuthoringTool/madie-cypress",
+  "organization": "Centers for Medicare & Medicaid Services",
+  "repositoryURL": "https://github.com/CMSgov/madie-cypress",
+  "repositoryHost": "github.com/CMSgov",
+  "repositoryVisibility": "public",
   "vcs": "git",
   "laborHours": 14062,
-  "platforms": [],
-  "categories": [],
-  "softwareType": "",
-  "languages": [
-    "TypeScript",
-    "HTML",
-    "JavaScript",
-    "Dockerfile"
+  "reuseFrequency": {
+      "forks": 0,
+      "clones": 0
+  },
+  "platforms": [
+      "web"
   ],
-  "maintenance": "",
+  "categories": [
+    "data-analytics"
+  ],
+  "softwareType": "standalone/other",
+  "languages": [
+      "JavaScript",
+      "TypeScript"
+  ],
+  "maintenance": "contract",
+  "contractNumber": [
+      ""
+  ],
+  "SBOM": "https://github.com/CMSgov/madie-cypress/network/dependencies",
   "date": {
-    "created": "2021-10-01T14:29:51Z",
-    "lastModified": "2025-03-07T13:29:00Z",
-    "metaDataLastUpdated": "2025-03-07T18:11:02.907Z"
+      "created": "2024-01-01T00:00:00Z",
+      "lastModified": "2025-01-23T00:00:00Z",
+      "metadataLastUpdated": "2025-01-23T00:00:00Z"
   },
-  "tags": [],
+  "tags": [
+      "cypress",
+      "testing",
+      "automation",
+      "e2e",
+      "quality-assurance",
+      "madie",
+      "healthcare",
+      "quality-measures"
+  ],
   "contact": {
-    "email": "",
-    "name": ""
+    "email": "semanticbits-madie-help@icf.com",
+    "name": "MADiE Support Team"
   },
+  "feedbackMechanism": "https://github.com/CMSgov/madie-cypress/issues",
+  "AIUseCaseID": "0",
   "localisation": false,
-  "repositoryType": "",
+  "repositoryType": "tools",
   "userInput": false,
-  "fismaLevel": "",
-  "group": "",
-  "subsetInHealthcare": [],
-  "userType": [],
-  "repositoryHost": "github",
+  "fismaLevel": "low",
+  "group": "MADiE",
+  "projects": [
+      "MADiE"
+  ],
+  "subsetInHealthcare": [
+      "operational"
+  ],
+  "userType": [
+      "government"
+  ],
   "maturityModelTier": 0
 }
