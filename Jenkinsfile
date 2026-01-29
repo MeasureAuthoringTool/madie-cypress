@@ -116,7 +116,7 @@ pipeline {
         }
       }
       steps {
-        // Ensure dependencies in ${WORKSPACE} (for cypress-parallel & reporters)
+        // Install deps into ${WORKSPACE} so CLIs (cypress-parallel/marge) are available
         sh '''
           cd ${WORKSPACE}
           if [ ! -d node_modules ]; then
@@ -270,87 +270,94 @@ pipeline {
         }
       }
       steps {
-        // Nothing to generate here; we bundled per-run reports already.
+        // Nothing to generate here; per-run bundles created earlier.
         archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
   }
 
-  // --- Single, final Slack decision & cleanup ---
+  // --- Single, final Slack decision & cleanup (Groovy-only; no `sh`) ---
   post {
     always {
       script {
-        // File paths
-        def f0 = "${env.WORKSPACE}/failures-${env.BUILD_NUMBER}.txt"
-        def f1 = "${env.WORKSPACE}/failures-rerun1-${env.BUILD_NUMBER}.txt"
-        def f2 = "${env.WORKSPACE}/failures-rerun2-${env.BUILD_NUMBER}.txt"
-        // Ensure they exist
-        sh ": > '${f0}'; : > '${f1}'; : > '${f2}'"
+        try {
+          // File paths
+          String f0 = "${env.WORKSPACE}/failures-${env.BUILD_NUMBER}.txt"
+          String f1 = "${env.WORKSPACE}/failures-rerun1-${env.BUILD_NUMBER}.txt"
+          String f2 = "${env.WORKSPACE}/failures-rerun2-${env.BUILD_NUMBER}.txt"
 
-        // Counts
-        int c0 = (sh(script: "wc -l < '${f0}' | tr -d ' '", returnStdout: true).trim() ?: '0') as Integer
-        int c1 = (sh(script: "wc -l < '${f1}' | tr -d ' '", returnStdout: true).trim() ?: '0') as Integer
-        int c2 = (sh(script: "wc -l < '${f2}' | tr -d ' '", returnStdout: true).trim() ?: '0') as Integer
-
-        // Pass/fail rule
-        boolean passed = (c0 == 0) || (c0 > 0 && c1 == 0) || (c1 > 0 && c2 == 0)
-
-        // Title/message & color
-        String title = passed ? "All test cases passed" : "Failures remain after 2nd rerun"
-        String how =
-          (c0 == 0) ? "✅ Passed on the initial run." :
-          (c1 == 0) ? "✅ Passed after the 1st rerun. (initial: ${c0})" :
-                      (c2 == 0) ? "✅ Passed after the 2nd rerun. (initial: ${c0}, after rerun1: ${c1})"
-                                : "❌ Still failing after the 2nd rerun."
-        String color = passed ? "#36a64f" : "#ff0000"
-
-        // Artifact URLs
-        def artUrl = { fn -> "${env.BUILD_URL}artifact/${fn}" }
-        String urlInit = artUrl("mochawesome-initial-${env.BUILD_NUMBER}.tar.gz")
-        String urlR1   = artUrl("mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz")
-        String urlR2   = artUrl("mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz")
-
-        // Top N failing specs after rerun #2
-        int TOP_N = 10
-        String tail2 = readFile(file: f2)
-        List<String> topList = tail2.readLines().findAll{ it?.trim() }.take(TOP_N)
-        String topJoined = topList ? topList.join('\n') : 'None 🎉'
-        // Escape for JSON
-        topJoined = topJoined
-          .replace("\\", "\\\\")
-          .replace("\n", "\\n")
-          .replace("\"", "\\\"")
-
-        // Build Slack attachment JSON (classic attachments)
-        String attachments = """
-        [
-          {
-            "fallback": "${env.JOB_NAME} #${env.BUILD_NUMBER}: ${title}",
-            "color": "${color}",
-            "title": "${env.JOB_NAME} #${env.BUILD_NUMBER}: ${title}",
-            "title_link": "${env.BUILD_URL}",
-            "fields": [
-              { "title": "Outcome",             "value": "${how}",                        "short": false },
-              { "title": "Initial failures",    "value": "${c0}",                         "short": true  },
-              { "title": "After rerun #1",      "value": "${c1}",                         "short": true  },
-              { "title": "After rerun #2",      "value": "${c2}",                         "short": true  },
-              { "title": "Reports",             "value": "<${urlInit}|initial> | <${urlR1}|rerun1> | <${urlR2}|rerun2>", "short": false },
-              { "title": "Top failing specs (after rerun #2)", "value": "${topJoined}",  "short": false }
-            ],
-            "footer": "MADiE CI",
-            "ts": ${System.currentTimeMillis()/1000L}
+          // Read (if exists) and count non-empty trimmed lines
+          def readLinesSafe = { String p ->
+            fileExists(p) ? readFile(p).readLines().findAll { it?.trim() } : []
           }
-        ]
-        """.stripIndent().trim()
+          List l0 = readLinesSafe(f0)
+          List l1 = readLinesSafe(f1)
+          List l2 = readLinesSafe(f2)
 
-        // Set final build result
-        currentBuild.result = passed ? 'SUCCESS' : 'FAILURE'
+          int c0 = l0.size()
+          int c1 = l1.size()
+          int c2 = l2.size()
 
-        // Send exactly ONE Slack message
-        slackSend(
-          color: color,
-          attachments: attachments
-        )
+          // Success rule
+          boolean passed = (c0 == 0) || (c0 > 0 && c1 == 0) || (c1 > 0 && c2 == 0)
+
+          // Outcome text
+          String how =
+            (c0 == 0) ? "✅ Passed on the initial run." :
+            (c1 == 0) ? "✅ Passed after the 1st rerun. (initial: ${c0})" :
+            (c2 == 0) ? "✅ Passed after the 2nd rerun. (initial: ${c0}, after rerun1: ${c1})"
+                       : "❌ Still failing after the 2nd rerun."
+
+          String title = passed ? "All test cases passed" : "Failures remain after 2nd rerun"
+          String color = passed ? "#36a64f" : "#ff0000"
+
+          // Artifact URLs
+          def artUrl = { fn -> "${env.BUILD_URL}artifact/${fn}" }
+          String urlInit = artUrl("mochawesome-initial-${env.BUILD_NUMBER}.tar.gz")
+          String urlR1   = artUrl("mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz")
+          String urlR2   = artUrl("mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz")
+
+          // Top N failing specs after rerun #2 (format for Slack JSON)
+          int TOP_N = 10
+          List<String> topList = l2.take(TOP_N)
+          String topJoined = topList ? topList.join('\n') : 'None 🎉'
+          // Escape for JSON
+          topJoined = topJoined
+            .replace("\\", "\\\\")
+            .replace("\n", "\\n")
+            .replace("\"", "\\\"")
+
+          String attachments = """
+          [
+            {
+              "fallback": "${env.JOB_NAME} #${env.BUILD_NUMBER}: ${title}",
+              "color": "${color}",
+              "title": "${env.JOB_NAME} #${env.BUILD_NUMBER}: ${title}",
+              "title_link": "${env.BUILD_URL}",
+              "fields": [
+                { "title": "Outcome",             "value": "${how}",                        "short": false },
+                { "title": "Initial failures",    "value": "${c0}",                         "short": true  },
+                { "title": "After rerun #1",      "value": "${c1}",                         "short": true  },
+                { "title": "After rerun #2",      "value": "${c2}",                         "short": true  },
+                { "title": "Reports",             "value": "<${urlInit}|initial> | <${urlR1}|rerun1> | <${urlR2}|rerun2>", "short": false },
+                { "title": "Top failing specs (after rerun #2)", "value": "${topJoined}",  "short": false }
+              ],
+              "footer": "MADiE CI",
+              "ts": ${System.currentTimeMillis()/1000L}
+            }
+          ]
+          """.stripIndent().trim()
+
+          currentBuild.result = passed ? 'SUCCESS' : 'FAILURE'
+
+          slackSend(
+            color: color,
+            attachments: attachments
+          )
+        } catch (e) {
+          // Never fail the post block; just log
+          echo "Post summary/Slack failed: ${e}"
+        }
       }
 
       // Clean workspace last
