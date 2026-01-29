@@ -31,8 +31,71 @@ pipeline {
 
   environment {
     AWS_ACCOUNT = credentials('HCQIS_dev')
-    // (all your CYPRESS_* creds/keys preserved here as before)
-    NODE_OPTIONS = credentials('NODE_OPTIONS')
+
+    // ---------- DEV creds ----------
+    CYPRESS_DEV_USERNAME            = credentials('CYPRESS_TEST_USERNAME')
+    CYPRESS_DEV_USERNAME2           = credentials('CYPRESS_TEST_USERNAME2')
+    CYPRESS_DEV_USERNAME3           = credentials('CYPRESS_TEST_USERNAME3')
+    CYPRESS_DEV_PASSWORD            = credentials('CYPRESS_TEST_PASSWORD')
+    CYPRESS_DEV_PASSWORD2           = credentials('CYPRESS_TEST_PASSWORD2')
+    CYPRESS_DEV_PASSWORD3           = credentials('CYPRESS_TEST_PASSWORD3')
+    CYPRESS_DEV_ALT_USERNAME        = credentials('CYPRESS_TEST_ALT_USERNAME')
+    CYPRESS_DEV_ALT_USERNAME2       = credentials('CYPRESS_TEST_ALT_USERNAME2')
+    CYPRESS_DEV_ALT_USERNAME3       = credentials('CYPRESS_TEST_ALT_USERNAME3')
+    CYPRESS_DEV_ALT_PASSWORD        = credentials('CYPRESS_TEST_ALT_PASSWORD')
+    CYPRESS_DEV_ALT_PASSWORD2       = credentials('CYPRESS_TEST_ALT_PASSWORD2')
+    CYPRESS_DEV_ALT_PASSWORD3       = credentials('CYPRESS_TEST_ALT_PASSWORD3')
+    CYPRESS_DEV_MEASURESHARING_API_KEY    = credentials('CYPRESS_DEV_MEASURESHARING_API_KEY')
+    CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY')
+    CYPRESS_DEV_ADMIN_API_KEY       = credentials('CYPRESS_DEV_ADMIN_API_KEY')
+
+    // ---------- TEST creds ----------
+    CYPRESS_TEST_USERNAME           = credentials('CYPRESS_TEST_USERNAME')
+    CYPRESS_TEST_USERNAME2          = credentials('CYPRESS_TEST_USERNAME2')
+    CYPRESS_TEST_USERNAME3          = credentials('CYPRESS_TEST_USERNAME3')
+    CYPRESS_TEST_PASSWORD           = credentials('CYPRESS_TEST_PASSWORD')
+    CYPRESS_TEST_PASSWORD2          = credentials('CYPRESS_TEST_PASSWORD2')
+    CYPRESS_TEST_PASSWORD3          = credentials('CYPRESS_TEST_PASSWORD3')
+    CYPRESS_TEST_ALT_USERNAME       = credentials('CYPRESS_TEST_ALT_USERNAME')
+    CYPRESS_TEST_ALT_USERNAME2      = credentials('CYPRESS_TEST_ALT_USERNAME2')
+    CYPRESS_TEST_ALT_USERNAME3      = credentials('CYPRESS_TEST_ALT_USERNAME3')
+    CYPRESS_TEST_ALT_PASSWORD       = credentials('CYPRESS_TEST_ALT_PASSWORD')
+    CYPRESS_TEST_ALT_PASSWORD2      = credentials('CYPRESS_TEST_ALT_PASSWORD2')
+    CYPRESS_TEST_ALT_PASSWORD3      = credentials('CYPRESS_TEST_ALT_PASSWORD3')
+    CYPRESS_TEST_MEASURESHARING_API_KEY   = credentials('CYPRESS_TEST_MEASURESHARING_API_KEY')
+    CYPRESS_TEST_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_TEST_DELETEMEASUREADMIN_API_KEY')
+    CYPRESS_TEST_ADMIN_API_KEY      = credentials('CYPRESS_TEST_ADMIN_API_KEY')
+
+    // ---------- IMPL creds ----------
+    CYPRESS_IMPL_USERNAME           = credentials('CYPRESS_IMPL_USERNAME')
+    CYPRESS_IMPL_PASSWORD           = credentials('CYPRESS_IMPL_PASSWORD')
+    CYPRESS_IMPL_ALT_USERNAME       = credentials('CYPRESS_IMPL_ALT_USERNAME')
+    CYPRESS_IMPL_ALT_PASSWORD       = credentials('CYPRESS_IMPL_ALT_PASSWORD')
+    CYPRESS_IMPL_MEASURESHARING_API_KEY   = credentials('CYPRESS_IMPL_MEASURESHARING_API_KEY')
+    CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY')
+    CYPRESS_IMPL_ADMIN_API_KEY      = credentials('CYPRESS_IMPL_ADMIN_API_KEY')
+
+    // ---------- VSAC ----------
+    CYPRESS_VSAC_API_KEY            = credentials('CYPRESS_VSAC_API_KEY')
+
+    // ---------- MADiE OAuth (DEV/TEST/IMPL) ----------
+    CYPRESS_DEV_MADIE_CLIENTID      = credentials('CYPRESS_DEV_MADIE_CLIENTID')
+    CYPRESS_DEV_MADIE_CODECHALLENGE = credentials('CYPRESS_DEV_MADIE_CODECHALLENGE')
+    CYPRESS_DEV_MADIE_REDIRECTURI   = credentials('CYPRESS_DEV_MADIE_REDIRECTURI')
+    CYPRESS_DEV_MADIE_AUTHURI       = credentials('CYPRESS_DEV_MADIE_AUTHURI')
+    CYPRESS_MADIE_CODEVERIFIER      = credentials('CYPRESS_MADIE_CODEVERIFIER')
+
+    CYPRESS_TEST_MADIE_CLIENTID     = credentials('CYPRESS_TEST_MADIE_CLIENTID')
+    CYPRESS_TEST_MADIE_REDIRECTURI  = credentials('CYPRESS_TEST_MADIE_REDIRECTURI')
+    CYPRESS_TEST_MADIE_AUTHURI      = credentials('CYPRESS_TEST_MADIE_AUTHURI')
+
+    CYPRESS_IMPL_MADIE_CLIENTID     = credentials('CYPRESS_IMPL_MADIE_CLIENTID')
+    CYPRESS_IMPL_MADIE_REDIRECTURI  = credentials('CYPRESS_IMPL_MADIE_REDIRECTURI')
+    CYPRESS_IMPL_MADIE_AUTHURI      = credentials('CYPRESS_IMPL_MADIE_AUTHURI')
+
+    // ---------- Misc ----------
+    CYPRESS_REPORT_BUCKET           = credentials('CYPRESS_REPORT_BUCKET')
+    NODE_OPTIONS                    = credentials('NODE_OPTIONS')
     PROFILE = 'dev-madie'
   }
 
@@ -67,7 +130,7 @@ pipeline {
         }
       }
       steps {
-        // Ensure node_modules in ${WORKSPACE} (so CLIs like cypress-parallel/mochawesome-merge are available)
+        // Ensure node_modules in ${WORKSPACE}
         sh '''
           cd ${WORKSPACE}
           if [ ! -d node_modules ]; then
@@ -83,15 +146,14 @@ pipeline {
         catchError(buildResult: 'FAILURE') {
           sh '''
             cd ${WORKSPACE}
-            # Clean previous build's JSONs only once at the start (we will NOT delete between reruns)
+            # Clean prior run JSONs once at the start (keep results across reruns)
             npm run delete:reports
-            # Run the selected test set
             npm run $TEST_SCRIPT
             echo $?
           '''
         }
 
-        // Extract initial failures for rerun #1 (if any) from runner-results
+        // Initial failures for rerun #1 (newline-separated)
         sh '''
           cd ${WORKSPACE}
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -130,7 +192,7 @@ pipeline {
           fi
 
           echo '=== RERUN #1 ==='
-          # Do NOT delete cypress/results here; we want a single merged report at the end.
+          # Do NOT delete cypress/results here; we merge all runs at the end
           : > ${WORKSPACE}/test-files.txt
           cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
 
@@ -138,7 +200,7 @@ pipeline {
           mkdir -p ${WORKSPACE}/runner-results
           npm run test:specific:files:parallel || true
 
-          # Collect failures for rerun #2
+          # Failures for RERUN #2
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
@@ -161,7 +223,7 @@ pipeline {
           mkdir -p ${WORKSPACE}/runner-results
           npm run test:specific:files:parallel || true
 
-          # Collect failures remaining after rerun #2
+          # Remaining failures after RERUN #2
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
@@ -185,11 +247,10 @@ pipeline {
         }
       }
       steps {
-        // Merge all JSONs produced across all runs into one HTML report
+        // Merge *all* JSONs across all runs & build one HTML bundle
         sh '''
           cd ${WORKSPACE}
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
-            # Merge JSONs → mochawesome.json, then generate HTML (single bundle)
             npx mochawesome-merge 'cypress/results/*.json' > mochawesome.json
             npx marge mochawesome.json --reportDir ${WORKSPACE}/mochawesome-report --reportFilename index.html
             tar -czf ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report .
@@ -203,7 +264,7 @@ pipeline {
     }
   }
 
-  // One final Slack message (plain text; no JSON attachments)
+  // Single, final Slack summary (plain text; robust)
   post {
     always {
       script {
@@ -211,7 +272,6 @@ pipeline {
           String ws = env.WORKSPACE
           String bn = env.BUILD_NUMBER
 
-          // Failure lists (safe read)
           def readList = { String p -> fileExists(p) ? readFile(p).readLines().findAll { it?.trim() } : [] }
           List<String> l0 = readList("${ws}/failures-${bn}.txt")
           List<String> l1 = readList("${ws}/failures-rerun1-${bn}.txt")
@@ -219,7 +279,6 @@ pipeline {
 
           int c0 = l0.size(), c1 = l1.size(), c2 = l2.size()
 
-          // Determine success: zero after initial OR rerun1 OR rerun2
           boolean passed = (c0 == 0) || (c0 > 0 && c1 == 0) || (c1 > 0 && c2 == 0)
 
           String outcome =
@@ -228,7 +287,6 @@ pipeline {
             (c2 == 0) ? "✅ Passed after the 2nd rerun. (initial: ${c0}, after rerun1: ${c1})"
                        : "❌ Still failing after the 2nd rerun."
 
-          // One plain-text message (no JSON attachments)
           String msg = """\
 ${passed ? "All test cases passed" : "Failures remain after 2nd rerun"}
 Outcome: ${outcome}
@@ -254,4 +312,3 @@ ${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
     }
   }
 }
-``
