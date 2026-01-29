@@ -27,11 +27,12 @@ pipeline {
       name: 'TEST_SCRIPT'
     )
     choice(name: 'BUILD_CONTAINER', description: 'Rebuild Cypress Container?', choices: ['no','yes'])
-    choice(name: 'FORCE_REPORTER', description: 'If cypress reporter is misconfigured, force mochawesome via CLI?', choices: ['no','yes'])
   }
 
   environment {
     AWS_ACCOUNT = credentials('HCQIS_dev')
+
+    // ---------- DEV creds ----------
     CYPRESS_DEV_USERNAME           = credentials('CYPRESS_TEST_USERNAME')
     CYPRESS_DEV_USERNAME2          = credentials('CYPRESS_TEST_USERNAME2')
     CYPRESS_DEV_USERNAME3          = credentials('CYPRESS_TEST_USERNAME3')
@@ -47,6 +48,8 @@ pipeline {
     CYPRESS_DEV_MEASURESHARING_API_KEY   = credentials('CYPRESS_DEV_MEASURESHARING_API_KEY')
     CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_DEV_DELETEMEASUREADMIN_API_KEY')
     CYPRESS_DEV_ADMIN_API_KEY      = credentials('CYPRESS_DEV_ADMIN_API_KEY')
+
+    // ---------- TEST creds ----------
     CYPRESS_TEST_USERNAME          = credentials('CYPRESS_TEST_USERNAME')
     CYPRESS_TEST_USERNAME2         = credentials('CYPRESS_TEST_USERNAME2')
     CYPRESS_TEST_USERNAME3         = credentials('CYPRESS_TEST_USERNAME3')
@@ -62,25 +65,35 @@ pipeline {
     CYPRESS_TEST_MEASURESHARING_API_KEY   = credentials('CYPRESS_TEST_MEASURESHARING_API_KEY')
     CYPRESS_TEST_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_TEST_DELETEMEASUREADMIN_API_KEY')
     CYPRESS_TEST_ADMIN_API_KEY     = credentials('CYPRESS_TEST_ADMIN_API_KEY')
+
+    // ---------- IMPL creds ----------
     CYPRESS_IMPL_USERNAME          = credentials('CYPRESS_IMPL_USERNAME')
     CYPRESS_IMPL_PASSWORD          = credentials('CYPRESS_IMPL_PASSWORD')
     CYPRESS_IMPL_ALT_USERNAME      = credentials('CYPRESS_IMPL_ALT_USERNAME')
     CYPRESS_IMPL_ALT_PASSWORD      = credentials('CYPRESS_IMPL_ALT_PASSWORD')
+    CYPRESS_IMPL_MEASURESHARING_API_KEY  = credentials('CYPRESS_IMPL_MEASURESHARING_API_KEY')
+    CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY')
+    CYPRESS_IMPL_ADMIN_API_KEY     = credentials('CYPRESS_IMPL_ADMIN_API_KEY')
+
+    // ---------- VSAC ----------
     CYPRESS_VSAC_API_KEY           = credentials('CYPRESS_VSAC_API_KEY')
+
+    // ---------- MADiE OAuth (DEV/TEST/IMPL) ----------
     CYPRESS_DEV_MADIE_CLIENTID     = credentials('CYPRESS_DEV_MADIE_CLIENTID')
     CYPRESS_DEV_MADIE_CODECHALLENGE= credentials('CYPRESS_DEV_MADIE_CODECHALLENGE')
     CYPRESS_DEV_MADIE_REDIRECTURI  = credentials('CYPRESS_DEV_MADIE_REDIRECTURI')
     CYPRESS_DEV_MADIE_AUTHURI      = credentials('CYPRESS_DEV_MADIE_AUTHURI')
     CYPRESS_MADIE_CODEVERIFIER     = credentials('CYPRESS_MADIE_CODEVERIFIER')
+
     CYPRESS_TEST_MADIE_CLIENTID    = credentials('CYPRESS_TEST_MADIE_CLIENTID')
     CYPRESS_TEST_MADIE_REDIRECTURI = credentials('CYPRESS_TEST_MADIE_REDIRECTURI')
     CYPRESS_TEST_MADIE_AUTHURI     = credentials('CYPRESS_TEST_MADIE_AUTHURI')
+
     CYPRESS_IMPL_MADIE_CLIENTID    = credentials('CYPRESS_IMPL_MADIE_CLIENTID')
     CYPRESS_IMPL_MADIE_REDIRECTURI = credentials('CYPRESS_IMPL_MADIE_REDIRECTURI')
     CYPRESS_IMPL_MADIE_AUTHURI     = credentials('CYPRESS_IMPL_MADIE_AUTHURI')
-    CYPRESS_IMPL_MEASURESHARING_API_KEY  = credentials('CYPRESS_IMPL_MEASURESHARING_API_KEY')
-    CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY = credentials('CYPRESS_IMPL_DELETEMEASUREADMIN_API_KEY')
-    CYPRESS_IMPL_ADMIN_API_KEY     = credentials('CYPRESS_IMPL_ADMIN_API_KEY')
+
+    // ---------- Misc ----------
     CYPRESS_REPORT_BUCKET          = credentials('CYPRESS_REPORT_BUCKET')
     NODE_OPTIONS                   = credentials('NODE_OPTIONS')
     PROFILE = 'dev-madie'
@@ -117,7 +130,7 @@ pipeline {
         }
       }
       steps {
-        // Ensure dependencies exist in ${WORKSPACE} (cypress-parallel, merge tools, etc.)
+        // Ensure dependencies exist in ${WORKSPACE} (needed for cypress-parallel)
         sh '''
           cd ${WORKSPACE}
           if [ ! -d node_modules ]; then
@@ -133,16 +146,8 @@ pipeline {
         catchError(buildResult: 'FAILURE') {
           sh '''
             cd ${WORKSPACE}
-            # Prepare reporter args (optional override)
-            if [ "${FORCE_REPORTER}" = "yes" ]; then
-              REPORTER_ARGS='--reporter mochawesome --reporter-options "reportDir=cypress/results,overwrite=false,html=false,json=true"'
-            else
-              REPORTER_ARGS=''
-            fi
-
             npm run delete:reports
-            # Pass reporter args via npm-run extra args (after --)
-            npm run $TEST_SCRIPT -- $REPORTER_ARGS
+            npm run $TEST_SCRIPT
             echo $?
           '''
         }
@@ -189,13 +194,6 @@ pipeline {
             exit 0
           fi
 
-          # Build reporter args (optional override)
-          if [ "${FORCE_REPORTER}" = "yes" ]; then
-            REPORTER_ARGS='--reporter mochawesome --reporter-options "reportDir=cypress/results,overwrite=false,html=false,json=true"'
-          else
-            REPORTER_ARGS=''
-          fi
-
           echo '=== RERUN #1 ==='
           # Clear and write test-files.txt
           : > ${WORKSPACE}/test-files.txt
@@ -203,7 +201,7 @@ pipeline {
 
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel -- $REPORTER_ARGS || true
+          npm run test:specific:files:parallel || true
 
           echo '=== Collect NEW failures after RERUN #1 ==='
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -227,7 +225,7 @@ pipeline {
 
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel -- $REPORTER_ARGS || true
+          npm run test:specific:files:parallel || true
 
           echo '=== Collect NEW failures after RERUN #2 ==='
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -271,15 +269,53 @@ pipeline {
     }
   }
 
+  // Single, final Slack summary (plain text; robust; like your screenshot)
   post {
-    success {
-      slackSend(color: "#00ff00", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} Tests Finished")
-    }
-    failure {
-      sh 'echo fail'
-      slackSend(color: "#ff0000", message: "${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) ${params.TEST_SCRIPT} You have Test failures or a bad build, please review report attached to jenkins build")
-    }
     always {
+      script {
+        try {
+          String ws = env.WORKSPACE
+          String bn = env.BUILD_NUMBER
+
+          def readList = { String p -> fileExists(p) ? readFile(p).readLines().findAll { it?.trim() } : [] }
+          List<String> l0 = readList("${ws}/failures-${bn}.txt")
+          List<String> l1 = readList("${ws}/failures-rerun1-${bn}.txt")
+          List<String> l2 = readList("${ws}/failures-rerun2-${bn}.txt")
+
+          int c0 = l0.size()
+          int c1 = l1.size()
+          int c2 = l2.size()
+
+          // Success if 0 remain after initial OR rerun #1 OR rerun #2
+          boolean passed = (c0 == 0) || (c0 > 0 && c1 == 0) || (c1 > 0 && c2 == 0)
+
+          String outcome =
+            (c0 == 0) ? "✅ Passed on the initial run." :
+            (c1 == 0) ? "✅ Passed after the 1st rerun. (initial: ${c0})" :
+            (c2 == 0) ? "✅ Passed after the 2nd rerun. (initial: ${c0}, after rerun #1: ${c1})"
+                       : "❌ Still failing after the 2nd rerun."
+
+          String msg = """\
+${passed ? "All test cases passed" : "Failures remain after 2nd rerun"}
+Outcome: ${outcome}
+
+Counts:
+• Initial failures: ${c0}
+• After rerun #1:  ${c1}
+• After rerun #2:  ${c2}
+
+Report:
+• ${env.BUILD_URL}artifact/mochawesome-report-${bn}.tar.gz
+
+${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
+""".stripIndent()
+
+          currentBuild.result = passed ? 'SUCCESS' : 'FAILURE'
+          slackSend(color: passed ? "#36a64f" : "#ff0000", message: msg)
+        } catch (e) {
+          echo "Post summary/Slack failed: ${e}"
+        }
+      }
       cleanWs()
     }
   }
