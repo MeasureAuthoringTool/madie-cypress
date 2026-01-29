@@ -130,7 +130,7 @@ pipeline {
         }
       }
       steps {
-        // Ensure dependencies exist in ${WORKSPACE} (needed for cypress-parallel)
+        // Ensure dependencies exist in ${WORKSPACE} (needed for cypress-parallel & reporting CLIs)
         sh '''
           cd ${WORKSPACE}
           if [ ! -d node_modules ]; then
@@ -146,13 +146,14 @@ pipeline {
         catchError(buildResult: 'FAILURE') {
           sh '''
             cd ${WORKSPACE}
+            # Per-run report: start clean
             npm run delete:reports
             npm run $TEST_SCRIPT
             echo $?
           '''
         }
 
-        // Extract initial failures (newline-separated) from runner-results if present
+        // Initial failures (newline-separated) from runner-results if present
         sh '''
           cd ${WORKSPACE}
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -165,13 +166,24 @@ pipeline {
           fi
         '''
 
-        // Ensure the two rerun failure files exist (even if empty), so we can always archive them
+        // Build initial per-run Mochawesome bundle
+        sh '''
+          cd ${WORKSPACE}
+          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+            npm run combine:reports
+            npm run generateOne:report
+            tar -czf ${WORKSPACE}/mochawesome-initial-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
+          else
+            echo "No mochawesome JSON for initial run; creating empty bundle."
+            : > ${WORKSPACE}/mochawesome-initial-${BUILD_NUMBER}.tar.gz || true
+          fi
+        '''
+
+        // Pre-create rerun lists so final archive always has 3 files
         sh '''
           : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
         '''
-
-        archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
 
@@ -184,17 +196,22 @@ pipeline {
         }
       }
       steps {
-        // Reuse node_modules created in previous stage (it's in ${WORKSPACE}, which is mounted)
         sh '''
           set -e
           cd ${WORKSPACE}
 
           if [ ! -s ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ]; then
             echo "No initial failures found. Skipping reruns."
+            # Ensure empty bundles exist for consistency
+            : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
+            : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
             exit 0
           fi
 
           echo '=== RERUN #1 ==='
+          # Per-run report: start clean for rerun #1
+          npm run delete:reports
+
           # Clear and write test-files.txt
           : > ${WORKSPACE}/test-files.txt
           cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
@@ -203,7 +220,7 @@ pipeline {
           mkdir -p ${WORKSPACE}/runner-results
           npm run test:specific:files:parallel || true
 
-          echo '=== Collect NEW failures after RERUN #1 ==='
+          # Collect failures for rerun #2
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
@@ -213,12 +230,26 @@ pipeline {
             : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           fi
 
+          # Build rerun #1 per-run bundle
+          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+            npm run combine:reports
+            npm run generateOne:report
+            tar -czf ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
+          else
+            echo "No mochawesome JSON for rerun #1; creating empty bundle."
+            : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
+          fi
+
           if [ ! -s ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ]; then
-            echo 'No failures left after first rerun – skipping second rerun.'
+            echo 'No failures left after RERUN #1 – skipping RERUN #2.'
+            : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
             exit 0
           fi
 
           echo '=== RERUN #2 ==='
+          # Per-run report: start clean for rerun #2
+          npm run delete:reports
+
           # Clear and write test-files.txt again
           : > ${WORKSPACE}/test-files.txt
           cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
@@ -227,7 +258,7 @@ pipeline {
           mkdir -p ${WORKSPACE}/runner-results
           npm run test:specific:files:parallel || true
 
-          echo '=== Collect NEW failures after RERUN #2 ==='
+          # Remaining failures after rerun #2
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
               | jq -r 'select(.failures > 0) | .file' \
@@ -236,10 +267,17 @@ pipeline {
           else
             : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
           fi
-        '''
 
-        // Publish all three failure lists regardless of emptiness
-        archiveArtifacts artifacts: "failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+          # Build rerun #2 per-run bundle
+          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+            npm run combine:reports
+            npm run generateOne:report
+            tar -czf ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
+          else
+            echo "No mochawesome JSON for rerun #2; creating empty bundle."
+            : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
+          fi
+        '''
       }
     }
 
@@ -252,71 +290,22 @@ pipeline {
         }
       }
       steps {
-        // node_modules already in ${WORKSPACE}
-        sh '''
-          cd ${WORKSPACE}
-          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
-            npm run combine:reports
-            npm run generateOne:report
-            tar -czf ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
-          else
-            echo "No mochawesome JSON found under ${WORKSPACE}/cypress/results; skipping report generation."
-            : > ${WORKSPACE}/mochawesome-report-${BUILD_NUMBER}.tar.gz || true
-          fi
-        '''
-        archiveArtifacts artifacts: "mochawesome-report-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        // Single place to publish all artifacts (no extra merging here)
+        archiveArtifacts artifacts: """
+          mochawesome-initial-${env.BUILD_NUMBER}.tar.gz,
+          mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz,
+          mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz,
+          failures-${env.BUILD_NUMBER}.txt,
+          failures-rerun1-${env.BUILD_NUMBER}.txt,
+          failures-rerun2-${env.BUILD_NUMBER}.txt
+        """.stripIndent().trim(), onlyIfSuccessful: false
       }
     }
   }
 
-  // Single, final Slack summary (plain text; robust; like your screenshot)
+  // One final Slack summary (plain text; includes links to each per-run bundle)
   post {
     always {
       script {
         try {
           String ws = env.WORKSPACE
-          String bn = env.BUILD_NUMBER
-
-          def readList = { String p -> fileExists(p) ? readFile(p).readLines().findAll { it?.trim() } : [] }
-          List<String> l0 = readList("${ws}/failures-${bn}.txt")
-          List<String> l1 = readList("${ws}/failures-rerun1-${bn}.txt")
-          List<String> l2 = readList("${ws}/failures-rerun2-${bn}.txt")
-
-          int c0 = l0.size()
-          int c1 = l1.size()
-          int c2 = l2.size()
-
-          // Success if 0 remain after initial OR rerun #1 OR rerun #2
-          boolean passed = (c0 == 0) || (c0 > 0 && c1 == 0) || (c1 > 0 && c2 == 0)
-
-          String outcome =
-            (c0 == 0) ? "✅ Passed on the initial run." :
-            (c1 == 0) ? "✅ Passed after the 1st rerun. (initial: ${c0})" :
-            (c2 == 0) ? "✅ Passed after the 2nd rerun. (initial: ${c0}, after rerun #1: ${c1})"
-                       : "❌ Still failing after the 2nd rerun."
-
-          String msg = """\
-${passed ? "All test cases passed" : "Failures remain after 2nd rerun"}
-Outcome: ${outcome}
-
-Counts:
-• Initial failures: ${c0}
-• After rerun #1:  ${c1}
-• After rerun #2:  ${c2}
-
-Report:
-• ${env.BUILD_URL}artifact/mochawesome-report-${bn}.tar.gz
-
-${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
-""".stripIndent()
-
-          currentBuild.result = passed ? 'SUCCESS' : 'FAILURE'
-          slackSend(color: passed ? "#36a64f" : "#ff0000", message: msg)
-        } catch (e) {
-          echo "Post summary/Slack failed: ${e}"
-        }
-      }
-      cleanWs()
-    }
-  }
-}
