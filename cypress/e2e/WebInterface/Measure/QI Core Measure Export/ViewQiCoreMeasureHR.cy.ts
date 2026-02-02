@@ -6,23 +6,17 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let measureCQLPFTests = MeasureCQL.CQL_Populations
-let measureQICore = ''
-let qiCoreCQLLibrary = ''
+const date = Date.now()
+const measureCQLPFTests = MeasureCQL.CQL_Populations
+const measureQICore = 'QICoreExportMeasure' + date
+const qiCoreCQLLibrary = 'QiCoreTestLibrary' + date
 
 describe('View Human Readable for Qi Core Measure', () => {
 
     before(() => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-        const date = Date.now()
-        measureQICore = 'QICoreExportMeasure' + date
-        qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
@@ -34,17 +28,16 @@ describe('View Human Readable for Qi Core Measure', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
     })
 
     after(() => {
 
-        Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary)
+        Utilities.deleteMeasure()
     })
 
     it('View Human Readable for QiCore 4.1.1 Measure on My Measures page', () => {
 
-        OktaLogin.Login()
+        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('viewhr')
 
