@@ -7,33 +7,22 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
-let measureName = 'TestMeasure' + Date.now() + 1
-let CqlLibraryName = 'TestLibrary' + Date.now() + 1
-let newMeasureName = ''
-let newCqlLibraryName = ''
+const now = Date.now()
+const measureName = 'CQLCodeSystem' + now
+const CqlLibraryName = 'CQLCodeSystemLib' + now
 
 describe('Validations around code system in Measure CQL', () => {
 
     beforeEach('Create measure and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Verify proper error(s) appear in CQL Editor, when codesystem URL is incorrect', () => {
@@ -57,7 +46,6 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:110 | Invalid Code system")
-
     })
 
     it('Verify proper error(s) appear in CQL Editor, when a user includes version and there is no vsac version', () => {
@@ -74,10 +62,8 @@ describe('Validations around code system in Measure CQL', () => {
         //save the value in the CQL Editor
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-
         //Validate message on page
         cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:72 | Version not found.')
-
 
         cy.get('.page-header').click()
 
@@ -85,8 +71,6 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:72 | Version not found.")
-
-
     })
 
     it('Verify proper error(s) appear in CQL Editor, when a user does not include version and there is no vsac', () => {
@@ -110,9 +94,7 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Code: 0:57 | Code not found.")
-
     })
-
 
     it('Verify proper error(s) appear in CQL Editor, when a user provides no version and vsac exists', () => {
 
@@ -135,8 +117,6 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
-
-
     })
 
     it('Verify proper error(s) appear in CQL Editor, when a user provides a FHIR version', () => {
@@ -160,7 +140,6 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
-
     })
 
     it('Verify proper error(s) appear in CQL Editor, when user provides a FHIR version and there is no vsac version', () => {
@@ -186,7 +165,6 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:107 | Version not found.")
-
     })
 
     it('Verify proper error(s) appear in CQL Editor, when user provides invalid value set format ', () => {
@@ -212,6 +190,5 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain', 'Row: 8, Col:0: VSAC: 0:125 | "\'http://cts.nlm.nih.gov/INCORRECT/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"')
-
     })
 })

@@ -10,18 +10,12 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 const measureName = 'MeasureBundle ' + Date.now()
 const CqlLibraryName = 'MeasureBundleLib' + Date.now()
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
-let newMeasureName = ''
-let newCqlLibraryName = ''
 
-describe('Measure Bundle end point returns cqlErrors as true', () => {
-
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+describe('Measure Bundle end points', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
 
         OktaLogin.Login()
@@ -79,33 +73,6 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
             })
         })
     })
-})
-
-describe('Bundle returns elmXML', () => {
-
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
-
-    beforeEach('Create Measure', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
-
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-    })
-
-    afterEach('Clean up', () => {
-
-        Utilities.deleteMeasure()
-    })
 
     it('Upon saving CQL from the UI, GET Bundle request returns elm xml', () => {
         let currentUser = Cypress.env('selectedUser')
@@ -149,33 +116,6 @@ describe('Bundle returns elmXML', () => {
                 })
             })
         })
-    })
-})
-
-describe('Measure bundle end point returns scoring type for multiple Measure groups', () => {
-
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
-
-    beforeEach('Create Measure', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
-
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-    })
-
-    afterEach('Clean up', () => {
-
-        Utilities.deleteMeasure()
     })
 
     it('Measure bundle end point returns scoring type for multiple Measure groups', () => {
@@ -248,13 +188,9 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
 
 describe('Measure bundle end point returns stratifications', () => {
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
-
     beforeEach('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -559,13 +495,9 @@ describe('Measure bundle end point returns stratifications', () => {
 
 describe('Verify the criteria reference for measure observations', () => {
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue + 3
-    newCqlLibraryName = CqlLibraryName + randValue + 3
-
     beforeEach('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
     })
 
