@@ -482,8 +482,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
     })
 })
 
-//Skipping until MAT-9481 is fixed
-describe.skip('Qi-Core Code Search - Measure ownership Validations', () => {
+describe('Qi-Core Code Search - Measure ownership Validations', () => {
 
     newCqlLibraryName = CqlLibraryName + randValue + 4
 
