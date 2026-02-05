@@ -568,6 +568,7 @@ export class Utilities {
                     cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                         cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((tcId) => {
                             let lockUrl = '/api/measures/' + measureId + '/test-cases/' + tcId + '/lock'
+                            action = 'POST'
                             if (!lockObject) {
                                 lockUrl = '/api/test-cases/' + tcId + '/unlock'
                             }
