@@ -1,16 +1,15 @@
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Header} from "../../../../Shared/Header"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Header } from "../../../../Shared/Header"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let CqlLibraryOne: string
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
 
-//Skipping until feature flag 'CompareLibraryVersions' is removed
-describe.skip('CompareLibraryVersions', () => {
+describe('CompareLibraryVersions', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
@@ -19,8 +18,8 @@ describe.skip('CompareLibraryVersions', () => {
         CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
     afterEach('Logout and Clean up CQL Libraries', () => {
-        OktaLogin.UILogout()
 
+        OktaLogin.UILogout()
         Utilities.deleteLibrary(CqlLibraryOne, false, 2)
     })
 
@@ -89,6 +88,5 @@ describe.skip('CompareLibraryVersions', () => {
         //Verify Popup Screen
         cy.contains('h2', 'Compare Library Versions').should('be.visible')
         cy.get('[data-testid="library-name"]').should('contain.text', '-- ' + CqlLibraryOne + ' ++ ' + updatedCqlLibraryName)
-
     })
 })

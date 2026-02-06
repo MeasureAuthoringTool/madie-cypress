@@ -19,8 +19,7 @@ measureData.ecqmTitle = measureName
 measureData.cqlLibraryName = cqlLibraryName + randValue
 measureData.measureCql = measureCQL
 
-//Skipping until feature flag 'CompareMeasureVersions' is removed
-describe.skip('Compare Measure Versions', () => {
+describe('Compare Measure Versions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 

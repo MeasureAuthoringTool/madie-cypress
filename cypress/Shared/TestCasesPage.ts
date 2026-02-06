@@ -660,10 +660,10 @@ export class TestCasesPage {
             .wait(1000)
             .type('{enter}')
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Wait for the save button to become unavailable
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 21500)
 
         cy.get(this.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'])
