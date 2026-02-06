@@ -4125,7 +4125,7 @@ export class TestCaseJson {
     public static readonly fromCMS1272Strata1 = `{
   "resourceType": "Bundle",
   "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime",
-  "type": "transaction",
+  "type": "collection",
   "entry": [
     {
       "fullUrl": "https://madie.cms.gov/Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00",
