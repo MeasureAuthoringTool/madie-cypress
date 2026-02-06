@@ -1,7 +1,7 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Environment } from "../../../Shared/Environment"
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions, SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
@@ -670,73 +670,21 @@ describe('Measure Service: Update Delete Flag', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureNameU + randValue
         newCQLLibraryName = CqlLibraryNameU + randValue
-        let measureCQL = "library EXM124v7QICore4 version '7.0.000'\n\n/*\nBased on CMS124v7 - Cervical Cancer Screening\n*/\n\n/*\nThis example is a work in progress and should not be considered a final specification\nor recommendation for guidance. This example will help guide and direct the process\nof finding conventions and usage patterns that meet the needs of the various stakeholders\nin the measure development community.\n*/\n\nusing QICore version '4.1.000'\n\ninclude FHIRHelpers version '4.1.000'\n\ninclude HospiceQICore4 version '2.0.000' called Hospice\ninclude AdultOutpatientEncountersQICore4 version '2.0.000' called AdultOutpatientEncounters\ninclude CQMCommon version '1.0.000' called Global\ninclude SupplementalDataElementsQICore4 version '2.0.000' called SDE\n\ncodesystem \"SNOMEDCT:2017-09\": 'http://snomed.info/sct/731000124108' version 'http://snomed.info/sct/731000124108/version/201709'\n\nvalueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'\nvalueset \"Race\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836'\nvalueset \"Ethnicity\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837'\nvalueset \"Payer\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591'\nvalueset \"Female\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.560.100.2'\nvalueset \"Home Healthcare Services\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016'\nvalueset \"Hysterectomy with No Residual Cervix\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014'\nvalueset \"Office Visit\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001'\nvalueset \"Pap Test\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017'\nvalueset \"Preventive Care Services - Established Office Visit, 18 and Up\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025'\nvalueset \"Preventive Care Services-Initial Office Visit, 18 and Up\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023'\nvalueset \"HPV Test\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1059'\n\ncode \"Congenital absence of cervix (disorder)\": '37687000' from \"SNOMEDCT:2017-09\" display 'Congenital absence of cervix (disorder)'\n\nparameter \"Measurement Period\" Interval<DateTime>\n  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n  \ncontext Patient\n\ndefine \"SDE Ethnicity\":\n\n  SDE.\"SDE Ethnicity\"\n  \n  \ndefine \"SDE Payer\":\n\n  SDE.\"SDE Payer\"\n  \n  \ndefine \"SDE Race\":\n\n  SDE.\"SDE Race\"\n  \n  \ndefine \"SDE Sex\":\n\n  SDE.\"SDE Sex\"\n  \n  \ndefine \"Initial Population\":\n  Patient.gender = 'female'\n      and Global.\"CalendarAgeInYearsAt\"(Patient.birthDate, start of \"Measurement Period\") in Interval[23, 64]\n      and exists AdultOutpatientEncounters.\"Qualifying Encounters\"\n      \ndefine \"Denominator\":\n        \"Initial Population\"\n        \ndefine \"Denominator Exclusion\":\n    Hospice.\"Has Hospice\"\n          or exists \"Surgical Absence of Cervix\"\n         or exists \"Absence of Cervix\"\n         \ndefine \"Absence of Cervix\":\n    [Condition : \"Congenital absence of cervix (disorder)\"] NoCervixBirth\n          where Global.\"Normalize Interval\"(NoCervixBirth.onset) starts before end of \"Measurement Period\"\n          \ndefine \"Surgical Absence of Cervix\":\n    [Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n        where Global.\"Normalize Interval\"(NoCervixHysterectomy.performed) ends before end of \"Measurement Period\"\n            and NoCervixHysterectomy.status = 'completed'\n            \ndefine \"Numerator\":\n    exists \"Pap Test Within 3 Years\"\n        or exists \"Pap Test With HPV Within 5 Years\"\n        \ndefine \"Pap Test with Results\":\n    [Observation: \"Pap Test\"] PapTest\n        where PapTest.value is not null\n            and PapTest.status in { 'final', 'amended', 'corrected', 'preliminary' }\n            \ndefine \"Pap Test Within 3 Years\":\n    \"Pap Test with Results\" PapTest\n        where Global.\"Normalize Interval\"(PapTest.effective) ends 3 years or less before end of \"Measurement Period\"\n        \ndefine \"PapTest Within 5 Years\":\n    ( \"Pap Test with Results\" PapTestOver30YearsOld\n            where Global.\"CalendarAgeInYearsAt\"(Patient.birthDate, start of Global.\"Normalize Interval\"(PapTestOver30YearsOld.effective))>= 30\n                and Global.\"Normalize Interval\"(PapTestOver30YearsOld.effective) ends 5 years or less before end of \"Measurement Period\"\n    )\n    \ndefine \"Pap Test With HPV Within 5 Years\":\n    \"PapTest Within 5 Years\" PapTestOver30YearsOld\n        with [Observation: \"HPV Test\"] HPVTest\n            such that HPVTest.value is not null\n        and Global.\"Normalize Interval\"(HPVTest.effective) starts within 1 day of start of Global.\"Normalize Interval\"(PapTestOver30YearsOld.effective)\n                and HPVTest.status in { 'final', 'amended', 'corrected', 'preliminary' }\n                "
 
         harpUser = OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        defaultUser = CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        defaultUser = CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCQLLibraryName, SupportedModels.qiCore4)
 
     })
-    //update / delete measure
+
     it('Update / delete measure', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
 
-        let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
-                    cy.readFile(versionIdPath).should('exist').then((vId) => {
-                        cy.request({
-                            url: '/api/measures/' + id,
-                            method: 'PUT',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value
-                            },
-                            body: {
-                                "id": id,
-                                "measureName": newMeasureName,
-                                "cqlLibraryName": newCQLLibraryName,
-                                "model": 'QI-Core v4.1.1',
-                                "versionId": vId,
-                                "measureSetId": measureSetId,
-                                "reviewMetaData": {
-                                    "approvalDate": null,
-                                    "lastReviewDate": null
-                                },
-                                "measureSet": {
-                                    "id": "68ac804018f2135a1f3a17d3",
-                                    "cmsId": null,
-                                    "measureSetId": "db336d58-3f9c-407f-88f6-890cec960a83",
-                                    "owner": defaultUser,
-                                    "acls": null
-                                },
-                                "ecqmTitle": eCQMTitle,
-                                "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
-                                "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
-                                "testCaseConfiguration": {
-                                    "id": null,
-                                    "sdeIncluded": null
-                                },
-                                "scoring": null,
-                                "baseConfigurationTypes": null,
-                                "patientBasis": true,
-                                "rateAggregation": null,
-                                "improvementNotation": null,
-                                "improvementNotationDescription": null,
-                                "active": false,
-                                "createdBy": defaultUser
-                            }
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            cy.log("Measure Deleted successfully")
-                        })
-                    })
-                })
-            })
-        })
+        Utilities.deleteMeasure()
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
@@ -754,7 +702,7 @@ describe('Measure Service: Update Delete Flag', () => {
             })
         })
     })
-    //attempt to update measure that does not belong to user
+
     it('Attempt to update / delete measure that does not belong to current user', () => {
         const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
@@ -837,7 +785,7 @@ describe('Measure Service: Update Delete Flag', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
-    //attempt to update / delete measure that does not exist
+
     it('Attempt to update / delete measure that does not exist', () => {
         let currentUser = Cypress.env('selectedUser')
         let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
@@ -901,63 +849,10 @@ describe('Measure Service: Update Delete Flag', () => {
         let description = 'SomeDescription'
         let TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter", "resource": { "id":"1", "resourceType": "Encounter","meta": { "versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated","div":"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Sep 9th 2021 for Asthma<a name=\\\"mm\\\"/></div>"}, "status": "finished","class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],"period": { "start": "2023-09-10T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2", "resourceType": "Patient","text": { "status": "generated","div": "<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Lizzy Health</div>"},"identifier": [ { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
         let currentUser = Cypress.env('selectedUser')
-        let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
-
 
         TestCasesPage.CreateTestCaseAPI(title, series, description, TCJson)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
-                    cy.readFile(versionIdPath).should('exist').then((vId) => {
-                        cy.request({
-                            url: '/api/measures/' + id,
-                            method: 'PUT',
-                            headers: {
-                                authorization: 'Bearer ' + accessToken.value
-                            },
-                            body: {
-                                "id": id,
-                                "measureName": newMeasureName,
-                                "cqlLibraryName": newCQLLibraryName,
-                                "model": model,
-                                "versionId": vId,
-                                "measureSetId": measureSetId,
-                                "reviewMetaData": {
-                                    "approvalDate": null,
-                                    "lastReviewDate": null
-                                },
-                                "measureSet": {
-                                    "id": "68ac804018f2135a1f3a17d3",
-                                    "cmsId": null,
-                                    "measureSetId": measureSetId,
-                                    "owner": defaultUser,
-                                    "acls": null
-                                },
-                                "testCaseConfiguration": {
-                                    "id": null,
-                                    "sdeIncluded": null
-                                },
-                                "scoring": null,
-                                "baseConfigurationTypes": null,
-                                "patientBasis": true,
-                                "rateAggregation": null,
-                                "improvementNotation": null,
-                                "improvementNotationDescription": null,
-                                "ecqmTitle": eCQMTitle,
-                                "measurementPeriodStart": mpStartDate,
-                                "measurementPeriodEnd": mpEndDate,
-                                "active": false,
-                                "createdBy": defaultUser
-                            }
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                        })
-                    })
-                })
-            })
-
-        })
+        Utilities.deleteMeasure()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -972,7 +867,6 @@ describe('Measure Service: Update Delete Flag', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(404)
                 })
-
             })
         })
 
