@@ -18,8 +18,7 @@ let testCaseSeries = 'SBTestSeries'
 const measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 
-//Skipping until Feature flag MakeJSONMatchUI is enabled
-describe.skip('Success Scenario - Make Test Case Json match UI', () => {
+describe('Success Scenario - Make Test Case Json match UI', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -86,8 +85,7 @@ describe.skip('Success Scenario - Make Test Case Json match UI', () => {
     })
 })
 
-//Skipping until Feature flag MakeJSONMatchUI is enabled
-describe.skip('Error message when making Test case match', () => {
+describe('Error message when making Test case match', () => {
 
     beforeEach('Create measure and login', () => {
 

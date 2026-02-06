@@ -20,6 +20,7 @@ export class CQLEditorPage {
     public static readonly errorMsg = '[data-testid="generic-errors-text-list"]'
     public static readonly warningMsg = '[data-testid="generic-warnings-text-list"]'
     public static readonly minimizeButton = '[data-testid="minimize-button-0"]'
+    public static readonly secondMinimizeButton = '[data-testid="minimize-button-1"]'
     public static readonly greenMessageBox = '.madie-alert.success'
     public static readonly orangeWarningBox = '[data-testid="generic-warning-text-header"]'
 
