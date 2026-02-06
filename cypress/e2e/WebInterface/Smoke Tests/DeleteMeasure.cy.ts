@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
@@ -52,7 +52,7 @@ describe('Delete Measure ownership validation', () => {
         //Create Measure with Regular User
         measureTwo = 'TestMeasure2' + now
         CqlLibraryTwo = 'TestLibrary2' + now
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, CqlLibraryTwo)
+        CreateMeasurePage.CreateMeasureAPI(measureTwo, CqlLibraryTwo, SupportedModels.qiCore4)
 
         OktaLogin.AltLogin()
     })
@@ -60,7 +60,7 @@ describe('Delete Measure ownership validation', () => {
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureTwo, CqlLibraryTwo)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure Owner can not Delete Measure through Action center', () => {

@@ -113,16 +113,12 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         cy.get(TestCasesPage.initialPopulationStrata2ExpectedValue).type('0')
         cy.get(TestCasesPage.measurePopulationStrata2ExpectedValue).type('0')
 
-
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 45000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })

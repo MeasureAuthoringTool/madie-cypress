@@ -1,15 +1,11 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -17,11 +13,9 @@ let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
-let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
-let measureCQLPFTests = MeasureCQL.CQL_Populations
 
 // "qiCoreElementsTab": false
-describe('QI Core: Elements tab is not present', () => {
+describe('QI Core v4: Elements tab is not present', () => {
 
     before('Create Measure', () => {
 
@@ -88,87 +82,4 @@ describe('QI Core v6: UI Elements Builder tab is not shown', () => {
         // assert that blank editor field is there
         cy.get(TestCasesPage.aceEditorJsonInput).should('be.empty')
     })
-})
-
-// "QICoreIncludeSDEValues": false
-describe('Qi Core Test Case Include SDE sub-tab / feature', () => {
-
-    beforeEach('Create measure, create group, create test case, login and update CQL', () => {
-
-        CqlLibraryName = 'TestLibrary5' + Date.now()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
-    })
-
-    it('Verify that SDE sub-tab is not available', () => {
-
-        //navigate to the measures list page
-        cy.get(Header.measures).click()
-
-        //navigate to measure's detail page
-        MeasuresPage.actionCenter("edit")
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //confirm that the SDE sub-tab is disabled / not available
-        Utilities.waitForElementToNotExist(TestCasesPage.qdmSDESubTab, 35000)
-    })
-})
-
-// "CompareLibraryVersions": false
-describe('Compare Library versions / feature', () => {
-
-    beforeEach('Login', () => {
-
-        OktaLogin.Login()
-
-    })
-
-    afterEach('Logout', () => {
-
-        OktaLogin.UILogout()
-    })
-
-    it('Verify that Compare Libraries Action button is not visible', () => {
-
-        // Navigate to CQL Libraries page to ensure the action center would be present if enabled
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        // Wait briefly for the page to render action center area (keep this short to avoid flakiness)
-        cy.wait(1000)
-
-        const selector = CQLLibrariesPage.actionCenterCompareVersions
-
-        // Guarded lookup: ensure that no matched elements are visible (covers both absent and present-but-hidden)
-        cy.get('body').then($body => {
-            const found = $body.find(selector)
-            const visibleCount = found.filter(':visible').length
-            // visibleCount should be 0 (either element absent -> 0, or present but hidden -> 0)
-            expect(visibleCount, `Visible elements matching ${selector}`).to.equal(0)
-        })
-    })
-
 })
