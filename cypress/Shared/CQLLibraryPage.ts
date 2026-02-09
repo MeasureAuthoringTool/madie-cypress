@@ -77,7 +77,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
-    public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
+    public static readonly actionCenterTransfer = '[data-testid="Youcannottransferalibraryyoudonotown."]' //'[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
 
     //CQL Editor

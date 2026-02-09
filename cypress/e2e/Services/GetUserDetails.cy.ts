@@ -1,4 +1,4 @@
-import {OktaLogin} from "../../Shared/OktaLogin"
+import { OktaLogin } from "../../Shared/OktaLogin"
 
 describe('User Details with HARPID', () => {
 
@@ -9,13 +9,13 @@ describe('User Details with HARPID', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 url: '/api/users/' + harpUser,
-                method: 'PUT',
+                method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value
                 },
             }).then((response) => {
                 expect(response.status).to.eql(200)
-                expect(String(response.body.harpId).toLowerCase()).to.equal(String(harpUser).toLowerCase())
+                expect(response.body.harpId).to.equal(harpUser)
             })
         })
     })

@@ -481,10 +481,12 @@ export class Utilities {
         cy.get('thead th').find('input[type="checkbox"]').check()
     }
 
-    public static deleteLibrary(libraryName: string, altUser?: boolean, libraryNumber?: number) {
+    public static deleteLibrary(libraryName?: string, altUser?: boolean, libraryNumber?: number) {
 
         const currentUser = Cypress.env('selectedUser')
-
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
         let libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
         OktaLogin.setupUserSession(false)
@@ -492,9 +494,7 @@ export class Utilities {
         if (libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
-        if (altUser === undefined || altUser === null) {
-            altUser = false
-        }
+
         OktaLogin.setupUserSession(altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -512,7 +512,6 @@ export class Utilities {
                     cy.log('Library Deleted Successfully')
                 })
             })
-
         })
     }
 
