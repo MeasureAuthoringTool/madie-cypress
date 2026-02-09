@@ -423,6 +423,7 @@ export class Utilities {
         }
     }
 
+    // ToDo: add similar function to easily transfer ownership of measures or libraries
     public static setSharePermissions(objectType: MadieObject, action: PermissionActions, user: string) {
         let currentUser = Cypress.env('selectedUser')
         let path: string
