@@ -366,7 +366,7 @@ describe('Delete Saved Parameters', () => {
 
             cy.get(CQLEditorPage.modalXButton).should('be.visible')
 
-            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'Are you sure you want to delete this Parameter?')
+            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'Are you sure you want to delete this Parameter? ')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
 
