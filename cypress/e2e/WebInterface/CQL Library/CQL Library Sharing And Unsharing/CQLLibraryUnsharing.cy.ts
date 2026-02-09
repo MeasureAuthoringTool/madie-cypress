@@ -4,10 +4,9 @@ import { Environment } from "../../../../Shared/Environment"
 import { Header } from "../../../../Shared/Header"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
-let newCQLLibraryName = ''
+let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 let updatedCQLLibraryName = ''
@@ -15,23 +14,12 @@ let updatedCQLLibraryName = ''
 describe('Un Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
+        CQLLibraryName = 'UnshareLibrary' + Date.now()
 
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
-
-        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-    })
-
-    afterEach('LogOut and Clean up', () => {
-
-        OktaLogin.UILogout()
-        cy.clearAllCookies()
-
-        OktaLogin.setupUserSession(false)
-        Utilities.deleteLibrary(newCQLLibraryName)
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
     })
 
     it('Verify CQL Library owner can un share Library from Libraries page Action centre share button', () => {
@@ -63,7 +51,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        cy.get('[class="cql-library-table"]').should('not.contain', newCQLLibraryName)
+        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
     })
 
     it('Verify CQL Library owner can un share Library from Edit Library page Action centre share button', () => {
@@ -97,7 +85,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        cy.get('[class="cql-library-table"]').should('not.contain', newCQLLibraryName)
+        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
 
     })
 
@@ -120,7 +108,9 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         //Assert text on the popup screen
         Utilities.waitForElementVisible('.MuiBox-root', 60000)
         cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
-        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + newCQLLibraryName + ' with the following users:' + harpUserALT)
+        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + CQLLibraryName + ' with the following users:')
+        const nameRegex = RegExp(harpUserALT, 'i')
+        cy.get('.MuiDialogContent-root').find('li').text().should('match', nameRegex)
 
         //Click on Accept button and Un share Library
         cy.get(EditMeasurePage.acceptBtn).click()
@@ -128,7 +118,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
 
         //Verify Library is not visible under Shared Libraries tab
         Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
-        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', newCQLLibraryName)
+        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
     })
 })
 
@@ -136,19 +126,12 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
 
     beforeEach('Create CQL Library', () => {
 
+        CQLLibraryName = 'UnshareLibrary' + Date.now()
+        updatedCQLLibraryName = 'SpecialUnshare' + Date.now()
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
-        updatedCQLLibraryName = CQLLibraryName + randValue + 5
-
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
-    })
-
-    afterEach('LogOut', () => {
-
-        OktaLogin.UILogout()
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
@@ -178,10 +161,10 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
                 }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.draft).to.eql(true)
-
                 })
             })
         })
+
         //Share CQL Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
@@ -214,7 +197,7 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         Utilities.waitForElementVisible('[class="cql-library-table"]', 60000)
-        cy.get('[class="cql-library-table"]').should('not.contain', newCQLLibraryName)
+        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
         cy.get('[class="cql-library-table"]').should('not.contain', updatedCQLLibraryName)
     })
 })
