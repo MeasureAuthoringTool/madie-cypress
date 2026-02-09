@@ -143,39 +143,22 @@ export class Utilities {
 
         OktaLogin.setupUserSession(altUser)
 
-        let measureData: Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((id) => {
-
                 cy.request({
-                    url: '/api/measures/' + id,
+                    url: `/api/measures/${id}/delete`,
+                    method: 'DELETE',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        Authorization: `Bearer ${accessToken.value}`,
                     },
-                    method: 'GET',
-
+                    failOnStatusCode: false,
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body.active).to.eql(true)
-                    measureData = response.body
-                    measureData.active = false
-
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        method: 'PUT',
-                        headers: {
-                            Authorization: 'Bearer ' + accessToken.value
-                        },
-                        body: measureData
-                    }).then((response) => {
-                        console.log(response)
-
-                        expect(response.status).to.eql(200)
-                        cy.log('Measure Deleted Successfully')
-                    })
+                    cy.log('Measure deleted (hard delete) via API successfully')
                 })
             })
         })
+
     }
 
     public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
