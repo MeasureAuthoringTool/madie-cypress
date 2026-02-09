@@ -125,11 +125,9 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get('[data-testid="generic-error-text-header"]').should('contain.text', 'Errors were found within the CQL')
+        cy.get('.toast').should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
 
         cy.get(Header.measures).click()
-
-        Utilities.clickOnDiscardChanges() // workaround for https://jira.cms.gov/browse/MAT-9657
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
