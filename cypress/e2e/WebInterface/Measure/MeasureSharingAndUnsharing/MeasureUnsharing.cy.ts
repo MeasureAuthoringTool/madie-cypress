@@ -6,29 +6,28 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestCql' + Date.now()
+let measureName = ''
+let cqlLibraryName = ''
 let harpUserALT = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Un Sharing', () => {
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = measureName + randValue
-    let newCqlLibraryName = cqlLibraryName + randValue
+    measureName = 'MeasureUnshare' + Date.now()
+    cqlLibraryName = 'MeasureUnshareLib' + Date.now()
 
     beforeEach('Create Measure and Set Access Token', () => {
 
         harpUserALT = OktaLogin.getUser(true)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })
 
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.UILogout()
         OktaLogin.setupUserSession(false)
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Measure owner can un share Measure from Measures page Action centre share button', () => {
@@ -52,8 +51,7 @@ describe('Measure Un Sharing', () => {
         //Login as ALT user and verify Measure is not visible on My Measures page
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', newMeasureName)
-
+        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 
     it('Verify Measure owner can un share Measure from Edit Measure page Action centre share button', () => {
@@ -80,8 +78,7 @@ describe('Measure Un Sharing', () => {
         //Login as ALT user and verify Measure is not visible on My Measures page
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', newMeasureName)
-
+        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 
     it('Verify Shared user can Un share Measure from themself on Shared Measures tab', () => {
@@ -102,7 +99,9 @@ describe('Measure Un Sharing', () => {
         //Assert text on the popup screen
         Utilities.waitForElementVisible('.MuiBox-root', 60000)
         cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
-        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + newMeasureName + ' with the following users:' + harpUserALT)
+        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + measureName + ' with the following users:')
+        const nameRegex = RegExp(harpUserALT, 'i')
+        cy.get('.MuiDialogContent-root').find('li').text().should('match', nameRegex)
 
         //Click on Accept button and Un share Measure
         cy.get(EditMeasurePage.acceptBtn).click()
@@ -110,7 +109,7 @@ describe('Measure Un Sharing', () => {
 
         //Verify Measure is not visible under Shared Measures tab
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', newMeasureName)
+        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 })
 
