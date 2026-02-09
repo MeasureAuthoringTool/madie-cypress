@@ -3,38 +3,25 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import {MadieObject, PermissionActions, Utilities} from "../../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
-let newCQLLibraryName = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
-let randomCQLLibraryName = 'TransferTestCQLLibrary' + randValue + 5
-let CQLLibraryPublisher = 'SemanticBits'
+let CQLLibraryName = ''
+const CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
-let versionNumber = '1.0.000'
+const versionNumber = '1.0.000'
 const adminApiKey = Environment.credentials().adminApiKey
 
 describe('CQL Library Transfer', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
+        CQLLibraryName = 'TransferLibrary' + Date.now()
 
-        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 
         harpUserALT = OktaLogin.getUser(true)
     })
-
-    afterEach('LogOut', () => {
-
-        OktaLogin.UILogout()
-        OktaLogin.setupUserSession(true)
-        Utilities.deleteLibrary(CQLLibraryName, true)
-    })
-
 
     it('Verify transferred CQL Library is viewable under Owned Libraries tab', () => {
 
@@ -45,15 +32,16 @@ describe('CQL Library Transfer', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
+                    body: [id],
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
@@ -68,6 +56,7 @@ describe('CQL Library Transfer', () => {
     })
 
     it('Verify CQL Library can be edited by the transferred user', () => {
+        const updatedCQLLibraryName = CQLLibraryName + 'SomeUpdate' + Date.now()
 
         OktaLogin.setupUserSession(false)
 
@@ -75,15 +64,16 @@ describe('CQL Library Transfer', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
+                    body: [id],
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
@@ -105,16 +95,17 @@ describe('CQL Library Transfer', () => {
 
 describe('CQL Library Transfer - Action Centre buttons', () => {
 
-    newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
-
     beforeEach('Create Library and Set Access Token', () => {
 
-        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryName = 'ACTransferLibrary' + Date.now()
+
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
     })
 
     it('Verify CQL Library owner can transfer Library from Action centre transfer button on Owned Libraries page', () => {
+        const updatedCQLLibraryName = CQLLibraryName + 'SomeUpdate' + Date.now()
 
         //Login as Regular user and transfer Library to ALT user
         OktaLogin.Login()
@@ -140,7 +131,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         //Verify the user still has Share access to the Library
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
         //Logout as Regular user and Login as ALT user to verify ownership
         OktaLogin.UILogout()
@@ -150,7 +141,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
         //Verify the user has Edit access to the Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -161,8 +152,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         cy.log('CQL Library Updated Successfully')
 
         //Delete Library with ALT user
-        Utilities.deleteLibrary(newCQLLibraryName, true)
-
+        Utilities.deleteLibrary(updatedCQLLibraryName, true)
     })
 
     it('Verify CQL Library owner can transfer Library from Action centre transfer button on Edit Library page', () => {
@@ -197,11 +187,11 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
         //Logout and Delete Library with ALT user
         OktaLogin.UILogout()
-        Utilities.deleteLibrary(newCQLLibraryName, true)
+        Utilities.deleteLibrary(CQLLibraryName, true)
     })
 
     it('Verify Transfer button disabled for non Library owner', () => {
@@ -227,7 +217,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         //Logout and Delete Measure with Regular user
         OktaLogin.UILogout()
-        Utilities.deleteLibrary(newCQLLibraryName)
+        Utilities.deleteLibrary(CQLLibraryName)
     })
 
     it('Verify Transfer button does not exist for shared user on Edit Library page', () => {
@@ -255,18 +245,19 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         //Logout and Delete Measure with Regular user
         OktaLogin.UILogout()
-        Utilities.deleteLibrary(newCQLLibraryName)
+        Utilities.deleteLibrary(CQLLibraryName)
     })
 })
 
 describe('CQL Library Transfer - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
+        
+        harpUserALT = OktaLogin.getUser(true)
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
+        CQLLibraryName = 'TransferMultipleLibraries' + Date.now()
 
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
 
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -274,12 +265,12 @@ describe('CQL Library Transfer - Multiple instances', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
         OktaLogin.setupUserSession(true)
         Utilities.deleteLibrary(null, true)
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Transferred to the new owner', () => {
+        const randomCQLLibraryName = 'TransferTestCQLLibrary' + Date.now()
         const currentUser = Cypress.env('selectedUser')
         //Version the CQL Library
         CQLLibrariesPage.cqlLibraryActionCenter("version")
@@ -325,15 +316,16 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
+                    body: [id],
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
@@ -347,7 +339,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
         //Click on Expand button to view Versioned Library
         cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
-        cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
+        cy.get('[data-testid="table-body"]').should('contain', CQLLibraryName)
     })
 })
 
