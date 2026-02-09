@@ -2,11 +2,13 @@ import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
+import { QdmCql } from "../../../Shared/QDMMeasuresCQL"
 const now = require('dayjs')
 const mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 const mpEndDate = now().format('YYYY-MM-DD')
 const eCQMTitle = 'eCQMTitle'
 const QDMModel = 'QDM v5.6'
+const cql = QdmCql.qdmCQLPatientBasedTest
 
 let measureName = ''
 let CQLLibraryName = ''
@@ -193,7 +195,7 @@ describe('QDM Measure: Transmission format', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CQLLibraryName)
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CQLLibraryName, cql)
         OktaLogin.setupUserSession(false)
     })
 
@@ -218,6 +220,7 @@ describe('QDM Measure: Transmission format', () => {
                             "measureName": measureName,
                             "cqlLibraryName": CQLLibraryName,
                             "model": QDMModel,
+                            "cql": cql,
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
