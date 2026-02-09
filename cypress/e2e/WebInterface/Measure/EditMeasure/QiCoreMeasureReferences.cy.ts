@@ -5,25 +5,26 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
-let randValue = Cypress._.random(100)
-let newMeasureName = ''
-let newCqlLibraryName = ''
+let measureName = ''
+let cqlLibraryName = ''
+const cql = QiCore4Cql.CQL_Populations
 
 describe('Qi Core Measure Reference', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        measureName = 'MeasureRef' + Date.now()
+        cqlLibraryName = 'MeasureRefLib' + Date.now()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
         OktaLogin.Login()
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Add and Edit Qi Core Measure reference', () => {
@@ -69,6 +70,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'JustificationUpdated Measure Reference')
     })
 
+    //pass
     it('Discard changes button', () => {
 
         MeasuresPage.actionCenter('edit')
@@ -144,19 +146,20 @@ describe('Add Qi Core Measure Reference - ownership validation', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        measureName = 'MeasureRef1' + Date.now()
+        cqlLibraryName = 'MeasureRef1Lib' + Date.now()
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
         OktaLogin.AltLogin()
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
+    //pass
     it('Non Measure owner unable to add Qi Core Measure References', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -173,10 +176,10 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
 
     beforeEach('Create Measure and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        measureName = 'MeasureRef2' + Date.now()
+        cqlLibraryName = 'MeasureRef2Lib' + Date.now()
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
 
         //Login to UI and Add Measure reference
         OktaLogin.Login()
@@ -196,7 +199,7 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Non Measure owner unable to delete or edit Qi Core Measure reference', () => {

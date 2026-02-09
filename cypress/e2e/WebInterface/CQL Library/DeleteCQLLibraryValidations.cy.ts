@@ -8,21 +8,18 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 
-let currentUser = Cypress.env('selectedUser')
 let CQLLibraryName = ''
-const CQLLibraryPublisher = 'SemanticBits'
-let harpUser = ''
 let harpUserALT = ''
+const CQLLibraryPublisher = 'SemanticBits'
 const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'
-const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
 describe('Delete CQL Library Validations - Library List page', () => {
 
     beforeEach('Set Access Token', () => {
 
-        CQLLibraryName = 'TestCqlLibrary' + Date.now()
+        CQLLibraryName = 'DeleteLibValidations' + Date.now()
 
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
@@ -48,21 +45,21 @@ describe('Delete CQL Library Validations - Library List page', () => {
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
 
         //Transfer Library to the ALT User
-
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
+                    body: [id],
                     method: 'PUT',
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
@@ -123,15 +120,16 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
+                    body: [id],
                     method: 'PUT',
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
@@ -173,16 +171,10 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        CQLLibraryName = 'TestCqlLibrary' + Date.now()
+        CQLLibraryName = 'DeleteLibValidations' + Date.now()
 
         //Create CQL Library with Regular User
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
-    })
-
-    afterEach('Clear cache', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
     })
 
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
@@ -210,15 +202,16 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
+                    body: [id],
                     method: 'PUT',
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
@@ -274,15 +267,16 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
+                    body: [id],
                     method: 'PUT',
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
