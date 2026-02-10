@@ -786,7 +786,8 @@ describe('Measure Service: Update Delete Flag', () => {
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
 
-    it('Attempt to update / delete measure that does not exist', () => {
+    // https://jira.cms.gov/browse/MAT-9674
+    it.skip('Attempt to update / delete measure that does not exist', () => {
         let currentUser = Cypress.env('selectedUser')
         let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
 

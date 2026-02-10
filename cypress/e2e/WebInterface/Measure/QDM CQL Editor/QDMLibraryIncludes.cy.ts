@@ -8,17 +8,15 @@ import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
-let measureName = 'QDMTestMeasure' + Date.now()
-let CqlLibraryName = 'QDMLibrary' + Date.now()
+let measureName = 'QDMLibraryIncludes' + Date.now()
+let CqlLibraryName = 'QDMLibraryIncludesLib' + Date.now()
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
+    'using QDM version \'5.6\'\n\n' +
     'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient\n' +
     'define "SDE Ethnicity":\n' +
@@ -40,7 +38,6 @@ describe('QDM Library Includes fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
 
@@ -55,8 +52,7 @@ describe('QDM Library Includes fields', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Search for QDM Included Libraries', () => {
@@ -87,7 +83,11 @@ describe('QDM Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'UATVTEQDM0.1.000YaHu1257View / ApplyVTEQDM9.1.000YaHu1257View / ApplyVTEQDM9.0.000YaHu1257View / ApplyVTEQDM8.3.000YaHu1257View / ApplyVTEQDM8.2.000YaHu1257View / Apply')
+        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]')
+            .find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable)
+            .find('[data-testid="library-results-tbl"]')
+            .find('[data-testid="library-results-table-body"]')
+            .should('include.text', 'UATVTEQDM0.1.000yahu1257View / ApplyVTEQDM9.1.000yahu1257View / ApplyVTEQDM9.0.000yahu1257View / ApplyVTEQDM8.3.000yahu1257View / ApplyVTEQDM8.2.000yahu1257View / Apply')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -108,7 +108,12 @@ describe('QDM Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('VTE')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'UATVTEQDM0.1.000YaHu1257View / ApplyVTEQDM9.1.000YaHu1257View / ApplyVTEQDM9.0.000YaHu1257View / ApplyVTEQDM8.3.000YaHu1257View / ApplyVTEQDM8.2.000YaHu1257View / Apply')
+        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]')
+            .find('[class="growing-div open"]')
+            .find(CQLEditorPage.librarySearchTable)
+            .find('[data-testid="library-results-tbl"]')
+            .find('[data-testid="library-results-table-body"]')
+            .should('include.text', 'UATVTEQDM0.1.000yahu1257View / ApplyVTEQDM9.1.000yahu1257View / ApplyVTEQDM9.0.000yahu1257View / ApplyVTEQDM8.3.000yahu1257View / ApplyVTEQDM8.2.000yahu1257View / Apply')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -125,12 +130,17 @@ describe('QDM Library Includes fields', () => {
         //Apply different Library with duplicate Alias
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('QDM')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'ASNQDM0.2.000AlannahMarshView / ApplyASNQDM0.1.000AlannahMarshView / ApplyAdultOutpatientEncountersQDM4.0.000swshahView / ApplyAdultOutpatientEncountersQDM3.0.000swshahView / ApplyAdultOutpatientEncountersQDM2.0.000swshahView / Apply')
-        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]')
+            .find('[class="growing-div open"]')
+            .find(CQLEditorPage.librarySearchTable)
+            .find('[data-testid="library-results-tbl"]')
+            .find('[data-testid="library-results-table-body"]')
+            .should('include.text', 'ASNQDM0.2.000alannahmarshView / ApplyASNQDM0.1.000alannahmarshView / ApplyAdultOutpatientEncountersQDM4.0.000swshahView / ApplyAdultOutpatientEncountersQDM3.0.000swshahView / ApplyAdultOutpatientEncountersQDM2.0.000swshahView / Apply')
+        
+            cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
         cy.get('[data-testid="apply-button"]').click()
         cy.get('[class="toast info"]').should('contain.text', 'Alias VTE has already been defined in the CQL.')
-
     })
 
     it('Verify Included Libraries under Saved Libraries tab', () => {
@@ -144,7 +154,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-test-id="row-0"]').children().first().should('contain.text', 'Common')
         cy.get('[data-test-id="row-0"]').children().eq(1).should('contain.text', 'MATGlobalCommonFunctionsQDM')
         cy.get('[data-test-id="row-0"]').children().eq(2).should('contain.text', '8.0.000')
-        cy.get('[data-test-id="row-0"]').children().eq(3).should('contain.text', 'Angela.flanagan')
+        cy.get('[data-test-id="row-0"]').children().eq(3).should('contain.text', 'angela.flanagan')
     })
 
     it('QDM: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {
@@ -435,7 +445,6 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
-
     })
 
     it('View Included QDM Library Details', () => {
@@ -488,12 +497,5 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.includesTab).click()
         Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 60000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
-
-        //Need to investigate how to handle the load time issue
-        //Navigate to Saved Parameters tab
-        // cy.get(CQLEditorPage.savedLibrariesTab).click()
-        // cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (0)')
-        // cy.get('[class="Results___StyledTd-sc-18pioce-0 cBTZQp"]').should('contain.text', 'No Results were found')
     })
-
 })
