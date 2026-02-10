@@ -4,18 +4,17 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { url } from "inspector"
 
 let measureName = 'QDMTestingParameters' + Date.now()
 let CqlLibraryName = 'QDMParametersLibrary' + Date.now()
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
+    'using QDM version \'5.6\'\n\n' +
     'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient\n' +
     'define "SDE Ethnicity":\n' +
@@ -33,7 +32,7 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'define "n":\n' +
     '\ttrue\n' +
     'define fluent function "test"():\n' +
-    '\t true\n'
+    '\ttrue\n'
 
 
 describe('QDM CQL Parameters', () => {
@@ -54,29 +53,10 @@ describe('QDM CQL Parameters', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate default Parameters tab and basic form functions', () => {
-        /*
-        scenario 1: validate Paramaters tab & form functions
-        go to measure, edit
-
-        CQL editor, collapse to show tabs
-
-        parameters
-            validate empty
-            validate Saved tab in background ?
-         
-        enter name 
-            check for special char
-            check expanded
-            buttons enable
-
-        clear
-            validate empty state
-         */
 
         cy.get(CQLEditorPage.parametersTab).click()
 
@@ -122,18 +102,7 @@ describe('QDM CQL Parameters', () => {
     })
 
     it('Confirm that valid options can be applied to the CQL and saved', () => {
-        /*
-         scenario 2: confirm apply to cql when options are valid
 
-         enter valid
-
-        apply
-            check cql 
-            check dirty state
-
-        save measure
-
-        */
         const paramName = 'NewParameter'
 
         cy.get(CQLEditorPage.parametersTab).click()
@@ -184,10 +153,7 @@ describe('QDM CQL Parameters', () => {
     })
 
     it('Confirm that Parameter builder checks for duplicates', () => {
-        /*
-            scenario 3: verify duplicate check
-            re-do with same name, check for blue toast
-        */
+
         const paramName = 'NewParameter'
 
         cy.get(CQLEditorPage.parametersTab).click()
@@ -302,8 +268,7 @@ describe('Delete Saved Parameters', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('When form is dirty, ask to Discard Changes', () => {
@@ -346,7 +311,6 @@ describe('Delete Saved Parameters', () => {
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
     })
 
-
     it('When form is clean ask "Are you sure?"', () => {
 
         cy.get(CQLEditorPage.parametersTab).click()
@@ -361,7 +325,7 @@ describe('Delete Saved Parameters', () => {
 
             cy.get(CQLEditorPage.modalXButton).should('be.visible')
 
-            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'Are you sure you want to delete this Parameter?')
+            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'Are you sure you want to delete this Parameter? ')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
 
@@ -376,29 +340,24 @@ describe('Delete Saved Parameters', () => {
 })
 
 describe('QDM CQL Parameters - Measure ownership Validations', () => {
-    /*
-     scenario 4:
-     access non-owned measure
-     verify no tab access
-     */
+
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner unable to access Parameters', () => {
 
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
