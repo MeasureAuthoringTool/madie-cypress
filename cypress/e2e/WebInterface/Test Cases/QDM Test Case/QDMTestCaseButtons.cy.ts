@@ -116,8 +116,8 @@ describe('Test case list page - Action Center icons for measure owner', () => {
         let excelButton: string
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
 
-            qrdaButton = 'button[data-testid="export-qrda-' + measureId + '"]'
-            excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
+            qrdaButton = '[data-testid="export-qrda-' + measureId + '"]'
+            excelButton = '[data-testid="export-excel-' + measureId + '"]'
 
             cy.get(qrdaButton).should('be.visible')
             cy.get(excelButton).should('be.visible').click()
@@ -209,8 +209,8 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         let excelButton: string
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
 
-            qrdaButton = 'button[data-testid="export-qrda-' + measureId + '"]'
-            excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
+            qrdaButton = '[data-testid="export-qrda-' + measureId + '"]'
+            excelButton = '[data-testid="export-excel-' + measureId + '"]'
 
             cy.get(qrdaButton).should('be.visible')
             cy.get(excelButton).should('be.visible').click()
@@ -306,8 +306,8 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         let excelButton: string
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
 
-            qrdaButton = 'button[data-testid="export-qrda-' + measureId + '"]'
-            excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
+            qrdaButton = '[data-testid="export-qrda-' + measureId + '"]'
+            excelButton = '[data-testid="export-excel-' + measureId + '"]'
 
             cy.get(qrdaButton).should('be.visible')
             cy.get(excelButton).should('be.visible').click()
