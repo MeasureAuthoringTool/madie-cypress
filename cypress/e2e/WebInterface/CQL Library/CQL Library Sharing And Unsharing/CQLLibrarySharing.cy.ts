@@ -201,7 +201,7 @@ describe('Share CQL Library using Action Center buttons', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 

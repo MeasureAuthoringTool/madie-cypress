@@ -45,7 +45,9 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000YaHu1257View / ApplyVTE8.9.000YaHu1257View / ApplyVTE8.8.000YaHu1257View / ApplyVTE8.7.000YaHu1257View / ApplyVTE8.6.000YaHu1257View / ApplyItems per page 5.Items per page5​1 - 5 of 181234')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000yahu1257View ' +
+            '/ ApplyVTE8.9.000yahu1257View / ApplyVTE8.8.000yahu1257View / ApplyVTE8.7.000yahu1257View / ApplyVTE8.6.000yahu1257View ' +
+            '/ ApplyItems per page 5.Items per page5​1 - 5 of 181234')
     })
 
     it('Apply Qi-Core Included library to the CQL and save', () => {
@@ -56,7 +58,9 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000YaHu1257View / ApplyVTE8.9.000YaHu1257View / ApplyVTE8.8.000YaHu1257View / ApplyVTE8.7.000YaHu1257View / ApplyVTE8.6.000YaHu1257View / ApplyItems per page 5.Items per page5​1 - 5 of 181234')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000yahu1257View ' +
+            '/ ApplyVTE8.9.000yahu1257View / ApplyVTE8.8.000yahu1257View / ApplyVTE8.7.000yahu1257View / ApplyVTE8.6.000yahu1257View ' +
+            '/ ApplyItems per page 5.Items per page5​1 - 5 of 181234')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -77,7 +81,9 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000YaHu1257View / ApplyVTE8.9.000YaHu1257View / ApplyVTE8.8.000YaHu1257View / ApplyVTE8.7.000YaHu1257View / ApplyVTE8.6.000YaHu1257View / ApplyItems per page 5.Items per page5​1 - 5 of 181234')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000yahu1257View ' +
+            '/ ApplyVTE8.9.000yahu1257View / ApplyVTE8.8.000yahu1257View / ApplyVTE8.7.000yahu1257View / ApplyVTE8.6.000yahu1257View ' +
+            '/ ApplyItems per page 5.Items per page5​1 - 5 of 181234')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -111,7 +117,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get('[data-test-id="row-0"]').find('td').eq(0).should('contain.text', 'FHIRHelpers') //Alias
         cy.get('[data-test-id="row-0"]').find('td').eq(1).should('contain.text', 'FHIRHelpers') //Name
         cy.get('[data-test-id="row-0"]').find('td').eq(2).should('contain.text', '4.1.000') //Version
-        cy.get('[data-test-id="row-0"]').find('td').eq(3).should('contain.text', 'Angela.flanagan') //Owner
+        cy.get('[data-test-id="row-0"]').find('td').eq(3).should('contain.text', 'angela.flanagan') //Owner
     })
 
     it('Qi Core: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {

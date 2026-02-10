@@ -3,7 +3,7 @@ import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { EditMeasureActions, EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
@@ -16,12 +16,18 @@ let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
+const testCase: TestCase = {
+    title: 'test case title',
+    description: 'DENOMFail' + now,
+    group: 'SBTestSeries'
+}
 const measureCQLPFTests = MeasureCQL.CQL_Populations
 const measureCQLDFUTests = MeasureCQL.CQLDFN_value
 const measureCQLResults = MeasureCQL.CQLHLResults_value
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const tcDFNJson = TestCaseJson.tcJson_value
 const tcResultJson = TestCaseJson.tcResultsJson
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 
 let measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine = 'library Library7027567898767 version \'0.0.000\'\n' +
     '\n' +
@@ -1476,6 +1482,115 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
     })
 })
 
+describe('Verify multiple IPs on the highlighting tab', () => {
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure()
+    })
+
+    it('Multiple IPs appear on the highlighting test case tab', () => {
+        const currentUser = Cypress.env('selectedUser')
+        const measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
+
+        //Add second Measure Group with return type as Boolean
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Initial PopulationOne')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
+        cy.contains(testCase.group).click()
+
+        TestCasesPage.clickCreateTestCaseButton()
+
+        //Verify created test case Title and Series exists on Test Cases Page
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+        cy.editTestCaseJSON(validTestCaseJson)
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to test case detail / edit page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //navigate to the highlighting sub tab
+        cy.get(TestCasesPage.tcHighlightingTab).should('exist')
+        cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
+        cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 50000)
+            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP 1').wait(3000).click()
+            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP 2').wait(3000).click()
+        })
+    })
+})
+
 describe('Highlighting tab shows Results, Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -1853,7 +1968,7 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
     })
 
@@ -1950,7 +2065,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
     Using measure "Chlamydia Screening in WomenFHIR" version 0.2.000 QI-Core v4.1.1
     */
     const specificMeasureName = 'Chlamydia Screening in WomenFHIR'
-    beforeEach('Create measure and login', () => {
+    beforeEach('Login and search for specific measure', () => {
 
         OktaLogin.Login()
 
@@ -1964,7 +2079,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
         cy.get('[data-testid*="_expandArrow"]').click().wait(500)
         cy.get(MeasuresPage.measureListTitles)
             .find('[class="table-body measures-list"]')
-            .find('[class="expanded-row"]').eq(3)
+            .find('[class="expanded-row"]').eq(4)
             .find('[class="qpp-c-button qpp-c-button--outline-filled"]')
             .should('contain', 'View')
             .click()
@@ -1972,7 +2087,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Execute Test Case on an old versioned measure; verify Measure highlighting happens', () => {

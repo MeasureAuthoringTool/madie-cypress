@@ -7,7 +7,6 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Ut
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Environment } from "../../../../Shared/Environment"
 
 const now = Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -136,7 +135,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.createDefinitionBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).type('DefinitionTerm')
-        cy.get(EditMeasurePage.defintionEditorField).find(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
+        cy.get(EditMeasurePage.defintionEditorField).find(EditMeasurePage.definitionInputNonQDM).type('Definition details for DefinitionTerm')
         Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermDefinition details for DefinitionTerm')
@@ -214,7 +213,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get('[aria-label="Edit"]').eq(0).click()
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
-        cy.get(EditMeasurePage.definitionInput).clear().type('Definition details for DefinitionTerm')
+        cy.get(EditMeasurePage.definitionInputNonQDM).clear().type('Definition details for DefinitionTerm')
         Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermUpdateDefinition details for DefinitionTerm')
@@ -237,18 +236,18 @@ describe('Edit Measure: Add Meta Data', () => {
 
         // checking table auto-sorts alphabetical order
         const defText = 'A valuable term for this measure.'
-        EditMeasurePage.addMeasureDefinition('two', defText)
-        EditMeasurePage.addMeasureDefinition('six', defText)
-        EditMeasurePage.addMeasureDefinition('three', defText)
-        EditMeasurePage.addMeasureDefinition('four', defText)
-        EditMeasurePage.addMeasureDefinition('five', defText)
-        EditMeasurePage.addMeasureDefinition('one', defText)
-        EditMeasurePage.addMeasureDefinition('twelve', defText)
-        EditMeasurePage.addMeasureDefinition('seven', defText)
-        EditMeasurePage.addMeasureDefinition('nine', defText)
-        EditMeasurePage.addMeasureDefinition('eleven', defText)
-        EditMeasurePage.addMeasureDefinition('ten', defText)
-        EditMeasurePage.addMeasureDefinition('eight', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('two', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('six', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('three', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('four', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('five', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('one', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('twelve', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('seven', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('nine', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('eleven', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('ten', defText)
+        EditMeasurePage.addMeasureDefinitionNonQDM('eight', defText)
 
 
         const expectedOrder = ['eight', 'eleven', 'five', 'four', 'nine', 'one', 'seven', 'six', 'ten', 'ThisIsTheDefinitionTermValue']
@@ -375,7 +374,7 @@ describe('Generate CMS ID for QDM Measure', () => {
 
     after('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -429,7 +428,7 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })

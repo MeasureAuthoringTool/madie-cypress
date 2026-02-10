@@ -107,8 +107,8 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //add embedded table
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.measureRTEPurposeContentField).click()
+        cy.get(EditMeasurePage.measureRTEPurposeContentField).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.embdTableBtn).click()
 
         //confirm html formatting that is in the field

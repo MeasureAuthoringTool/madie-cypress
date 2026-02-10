@@ -23,6 +23,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2023-01-01')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
@@ -43,27 +44,13 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Create Measure Group
+        // add stratification data to group
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        MeasureGroupPage.setMeasureGroupType()
-
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Encounter')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratificaction 1')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
-
-        cy.get(MeasureGroupPage.reportingTab).click()
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -80,14 +67,10 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
 
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('exist')
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.enabled')
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.visible')
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
 
         cy.get(TestCasesPage.detailsTab).should('exist')
@@ -99,12 +82,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })

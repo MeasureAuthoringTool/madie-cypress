@@ -107,7 +107,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         OktaLogin.UILogout()

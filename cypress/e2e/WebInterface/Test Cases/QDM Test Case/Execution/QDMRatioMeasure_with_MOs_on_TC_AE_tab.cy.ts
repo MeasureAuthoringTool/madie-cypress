@@ -586,6 +586,17 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 90000)
+
+        cy.reload()
+
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //click on the Expected / Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 

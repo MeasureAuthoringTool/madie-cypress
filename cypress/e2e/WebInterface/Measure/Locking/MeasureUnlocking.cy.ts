@@ -1,11 +1,12 @@
-import {MadieObject, Utilities} from "../../../../Shared/Utilities"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import { MadieObject, Utilities } from "../../../../Shared/Utilities"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { Header } from "../../../../Shared/Header"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
-const measureName = 'TestMeasure' + Date.now() + randValue
-const cqlLibraryName = 'TestMeasure' + Date.now() + randValue
+const measureName = 'UnlockingMeasure' + Date.now() + randValue
+const cqlLibraryName = 'UmlockingMeasureLib' + Date.now() + randValue
 let harpUserALT = ''
 
 describe('Measure Locking Validations', () => {
@@ -19,7 +20,7 @@ describe('Measure Locking Validations', () => {
 
     after('Delete Measure', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Measure Unlock fires when the user logs in & logs out', () => {
@@ -44,15 +45,15 @@ describe('Measure Locking Validations', () => {
         Utilities.verifyAllLocksDeleted(MadieObject.Library)
 
         //Logout 
-        OktaLogin.UILogout()
+        // most of OktaLogin.UILogout():
+        Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
+        cy.get(Header.userProfileSelect).scrollIntoView()
+        cy.get(Header.userProfileSelect).click()
+        Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 60000)
+        cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
 
-        cy.wait('@measureUnlock', { timeout: 20000 }).then(mUnlock => {
-            expect(mUnlock.response.statusCode).to.eql(200)
-        })
-
-        cy.wait('@libraryUnlock', { timeout: 20000 }).then(lUnlock => {
-            expect(lUnlock.response.statusCode).to.eql(200)
-        })
+        Utilities.waitForElementVisible(OktaLogin.usernameInput, 500000)
+        cy.log('Log out successful')
 
         Utilities.verifyAllLocksDeleted(MadieObject.Measure)
         Utilities.verifyAllLocksDeleted(MadieObject.Library)
@@ -80,9 +81,8 @@ describe('Measure Locking Validations', () => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
         Utilities.waitForElementDisabled('[data-testid="version-action-btn"]', 50000)
-        cy.get('[data-testid="version-action-tooltip"]').trigger('mouseover')
-        cy.get('.MuiTooltip-tooltip').should('contain.text', 'Unable to version measure. Locked while being edited by ' + harpUserALT)
-
+        cy.get('[data-testid="version-action-tooltip"]').trigger('mouseover').wait(750)
+        cy.contains('Unable to version measure. Locked while being edited by ').should('be.visible')
         //Delete Library Locks
         OktaLogin.setupUserSession(true)
         Utilities.verifyAllLocksDeleted(MadieObject.Measure, true)

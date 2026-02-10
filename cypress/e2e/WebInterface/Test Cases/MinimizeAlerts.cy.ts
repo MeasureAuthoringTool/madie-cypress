@@ -58,8 +58,8 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.get(TestCasesPage.testCaseExecutionError).should('be.visible')
     })
 
-    //Skipping until MAT-8410 is fixed
-    it.skip('Test case shift dates failure shows error', () => {
+    // was skipped for MAT-8410
+    it('Test case shift dates failure shows error', () => {
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -85,9 +85,9 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.get(TestCasesPage.executionContextWarning).should('be.visible')
         cy.get('[data-testid="warn-title"]').should('have.text', 'The following Test Case dates could not be shifted. Please try again. If the issue continues, please contact helpdesk.abc - empty testcase')
 
-        // clear both - don't need qualifier .eq() for 2nd one, it's the only id
-        cy.get(CQLEditorPage.minimizeButton).eq(1).click()
+        // clear both
         cy.get(CQLEditorPage.minimizeButton).click()
+        cy.get(CQLEditorPage.secondMinimizeButton).click()
 
         // Both boxes are gone
         cy.get(TestCasesPage.executionContextWarning).should('not.exist')

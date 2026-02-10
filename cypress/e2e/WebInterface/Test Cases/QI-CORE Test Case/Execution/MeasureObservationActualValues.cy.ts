@@ -23,32 +23,22 @@ let measureCQL = 'library Library4969 version \'0.0.000\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
     'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
-    'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\' \n' +
-    '\n' +
+    'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
-    '\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\n' +
-    '  true\n' +
-    ' \n' +
+    '  true\n\n' +
     ' define "ipp":\n' +
-    '    true\n' +
-    '    \n' +
+    '    true\n\n' +
     'define "mpopEx":\n' +
-    '  ["Encounter"] E where E.status = \'finished\'\n' +
-    ' \n' +
+    '  ["Encounter"] E where E.status = \'finished\'\n\n' +
     'define function boolFunc():\n' +
-    '  1\n' +
-    '\n' +
+    '  1\n\n' +
     'define function boolFunc2():\n' +
-    '  14\n' +
-    '\n' +
+    '  14\n\n' +
     'define function daysObs(e Encounter):\n' +
-    '  duration in days of e.period\n' +
-    '\n' +
+    '  duration in days of e.period\n\n' +
     'define function hoursObs(e Encounter):\n' +
     '  duration in hours of e.period'
 
@@ -64,7 +54,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Actual values for Non Boolean CV Measure', () => {
@@ -212,7 +202,7 @@ describe('Boolean Measure Observation Actual values', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Actual values for Boolean CV Measure', () => {

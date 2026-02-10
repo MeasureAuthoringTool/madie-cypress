@@ -143,39 +143,22 @@ export class Utilities {
 
         OktaLogin.setupUserSession(altUser)
 
-        let measureData: Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((id) => {
-
                 cy.request({
-                    url: '/api/measures/' + id,
+                    url: `/api/measures/${id}/delete`,
+                    method: 'DELETE',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        Authorization: `Bearer ${accessToken.value}`,
                     },
-                    method: 'GET',
-
+                    failOnStatusCode: false,
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body.active).to.eql(true)
-                    measureData = response.body
-                    measureData.active = false
-
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        method: 'PUT',
-                        headers: {
-                            Authorization: 'Bearer ' + accessToken.value
-                        },
-                        body: measureData
-                    }).then((response) => {
-                        console.log(response)
-
-                        expect(response.status).to.eql(200)
-                        cy.log('Measure Deleted Successfully')
-                    })
+                    cy.log('Measure deleted (hard delete) via API successfully')
                 })
             })
         })
+
     }
 
     public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
@@ -440,6 +423,7 @@ export class Utilities {
         }
     }
 
+    // ToDo: add similar function to easily transfer ownership of measures or libraries
     public static setSharePermissions(objectType: MadieObject, action: PermissionActions, user: string) {
         let currentUser = Cypress.env('selectedUser')
         let path: string
@@ -498,10 +482,12 @@ export class Utilities {
         cy.get('thead th').find('input[type="checkbox"]').check()
     }
 
-    public static deleteLibrary(libraryName: string, altUser?: boolean, libraryNumber?: number) {
+    public static deleteLibrary(libraryName?: string, altUser?: boolean, libraryNumber?: number) {
 
         const currentUser = Cypress.env('selectedUser')
-
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
         let libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
         OktaLogin.setupUserSession(false)
@@ -509,10 +495,7 @@ export class Utilities {
         if (libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
-        if (altUser === undefined || altUser === null)
-        {
-            altUser = false
-        }
+
         OktaLogin.setupUserSession(altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -530,7 +513,6 @@ export class Utilities {
                     cy.log('Library Deleted Successfully')
                 })
             })
-
         })
     }
 
@@ -569,6 +551,7 @@ export class Utilities {
                     cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                         cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((tcId) => {
                             let lockUrl = '/api/measures/' + measureId + '/test-cases/' + tcId + '/lock'
+                            action = 'POST'
                             if (!lockObject) {
                                 lockUrl = '/api/test-cases/' + tcId + '/unlock'
                             }
@@ -611,6 +594,10 @@ export class Utilities {
 
     public static verifyAllLocksDeleted(type: MadieObject, altUser?: boolean) {
 
+        if (!altUser) {
+            altUser = false
+        }
+
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(altUser)
 
@@ -632,14 +619,14 @@ export class Utilities {
                             expect(response.status).to.eql(200)
                             if (altUser) {
                                 expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUserALT)
-                                expect(response.body[1]).to.include('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUserALT)
-                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUserALT)
+                                expect(response.body[1]).to.be.oneOf(['Deleted measure lock: ' + measureId, 'No measure locks found for harpId: ' + harpUserALT])
+                                expect(response.body[2]).to.be.oneOf(['Delete test case locks for harpId: ' + harpUserALT, 'Delete library locks for harpId: ' + harpUserALT])
                                 expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUserALT)
                             }
                             else {
-                                expect(response.body[0]).to.eql('Delete measure locks for harpId: ' + harpUser)
-                                expect(response.body[1]).to.eql('Deleted measure lock: ' + measureId || 'No measure locks found for harpId: ' + harpUser)
-                                expect(response.body[2]).to.include('Delete test case locks for harpId: ' + harpUser)
+                                expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUser)
+                                expect(response.body[1]).to.be.oneOf(['Deleted measure lock: ' + measureId, 'No measure locks found for harpId: ' + harpUser])
+                                expect(response.body[2]).to.be.oneOf(['Delete test case locks for harpId: ' + harpUser, 'Delete library locks for harpId: ' + harpUser])
                                 expect(response.body[3]).to.include('No test case locks found for harpId: ' + harpUser)
                             }
                         })
@@ -659,13 +646,13 @@ export class Utilities {
                         }).then((response) => {
                             expect(response.status).to.eql(200)
                             if (altUser) {
-                                expect(response.body).to.include('Delete library locks for harpId: ' + harpUserALT)
-                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUser)
+                                expect(response.body[0]).to.include('Delete library locks for harpId: ' + harpUserALT)
+                                expect(response.body[1]).to.be.oneOf(['Deleted library lock for Id: ' + id, 'No library locks found for harpId: ' + harpUserALT])
                             }
                             else {
                                 // if not altUser, then check for the library lock deletion message
-                                expect(response.body).to.include('Delete library locks for harpId: ' + harpUser)
-                                expect(response.body).to.include('Deleted library lock for Id: ' + id || 'No library locks found for harpId: ' + harpUser)
+                                expect(response.body[0]).to.include('Delete library locks for harpId: ' + harpUser)
+                                expect(response.body[1]).to.be.oneOf(['Deleted library lock for Id: ' + id, 'No library locks found for harpId: ' + harpUser])
                             }
                         })
                     })

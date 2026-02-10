@@ -52,6 +52,8 @@ cypress/fixtures/versionId
 cypress/fixtures/versionId*
 cypress/fixtures/cmsId4QDM
 cypress/fixtures/cmsId4QiCore
+cypress/fixtures/referenceId
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node

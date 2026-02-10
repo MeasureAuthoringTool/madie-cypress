@@ -4,6 +4,7 @@ import { defineConfig } from 'cypress'
 const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
 const fs = require('fs-extra')
 const xlsx = require('xlsx')
+const xml2js = require('xml2js')
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -42,7 +43,16 @@ export default defineConfig({
           const workbook = xlsx.read(buf, {type:'buffer'})
           const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
           return rows
-        }
+        },
+          parseXML(xmlContent: string) {
+              return new Promise((resolve, reject) => {
+                  const parser = new xml2js.Parser()
+                  parser.parseString(xmlContent, (err: any, result: any) => {
+                      if (err) reject(err)
+                      else resolve(result)
+                  })
+              })
+          }
       })
 
       return require('./cypress/plugins/index.js')(on, config)

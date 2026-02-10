@@ -39,6 +39,8 @@ describe('QDM Test Case Excel Export', () => {
 
     it('Successful Excel Export for QDM Test Cases', () => {
 
+        let currentUser = Cypress.env('selectedUser')
+
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //Click on Edit Button
@@ -267,9 +269,20 @@ describe('QDM Test Case Excel Export', () => {
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
 
-        //Export Test cases and assert the values
-        cy.get(TestCasesPage.actionCenterExport).click()
-        cy.get(TestCasesPage.btnContainer).contains('Excel').click()
+        TestCasesPage.checkTestCase(2)
+        TestCasesPage.checkTestCase(1)
+
+        cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
+
+        let excelButton: string
+
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
+
+            excelButton = '[data-testid="export-excel-' + measureId + '"]'
+
+            cy.get(excelButton).should('be.visible').click()
+        })
+
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Excel exported successfully')
 
         const file = 'cypress/downloads/eCQMTitle-v0.0.000-QDM-TestCases.xlsx'

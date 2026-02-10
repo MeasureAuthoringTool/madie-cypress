@@ -13,8 +13,8 @@ import { Header } from "../../../../Shared/Header"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-const measureName = 'TestMeasure' + Date.now()
-const cqlLibraryName = 'TestCql' + Date.now()
+const measureName = 'MeasureHistory'
+const cqlLibraryName = 'MeasureHistoryLib'
 const measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 const measureCQLPFTests = MeasureCQL.CQL_Populations
 const qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
@@ -26,12 +26,9 @@ const testCaseDescription = 'DENOMFail'
 const testCaseSeries = 'SBTestSeries'
 const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip'
 const measureData: CreateMeasureOptions = {}
-const randValue = (Math.floor((Math.random() * 1000) + 1))
 let harpUser = ''
 let harpUserALT = ''
 
-measureData.ecqmTitle = measureName + randValue
-measureData.cqlLibraryName = cqlLibraryName + randValue
 measureData.measureScoring = 'Cohort'
 measureData.patientBasis = 'true'
 measureData.measureCql = measureCQL
@@ -39,6 +36,9 @@ measureData.measureCql = measureCQL
 describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Actions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
+
+        measureData.ecqmTitle = measureName + Date.now()
+        measureData.cqlLibraryName = cqlLibraryName + Date.now()
 
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
@@ -181,6 +181,9 @@ describe('Measure History - Version and Draft actions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        measureData.ecqmTitle = measureName + 'Version' + Date.now()
+        measureData.cqlLibraryName = cqlLibraryName + 'Version' + Date.now()
+
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
 
@@ -237,8 +240,8 @@ describe('Measure History - Version and Draft actions', () => {
 
 describe('Measure History - Associate Measure and Export Measure actions', () => {
 
-    let measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
-    let QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
+    let measureQDMManifestName1 = 'AssociateMeasureHistoryQDM' + Date.now()
+    let QDMCqlLibraryName1 = 'AssociateMeasureHistoryQDMLib' + Date.now()
 
     const qdmMeasure: CreateMeasureOptions = {
         ecqmTitle: measureQDMManifestName1,
@@ -250,8 +253,8 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
         mpEndDate: '2025-12-31'
     }
 
-    let QiCoreMeasureName1 = 'QiCoreManifestTestMN1' + Date.now() + randValue + 4 + randValue
-    let QiCoreCqlLibraryName1 = 'QiCoreManifestTestLN1' + Date.now() + randValue + 5 + randValue
+    let QiCoreMeasureName1 = 'AssociateMeasureHistoryQiCore' + Date.now()
+    let QiCoreCqlLibraryName1 = 'AssociateMeasureHistoryQiCoreLib' + Date.now()
 
     beforeEach('Create Measure', () => {
 
@@ -458,12 +461,8 @@ describe('Measure History - QDM Export Test case Action', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 45000)
         
         // export
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
-
-            cy.get(TestCasesPage.actionCenterExport).click()
-            const excelButton = 'button[data-testid="export-excel-' + measureId + '"]'
-            cy.get(excelButton).should('be.visible').click()
-        })
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.contains('Excel').click()
         cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM-TestCases.xlsx', {timeout: 5500})
 
         //Go to Measure History and verify that Export Test cases actions are recorded

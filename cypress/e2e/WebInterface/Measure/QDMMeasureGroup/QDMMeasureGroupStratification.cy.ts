@@ -293,6 +293,8 @@ describe('Validating Stratification tabs', () => {
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'Initial Population')
         cy.get(MeasureGroupPage.stratDescFour).type('Stratification Four Description')
 
+        Utilities.waitForElementEnabled(MeasureGroupPage.ucumScoringUnitSelect, 30700)
+        Utilities.waitForElementVisible(MeasureGroupPage.ucumScoringUnitSelect, 30700)
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
 
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)

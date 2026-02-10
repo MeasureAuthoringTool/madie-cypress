@@ -77,7 +77,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
-    public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
+    public static readonly actionCenterTransfer = '[data-testid="Youcannottransferalibraryyoudonotown."]' //'[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
 
     //CQL Editor
@@ -354,12 +354,11 @@ export class CQLLibraryPage {
 
         const currentUser = Cypress.env('selectedUser')
 
-        user = OktaLogin.setupUserSession(options.altUser)
-
-        if (options.altUser === undefined || options.altUser === null)
+        if (!options.altUser)
         {
             options.altUser = false
         }
+        user = OktaLogin.setupUserSession(options.altUser)
 
         if (options && options.description) {
             description = options.description

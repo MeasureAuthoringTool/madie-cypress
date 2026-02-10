@@ -1,36 +1,27 @@
 import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
-import {CQLLibraryPage, EditLibraryActions} from "../../../../Shared/CQLLibraryPage"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
-import {Header} from "../../../../Shared/Header"
+import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { Header } from "../../../../Shared/Header"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
-let newCQLLibraryName = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 let harpUser = ''
-let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
+let updatedCQLLibraryName = CQLLibraryName + 'SomeUpdate' + 9
 const adminApiKey = Environment.credentials().adminApiKey
 
 describe('Library History - Create, Update, Sharing and Unsharing Actions', () => {
 
     beforeEach('Create Library and Login', () => {
+        CQLLibraryName = 'HistoryLibrary' + Date.now()
 
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
-        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
         OktaLogin.Login()
-    })
-
-    afterEach('Log out and Clean up', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteLibrary(newCQLLibraryName)
     })
 
     it('Verify that Library Create and Update actions are recorded in Library History', () => {
@@ -45,9 +36,9 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
         //Go to Library History and verify that Create and Update actions are recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'CREATED')
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'UPDATED')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'UPDATED')
+        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'CREATED')
         cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
 
     })
@@ -75,10 +66,10 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
         //Go to Library History and verify that Library Sharing is recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'SHARED')
-        cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'SHARED')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
 
-        cy.get('[data-testid="library-history-1_additionalActionMessage"]').should('contain.text', 'Shared with - ' + harpUserALT)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Shared with - ' + harpUserALT)
 
         //Close History popup
         cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
@@ -99,25 +90,23 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 
         //Go to Library History and verify that Library Unsharing is recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[data-testid="library-history-2_actionType"]').should('contain.text', 'UNSHARED')
-        cy.get('[data-testid="library-history-2_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-2_additionalActionMessage"]').should('contain.text', 'Unshared with - ' + harpUserALT)
-
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'UNSHARED')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Unshared with - ' + harpUserALT)
     })
 })
 
 describe('Library History - Version and Draft actions', () => {
 
     beforeEach('Create Library and Set Access Token', () => {
+        CQLLibraryName = 'HistoryLibrary' + Date.now()
 
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 4
-        updatedCQLLibraryName = newCQLLibraryName + 'Updated'
+        updatedCQLLibraryName = CQLLibraryName + 'Updated'
 
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
         OktaLogin.Login()
     })
 
@@ -136,10 +125,10 @@ describe('Library History - Version and Draft actions', () => {
 
         //Go to Library History and verify that Library Version action is recorded
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[class="header-info"]').should('contain.text', newCQLLibraryName + ' (Version 1.0.000)')
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'VERSIONED_MAJOR')
-        cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-1_additionalActionMessage"]').should('contain.text', 'Versioned to 1.0.000')
+        cy.get('[class="header-info"]').should('contain.text', CQLLibraryName + ' (Version 1.0.000)')
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'VERSIONED_MAJOR')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Versioned to 1.0.000')
 
         //Close History popup
         cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
@@ -153,33 +142,24 @@ describe('Library History - Version and Draft actions', () => {
         //Go to Library History and verify that Library Draft action is recorded
         cy.get(CQLLibraryPage.actionCenterButton).click()
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
-        cy.get('[class="header-info"]').should('contain.text', newCQLLibraryName + ' (Version 1.0.000)Draft')
+        cy.get('[class="header-info"]').should('contain.text', CQLLibraryName + ' (Version 1.0.000)Draft')
         cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'DRAFTED')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
         cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Draft created from version 1.0.000')
-
     })
 })
 
 describe('Library History - Transfer action', () => {
 
     beforeEach('Create Library and Set Access Token', () => {
+        CQLLibraryName = 'HistoryLibrary' + Date.now()
 
         harpUser = OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 4
-        updatedCQLLibraryName = newCQLLibraryName + 'Updated'
+        updatedCQLLibraryName = CQLLibraryName + 'Updated'
 
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
-    })
-
-    afterEach('Log out and Clean up', () => {
-
-        OktaLogin.Logout()
-
-        Utilities.deleteLibrary(newCQLLibraryName, true)
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
     })
 
     it('Verify that Transfer Library action is recorded in Library History', () => {
@@ -190,15 +170,16 @@ describe('Library History - Transfer action', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        'api-key': adminApiKey,
+                        'harpid': harpUserALT
                     },
-                    method: 'PUT'
+                    method: 'PUT',
+                    body: [id],
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
                 })
             })
         })
@@ -209,14 +190,12 @@ describe('Library History - Transfer action', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(newCQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
         //Go to Library History and verify that Transfer Library is recorded
         CQLLibrariesPage.cqlLibraryActionCenter('viewHistory')
-        cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'OWNERSHIP_TRANSFER')
-        cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
-
-        cy.get('[data-testid="library-history-1_additionalActionMessage"]').should('contain.text', 'Transferred from ' + harpUser + ' to ' + harpUserALT)
-
+        cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'OWNERSHIP_TRANSFER')
+        cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
+        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Transferred from ' + harpUser + ' to ' + harpUserALT)
     })
 })

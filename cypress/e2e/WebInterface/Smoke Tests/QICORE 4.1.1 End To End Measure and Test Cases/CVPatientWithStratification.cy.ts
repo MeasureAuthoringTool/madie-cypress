@@ -14,58 +14,41 @@ let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.CVPatientWithStratification_PASS
-let measureCQL = 'library CVPatientWithStratification version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library CVPatientWithStratification version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
-    'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
-    '\n' +
-    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n' +
-    '\n' +
-    'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'codesystem "SNOMED": \'http://snomed.info/sct\'\n\n' +
+    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
+    'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population 1":\n' +
-    '   exists ( "Inpatient Encounters" )\n' +
-    '       \n' +
+    '   exists ( "Inpatient Encounters" )\n\n' +
     'define "Measure Population":\n' +
-    '    exists ("Inpatient Encounters During Day of Measurement Period")\n' +
-    '\n' +
+    '    exists ("Inpatient Encounters During Day of Measurement Period")\n\n' +
     'define "Measure Population Exclusions":\n' +
-    '    exists ("Inpatient Encounters During Day of Measurement Period LOS GT 120 Days")\n' +
-    '\n' +
+    '    exists ("Inpatient Encounters During Day of Measurement Period LOS GT 120 Days")\n\n' +
     'define function "Measure Observation"(): \n' +
     '  Count({\n' +
     '    ( "Measure Popluation Visits Excluding Measure Popluation Exclusions") Enc\n' +
-    '          where Enc.priority ~ "Unscheduled (qualifier value)"          \n' +
-    '          })\n' +
-    '\n' +
+    '          where Enc.priority ~ "Unscheduled (qualifier value)"\n' +
+    '          })\n\n' +
     'define "Measure Popluation Visits Excluding Measure Popluation Exclusions":\n' +
     '  "Inpatient Encounters" \n' +
-    '      except "Inpatient Encounters During Day of Measurement Period LOS GT 120 Days"\n' +
-    '\n' +
+    '      except "Inpatient Encounters During Day of Measurement Period LOS GT 120 Days"\n\n' +
     'define "Inpatient Encounters":\n' +
     '  [Encounter: "Encounter Inpatient"] InptEncounter\n' +
-    '      where InptEncounter.status = \'finished\' \n' +
-    '\t\t\n' +
+    '      where InptEncounter.status = \'finished\'\n\n' +
     'define "Inpatient Encounters During Day of Measurement Period":\n' +
     '  "Inpatient Encounters" IE\n' +
-    '    where IE.period ends during day of "Measurement Period"\n' +
-    '\t\n' +
+    '    where IE.period ends during day of "Measurement Period"\n\n' +
     'define "Inpatient Encounters During Day of Measurement Period LOS GT 120 Days":\n' +
     '  "Inpatient Encounters During Day of Measurement Period" IE \n' +
-    '    where Global."LengthInDays"(IE.period) > 120\n' +
-    '\n' +
+    '    where Global."LengthInDays"(IE.period) > 120\n\n' +
     'define "Stratification 1":\n' +
-    '  true\n' +
-    ' \n' +
+    '  true\n\n' +
     'define "Stratification 2":\n' +
     '  true'
 
@@ -73,7 +56,6 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
     before('Create Measure, Test Case and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-01', '2012-12-31')
 

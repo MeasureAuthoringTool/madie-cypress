@@ -15,12 +15,11 @@ const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const measureData: CreateMeasureOptions = {}
 const randValue = (Math.floor((Math.random() * 1000) + 1))
 
-measureData.ecqmTitle = measureName + randValue
+measureData.ecqmTitle = measureName
 measureData.cqlLibraryName = cqlLibraryName + randValue
 measureData.measureCql = measureCQL
 
-//Skipping until feature flag 'CompareMeasureVersions' is removed
-describe.skip('Compare Measure Versions', () => {
+describe('Compare Measure Versions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -97,16 +96,22 @@ describe.skip('Compare Measure Versions', () => {
 
         //Verify Popup Screen
         cy.contains('h2', 'Compare Measure Versions').should('be.visible')
-        cy.get('[data-testid="measure-name"]').should('contain.text', updatedMeasureName)
+        cy.get('[data-testid="measure-name"]').should('contain.text', '-- ' + measureName)
+            .and('contain.text', '++ ' + updatedMeasureName)
         cy.get(MeasuresPage.compareVersionsCqlTab).should('contain.text', 'CQL')
         cy.get(MeasuresPage.compareVersionsHRTab).should('contain.text', 'Human Readable')
 
-        // temporary - can look for real CQL once it's there
-        cy.get('[data-testid="panel-content-old"]').should('contain.text', 'CQL coming soon')
+        //Verify CQL Comparison
+        cy.get('[class="react-diff-n9mfsc-code-fold-content"]').click()
 
+        cy.contains('using QICore version \'4.1.1\'').should('be.visible')
+
+        //Verify HR Comparison
         cy.get(MeasuresPage.compareVersionsHRTab).click()
 
         // very basic check that HR will display - Utilities.waitForElementVisible won't work here with nesting
         cy.contains('eCQMTitle4QICore', { timeout: 12500 }).should('be.visible')
+
+        cy.contains('Differences (4)', { timeout: 9500 }).should('be.visible')
     })
 })

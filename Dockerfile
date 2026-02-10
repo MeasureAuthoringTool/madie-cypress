@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y awscli
 # install other tools
 RUN apt-get update && apt-get install -y jq
 
+COPY ./test-files.txt ./test-files.txt
 COPY ./cypress ./cypress
 COPY ./cypress.config.ts ./cypress.config.ts
 COPY ./tsconfig.json ./tsconfig.json

@@ -208,7 +208,8 @@ export class OktaLogin {
             }
         }
 
-        return user
+        // doing this here to match dev work, rather than trying to track down each individual config
+        return user.toLowerCase()
     }
 
     public static getUser(altUser: boolean) {
@@ -246,6 +247,7 @@ export class OktaLogin {
             }
         }
 
-        return user
+        // doing this here to match dev work, rather than trying to track down each individual config
+        return user.toLowerCase()
     }
 }

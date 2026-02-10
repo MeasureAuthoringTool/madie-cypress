@@ -42,7 +42,7 @@ describe('Measure Sharing', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     afterEach('Log out and Clean up', () => {

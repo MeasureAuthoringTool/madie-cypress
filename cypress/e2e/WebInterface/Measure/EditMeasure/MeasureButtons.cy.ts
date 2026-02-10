@@ -7,7 +7,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
-import { Environment } from "../../../../Shared/Environment"
 import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
 
 const path = require('path')
@@ -347,6 +346,7 @@ describe('Share measure from the Edit Measure page', () => {
 
     after(() => {
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
     })
@@ -370,6 +370,7 @@ describe('Share measure from the Edit Measure page', () => {
 
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+        OktaLogin.UILogout()
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -443,6 +444,7 @@ describe('Share measure from the Edit Measure page', () => {
 
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+        OktaLogin.UILogout()
 
         //Login as ALT User
         OktaLogin.AltLogin()

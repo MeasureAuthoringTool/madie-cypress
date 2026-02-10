@@ -29,6 +29,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -49,30 +50,6 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        MeasureGroupPage.setMeasureGroupType()
-
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Encounter')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-
-        cy.get(MeasureGroupPage.reportingTab).click()
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

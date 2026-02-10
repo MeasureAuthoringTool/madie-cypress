@@ -1,0 +1,37 @@
+cypress/e2e/Services/CQL Library Service/CQLLibraryDelete.cy.ts
+cypress/e2e/Services/GetUserDetails.cy.ts
+cypress/e2e/Services/Measure Service/DeleteCMSID.cy.ts
+cypress/e2e/Services/Measure Service/Measure.cy.ts
+cypress/e2e/Services/Measure Service/MeasureExport.cy.ts
+cypress/e2e/Services/Measure Service/MeasureSearching.cy.ts
+cypress/e2e/Services/Measure Service/MeasureVersion.cy.ts
+cypress/e2e/Services/Measure Service/QI Core Test-Cases.cy.ts
+cypress/e2e/Services/Measure Service/TestCaseExport.cy.ts
+cypress/e2e/Services/QDM Measure Service/QDM Measure.cy.ts
+cypress/e2e/Services/QDM Measure Service/QDMMeasureVersion.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQL Library Sharing And Unsharing/CQLLibraryUnsharing.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQL Library Transfer/CQLLibraryTransfer.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQLLibraryHistory/LibraryHistory.cy.ts
+cypress/e2e/WebInterface/CQL Library/DeleteCQLLibraryValidations.cy.ts
+cypress/e2e/WebInterface/Measure/EditMeasure/EditMeasureValidations.cy.ts
+cypress/e2e/WebInterface/Measure/EditMeasure/QiCoreMeasureReferences.cy.ts
+cypress/e2e/WebInterface/Measure/Locking/MeasureUnlocking.cy.ts
+cypress/e2e/WebInterface/Measure/Measure Group/MeasureGroupScoringRule.cy.ts
+cypress/e2e/WebInterface/Measure/MeasureHistory/MeasureHistory.cy.ts
+cypress/e2e/WebInterface/Measure/MeasureSharingAndUnsharing/MeasureUnsharing.cy.ts
+cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMCQLParameters.cy.ts
+cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMLibraryIncludes.cy.ts
+cypress/e2e/WebInterface/Measure/QDMMeasureGroup/QDMPopulationCriteriaPage.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/CQLEditor.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreCQLParameters.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreLibraryIncludes.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core Measure Export/MeasureExportValidations.cy.ts
+cypress/e2e/WebInterface/Measure/VersionAndDraftMeasure/MeasureVersionValidations.cy.ts
+cypress/e2e/WebInterface/Test Cases/QDM Test Case/CreateUpdateQDMTestCase.cy.ts
+cypress/e2e/WebInterface/Test Cases/QDM Test Case/QDM Test Case Validations/QDMTestCaseValidations.cy.ts
+cypress/e2e/WebInterface/Test Cases/QDM Test Case/QDMTestCaseButtons.cy.ts
+cypress/e2e/WebInterface/Test Cases/QDM Test Case/Test Case Export/ExcelTestCaseExport.cy.ts
+cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/TestCaseExportImport/TestCaseExport.cy.ts
+cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/TestCaseExportImport/TestCaseExportBundleType.cy.ts
+cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/TestCasePopulationValues.cy.ts
+cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/Validations/TestCaseValidations.cy.ts

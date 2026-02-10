@@ -1,16 +1,14 @@
-import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Header } from "../../../Shared/Header"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
+let CQLLibraryName = 'LibraryCheckboxes' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 
-//skipping until the LibraryListCheckboxes feature flag is removed
 describe('CQL Library Sharing', () => {
 
     beforeEach('Create CQL Library', () => {
@@ -43,6 +41,5 @@ describe('CQL Library Sharing', () => {
 
         CQLLibraryPage.checkLibrary(0)
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-
     })
 })

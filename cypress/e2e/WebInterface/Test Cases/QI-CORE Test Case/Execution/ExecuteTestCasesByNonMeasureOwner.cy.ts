@@ -167,7 +167,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-            cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+            cy.get('.toast').should('have.text', 'Test case updated successfully with warnings in JSON')
 
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -241,7 +241,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get('.toast').should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -310,13 +310,13 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: Resource ID: 1 | CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Resource ID: 1 | The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: Resource ID: 1 | No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: Resource ID: 1 | CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Resource ID: 1 | The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: Resource ID: 1 | No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
     })
 })

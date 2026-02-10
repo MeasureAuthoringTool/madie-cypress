@@ -27,7 +27,7 @@ export class EditMeasurePage {
     public static readonly measureDetailsTab = '[data-testid=measure-details-tab]'
     public static readonly cqlEditorTab = '[data-testid=cql-editor-tab]'
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'
-    public static readonly testCasesTab = '[data-testid=patients-tab]'
+    public static readonly testCasesTab = '[data-testid="patients-tab"]'
     public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
     public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
@@ -114,6 +114,7 @@ export class EditMeasurePage {
     public static readonly createDefinitionBtn = '[data-testid="create-definition-button"]'
     public static readonly definitionTermInput = '[data-testid="measure-definition-term-input"]'
     public static readonly defintionEditorField = '[data-testid="definition-rich-text-editor"]'
+    public static readonly definitionInputNonQDM = '[data-testid="definition-rich-text-editor-content"]'
     public static readonly definitionInput = '[data-testid="genericField-rich-text-editor-content"]'
     public static readonly definitionMetaTable = '[id="measure-meta-data-table"]'
     public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
@@ -345,6 +346,18 @@ export class EditMeasurePage {
         cy.get(this.definitionTermInput).clear().type(term)
 
         cy.get(this.definitionInput).clear().type(definitionText)
+
+        cy.get(this.saveButton).click()
+
+        cy.contains('td', term).should('be.visible')
+    }
+    public static addMeasureDefinitionNonQDM(term: string, definitionText: string) {
+
+        cy.get(this.createDefinitionBtn).click()
+
+        cy.get(this.definitionTermInput).clear().type(term)
+
+        cy.get(this.definitionInputNonQDM).clear().type(definitionText)
 
         cy.get(this.saveButton).click()
 

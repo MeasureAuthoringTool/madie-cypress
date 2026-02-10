@@ -231,7 +231,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get('[data-testid="test-case-alerts"]').should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')

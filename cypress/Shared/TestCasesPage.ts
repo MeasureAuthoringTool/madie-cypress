@@ -205,6 +205,7 @@ export class TestCasesPage {
     public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
     public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
+    public static readonly testCaseJson = '[class="ace_content"]'
 
     public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
     public static readonly testCaseGroupInlineError = '[data-testid="test-case-series-helper-text"]'
@@ -611,7 +612,7 @@ export class TestCasesPage {
                     cy.get(TestCasesPage.jsonTab).click()
                 }
             })
-            
+
             // modify testcase JSON
             Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
@@ -659,10 +660,10 @@ export class TestCasesPage {
             .wait(1000)
             .type('{enter}')
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Wait for the save button to become unavailable
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 21500)
 
         cy.get(this.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'])
@@ -670,7 +671,8 @@ export class TestCasesPage {
 
         // ToDo: find something to wait on here instead of the hard wait
         cy.wait(14500)
-
+        cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 90000)
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Verify edited / updated test case Title and Series exists on Test Cases Page
