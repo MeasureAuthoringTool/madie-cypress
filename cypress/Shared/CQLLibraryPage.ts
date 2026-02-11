@@ -350,15 +350,15 @@ export class CQLLibraryPage {
 
     public static createLibraryAPI(libraryName: string, model: SupportedModels, options: CreateLibraryOptions) {
 
-        let user: string, description: string, publisher: string, cql: string, cqlErrors = false
+        let user: string, description: string, publisher: string, cql: string, cqlErrors = false, altUser = false
 
         const currentUser = Cypress.env('selectedUser')
 
-        if (!options.altUser)
+        if (options && options.altUser)
         {
-            options.altUser = false
+            altUser = true
         }
-        user = OktaLogin.setupUserSession(options.altUser)
+        user = OktaLogin.setupUserSession(altUser)
 
         if (options && options.description) {
             description = options.description
@@ -381,8 +381,6 @@ export class CQLLibraryPage {
         if (options && options.cqlErrors) {
             cqlErrors = true
         }
-
-        user = OktaLogin.setupUserSession(options.altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
