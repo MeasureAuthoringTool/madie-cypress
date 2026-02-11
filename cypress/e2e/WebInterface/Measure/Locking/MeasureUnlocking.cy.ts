@@ -46,7 +46,7 @@ describe('Measure Locking Validations', () => {
 
         //Logout 
         // most of OktaLogin.UILogout():
-        Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
+        Utilities.waitForElementVisible(Header.userProfileSelect, 10000)
         cy.get(Header.userProfileSelect).scrollIntoView()
         cy.get(Header.userProfileSelect).click()
         Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 60000)
