@@ -641,45 +641,183 @@ export class TestCasesPage {
         cy.log('Erroneous JSON added to test case successfully')
     }
 
-    public static updateTestCase(updatedTestCaseTitle: string, updatedTestCaseDescription: string, updatedTestCaseSeries: string): void {
+    public static updateTestCase(
+        updatedTestCaseTitle: string,
+        updatedTestCaseDescription: string,
+        updatedTestCaseSeries: string
+    ): void {
+        cy.intercept('PUT', '/api/measures/**/test-cases/**').as('saveTestCase');
 
-        cy.get(this.detailsTab).click()
+        cy.get(this.detailsTab).click();
 
-        cy.get(this.testCaseTitle).should('exist')
-        cy.get(this.testCaseTitle).should('be.visible')
-        cy.get(this.testCaseTitle).should('be.enabled')
+        // Title
+        cy.get(this.testCaseTitle).should('exist').and('be.visible').and('be.enabled');
+        this.clearAndTypeStable(this.testCaseTitle, updatedTestCaseTitle);
 
+        // Description
+        this.clearAndTypeStable(this.testCaseDescriptionTextBox, updatedTestCaseDescription);
 
-        cy.get(this.testCaseTitle).clear().type(updatedTestCaseTitle)
+        // Series (avoid Enter → click option or blur to commit)
+        Utilities.waitForElementVisible(this.createTestCaseGroupInput, 5000);
 
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear().type(updatedTestCaseDescription)
+        // Try the autocomplete option-click path (uncomment the freeSolo fallback if needed)
+        this.commitSeriesViaOptionClick(this.createTestCaseGroupInput, updatedTestCaseSeries, {
+            // If options come from API, intercept before typing and pass the alias here:
+            // searchAlias: 'seriesSearch'
+        });
+        // Fallback if your field is freeSolo/plain input:
+        // this.commitSeriesFreeSolo(this.createTestCaseGroupInput, updatedTestCaseSeries);
 
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseGroupInput, 3500)
-        cy.get(TestCasesPage.createTestCaseGroupInput).clear()
-            .type(updatedTestCaseSeries)
-            .wait(1000)
-            .type('{enter}')
+        // Save (either becomes enabled, or you might have autosave—in either case we wait for PUT)
+        cy.get(this.editTestCaseSaveButton, { timeout: 20000 })
+            .should('be.visible')
+            .should(($btn) => {
+                const disabled =
+                    $btn.prop('disabled') ||
+                    $btn.attr('aria-disabled') === 'true' ||
+                    $btn.hasClass('Mui-disabled');
+                expect(disabled, 'Save should be enabled').to.eq(false);
+            })
+            .click();
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.wait('@saveTestCase', { timeout: 60000 })
+            .its('response.statusCode')
+            .should('be.oneOf', [200, 202]);
 
-        //Wait for the save button to become unavailable
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 21500)
+        cy.get(this.successMsg, { timeout: 60000 }).each((msg) => {
+            expect(msg.text()).to.be.oneOf([
+                'Test case updated successfully!',
+                'Test case updated successfully with errors in JSON',
+                'Test case updated successfully with warnings in JSON',
+                'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+            ]);
+        });
 
-        cy.get(this.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'])
-        })
+        cy.get(EditMeasurePage.testCasesTab).scrollIntoView();
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 90000);
+        cy.get(EditMeasurePage.testCasesTab).click();
 
-        // ToDo: find something to wait on here instead of the hard wait
-        cy.wait(14500)
-        cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
-        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 90000)
-        cy.get(EditMeasurePage.testCasesTab).click()
+        this.grabValidateTestCaseTitleAndSeries(updatedTestCaseTitle, updatedTestCaseSeries);
 
-        //Verify edited / updated test case Title and Series exists on Test Cases Page
-        this.grabValidateTestCaseTitleAndSeries(updatedTestCaseTitle, updatedTestCaseSeries)
-
-        cy.log('Test Case updated successfully')
+        cy.log('Test Case updated successfully');
     }
+
+    // -----------------------------
+    // PRIVATE STATIC HELPERS
+    // -----------------------------
+
+    /** Robust clear → assert empty → type → assert value → blur */
+    private static clearAndTypeStable(selector: string, value: string) {
+        cy.get(selector, { timeout: 20000 })
+            .should('be.visible')
+            .should('be.enabled')
+            .focus()
+            .type('{selectAll}{del}')
+            .should('have.value', '')
+            .type(value)
+            .should('have.value', value)
+            .blur();
+    }
+
+    /** Commit to a MUI-like Autocomplete by clicking option (no Enter to avoid bubbling) */
+    private static commitSeriesViaOptionClick(
+        inputWrapperSelector: string,
+        series: string,
+        opts: {
+            listboxSelector?: string;
+            optionSelector?: string;
+            searchAlias?: string | null;
+        } = {}
+    ) {
+        const {
+            listboxSelector = '[role="listbox"], .MuiAutocomplete-listbox',
+            optionSelector = '[role="option"], .MuiAutocomplete-option',
+            searchAlias = null,
+        } = opts;
+
+        // Many MUI inputs wrap an inner <input>. Try inner input first, fallback to the wrapper.
+        const inputOrInner = `${inputWrapperSelector} input, ${inputWrapperSelector}`;
+
+        cy.get(inputOrInner, { timeout: 20000 })
+            .should('be.visible')
+            .should('be.enabled')
+            .focus()
+            .type('{selectAll}{del}')
+            .should('have.value', '')
+            .type(series, { delay: 0 });
+
+        if (searchAlias) cy.wait(searchAlias, { timeout: 15000 });
+
+        cy.get(listboxSelector, { timeout: 20000 }).should('be.visible');
+        cy.get(listboxSelector)
+            .find(optionSelector)
+            .should('have.length.greaterThan', 0)
+            .then(($opts) => {
+                const exact = [...$opts].find((el) => el.textContent?.trim() === series);
+                if (exact) {
+                    cy.wrap(exact).click({ force: true });
+                } else {
+                    cy.contains(optionSelector, series, { matchCase: false }).first().click({ force: true });
+                }
+            });
+
+        cy.get(inputOrInner).blur(); // commit
+    }
+
+    /** For freeSolo/plain inputs: type and blur to commit (no Enter used) */
+    private static commitSeriesFreeSolo(inputWrapperSelector: string, series: string) {
+        const inputOrInner = `${inputWrapperSelector} input, ${inputWrapperSelector}`;
+        cy.get(inputOrInner, { timeout: 20000 })
+            .should('be.visible')
+            .should('be.enabled')
+            .focus()
+            .type('{selectAll}{del}')
+            .should('have.value', '')
+            .type(series)
+            .should('have.value', series)
+            .blur(); // commit without Enter
+    }
+
+
+
+    // public static updateTestCase(updatedTestCaseTitle: string, updatedTestCaseDescription: string, updatedTestCaseSeries: string): void {
+    //
+    //     cy.get(this.detailsTab).click()
+    //
+    //     cy.get(this.testCaseTitle).should('exist')
+    //     cy.get(this.testCaseTitle).should('be.visible')
+    //     cy.get(this.testCaseTitle).should('be.enabled')
+    //
+    //
+    //     cy.get(this.testCaseTitle).clear().type(updatedTestCaseTitle)
+    //
+    //     cy.get(TestCasesPage.testCaseDescriptionTextBox).clear().type(updatedTestCaseDescription)
+    //
+    //     Utilities.waitForElementVisible(TestCasesPage.createTestCaseGroupInput, 3500)
+    //     cy.get(TestCasesPage.createTestCaseGroupInput).clear()
+    //         .type(updatedTestCaseSeries)
+    //         .type('{enter}')
+    //
+    //     cy.get(TestCasesPage.editTestCaseSaveButton).click()
+    //
+    //     //Wait for the save button to become unavailable
+    //     Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 21500)
+    //
+    //     cy.get(this.successMsg).each(msg => {
+    //         expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'])
+    //     })
+    //
+    //     // ToDo: find something to wait on here instead of the hard wait
+    //     cy.wait(14500)
+    //     cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
+    //     Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 90000)
+    //     cy.get(EditMeasurePage.testCasesTab).click()
+    //
+    //     //Verify edited / updated test case Title and Series exists on Test Cases Page
+    //     this.grabValidateTestCaseTitleAndSeries(updatedTestCaseTitle, updatedTestCaseSeries)
+    //
+    //     cy.log('Test Case updated successfully')
+    // }
 
     public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
         const currentUser = Cypress.env('selectedUser')
