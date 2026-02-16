@@ -54,7 +54,6 @@ describe('Check all variations of calculated dates', () => {
 
     afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
         Utilities.deleteMeasure()
     })
 
@@ -154,5 +153,9 @@ describe('Check all variations of calculated dates', () => {
         Utilities.dropdownSelect(TestCasesPage.calculatorTool.dwmyUnitsSelect, 'years')
         cy.get(TestCasesPage.calculatorTool.calculateDate).click()
         cy.get(TestCasesPage.calculatorTool.computedDateResults).should('have.text', '02/01/2021')
+
+        // click on Today button
+        cy.get('[data-testid="ds-btn"]').click()
+        cy.get(TestCasesPage.calculatorTool.initialDate).should('have.value', today)
     })
 })
