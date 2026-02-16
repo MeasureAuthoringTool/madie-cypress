@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
