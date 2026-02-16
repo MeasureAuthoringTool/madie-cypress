@@ -1,14 +1,14 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { Header } from "../../../../../Shared/Header"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { Header } from "../../../../Shared/Header"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 
 const now = Date.now()
 const measureName = 'QiCoreManifestExpansion' + now
@@ -28,7 +28,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
