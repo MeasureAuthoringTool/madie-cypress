@@ -86,26 +86,6 @@ describe.skip('Test Case Builder Basics', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        /* add Patient
-            female
-            identifer - whatever, its required
-            name - whatever
-            01-01-1985
-            race omb 2028-9 asian
-            ethnicity 2135-2 hispanic or latino
-            sex -
-
-            cy.get('[data-testid="measure-name-qicore-patient_action"]').click()
-
-            from added
-            data-test-id="action-center-button-<id value>".  find(button)
-            or data-testid= action-center-button-<id value>_Edit
-
-           
-        */
-        //  wait applybutton is visible
-        Utilities.waitForElementVisible(TestCaseBuilder.availableSearch, 11000)
-
         // after the page is ready (e.g., available tab visible)
         cy.get('[data-testid="available-tab"]').should('be.visible')
 
@@ -113,7 +93,35 @@ describe.skip('Test Case Builder Basics', () => {
 
         TestCaseBuilder.addEditNewResource(Profile.Patient)
 
-        cy.wait(3500)
+        Utilities.dropdownSelect('[data-testid="code-selector-Patient.gender"]', 'female')
+       
+        TestCaseBuilder.applyAndWait()
+
+        TestCaseBuilder.selectLeftMenu(' *Identifier')
+        cy.get('[data-testid="uri-field-Patient.identifier[0].system"]').type('http://hospital.smarthealthit.org')
+        cy.get('[data-testid="string-field-input-Patient.identifier[0].value"]').type('999999995')
+        TestCaseBuilder.applyAndWait()
+
+        TestCaseBuilder.selectLeftMenu(' *Name')
+        cy.get('[data-testid="string-field-input-Patient.name[0].family"]').type('Starr')
+        cy.get('[data-testid="string-field-input-Patient.name[0].given[0]"]').type('Ringo')
+        TestCaseBuilder.applyAndWait()
+
+        cy.get(TestCaseBuilder.addAttribute).click()
+        cy.contains('birthDate').click()
+        cy.contains('extension:race').click()
+        cy.contains('extension:ethnicity').click()
+        cy.get('[data-testid="add-element-button-2"]').click()
+
+        TestCaseBuilder.selectLeftMenu('Birth Date')
+        cy.get('[data-testid="YYYY-MM-DD-field-Patient.birthDate-input"]').type('01-01-1985')
+        TestCaseBuilder.applyAndWait()
+
+        TestCaseBuilder.selectLeftMenu('Extension (Race)')
+        // waiting for https://jira.cms.gov/browse/MAT-9688 - race omb 2028-9 asian
+
+        TestCaseBuilder.selectLeftMenu('Extension (Ethnicity)')
+        // waiting for https://jira.cms.gov/browse/MAT-9688 - ethnicity 2135-2 hispanic or latino
 
         /* add Encounter
         class actcode AMB

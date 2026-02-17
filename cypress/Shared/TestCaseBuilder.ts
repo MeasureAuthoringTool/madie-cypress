@@ -56,6 +56,8 @@ export class TestCaseBuilder {
     public static readonly addedTab = '[data-testid="added-tab"]'
     public static readonly jsonTab = '[data-testid="json-tab"]'
 
+    public static readonly addAttribute = '[data-testid="add-attribute-dialog-button"]'
+
     public static readonly availableSearch = '[data-testid="search-elements-input-input"]'
 
     public static readonly applyButton = '[data-testid="element-editor-submit-button"]'
@@ -90,5 +92,17 @@ export class TestCaseBuilder {
             cy.get('[data-testid="action-center-' + resourceId + '_Edit"]').click()
         })
 
+    }
+
+    public static applyAndWait() {
+
+        cy.get(TestCaseBuilder.applyButton).click()
+        cy.wait(1000)
+        Utilities.waitForElementDisabled(TestCaseBuilder.applyButton, 8500)
+    }
+
+    public static selectLeftMenu(menuOption: string) {
+        
+        cy.get('[data-testid="' + menuOption + '"]').click()
     }
 }
