@@ -61,6 +61,9 @@ export class TestCaseBuilder {
     public static readonly applyButton = '[data-testid="element-editor-submit-button"]'
     public static readonly undoButton = '[data-testid="element-editor-undo-button"]'
 
+    public static readonly horizontalSlider = "[data-testid='builder-slider']"
+
+
 
     public static addEditNewResource(addition: Profile, resourceNumber?: number) {
         const currentUser = Cypress.env('selectedUser')

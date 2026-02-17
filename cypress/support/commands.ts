@@ -29,6 +29,7 @@ import { Utilities } from "../Shared/Utilities"
 import { Environment } from "../Shared/Environment"
 import '@cypress-audit/lighthouse/commands'
 import 'cypress-file-upload'
+import 'cypress-real-events'
 
 export { } // this file needs to be a module
 
@@ -50,6 +51,8 @@ declare global {
             UMLSAPIKeyLogin()
             lighthouse(thresholds?: Object, lighthouseOptions?: Object, lighthouseConfig?: Object)
             cssType(locator: string, text: string)
+            dragAnySashToRight(steps?: number, rightPadding?: number): Chainable<void>
+            dragSashToRight(index?: number, steps?: number, rightPadding?: number): Chainable<void>
 
             /**
              * Custom command to edit the test case JSON in the Ace Editor.
@@ -760,8 +763,8 @@ Cypress.Commands.add('editTestCaseJSON', (jsonContent: string) => {
     cy.get(TestCasesPage.aceEditor).should('be.visible')
     cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
     cy.get(TestCasesPage.aceEditor).type('{selectAll}{backspace}')
-    cy.get(TestCasesPage.aceEditor).type(jsonContent, { parseSpecialCharSequences: false });
-});
+    cy.get(TestCasesPage.aceEditor).type(jsonContent, { parseSpecialCharSequences: false })
+})
 
 const compareColor = (color: string, property: keyof CSSStyleDeclaration) => (
     targetEle: JQuery
@@ -789,5 +792,76 @@ Cypress.Commands.overwrite('should', (originalFn: Function, subject: any, expect
         return originalFn(subject, customMatchers[expectation]);
     }
 
-    return originalFn(subject, expectation, ...args);
-});
+    return originalFn(subject, expectation, ...args)
+})
+
+function findLeftmostSash($all: JQuery<HTMLElement>): JQuery<HTMLElement> {
+    const arr = Array.from($all)
+    const sorted = arr.sort(
+        (a, b) => (a as HTMLElement).getBoundingClientRect().left - (b as HTMLElement).getBoundingClientRect().left
+    )
+    return Cypress.$(sorted[0])
+}
+
+/**
+ * Drag the visually left‑most Allotment sash fully to the right edge of its container
+ * Uses native mouse events via cypress-real-events
+ */
+Cypress.Commands.add('dragAnySashToRight', (steps: number = 6, rightPadding: number = 12) => {
+    const SASH = '[data-testid="sash"]'
+
+    // ensure geometry is in a 1:1 pixel space
+    cy.document().then(doc => { doc.body.style.zoom = '1' })
+
+    cy.get(SASH, { timeout: 10000 }).should('have.length.greaterThan', 0)
+
+    cy.get(SASH).then($all => {
+        const $sash = findLeftmostSash($all)
+        const el = $sash[0] as HTMLElement
+
+        const rect = el.getBoundingClientRect()
+        const container = (el.closest('[class*="sashContainer"]') as HTMLElement) || el.parentElement as HTMLElement
+        const crect = container.getBoundingClientRect()
+
+        const targetLeft = crect.right - rightPadding
+        const dx = Math.max(1, Math.round(targetLeft - (rect.left + rect.width / 2)))
+        const step = Math.ceil(dx / Math.max(1, steps))
+
+        cy.wrap($sash).realMouseDown({ position: 'center' })
+
+        for (let i = 1; i <= steps; i++) {
+            cy.wrap($sash).realMouseMove(step * i, 0, { position: 'center' })
+        }
+
+        cy.wrap($sash).realMouseUp()
+    })
+})
+
+/**
+ * Drag a specific sash by index fully to the right edge of its container
+ */
+Cypress.Commands.add('dragSashToRight', (index: number = 0, steps: number = 6, rightPadding: number = 12) => {
+    const SASH = '[data-testid="sash"]'
+
+    cy.document().then(doc => { doc.body.style.zoom = '1' })
+
+    cy.get(SASH).eq(index).should('be.visible').then($sash => {
+        const el = $sash[0] as HTMLElement
+        const rect = el.getBoundingClientRect()
+        const container = (el.closest('[class*="sashContainer"]') as HTMLElement) || el.parentElement as HTMLElement
+        const crect = container.getBoundingClientRect()
+
+        const targetLeft = crect.right - rightPadding
+        const dx = Math.max(1, Math.round(targetLeft - (rect.left + rect.width / 2)))
+        const step = Math.ceil(dx / Math.max(1, steps))
+
+        cy.wrap($sash).realMouseDown({ position: 'center' })
+
+        for (let i = 1; i <= steps; i++) {
+            cy.wrap($sash).realMouseMove(step * i, 0, { position: 'center' })
+        }
+
+        cy.wrap($sash).realMouseUp()
+    })
+})
+

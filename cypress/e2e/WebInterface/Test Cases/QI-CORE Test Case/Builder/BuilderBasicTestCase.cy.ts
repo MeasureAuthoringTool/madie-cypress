@@ -103,12 +103,17 @@ describe.skip('Test Case Builder Basics', () => {
 
            
         */
-            //  wait applybutton is visible
-            Utilities.waitForElementVisible(TestCaseBuilder.availableSearch, 11000)
+        //  wait applybutton is visible
+        Utilities.waitForElementVisible(TestCaseBuilder.availableSearch, 11000)
 
-            TestCaseBuilder.addEditNewResource(Profile.Patient)
+        // after the page is ready (e.g., available tab visible)
+        cy.get('[data-testid="available-tab"]').should('be.visible')
 
-            cy.wait(3500)
+        cy.dragAnySashToRight()
+
+        TestCaseBuilder.addEditNewResource(Profile.Patient)
+
+        cy.wait(3500)
 
         /* add Encounter
         class actcode AMB
