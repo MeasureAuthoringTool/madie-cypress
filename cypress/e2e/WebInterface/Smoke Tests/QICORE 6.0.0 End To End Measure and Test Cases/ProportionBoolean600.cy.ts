@@ -144,14 +144,18 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
     })
 })
 
-function waitForValidationToBe100() {
+function waitForValidationToBe100(retries = 0) {
+    const maxRetries = 24 // 24 retries × 5s wait = ~2 minutes max
     cy.get(TestCasesPage.testCaseListValidationPercTab)
         .invoke('text')
         .then((text: string) => {
             if (!text.includes('100%')) {
+                if (retries >= maxRetries) {
+                    throw new Error(`Validation did not reach 100% after ${maxRetries} retries. Last value: "${text}"`)
+                }
                 cy.wait(5000)
                 cy.reload()
-                waitForValidationToBe100()
+                waitForValidationToBe100(retries + 1)
             }
         })
 }
