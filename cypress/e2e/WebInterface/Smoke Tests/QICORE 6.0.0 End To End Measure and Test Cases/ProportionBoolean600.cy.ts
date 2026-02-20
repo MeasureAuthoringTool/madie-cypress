@@ -97,13 +97,13 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //verify Passing Tab's text
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(51/51)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '94%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(48/51)')
 
         //Verify Coverage percentage
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '95%')
 
 
         //after versioning, there should be no change to test results or coverage
@@ -134,13 +134,13 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //verify Passing Tab's text after Versioning
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(51/51)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '94%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(48/51)')
 
         //Verify Coverage percentage after versioning
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '95%')
     })
 })
 

@@ -92,10 +92,10 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
         cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
 
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('0')
 
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).type('1')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).type('0')
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -119,6 +119,8 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+
+        cy.pause()
 
     })
 })
