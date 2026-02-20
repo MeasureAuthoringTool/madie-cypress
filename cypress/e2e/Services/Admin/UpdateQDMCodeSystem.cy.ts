@@ -396,7 +396,6 @@ const testCase: TestCase = {
     group: 'IPPass',
     description: 'example tc for testing codesystem update',
     json: testCaseJson
-
 }
 const adminAPIKey = Environment.credentials().adminApiKey
 let harpUser = ''
@@ -432,6 +431,8 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
 
+        OktaLogin.setupAdminSession()
+
         // API call admin with values
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -441,7 +442,7 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
                     url: '/api/admin/measures/' + measureId + '/testcases/code-system-correction',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        "api-key": adminAPIKey
+                    //    "api-key": adminAPIKey
                     },
                     method: 'PUT',
                     qs: {
@@ -454,6 +455,9 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
                     expect(response.body[0]).to.eql(1)                    
                 })
 
+                //reset to original user
+                OktaLogin.setupUserSession(false)
+
                 // API to validate change
                 cy.request({
                     url: '/api/measures/' + measureId + '/test-cases',
@@ -461,16 +465,12 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
                         authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'GET',
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body[0].json).to.include("2.16.840.1.113883.6.285")
-                        expect(response.body[0].json).to.not.include("http://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets")
-                    })
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body[0].json).to.include("2.16.840.1.113883.6.285")
+                    expect(response.body[0].json).to.not.include("http://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets")
+                })
             })
         })
-        
-
-
     })
-
 })

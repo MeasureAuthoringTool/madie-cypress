@@ -48,6 +48,7 @@ declare global {
             setAccessTokenCookieALT2()
             setAccessTokenCookieALT3()
             setAccessTokenCookieCAMELCASE()
+            setAccessTokenCookieAdmin()
             UMLSAPIKeyLogin()
             lighthouse(thresholds?: Object, lighthouseOptions?: Object, lighthouseConfig?: Object)
             cssType(locator: string, text: string)
@@ -709,6 +710,95 @@ export function setAccessTokenCookieALT3() {
     })
 }
 
+export function setAccessTokenCookieAdmin() {
+
+    cy.clearCookies()
+    cy.clearLocalStorage()
+
+    cy.request({
+        url: authnUrl,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept': 'application/json'
+        },
+
+        body: {
+            username: Environment.credentials().adminUser,
+            password: Environment.credentials().adminPassword,
+
+            options: {
+                multiOptionalFactorEnroll: false,
+                warnBeforePasswordExpired: true
+            }
+        },
+        failOnStatusCode: false
+    }).then((response) => {
+
+        console.log(response)
+        expect(response.status).to.eql(200)
+        const sessionToken = response.body.sessionToken
+
+        let url = authCodeUrl + '?client_id=' + clientId +
+            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
+            '&code_challenge_method=S256' +
+            '&response_type=code' +
+            '&response_mode=okta_post_message' +
+            '&display=page' +
+            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
+            '&redirect_uri=' + redirectUri +
+            '&sessionToken=' + sessionToken +
+            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
+            '&scope=openid%20email%20profile'
+
+        cy.request({
+            url: url,
+            method: 'GET',
+            headers: {
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept': '*/*'
+            }
+        }).then((response) => {
+            expect(response.status).to.eql(200)
+
+            const resp = response.body
+            const codeIdx = resp.indexOf("data.code")
+            const codeEndIdx = resp.indexOf(";", codeIdx)
+            const codeLine = resp.substring(codeIdx, codeEndIdx)
+            const [v, c] = codeLine.split("=")
+            const escapedCode = c.trim().replace(/'/g, '')
+            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
+                return String.fromCharCode(parseInt(arguments[1], 16))
+            })
+
+            cy.request({
+                url: tokenUrl,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Accept': '*/*'
+                },
+                body: {
+                    grant_type: 'authorization_code',
+                    client_id: clientId,
+                    redirect_uri: redirectUri,
+                    code: authCode,
+                    code_verifier: codeVerifier
+                }
+            }).then((response) => {
+
+                expect(response.status).to.eql(200)
+                const access_token = response.body.access_token
+                //setting the cookie value to be grabbed for api authentication
+                cy.setCookie('accessToken', access_token)
+
+            })
+        })
+    })
+}
+
 export function UMLSAPIKeyLogin() {
     cy.getCookie('accessToken').then((accessToken) => {
         cy.request({
@@ -751,6 +841,9 @@ Cypress.Commands.add('setAccessTokenCookieALT3', () => {
 })
 Cypress.Commands.add('setAccessTokenCookieCAMELCASE', () => {
     return setAccessTokenCookieCAMELCASE()
+})
+Cypress.Commands.add('setAccessTokenCookieAdmin', () => {
+    return setAccessTokenCookieAdmin()
 })
 Cypress.Commands.add('UMLSAPIKeyLogin', () => {
     return UMLSAPIKeyLogin()
