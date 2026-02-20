@@ -474,4 +474,14 @@ export class OktaLogin {
         // doing this here to match dev work, rather than trying to track down each individual config
         return user.toLowerCase()
     }
+
+    public static setupAdminSession() {
+
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        cy.setAccessTokenCookieAdmin()
+    }
 }

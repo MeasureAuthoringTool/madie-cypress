@@ -7,7 +7,7 @@ export class Environment {
         harpUser: string, password: string, harpUser2: string,
         password2: string, harpUser3: string, password3: string, altHarpUser: string, altHarpUser2: string,
         altHarpUser3: string, passwordALT: string, passwordALT2: string, passwordALT3: string, umls_API_KEY: string,
-        adminApiKey: string
+        adminApiKey: string, adminUser: string, adminPassword: string
     } => {
         switch (Cypress.env('environment')) {
             case 'dev': {
@@ -25,7 +25,9 @@ export class Environment {
                     passwordALT2: Cypress.env('TEST_ALT_PASSWORD2'),
                     passwordALT3: Cypress.env('TEST_ALT_PASSWORD3'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    adminApiKey: Cypress.env('DEV_ADMIN_API_KEY')
+                    adminApiKey: Cypress.env('DEV_ADMIN_API_KEY'),
+                    adminUser: Cypress.env('TEST_ADMIN_USERNAME'),
+                    adminPassword: Cypress.env('TEST_ADMIN_PASSWORD')
                 }
             }
             case 'test': {
@@ -43,7 +45,9 @@ export class Environment {
                     passwordALT2: Cypress.env('TEST_ALT_PASSWORD2'),
                     passwordALT3: Cypress.env('TEST_ALT_PASSWORD3'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    adminApiKey: Cypress.env('TEST_ADMIN_API_KEY')
+                    adminApiKey: Cypress.env('TEST_ADMIN_API_KEY'),
+                    adminUser: Cypress.env('TEST_ADMIN_USERNAME'),
+                    adminPassword: Cypress.env('TEST_ADMIN_PASSWORD')
                 }
             }
             // case 'impl': {
