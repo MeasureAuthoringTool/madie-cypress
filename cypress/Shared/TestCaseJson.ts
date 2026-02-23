@@ -2213,7 +2213,7 @@ export class TestCaseJson {
         '          ]\n' +
         '        },\n' +
         '        "subject": {\n' +
-        '          "reference": "https://www.myGoodHealthcare/Patient/60ad199cacdbd5186fd799f3"\n' +
+        '          "reference": "Patient/60ad199cacdbd5186fd799f3"\n' +
         '        },\n' +
         '        "onsetPeriod": {\n' +
         '          "start": "2021-03-04T08:00:00.000+00:00"\n' +
@@ -2319,7 +2319,7 @@ export class TestCaseJson {
         '          ]\n' +
         '        },\n' +
         '        "subject": {\n' +
-        '          "reference": "https://www.myGoodHealthcare/Patient/60ad199cacdbd5186fd799f3"\n' +
+        '          "reference": "Patient/60ad199cacdbd5186fd799f3"\n' +
         '        },\n' +
         '        "requester": {\n' +
         '          "reference": "Practitioner/6546464"\n' +
