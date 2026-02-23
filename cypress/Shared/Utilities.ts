@@ -161,7 +161,7 @@ export class Utilities {
 
     }
 
-    public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
+    public static deleteVersionedMeasure(measureName?: string, cqlLibraryName?: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
         const currentUser = Cypress.env('selectedUser')
         let user = ''
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -173,7 +173,8 @@ export class Utilities {
             altUser = false
         }
 
-        user = OktaLogin.setupUserSession(altUser)
+        user = OktaLogin.getUser(altUser)
+        OktaLogin.setupAdminSession()
 
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
@@ -188,7 +189,6 @@ export class Utilities {
                     method: 'DELETE',
                     headers: {
                         Authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpId': user
                     }
                 }).then((response) => {
@@ -196,7 +196,6 @@ export class Utilities {
                     cy.log("Measure Deleted successfully")
                 })
             })
-
         })
     }
 
