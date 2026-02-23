@@ -120,7 +120,5 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
-        cy.pause()
-
     })
 })
