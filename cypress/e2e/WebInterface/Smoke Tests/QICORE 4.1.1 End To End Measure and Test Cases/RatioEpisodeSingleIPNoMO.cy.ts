@@ -16,7 +16,7 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeSingleIPNoMO_IPP_PASS
 let testCaseJsonMultipleEpisodesPass = TestCaseJson.RatioEpisodeSingleIPNoMO_MultipleEpisodes_PASS
-let measureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n\n' +
+const baseMeasureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n\n' +
     'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include CQMCommon version \'1.0.000\' called Global\n\n' +
@@ -44,6 +44,7 @@ let measureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n\n' +
     'define "Numerator Exclusions":\n' +
     '    Numerator Numer\n' +
     '        where Numer.class ~ "Emergency"'
+let measureCQL = baseMeasureCQL
 
 describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
@@ -57,6 +58,11 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
     }
 
     beforeEach('Create Measure and Test Case', () => {
+
+        let newTimestamp = Date.now()
+        measureName = 'RatioEpSglIPNoMO' + newTimestamp
+        CqlLibraryName = 'RatioEpSglIPNoMO' + newTimestamp
+        measureCQL = baseMeasureCQL.replace('library RatioEpisodeSingleIPNoMO', 'library RatioEpSglIPNoMO' + newTimestamp)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2022-12-31')

@@ -116,7 +116,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
