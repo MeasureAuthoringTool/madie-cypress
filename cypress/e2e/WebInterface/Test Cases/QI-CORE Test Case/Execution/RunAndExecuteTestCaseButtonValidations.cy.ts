@@ -723,7 +723,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', expectedWarning)
     })
 
-    it.only('Cannot "Run Test Case" or "Execute Test Case" when a test case has multiple errors and a warning', () => {
+    it('Cannot "Run Test Case" or "Execute Test Case" when a test case has multiple errors and a warning', () => {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
