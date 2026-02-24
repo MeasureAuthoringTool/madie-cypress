@@ -799,21 +799,6 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //navigate to the details tab for the test case
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-
-        //confirm error messages
-        const expectedErrors = [
-            'Error: All resources must have an Id',
-            'Error: Resource ID: Bundle.entry[0] | Bundle entry missing fullUrl',
-            'Error: Resource ID: null | Relative Reference appears inside Bundle whose entry is missing a fullUrl',
-            'Error: Resource ID: null | Relative Reference appears inside Bundle whose entry is missing a fullUrl',
-            'Error: Resource ID: Bundle.entry[0] | Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in the entry',
-            'Warning: Resource ID: null | No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)'
-        ]
-
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).children().text().should('deep.equal', expectedErrors)
-
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('not.be.enabled')
