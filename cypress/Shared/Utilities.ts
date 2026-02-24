@@ -174,7 +174,7 @@ export class Utilities {
         }
 
         user = OktaLogin.getUser(altUser)
-        OktaLogin.setupUserSession(altUser)
+        OktaLogin.setupAdminSession()
 
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
