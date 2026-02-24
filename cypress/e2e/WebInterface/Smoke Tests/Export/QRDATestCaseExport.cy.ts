@@ -34,6 +34,11 @@ describe('QDM Test Cases : Export Test Case', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 
+        let newTimestamp = Date.now()
+        let newRandValue = (Math.floor((Math.random() * 1000) + 1))
+        measureName = 'QDMTestMeasure' + newTimestamp + newRandValue
+        CqlLibraryName = 'QDMCQLLibrary' + newTimestamp + newRandValue
+
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Cohort'
@@ -142,6 +147,11 @@ describe('Export Test cases by Non Measure Owner', () => {
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
+
+        let newTimestamp = Date.now()
+        let newRandValue = (Math.floor((Math.random() * 1000) + 1))
+        measureName = 'QDMTestMeasure' + newTimestamp + newRandValue
+        CqlLibraryName = 'QDMCQLLibrary' + newTimestamp + newRandValue
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName

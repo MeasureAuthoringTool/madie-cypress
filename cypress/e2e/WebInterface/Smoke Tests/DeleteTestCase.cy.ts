@@ -29,6 +29,11 @@ describe('Delete Test Case', () => {
 
     beforeEach('Create measure and login', () => {
 
+        let newTimestamp = Date.now()
+        measureName = 'DeleteTC' + newTimestamp
+        CqlLibraryName = 'DeleteTCLib' + newTimestamp
+        measureCQL = MeasureCQL.ICFCleanTest_CQL.replace('SimpleFhirLibrary', CqlLibraryName)
+
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
         OktaLogin.Login()

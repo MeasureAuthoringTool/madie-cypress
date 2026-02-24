@@ -40,7 +40,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
     after('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

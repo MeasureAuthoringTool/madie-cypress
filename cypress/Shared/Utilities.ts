@@ -174,7 +174,7 @@ export class Utilities {
         }
 
         user = OktaLogin.getUser(altUser)
-        OktaLogin.setupAdminSession()
+        OktaLogin.setupUserSession(altUser)
 
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
@@ -189,6 +189,7 @@ export class Utilities {
                     method: 'DELETE',
                     headers: {
                         Authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminApiKey,
                         'harpId': user
                     }
                 }).then((response) => {

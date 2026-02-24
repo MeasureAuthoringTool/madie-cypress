@@ -22,7 +22,7 @@ describe('Delete Measure', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Verify Measure Owner can Delete Measure through Action center', () => {
