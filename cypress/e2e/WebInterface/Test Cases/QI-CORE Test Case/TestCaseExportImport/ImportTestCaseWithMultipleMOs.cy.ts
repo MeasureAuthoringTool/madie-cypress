@@ -78,9 +78,8 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Import test case zip & execute tests', () => {
@@ -93,7 +92,7 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
 
         //Upload valid Json file via drag and drop
         // this file was generated post 2.2.0, with the QMIG STU5 naming structure
-        // MAT-9275 - this export is a transaction bundle & will be transformed to a collection
+        // MAT-9275 - this export is a transaction bundle & will be transformed to a collection after release of TestCase Builder
         cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/Multiple-MO-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
