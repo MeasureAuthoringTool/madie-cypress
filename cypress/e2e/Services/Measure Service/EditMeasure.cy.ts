@@ -26,7 +26,10 @@ describe('Measure Service: Edit Measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        let newMName = 'TestMeasureA' + Date.now() + randVal
+        let newCqlLibName = 'TestCqlA' + Date.now() + randVal
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMName, newCqlLibName, measureCQL)
 
         harpUser = OktaLogin.setupUserSession(false)
 
@@ -1076,8 +1079,12 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
 
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        let newMName = 'TestMeasureB' + Date.now() + randVal
+        let newCqlLibName = 'TestCqlB' + Date.now() + randVal
+
         //Create Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMName, newCqlLibName, measureCQL)
 
     })
 
@@ -1150,15 +1157,21 @@ describe('Edit Measure Validations', () => {
     updatedMeasureName = measureName + 2 + randValue
     updatedCQLLibraryName = cqlLibraryName + 2 + randValue
 
+    let newMName = ''
+    let newCqlLibName = ''
+
     beforeEach('Create Measure ans Set Access token', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        newMName = 'TestMeasureC' + Date.now() + randVal
+        newCqlLibName = 'TestCqlC' + Date.now() + randVal
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMName, newCqlLibName, measureCQL)
 
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(newMName, newCqlLibName)
 
     })
 
@@ -1461,14 +1474,20 @@ describe('Measurement Period Validations', () => {
     updatedMeasureName = measureName + 3 + randValue
     updatedCQLLibraryName = cqlLibraryName + 3 + randValue
 
+    let newMNameD = ''
+    let newCqlLibNameD = ''
+
     beforeEach('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        newMNameD = 'TestMeasureD' + Date.now() + randVal
+        newCqlLibNameD = 'TestCqlD' + Date.now() + randVal
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMNameD, newCqlLibNameD, measureCQL)
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
+        Utilities.deleteMeasure(newMNameD, newCqlLibNameD)
 
     })
 

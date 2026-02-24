@@ -27,9 +27,6 @@ let harpUser = ''
 let newMeasureName = ''
 let newCQLLibraryName = ''
 let qdmMeasureCQLVm = MeasureCQL.CQLQDMObservationRun
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let measureName = 'TestMeasure' + Date.now() + randValue
-let cqlLibraryName = 'TestCql' + Date.now() + randValue
 let measureCQL = MeasureCQL.SBTEST_CQL
 let qdmMeasureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
@@ -40,9 +37,15 @@ const actionOptions: MeasureActionOptions = {
 
 describe('Measure Service: View Human Readable for Qi Core Draft Measure', () => {
 
+    let newMeasureName = ''
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'TestMeasureA' + Date.now() + randVal
+        newCqlLibraryName = 'TestCqlA' + Date.now() + randVal
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -57,7 +60,7 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -82,9 +85,15 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
 
 describe('Measure Service: View Human Readable for Versioned Qi Core Measure', () => {
 
+    let newMeasureName = ''
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'TestMeasureB' + Date.now() + randVal
+        newCqlLibraryName = 'TestCqlB' + Date.now() + randVal
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -99,7 +108,7 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -140,10 +149,16 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
 
 describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
 
+    let newMeasureName = ''
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Set Access Token', () => {
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = cqlLibraryName
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'TestMeasureC' + Date.now() + randVal
+        newCqlLibraryName = 'TestCqlC' + Date.now() + randVal
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
         measureData.measureCql = qdmMeasureCQL
@@ -163,7 +178,7 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -188,16 +203,20 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
 
 describe('Measure Service: View Human readable for Versioned QDM Measure', () => {
 
-    newMeasureName = measureName + 1 + randValue
-    newCQLLibraryName = cqlLibraryName + 1 + randValue
+    let localMeasureName = ''
+    let localCqlLibraryName = ''
 
     beforeEach('Create Measure', () => {
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
 
-        measureData.ecqmTitle = newMeasureName
-        measureData.cqlLibraryName = newCQLLibraryName
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        localMeasureName = 'TestMeasureD' + Date.now() + randVal
+        localCqlLibraryName = 'TestCqlD' + Date.now() + randVal
+
+        measureData.ecqmTitle = localMeasureName
+        measureData.cqlLibraryName = localCqlLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'false'
         measureData.measureCql = qdmMeasureCQLVm
@@ -218,7 +237,7 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
         cy.clearAllCookies()
         cy.clearLocalStorage()
 
-        Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
+        Utilities.deleteVersionedMeasure(localMeasureName, localCqlLibraryName)
     })
 
     //MAT-8548
@@ -271,8 +290,9 @@ describe('Measure Human Readable comparison', () => {
     before('Create Measure, version, and draft the measure', () => {
         let currentUser = Cypress.env('selectedUser')
 
-        newMeasureName = measureName + 1 + randValue
-        newCQLLibraryName = cqlLibraryName + 1 + randValue
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'TestMeasureE' + Date.now() + randVal
+        newCQLLibraryName = 'TestCqlE' + Date.now() + randVal
         let firstVersionedMeasureName = 'FirstVersioned' + newMeasureName + Date.now()
         cy.wait(2000)
         let secondVersionedMeasureName = 'SecondVersioned' + newMeasureName + Date.now()
@@ -385,10 +405,16 @@ describe('Measure Human Readable comparison', () => {
 
 describe('Measure Service: Verify error message when there is no Population Criteria for QDM Measure', () => {
 
+    let newMeasureName = ''
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Set Access Token', () => {
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = cqlLibraryName
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'TestMeasureF' + Date.now() + randVal
+        newCqlLibraryName = 'TestCqlF' + Date.now() + randVal
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
         measureData.measureCql = qdmMeasureCQL
@@ -400,7 +426,7 @@ describe('Measure Service: Verify error message when there is no Population Crit
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
