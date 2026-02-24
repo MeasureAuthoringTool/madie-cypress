@@ -39,10 +39,14 @@ describe('Test Case population values based on Measure Group population definiti
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
         TCName = 'TCName' + randTCNameValue
 
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        let newMeasureName = measureName + randVal + Date.now()
+        let newCqlLibraryName = cqlLibraryName + randVal + Date.now()
+
         OktaLogin.setupUserSession(false)
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = cqlLibraryName
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'true'
         measureData.measureCql = booleanPatientBasisQDM_CQL
@@ -521,10 +525,14 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
         TCName = 'TCName' + randTCNameValue
 
+        let randVal = (Math.floor((Math.random() * 2000) + 3))
+        let newMeasureName = measureName + randVal + Date.now()
+        let newCqlLibraryName = cqlLibraryName + randVal + Date.now()
+
         OktaLogin.setupUserSession(false)
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = cqlLibraryName
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'true'
         measureData.measureCql = booleanPatientBasisQDM_CQL

@@ -17,7 +17,8 @@ let testCaseTitle = 'Combo2 ThreeEncounter'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 
-let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
+function generateQDMCQLWithErrors(libraryName: string): string {
+    return 'library ' + libraryName + ' version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
     'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
@@ -57,6 +58,7 @@ let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\
     '\n' +
     'define "Initial Population":\'\'\n' +
     '\t  \'Inpatient Encounters\'\n'
+}
 
 const measureData: CreateMeasureOptions = {}
 
@@ -64,6 +66,9 @@ describe('Measure Versioning validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        measureName = 'TestMeasureA' + Date.now() + randValue
+        cqlLibraryName = 'TestCqlA' + Date.now() + randValue
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = cqlLibraryName
         measureData.measureScoring = 'Cohort'
@@ -109,7 +114,7 @@ describe('Measure Versioning validations', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(generateQDMCQLWithErrors(cqlLibraryName))
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')

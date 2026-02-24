@@ -18,10 +18,14 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let newMeasureName = measureName + randValue + Date.now()
+        let newCqlLibraryName = cqlLibraryName + randValue + Date.now()
+
         OktaLogin.setupUserSession(false)
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = cqlLibraryName
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'true'
         measureData.measureCql = booleanPatientBasisQDM_CQL
@@ -86,10 +90,14 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let newMeasureName = measureName + randValue + Date.now()
+        let newCqlLibraryName = cqlLibraryName + randValue + Date.now()
+
         OktaLogin.setupUserSession(false)
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = cqlLibraryName
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'false'
         measureData.measureCql = booleanPatientBasisQDM_CQL

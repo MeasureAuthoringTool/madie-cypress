@@ -11,37 +11,41 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Toasts } from "../../../../Shared/Toasts"
 
-const now = Date.now()
-const measureName = 'VersionValidations' + now
-const cqlLibraryName = 'VersionValidationsLib' + now
 const measureCQL = MeasureCQL.SBTEST_CQL
 const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
 const cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const testCaseTitle = 'TestcaseTitle'
-const testCaseDescription = 'Description' + now
+const testCaseDescription = 'Description' + Date.now()
 const testCaseSeries = 'SBTestSeries'
 
-let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' \n' +
-    'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\' \n' +
-    'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
-    'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
-    'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Female": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.560.100.2\'\n' +
-    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
-    'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-    'valueset "Pap Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
-    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
-    'valueset "HPV Test": \'\')'
+function generateMeasureCQLWithErrors(libraryName: string): string {
+    return 'library ' + libraryName + ' version \'0.0.000\'\n' +
+        'using QICore version \'4.1.1\'\n' +
+        'include FHIRHelpers version \'4.1.000\' \n' +
+        'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\' \n' +
+        'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Female": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.560.100.2\'\n' +
+        'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+        'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+        'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+        'valueset "Pap Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
+        'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+        'valueset "HPV Test": \'\')'
+}
 
 describe('Measure Versioning validations', () => {
 
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let newMeasureName = 'VersionValidationsA' + Date.now() + randValue
+        newCqlLibraryName = 'VersionValidationsLibA' + Date.now() + randValue
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
     })
 
@@ -74,7 +78,7 @@ describe('Measure Versioning validations', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(generateMeasureCQLWithErrors(newCqlLibraryName))
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -101,9 +105,15 @@ describe('Measure Versioning validations', () => {
 
 describe('Measure Versioning when the measure has test case with errors', () => {
 
+    let newMeasureName = ''
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cohortMeasureCQL)
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'VersionValidationsB' + Date.now() + randValue
+        newCqlLibraryName = 'VersionValidationsLibB' + Date.now() + randValue
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
 
@@ -117,7 +127,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('User receives "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
@@ -177,9 +187,15 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
 describe('Create Test case for Qi Core Versioned Measure', () => {
 
+    let newMeasureName = ''
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cohortMeasureCQL)
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'VersionValidationsC' + Date.now() + randValue
+        newCqlLibraryName = 'VersionValidationsLibC' + Date.now() + randValue
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -192,7 +208,7 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Measure owner able to Add, Clone, and Import Test cases to Qi Core Versioned Measure', () => {
@@ -223,9 +239,15 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
 
 describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
 
+    let newMeasureName = ''
+    let newCqlLibraryName = ''
+
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cohortMeasureCQL)
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        newMeasureName = 'VersionValidationsD' + Date.now() + randValue
+        newCqlLibraryName = 'VersionValidationsLibD' + Date.now() + randValue
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
@@ -249,7 +271,7 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Measure owner able to Edit Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
@@ -301,7 +323,10 @@ describe('Non Measure owner unable to create Version', () => {
 
     before('Create Measure with regular user and Login as Alt user', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let newMeasureName = 'VersionValidationsE' + Date.now() + randValue
+        let newCqlLibraryName = 'VersionValidationsLibE' + Date.now() + randValue
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
     })
 
