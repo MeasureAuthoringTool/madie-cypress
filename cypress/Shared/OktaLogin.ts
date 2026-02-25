@@ -431,6 +431,9 @@ export class OktaLogin {
                     user = Environment.credentials().harpUser
             }
         }
+        if (!user) {
+            throw new Error(`User credential is not set. altUser=${altUser}, selectedAltUser=${currentAltUser}, selectedUser=${currentUser}. Ensure the corresponding environment variables (e.g. TEST_ALT_USERNAME) are configured.`)
+        }
         cy.log('Current user is: ' + user)
         // doing this here to match dev work, rather than trying to track down each individual config
         return user.toLowerCase()
@@ -452,6 +455,10 @@ export class OktaLogin {
                 case 'altHarpUser3':
                     user = Environment.credentials().altHarpUser3
                     break
+                case undefined:
+                    // selectedAltUser not yet set; fall back to default alt user
+                    user = Environment.credentials().altHarpUser
+                    break
                 default:
                     throw new Error(`Unknown user type: ${currentAltUser}`)
             }
@@ -466,9 +473,17 @@ export class OktaLogin {
                 case 'harpUser3':
                     user = Environment.credentials().harpUser3
                     break
+                case undefined:
+                    // selectedUser not yet set; fall back to default user
+                    user = Environment.credentials().harpUser
+                    break
                 default:
                     throw new Error(`Unknown user type: ${currentUser}`)
             }
+        }
+
+        if (!user) {
+            throw new Error(`User credential is not set. altUser=${altUser}, selectedAltUser=${currentAltUser}, selectedUser=${currentUser}. Ensure the corresponding environment variables (e.g. TEST_ALT_USERNAME) are configured.`)
         }
 
         cy.log('Grabbing username: ' + user)
