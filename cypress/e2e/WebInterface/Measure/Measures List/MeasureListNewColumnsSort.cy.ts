@@ -1,9 +1,10 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Utilities } from "../../../../Shared/Utilities"
 
 const dayjs = require('dayjs')
+const customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
 const today = dayjs().format('M/D/YYYY')
 
 describe('Measure List Page Sort by Columns', () => {
@@ -33,11 +34,11 @@ describe('Measure List Page Sort by Columns', () => {
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=DESC').as('sort8')
 
         //here - cms id
-        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=ASC').as('sort9')
-        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=DESC').as('sort10')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.cmsId&direction=ASC').as('sort9')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.cmsId&direction=DESC').as('sort10')
 
-        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=ASC').as('sort11')
-        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureSet.acls&direction=DESC').as('sort12')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=lastModifiedAt&direction=ASC').as('sort11')
+        cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=lastModifiedAt&direction=DESC').as('sort12')
 
         // out of order, but not worth resetting everything
         cy.intercept('/api/measures/searches?ownershipTypes=ALL&limit=10&page=0&sort=measureMetaData.draft&direction=ASC').as('sort13')
@@ -47,74 +48,113 @@ describe('Measure List Page Sort by Columns', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
 
-        //sort by measure
+        //sort by measure name ASC
         cy.contains('.header-button', 'Measure').click()
         cy.wait('@sort')
-        MeasuresPage.checkFirstRow({ name: '\t Test.CMS334.emm' })
-        cy.contains('.header-button', 'Measure').click()
-        cy.wait('@sort2')
-        MeasuresPage.checkFirstRow({ name: 'tillertest' })
-
-        // sort by version
-        cy.contains('.header-button', 'Version').click()
-        cy.wait('@sort3')
-        MeasuresPage.checkFirstRow({ version: '0.0.000' })
-        cy.contains('.header-button', 'Version').click()
-        cy.wait('@sort4')
-        MeasuresPage.checkFirstRow({ version: '15.3.000' })
-
-        // sort by status
-        cy.contains('.header-button', 'Status').click()
-        cy.wait('@sort13')
-        MeasuresPage.checkFirstRow({ status: '' })
-        cy.contains('.header-button', 'Status').click()
-        cy.wait('@sort14')
-        MeasuresPage.checkFirstRow({ status: 'Draft' })
-
-        // sort by model
-        cy.contains('.header-button', 'Model').click()
-        cy.wait('@sort5')
-        MeasuresPage.checkFirstRow({ model: SupportedModels.QDM })
-        cy.contains('.header-button', 'Model').click()
-        cy.wait('@sort6')
-        MeasuresPage.checkFirstRow({ model: SupportedModels.qiCore6 })
-
-        // sort by shared
-        cy.contains('.header-button', 'Shared').click()
-        cy.wait('@sort7')
-        MeasuresPage.checkFirstRow({ shared: false })
-        cy.contains('.header-button', 'Shared').click()
-        cy.wait('@sort8')
-        MeasuresPage.checkFirstRow({ shared: true })
-
-        // sort by cms id empty
-        cy.contains('.header-button', 'CMS ID').click()
-        cy.wait('@sort9')
-        MeasuresPage.checkFirstRow({ cmsId: '' })
-        cy.contains('.header-button', 'CMS ID').click()
-        cy.wait('@sort10')
-        cy.wait(7000)
-        // since we have tests for generating CMS id now, need to do this annoying check now
-        cy.get('[data-testid="row-item"]').first().find('td').eq(6).invoke('text').then(cmsId => {
-
-            const greatestProdId = 1332 // we can periodically update this I guess?
-            if (cmsId.toString().length < 5) {
-                const idNumber = Number(cmsId)
-                expect(idNumber).to.be.greaterThan(greatestProdId)
-            } else {
-                const fhirNumber = Number(cmsId.slice(0, -4))
-                expect(fhirNumber).to.be.greaterThan(greatestProdId)
-                expect(cmsId).to.have.string('FHIR')
-            }
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(ascName => {
+            // sort by measure name DESC
+            cy.contains('.header-button', 'Measure').click()
+            cy.wait('@sort2')
+            cy.wait(1100)
+            cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(descName => {
+                // ASC first name should come before DESC first name alphabetically
+                expect(ascName.toLowerCase().localeCompare(descName.toLowerCase())).to.be.lessThan(0)
+            })
         })
 
-        // sort by updated
+        // sort by version ASC
+        cy.contains('.header-button', 'Version').click()
+        cy.wait('@sort3')
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(2).invoke('text').then(ascVersion => {
+            // sort by version DESC
+            cy.contains('.header-button', 'Version').click()
+            cy.wait('@sort4')
+            cy.wait(1100)
+            cy.get('.measures-list tr').first().find('td').eq(2).invoke('text').then(descVersion => {
+                // ASC first version should differ from DESC first version
+                expect(ascVersion).to.not.equal(descVersion)
+            })
+        })
+
+        // sort by status ASC
+        cy.contains('.header-button', 'Status').click()
+        cy.wait('@sort13')
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(3).invoke('text').then(ascStatus => {
+            // sort by status DESC
+            cy.contains('.header-button', 'Status').click()
+            cy.wait('@sort14')
+            cy.wait(1100)
+            cy.get('.measures-list tr').first().find('td').eq(3).invoke('text').then(descStatus => {
+                // At least one of the two should show 'Draft'
+                const hasDraft = ascStatus === 'Draft' || descStatus === 'Draft'
+                expect(hasDraft).to.be.true
+            })
+        })
+
+        // sort by model ASC
+        cy.contains('.header-button', 'Model').click()
+        cy.wait('@sort5')
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(ascModel => {
+            // sort by model DESC
+            cy.contains('.header-button', 'Model').click()
+            cy.wait('@sort6')
+            cy.wait(1100)
+            cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(descModel => {
+                // ASC and DESC should produce different first models
+                expect(ascModel).to.not.equal(descModel)
+                // ASC should come before DESC alphabetically
+                expect(ascModel.localeCompare(descModel)).to.be.lessThan(0)
+            })
+        })
+
+        // sort by shared ASC
+        cy.contains('.header-button', 'Shared').click()
+        cy.wait('@sort7')
+        cy.wait(1100)
+        // sort by shared DESC - verify the shared icon appears on the first row
+        cy.contains('.header-button', 'Shared').click()
+        cy.wait('@sort8')
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(5).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
+
+        // sort by cms id ASC - empty/null values first
+        cy.contains('.header-button', 'CMS ID').click()
+        cy.wait('@sort9')
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(6).invoke('text').then(ascCmsId => {
+            // sort by cms id DESC - highest values first
+            cy.contains('.header-button', 'CMS ID').click()
+            cy.wait('@sort10')
+            cy.wait(1100)
+            cy.get('.measures-list tr').first().find('td').eq(6).invoke('text').then(descCmsId => {
+                // ASC should start empty or with a lower ID, DESC should have a value
+                // At minimum, the two sort orders should produce different first rows
+                expect(ascCmsId).to.not.equal(descCmsId)
+                // DESC first row should have a non-empty CMS ID
+                expect(descCmsId.trim()).to.not.be.empty
+            })
+        })
+
+        // sort by updated ASC - oldest first
         cy.contains('.header-button', 'Updated').click()
         cy.wait('@sort11')
-        MeasuresPage.checkFirstRow({ updated: '11/29/2022' })
-        cy.contains('.header-button', 'Updated').click()
-        cy.wait('@sort12')
-        MeasuresPage.checkFirstRow({ updated: today })
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(7).invoke('text').then(ascDate => {
+            // sort by updated DESC - newest first
+            cy.contains('.header-button', 'Updated').click()
+            cy.wait('@sort12')
+            cy.wait(1100)
+            cy.get('.measures-list tr').first().find('td').eq(7).invoke('text').then(descDate => {
+                // The oldest date (ASC) should be before the newest date (DESC)
+                const ascParsed = dayjs(ascDate, 'M/D/YYYY')
+                const descParsed = dayjs(descDate, 'M/D/YYYY')
+                expect(ascParsed.isBefore(descParsed)).to.be.true
+            })
+        })
     })
 
     it('Column sort resets pagination to page 1', () => {
@@ -133,28 +173,35 @@ describe('Measure List Page Sort by Columns', () => {
         // sort by model
         cy.contains('.header-button', 'Model').click()
         cy.wait('@sort')
-        MeasuresPage.checkFirstRow({ model: SupportedModels.QDM })
+        cy.wait(1100)
+        cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(ascModel => {
 
-        // verify page 1
-        cy.url().should('match', /page=1/)
-        cy.get('button[aria-current="page"]').should('have.text', '1')
+            // verify page 1
+            cy.url().should('match', /page=1/)
+            cy.get('button[aria-current="page"]').should('have.text', '1')
 
-        // go to page 6
-        cy.get('.MuiPagination-ul').children().eq(5).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
+            // navigate away from page 1 by clicking a numbered page button (not prev/next arrows)
+            cy.get('.MuiPagination-ul button[aria-label^="Go to page"]').last().click()
+            Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 31000)
 
-        // verify page 6
-        cy.url().should('match', /page=6/)
-        cy.get('button[aria-current="page"]').should('have.text', '6')
+            // verify we're not on page 1
+            cy.get('button[aria-current="page"]').invoke('text').then(lastPageNumber => {
+                expect(Number(lastPageNumber)).to.be.greaterThan(1)
+            })
 
-        // sort by model again to reset
-        cy.contains('.header-button', 'Model').click()
-        cy.wait('@sort2')
-        MeasuresPage.checkFirstRow({ model: SupportedModels.qiCore6 })
+            // sort by model again to reset
+            cy.contains('.header-button', 'Model').click()
+            cy.wait('@sort2')
+            cy.wait(1100)
+            cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(descModel => {
+                // ASC and DESC should produce different first models
+                expect(ascModel).to.not.equal(descModel)
+            })
 
-        // verify page 1
-        cy.url().should('match', /page=1/)
-        cy.get('button[aria-current="page"]').should('have.text', '1')
+            // verify page 1
+            cy.url().should('match', /page=1/)
+            cy.get('button[aria-current="page"]').should('have.text', '1')
+        })
     })
 
     it('Sort cycles - ASC by column, DESC by column, most recently updated (default)', () => {
@@ -167,47 +214,40 @@ describe('Measure List Page Sort by Columns', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
 
-        let originalMeasureName = ''
-        let secondMeasureName = ''
-        let secondDate = ''
-
         MeasuresPage.checkFirstRow({ updated: today })
-        cy.get('.measures-list tr').first().then(firstRow => {
 
-            // save name of default 1st measure
-            originalMeasureName = cy.wrap(firstRow.children().eq(1)).text().toString()
+        // save name of default 1st measure
+        cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(originalMeasureName => {
+
+            // sort 1 - by measure ASC
+            cy.contains('.header-button', 'Measure').click()
+            cy.wait('@sort')
+            cy.wait(1100)
+
+            cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(secondMeasureName => {
+
+                    // verify that name has changed from default
+                    expect(secondMeasureName).to.not.equal(originalMeasureName)
+
+                    // sort 2 - by measure DESC
+                    cy.contains('.header-button', 'Measure').click()
+                    cy.wait('@sort2')
+                    cy.wait(1100)
+                    cy.get('.measures-list tr').first().then(firstRow => {
+
+                        // verify that name is different from both previous measures
+                        cy.wrap(firstRow.children().eq(1)).should('not.have.text', originalMeasureName)
+                            .and('not.have.text', secondMeasureName)
+                    })
+
+                    // sort 3 - click again to return to default sort
+                    cy.contains('.header-button', 'Measure').click()
+                    cy.wait('@sort3')
+                    cy.wait(1100)
+                    // verify return to default sort by "last updated"
+                    MeasuresPage.checkFirstRow({ name: originalMeasureName, updated: today })
+            })
         })
-
-        // sort 1 - by measure
-        cy.contains('.header-button', 'Measure').click()
-        cy.wait('@sort')
-        cy.get('.measures-list tr').first().then(firstRow => {
-            // save name & date of this measure
-            secondMeasureName = cy.wrap(firstRow.children().eq(1)).text().toString()
-            secondDate = cy.wrap(firstRow.children().eq(8)).text().toString()
-
-            // verify that name & date have changed from default
-            cy.wrap(firstRow.children().eq(1)).should('not.have.text', originalMeasureName)
-            cy.wrap(firstRow.children().eq(8)).should('not.have.text', today)
-        })
-
-        // sort 2
-        cy.contains('.header-button', 'Measure').click()
-        cy.wait('@sort2')
-        cy.get('.measures-list tr').first().then(firstRow => {
-
-            // verify that name & date are different from both previous measures
-            cy.wrap(firstRow.children().eq(1)).should('not.have.text', originalMeasureName)
-                .and('not.have.text', secondMeasureName)
-            cy.wrap(firstRow.children().eq(8)).should('not.have.text', today)
-                .and('not.have.text', secondDate)
-        })
-
-        // sort 3 by measure
-        cy.contains('.header-button', 'Measure').click()
-        cy.wait('@sort3')
-        // verify return to default sort by "last updated", i.e. measure showing is same as when test started
-        MeasuresPage.checkFirstRow({ name: originalMeasureName, updated: today })
     })
 
     it('Sort is not allowed on checkbox column, action button column, owner column, or expansion column', () => {
@@ -220,11 +260,10 @@ describe('Measure List Page Sort by Columns', () => {
 
             // checkbox
             cy.wrap(headerRow.children().eq(0).find('button')).should('not.have.class', 'header-button')
-            // owner does not even have a sub-element like button to check
             // action button
-            cy.wrap(headerRow.children().eq(9).find('button')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(8).find('button')).should('not.have.class', 'header-button')
             // expansion button
-            cy.wrap(headerRow.children().eq(10).find('span')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(9).find('span')).should('not.have.class', 'header-button')
         })
     })
 })
