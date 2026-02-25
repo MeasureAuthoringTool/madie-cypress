@@ -6,17 +6,18 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 
-const now = Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
-let measureName = 'MeasureDefs' + now
-let CqlLibraryName = 'MeasureDefsLib' + now
 let newCqlLibraryName = ''
 let newMeasureName = ''
-const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
 
 describe('Edit Measure: Add content to an Rich Text field and use formatting buttons', () => {
 
     beforeEach('Login', () => {
+        randValue = (Math.floor((Math.random() * 1000) + 1))
+        const now = Date.now()
+        const measureName = 'MeasureDefs' + now
+        const CqlLibraryName = 'MeasureDefsLib' + now
+        const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue + 2
 
@@ -126,6 +127,11 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
 describe('Edit Measure: Add embedded table to Rich Text field and use the various buttons to manage the table', () => {
 
     beforeEach('Login', () => {
+        randValue = (Math.floor((Math.random() * 1000) + 1))
+        const now = Date.now()
+        const measureName = 'MeasureDefs' + now
+        const CqlLibraryName = 'MeasureDefsLib' + now
+        const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue + 2
 
