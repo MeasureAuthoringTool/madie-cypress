@@ -91,7 +91,7 @@ describe('Delete measure on the measure edit page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 500000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 500000)
-        cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://test-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://impl-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
+        cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
 
 
         //QDM
@@ -105,7 +105,7 @@ describe('Delete measure on the measure edit page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 500000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 500000)
-        cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://test-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://impl-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
+        cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
 
     })
 })
