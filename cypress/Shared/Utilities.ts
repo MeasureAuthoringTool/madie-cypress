@@ -442,7 +442,7 @@ export class Utilities {
             if (action === PermissionActions.GRANT) {
                 urlPath = 'measures/shared'
             } else {
-                urlPath = '/measures/unshared'
+                urlPath = 'measures/unshared'
             }
         }
 

@@ -386,12 +386,16 @@ describe('Remove user\'s share access from a measure', () => {
         // add a test case to prove edit access
         TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS', 'null')
 
+        // Log out ALT user and revoke share as the measure owner
+        OktaLogin.UILogout()
+        OktaLogin.setupUserSession(false)
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
 
-        // refresh to update permissions
-        cy.reload()
+        // Log back in as ALT user and verify edit access was removed
+        OktaLogin.AltLogin()
+        cy.get(LandingPage.sharedMeasures).click()
 
-        // proves that edit access was removed
-        Utilities.waitForElementToNotExist(TestCasesPage.newTestCaseButton, 35000)
+        // proves that edit access was removed — measure should no longer appear in shared list
+        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 })
