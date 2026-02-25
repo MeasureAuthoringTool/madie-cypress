@@ -7,8 +7,8 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Ut
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let CQLLibraryName = ''
-const CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
+const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
 const adminApiKey = Environment.credentials().adminApiKey
 
@@ -56,13 +56,14 @@ describe('CQL Library Transfer', () => {
     })
 
     it('Verify CQL Library can be edited by the transferred user', () => {
+        const currentUser = Cypress.env('selectedUser')
         const updatedCQLLibraryName = CQLLibraryName + 'SomeUpdate' + Date.now()
 
         OktaLogin.setupUserSession(false)
 
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
@@ -89,7 +90,6 @@ describe('CQL Library Transfer', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
         cy.log('CQL Library Updated Successfully')
-
     })
 })
 
