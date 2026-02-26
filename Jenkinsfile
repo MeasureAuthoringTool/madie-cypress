@@ -21,6 +21,7 @@ pipeline {
         'test:ui:smoketests:endtoend:CVPatientWithStratification',
         'test:ui:smoketests:endtoend:RatioEpisodeSingleIPNoMO',
         'test:ui:testcases:versionedmeasure:VersionedMeasure_CreateEditDeleteTestCase',
+        'test:ui:measure:qdmexportvalidations',
         'impl:all:tests','impl:all:ui:tests','impl:all:services:tests','impl:ui:smoketests'
       ],
       description: 'Choose the Test script to run',
