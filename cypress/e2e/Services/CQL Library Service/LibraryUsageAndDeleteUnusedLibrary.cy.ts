@@ -75,7 +75,7 @@ describe('Verify Library usage and Delete Library', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: 'api/cql-libraries/FHIRHelpers/delete-all-versions',
+                url: 'api/cql-libraries/admin/FHIRHelpers/delete-all-versions',
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
@@ -94,7 +94,7 @@ describe('Verify Library usage and Delete Library', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: 'api/cql-libraries/' + CQLLibraryName + '/delete-all-versions',
+                url: 'api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
