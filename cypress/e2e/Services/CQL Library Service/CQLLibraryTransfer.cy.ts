@@ -1,13 +1,13 @@
-import {Environment} from "../../../Shared/Environment"
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
+import { Environment } from "../../../Shared/Environment"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
+let CQLLibraryName = 'LibraryTransfer' + Date.now()
 let newCQLLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
-let adminApiKey = Environment.credentials().adminApiKey
 let harpUserALT = ''
+const CQLLibraryPublisher = 'SemanticBits'
+const adminApiKey = Environment.credentials().adminApiKey
 
 describe('CQL Library Transfer Service', () => {
 
@@ -46,7 +46,7 @@ describe('CQL Library Transfer Validations', () => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/cql-libraries/' + id + '/acls',
+                    url: '/api/cql-libraries/admin/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': '1233'
@@ -63,7 +63,6 @@ describe('CQL Library Transfer Validations', () => {
                         ],
                         "action": "GRANT"
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(403)
                 })
@@ -78,7 +77,7 @@ describe('CQL Library Transfer Validations', () => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/cql-libraries/' + id + 25 + '/acls',
+                    url: '/api/cql-libraries/admin/' + id + 25 + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': adminApiKey
@@ -95,7 +94,6 @@ describe('CQL Library Transfer Validations', () => {
                         ],
                         "action": "GRANT"
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(404)
                     expect(response.body.message).to.contain('Library does not exist:')
