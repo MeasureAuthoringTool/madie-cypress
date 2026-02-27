@@ -6,20 +6,16 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
-const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
+let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'
 
 describe('Delete CQL Library', () => {
-    /*
-        Tests covering Libraries that are in draft and versioned states as well as when user is the owner, 
-        when user has had Library transferred to them, and when the user is neither the owner nor has had 
-        the Library transferred to them
-    */
 
     beforeEach('Set Access Token', () => {
 
         CQLLibraryName = 'DeleteCqlLibrary' + Date.now()
+        measureCQLAlt = measureCQLAlt.replace('SimpleFhirLibrary', CQLLibraryName)
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
     })
 
@@ -27,6 +23,7 @@ describe('Delete CQL Library', () => {
         const currentUser = Cypress.env('selectedUser')
         // this is altUser, since we are looking for a failure
         OktaLogin.setupUserSession(true)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -105,6 +102,7 @@ describe('Delete CQL Library', () => {
         OktaLogin.setupUserSession(false)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
+        // switch to altUser
         OktaLogin.setupUserSession(true)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
@@ -204,7 +202,6 @@ describe('Delete CQL Library', () => {
                         "cqlLibraryName": CQLLibraryName,
                         "model": 'QI-Core v4.1.1'
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.draft).to.eql(true)
@@ -212,10 +209,9 @@ describe('Delete CQL Library', () => {
             })
         })
 
-     //   OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/cql-libraries/' + CQLLibraryName + '/delete-all-versions',
+                url: '/api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
                     'api-key': adminApiKey,
@@ -227,6 +223,7 @@ describe('Delete CQL Library', () => {
                 expect(response.body).to.eql('The library and all its associated versions have been removed successfully.')
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -252,7 +249,7 @@ describe('Delete CQL Library', () => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/cql-libraries/' + CQLLibraryName + '/delete-all-versions',
+                    url: '/api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': adminApiKey,
