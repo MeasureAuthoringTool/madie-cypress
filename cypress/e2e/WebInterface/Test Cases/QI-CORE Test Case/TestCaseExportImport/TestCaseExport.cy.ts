@@ -5,7 +5,6 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { Header } from "../../../../../Shared/Header"
 import * as path from 'path'
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -19,8 +18,8 @@ const testCase: TestCase = {
     group: 'SBTestSeries',
     json: TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 }
-const testCasePIdPath = 'cypress/fixtures/harpUser/testCasePId'
-const testCasePIdPathSecnD = 'cypress/fixtures/harpUser/testCasePId2'
+let testCasePIdPath = ''
+let testCasePIdPathSecnD = ''
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip'
@@ -47,15 +46,11 @@ describe('QI-Core Single Test Case Export', () => {
 
     it('Export single QI-Core Test Case', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+        testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
+
         OktaLogin.Login()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
 
         MeasuresPage.actionCenter('edit')
 
@@ -84,12 +79,15 @@ describe('QI-Core Single Test Case Export', () => {
 
     it('Non-owner of Measure: Export single QI-Core Test case', () => {
 
-        OktaLogin.AltLogin()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        const currentUser = Cypress.env('selectedUser')
+        testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
 
+        OktaLogin.AltLogin()
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
@@ -117,13 +115,11 @@ describe('QI-Core Single Test Case Export', () => {
 
     it('QMIG STU5 Reference Validations', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+        testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
+
         OktaLogin.Login()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
 
         MeasuresPage.actionCenter('edit')
 
@@ -172,21 +168,18 @@ describe('QI-Core Test Case Export for all test cases', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Export All QI-Core Test cases', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+        testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
+        testCasePIdPathSecnD = 'cypress/fixtures/' + currentUser + '/testCasePId2'
+    
         OktaLogin.Login()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
 
         MeasuresPage.actionCenter('edit')
 
@@ -221,14 +214,16 @@ describe('QI-Core Test Case Export for all test cases', () => {
 
     it('Non-owner of Measure: Export All QI-Core Test cases', () => {
 
+        const currentUser = Cypress.env('selectedUser')
+        testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
+        testCasePIdPathSecnD = 'cypress/fixtures/' + currentUser + '/testCasePId2'
+
         OktaLogin.AltLogin()
 
-        cy.reload()
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
 
+         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
@@ -261,10 +256,5 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.reload()
         Utilities.waitForElementVisible('[data-testid="user-profile-select"]', 60000)
 
-        OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
     })
 })
