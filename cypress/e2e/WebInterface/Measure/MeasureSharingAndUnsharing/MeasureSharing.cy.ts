@@ -144,7 +144,7 @@ describe('Measure Sharing', () => {
 
         //Delete button disabled for shared owner
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
         cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
@@ -209,7 +209,7 @@ describe('Measure Sharing', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', newMeasureName)
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })

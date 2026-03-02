@@ -694,7 +694,7 @@ export class TestCasesPage {
         });
 
         cy.get(EditMeasurePage.testCasesTab).scrollIntoView();
-        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 90000);
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000);
         cy.get(EditMeasurePage.testCasesTab).click();
 
         this.grabValidateTestCaseTitleAndSeries(updatedTestCaseTitle, updatedTestCaseSeries);
@@ -810,7 +810,7 @@ export class TestCasesPage {
     //     // ToDo: find something to wait on here instead of the hard wait
     //     cy.wait(14500)
     //     cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
-    //     Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 90000)
+    //     Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
     //     cy.get(EditMeasurePage.testCasesTab).click()
     //
     //     //Verify edited / updated test case Title and Series exists on Test Cases Page
@@ -840,7 +840,7 @@ export class TestCasesPage {
 
             cy.get(buttonSelector).should('be.visible').wait(3000)
             cy.get(buttonSelector).should('be.enabled')
-            Utilities.waitForElementVisible(buttonSelector, 90000)
+            Utilities.waitForElementVisible(buttonSelector, 30000)
             cy.get(buttonSelector).scrollIntoView()
             cy.get(buttonSelector).click()
 
@@ -1018,14 +1018,14 @@ export class TestCasesPage {
 
         if (race) {
             cy.get(TestCasesPage.QDMRace).click()
-            Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 100000)
+            Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 30000)
             cy.get('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]').click()
             cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
         }
 
         if (gender) {
             cy.get(TestCasesPage.QDMGender).click()
-            Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 100000)
+            Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 30000)
             cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
         }
 
@@ -1037,10 +1037,10 @@ export class TestCasesPage {
 
             cy.get('body', { timeout: 10000 }).then(($body: JQuery<HTMLElement>) => {
                 if ($body.find(ethnicityOne).length > 0) {
-                    Utilities.waitForElementVisible(ethnicityOne, 100000)
+                    Utilities.waitForElementVisible(ethnicityOne, 30000)
                     cy.get(ethnicityOne).click()
                 } else if ($body.find(ethnicityTwo).length > 0) {
-                    Utilities.waitForElementVisible(ethnicityTwo, 100000)
+                    Utilities.waitForElementVisible(ethnicityTwo, 30000)
                     cy.get(ethnicityTwo).click()
                 } else {
                     throw new Error('No matching ethnicity element found in the DOM.')

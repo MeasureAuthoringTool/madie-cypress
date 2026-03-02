@@ -257,7 +257,7 @@ describe('Test Case Expected Measure Group population values based on initial me
                 //navigate back to the test case tab
                 cy.get(EditMeasurePage.testCasesTab).click()
 
-                cy.url({ timeout: 100000 }).should('include', '/edit/test-cases')
+                cy.url({ timeout: 30000 }).should('include', '/edit/test-cases')
 
                 cy.wait('@testCase').then(({ response }) => {
                     expect(response.statusCode).to.eq(200)

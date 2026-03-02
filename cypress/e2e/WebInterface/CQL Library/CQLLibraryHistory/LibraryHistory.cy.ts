@@ -9,13 +9,14 @@ let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 let harpUser = ''
-let updatedCQLLibraryName = CQLLibraryName + 'SomeUpdate' + 9
+let updatedCQLLibraryName = ''
 const adminApiKey = Environment.credentials().adminApiKey
 
 describe('Library History - Create, Update, Sharing and Unsharing Actions', () => {
 
     beforeEach('Create Library and Login', () => {
         CQLLibraryName = 'HistoryLibrary' + Date.now()
+        updatedCQLLibraryName = CQLLibraryName + 'SomeUpdate' + 9
 
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)

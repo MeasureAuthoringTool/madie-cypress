@@ -52,7 +52,7 @@ describe('Measure Locking Validations', () => {
         Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 60000)
         cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
 
-        Utilities.waitForElementVisible(OktaLogin.usernameInput, 500000)
+        Utilities.waitForElementVisible(OktaLogin.usernameInput, 30000)
         cy.log('Log out successful')
 
         Utilities.verifyAllLocksDeleted(MadieObject.Measure)

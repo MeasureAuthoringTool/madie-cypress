@@ -1918,21 +1918,21 @@ describe('Highlighting accurately appears for a measure with same Definition in 
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureGroupId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 30000)
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 90000)
+            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 30000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n' +
                 '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"')
             cy.get('[data-ref-id="317"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 90000)
+            Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 30000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', 'define "Denominator":\n' +
                 '  "Initial Population"')
             cy.get('[data-ref-id="328"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 90000)
+            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 30000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', 'define "Numerator":\n' +
                 '  "Encounter with VTE Prophylaxis Received From Day of Start of Hospitalization To Day After Admission or Procedure"\n' +
                 '      union ( "Encounter with Medication Oral Factor Xa Inhibitor Administered on Day of or Day After Admission or Procedure"\n' +
@@ -2038,7 +2038,7 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
 
         //run test case
-        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 90000)
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 30000)
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
@@ -2094,7 +2094,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
 
         // select test case on top of list
         cy.contains('View').click()

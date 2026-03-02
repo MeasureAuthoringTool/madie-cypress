@@ -134,7 +134,7 @@ export class MeasuresPage {
             filePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
             cy.get('[data-testid="measure-name-' + fileContents + '_version"]').should('contain', versionNumber)
         })
@@ -162,8 +162,8 @@ export class MeasuresPage {
         cy.log('File path is ' + filePath)
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.log('File contents is ' + fileContents)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 30000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 30000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
@@ -173,11 +173,11 @@ export class MeasuresPage {
             case 'edit': {
 
                 cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 90000)
+                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').click().wait(2000)
-                    Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 90000)
+                    Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 30000)
 
                 })
                 break
@@ -186,7 +186,7 @@ export class MeasuresPage {
             case 'view': {
 
                 cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 90000)
+                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').click()
@@ -197,21 +197,21 @@ export class MeasuresPage {
             case 'export': {
 
                 const exportForPublish = options?.exportForPublish
-                Utilities.waitForElementVisible('[data-testid="export-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="export-action-btn"]', 30000)
                 cy.get('[data-testid="export-action-btn"]').should('be.visible')
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
 
                 if (exportForPublish) {
-                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 90000)
+                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 30000)
                     cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
                 } else {
-                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 90000)
+                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 30000)
                     cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
                 }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
-                Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 90000)
+                Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 30000)
                 cy.get(TestCasesPage.successMsg).should('contain.text', 'Measure exported successfully')
                 cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
 
@@ -222,15 +222,15 @@ export class MeasuresPage {
                 cy.readFile(filePath).should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 900000)
                 })
-                Utilities.waitForElementVisible('[data-testid="version-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="version-action-btn"]', 30000)
                 cy.get('[data-testid="version-action-btn"]').should('be.visible')
                 cy.get('[data-testid="version-action-btn"]').click()
-                Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 90000)
+                Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 30000)
 
                 break
             }
             case 'draft': {
-                Utilities.waitForElementVisible('[data-testid="draft-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="draft-action-btn"]', 30000)
                 cy.get('[data-testid="draft-action-btn"]').should('be.visible')
                 cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="draft-action-btn"]').click()
@@ -238,7 +238,7 @@ export class MeasuresPage {
                 break
             }
             case 'delete': {
-                Utilities.waitForElementVisible('[data-testid="delete-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="delete-action-btn"]', 30000)
                 cy.get('[data-testid="delete-action-btn"]').should('be.visible')
                 cy.get('[data-testid="delete-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="delete-action-btn"]').click()
@@ -249,26 +249,26 @@ export class MeasuresPage {
 
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
                 cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 30000)
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 30000)
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
                 })
-                Utilities.waitForElementVisible('[data-testid="associate-cms-id-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="associate-cms-id-action-btn"]', 30000)
                 cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.visible')
                 cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="associate-cms-id-action-btn"]').click()
 
-                Utilities.waitForElementVisible('[data-testid="associate-cms-id-button"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="associate-cms-id-button"]', 30000)
                 cy.get('[data-testid="associate-cms-id-button"]').should('be.visible')
                 cy.get('[data-testid="associate-cms-id-button"]').should('be.enabled')
 
                 break
             }
             case 'share': {
-                Utilities.waitForElementVisible('[data-testid="share-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="share-action-btn"]', 30000)
                 cy.get('[data-testid="share-action-btn"]').should('be.visible')
                 cy.get('[data-testid="share-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="share-action-btn"]').click()
@@ -277,7 +277,7 @@ export class MeasuresPage {
             }
 
             case 'transfer': {
-                Utilities.waitForElementVisible('[data-testid="transfer-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="transfer-action-btn"]', 30000)
                 cy.get('[data-testid="transfer-action-btn"]').should('be.visible')
                 cy.get('[data-testid="transfer-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="transfer-action-btn"]').click()
@@ -285,7 +285,7 @@ export class MeasuresPage {
                 break
             }
             case 'viewhr': {
-                Utilities.waitForElementVisible('[data-testid="view-hr-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="view-hr-action-btn"]', 30000)
                 cy.get('[data-testid="view-hr-action-btn"]').should('be.visible')
                 cy.get('[data-testid="view-hr-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="view-hr-action-btn"]').click()
@@ -293,7 +293,7 @@ export class MeasuresPage {
                 break
             }
             case 'viewhistory': {
-                Utilities.waitForElementVisible('[data-testid="history-action-btn"]', 90000)
+                Utilities.waitForElementVisible('[data-testid="history-action-btn"]', 30000)
                 cy.get('[data-testid="history-action-btn"]').should('be.visible')
                 cy.get('[data-testid="history-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="history-action-btn"]').click()

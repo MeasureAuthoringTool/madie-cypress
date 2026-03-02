@@ -208,7 +208,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         //Select the Library
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         cy.get('[data-testid="transfer-action-tooltip"]').should('not.be.enabled')

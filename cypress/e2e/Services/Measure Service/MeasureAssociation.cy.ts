@@ -480,7 +480,7 @@ describe('Measure Association: Validations', () => {
         }
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 0, qdmMeasure)
-        Utilities.waitForElementVisible(EditMeasurePage.generateCmsIdButton, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.generateCmsIdButton, 30000)
         cy.get(EditMeasurePage.generateCmsIdButton).wait(3700).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)

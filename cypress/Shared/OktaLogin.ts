@@ -265,11 +265,6 @@ export class OktaLogin {
             }
         }
 
-        // 2) Re-evaluate auth (navigate to root so route guard runs)
-        if (cookieSet) {
-            cy.visit('/');
-        }
-
         // Local selectors (avoid `this` in closures where not needed)
         const selectors = {
             username: this.usernameInput,
@@ -278,9 +273,26 @@ export class OktaLogin {
             landing:  LandingPage.newMeasureButton,
         };
 
-        // 3) Race: wait until either login form is visible OR landing is visible
-        const waitForEither = (opts = { timeout: 25000, interval: 200 }) => {
-            const deadline = Date.now() + opts.timeout;
+        // Helper: type credentials and click sign-in (registers UMLS intercept right before clicking)
+        const doFormLogin = () => {
+            const creds = who ? args.credsForUser(who) : null;
+            if (creds) {
+                cy.get(selectors.username, { timeout: 20000 }).should('be.visible').clear().type(creds.username, { log: false });
+                cy.get(selectors.password, { timeout: 20000 }).should('be.visible').clear().type(creds.password, { log: false });
+            } else {
+                cy.log(`${logPrefix}: No credentials mapped for "${who}"—skipping typing.`);
+            }
+
+            // Register UMLS intercept right before clicking sign-in so it catches
+            // the request that fires when the app loads the measures page after login
+            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
+
+            cy.get(selectors.signIn, { timeout: 20000 }).should('be.visible').should('be.enabled').click();
+        };
+
+        // Poller: wait until either login form or landing page is visible
+        const waitForEither = (timeoutMs: number, intervalMs = 300): Cypress.Chainable<string> => {
+            const deadline = Date.now() + timeoutMs;
 
             function probe(): any {
                 const onLogin =
@@ -297,39 +309,55 @@ export class OktaLogin {
                 if (onLanding) return 'landing';
                 if (Date.now() >= deadline) return 'timeout';
 
-                return Cypress.Promise.delay(opts.interval).then(probe);
+                return Cypress.Promise.delay(intervalMs).then(probe);
             }
 
             return cy.wrap(null, { log: false }).then(() => probe());
         };
 
-        // 4) Act based on state
-        waitForEither().then((state) => {
-            cy.log(`${logPrefix}: UI state after wait: ${state}`);
+        // 2) Re-evaluate auth (navigate to root so route guard runs)
+        if (cookieSet) {
+            cy.visit('/');
+        }
+
+        // 3) First attempt: wait for login form or landing page
+        waitForEither(35000).then((state) => {
+            cy.log(`${logPrefix}: UI state after first wait: ${state}`);
+
+            if (state === 'landing') {
+                // Already authenticated — register UMLS intercept to catch the
+                // request that should already be in-flight or about to fire
+                cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
+                return;
+            }
 
             if (state === 'login') {
-                const creds = who ? args.credsForUser(who) : null;
-                if (creds) {
-                    cy.get(selectors.username, { timeout: 20000 }).should('be.visible').clear().type(creds.username, { log: false });
-                    cy.get(selectors.password, { timeout: 20000 }).should('be.visible').clear().type(creds.password, { log: false });
-                } else {
-                    cy.log(`${logPrefix}: No credentials mapped for "${who}"—skipping typing.`);
-                }
-
-                cy.get('body').then(($body) => {
-                    const $btn = $body.find(selectors.signIn);
-                    if ($btn.length && $btn.is(':visible')) {
-                        cy.get(selectors.signIn, { timeout: 20000 }).should('be.enabled').click();
-                    } else {
-                        cy.log(`${logPrefix}: Sign-in button not visible after typing.`);
-                    }
-                });
+                cy.log(`${logPrefix}: Login form visible — performing form-based login.`);
+                doFormLogin();
+                return;
             }
+
+            // state === 'timeout'
+            // Cookie-based auth likely failed. The app may be mid-redirect
+            // (e.g. briefly hit /measures then bounced to /login).
+            // We need to get to the login form and enter credentials.
+            cy.log(`${logPrefix}: Timed out detecting UI state. Falling back to form-based login...`);
+
+            // Clear cookies since the cookie-based token was rejected
+            cy.clearAllCookies();
+            cy.clearLocalStorage();
+
+            // Navigate directly to /login
+            cy.visit('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
+
+            // Wait for the login form to appear with a generous timeout
+            cy.get(selectors.username, { timeout: 60000 }).should('be.visible').then(() => {
+                cy.log(`${logPrefix}: Login form visible after fallback — performing form-based login.`);
+                doFormLogin();
+            });
         });
 
-        // 5) Post-login checks
-        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
-
+        // 4) Post-login checks — wait for UMLS
         cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
             if (!response || response.statusCode !== 200) {
                 umlsLoginForm.UMLSLogin();
@@ -381,7 +409,7 @@ export class OktaLogin {
                 cy.get(Header.userProfileSelect).click()
                 Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 60000)
                 cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
-                Utilities.waitForElementVisible(this.usernameInput, 500000)
+                Utilities.waitForElementVisible(this.usernameInput, 30000)
                 cy.log('Log out successful')
             }
         })

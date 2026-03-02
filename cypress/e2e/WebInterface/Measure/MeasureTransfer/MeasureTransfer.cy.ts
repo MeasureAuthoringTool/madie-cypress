@@ -110,7 +110,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         //Select the Measure
         let currentUser = Cypress.env('selectedUser')
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })

@@ -300,7 +300,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
-        Utilities.waitForElementVisible(CQLEditorPage.deleteCodeBtn, 100000)
+        Utilities.waitForElementVisible(CQLEditorPage.deleteCodeBtn, 30000)
         cy.get(CQLEditorPage.deleteCodeBtn).click()
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
@@ -416,7 +416,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Edit code
-        Utilities.waitForElementVisible(CQLEditorPage.editCodeBtn, 150000)
+        Utilities.waitForElementVisible(CQLEditorPage.editCodeBtn, 30000)
         cy.get(CQLEditorPage.editCodeBtn).click()
 
         //Code Details Pop up screen
@@ -469,7 +469,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
-        Utilities.waitForElementVisible(CQLEditorPage.deleteCodeBtn, 150000)
+        Utilities.waitForElementVisible(CQLEditorPage.deleteCodeBtn, 30000)
         cy.get(CQLEditorPage.deleteCodeBtn).click()
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
@@ -511,7 +511,7 @@ describe('Qi-Core Code Search - Measure ownership Validations', () => {
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Edit button should not be visible
-        Utilities.waitForElementVisible('[data-testid="saved-code-row-0"]', 150000)
+        Utilities.waitForElementVisible('[data-testid="saved-code-row-0"]', 30000)
         cy.get(CQLEditorPage.editCodeBtn).should('not.exist')
 
         //Delete button should not be visible

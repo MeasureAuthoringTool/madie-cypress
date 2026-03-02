@@ -903,7 +903,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        Utilities.waitForElementVisible(Toasts.generalToast, 90000)
+        Utilities.waitForElementVisible(Toasts.generalToast, 30000)
         cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
          
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

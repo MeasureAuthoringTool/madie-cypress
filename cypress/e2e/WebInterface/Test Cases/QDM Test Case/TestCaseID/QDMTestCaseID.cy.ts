@@ -52,7 +52,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         OktaLogin.Login()
 
         cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
         })
 
         MeasuresPage.actionCenter('edit')
@@ -101,7 +101,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
         })
 
         //Click on Edit Measure
@@ -111,10 +111,10 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
-        Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 30000)
 
         // testcase 2 in 1st row, testcase 1 below
         cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '2')
@@ -140,7 +140,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
 
         //third click removes sorting
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 30000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 15000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 15000)
@@ -150,9 +150,9 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
 
         //sort by case number and then edit some test case that is not at the top -- once user navigates back to the test case list page default sorting should appear
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 30000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 30000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
 
         // testcase 1 in 1st row, testcase 2 below
@@ -164,10 +164,10 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
         cy.get('[data-value="Other Race__2.16.840.1.114222.4.11.836"]').click()
-        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 90000)
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 30000)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         //Navigate back to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -207,7 +207,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.reload()
 
         cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
         })
 
         //Click on Edit Measure
@@ -247,7 +247,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         OktaLogin.Login()
 
         cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
         })
 
         //adding supplemental data
@@ -347,7 +347,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         OktaLogin.Login()
 
         cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
         })
 
         //adding supplemental data

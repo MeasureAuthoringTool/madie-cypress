@@ -460,7 +460,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         //Navigate to Definitions tab
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.definitionsTab).wait(1000).click()
-        Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 90000)
+        Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 30000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
         //Verify Expression editor name dropdown is disabled when there are CQL errors
         //Navigate to Saved Definitions tab
