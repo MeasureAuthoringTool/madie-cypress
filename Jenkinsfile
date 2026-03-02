@@ -202,6 +202,17 @@ pipeline {
           set -e
           cd ${WORKSPACE}
 
+          # Determine which rerun script to use based on the initial TEST_SCRIPT
+          case "${TEST_SCRIPT}" in
+            *hcqis*|*hqcis*)
+              RERUN_SCRIPT="test:specific:files:parallel:hqcis:rerun"
+              ;;
+            *)
+              RERUN_SCRIPT="test:specific:files:parallel"
+              ;;
+          esac
+          echo "Using rerun script: ${RERUN_SCRIPT}"
+
           if [ ! -s ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ]; then
             echo "No initial failures found. Skipping reruns."
             : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
@@ -215,7 +226,7 @@ pipeline {
           cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel || true
+          npm run ${RERUN_SCRIPT} || true
 
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
@@ -247,7 +258,7 @@ pipeline {
           cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run test:specific:files:parallel || true
+          npm run ${RERUN_SCRIPT} || true
 
           if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
             cat ${WORKSPACE}/runner-results/*.json \
