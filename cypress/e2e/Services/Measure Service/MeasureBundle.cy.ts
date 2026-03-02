@@ -21,55 +21,36 @@ let mpEndDate = now().format('YYYY-MM-DD')
 let updatedMeasureName = measureName + randValue
 let updatedCQLLibraryName = CqlLibraryName + randValue
 
-let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include Hospice version \'6.0.000\' called Hospice\n' +
-    '\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'include Hospice version \'6.0.000\' called Hospice\n\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     '//define "ipp":\n' +
-    '  //exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n' +
-    '  \n' +
+    '  //exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period"\n\n' +
     '//define "denom":\n' +
-    '    //"ipp"\n' +
-    '    \n' +
+    '    //"ipp"\n\n' +
     'define "num":\n' +
-    '    exists ["Encounter"] E where E.status ~ \'finished\'\n' +
-    '      \n' +
+    '    exists ["Encounter"] E where E.status ~ \'finished\'\n\n' +
     'define "numeratorExclusion":\n' +
-    '    Hospice."Has Hospice Services"\n' +
-    '    \n' +
+    '    Hospice."Has Hospice Services"\n\n' +
     'define "test":\n' +
     '    true'
-let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     '//define "ipp":\n' +
-    '  //exists ["Encounter"] E where E.period.start during "Measurement Period"\n' +
-    '  \n' +
+    '  //exists ["Encounter"] E where E.period.start during "Measurement Period"\n\n' +
     '//define "denom":\n' +
-    '  //"ipp"\n' +
-    '  \n' +
+    '  //"ipp"\n\n' +
     'define "num":\n' +
-    '  exists ["Encounter"] E where E.status ~ \'finished\'\n' +
-    '  \n' +
+    '  exists ["Encounter"] E where E.status ~ \'finished\'\n\n' +
     'define "numeratorExclusion":\n' +
-    '    "num"\n' +
-    '    \n' +
+    '    "num"\n\n' +
     'define function ToCode(coding FHIR.Coding):\n' +
     ' if coding is null then\n' +
     '   null\n' +
@@ -79,11 +60,9 @@ let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
     '           system: coding.system.value,\n' +
     '           version: coding.version.value,\n' +
     '           display: coding.display.value\n' +
-    '           }\n' +
-    '           \n' +
+    '           }\n\n' +
     'define function fun(notPascalCase Integer ):\n' +
-    '  true\n' +
-    '  \n' +
+    '  true\n\n' +
     'define function "isFinishedEncounter"():\n' +
     '  true'
 let PopIniPop = 'num'
@@ -100,7 +79,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
         OktaLogin.Login()
@@ -190,12 +168,9 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         OktaLogin.setupUserSession(false)
     })
 
-
     afterEach('Clean up', () => {
 
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
@@ -339,7 +314,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                                 "rateAggregation": null,
                                 "improvementNotation": null,
                                 "improvementNotationDescription": null,
-
                             }
                         }).then((response) => {
                             expect(response.status).to.eql(200)
@@ -365,10 +339,10 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                             expect(response.body.entry[0].resource.meta.profile[4]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm')
                             expect(response.body.entry[0].resource.meta.profile[5]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm')
                             expect(response.body.entry[0].resource.meta.profile[6]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cohort-measure-cqfm')
-                            expect(response.body.entry[0].resource.description).to.eql('Measure Description\n')
-                            expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance\n')
+                            expect(response.body.entry[0].resource.description).to.eql('Measure Description')
+                            expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance')
                             expect(response.body.entry[0].resource.author[0].name).to.eql('ACO Health Solutions')
-                            expect(response.body.entry[0].resource.clinicalRecommendationStatement).to.eql('Measure Clinical Recommendation\n')
+                            expect(response.body.entry[0].resource.clinicalRecommendationStatement).to.eql('Measure Clinical Recommendation')
                         })
                     })
                 })
@@ -410,7 +384,6 @@ describe('Measure Observation Validation', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
@@ -421,7 +394,7 @@ describe('Measure Observation Validation', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Backend user cannot create or add a Measure Observation if one is not defined in the CQL', () => {
@@ -572,13 +545,11 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
     beforeEach('Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
-
     })
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
@@ -629,7 +600,6 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
 
         OktaLogin.setupUserSession(false)
 
-        //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 url: '/api/measure',
@@ -659,8 +629,7 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 1)
-
+        Utilities.deleteMeasure()
     })
 
     it('Measure Bundle end point returns 409 when there is no elmJson for the measure', () => {
@@ -689,7 +658,6 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 1, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -764,8 +732,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
     })
 
     after('Clean up', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 1)
-
+        Utilities.deleteMeasure()
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
@@ -816,7 +783,6 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
     newCqlLibraryName = 'TestCqlLibraryName' + randValue
     let measureCQL = MeasureCQL.CQL_Multiple_Populations
 
-
     before('Create Measure', () => {
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(true)
@@ -839,8 +805,8 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
     after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 2, false, true)
-
     })
+
     it('Get Measure bundle resource will return details of measure, regardless if the request is comfing from the owner / creator of the measure', () => {
         const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
@@ -854,13 +820,12 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
                 }).then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(200)
-
                 })
             })
         })
     })
-
 })
+
 describe('Measure Bundle end point returns 409 when the measure is missing a group', () => {
 
     before('Create Measure', () => {
@@ -868,20 +833,18 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 3, measureCQL)
     })
 
     beforeEach('Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
-
     })
 
     after('Clean up', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 3)
-
+        Utilities.deleteMeasure()
     })
+
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
         let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
@@ -900,6 +863,7 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
         })
     })
 })
+
 describe('Non-boolean populationBasis returns the correct value and in the correct format', () => {
 
     beforeEach('Create measure and login', () => {
@@ -927,11 +891,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
 
     afterEach('Clean up', () => {
 
-        randValue = (Math.floor((Math.random() * 2000) + 5))
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Get Measure bundle data from madie-fhir-service and verify that non-boolean value returns as "Encounter"', () => {
@@ -1047,13 +1007,11 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
         cy.get(Header.measures).click()
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'num', '', '', 'num', '', 'numeratorExclusion')
-
     })
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Get Measure bundle data and verify that the Supplemental data elements and Risk Adjustment variables are added', () => {
@@ -1083,16 +1041,14 @@ describe('Measure bundle end point returns Measure Population Description', () =
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
-
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
+
 
     it('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
         let currentUser = Cypress.env('selectedUser')
@@ -1179,14 +1135,14 @@ describe('Measure bundle end point returns Measure Population Description', () =
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body.entry[0].resource.group[0].population[0].description).to.eql('Initial Population 1 Description\n')
-                    expect(response.body.entry[0].resource.group[0].population[1].description).to.eql('Initial Population 2 Description\n')
-                    expect(response.body.entry[0].resource.group[0].population[2].description).to.eql('Denominator Description\n')
-                    expect(response.body.entry[0].resource.group[0].population[3].description).to.eql('Denominator Exclusion Description\n')
-                    expect(response.body.entry[0].resource.group[0].population[4].description).to.eql('Numerator Description\n')
-                    expect(response.body.entry[0].resource.group[0].population[5].description).to.eql('Numerator Exclusion Description\n')
-                    expect(response.body.entry[0].resource.group[0].population[6].description).to.eql('Denominator Observation Description\n')
-                    expect(response.body.entry[0].resource.group[0].population[7].description).to.eql('Numerator Observation Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[0].description).to.eql('Initial Population 1 Description')
+                    expect(response.body.entry[0].resource.group[0].population[1].description).to.eql('Initial Population 2 Description')
+                    expect(response.body.entry[0].resource.group[0].population[2].description).to.eql('Denominator Description')
+                    expect(response.body.entry[0].resource.group[0].population[3].description).to.eql('Denominator Exclusion Description')
+                    expect(response.body.entry[0].resource.group[0].population[4].description).to.eql('Numerator Description')
+                    expect(response.body.entry[0].resource.group[0].population[5].description).to.eql('Numerator Exclusion Description')
+                    expect(response.body.entry[0].resource.group[0].population[6].description).to.eql('Denominator Observation Description')
+                    expect(response.body.entry[0].resource.group[0].population[7].description).to.eql('Numerator Observation Description')
                 })
             })
         })
