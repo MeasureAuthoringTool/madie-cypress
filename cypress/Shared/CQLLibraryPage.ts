@@ -435,7 +435,7 @@ export class CQLLibraryPage {
                 cy.wrap(firstRow.children().eq(5)).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
             }
             if (expectedData.updated) {
-                cy.wrap(firstRow.children().eq(6)).should('have.text', expectedData.updated)
+                cy.wrap(firstRow.children().eq(7)).should('have.text', expectedData.updated)
             }
 
         })
