@@ -70,7 +70,7 @@ describe('CompareLibraryVersions', () => {
         cy.log('Draft Created Successfully')
 
         //Check Draft Library
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
 

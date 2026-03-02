@@ -52,7 +52,7 @@ describe('Qi Core Measure Reference', () => {
 
         //Edit Measure reference
         // .editReference will work as long as there is only 1 item on the table
-        Utilities.waitForElementVisible(EditMeasurePage.deleteQiCoreReference, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.deleteQiCoreReference, 30000)
         cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()

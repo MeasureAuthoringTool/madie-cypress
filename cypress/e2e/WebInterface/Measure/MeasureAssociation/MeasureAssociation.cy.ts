@@ -138,7 +138,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         //validation test: only one measure is selected
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -149,7 +149,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Select two measures')
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -161,7 +161,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Must select one QDM and one QI-Core measure')
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -169,19 +169,19 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         //validation test: QDM measure must contain CMS id
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -191,13 +191,13 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'QDM measure must contain a CMS ID')
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -211,18 +211,18 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(MeasuresPage.versionToastSuccessMsg, 3500000)
+        Utilities.waitForElementVisible(MeasuresPage.versionToastSuccessMsg, 30000)
         cy.get(MeasuresPage.versionToastSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        Utilities.waitForElementToNotExist(MeasuresPage.versionToastSuccessMsg, 3500000)
+        Utilities.waitForElementToNotExist(MeasuresPage.versionToastSuccessMsg, 30000)
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -234,13 +234,13 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -263,13 +263,13 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -280,13 +280,13 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -318,16 +318,16 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
         // need altUser here, they are the measure owner
         cy.readFile('cypress/fixtures/' + currentAltUser + '/measureId5').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
@@ -639,7 +639,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -648,7 +648,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -657,7 +657,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -666,7 +666,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -688,7 +688,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
         //validation test: only one measure is selected
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -699,7 +699,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Select two measures')
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -711,7 +711,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Must select one QDM and one QI-Core measure')
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -719,19 +719,19 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         //validation test: QDM measure must contain CMS id
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -741,13 +741,13 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'QDM measure must contain a CMS ID')
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -760,18 +760,18 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(MeasuresPage.versionToastSuccessMsg, 3500000)
+        Utilities.waitForElementVisible(MeasuresPage.versionToastSuccessMsg, 30000)
         cy.get(MeasuresPage.versionToastSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        Utilities.waitForElementToNotExist(MeasuresPage.versionToastSuccessMsg, 3500000)
+        Utilities.waitForElementToNotExist(MeasuresPage.versionToastSuccessMsg, 30000)
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -783,13 +783,13 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId4').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -812,13 +812,13 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
@@ -828,13 +828,13 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -868,16 +868,16 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         cy.readFile('cypress/fixtures/' + currentAltUser + '/measureId5').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()

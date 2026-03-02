@@ -20,18 +20,18 @@ describe('Create New Measure with very long name', () => {
 
     afterEach('Cleanup and Logout', () => {
 
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
 
         //Verify the deleted measure on My Measures page list
         cy.get(Header.measures).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 90000)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
 
         OktaLogin.Logout()
@@ -43,7 +43,7 @@ describe('Create New Measure with very long name', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_measureName"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_measureName"]', 30000)
             cy.get('[data-testid="measure-name-' + fileContents + '_measureName"]').should('have.text', measureName.slice(0, 120) + 'Show more')
 
             cy.get('[data-testid="measure-name-' + fileContents + '_measureName"]').find('button').click()

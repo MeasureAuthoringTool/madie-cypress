@@ -109,7 +109,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(500).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Element - Encounter:Performed: Encounter Inpatient
@@ -212,7 +212,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Add Elements to the second Test case
@@ -225,7 +225,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(500).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Element - Physical Exam:Performed: Systolic blood pressure
@@ -287,7 +287,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page

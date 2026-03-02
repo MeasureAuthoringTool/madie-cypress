@@ -71,17 +71,17 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        Utilities.waitForElementVisible(TestCasesPage.importTestCasesBtn, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.importTestCasesBtn, 30000)
         cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
-        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 30000)
 
         //Upload valid Json file via drag and drop
         cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
-        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 30000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
@@ -89,8 +89,8 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         waitForValidationToBe100()
 
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
 
@@ -127,8 +127,8 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 90000)
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify Passing Tab's text after Versioning

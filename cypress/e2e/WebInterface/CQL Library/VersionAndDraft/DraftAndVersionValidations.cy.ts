@@ -55,7 +55,7 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get(CQLLibrariesPage.actionCenterDraftBtn).should('be.disabled')
     })

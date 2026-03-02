@@ -223,17 +223,17 @@ describe('Validating Population tabs', () => {
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.populationTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -247,7 +247,7 @@ describe('Validating Population tabs', () => {
 
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -255,7 +255,7 @@ describe('Validating Population tabs', () => {
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 30000)
 
         //assert save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
@@ -269,7 +269,7 @@ describe('Validating Population tabs', () => {
         }
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click().wait(2000)
 
@@ -284,7 +284,7 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.measureGroupOne).click()
         //Click on Populations tab
         cy.get(MeasureGroupPage.populationTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
@@ -319,13 +319,13 @@ describe('Validating Reporting tabs', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -344,7 +344,7 @@ describe('Validating Reporting tabs', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -373,10 +373,10 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //confirm message
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
@@ -399,9 +399,9 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //confirm message
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
@@ -424,7 +424,7 @@ describe('Validating Reporting tabs', () => {
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -458,7 +458,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -503,7 +503,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -517,12 +517,12 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
             .type('{selectAll}{backspace}Denominator Description').wait(500)
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -538,7 +538,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -562,7 +562,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -595,7 +595,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 

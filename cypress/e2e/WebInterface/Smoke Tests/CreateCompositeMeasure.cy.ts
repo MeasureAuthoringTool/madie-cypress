@@ -35,7 +35,7 @@ describe.skip('Create Composite Measure', () => {
 
         //Edit Measure
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 90000)
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=measure-action-' + fileContents + ']').click().wait(2000)

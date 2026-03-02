@@ -237,7 +237,7 @@ describe('Share CQL Library using Action Center buttons', () => {
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
         //Delete button disabled for shared owner
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
@@ -286,7 +286,7 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         cy.get('[data-testid="share-action-btn"]').should('be.visible')

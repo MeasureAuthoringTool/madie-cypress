@@ -40,10 +40,10 @@ describe('Dirty Check Validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 90000)
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 90000)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 

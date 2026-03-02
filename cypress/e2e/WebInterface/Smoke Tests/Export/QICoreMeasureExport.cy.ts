@@ -174,7 +174,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 90000)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
 

@@ -45,7 +45,7 @@ describe('FHIR Measure Export, Not the Owner', () => {
 
         MeasuresPage.actionCenter('export')
 
-        cy.readFile(path.join(downloadsFolder, expectedFileName), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, expectedFileName), { timeout: 60000 }).should('exist')
         cy.log('Successfully verified zip file export')
     })
 

@@ -78,8 +78,8 @@ describe('Compare Measure Versions', () => {
 
         //Check Draft Measure
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((draftMeasureId) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + draftMeasureId + '_select"] > [class="px-1"] > [type="checkbox"]', 90000)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + draftMeasureId + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + draftMeasureId + '_select"] > [class="px-1"] > [type="checkbox"]', 30000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + draftMeasureId + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 30000)
             cy.get('[data-testid="measure-name-' + draftMeasureId + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + draftMeasureId + '_select"]').find('[type="checkbox"]').check()
             cy.get('[data-testid="measure-name-' + draftMeasureId + '_expandArrow"]').click().wait(1000)

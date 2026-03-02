@@ -116,7 +116,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //select value set value for this attribute
         cy.get(TestCasesPage.valueSetSelector).click()
-        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 90000)
+        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 30000)
         cy.get(TestCasesPage.ABEMBDiathesisValue).click()
 
         //select the SNOMED code system

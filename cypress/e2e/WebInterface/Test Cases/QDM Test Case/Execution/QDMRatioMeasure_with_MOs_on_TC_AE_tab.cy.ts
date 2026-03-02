@@ -586,7 +586,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 90000)
+        Utilities.waitForElementToNotExist(Toasts.otherSuccessToast, 30000)
 
         cy.reload()
 

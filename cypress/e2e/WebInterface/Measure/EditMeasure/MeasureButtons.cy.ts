@@ -82,29 +82,29 @@ describe('Delete measure on the measure edit page', () => {
 
         //Qi Core
         MeasuresPage.actionCenter('edit', 1)
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 500000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
         cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
 
 
         //QDM
         MeasuresPage.actionCenter('edit')
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 500000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 500000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
         cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
 
     })
@@ -290,7 +290,7 @@ describe('Export measure on the Edit Measure page', () => {
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
-        cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
+        cy.readFile(fullPathToExport, { timeout: 60000 }).should('exist')
         cy.log('Successfully verified zip file export')
     })
 
@@ -313,7 +313,7 @@ describe('Export measure on the Edit Measure page', () => {
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
-        cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
+        cy.readFile(fullPathToExport, { timeout: 60000 }).should('exist')
         cy.log('Successfully verified zip file export')
     })
 })
@@ -379,7 +379,7 @@ describe('Share measure from the Edit Measure page', () => {
 
         //Delete button disabled for shared owner
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
