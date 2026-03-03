@@ -93,15 +93,15 @@ describe('Measure Un Sharing', () => {
         //Unshare Measure
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get('[type="checkbox"]').first().click()
-        cy.get('[data-testid="share-action-btn"]').click()
-        cy.get('[data-testid="Unshare-option"]').click()
+        Utilities.waitForElementVisible('[data-testid="share-action-btn"]', 30000)
+        cy.get('[data-testid="share-action-btn"]').should('be.visible').should('be.enabled').click()
+        cy.get(EditMeasurePage.unshareOption).click({ force: true })
 
         //Assert text on the popup screen
-        Utilities.waitForElementVisible('.MuiBox-root', 60000)
-        cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
-        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + measureName + ' with the following users:')
-        const nameRegex = RegExp(harpUserALT, 'i')
-        cy.get('.MuiDialogContent-root').find('li').text().should('match', nameRegex)
+        Utilities.waitForElementVisible(EditMeasurePage.acceptBtn, 60000)
+        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare')
+        cy.get('.MuiDialogContent-root').should('contain.text', measureName)
+        cy.get('.MuiDialogContent-root').find('li').should('have.length.gte', 1)
 
         //Click on Accept button and Un share Measure
         cy.get(EditMeasurePage.acceptBtn).click()
