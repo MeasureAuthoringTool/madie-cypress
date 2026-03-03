@@ -107,7 +107,7 @@ export class MeasuresPage {
                 cy.wrap(firstRow.children().eq(6)).should('have.text', expectedData.cmsId)
             }
             if (expectedData.updated) {
-                cy.wrap(firstRow.children().eq(7)).should('have.text', expectedData.updated)
+                cy.wrap(firstRow.children().eq(8)).should('have.text', expectedData.updated)
             }
         })
     }

@@ -143,12 +143,12 @@ describe('Measure List Page Sort by Columns', () => {
         cy.contains('.header-button', 'Updated').click()
         cy.wait('@sort11')
         cy.wait(1100)
-        cy.get('.measures-list tr').first().find('td').eq(7).invoke('text').then(ascDate => {
+        cy.get('.measures-list tr').first().find('td').eq(8).invoke('text').then(ascDate => {
             // sort by updated DESC - newest first
             cy.contains('.header-button', 'Updated').click()
             cy.wait('@sort12')
             cy.wait(1100)
-            cy.get('.measures-list tr').first().find('td').eq(7).invoke('text').then(descDate => {
+            cy.get('.measures-list tr').first().find('td').eq(8).invoke('text').then(descDate => {
                 // The oldest date (ASC) should be before the newest date (DESC)
                 const ascParsed = dayjs(ascDate, 'M/D/YYYY')
                 const descParsed = dayjs(descDate, 'M/D/YYYY')
@@ -261,9 +261,9 @@ describe('Measure List Page Sort by Columns', () => {
             // checkbox
             cy.wrap(headerRow.children().eq(0).find('button')).should('not.have.class', 'header-button')
             // action button
-            cy.wrap(headerRow.children().eq(8).find('button')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(9).find('button')).should('not.have.class', 'header-button')
             // expansion button
-            cy.wrap(headerRow.children().eq(9).find('span')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(10).find('span')).should('not.have.class', 'header-button')
         })
     })
 })
