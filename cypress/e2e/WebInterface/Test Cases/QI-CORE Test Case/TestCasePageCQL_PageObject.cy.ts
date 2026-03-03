@@ -51,7 +51,7 @@ describe('Test Case Page CQL page object', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         //type in an additional value to the already existing value in the editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type('define "ipp": true')
 
         //saving new CQL value
