@@ -228,12 +228,12 @@ export class Utilities {
             cy.log(cqlArr);
             for (let i in cqlArr) {
                 if (cqlArr[i] == '' || cqlArr[i] == null || cqlArr[i] == undefined) {
-                    cy.get(pageResource).type('{enter}')
+                    cy.get(pageResource).type('{moveToEnd}{enter}')
                 } else {
                     this.textValues.dataLines = cqlArr[i]
                     cy.get(pageResource)
                         .type(this.textValues.dataLines)
-                        .type('{enter}')
+                        .type('{moveToEnd}{enter}')
                     this.textValues.dataLines = null
                 }
 

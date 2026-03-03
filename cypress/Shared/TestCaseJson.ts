@@ -1616,7 +1616,7 @@ export class TestCaseJson {
 
     public static readonly RatioEpisodeSingleIPNoMO_IPP_PASS = '{ "resourceType": "Bundle", "id": "Denom-Pass-RatioEpisode' +
         'MultiIPWithMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collection' +
-        '", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient", "id": "609bde35980' +
+        '", "entry": [ { "fullUrl": "https://madie.cms.gov/Patient/609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient", "id": "609bde35980' +
         '86b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" ] }, "e' +
         'xtension": [ { "extension": [ { "url": "ombCategory", "valueCoding": { "system": "urn:oid:2.16.840.1.113883.6.238",' +
         ' "code": "2106-3", "display": "White" } }, { "url": "ombCategory", "valueCoding": { "system": "urn:oid:2.16.840.1.1' +
@@ -1636,7 +1636,7 @@ export class TestCaseJson {
         '} } ], "identifier": [ { "type": { "coding": [ { "system": "http://terminology.hl7.org/CodeSystem/v2-0203", "code": ' +
         '"MR" } ] }, "system": "http://MyGoodHealthare.com/MedicalRecord", "value": "8065dc8d26797064d8766be71f2bf020" } ], "' +
         'active": true, "name": [ { "use": "usual", "family": "IPPass", "given": [ "IPPass" ] } ], "gender": "male", "birthDa' +
-        'te": "1954-02-10" } }, { "fullUrl": "5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Encounter", "id": "5c' +
+        'te": "1954-02-10" } }, { "fullUrl": "https://madie.cms.gov/Patient/5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Encounter", "id": "5c' +
         '6c61ceb84846536a9a98f9", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"' +
         ' ] }, "status": "finished", "class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "IMP", ' +
         '"display": "inpatient encounter" }, "type": [ { "coding": [ { "system": "http://snomed.info/sct", "code": "183452005' +
