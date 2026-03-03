@@ -28,7 +28,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
         MeasuresPage.actionCenter('edit', null, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / succesful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
