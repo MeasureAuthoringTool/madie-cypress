@@ -1061,7 +1061,8 @@ export class TestCasesPage {
         cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
             .parent('tr')
             .find('input[type="checkbox"]')
-            .check()
+            .click()
+            .wait(200)
     }
 
     /*

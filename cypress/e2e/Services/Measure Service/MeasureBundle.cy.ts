@@ -879,7 +879,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('exist')
         cy.get(EditMeasurePage.cqlEditorTextBox).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
