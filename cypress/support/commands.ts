@@ -61,6 +61,12 @@ declare global {
              */
             editTestCaseJSON(jsonContent: string): Chainable<void>;
 
+            /**
+             * Visit a URL with automatic retry on network-level errors
+             * (ESOCKETTIMEDOUT, ECONNREFUSED, etc.).
+             */
+            visitWithRetry(url: string, options?: Partial<Cypress.VisitOptions>, maxRetries?: number, delayMs?: number): Chainable<void>;
+
         }
     }
 }
@@ -74,6 +80,48 @@ const authCodeUrl = authUri + '/v1/authorize'
 const tokenUrl = authUri + '/v1/token'
 const codeVerifier = Cypress.env('MADIE_CODEVERIFIER')
 require('cypress-delete-downloads-folder').addCustomCommand()
+
+
+// -------------------------------------------------------
+// cy.visitWithRetry — ensures the server is reachable
+// before calling cy.visit, to avoid ESOCKETTIMEDOUT.
+//
+// Uses a Node.js task (checkUrl) to probe the URL.
+// If the server is unreachable, it waits and re-probes
+// up to maxAttempts times before finally calling cy.visit.
+// -------------------------------------------------------
+Cypress.Commands.add('visitWithRetry', (
+    url: string,
+    options: Partial<Cypress.VisitOptions> = {},
+    maxAttempts = 5,
+    delayMs = 10000
+) => {
+    const baseUrl = Cypress.config('baseUrl') || '';
+    const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
+
+    function waitForServer(attempt: number): void {
+        cy.task('checkUrl', fullUrl, { log: false }).then((result: any) => {
+            if (result.reachable) {
+                cy.log(`visitWithRetry: server reachable on probe ${attempt}, loading page...`);
+                // Server confirmed reachable — call cy.visit with a generous timeout
+                cy.visit(url, { ...options, timeout: 120000 });
+            } else if (attempt < maxAttempts) {
+                cy.log(`visitWithRetry: probe ${attempt}/${maxAttempts} — server not reachable ("${result.error}"). Waiting ${delayMs / 1000}s...`);
+                cy.wait(delayMs);
+                // Re-register intercepts that need to capture the page load
+                cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
+                waitForServer(attempt + 1);
+            } else {
+                // All probes failed — attempt cy.visit anyway so Cypress
+                // reports the real error instead of a generic task error
+                cy.log(`visitWithRetry: server still unreachable after ${maxAttempts} probes. Attempting cy.visit as last resort...`);
+                cy.visit(url, { ...options, timeout: 120000 });
+            }
+        });
+    }
+
+    waitForServer(1);
+});
 
 
 export function setAccessTokenCookie() {

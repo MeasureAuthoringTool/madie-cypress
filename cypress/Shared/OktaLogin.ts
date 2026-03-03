@@ -185,6 +185,7 @@ export class OktaLogin {
     // }
 
 
+
     // ------------------------------------------------------
     // PUBLIC: keep these intact so tests DO NOT change
     // ------------------------------------------------------
@@ -235,19 +236,23 @@ export class OktaLogin {
     }): void {
         const logPrefix = args.logPrefix ?? 'Login';
 
-        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
-
         // Reset state
         sessionStorage.clear();
         cy.clearAllCookies();
         cy.clearLocalStorage();
         cy.clearAllSessionStorage?.({ log: true });
 
-        // Visit login and ensure fresh sessionStorage
-        cy.visit('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
+        // Register intercept right before visiting so it captures the request
+        // that fires when the login page loads. visitWithRetry re-registers
+        // the intercept on each retry attempt internally.
+        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
 
-        // Capture and write feature flags
-        cy.wait('@serviceConfig', { timeout: 15000 }).then((config) => {
+        // Visit login and ensure fresh sessionStorage (with retry on network errors)
+        cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
+
+        // Capture and write feature flags — use a generous timeout because
+        // retries inside visitWithRetry can delay when the request fires.
+        cy.wait('@serviceConfig', { timeout: 60000 }).then((config) => {
             cy.writeFile('cypress/fixtures/featureFlags', config.response!.body.features);
         });
 
@@ -317,7 +322,7 @@ export class OktaLogin {
 
         // 2) Re-evaluate auth (navigate to root so route guard runs)
         if (cookieSet) {
-            cy.visit('/');
+            cy.visitWithRetry('/');
         }
 
         // 3) First attempt: wait for login form or landing page
@@ -347,8 +352,8 @@ export class OktaLogin {
             cy.clearAllCookies();
             cy.clearLocalStorage();
 
-            // Navigate directly to /login
-            cy.visit('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
+            // Navigate directly to /login (with retry on network errors)
+            cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
 
             // Wait for the login form to appear with a generous timeout
             cy.get(selectors.username, { timeout: 60000 }).should('be.visible').then(() => {

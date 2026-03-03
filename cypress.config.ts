@@ -5,6 +5,8 @@ const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
 const fs = require('fs-extra')
 const xlsx = require('xlsx')
 const xml2js = require('xml2js')
+const http = require('http')
+const https = require('https')
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -50,6 +52,23 @@ export default defineConfig({
                   parser.parseString(xmlContent, (err: any, result: any) => {
                       if (err) reject(err)
                       else resolve(result)
+                  })
+              })
+          },
+          checkUrl(url: string) {
+              const lib = url.startsWith('https') ? https : http
+              return new Promise((resolve) => {
+                  const req = lib.get(url, { timeout: 30000 }, (res: any) => {
+                      // Consume response data to free up memory
+                      res.resume()
+                      resolve({ reachable: true, statusCode: res.statusCode })
+                  })
+                  req.on('error', (err: any) => {
+                      resolve({ reachable: false, error: err.message || String(err) })
+                  })
+                  req.on('timeout', () => {
+                      req.destroy()
+                      resolve({ reachable: false, error: 'ETIMEDOUT' })
                   })
               })
           }
