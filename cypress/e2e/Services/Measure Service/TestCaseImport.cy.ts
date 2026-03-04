@@ -168,11 +168,6 @@ describe('Test Case Import -- Non Measure owner validation', () => {
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
 
-    afterEach(() => {
-
-        Utilities.deleteMeasure()
-    })
-
     it('Non Measure owner unable to Import Test cases', () => {
 
         const currentUser = Cypress.env('selectedUser')
