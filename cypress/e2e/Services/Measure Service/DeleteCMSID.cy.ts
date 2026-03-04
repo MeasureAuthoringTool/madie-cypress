@@ -3,11 +3,9 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { Environment } from "../../../Shared/Environment"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let measureSharingAPIKey = Environment.credentials().adminApiKey
+let measureName = 'DeleteCMSID' + Date.now()
+let CqlLibraryName = 'DeleteCMSIDLib' + Date.now()
 let harpUser = ''
 let harpUserALT = ''
 
@@ -15,13 +13,11 @@ describe('Delete CMS ID for QI-Core Measure', () => {
 
     before('Login', () => {
         let currentUser = Cypress.env('selectedUser')
-        harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
         harpUser = OktaLogin.setupUserSession(false)
 
         let cmsId: string
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName)
 
         OktaLogin.Login()
@@ -48,30 +44,28 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         })
         cy.log('CMS ID Generated successfully')
 
-
+        OktaLogin.UILogout()
     })
 
     after('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
+
     it('Verify that the CMS ID deleted successfully for QDM Measure', () => {
 
         const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false)
+        OktaLogin.setupAdminSession()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
                     cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
                         cy.request({
-                            url: '/api/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
+                            url: '/api/admin/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
                             method: 'DELETE',
                             headers: {
                                 authorization: 'Bearer ' + accessToken.value,
-                                'api-key': measureSharingAPIKey,
                                 'harpId': harpUser
                             }
                         }).then((response) => {
@@ -94,17 +88,16 @@ describe('Delete CMS ID for QI-Core Measure', () => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
                     cy.request({
-                        url: '/api/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
+                        url: '/api/admin/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
                         method: 'DELETE',
                         failOnStatusCode: false,
                         headers: {
                             authorization: 'Bearer ' + accessToken.value,
-                            'api-key': measureSharingAPIKey,
                             'harpId': harpUserALT
                         }
                     }).then((response) => {
-                        expect(response.status).to.eql(409)
-                        expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + measureId + '. The owner of the measure is ' + harpUser)
+                        expect(response.status).to.eql(403)
+                        expect(response.body).to.eql('Forbidden: Invalid user role')
                     })
                 })
             })
