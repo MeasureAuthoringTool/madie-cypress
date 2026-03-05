@@ -3,7 +3,7 @@
   "screenshotsFolder": "mochawesome-report/assets",
   "numTestsKeptInMemory": 1,
   "env": {
-    "environment": "test",
+    "environment": "dev",
     "type": "base"
   }
 }
