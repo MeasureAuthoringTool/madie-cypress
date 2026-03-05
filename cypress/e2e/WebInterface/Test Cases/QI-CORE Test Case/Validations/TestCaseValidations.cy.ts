@@ -63,6 +63,7 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.editTCSaveTooltip).should('have.attr', 'aria-label', 'description: Test Case Description cannot be more than 250 characters.')
     })
 
     it('Create Test Case: Title more than 250 characters', () => {

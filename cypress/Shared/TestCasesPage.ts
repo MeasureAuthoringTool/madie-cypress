@@ -186,6 +186,7 @@ export class TestCasesPage {
     public static readonly voTCCQLEditor = '[class="ace_text-input"]'
     public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
     public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
+    public static readonly editTCSaveTooltip = '[data-testid="save-button-tooltip"]'
     public static readonly errorToastMsg = '[data-testid="error-toast"]'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
     public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'

@@ -300,6 +300,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.editTCSaveTooltip).should('have.attr', 'aria-label', 'title: Test Case Title cannot be more than 250 characters.')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
             'than 250 characters.')
     })
@@ -347,6 +348,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.editTCSaveTooltip).should('have.attr', 'aria-label', 'title: Test Case Title is required.')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).should('contain.text', 'Test Case Title is required.')
     })
 })
