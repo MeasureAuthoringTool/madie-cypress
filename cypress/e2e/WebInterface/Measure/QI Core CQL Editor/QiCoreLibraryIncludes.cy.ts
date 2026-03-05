@@ -439,7 +439,21 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.versionNumberList).should('contain.text', '4.4.0004.3.0004.2.0004.1.0004.0.0003.0.0002.0.0001.0.0000.1.000')
     })
 
+    // old defect to watch with this scenario https://jira.cms.gov/browse/MAT-9107
     it('Verify error message appears on Includes tab when there is an error in the Measure CQL', () => {
+
+        const brokenCql = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
+        'using QICore version \'4.1.0\'\n' +
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+        'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
+        'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+        'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+        'context Patient\n' +
+        'define "test":\n' + 
+        'define \"Surgical Absence of Cervix\":\n' +
+        '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
+        '		where NoCervixHysterectomy.status = \'completed\''
 
         //Navigate to Includes tab and verify no error message appears
         cy.get(CQLEditorPage.includesTab).click()
@@ -448,7 +462,10 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
 
         //Add errors to CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+      
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(brokenCql)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Navigate to Parameters tab
