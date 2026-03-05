@@ -97,17 +97,20 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
         cy.get(MeasuresPage.harpIdRow).should('contain.text', harpUser)
         cy.get(MeasuresPage.additionalActionRow).should('contain.text', 'Created CMS ID')
 
+        OktaLogin.UILogout()
+
         //Delete CMS ID
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
                     cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
                         cy.request({
-                            url: '/api/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
+                            url: '/api/admin/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
                             method: 'DELETE',
                             headers: {
                                 authorization: 'Bearer ' + accessToken.value,
-                                'api-key': measureSharingAPIKey,
+                              //  'api-key': measureSharingAPIKey,
                                 'harpId': harpUser
                             }
                         }).then((response) => {
@@ -119,6 +122,7 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
             })
         })
 
+        OktaLogin.setupUserSession(false)
         OktaLogin.Login()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
