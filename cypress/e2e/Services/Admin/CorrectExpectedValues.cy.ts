@@ -218,23 +218,30 @@ describe('Admin API - Reset test case expected values', () => {
                     expect(response.status).to.eql(200)
                     const versionedMeasure: Measure = response.body
 
-                    cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId2) => {
-                        cy.request({
-                            failOnStatusCode: false,
-                            url: '/api/admin/measures/' + measureId2,
-                            headers: {
-                                authorization: 'Bearer ' + accessToken.value,
-                                'api-key': adminAPIKey
-                            },
-                            method: 'PUT',
-                            body: versionedMeasure
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
+                    OktaLogin.setupAdminSession()
+
+                    // this looks odd, but is needed to refresh the changed value of accessToken
+                    cy.getCookie('accessToken').then((accessToken) => {
+                        cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((measureId2) => {
+                            cy.request({
+                                failOnStatusCode: false,
+                                url: '/api/admin/measures/' + measureId2,
+                                headers: {
+                                    authorization: 'Bearer ' + accessToken.value,
+                                    'api-key': adminAPIKey
+                                },
+                                method: 'PUT',
+                                body: versionedMeasure
+                            }).then((response) => {
+                                expect(response.status).to.eql(200)
+                            })
                         })
                     })
                 })
             })
         })
+
+        OktaLogin.setupUserSession(false)
 
         // verify original (measureId) expected values (true) are same on measureId2
         cy.getCookie('accessToken').then((accessToken) => {

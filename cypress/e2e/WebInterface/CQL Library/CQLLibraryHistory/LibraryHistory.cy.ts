@@ -1,4 +1,3 @@
-import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
@@ -10,7 +9,6 @@ let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 let harpUser = ''
 let updatedCQLLibraryName = ''
-const adminApiKey = Environment.credentials().adminApiKey
 
 describe('Library History - Create, Update, Sharing and Unsharing Actions', () => {
 
@@ -41,7 +39,6 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
         cy.get('[data-testid="library-history-1_actionType"]').should('contain.text', 'CREATED')
         cy.get('[data-testid="library-history-1_performedBy"]').should('contain.text', harpUser)
-
     })
 
     it('Verify that Library Sharing and Unsharing actions are recorded in Library History', () => {
@@ -174,7 +171,6 @@ describe('Library History - Transfer action', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     method: 'PUT',

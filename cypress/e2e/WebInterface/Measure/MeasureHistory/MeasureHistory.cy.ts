@@ -1,4 +1,3 @@
-import { Environment } from "../../../../Shared/Environment"
 import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -20,7 +19,6 @@ const measureCQLPFTests = MeasureCQL.CQL_Populations
 const qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const qiCoreMeasureCQL = MeasureCQL.SBTEST_CQL
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
-const measureSharingAPIKey = Environment.credentials().adminApiKey
 const testCaseTitle = 'Title for Auto Test'
 const testCaseDescription = 'DENOMFail'
 const testCaseSeries = 'SBTestSeries'

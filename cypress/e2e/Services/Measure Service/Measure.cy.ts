@@ -26,7 +26,6 @@ const mpEndDate = now().format('YYYY-MM-DD')
 const measureCQL = MeasureCQL.SBTEST_CQL
 const eCQMTitle = 'eCQMTitle'
 const randValue = (Math.floor((Math.random() * 1000) + 1))
-const adminAPIKey = Environment.credentials().adminApiKey
 
 describe('Measure Service: QICore Measure', () => {
 
@@ -879,7 +878,7 @@ describe('Measure Service: Update Delete Flag', () => {
     })
 })
 
-describe('Delete QI-Core Measure with admin API Key', () => {
+describe('Delete QI-Core Measure with admin access', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -915,7 +914,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
         OktaLogin.UILogout()
     })
 
-    it('Delete versioned QI-Core Measure with admin API key', () => {
+    it('Delete versioned QI-Core Measure with admin access', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
@@ -946,7 +945,6 @@ describe('Delete QI-Core Measure with admin API Key', () => {
                     method: 'DELETE',
                     headers: {
                         Authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminAPIKey,
                         'harpId': harpUser
                     }
                 }).then((response) => {
@@ -975,7 +973,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
         })
     })
 
-    it('Delete QI-Core Draft Measure with admin API key', () => {
+    it('Delete QI-Core Draft Measure with admin access', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
@@ -1043,7 +1041,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
     })
 })
 
-describe('Delete QDM Measure with admin API Key', () => {
+describe('Delete QDM Measure with admin access', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -1071,7 +1069,7 @@ describe('Delete QDM Measure with admin API Key', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
     })
 
-    it('Delete versioned QDM Measure with admin API key', () => {
+    it('Delete versioned QDM Measure with admin access', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
@@ -1130,7 +1128,7 @@ describe('Delete QDM Measure with admin API Key', () => {
         })
     })
 
-    it('Delete QDM Draft Measure with admin API key', () => {
+    it('Delete QDM Draft Measure with admin access', () => {
 
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupAdminSession()

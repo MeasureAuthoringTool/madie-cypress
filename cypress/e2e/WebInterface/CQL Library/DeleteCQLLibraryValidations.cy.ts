@@ -1,6 +1,5 @@
 import { CQLLibraryPage, EditLibraryActions } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
-import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Header } from "../../../Shared/Header"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
@@ -12,7 +11,6 @@ let CQLLibraryName = ''
 let harpUserALT = ''
 const CQLLibraryPublisher = 'SemanticBits'
 const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
-const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'
 
 describe('Delete CQL Library Validations - Library List page', () => {
@@ -53,7 +51,6 @@ describe('Delete CQL Library Validations - Library List page', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -116,14 +113,12 @@ describe('Delete CQL Library Validations - Library List page', () => {
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Transfer Library to ALT User
-
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -196,7 +191,6 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
 
         //Transfer Library to the ALT User
-
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
@@ -205,7 +199,6 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -270,7 +263,6 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],

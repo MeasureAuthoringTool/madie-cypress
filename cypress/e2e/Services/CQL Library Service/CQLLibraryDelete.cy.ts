@@ -7,7 +7,6 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
-const adminApiKey = Environment.credentials().adminApiKey
 const versionNumber = '1.0.000'
 
 describe('Delete CQL Library', () => {
@@ -70,7 +69,6 @@ describe('Delete CQL Library', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -153,7 +151,6 @@ describe('Delete CQL Library', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -209,12 +206,12 @@ describe('Delete CQL Library', () => {
             })
         })
 
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 url: '/api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
-                    'api-key': adminApiKey,
                     'harpId': harpUser
                 },
                 method: 'DELETE'
@@ -224,6 +221,7 @@ describe('Delete CQL Library', () => {
             })
         })
 
+        OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -245,6 +243,7 @@ describe('Delete CQL Library', () => {
         const harpUser = OktaLogin.setupUserSession(false)
         const harpUserALT = OktaLogin.getUser(true)
 
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -252,7 +251,6 @@ describe('Delete CQL Library', () => {
                     url: '/api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpId': harpUserALT
                     },
                     method: 'DELETE'
@@ -263,6 +261,7 @@ describe('Delete CQL Library', () => {
             })
         })
 
+        OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({

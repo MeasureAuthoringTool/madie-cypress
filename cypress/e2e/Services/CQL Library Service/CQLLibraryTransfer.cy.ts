@@ -1,4 +1,3 @@
-import { Environment } from "../../../Shared/Environment"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 import { OktaLogin } from "../../../Shared/OktaLogin"
@@ -7,7 +6,6 @@ let CQLLibraryName = 'LibraryTransfer' + Date.now()
 let newCQLLibraryName = ''
 let harpUserALT = ''
 const CQLLibraryPublisher = 'SemanticBits'
-const adminApiKey = Environment.credentials().adminApiKey
 
 describe('CQL Library Transfer Service', () => {
 
@@ -39,7 +37,7 @@ describe('CQL Library Transfer Validations', () => {
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
     })
 
-    it('Verify error message when wrong API key is provided', () => {
+    it('Verify error when non-admin attempts to share', () => {
 
         const currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
@@ -48,8 +46,7 @@ describe('CQL Library Transfer Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/' + id + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': '1233'
+                        authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT',
                     body: {
@@ -73,14 +70,14 @@ describe('CQL Library Transfer Validations', () => {
     it('Verify error message when the CQL Library does not exist in MADiE', () => {
 
         const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/' + id + 25 + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT',
                     body: {

@@ -77,7 +77,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
-    public static readonly actionCenterTransfer = '[data-testid="Youcannottransferalibraryyoudonotown."]' //'[data-testid="Transfer"]'
+    public static readonly actionCenterTransfer = '[data-testid="Transfer"]' //'[data-testid="Youcannottransferalibraryyoudonotown."]' 
     public static readonly actionCenterHistory = '[data-testid="History"]'
 
     //CQL Editor
@@ -278,6 +278,7 @@ export class CQLLibraryPage {
     public static actionCenter(action: EditLibraryActions): void {
 
         cy.get(this.actionCenterButton).click()
+        cy.wait(250)
 
         switch (action) {
 
