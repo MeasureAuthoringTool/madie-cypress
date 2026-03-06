@@ -1,4 +1,3 @@
-import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
@@ -10,7 +9,6 @@ let CQLLibraryName = ''
 let harpUserALT = ''
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
-const adminApiKey = Environment.credentials().adminApiKey
 
 describe('CQL Library Transfer', () => {
 
@@ -35,7 +33,6 @@ describe('CQL Library Transfer', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -68,7 +65,6 @@ describe('CQL Library Transfer', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -225,7 +221,6 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
-
         //Login as ALT User
         OktaLogin.AltLogin()
 
@@ -319,7 +314,6 @@ describe('CQL Library Transfer - Multiple instances', () => {
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpid': harpUserALT
                     },
                     body: [id],

@@ -3,10 +3,9 @@ import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
+let CQLLibraryName = 'LibrarySharing' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let adminApiKey = Environment.credentials().adminApiKey
 let harpUserALT = ''
 let harpUser = ''
 
@@ -31,13 +30,14 @@ describe('CQL Library Sharing Service', () => {
     it('Get details of CQL Library shared with', () => {
         const currentUser = Cypress.env('selectedUser')
 
+        OktaLogin.setupAdminSession()
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/cql-libraries/admin/sharedWith?libraryids=' + id,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpId': harpUser
                     },
                     method: 'GET'
@@ -66,7 +66,7 @@ describe('CQL Library sharing Validations', () => {
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
     })
 
-    it('Verify error message when wrong API key is provided', () => {
+    it('Verify error when non-admin attempts to share', () => {
         const currentUser = Cypress.env('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -99,14 +99,15 @@ describe('CQL Library sharing Validations', () => {
 
     it('Verify error message when the CQL Library does not exist in MADiE', () => {
         const currentUser = Cypress.env('selectedUser')
+
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/' + id + 5 + 'z' + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
+                        authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT',
                     body: {
@@ -130,6 +131,8 @@ describe('CQL Library sharing Validations', () => {
 
     it('Verify error Message when Non Measure owner tried to get details of CQL Library Shared with', () => {
         const currentUser = Cypress.env('selectedUser')
+
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -137,7 +140,6 @@ describe('CQL Library sharing Validations', () => {
                     url: '/api/cql-libraries/admin/sharedWith?libraryids=' + id,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey,
                         'harpId': harpUserALT
                     },
                     method: 'GET'

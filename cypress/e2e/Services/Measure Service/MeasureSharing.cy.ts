@@ -1,15 +1,16 @@
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
-import {Environment} from "../../../Shared/Environment"
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
+import { Environment } from "../../../Shared/Environment"
+import { OktaLogin } from "../../../Shared/OktaLogin";
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestCql' + Date.now()
+const measureName = 'ServiceMeasureSharing' + Date.now()
+const cqlLibraryName = 'ServiceMeasureSharingLib' + Date.now()
+const measureCQL = MeasureCQL.SBTEST_CQL
 let measureSharingAPIKey = Environment.credentials().adminApiKey
 let harpUserALT = ''
 let harpUser = ''
-let measureCQL = MeasureCQL.SBTEST_CQL
+
 
 describe('Measure Sharing Service', () => {
 
@@ -23,19 +24,19 @@ describe('Measure Sharing Service', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Successful Measure sharing', () => {
         let currentUser = Cypress.env('selectedUser')
+        
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/acls',
+                    url: '/api/admin/measures/' + id + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
+                        authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT',
                     body: {
@@ -49,7 +50,6 @@ describe('Measure Sharing Service', () => {
                         ],
                         "action": "GRANT"
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body[0].userId).to.eql(harpUserALT)
@@ -59,16 +59,15 @@ describe('Measure Sharing Service', () => {
         })
     })
 
-    it('Verify error message when wrong API key is provided', () => {
+    it('Verify error when non-admin attempts to share', () => {
         let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/acls',
+                    url: '/api/admin/measures/' + id + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': '1233'
+                        authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT',
                     body: {
@@ -91,14 +90,15 @@ describe('Measure Sharing Service', () => {
 
     it('Verify error message when the Measure does not exist in MADiE', () => {
         let currentUser = Cypress.env('selectedUser')
+
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + id+5 + '/acls',
+                    url: '/api/admin/measures/' + id+5 + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
+                        authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT',
                     body: {
@@ -113,7 +113,7 @@ describe('Measure Sharing Service', () => {
                         "action": "GRANT"
                     }
                 }).then((response) => {
-                    expect(response.status).to.eql(500)
+                    expect(response.status).to.eql(404)
                 })
             })
         })
@@ -121,13 +121,14 @@ describe('Measure Sharing Service', () => {
 
     it('Get details of Measure shared with', () => {
         let currentUser = Cypress.env('selectedUser')
+
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
                     url: '/api/admin/measures/sharedWith?measureids=' + id,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey,
                         'harpId': harpUser
                     },
                     method: 'GET'
@@ -151,13 +152,12 @@ describe('Measure Sharing Service', () => {
                     url: '/api/admin/measures/sharedWith?measureids=' + id,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey,
                         'harpId': harpUserALT
                     },
                     method: 'GET'
                 }).then((response) => {
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' + harpUser)
+                    expect(response.status).to.eql(403)
+                    expect(response.body).to.eql('Forbidden: Invalid user role')
                 })
             })
         })

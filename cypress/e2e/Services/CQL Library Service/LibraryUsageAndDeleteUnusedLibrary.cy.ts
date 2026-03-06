@@ -1,9 +1,7 @@
-import { Environment } from "../../../Shared/Environment"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 
-let adminApiKey = Environment.credentials().adminApiKey
 let CQLLibraryName = 'TestCqlLibrary' + Date.now()
 let CQLLibraryPublisher = 'SemanticBits'
 let libraryCQL = MeasureCQL.ICFCleanTestQICore
@@ -72,6 +70,7 @@ describe('Verify Library usage and Delete Library', () => {
 
     it('Verify Library can not be deleted if used within another Library or Measure', () => {
 
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
@@ -79,7 +78,6 @@ describe('Verify Library usage and Delete Library', () => {
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
-                    'api-key': adminApiKey,
                     'harpId': harpUser
                 }
             }).then((response) => {
@@ -91,6 +89,7 @@ describe('Verify Library usage and Delete Library', () => {
 
     it('Verify Library can be deleted if not used within another Library or Measure', () => {
 
+        OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
@@ -98,7 +97,6 @@ describe('Verify Library usage and Delete Library', () => {
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
-                    'api-key': adminApiKey,
                     'harpId': harpUser
                 }
             }).then((response) => {

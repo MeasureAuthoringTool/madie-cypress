@@ -1,11 +1,9 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MadieObject, Utilities } from "../../../Shared/Utilities"
 
 const coreLibName = 'AdminTransferLibrary'
-const adminAPIKey = Environment.credentials().adminApiKey
 const now = Date.now()
 
 describe('Transfer ownership of library via Admin API', () => {
@@ -28,13 +26,14 @@ describe('Transfer ownership of library via Admin API', () => {
     it('Request sent with no library data returns 400', () => {
         const currentUser = Cypress.env('selectedUser')
 
+        OktaLogin.setupAdminSession()
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
                 url: '/api/cql-libraries/admin/ownership?harpId=' + currentUser,
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value,
-                    'api-key': adminAPIKey
+                    authorization: 'Bearer ' + accessToken.value
                 },
                 method: 'PUT',
                 body: []
@@ -47,7 +46,8 @@ describe('Transfer ownership of library via Admin API', () => {
     it('Successful admin transfer of 1 Library', () => {
         const currentUser = Cypress.env('selectedUser')
         const altUserName = OktaLogin.getUser(true)
-        OktaLogin.setupUserSession(false)
+
+        OktaLogin.setupAdminSession()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2').should('exist').then((measureId3) => {
@@ -55,8 +55,7 @@ describe('Transfer ownership of library via Admin API', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/ownership?harpId=' + altUserName,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminAPIKey
+                        authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT',
                     body: [measureId3]
@@ -75,6 +74,8 @@ describe('Transfer ownership of library via Admin API', () => {
         // as current owner, lock Measure with measureId
         Utilities.lockControl(MadieObject.Library, true, false)
 
+        OktaLogin.setupAdminSession()
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId1').should('exist').then((measureId1) => {
@@ -82,8 +83,7 @@ describe('Transfer ownership of library via Admin API', () => {
                         failOnStatusCode: false,
                         url: '/api/cql-libraries/admin/ownership?harpId=' + altUserName,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value,
-                            'api-key': adminAPIKey
+                            authorization: 'Bearer ' + accessToken.value
                         },
                         method: 'PUT',
                         body: [measureId, measureId1]
