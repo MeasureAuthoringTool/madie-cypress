@@ -18,8 +18,9 @@ const tc: TestCase = {
 }
 let harpUserALT = ''
 
-// https://jira.cms.gov/browse/MAT-9511
-describe('Changes to groups are not allowed when a test case is locked by another user', () => {
+// funtionality: https://jira.cms.gov/browse/MAT-9511
+// defect for skip: https://jira.cms.gov/browse/MAT-9789
+describe.skip('Changes to groups are not allowed when a test case is locked by another user', () => {
 
     beforeEach('Create measures', () => {
 
