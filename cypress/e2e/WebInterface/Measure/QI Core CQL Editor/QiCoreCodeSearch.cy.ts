@@ -86,22 +86,18 @@ describe('Qi Core Code Search fields', () => {
 
         CqlLibraryName = 'QiCoreCodeSearchLib' + Date.now()
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+      //  Utilities.deleteMeasure()
     })
 
     it('Search for the Codes', () => {
@@ -293,11 +289,17 @@ describe('Qi Core Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
+        Utilities.waitForElementDisabled(CQLEditorPage.saveCQLButton, 15500)
+
+        cy.intercept('/api/terminology/get-code-systems').as('codeSystemReturn')
+        cy.intercept('/api/terminology/codes').as('codeReturn')
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click().wait(1000)
+        cy.get(CQLEditorPage.codesTab).click()
+        cy.wait('@codeSystemReturn', { timeout: 9500 })
         cy.get(CQLEditorPage.savedCodesTab).click()
+        cy.wait('@codeReturn', { timeout: 9500 })
 
         //Remove Code
         Utilities.waitForElementVisible(CQLEditorPage.deleteCodeBtn, 30000)
@@ -316,24 +318,19 @@ describe('Error Message on Codes tab', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, newCqlLibraryName, measureCQLWithCode)
         OktaLogin.Login()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        //Navigate to CQL builder
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message appears on Codes tab when there is an error in the Measure CQL', () => {
@@ -365,22 +362,18 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Edit Code with Suffix and Version from Saved Codes Grid', () => {
@@ -407,6 +400,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
+        Utilities.waitForElementDisabled(CQLEditorPage.saveCQLButton, 15500)
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -494,8 +488,8 @@ describe('Qi-Core Code Search - Measure ownership Validations', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Qi Core Codes', () => {
