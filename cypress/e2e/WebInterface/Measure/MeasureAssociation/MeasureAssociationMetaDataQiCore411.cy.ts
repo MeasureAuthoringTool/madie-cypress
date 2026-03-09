@@ -53,7 +53,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Create new QI Core measure
         measureQICore = 'QICoreMeasure' + Date.now() + randValue + 4 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPIWithSimpleDesc(measureQICore, measureQICore, measureCQLPFTests, 2)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(3, false, 'Initial Population', '', '',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
 
         OktaLogin.Login()
@@ -155,11 +155,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).type(QDMclinicalRecommendation)
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
