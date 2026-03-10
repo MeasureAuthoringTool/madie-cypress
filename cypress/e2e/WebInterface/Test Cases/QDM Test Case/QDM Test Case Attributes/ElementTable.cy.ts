@@ -1,4 +1,4 @@
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
@@ -29,8 +29,9 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQL
 
-        //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -40,16 +41,14 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
+
     it('Add Quantity attribute to the Test case and Edit from Elements table', () => {
 
         cy.get(Header.measures).click()
@@ -63,12 +62,20 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         //Add Supplemental Data Elements
         MeasureGroupPage.includeSdeData()
 
-        //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //create test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        //navigate to the SDE side tab section on the test cases tab
+        Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
+        cy.get(TestCasesPage.qdmSDESidNavLink).click()
+
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
+        cy.get(TestCasesPage.saveSDEOption).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -80,8 +87,6 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-
-        cy.reload()
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
@@ -156,6 +161,5 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get('[data-testid="code-option-14463-4"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click() //click the "Add" button
         cy.get('tbody > tr > :nth-child(1)').should('contain.text', 'Laboratory_test, PerformedChlamydia ScreeningLOINC: 14463-4 ')
-
     })
 })
