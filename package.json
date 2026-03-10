@@ -12,6 +12,7 @@
 	"scripts": {
 		"cypress:open": "cypress open --e2e -b chrome",
 		"cypress:open:dev": "cypress open --env configFile=dev --e2e -b chrome",
+		"cypress:open:hcqis-dev": "cypress open --env configFile=hcqis-dev --e2e -b chrome",
 		"cypress:open:test": "cypress open --env configFile=test --e2e -b chrome",
 		"cypress:open:hcqis-test": "cypress open --env configFile=hcqis-test --e2e -b chrome",
 		"cypress:open:impl": "cypress open --env configFile=impl --e2e -b chrome",

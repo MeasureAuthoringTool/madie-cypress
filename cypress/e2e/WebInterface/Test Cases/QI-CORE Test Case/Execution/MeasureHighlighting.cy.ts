@@ -2094,7 +2094,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 60000)
 
         // select test case on top of list
         cy.contains('View').click()
