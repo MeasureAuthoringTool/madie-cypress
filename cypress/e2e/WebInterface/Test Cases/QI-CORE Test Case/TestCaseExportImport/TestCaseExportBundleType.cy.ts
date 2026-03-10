@@ -22,10 +22,6 @@ const measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-/*
-    After MAT-9275 and MAT-9276, we will always force our bundle types to be "collection" while
-    within Madie.
-*/
 
 describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or Collection', () => {
 
@@ -47,22 +43,6 @@ describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or C
 
         OktaLogin.Login()
 
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
@@ -79,22 +59,6 @@ describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or C
     it('Export single QI-Core Test case by Non Measure Owner: Collection', () => {
 
         OktaLogin.Login()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
 
         MeasuresPage.actionCenter('edit')
 
@@ -117,20 +81,6 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         OktaLogin.Login()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
         MeasuresPage.actionCenter('edit')
 
@@ -192,11 +142,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        /* 
-            note: With https://jira.cms.gov/browse/MAT-9275 this seems like 
-            it should be collection, but that story is scoped to only QiiCore 6+
-        */
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
     })
 
     it('Export single QI-Core Test case Collection bundle and Import to the same Measure', () => {
@@ -257,20 +203,6 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
    
         OktaLogin.Login()
 
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
@@ -327,7 +259,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -335,7 +267,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
     })
 
     it('Export multiple QI-Core Test cases Collection bundle and Import to the same Measure', () => {
