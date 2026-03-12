@@ -110,6 +110,7 @@ Cypress.Commands.add('visitWithRetry', (
                 cy.wait(delayMs);
                 // Re-register intercepts that need to capture the page load
                 cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
+                cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
                 waitForServer(attempt + 1);
             } else {
                 // All probes failed — attempt cy.visit anyway so Cypress

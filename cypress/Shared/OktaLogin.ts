@@ -242,10 +242,13 @@ export class OktaLogin {
         cy.clearLocalStorage();
         cy.clearAllSessionStorage?.({ log: true });
 
-        // Register intercept right before visiting so it captures the request
-        // that fires when the login page loads. visitWithRetry re-registers
-        // the intercept on each retry attempt internally.
+        // Register intercepts BEFORE any navigation so they are in place
+        // when the app fires requests during page load. This prevents the
+        // race condition where the UMLS credentials check fires before the
+        // intercept is registered, causing cy.wait('@umls') to hang for
+        // 110 seconds and fail.
         cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
+        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
 
         // Visit login and ensure fresh sessionStorage (with retry on network errors)
         cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
@@ -278,7 +281,7 @@ export class OktaLogin {
             landing:  LandingPage.newMeasureButton,
         };
 
-        // Helper: type credentials and click sign-in (registers UMLS intercept right before clicking)
+        // Helper: type credentials and click sign-in
         const doFormLogin = () => {
             const creds = who ? args.credsForUser(who) : null;
             if (creds) {
@@ -287,10 +290,6 @@ export class OktaLogin {
             } else {
                 cy.log(`${logPrefix}: No credentials mapped for "${who}"—skipping typing.`);
             }
-
-            // Register UMLS intercept right before clicking sign-in so it catches
-            // the request that fires when the app loads the measures page after login
-            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
 
             cy.get(selectors.signIn, { timeout: 20000 }).should('be.visible').should('be.enabled').click();
         };
@@ -322,6 +321,9 @@ export class OktaLogin {
 
         // 2) Re-evaluate auth (navigate to root so route guard runs)
         if (cookieSet) {
+            // Re-register the UMLS intercept before navigating — the alias
+            // may have been consumed by the initial /login page load.
+            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
             cy.visitWithRetry('/');
         }
 
@@ -330,9 +332,8 @@ export class OktaLogin {
             cy.log(`${logPrefix}: UI state after first wait: ${state}`);
 
             if (state === 'landing') {
-                // Already authenticated — register UMLS intercept to catch the
-                // request that should already be in-flight or about to fire
-                cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
+                // Already authenticated — UMLS intercept was registered early
+                // so it will have captured/will capture the request.
                 return;
             }
 
@@ -351,6 +352,10 @@ export class OktaLogin {
             // Clear cookies since the cookie-based token was rejected
             cy.clearAllCookies();
             cy.clearLocalStorage();
+
+            // Re-register UMLS intercept before navigating — previous alias
+            // may have been consumed by earlier page loads.
+            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
 
             // Navigate directly to /login (with retry on network errors)
             cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
