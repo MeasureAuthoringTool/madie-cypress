@@ -18,7 +18,7 @@ export enum Profile {
     DeviceUseStatement = 'device',
     DiagnositicReportLabResultsReporting = 'device',
     DiagnositicReportReportAndNoteExchange = 'device',
-    Encounter = 'encounter',
+    Encounter = 'qicore-encounter',
     FamilyMemberHistory = 'family-member-history',
     Flag = 'flag',
     Goal = 'goal',
@@ -78,7 +78,7 @@ export class TestCaseBuilder {
             resourceIdPath = 'cypress/fixtures/' + currentUser + '/builderResourceId' + resourceNumber
         }
 
-        cy.get('[data-testid="add-element-' + addition + '"]').click()
+        cy.get('[data-testid="add-element-' + addition + '"]').click().wait(500)
 
         cy.get(this.addedTab).click().wait(500)
 
@@ -91,7 +91,6 @@ export class TestCaseBuilder {
             cy.get('[data-testid="action-center-button-' + resourceId + '"]').click().wait(250)
             cy.get('[data-testid="action-center-' + resourceId + '_Edit"]').click()
         })
-
     }
 
     public static applyAndWait() {

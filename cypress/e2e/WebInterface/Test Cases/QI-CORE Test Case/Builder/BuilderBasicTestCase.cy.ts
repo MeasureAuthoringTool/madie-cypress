@@ -54,7 +54,7 @@ const strats: Array<Stratification> = [
     }
 ]
 
-describe.skip('Test Case Builder Basics', () => {
+describe('Test Case Builder Basics', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -67,7 +67,7 @@ describe.skip('Test Case Builder Basics', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -103,8 +103,8 @@ describe.skip('Test Case Builder Basics', () => {
         TestCaseBuilder.applyAndWait()
 
         TestCaseBuilder.selectLeftMenu(' *Name')
-        cy.get('[data-testid="string-field-input-Patient.name[0].family"]').type('Starr')
-        cy.get('[data-testid="string-field-input-Patient.name[0].given[0]"]').type('Ringo')
+        cy.get('[data-testid="string-field-input-Patient.name[0].family"]').type('Rodriguez')
+        cy.get('[data-testid="string-field-input-Patient.name[0].given[0]"]').type('Sara')
         TestCaseBuilder.applyAndWait()
 
         cy.get(TestCaseBuilder.addAttribute).click()
@@ -118,22 +118,69 @@ describe.skip('Test Case Builder Basics', () => {
         TestCaseBuilder.applyAndWait()
 
         TestCaseBuilder.selectLeftMenu('Extension (Race)')
-        // waiting for https://jira.cms.gov/browse/MAT-9688 - race omb 2028-9 asian
+        Utilities.waitForElementVisible('[data-testid="uri-field-Patient.extension[0].url"]', 8500)
+        Utilities.dropdownSelect('[data-testid="value-set-Patient.extension[0].extension[0].valueCoding"]', 'OmbRaceCategories')
+        Utilities.dropdownSelect('[data-testid="code-system-selector"]', 'urn:oid:2.16.840.1.113883.6.238')
+        Utilities.dropdownSelect('[data-testid="code-selector"]', '2028-9')
+        cy.get('[data-testid="string-field-input-Patient.extension[0].extension[2].valueString"]').type('Asian')
+        TestCaseBuilder.applyAndWait()
 
         TestCaseBuilder.selectLeftMenu('Extension (Ethnicity)')
-        // waiting for https://jira.cms.gov/browse/MAT-9688 - ethnicity 2135-2 hispanic or latino
+        Utilities.waitForElementVisible('[data-testid="uri-field-Patient.extension[1].url"]', 8500)
+        Utilities.dropdownSelect('[data-testid="value-set-Patient.extension[1].extension[0].valueCoding"]', 'OmbEthnicityCategories')
+        Utilities.dropdownSelect('[data-testid="code-system-selector"]', 'urn:oid:2.16.840.1.113883.6.238')
+        Utilities.dropdownSelect('[data-testid="code-selector"]', '2135-2')
+        cy.get('[data-testid="string-field-input-Patient.extension[1].extension[2].valueString"]').type('Hispanic')
+        TestCaseBuilder.applyAndWait()
 
-        /* add Encounter
-        class actcode AMB
-        status finished
-        subject, ref patient
-        type    snomed 185463005 visit out of hours procedure
-        period  010126 00:00:00 to 010126 whatever        
+        cy.get('[data-testid="close-resource-editor-button"]').click()
 
+        cy.get('[data-testid="available-tab"]').click()
 
-            cy.get('[data-testid="measure-name-qicore-encounter_action"]').click()
-        */
+        TestCaseBuilder.addEditNewResource(Profile.Encounter, 1)
 
+        Utilities.dropdownSelect('[data-testid="value-set-Encounter.class"]', 'ActEncounterCode')
+        Utilities.dropdownSelect('[data-testid="code-system-selector"]', 'http://terminology.hl7.org/CodeSystem/v3-ActCode')
+        Utilities.dropdownSelect('[data-testid="code-selector"]', 'AMB')
+        TestCaseBuilder.applyAndWait()
+
+        TestCaseBuilder.selectLeftMenu(' *Status')
+        Utilities.dropdownSelect('[data-testid="code-selector-Encounter.status"]', 'finished')
+        TestCaseBuilder.applyAndWait()
+
+        TestCaseBuilder.selectLeftMenu(' *Subject')
+        Utilities.dropdownSelect('[data-testid="reference-type-select-0"]', 'http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient')
+        cy.get('[data-testid="reference-select-0"]').click()
+        cy.get('[data-value*="Patient/"]').click()
+        TestCaseBuilder.applyAndWait()
+
+        TestCaseBuilder.selectLeftMenu(' *Type')
+        Utilities.dropdownSelect('[data-testid="value-set-Encounter.type[0].coding[0]"]', 'Custom Code')
+        cy.get('[data-testid="custom-code-system-input"]').type('http://snomed.info/sct')
+        cy.get('[data-testid="custom-code-input"]').type('185463005')
+        TestCaseBuilder.applyAndWait()
+
+        cy.get(TestCaseBuilder.addAttribute).click()
+        cy.contains('period').click()
+        cy.get('[data-testid="add-element-button-2"]').click()
+
+        TestCaseBuilder.selectLeftMenu('Period')
+        Utilities.dropdownSelect('[data-testid="date-time-format-selector-field-Period"]', 'YYYY-MM-DDTHH:mm:ssZ')
+
+        cy.get('[data-testid="start-YYYY-MM-DDTHH:mm:ssZ-field-Period-input"]').type('01-01-2026')
+        cy.get('#time').eq(0).type('080000AM')
+        TestCaseBuilder.applyAndWait()
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
+
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get('[data-testid="test-case-title-0_testCaseValidationStatus"]').should('contain.text', 'Pending')
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.get('[data-testid="show-json-validation-errors-button"]').should('have.attr', 'title', 'Valid')
     })
-
 })
