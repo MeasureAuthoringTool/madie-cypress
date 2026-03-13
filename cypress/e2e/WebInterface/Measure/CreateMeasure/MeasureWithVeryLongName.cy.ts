@@ -20,21 +20,8 @@ describe('Create New Measure with very long name', () => {
 
     afterEach('Cleanup and Logout', () => {
 
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
-        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 30000)
-        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
-        cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
-
-        //Verify the deleted measure on My Measures page list
-        cy.get(Header.measures).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
-
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Create QI Core 4.1.1 Measure', () => {

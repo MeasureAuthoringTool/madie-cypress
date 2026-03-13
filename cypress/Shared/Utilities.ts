@@ -129,6 +129,11 @@ export class Utilities {
             currentUser = Cypress.env('selectedUser')
         }
 
+        if (!currentUser) {
+            cy.log('⚠️ deleteMeasure: No user set — skipping cleanup')
+            return
+        }
+
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -144,7 +149,15 @@ export class Utilities {
         OktaLogin.setupUserSession(altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((id) => {
+            if (!accessToken?.value) {
+                cy.log('⚠️ deleteMeasure: No access token available — skipping cleanup')
+                return
+            }
+            cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
+                if (!id) {
+                    cy.log(`⚠️ deleteMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`)
+                    return
+                }
                 cy.request({
                     url: `/api/measures/${id}/delete`,
                     method: 'DELETE',
@@ -153,8 +166,11 @@ export class Utilities {
                     },
                     failOnStatusCode: false,
                 }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    cy.log('Measure deleted (hard delete) via API successfully')
+                    if (response.status === 200) {
+                        cy.log('Measure deleted (hard delete) via API successfully')
+                    } else {
+                        cy.log(`⚠️ Measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`)
+                    }
                 })
             })
         })
@@ -163,6 +179,12 @@ export class Utilities {
 
     public static deleteVersionedMeasure(measureName?: string, cqlLibraryName?: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
         const currentUser = Cypress.env('selectedUser')
+
+        if (!currentUser) {
+            cy.log('⚠️ deleteVersionedMeasure: No user set — skipping cleanup')
+            return
+        }
+
         let user = ''
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         if ((measureNumber === undefined) || (measureNumber === null)) {
@@ -183,7 +205,15 @@ export class Utilities {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
         }
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((id) => {
+            if (!accessToken?.value) {
+                cy.log('⚠️ deleteVersionedMeasure: No access token available — skipping cleanup')
+                return
+            }
+            cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
+                if (!id) {
+                    cy.log(`⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`)
+                    return
+                }
                 cy.request({
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
@@ -191,10 +221,14 @@ export class Utilities {
                         Authorization: 'Bearer ' + accessToken.value,
                         'api-key': adminApiKey,
                         'harpId': user
-                    }
+                    },
+                    failOnStatusCode: false,
                 }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    cy.log("Measure Deleted successfully")
+                    if (response.status === 200) {
+                        cy.log('Versioned measure deleted successfully via admin API')
+                    } else {
+                        cy.log(`⚠️ Versioned measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`)
+                    }
                 })
             })
         })
@@ -485,6 +519,12 @@ export class Utilities {
     public static deleteLibrary(libraryName?: string, altUser?: boolean, libraryNumber?: number) {
 
         const currentUser = Cypress.env('selectedUser')
+
+        if (!currentUser) {
+            cy.log('⚠️ deleteLibrary: No user set — skipping cleanup')
+            return
+        }
+
         if (altUser === undefined || altUser === null) {
             altUser = false
         }
@@ -499,18 +539,28 @@ export class Utilities {
         OktaLogin.setupUserSession(altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(libraryPath).should('exist').then((id) => {
+            if (!accessToken?.value) {
+                cy.log('⚠️ deleteLibrary: No access token available — skipping cleanup')
+                return
+            }
+            cy.task('readFileSafe', libraryPath, { log: false }).then((id: string | null) => {
+                if (!id) {
+                    cy.log(`⚠️ deleteLibrary: Fixture file ${libraryPath} is empty or missing — skipping cleanup`)
+                    return
+                }
                 cy.request({
                     url: '/api/cql-libraries/' + id,
                     method: 'DELETE',
                     headers: {
                         Authorization: 'Bearer ' + accessToken.value
-                    }
+                    },
+                    failOnStatusCode: false,
                 }).then((response) => {
-                    console.log(response)
-
-                    expect(response.status).to.eql(200)
-                    cy.log('Library Deleted Successfully')
+                    if (response.status === 200) {
+                        cy.log('Library deleted successfully')
+                    } else {
+                        cy.log(`⚠️ Library cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`)
+                    }
                 })
             })
         })

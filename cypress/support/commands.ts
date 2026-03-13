@@ -125,10 +125,20 @@ Cypress.Commands.add('visitWithRetry', (
 });
 
 
-export function setAccessTokenCookie() {
+// -------------------------------------------------------
+// Parameterized OAuth token cookie setter
+// Replaces 8 near-identical copy-pasted functions with one.
+// -------------------------------------------------------
+function fetchAccessTokenAndSetCookie(
+    username: string,
+    password: string,
+    opts?: { failOnStatusCode?: boolean; uppercaseUsername?: boolean }
+): void {
+    const failOnStatus = opts?.failOnStatusCode ?? false;
+    const effectiveUsername = opts?.uppercaseUsername ? username.toUpperCase() : username;
 
-    cy.clearCookies()
-    cy.clearLocalStorage()
+    cy.clearCookies();
+    cy.clearLocalStorage();
 
     cy.request({
         url: authnUrl,
@@ -136,26 +146,24 @@ export function setAccessTokenCookie() {
         headers: {
             'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
         },
-
         body: {
-            username: Environment.credentials().harpUser,
-            password: Environment.credentials().password,
-
+            username: effectiveUsername,
+            password: password,
             options: {
                 multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
+                warnBeforePasswordExpired: true,
+            },
         },
-        failOnStatusCode: false
-    }).then((response) => {
+        failOnStatusCode: false,
+    }).then((authnResponse) => {
+        expect(authnResponse.status).to.eql(200);
+        const sessionToken = authnResponse.body.sessionToken;
 
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-
-        let url = authCodeUrl + '?client_id=' + clientId +
+        const url =
+            authCodeUrl +
+            '?client_id=' + clientId +
             '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
             '&code_challenge_method=S256' +
             '&response_type=code' +
@@ -165,30 +173,28 @@ export function setAccessTokenCookie() {
             '&redirect_uri=' + redirectUri +
             '&sessionToken=' + sessionToken +
             '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
+            '&scope=openid%20email%20profile';
 
         cy.request({
             url: url,
             method: 'GET',
             headers: {
                 'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
+                'Accept': '*/*',
             },
-            failOnStatusCode: false
-        }).then((response) => {
+            failOnStatusCode: failOnStatus,
+        }).then((authzResponse) => {
+            expect(authzResponse.status).to.eql(200);
 
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
+            const resp = authzResponse.body;
+            const codeIdx = resp.indexOf('data.code');
+            const codeEndIdx = resp.indexOf(';', codeIdx);
+            const codeLine = resp.substring(codeIdx, codeEndIdx);
+            const [, c] = codeLine.split('=');
+            const escapedCode = c.trim().replace(/'/g, '');
             const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
+                return String.fromCharCode(parseInt(arguments[1], 16));
+            });
 
             cy.request({
                 url: tokenUrl,
@@ -196,656 +202,86 @@ export function setAccessTokenCookie() {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
+                    'Accept': '*/*',
                 },
                 body: {
                     grant_type: 'authorization_code',
                     client_id: clientId,
                     redirect_uri: redirectUri,
                     code: authCode,
-                    code_verifier: codeVerifier
+                    code_verifier: codeVerifier,
                 },
-                failOnStatusCode: false
-            }).then((response) => {
+                failOnStatusCode: failOnStatus,
+            }).then((tokenResponse) => {
+                expect(tokenResponse.status).to.eql(200);
+                const access_token = tokenResponse.body.access_token;
+                // setting the cookie value to be grabbed for api authentication
+                cy.setCookie('accessToken', access_token);
+            });
+        });
+    });
+}
 
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
+// --- Thin wrappers that preserve the original public API ---
 
-            })
-        })
-    })
+export function setAccessTokenCookie() {
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().harpUser,
+        Environment.credentials().password,
+        { failOnStatusCode: false },
+    );
 }
 
 export function setAccessTokenCookie2() {
-
-    cy.clearCookies()
-    cy.clearLocalStorage()
-
-    cy.request({
-        url: authnUrl,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
-        },
-
-        body: {
-            username: Environment.credentials().harpUser2,
-            password: Environment.credentials().password2,
-
-            options: {
-                multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
-        },
-        failOnStatusCode: false
-    }).then((response) => {
-
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-
-        let url = authCodeUrl + '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
-            '&code_challenge_method=S256' +
-            '&response_type=code' +
-            '&response_mode=okta_post_message' +
-            '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
-            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
-
-        cy.request({
-            url: url,
-            method: 'GET',
-            headers: {
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
-            },
-            failOnStatusCode: false
-        }).then((response) => {
-
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
-            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
-
-            cy.request({
-                url: tokenUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
-                },
-                body: {
-                    grant_type: 'authorization_code',
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    code: authCode,
-                    code_verifier: codeVerifier
-                },
-                failOnStatusCode: false
-            }).then((response) => {
-
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
-
-            })
-        })
-    })
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().harpUser2,
+        Environment.credentials().password2,
+        { failOnStatusCode: false },
+    );
 }
 
 export function setAccessTokenCookie3() {
-
-    cy.clearCookies()
-    cy.clearLocalStorage()
-
-    cy.request({
-        url: authnUrl,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
-        },
-
-        body: {
-            username: Environment.credentials().harpUser3,
-            password: Environment.credentials().password3,
-
-            options: {
-                multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
-        },
-        failOnStatusCode: false
-    }).then((response) => {
-
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-
-        let url = authCodeUrl + '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
-            '&code_challenge_method=S256' +
-            '&response_type=code' +
-            '&response_mode=okta_post_message' +
-            '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
-            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
-
-        cy.request({
-            url: url,
-            method: 'GET',
-            headers: {
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
-            },
-            failOnStatusCode: false
-        }).then((response) => {
-
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
-            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
-
-            cy.request({
-                url: tokenUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
-                },
-                body: {
-                    grant_type: 'authorization_code',
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    code: authCode,
-                    code_verifier: codeVerifier
-                },
-                failOnStatusCode: false
-            }).then((response) => {
-
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
-
-            })
-        })
-    })
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().harpUser3,
+        Environment.credentials().password3,
+        { failOnStatusCode: false },
+    );
 }
 
 export function setAccessTokenCookieCAMELCASE() {
-
-    cy.clearCookies()
-    cy.clearLocalStorage()
-
-    cy.request({
-        url: authnUrl,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
-        },
-
-        body: {
-            username: (Environment.credentials().harpUser).toUpperCase(),
-            password: (Environment.credentials().password),
-
-            options: {
-                multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
-        },
-        failOnStatusCode: false
-    }).then((response) => {
-
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-        let url = authCodeUrl + '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
-            '&code_challenge_method=S256' +
-            '&response_type=code' +
-            '&response_mode=okta_post_message' +
-            '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
-            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
-        cy.request({
-            url: url,
-            method: 'GET',
-            headers: {
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
-            }
-        }).then((response) => {
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
-            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
-
-            cy.request({
-                url: tokenUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
-                },
-                body: {
-                    grant_type: 'authorization_code',
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    code: authCode,
-                    code_verifier: codeVerifier
-                }
-            }).then((response) => {
-
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
-
-            })
-        })
-    })
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().harpUser,
+        Environment.credentials().password,
+        { uppercaseUsername: true },
+    );
 }
 
 export function setAccessTokenCookieALT() {
-
-    cy.clearCookies()
-    cy.clearLocalStorage()
-
-    cy.request({
-        url: authnUrl,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
-        },
-
-        body: {
-            username: Environment.credentials().altHarpUser,
-            password: Environment.credentials().passwordALT,
-
-            options: {
-                multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
-        },
-        failOnStatusCode: false
-    }).then((response) => {
-
-        console.log(response)
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-        let url = authCodeUrl + '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
-            '&code_challenge_method=S256' +
-            '&response_type=code' +
-            '&response_mode=okta_post_message' +
-            '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
-            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
-        cy.request({
-            url: url,
-            method: 'GET',
-            headers: {
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
-            }
-        }).then((response) => {
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
-            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
-
-            cy.request({
-                url: tokenUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
-                },
-                body: {
-                    grant_type: 'authorization_code',
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    code: authCode,
-                    code_verifier: codeVerifier
-                }
-            }).then((response) => {
-
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
-
-            })
-        })
-    })
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().altHarpUser,
+        Environment.credentials().passwordALT,
+    );
 }
 
 export function setAccessTokenCookieALT2() {
-
-    cy.clearCookies()
-    cy.clearLocalStorage()
-
-    cy.request({
-        url: authnUrl,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
-        },
-
-        body: {
-            username: Environment.credentials().altHarpUser2,
-            password: Environment.credentials().passwordALT2,
-
-            options: {
-                multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
-        },
-        failOnStatusCode: false
-    }).then((response) => {
-
-        console.log(response)
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-        let url = authCodeUrl + '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
-            '&code_challenge_method=S256' +
-            '&response_type=code' +
-            '&response_mode=okta_post_message' +
-            '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
-            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
-        cy.request({
-            url: url,
-            method: 'GET',
-            headers: {
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
-            }
-        }).then((response) => {
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
-            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
-
-            cy.request({
-                url: tokenUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
-                },
-                body: {
-                    grant_type: 'authorization_code',
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    code: authCode,
-                    code_verifier: codeVerifier
-                }
-            }).then((response) => {
-
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
-
-            })
-        })
-    })
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().altHarpUser2,
+        Environment.credentials().passwordALT2,
+    );
 }
 
 export function setAccessTokenCookieALT3() {
-
-    cy.clearCookies()
-    cy.clearLocalStorage()
-
-    cy.request({
-        url: authnUrl,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
-        },
-
-        body: {
-            username: Environment.credentials().altHarpUser3,
-            password: Environment.credentials().passwordALT3,
-
-            options: {
-                multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
-        },
-        failOnStatusCode: false
-    }).then((response) => {
-
-        console.log(response)
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-        let url = authCodeUrl + '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
-            '&code_challenge_method=S256' +
-            '&response_type=code' +
-            '&response_mode=okta_post_message' +
-            '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
-            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
-        cy.request({
-            url: url,
-            method: 'GET',
-            headers: {
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
-            }
-        }).then((response) => {
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
-            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
-
-            cy.request({
-                url: tokenUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
-                },
-                body: {
-                    grant_type: 'authorization_code',
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    code: authCode,
-                    code_verifier: codeVerifier
-                }
-            }).then((response) => {
-
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
-
-            })
-        })
-    })
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().altHarpUser3,
+        Environment.credentials().passwordALT3,
+    );
 }
 
 export function setAccessTokenCookieAdmin() {
-
-    cy.clearCookies()
-    cy.clearLocalStorage()
-
-    cy.request({
-        url: authnUrl,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json'
-        },
-
-        body: {
-            username: Environment.credentials().adminUser,
-            password: Environment.credentials().adminPassword,
-
-            options: {
-                multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true
-            }
-        },
-        failOnStatusCode: false
-    }).then((response) => {
-
-        console.log(response)
-        expect(response.status).to.eql(200)
-        const sessionToken = response.body.sessionToken
-
-        let url = authCodeUrl + '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
-            '&code_challenge_method=S256' +
-            '&response_type=code' +
-            '&response_mode=okta_post_message' +
-            '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
-            '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile'
-
-        cy.request({
-            url: url,
-            method: 'GET',
-            headers: {
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*'
-            }
-        }).then((response) => {
-            expect(response.status).to.eql(200)
-
-            const resp = response.body
-            const codeIdx = resp.indexOf("data.code")
-            const codeEndIdx = resp.indexOf(";", codeIdx)
-            const codeLine = resp.substring(codeIdx, codeEndIdx)
-            const [v, c] = codeLine.split("=")
-            const escapedCode = c.trim().replace(/'/g, '')
-            const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16))
-            })
-
-            cy.request({
-                url: tokenUrl,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*'
-                },
-                body: {
-                    grant_type: 'authorization_code',
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    code: authCode,
-                    code_verifier: codeVerifier
-                }
-            }).then((response) => {
-
-                expect(response.status).to.eql(200)
-                const access_token = response.body.access_token
-                //setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
-
-            })
-        })
-    })
+    fetchAccessTokenAndSetCookie(
+        Environment.credentials().adminUser,
+        Environment.credentials().adminPassword,
+    );
 }
 
 export function UMLSAPIKeyLogin() {
