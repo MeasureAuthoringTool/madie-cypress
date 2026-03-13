@@ -225,6 +225,20 @@ export class OktaLogin {
         });
     }
 
+    public static AdminLogin(): void {
+        this.runLoginFlow({
+            selectedEnvVar: 'selectedUser',
+            cookieSetters: {
+                any: () => cy.setAccessTokenCookieAdmin()
+            },
+            credsForUser: (u) => {
+                return { username: Environment.credentials().adminUser, password: Environment.credentials().adminPassword }
+            },
+            logPrefix: 'Admin Login'
+        })
+
+    }
+
     // ------------------------------------------------------
     // PRIVATE: shared hardened engine
     // ------------------------------------------------------
