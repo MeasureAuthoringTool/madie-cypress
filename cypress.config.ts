@@ -46,6 +46,17 @@ export default defineConfig({
           const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
           return rows
         },
+          readFileSafe(filePath: string) {
+              try {
+                  if (fs.existsSync(filePath)) {
+                      const content = fs.readFileSync(filePath, 'utf8')
+                      return content || null
+                  }
+                  return null
+              } catch {
+                  return null
+              }
+          },
           parseXML(xmlContent: string) {
               return new Promise((resolve, reject) => {
                   const parser = new xml2js.Parser()
