@@ -80,7 +80,7 @@ describe('QDM CQL Functions', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -90,7 +90,7 @@ describe('QDM CQL Functions', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -261,12 +261,12 @@ describe('QDM CQL Functions - Measure ownership Validations', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

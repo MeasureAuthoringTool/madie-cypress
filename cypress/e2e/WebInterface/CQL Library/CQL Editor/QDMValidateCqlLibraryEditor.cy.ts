@@ -16,12 +16,12 @@ describe('Validate QDM CQL on CQL Library page', () => {
         apiCQLLibraryName = 'QdmValidationsLib' + Date.now()
         CQLLibraryPage.createLibraryAPI(apiCQLLibraryName, SupportedModels.QDM, { publisher: CQLLibraryPublisher })           
         
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
@@ -176,12 +176,12 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
         apiCQLLibraryName = 'QDMValueSetLib' + Date.now()
         CQLLibraryPage.createLibraryAPI(apiCQLLibraryName, SupportedModels.QDM, { publisher: CQLLibraryPublisher })           
        
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('Value Sets are valid', () => {

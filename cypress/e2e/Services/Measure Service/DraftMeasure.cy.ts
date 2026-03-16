@@ -41,7 +41,7 @@ describe('Version and Draft CQL Library', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
-        OktaLogin.Logout()
+
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
 

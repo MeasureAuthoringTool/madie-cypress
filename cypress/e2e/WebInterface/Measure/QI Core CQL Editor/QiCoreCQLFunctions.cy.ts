@@ -62,17 +62,15 @@ describe('Qi Core CQL Functions', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
-    afterEach('Clean up and Logout', () => {
+    afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -232,13 +230,12 @@ describe('Qi-Core CQL Functions - Measure ownership Validations', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
-    afterEach('Clean up and Logout', () => {
+    afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

@@ -21,17 +21,13 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
     })
 
-    beforeEach('Craete CQL Library and Login', () => {
-        //Create CQL Library with Regular User
-        CqlLibraryOne = 'TestLibrary1' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
-
-        OktaLogin.Login()
+    beforeEach('Login', () => {
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('User cannot create a draft of a draft that already exists, while the version is still open', () => {

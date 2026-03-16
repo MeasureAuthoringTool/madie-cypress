@@ -36,7 +36,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

@@ -77,7 +77,7 @@ describe('Measure Versioning validations', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -179,7 +179,7 @@ describe('Create Test case for QDM Versioned Measure', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
     })
 
@@ -340,7 +340,7 @@ describe('Non Measure owner unable to create Version', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        OktaLogin.Logout()
+        
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.AltLogin()
     })

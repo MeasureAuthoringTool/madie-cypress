@@ -34,7 +34,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     after('Clean up', () => {
@@ -283,7 +283,7 @@ describe('Verify Measure Id and Version Id', () => {
 
     after('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -323,7 +323,7 @@ describe('Generate CMS ID for QI-Core Measure', () => {
 
     after('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })

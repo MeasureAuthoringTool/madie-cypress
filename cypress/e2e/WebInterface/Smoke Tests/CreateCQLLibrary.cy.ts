@@ -16,7 +16,7 @@ describe('Create CQL Library', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(CQLLibraryName)
     })
 

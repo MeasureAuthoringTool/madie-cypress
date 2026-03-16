@@ -175,10 +175,10 @@ export class CQLEditorPage {
 
         if (!library || library == null) {
             library = false
-            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 600000)
+            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 120000)
 
         } else {
-            Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 600000)
+            Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 120000)
         }
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {

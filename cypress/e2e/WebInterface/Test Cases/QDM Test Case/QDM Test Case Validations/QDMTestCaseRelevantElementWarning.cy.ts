@@ -45,7 +45,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

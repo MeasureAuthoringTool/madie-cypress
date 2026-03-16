@@ -12,12 +12,12 @@ describe('CQL Library Validations', () => {
 
     beforeEach('Login', () => {
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {

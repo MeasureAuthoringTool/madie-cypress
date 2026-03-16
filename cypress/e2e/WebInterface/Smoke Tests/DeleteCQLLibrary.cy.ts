@@ -18,7 +18,7 @@ describe('Delete CQL Library', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('Verify Library Owner can Delete Library through Action center on Library list Page', () => {

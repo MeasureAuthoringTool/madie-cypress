@@ -125,12 +125,12 @@ describe('Qi-Core CQL Definitions Builder', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
@@ -430,7 +430,7 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
@@ -489,13 +489,13 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 

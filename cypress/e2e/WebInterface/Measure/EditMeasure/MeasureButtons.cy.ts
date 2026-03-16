@@ -74,7 +74,7 @@ describe('Delete measure on the measure edit page', () => {
 
     afterEach('Log Out', () => {
 
-        OktaLogin.Logout()
+        
 
     })
 
@@ -144,7 +144,7 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
 
     afterEach('Log Out and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteVersionedMeasure(measureQDM, qdmCQLLibrary)
     })
 
@@ -202,7 +202,7 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
 
     afterEach('Log Out and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteVersionedMeasure(measureQICore, qiCoreCQLLibrary)
     })
 
@@ -527,7 +527,7 @@ describe('Dirty Check Validations', () => {
 
     after('Log Out', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
 

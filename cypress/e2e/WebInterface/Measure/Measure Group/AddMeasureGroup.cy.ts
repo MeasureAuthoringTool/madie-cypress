@@ -17,12 +17,12 @@ describe('Validate Measure Group additions', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName1, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null,
             null, 'Procedure')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Cleanup', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName1)
     })
 

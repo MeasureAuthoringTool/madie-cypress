@@ -67,7 +67,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 

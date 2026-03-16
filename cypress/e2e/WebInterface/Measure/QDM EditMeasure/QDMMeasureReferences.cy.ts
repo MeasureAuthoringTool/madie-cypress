@@ -33,7 +33,7 @@ describe('QDM Measure Reference', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 

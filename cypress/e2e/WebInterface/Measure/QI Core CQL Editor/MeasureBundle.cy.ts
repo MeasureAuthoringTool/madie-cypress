@@ -18,7 +18,7 @@ describe('Measure Bundle end points', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -54,7 +54,7 @@ describe('Measure Bundle end points', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //log out of UI
-        OktaLogin.Logout()
+        
         //log into backend
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
@@ -93,7 +93,7 @@ describe('Measure Bundle end points', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //log out of UI
-        OktaLogin.Logout()
+        
 
         //log into backend
         cy.setAccessTokenCookie()
@@ -159,7 +159,7 @@ describe('Measure Bundle end points', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //log out of UI
-        OktaLogin.Logout()
+        
 
         //log into backend
         cy.setAccessTokenCookie()
@@ -191,7 +191,7 @@ describe('Measure bundle end point returns stratifications', () => {
     beforeEach('Create Measure', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
@@ -256,7 +256,7 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //log out of UI
-        OktaLogin.Logout()
+        
 
         //log into backend
         cy.setAccessTokenCookie()
@@ -354,7 +354,7 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //log out of UI
-        OktaLogin.Logout()
+        
 
         //log into backend
         cy.setAccessTokenCookie()
@@ -454,7 +454,7 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //log out of UI
-        OktaLogin.Logout()
+        
 
         //log into backend
         cy.setAccessTokenCookie()
@@ -498,7 +498,7 @@ describe('Verify the criteria reference for measure observations', () => {
     beforeEach('Create Measure', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up', () => {
@@ -571,7 +571,7 @@ describe('Verify the criteria reference for measure observations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //log out of UI
-        OktaLogin.Logout()
+        
 
         //log into backend
         cy.setAccessTokenCookie()
@@ -657,7 +657,7 @@ describe('Verify the criteria reference for measure observations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //log out of UI
-        OktaLogin.Logout()
+        
 
         //log into backend
         cy.setAccessTokenCookie()

@@ -43,7 +43,7 @@ describe('Qi-Core CQL Parameters', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
@@ -55,9 +55,8 @@ describe('Qi-Core CQL Parameters', () => {
         cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
-    afterEach('Clean up and Logout', () => {
+    afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -298,7 +297,7 @@ describe('Delete Saved Parameters', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL })
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
@@ -306,9 +305,8 @@ describe('Delete Saved Parameters', () => {
         cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
-    afterEach('Clean up and Logout', () => {
+    afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -385,13 +383,12 @@ describe('Qi-Core CQL Parameters - Measure ownership Validations', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
-    afterEach('Clean up and Logout', () => {
+    afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

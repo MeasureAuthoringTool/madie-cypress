@@ -21,12 +21,12 @@ describe('Edit CQL Library validations', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -151,13 +151,13 @@ describe('CQL Library Validations -- User ownership', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(CQLLibraryNameAlt)
     })
 
     it('Owner is the same as current user, library will appear in, both, "All Libraries" and "My Libraries" default / stand-alone lists', () => {
         //log in as user that does not own the Library
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -183,7 +183,7 @@ describe('CQL Library Validations -- User ownership', () => {
     it('Owner is not the user and the library details are viewed via a View button and Library cannot be edited', () => {
         const currentUser = Cypress.env('selectedUser')
         //log in as user that own the Library
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')

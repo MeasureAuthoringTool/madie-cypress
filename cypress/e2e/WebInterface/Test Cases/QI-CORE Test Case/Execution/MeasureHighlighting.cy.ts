@@ -1092,7 +1092,7 @@ describe('Measure Highlighting', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -1219,7 +1219,7 @@ describe('Highlighting accurately appears for a single PC measure', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -1331,7 +1331,7 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -1504,7 +1504,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -1612,7 +1612,7 @@ describe('Highlighting tab shows Results, Definitions, Functions, and Unused sec
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -1747,7 +1747,7 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -1881,7 +1881,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

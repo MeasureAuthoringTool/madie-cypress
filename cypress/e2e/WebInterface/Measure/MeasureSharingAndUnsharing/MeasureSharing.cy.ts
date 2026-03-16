@@ -267,7 +267,7 @@ describe('Measure Sharing - Multiple instances', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {

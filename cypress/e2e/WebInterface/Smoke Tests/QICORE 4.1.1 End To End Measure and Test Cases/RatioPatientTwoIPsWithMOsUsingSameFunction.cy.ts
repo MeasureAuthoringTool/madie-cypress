@@ -108,7 +108,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
 
-        OktaLogin.Logout()
+        
     })
 
     after('Clean up', () => {

@@ -71,7 +71,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(randomCQLLibraryName)
     })
 
@@ -334,7 +334,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        
         OktaLogin.setupUserSession(false)
         Utilities.deleteLibrary(updatedCQLLibraryName, false)
     })

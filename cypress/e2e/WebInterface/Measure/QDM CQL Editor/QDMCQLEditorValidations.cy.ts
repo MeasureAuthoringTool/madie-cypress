@@ -181,13 +181,13 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })

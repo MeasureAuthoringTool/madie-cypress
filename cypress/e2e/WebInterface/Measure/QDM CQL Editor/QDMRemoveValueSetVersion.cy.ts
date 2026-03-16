@@ -43,7 +43,7 @@ describe('Validating that the valueset version is removed and message appears, o
 
     afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })

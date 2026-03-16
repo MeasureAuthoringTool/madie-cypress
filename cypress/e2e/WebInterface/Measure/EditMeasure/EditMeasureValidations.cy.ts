@@ -17,11 +17,7 @@ describe('Edit Measure Validations', () => {
     })
 
     beforeEach('Login', () => {
-        OktaLogin.Login()
-    })
-
-    afterEach('Logout', () => {
-        OktaLogin.Logout()
+        OktaLogin.SessionLogin()
     })
 
     after('Clean up', () => {
@@ -104,13 +100,11 @@ describe('Measurement Period Validations', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
     })
 
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.Logout()
+    afterEach('Clean up Measures', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 

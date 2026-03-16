@@ -839,15 +839,15 @@ export class TestCasesPage {
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
             const buttonSelector = `[data-testid=view-edit-test-case-button-${tcId}]`
 
-            cy.get(buttonSelector).should('be.visible').wait(3000)
+            cy.get(buttonSelector, { timeout: 60000 }).should('be.visible').wait(3000)
             cy.get(buttonSelector).should('be.enabled')
-            Utilities.waitForElementVisible(buttonSelector, 30000)
+            Utilities.waitForElementVisible(buttonSelector, 60000)
             cy.get(buttonSelector).scrollIntoView()
             cy.get(buttonSelector).click()
 
             cy.wait(1000).then(() => {
                 if (callstackIntercepted) {
-                    cy.wait('@callstacks', { timeout: 140000 })
+                    cy.wait('@callstacks', { timeout: 90000 })
                 } else {
                     cy.log('No callstack request detected, continuing...')
                 }

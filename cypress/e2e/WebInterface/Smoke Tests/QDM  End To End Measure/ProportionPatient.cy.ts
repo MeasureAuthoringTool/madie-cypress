@@ -151,7 +151,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

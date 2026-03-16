@@ -30,7 +30,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -38,7 +38,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName + randValue
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -139,7 +139,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
         //verify that the errors flag indicates the mismatch CQL PC return type error
         //log out of UI
-        OktaLogin.Logout()
+        
         //log into backend
         OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {
@@ -159,7 +159,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         })
 
         //log back in
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         //click edit on measure with error
         MeasuresPage.actionCenter('edit')
         //navigate to the CQL Editor tab
@@ -179,7 +179,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         //verify that the errors flag contains no errors / has been cleared
 
         //log out of UI
-        OktaLogin.Logout()
+        
         //log into backend
 
         OktaLogin.setupUserSession(false)
@@ -296,7 +296,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
         //verify that the errors flag indicates the mismatch CQL PC return type error
         //log out of UI
-        OktaLogin.Logout()
+        
         //log into backend
 
         OktaLogin.setupUserSession(false)
@@ -317,7 +317,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         })
 
         //log back in
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         //click edit on measure with error
         MeasuresPage.actionCenter('edit')
         //Click on the measure group tab
@@ -336,7 +336,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
         //verify that the errors flag contains no errors / has been cleared
         //log out of UI
-        OktaLogin.Logout()
+        
         //log into backend
         OktaLogin.setupUserSession(false)
         cy.getCookie('accessToken').then((accessToken) => {

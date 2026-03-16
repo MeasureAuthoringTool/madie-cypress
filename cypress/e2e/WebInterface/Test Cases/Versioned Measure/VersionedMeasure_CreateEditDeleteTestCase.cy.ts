@@ -104,7 +104,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })

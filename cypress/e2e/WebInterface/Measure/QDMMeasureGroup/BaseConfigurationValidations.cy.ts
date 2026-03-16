@@ -31,7 +31,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         altCqlLibraryName = CqlLibraryName + altRandValue
 
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false, null, null, null)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -339,7 +339,7 @@ describe('Validating Non-owner access to Base Configuration page', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL)
 
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -403,7 +403,7 @@ describe('Updates on Base Configuration page', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit', null)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -414,7 +414,7 @@ describe('Updates on Base Configuration page', () => {
     afterEach('Clean up and Logout', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
+        
     })
 
     it('Changing the scoring elicits the Change Scoring prompt', () => {

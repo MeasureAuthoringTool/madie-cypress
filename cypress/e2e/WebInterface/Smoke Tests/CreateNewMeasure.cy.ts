@@ -37,7 +37,7 @@ describe('Create New Measure', () => {
         //Verify the deleted measure on All Measures page list
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
 
-        OktaLogin.Logout()
+        
     })
 
     it('Create QI Core 4.1.1 Measure', () => {

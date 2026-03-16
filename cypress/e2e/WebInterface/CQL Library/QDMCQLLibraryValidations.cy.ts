@@ -21,12 +21,12 @@ describe('QDM CQL Library Validations', () => {
 
     beforeEach('Login', () => {
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('Verify _ is allowed while creating QDM CQL Library', () => {

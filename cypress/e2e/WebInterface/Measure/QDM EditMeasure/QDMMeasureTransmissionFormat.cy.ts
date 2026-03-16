@@ -31,7 +31,7 @@ describe('QDM Measure: Transmission Format', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 

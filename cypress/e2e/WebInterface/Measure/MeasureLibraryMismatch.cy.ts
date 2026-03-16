@@ -26,7 +26,7 @@ describe('Mismatch between measure model and library model -- error state', () =
 
     afterEach('Logout and Clean up Measure', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -35,7 +35,7 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.QDM)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
@@ -60,7 +60,7 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore4)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
@@ -84,7 +84,7 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore4)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
@@ -108,7 +108,7 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
@@ -132,7 +132,7 @@ describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
 
     afterEach('Logout and Clean up Measure', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -141,7 +141,7 @@ describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore4)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
@@ -160,7 +160,7 @@ describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 

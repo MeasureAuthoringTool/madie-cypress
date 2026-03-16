@@ -30,7 +30,7 @@ describe('Test Case Validations', () => {
     })
 
     afterEach('Logout', () => {
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -167,7 +167,7 @@ describe('Attempting to create a test case without a title', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -346,7 +346,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
     afterEach('Cleanup and Logout', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+        
     })
 
     it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {

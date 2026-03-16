@@ -18,7 +18,7 @@ describe('Qi-Core Library Includes fields', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit', 0)
 
@@ -28,7 +28,7 @@ describe('Qi-Core Library Includes fields', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

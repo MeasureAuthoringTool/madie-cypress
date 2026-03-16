@@ -29,7 +29,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

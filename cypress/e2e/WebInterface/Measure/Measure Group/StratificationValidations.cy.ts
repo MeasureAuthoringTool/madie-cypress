@@ -17,7 +17,7 @@ describe('Validating Stratification tabs', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -29,7 +29,7 @@ describe('Validating Stratification tabs', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -251,7 +251,7 @@ describe('Stratification Validations for Ratio Measure group', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'ipp', 'num', 'denom', 'Boolean')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
@@ -263,7 +263,7 @@ describe('Stratification Validations for Ratio Measure group', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

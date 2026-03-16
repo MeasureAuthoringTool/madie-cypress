@@ -46,7 +46,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure(measureName, libraryName)
     })

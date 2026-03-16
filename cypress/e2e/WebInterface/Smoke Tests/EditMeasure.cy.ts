@@ -50,7 +50,7 @@ describe('Edit Measure', () => {
     afterEach('Clean up and Logout', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+        
     })
 
     it('Edit Measure Name and verify the measure name is updated on Measures page', () => {

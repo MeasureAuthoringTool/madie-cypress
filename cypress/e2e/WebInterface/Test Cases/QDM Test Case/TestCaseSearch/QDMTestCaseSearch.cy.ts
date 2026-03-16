@@ -58,7 +58,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
 
     afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })

@@ -47,7 +47,7 @@ describe('Test Case sorting by Test Case number', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -346,7 +346,7 @@ describe('QICore Test Case - Deleting all test cases resets test case counter', 
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

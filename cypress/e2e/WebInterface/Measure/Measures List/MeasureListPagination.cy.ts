@@ -59,7 +59,7 @@ describe('Measure List Pagination', () => {
             })
         }
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     after('Cleanup Measures and Logout', () => {
@@ -141,7 +141,7 @@ describe('Measure List Pagination', () => {
             })
         })
 
-        OktaLogin.Logout()
+        
     })
 
     it('Verify Pagination', () => {
