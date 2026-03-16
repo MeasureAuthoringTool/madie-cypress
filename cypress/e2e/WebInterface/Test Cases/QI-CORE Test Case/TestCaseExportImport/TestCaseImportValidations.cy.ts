@@ -304,7 +304,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     afterEach('Logout and Clean up Measures', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+        
     })
 
     it('Importing: not a .zip file', () => {
@@ -439,7 +439,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure()
         Utilities.deleteMeasure(measureName + 'b', CqlLibraryName,null,null, 2)
@@ -547,7 +547,7 @@ describe('Test case uniqueness error validation', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })
@@ -664,7 +664,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.Logout()
+        
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })

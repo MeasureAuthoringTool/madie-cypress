@@ -40,7 +40,7 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

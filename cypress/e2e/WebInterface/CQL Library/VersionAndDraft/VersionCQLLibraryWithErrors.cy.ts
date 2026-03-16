@@ -19,12 +19,12 @@ describe('Version CQL Library with errors', () => {
         CqlLibraryOther = 'CQLLibraryWithErrors' + Date.now()
         CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(CqlLibraryOther)
     })
 

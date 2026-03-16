@@ -38,7 +38,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, libraryName)
     })
 

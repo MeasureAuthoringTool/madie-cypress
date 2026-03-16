@@ -156,7 +156,7 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
 
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName + '2')
 
-        OktaLogin.Logout()
+        
     })
 
     it('Validate the zip file Export is downloaded for QDM Measure', () => {

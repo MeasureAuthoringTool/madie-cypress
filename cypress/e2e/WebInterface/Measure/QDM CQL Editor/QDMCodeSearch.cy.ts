@@ -66,7 +66,7 @@ describe('QDM Code Search fields', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -82,7 +82,7 @@ describe('QDM Code Search fields', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -404,7 +404,7 @@ describe('Error Message on Codes tab', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withCode)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -417,7 +417,7 @@ describe('Error Message on Codes tab', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })

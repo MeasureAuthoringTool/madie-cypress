@@ -12,12 +12,12 @@ describe('CQL Library List Page Sort by Columns', () => {
 
     beforeEach('Login', () => {
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('CQL Library sorting by columns on All Libraries tab', () => {

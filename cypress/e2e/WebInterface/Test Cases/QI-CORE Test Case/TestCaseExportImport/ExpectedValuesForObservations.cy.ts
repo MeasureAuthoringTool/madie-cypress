@@ -57,7 +57,7 @@ describe('Ratio based measure with measure observations', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measure.name, measure.libName)
     })
 
@@ -155,7 +155,7 @@ describe('Proportion based measure with no observations', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measure.name, measure.libName)
     })
 

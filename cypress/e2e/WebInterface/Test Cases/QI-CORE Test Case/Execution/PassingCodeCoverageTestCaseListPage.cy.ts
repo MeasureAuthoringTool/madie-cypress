@@ -43,7 +43,7 @@ describe('Code Coverage Highlighting', () => {
     })
 
     afterEach('Logout', () => {
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

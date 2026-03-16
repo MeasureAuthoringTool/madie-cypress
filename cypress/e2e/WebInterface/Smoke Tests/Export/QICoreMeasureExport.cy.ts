@@ -116,7 +116,7 @@ describe('QI-Core Measure Export', () => {
         cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 15000 })
         cy.log('Successfully verified zip file export')
 
-        OktaLogin.Logout()
+        
     })
 
     it('Unzip the downloaded file and verify file types for QI-Core Measure', () => {

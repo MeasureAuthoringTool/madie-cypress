@@ -24,11 +24,11 @@ describe('Validations on Measure Details page', () => {
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -281,11 +281,11 @@ describe('Create Measure validations', () => {
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -470,11 +470,11 @@ describe('Measurement Period Validations', () => {
     let CqlLibraryName = 'TestLibrary' + Date.now()
 
     beforeEach('Login', () => {
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
-        OktaLogin.Logout()
+        
     })
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
@@ -582,12 +582,12 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
         }
         CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.QDM, opts)
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, measureCQLLibName, null, null, false)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, measureCQLLibName)
     })
 
@@ -637,12 +637,12 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
         }
         CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.qiCore4, opts)
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, measureCQLLibName, null, false, false)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, measureCQLLibName)
     })
 

@@ -35,7 +35,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureOne, newCqlLibraryName)
     })
 

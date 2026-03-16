@@ -98,10 +98,10 @@ export class QDMElements {
     public static addCode(codeSystem: string, code: string): void {
 
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).scrollIntoView()
-        Utilities.waitForElementVisible(TestCasesPage.ExpandedOSSDetailCardTabCodes, 700000)
+        Utilities.waitForElementVisible(TestCasesPage.ExpandedOSSDetailCardTabCodes, 120000)
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get(TestCasesPage.codeSystemSelector).click()
-        Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 700000)
+        Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 120000)
         cy.get('[data-testid="code-system-option-' + codeSystem + '"]').click()
 
         cy.get(TestCasesPage.codeSelector).click()

@@ -270,7 +270,7 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 

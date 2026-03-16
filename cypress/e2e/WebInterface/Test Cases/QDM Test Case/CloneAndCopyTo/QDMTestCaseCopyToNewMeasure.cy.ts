@@ -68,7 +68,7 @@ describe('Copy test cases from existing measure into new measure', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
@@ -254,7 +254,7 @@ describe('Copy to new measure - partial success case', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, cqlLibraryName)
         Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 1)
     })

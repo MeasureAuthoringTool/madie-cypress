@@ -63,7 +63,7 @@ describe('Measure Populations', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -77,7 +77,7 @@ describe('Measure Populations', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -250,20 +250,20 @@ describe('Warning Messages on Population updates', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL_multiplePopulations)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })

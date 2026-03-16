@@ -33,7 +33,7 @@ describe('QDM Test Case Excel Export', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

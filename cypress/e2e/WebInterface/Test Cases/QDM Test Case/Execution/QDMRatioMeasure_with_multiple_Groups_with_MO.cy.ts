@@ -43,7 +43,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -60,7 +60,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
 
     after('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -224,7 +224,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -241,7 +241,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
 
     after('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })

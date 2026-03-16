@@ -34,12 +34,12 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         //Create QDM Measure, PC and Test Case with Regular user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, false)
     })
 

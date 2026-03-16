@@ -169,7 +169,7 @@ describe('Create and Update QDM Test Case', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
@@ -293,7 +293,7 @@ describe('Non Boolean Test case Expected Values', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
@@ -342,7 +342,7 @@ describe('Create and update QDM Test case validations', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })

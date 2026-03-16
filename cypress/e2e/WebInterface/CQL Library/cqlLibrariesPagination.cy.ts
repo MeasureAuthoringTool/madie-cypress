@@ -17,12 +17,12 @@ describe('Validate QDM CQL on CQL Library page', () => {
         for (var x = 1; x <= 12; x++) {
             CQLLibraryPage.createLibraryAPI(apiCQLLibraryName + x, SupportedModels.QDM, { publisher: CQLLibraryPublisher })      
         }
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('Verify Pagination for "All Libraries"', () => {
@@ -63,12 +63,12 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         for (var x = 1; x <= 12; x++) {
             CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName + x, CQLLibraryPublisher + x)
         }
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('Verify Pagination for the "Owned Libraries"', () => {

@@ -40,7 +40,7 @@ describe('Delete Test Case', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
             null, null, 'Procedure')
         OktaLogin.Login()

@@ -41,7 +41,7 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
 
     afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })

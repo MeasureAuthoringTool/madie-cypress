@@ -54,7 +54,7 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

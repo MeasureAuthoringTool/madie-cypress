@@ -37,7 +37,7 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
     })
 
     it('View CMS 334 and generate the Overlapping Value Set report', () => {
@@ -139,7 +139,7 @@ describe('Overlapping Value Set report validations', () => {
     afterEach('Clean up and Logout', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+        
     })
 
     it('Reports button disabled when there are errors in Measure CQL', () => {

@@ -15,7 +15,7 @@ describe('Minimize Alerts - Library with a CQL error', () => {
     beforeEach('Create Library and Login', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(libraryName, 'ICF', false, false, errorCql) 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         cy.get(Header.cqlLibraryTab).click()
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -28,7 +28,7 @@ describe('Minimize Alerts - Library with a CQL error', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(libraryName)
     })
 
@@ -89,7 +89,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the Library', 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 25000)
-        OktaLogin.Logout()
+        
 
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
@@ -99,7 +99,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the Library', 
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(libraryName)
     })
 

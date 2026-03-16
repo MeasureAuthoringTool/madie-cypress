@@ -117,7 +117,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
             //logout as Regular user and, then, log in as ALT user
-            OktaLogin.Logout()
+            
 
             OktaLogin.AltLogin()
 
@@ -194,7 +194,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
             //logout as Regular user and, then, log in as Alt user
-            OktaLogin.Logout()
+            
 
             OktaLogin.AltLogin()
 
@@ -274,7 +274,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
         //logout as Regular user and, then, log in as Alt user
-        OktaLogin.Logout()
+        
 
         OktaLogin.AltLogin()
 

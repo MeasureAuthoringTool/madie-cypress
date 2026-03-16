@@ -119,7 +119,7 @@ describe('QDM CQL Definitions', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
@@ -134,7 +134,7 @@ describe('QDM CQL Definitions', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -367,7 +367,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -536,12 +536,12 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
         randValue = (Math.floor((Math.random() * 1000) + 4))
         CqlLibraryName = CqlLibraryName + randValue
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
     })
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

@@ -21,12 +21,12 @@ describe('Validate Measure Group', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
@@ -279,7 +279,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -287,16 +287,16 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 22700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false,
             'Surgical Absence of Cervix', 'Surgical Absence of Cervix',
             'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -485,7 +485,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -493,14 +493,14 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 

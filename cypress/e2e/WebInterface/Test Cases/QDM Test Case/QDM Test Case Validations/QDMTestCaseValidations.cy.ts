@@ -45,7 +45,7 @@ describe('Non Boolean Population basis Expected values', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -170,7 +170,7 @@ describe('Create Test Case Validations', () => {
     })
 
     afterEach('Logout', () => {
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

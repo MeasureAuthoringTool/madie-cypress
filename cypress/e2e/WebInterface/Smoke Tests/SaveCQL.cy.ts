@@ -16,7 +16,7 @@ describe('Save CQL on CQL Editor Page', () => {
     })
 
     afterEach('Logout', () => {
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

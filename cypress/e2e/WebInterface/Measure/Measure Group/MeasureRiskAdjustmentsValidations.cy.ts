@@ -20,7 +20,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '',
             'num', '', 'ipp', 'boolean')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -33,7 +33,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
     afterEach('Log out', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

@@ -45,12 +45,12 @@ describe('Validate Measure Group -- scoring and populations', () => {
     beforeEach('Create Measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up and Logout', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+        
     })
 
     it('"Please complete the CQL Editor process before continuing" appears when there are issues with entered CQL', () => {
@@ -401,12 +401,12 @@ describe('Validate Population Basis', () => {
     beforeEach('Create Measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up and Logout', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+        
     })
 
     it('Verify default Value and if no value is selected for Population Basis, the save button is unavailable', () => {

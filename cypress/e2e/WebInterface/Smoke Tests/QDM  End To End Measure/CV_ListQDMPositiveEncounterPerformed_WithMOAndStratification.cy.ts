@@ -150,7 +150,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
     after('Clean up', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

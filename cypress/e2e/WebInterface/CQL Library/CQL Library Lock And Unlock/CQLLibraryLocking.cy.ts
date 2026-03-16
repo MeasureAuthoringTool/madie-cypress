@@ -21,7 +21,7 @@ describe('CQL Library Locking Validations', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -32,7 +32,7 @@ describe('CQL Library Locking Validations', () => {
         Utilities.lockControl(MadieObject.Library, true, true)
 
         //Login as Regular user
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
@@ -54,7 +54,7 @@ describe('CQL Library Locking Validations', () => {
         Utilities.lockControl(MadieObject.Library, true, true)
 
         //Login as Regular user
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         cy.get(Header.cqlLibraryTab).click()
 
         //Click View CQL Library

@@ -24,7 +24,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI('passing test', 'abc', 'example', testCaseJson)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
@@ -37,7 +37,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

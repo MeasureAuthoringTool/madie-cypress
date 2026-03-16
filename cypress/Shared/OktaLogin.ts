@@ -20,172 +20,6 @@ export class OktaLogin {
     public static readonly resetViaEmail = '[data-se="email-button"]'
     public static readonly backFromReset = '[data-se="cancel"]'
 
-    // public static AltLogin() {
-    //     const currentAltUser = Cypress.env('selectedAltUser')
-    //
-    //     sessionStorage.clear()
-    //     cy.clearAllCookies()
-    //     cy.clearLocalStorage()
-    //
-    //     cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
-    //
-    //     if (currentAltUser === 'altHarpUser') {
-    //         cy.setAccessTokenCookieALT()
-    //         cy.get(this.usernameInput).type(Environment.credentials().altHarpUser)
-    //         cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
-    //     } else if (currentAltUser === 'altHarpUser2') {
-    //         cy.setAccessTokenCookieALT2()
-    //         cy.get(this.usernameInput).type(Environment.credentials().altHarpUser2)
-    //         cy.get(this.passwordInput).type(Environment.credentials().passwordALT2)
-    //     }
-    //     else if (currentAltUser === 'altHarpUser3') {
-    //         cy.setAccessTokenCookieALT3()
-    //         cy.get(this.usernameInput).type(Environment.credentials().altHarpUser3)
-    //         cy.get(this.passwordInput).type(Environment.credentials().passwordALT3)
-    //     }
-    //
-    //     //setup for grabbing the measure create call
-    //     cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
-    //
-    //     cy.get(this.signInButton).click()
-    //
-    //     cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-    //
-    //         if (response.statusCode === 200) {
-    //             //do nothing
-    //         }
-    //         else {
-    //             umlsLoginForm.UMLSLogin()
-    //         }
-    //
-    //     })
-    //     cy.get(LandingPage.newMeasureButton).should('be.visible')
-    //     cy.log('Login Successful')
-    // }
-
-
-    // public static Login(): void {
-    //     const user = Cypress.env('selectedUser');
-    //     cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
-    //
-    //     sessionStorage.clear();
-    //     cy.clearAllCookies();
-    //     cy.clearLocalStorage();
-    //     cy.clearAllSessionStorage({ log: true });
-    //
-    //     cy.visit('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
-    //
-    //     cy.wait('@serviceConfig', { timeout: 15000 }).then((config) => {
-    //         cy.writeFile('cypress/fixtures/featureFlags', config.response!.body.features);
-    //     });
-    //
-    //     // --- selectors (avoid `this` inside closures) ---
-    //     const selectors = {
-    //         username: this.usernameInput,
-    //         password: this.passwordInput,
-    //         signIn: this.signInButton,
-    //         // Optional: container if you have one (more stable than inputs):
-    //         // formContainer: this.loginFormContainer
-    //         landing: LandingPage.newMeasureButton,
-    //     };
-    //
-    //     // --- 1) Set token per selected user ---
-    //     let cookieSet = false;
-    //     if (user === 'harpUser') {
-    //         cy.setAccessTokenCookie(); cookieSet = true;
-    //     } else if (user === 'harpUser2') {
-    //         cy.setAccessTokenCookie2(); cookieSet = true;
-    //     } else if (user === 'harpUser3') {
-    //         cy.setAccessTokenCookie3(); cookieSet = true;
-    //     }
-    //
-    //     // --- 2) Force app to re-evaluate auth (stronger than reload on /login) ---
-    //     if (cookieSet) {
-    //         cy.visit('/'); // let your route guard hide login if token is valid
-    //     }
-    //
-    //     // --- 3) Race: wait until either login form is visible OR landing page is visible ---
-    //     const waitForEither = (
-    //         opts = { timeout: 25000, interval: 200 }
-    //     ) => {
-    //         const deadline = Date.now() + opts.timeout;
-    //
-    //         function probe(): any {
-    //             const onLogin =
-    //                 Cypress.$(selectors.username).length > 0 &&
-    //                 Cypress.$(selectors.password).length > 0 &&
-    //                 Cypress.$(selectors.username).is(':visible') &&
-    //                 Cypress.$(selectors.password).is(':visible');
-    //
-    //             const onLanding =
-    //                 Cypress.$(selectors.landing).length > 0 &&
-    //                 Cypress.$(selectors.landing).is(':visible');
-    //
-    //             if (onLogin) return 'login';
-    //             if (onLanding) return 'landing';
-    //
-    //             if (Date.now() >= deadline) return 'timeout';
-    //
-    //             return Cypress.Promise.delay(opts.interval).then(probe);
-    //         }
-    //
-    //         // Wrap in Cypress chain so it shows in the command log and respects test flow
-    //         return cy.wrap(null, { log: false }).then(() => probe());
-    //     };
-    //
-    //     // --- 4) Do the right thing once UI state is clear ---
-    //     waitForEither().then((state) => {
-    //         cy.log(`UI state after wait: ${state}`);
-    //
-    //         if (state === 'login') {
-    //             // Extra safety: let Cypress retry visibility before typing
-    //             const typeCreds = (uSel: string, pSel: string, uVal: string, pVal: string) => {
-    //                 cy.get(uSel, { timeout: 20000 }).should('be.visible').clear().type(uVal, { log: false });
-    //                 cy.get(pSel, { timeout: 20000 }).should('be.visible').clear().type(pVal, { log: false });
-    //             };
-    //
-    //             if (user === 'harpUser') {
-    //                 typeCreds(selectors.username, selectors.password, Environment.credentials().harpUser, Environment.credentials().password);
-    //             } else if (user === 'harpUser2') {
-    //                 typeCreds(selectors.username, selectors.password, Environment.credentials().harpUser2, Environment.credentials().password2);
-    //             } else if (user === 'harpUser3') {
-    //                 typeCreds(selectors.username, selectors.password, Environment.credentials().harpUser3, Environment.credentials().password3);
-    //             } else {
-    //                 cy.log(`Unknown selectedUser "${user}". Skipping credential typing.`);
-    //             }
-    //
-    //             // Click sign-in if visible
-    //             cy.get('body').then(($body) => {
-    //                 const $btn = $body.find(selectors.signIn);
-    //                 if ($btn.length && $btn.is(':visible')) {
-    //                     cy.get(selectors.signIn, { timeout: 20000 }).should('be.enabled').click();
-    //                 } else {
-    //                     cy.log('Sign-in button not visible after typing.');
-    //                 }
-    //             });
-    //         }
-    //
-    //         // If 'landing' (already authenticated), do nothing.
-    //         // If 'timeout', continue; the next steps will still verify via UMLS / landing check.
-    //     });
-    //
-    //     // --- 5) Rest of flow ---
-    //     cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
-    //
-    //     cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-    //         if (!response || response.statusCode !== 200) {
-    //             umlsLoginForm.UMLSLogin();
-    //         }
-    //     });
-    //
-    //     cy.get(selectors.landing, { timeout: 60000 }).should('be.visible');
-    //     cy.log('Login Successful');
-    //
-    //     Cypress.env('selectedUser', user);
-    // }
-
-
-
     // ------------------------------------------------------
     // PUBLIC: keep these intact so tests DO NOT change
     // ------------------------------------------------------
@@ -237,6 +71,46 @@ export class OktaLogin {
             logPrefix: 'Admin Login'
         })
 
+    }
+
+    // ------------------------------------------------------
+    // SESSION-CACHED LOGIN
+    // Uses cy.session() to avoid repeating the full Okta
+    // login flow between tests in the same spec file.
+    // Only use in files whose afterEach uses the no-op
+    // Logout() — NOT UILogout().
+    // ------------------------------------------------------
+
+    public static SessionLogin(): void {
+        const who = Cypress.env('selectedUser')
+
+        cy.session('login-' + who, () => {
+            // Full login — only runs on first call or if validate fails
+            OktaLogin.Login()
+        }, {
+            validate() {
+                cy.getCookie('accessToken').should('exist')
+            },
+        })
+
+        // cy.session() restores cookies/storage but does not navigate
+        cy.visit('/')
+        cy.get(LandingPage.newMeasureButton, { timeout: 30000 }).should('be.visible')
+    }
+
+    public static SessionAltLogin(): void {
+        const who = Cypress.env('selectedAltUser')
+
+        cy.session('alt-login-' + who, () => {
+            OktaLogin.AltLogin()
+        }, {
+            validate() {
+                cy.getCookie('accessToken').should('exist')
+            },
+        })
+
+        cy.visit('/')
+        cy.get(LandingPage.newMeasureButton, { timeout: 30000 }).should('be.visible')
     }
 
     // ------------------------------------------------------
@@ -390,34 +264,6 @@ export class OktaLogin {
 
         cy.get(selectors.landing, { timeout: 60000 }).should('be.visible');
         cy.log(`${logPrefix} Successful`);
-    }
-
-
-    public static Logout(): void {
-
-
-        //commenting out all the logout until logout issue MAT-4520 is resolved
-
-        // cy.get(Header.userProfileSelect).should('exist')
-        // cy.get(Header.userProfileSelect, { timeout: 1000000 }).should('be.visible')
-        // cy.get(Header.userProfileSelect).should('be.visible')
-        // cy.get(Header.userProfileSelect).invoke('click')
-        //cy.get(Header.userProfileSelect).click()
-        //
-        // cy.get(Header.userProfileSelectSignOutOption).should('exist')
-        // cy.get(Header.userProfileSelectSignOutOption, { timeout: 1000000 }).should('be.visible')
-        // cy.get(Header.userProfileSelectSignOutOption).should('be.visible')
-        // cy.get(Header.userProfileSelectSignOutOption).focus()
-        // cy.get(Header.userProfileSelectSignOutOption).invoke('click')
-        // cy.intercept('POST', '/api/log/logout').as('logout')
-        // cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
-        // cy.wait('@logout', {timeout: 60000}).then(({response}) => {
-        //     expect(response.statusCode).to.eq(405)
-        // })
-        // cy.window().then((win) => {
-        //     win.sessionStorage.clear()
-        // })
-        // cy.log('Logout Successful')
     }
 
     public static UILogout(): void {

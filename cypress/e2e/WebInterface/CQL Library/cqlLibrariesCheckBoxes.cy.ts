@@ -24,7 +24,7 @@ describe('CQL Library Sharing', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        
     })
 
 
@@ -33,7 +33,7 @@ describe('CQL Library Sharing', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')

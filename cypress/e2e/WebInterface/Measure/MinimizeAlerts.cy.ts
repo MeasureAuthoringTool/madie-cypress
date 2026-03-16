@@ -28,7 +28,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
@@ -114,7 +114,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the measure', 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
-        OktaLogin.Logout()
+        
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -124,7 +124,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the measure', 
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 

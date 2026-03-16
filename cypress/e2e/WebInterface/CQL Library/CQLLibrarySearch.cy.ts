@@ -146,7 +146,7 @@ describe('CQL Library Search Validations -- User ownership', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteLibrary(CQLLibraryName)
     })
 

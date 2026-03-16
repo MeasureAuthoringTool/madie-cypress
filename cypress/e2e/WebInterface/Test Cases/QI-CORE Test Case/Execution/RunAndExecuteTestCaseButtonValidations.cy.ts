@@ -600,7 +600,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 
@@ -823,7 +823,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

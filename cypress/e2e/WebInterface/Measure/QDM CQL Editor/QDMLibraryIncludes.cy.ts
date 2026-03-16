@@ -39,7 +39,7 @@ describe('QDM Library Includes fields', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -51,7 +51,7 @@ describe('QDM Library Includes fields', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.Logout()
+        
         Utilities.deleteMeasure()
     })
 

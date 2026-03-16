@@ -200,7 +200,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        
 
 
         OktaLogin.AltLogin()
