@@ -85,32 +85,71 @@ export class OktaLogin {
         const who = Cypress.env('selectedUser')
 
         cy.session('login-' + who, () => {
-            // Full login — only runs on first call or if validate fails
-            OktaLogin.Login()
+            // Only acquire the access token via API — no browser navigation.
+            // This avoids the cy.intercept/cy.wait('@serviceConfig') race
+            // condition that occurs when cy.session() resets the page to
+            // about:blank before running the setup function.
+            //
+            // The cookie-setter commands do pure HTTP requests to Okta
+            // (authn → authorize → token) and set the accessToken cookie.
+            const cookieSetters: Record<string, () => void> = {
+                harpUser:  () => cy.setAccessTokenCookie(),
+                harpUser2: () => cy.setAccessTokenCookie2(),
+                harpUser3: () => cy.setAccessTokenCookie3(),
+            }
+            const setter = cookieSetters[who]
+            if (setter) {
+                setter()
+            } else {
+                cy.log(`SessionLogin: No cookie setter for user "${who}"`)
+            }
         }, {
             validate() {
                 cy.getCookie('accessToken').should('exist')
             },
         })
 
-        // cy.session() restores cookies/storage but does not navigate
+        // After session restore/create, navigate to the app.
+        // Register intercepts BEFORE visiting so they capture page-load requests.
+        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
         cy.visit('/')
-        cy.get(LandingPage.newMeasureButton, { timeout: 30000 }).should('be.visible')
+        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
+            if (!response || response.statusCode !== 200) {
+                umlsLoginForm.UMLSLogin()
+            }
+        })
+        cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
     public static SessionAltLogin(): void {
         const who = Cypress.env('selectedAltUser')
 
         cy.session('alt-login-' + who, () => {
-            OktaLogin.AltLogin()
+            const cookieSetters: Record<string, () => void> = {
+                altHarpUser:  () => cy.setAccessTokenCookieALT(),
+                altHarpUser2: () => cy.setAccessTokenCookieALT2(),
+                altHarpUser3: () => cy.setAccessTokenCookieALT3(),
+            }
+            const setter = cookieSetters[who]
+            if (setter) {
+                setter()
+            } else {
+                cy.log(`SessionAltLogin: No cookie setter for user "${who}"`)
+            }
         }, {
             validate() {
                 cy.getCookie('accessToken').should('exist')
             },
         })
 
+        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
         cy.visit('/')
-        cy.get(LandingPage.newMeasureButton, { timeout: 30000 }).should('be.visible')
+        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
+            if (!response || response.statusCode !== 200) {
+                umlsLoginForm.UMLSLogin()
+            }
+        })
+        cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
     // ------------------------------------------------------
