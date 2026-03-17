@@ -67,6 +67,7 @@ describe('Qi Core CQL Functions', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
     afterEach('Clean up', () => {
