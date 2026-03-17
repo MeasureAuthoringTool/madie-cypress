@@ -469,6 +469,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Navigate to Parameters tab
+        Utilities.waitForElementVisible(CQLEditorPage.expandCQLBuilder, 50000)
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.includesTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')

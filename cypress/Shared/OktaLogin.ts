@@ -110,14 +110,11 @@ export class OktaLogin {
         })
 
         // After session restore/create, navigate to the app.
-        // Register intercepts BEFORE visiting so they capture page-load requests.
-        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+        // No intercept/wait for UMLS here — on session restore the request
+        // may fire before the intercept is registered, causing a timeout.
+        // The landing page assertion below is sufficient: if UMLS login is
+        // actually required, the app won't render the landing page.
         cy.visit('/')
-        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-            if (!response || response.statusCode !== 200) {
-                umlsLoginForm.UMLSLogin()
-            }
-        })
         cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
@@ -142,13 +139,7 @@ export class OktaLogin {
             },
         })
 
-        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
         cy.visit('/')
-        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-            if (!response || response.statusCode !== 200) {
-                umlsLoginForm.UMLSLogin()
-            }
-        })
         cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
