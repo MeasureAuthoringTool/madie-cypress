@@ -25,7 +25,7 @@ export class umlsLoginForm {
         Utilities.waitForElementVisible(Header.umlsLoginButton, 35000)
         cy.get(Header.umlsLoginButton).click()
 
-        cy.get('[data-value="Connect to UMLS"]').find(Header.umlsConnectButtonCurrentStatus).click()
+        cy.get('[data-value="Connect to UMLS"]', { timeout: 15000 }).should('be.visible').click()
 
         //form to enter API and to actually log into UMLS appears and is available to read and enter API key
         cy.get(umlsLoginForm.umlsForm).should('exist')
