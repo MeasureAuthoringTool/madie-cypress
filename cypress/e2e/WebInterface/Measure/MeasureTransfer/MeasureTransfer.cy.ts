@@ -11,7 +11,6 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
 import { Toasts } from "../../../../Shared/Toasts"
 
-
 const measureName = 'MeasureTransfer'
 const cqlLibraryName = 'MeasureTransferLib'
 const randomMeasureName = 'TransferedMeasure'
@@ -25,11 +24,6 @@ const testCaseDescription = 'DENOMFail'
 const testCaseSeries = 'SBTestSeries'
 
 describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
-    /* 
-        includes verifications for initiating transfer from MeasuresPage
-        and
-        tranferred measures are viewable on Owned Measures tab
-    */
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -59,7 +53,6 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
-        cy.reload()
 
         //Draft the Versioned Measure
         MeasuresPage.actionCenter('draft')
@@ -78,7 +71,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         //Share Measure with ALT User
         MeasuresPage.actionCenter('transfer', 1)
         //Verify message on the transfer pop up screen
-        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the following measure(s). All versions and drafts will be transferred. So only the most recent measure name appears here.This action cannot be undone.')
+        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the 1 selected measure(s) below. All versions and drafts will be transferred, but only the most recent measure name appears in the list below.This action cannot be undone.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
         OktaLogin.UILogout()
@@ -128,11 +121,6 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
 })
 
 describe('Delete Test Case with Transferred user', () => {
-    /* 
-        includes verification for initiating transfer from EditMeasurePage
-        and
-        transferred measures are editable by new owner
-    */
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -148,16 +136,10 @@ describe('Delete Test Case with Transferred user', () => {
 
         EditMeasurePage.actionCenter(EditMeasureActions.transfer)
         //Verify message on the transfer pop up screen
-        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the following measure(s). All versions and drafts will be transferred. So only the most recent measure name appears here.This action cannot be undone.')
+        cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the 1 selected measure(s) below. All versions and drafts will be transferred, but only the most recent measure name appears in the list below.This action cannot be undone.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
         OktaLogin.UILogout()
-    })
-
-    afterEach('Clean up', () => {
-
-        OktaLogin.UILogout()
-
     })
 
     it('Verify Test Case can be deleted by the new owner after transfer', () => {
