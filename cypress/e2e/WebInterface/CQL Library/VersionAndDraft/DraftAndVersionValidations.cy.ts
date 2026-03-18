@@ -15,13 +15,16 @@ const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
 
 describe('Action Center Buttons - Draft and Version Validations', () => {
 
-    before('Create CQL Library', () => {
-        //create a single use CQL Library
+    before('Create CQL Library for duplicate name test', () => {
+        //create a single use CQL Library with invalid CQL (used for duplicate-name draft test)
         CqlLibraryOther = 'Another' + Date.now()
         CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
     })
 
-    beforeEach('Login', () => {
+    beforeEach('Create CQL Library and Login', () => {
+        //create a fresh CQL Library with valid CQL for versioning
+        CqlLibraryOne = 'VersionLib' + Date.now()
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
         OktaLogin.SessionLogin()
     })
 

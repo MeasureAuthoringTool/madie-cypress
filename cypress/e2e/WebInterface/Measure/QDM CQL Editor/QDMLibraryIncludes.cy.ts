@@ -492,8 +492,12 @@ describe('QDM Library Includes fields', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //Navigate to Parameters tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        //Navigate to Parameters tab — expand CQL builder if collapsed
+        cy.get('body').then(($body) => {
+            if ($body.find(CQLEditorPage.expandCQLBuilder).length > 0) {
+                cy.get(CQLEditorPage.expandCQLBuilder).click()
+            }
+        })
         cy.get(CQLEditorPage.includesTab).click()
         Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 60000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
