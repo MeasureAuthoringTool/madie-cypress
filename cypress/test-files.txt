@@ -25,3 +25,4 @@ cypress/e2e/WebInterface/Smoke Tests/QICORE 6.0.0 End To End Measure and Test Ca
 cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/Execution/ExecuteTestCasesByNonMeasureOwner.cy.ts
 cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/Execution/ExecutionAndCoverageValidations.cy.ts
 cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/TestCaseExportImport/ExpectedValuesForObservations.cy.ts
+cypress/e2e/WebInterface/Test Cases/Versioned Measure/VersionedMeasure_CreateEditDeleteTestCase.cy.ts
