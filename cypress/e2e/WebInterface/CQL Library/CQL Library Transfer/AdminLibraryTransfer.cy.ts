@@ -9,7 +9,8 @@ const CQLLibraryName = 'AdminTransferLibrary' + Date.now()
 const CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 
-describe('CQL Library Transfer performed by Admin user', () => {
+// enable this test when FF AdminTransferLibrary is flipped
+describe.skip('CQL Library Transfer performed by Admin user', () => {
 
     beforeEach('Create CQL Library', () => {
 
