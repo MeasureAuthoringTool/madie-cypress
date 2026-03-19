@@ -14,7 +14,8 @@ const cqlLibraryName = 'MeasureTransferLib' + now
 const measureCQL = MeasureCQL.SBTEST_CQL
 let harpUserALT = ''
 
-describe('Measure Transfer performed by Admin user', () => {
+// enable this test when FF AdminTransferMeasure is flipped
+describe.skip('Measure Transfer performed by Admin user', () => {
 
     beforeEach('Create Measure', () => {
 
