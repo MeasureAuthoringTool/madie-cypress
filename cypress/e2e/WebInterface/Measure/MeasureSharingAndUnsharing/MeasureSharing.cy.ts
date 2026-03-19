@@ -11,17 +11,17 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestCql' + Date.now()
-let updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
-let updatedMeasureName = measureName + 'someUpdate'
+const measureName = 'MeasureSharing' + Date.now()
+const cqlLibraryName = 'MeasureSharingLib' + Date.now()
+const updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
+const updatedMeasureName = measureName + 'someUpdate'
+const measureCQL = MeasureCQL.SBTEST_CQL
+const testCaseJson = TestCaseJson.TestCaseJson_Valid
+const testCaseTitle = 'Title for Auto Test'
+const testCaseDescription = 'DENOMFail' + Date.now()
+const testCaseSeries = 'SBTestSeries'
 let updatedMeasuresPageName = ''
 let harpUserALT = ''
-let measureCQL = MeasureCQL.SBTEST_CQL
-let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 describe('Measure Sharing', () => {
 
@@ -47,8 +47,7 @@ describe('Measure Sharing', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify shared Measure is viewable under Shared Measure tab', () => {
@@ -265,9 +264,9 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.get(Header.measures).click()
     })
 
-    afterEach('LogOut', () => {
+    afterEach('Log out and Clean up', () => {
 
-        
+        Utilities.deleteMeasure()
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
@@ -331,8 +330,7 @@ describe('Delete Test Case with Shared user', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Test Case can be deleted by the shared user', () => {
@@ -371,31 +369,38 @@ describe('Remove user\'s share access from a measure', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('After removing access, user can no longer edit on the measure', () => {
 
         OktaLogin.AltLogin()
         cy.get(LandingPage.sharedMeasures).click()
-        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        // captures name of measure in 2nd row
+        cy.get('[data-testid*="_measureName"]').eq(1).then(secondMeasure => {
 
-        // add a test case to prove edit access
-        TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS', 'null')
+            let capturedName = secondMeasure.text()
 
-        // Log out ALT user and revoke share as the measure owner
-        OktaLogin.UILogout()
-        OktaLogin.setupUserSession(false)
-        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
+            MeasuresPage.actionCenter('edit')
 
-        // Log back in as ALT user and verify edit access was removed
-        OktaLogin.AltLogin()
-        cy.get(LandingPage.sharedMeasures).click()
+            cy.get(EditMeasurePage.testCasesTab).click()
 
-        // proves that edit access was removed — measure should no longer appear in shared list
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
+            // add a test case to prove edit access
+            TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS', 'null')
+
+            // Log out ALT user and revoke share as the measure owner
+            OktaLogin.UILogout()
+            OktaLogin.setupUserSession(false)
+            Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
+
+            // Log back in as ALT user and verify edit access was removed
+            OktaLogin.AltLogin()
+            cy.get(LandingPage.sharedMeasures).click()
+            Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
+
+            // proves that edit access was removed — measure that was 2nd is now 1st
+            MeasuresPage.checkFirstRow( {name: capturedName} )
+        })
     })
 })
