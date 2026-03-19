@@ -18,7 +18,8 @@ export default defineConfig({
   viewportWidth: 1300,
   viewportHeight: 800,
   watchForFileChanges: false,
-  numTestsKeptInMemory: 1,
+  numTestsKeptInMemory: 0,
+  experimentalMemoryManagement: true,
   reporter: 'mochawesome',
   reporterOptions: {
     reportDir: 'cypress/results',
@@ -35,6 +36,12 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       on("before:browser:launch", (browser = Cypress.browser, launchOptions) => {
         prepareAudit(launchOptions);
+        if (browser.family === 'chromium' && browser.name !== 'electron') {
+          launchOptions.args.push('--disable-dev-shm-usage')
+          launchOptions.args.push('--js-flags=--max-old-space-size=4096')
+          launchOptions.args.push('--disable-gpu')
+        }
+        return launchOptions
       })
 
       on('task', verifyDownloadTasks)

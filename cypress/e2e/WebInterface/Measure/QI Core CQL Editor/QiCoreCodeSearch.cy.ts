@@ -8,7 +8,6 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 const date = Date.now()
 let measureName = 'QiCoreCodeSearch' + date
-let CqlLibraryName = 'QiCoreCodeSearchLib' + date
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newCqlLibraryName = ''
 let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
@@ -80,11 +79,11 @@ let measureCQLWithCode = 'library QiCoreLibrary1723824228401 version \'0.0.000\'
 
 describe('Qi Core Code Search fields', () => {
 
-    newCqlLibraryName = CqlLibraryName + randValue + 2
-
     beforeEach('Create Measure and Login', () => {
 
-        CqlLibraryName = 'QiCoreCodeSearchLib' + Date.now()
+        const now = Date.now()
+        measureName = 'QiCoreCodeSearch' + now
+        newCqlLibraryName = 'QiCoreCodeSearchLib' + now + randValue + 2
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -97,7 +96,7 @@ describe('Qi Core Code Search fields', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.UILogout()
-      //  Utilities.deleteMeasure()
+        Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
 
     it('Search for the Codes', () => {
@@ -314,9 +313,11 @@ describe('Qi Core Code Search fields', () => {
 
 describe('Error Message on Codes tab', () => {
 
-    newCqlLibraryName = CqlLibraryName + randValue + 5
-
     beforeEach('Create Measure and Login', () => {
+
+        const now = Date.now()
+        measureName = 'QiCoreCodeSearch' + now
+        newCqlLibraryName = 'QiCoreCodeSearchLib' + now + randValue + 5
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, newCqlLibraryName, measureCQLWithCode)
         OktaLogin.Login()
@@ -358,9 +359,11 @@ describe('Error Message on Codes tab', () => {
 
 describe('Edit and Delete Codes from Saved Codes grid', () => {
 
-    newCqlLibraryName = CqlLibraryName + randValue + 3
-
     beforeEach('Create Measure and Login', () => {
+
+        const now = Date.now()
+        measureName = 'QiCoreCodeSearch' + now
+        newCqlLibraryName = 'QiCoreCodeSearchLib' + now + randValue + 3
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -478,9 +481,11 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
 describe('Qi-Core Code Search - Measure ownership Validations', () => {
 
-    newCqlLibraryName = CqlLibraryName + randValue + 4
-
     beforeEach('Create Measure and Login', () => {
+
+        const now = Date.now()
+        measureName = 'QiCoreCodeSearch' + now
+        newCqlLibraryName = 'QiCoreCodeSearchLib' + now + randValue + 4
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQLWithCode)
         OktaLogin.AltLogin()
