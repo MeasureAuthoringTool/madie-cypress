@@ -112,9 +112,14 @@ describe('Ratio based measure with measure observations', () => {
         const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
-        // delete all tc
-        TestCasesPage.checkTestCase(1)
-        cy.get(TestCasesPage.actionCenterDelete).click()
+        // delete all tc - use .check() to ensure checkbox is checked (not toggled off)
+
+        // since the export step above may leave the checkbox in a checked state
+        cy.contains('td[data-testid*="caseNumber"]', 1)
+            .parent('tr')
+            .find('input[type="checkbox"]')
+            .check({ force: true })
+        cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // re-import immediately
@@ -208,9 +213,13 @@ describe('Proportion based measure with no observations', () => {
         const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
-        // delete all tc
-        TestCasesPage.checkTestCase(1)
-        cy.get(TestCasesPage.actionCenterDelete).click()
+        // delete all tc - use .check() to ensure checkbox is checked (not toggled off)
+        // since the export step above may leave the checkbox in a checked state
+        cy.contains('td[data-testid*="caseNumber"]', 1)
+            .parent('tr')
+            .find('input[type="checkbox"]')
+            .check({ force: true })
+        cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // re-import immediately
