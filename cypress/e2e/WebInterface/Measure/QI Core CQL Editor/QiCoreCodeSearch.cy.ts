@@ -42,27 +42,20 @@ let measureCQLWithCode = 'library QiCoreLibrary1723824228401 version \'0.0.000\'
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
-    'include CQMCommon version \'2.2.000\' called CQMCommon\n' +
-    '\n' +
-    'codesystem "SNOMEDCT": \'http://snomed.info/sct\' \n' +
-    '\n' +
+    'include CQMCommon version \'2.2.000\' called CQMCommon\n\n' +
+    'codesystem "SNOMEDCT": \'http://snomed.info/sct\'\n\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
-    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
-    '\n' +
-    'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n' +
-    '\n' +
+    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n\n' +
+    'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
     '//Test Comments\n' +
     'define "Initial Population":\n' +
-    '   exists "Qualifying Encounters"\n' +
-    '\n' +
+    '   exists "Qualifying Encounters"\n\n' +
     'define "Qualifying Encounters":\n' +
     '   (\n' +
     '[Encounter: "Office Visit"]\n' +
@@ -72,10 +65,9 @@ let measureCQLWithCode = 'library QiCoreLibrary1723824228401 version \'0.0.000\'
     '   union [Encounter: "Home Healthcare Services"]\n' +
     '   ) ValidEncounter\n' +
     'where ValidEncounter.period during "Measurement Period"\n' +
-    'and ValidEncounter.isFinishedEncounter()\n' +
-    '\n' +
+    'and ValidEncounter.isFinishedEncounter()\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '   (Enc E where E.status = \'finished\') is not null \n'
+    '   (Enc E where E.status = \'finished\') is not null'
 
 describe('Qi Core Code Search fields', () => {
 
@@ -95,8 +87,7 @@ describe('Qi Core Code Search fields', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Search for the Codes', () => {
@@ -188,7 +179,6 @@ describe('Qi Core Code Search fields', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Assert toast message while trying to apply the same code again
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
@@ -294,9 +284,11 @@ describe('Qi Core Code Search fields', () => {
         cy.intercept('/api/terminology/codes').as('codeReturn')
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //work around - jump to valuesets and back
+        cy.get(CQLEditorPage.valueSetsTab).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.wait('@codeSystemReturn', { timeout: 9500 })
+        cy.wait('@codeSystemReturn', { timeout: 12500 })
         cy.get(CQLEditorPage.savedCodesTab).click()
         cy.wait('@codeReturn', { timeout: 9500 })
 
@@ -330,7 +322,6 @@ describe('Error Message on Codes tab', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -347,7 +338,6 @@ describe('Error Message on Codes tab', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Navigate to Codes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
@@ -375,7 +365,6 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -406,7 +395,6 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         Utilities.waitForElementDisabled(CQLEditorPage.saveCQLButton, 15500)
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click().wait(2000)
         cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
         cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
@@ -457,9 +445,9 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
+        Utilities.waitForElementDisabled(CQLEditorPage.saveCQLButton, 15500)
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click().wait(2000)
         cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
         cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
@@ -471,7 +459,6 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
         Utilities.waitForElementVisible('.sc-jEACwC', 30000)
@@ -493,7 +480,6 @@ describe('Qi-Core Code Search - Measure ownership Validations', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -508,6 +494,18 @@ describe('Qi-Core Code Search - Measure ownership Validations', () => {
         //Navigate to Saved Functions tab
         cy.get(CQLEditorPage.codesTab).click().wait(2000)
         cy.get(CQLEditorPage.savedCodesTab).click()
+
+        cy.intercept('/api/terminology/get-code-systems').as('codeSystemReturn')
+        cy.intercept('/api/terminology/codes').as('codeReturn')
+
+        //Navigate to Saved Codes page
+
+        //work around - jump to valuesets and back
+        cy.get(CQLEditorPage.valueSetsTab).click()
+        cy.get(CQLEditorPage.codesTab).click()
+        cy.wait('@codeSystemReturn', { timeout: 12500 })
+        cy.get(CQLEditorPage.savedCodesTab).click()
+        cy.wait('@codeReturn', { timeout: 9500 })
 
         //Edit button should not be visible
         Utilities.waitForElementVisible('[data-testid="saved-code-row-0"]', 30000)

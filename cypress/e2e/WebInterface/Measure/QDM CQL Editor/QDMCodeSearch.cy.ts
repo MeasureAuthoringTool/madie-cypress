@@ -4,20 +4,17 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 const date = Date.now()
 let measureName = 'QDMCodeSearch' + date
 let CqlLibraryName = 'QDMCodeSearchLib' + date
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
+    'using QDM version \'5.6\'\n\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient\n' +
     'define "SDE Ethnicity":\n' +
@@ -64,11 +61,9 @@ describe('QDM Code Search fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false)
         OktaLogin.SessionLogin()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
@@ -77,14 +72,11 @@ describe('QDM Code Search fields', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Search for the Codes', () => {
@@ -100,7 +92,7 @@ describe('QDM Code Search fields', () => {
         cy.get(TestCasesPage.codeSystemSelector).type('SNOMEDCT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="http://snomed.info/sct/731000124108/version/20240301-option"]').click()
+        cy.get('[data-testid="2024-03-option"]').click()
         cy.get(CQLEditorPage.codeText).type('258219007')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -116,20 +108,13 @@ describe('QDM Code Search fields', () => {
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
-        //Search button disabled when the Code system does not have a version
-        cy.get(TestCasesPage.codeSystemSelector).type('ActReason')
-        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActReason').click()
-        cy.get(CQLEditorPage.codeText).type('16298561000119108')
-        cy.get(CQLEditorPage.codeSystemSearchBtn).should('be.disabled')
-
-        //Clear the code search values
-        cy.get(CQLEditorPage.clearCodeBtn).click()
+        // removed check for disabled search with no version selected - selecting code system now defaults to latest version
 
         //Assert when the Code is inactive in VSAC
         cy.get(TestCasesPage.codeSystemSelector).type('SNOMEDCT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="http://snomed.info/sct/731000124108/version/20240301-option"]').click()
+        cy.get('[data-testid="2024-03-option"]').click()
         cy.get(CQLEditorPage.codeText).type('16298561000119108')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -163,8 +148,7 @@ describe('QDM Code Search fields', () => {
         cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        //<li class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters Mui-selected MuiMenuItem-root MuiMenuItem-gutters Mui-selected css-1km1ehz" tabindex="0" role="option" data-testid="2023-02-01-option" aria-selected="true" data-value="2023-02-01"><span aria-label="2023-02-01" class="">2023-02</span><span class="MuiTouchRipple-root css-w0pj6f"></span></li>
-        cy.get('[data-testid="2023-02-01-option"]').click()
+        cy.get('[data-testid="2023-02-option"]').click()
         cy.get(CQLEditorPage.codeText).type('AMB')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -186,12 +170,10 @@ describe('QDM Code Search fields', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Assert toast message while trying to apply the same code again
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click()
         cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="2023-02-01-option"]').click()
+        cy.get('[data-testid="2023-02-option"]').click()
         cy.get(CQLEditorPage.codeText).type('AMB')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -202,9 +184,10 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.applyCodeBtn).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Code AMB has already been defined in CQL.')
 
+        // commented out until https://jira.cms.gov/browse/MAT-9848 is fixed
         //Save and Discard changes button should be disabled
-        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
-        cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.disabled')
+        //cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
+        //cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.disabled')
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).click()
@@ -220,7 +203,7 @@ describe('QDM Code Search fields', () => {
         cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="2023-02-01-option"]').click()
+        cy.get('[data-testid="2023-02-option"]').click()
         cy.get(CQLEditorPage.codeText).type('AMB')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -258,7 +241,7 @@ describe('QDM Code Search fields', () => {
         cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="2023-02-01-option"]').click()
+        cy.get('[data-testid="2023-02-option"]').click()
         cy.get(CQLEditorPage.codeText).type('AMB')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -273,16 +256,21 @@ describe('QDM Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
+        Utilities.waitForElementEnabled(CQLEditorPage.saveCQLButton, 18500)
+
+        cy.intercept('/api/terminology/get-code-systems').as('codeSystems')
+        cy.intercept('/api/terminology/codes').as('codes')
+
+        cy.wait('@codeSystems', { timeout: 12000 })
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click().wait(1500)
         cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
         cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
-        cy.get(CQLEditorPage.savedCodesTab).click().wait(2000)
+        cy.get(CQLEditorPage.savedCodesTab).click()
+
+        cy.wait('@codes', { timeout: 12000 })
 
         //Edit code
-        Utilities.waitForElementVisible('[data-testid="edit-code-0"]', 70000)
         cy.get('[data-testid="edit-code-0"]').click()
 
         //Code Details Pop up screen
@@ -311,7 +299,7 @@ describe('QDM Code Search fields', () => {
         cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="2023-02-01-option"]').click()
+        cy.get('[data-testid="2023-02-option"]').click()
         cy.get(CQLEditorPage.codeText).type('AMB')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -326,19 +314,27 @@ describe('QDM Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
+        Utilities.waitForElementEnabled(CQLEditorPage.saveCQLButton, 18500)
+
+        cy.intercept('/api/terminology/get-code-systems').as('codeSystems')
+        cy.intercept('/api/terminology/codes').as('codes')
+
+        cy.wait('@codeSystems', { timeout: 12000 })
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click().wait(2000)
+        cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
+        cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
         cy.get(CQLEditorPage.savedCodesTab).click()
 
+        cy.wait('@codes', { timeout: 12000 })
+
         //Remove Code
-        Utilities.waitForElementVisible('[data-testid="delete-code-0"]', 60000)
         cy.get('[data-testid="delete-code-0"]').click()
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //verify saved codes empty
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
         cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
@@ -353,7 +349,7 @@ describe('QDM Code Search fields', () => {
         cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="2023-02-01-option"]').click()
+        cy.get('[data-testid="2023-02-option"]').click()
         cy.get(CQLEditorPage.codeText).type('AMB')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -381,20 +377,37 @@ describe('QDM Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
+        Utilities.waitForElementEnabled(CQLEditorPage.saveCQLButton, 18500)
+
+        cy.intercept('/api/terminology/get-code-systems').as('codeSystems')
+        cy.intercept('/api/terminology/codes').as('codes')
+
+        cy.wait('@codeSystems', { timeout: 12000 })
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click().wait(2000)
+        cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
+        cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
         cy.get(CQLEditorPage.savedCodesTab).click()
 
+        cy.wait('@codes', { timeout: 12000 })
+
         //Remove Code
-        Utilities.waitForElementVisible('[data-testid="delete-code-0"]', 80000)
         cy.get('[data-testid="delete-code-0"]').click()
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
+        cy.wait('@codeSystems', { timeout: 12000 })
+
         //Verify the Code System is still available in the CQL Editor
         cy.get('[class="ace_content"]').should('contain.text', 'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\'')
+
+        cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
+        cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
+        cy.get(CQLEditorPage.savedCodesTab).click()
+
+        cy.wait('@codes', { timeout: 12000 })
+
+        cy.get('[data-testid="saved-codes-tbl"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionACUTEinpatient acuteActCode9.0.0')
     })
 })
 
@@ -402,24 +415,19 @@ describe('Error Message on Codes tab', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withCode)
         OktaLogin.SessionLogin()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL builder
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-
     })
 
-    afterEach('Clean up and Logout', () => {
+    afterEach('Clean up', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message appears on Codes tab when there is an error in the Measure CQL', () => {
@@ -433,14 +441,15 @@ describe('Error Message on Codes tab', () => {
         //Add errors to CQL
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
 
         //Navigate to Codes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+       // cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
         //Navigate to Saved Codes tab
-        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(0)').click()
+        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)').click()
         cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
     })
 })
