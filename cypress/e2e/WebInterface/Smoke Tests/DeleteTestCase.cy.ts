@@ -36,6 +36,9 @@ describe('Delete Test Case', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
+            null, null, 'Procedure')
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -46,21 +49,16 @@ describe('Delete Test Case', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
-            null, null, 'Procedure')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Delete single Test Case - Success scenario', () => {
-
-        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('not.exist')
         cy.get(TestCasesPage.exportTestCasesBtn).should('not.exist')
@@ -68,7 +66,7 @@ describe('Delete Test Case', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'You are choosing to delete the following Test Case(s)!' + testCase1.group + ' - ' + testCase1.title)
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
@@ -76,14 +74,14 @@ describe('Delete Test Case', () => {
 
     it('Delete multiple Test Cases - Success scenario', () => {
 
-        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
         TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         TestCasesPage.checkTestCase(1)
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase2.title + ', ' + testCase1.title + '?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 
+            'You are choosing to delete the following Test Case(s)!' + testCase2.group + ' - ' + testCase2.title + testCase1.group + ' - ' + testCase1.title)
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
