@@ -31,9 +31,6 @@ let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 let versionNumber = '1.0.000'
 let measureCQLPFTests = MeasureCQL.CQL_Populations.replace('TestLibrary4664', measureName)
 let measureCQL = MeasureCQL.CQL_Multiple_Populations.replace('TestLibrary4664', measureName)
-const now = require('dayjs')
-let todaysDate = now().format('MM/DD/YYYY')
-
 
 describe('Test Case sorting by Test Case number', () => {
 
@@ -364,7 +361,7 @@ describe('QICore Test Case - Deleting all test cases resets test case counter', 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'You are choosing to delete the following Test Case(s)!' + testCase1.group + ' - ' + testCase1.title)
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // verify test case #1 no longer shown, test case #2 is still shown

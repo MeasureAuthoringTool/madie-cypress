@@ -33,7 +33,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
     beforeEach('Create Measure', () => {
 
-
         let currentUser = Cypress.env('selectedUser')
         const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureData: CreateMeasureOptions = {
@@ -71,7 +70,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
     afterEach('Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -265,7 +263,6 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     afterEach('Delete Measure and Logout', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureQDMManifestName, CqlLibraryName)
     })
 
@@ -365,7 +362,6 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
     afterEach('Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -400,7 +396,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         // delete test case #1
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete QDMManifestTC?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'You are choosing to delete the following Test Case(s)!QDMManifestTCGroup - QDMManifestTC')
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // verify test case #1 no longer shown, test case #2 is still shown
