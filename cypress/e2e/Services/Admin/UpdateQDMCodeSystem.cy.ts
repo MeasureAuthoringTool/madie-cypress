@@ -442,7 +442,6 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
                     url: '/api/admin/measures/' + measureId + '/testcases/code-system-correction',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                    //    "api-key": adminAPIKey
                     },
                     method: 'PUT',
                     qs: {
