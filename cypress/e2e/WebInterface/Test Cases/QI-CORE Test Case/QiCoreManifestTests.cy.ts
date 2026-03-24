@@ -7,7 +7,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { Header } from "../../../../Shared/Header"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 
 const now = Date.now()
@@ -37,21 +36,13 @@ describe('Validating QICore Expansion -> Manifest', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Madie users can successfully execute test cases against their chosen manifest version', () => {
 
         // set intercept for manifest expansion
         cy.intercept('PUT', '/api/terminology/value-sets/expansion/fhir').as('expansion')
-
-
-        //navigate to the main measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -80,7 +71,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
 
         // intercept expansion API call & check for expected versions
         const expectedVersions = ['20170504', '20190315', '20240110', '20180310']
-        cy.wait('@expansion').then(expansion => {
+        cy.wait('@expansion', { timeout: 30000 }).then(expansion => {
             expect(expansion.response.body).to.have.length(5)
             // no guarantee of return order, and this avoids a for loop
             expect(expansion.response.body[0].version).to.be.oneOf(expectedVersions)
