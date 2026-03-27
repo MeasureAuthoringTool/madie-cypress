@@ -116,7 +116,13 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         //Verify message on the transfer pop up screen
         cy.get('.transfer-dialog-info-text > :nth-child(1)').should('contain.text', 'You are about to Transfer ownership of the following library(s). All versions and drafts will be transferred. So only the most recent library name appears here.')
-        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        
+        // added for https://jira.cms.gov/browse/MAT-9630
+        cy.get(MeasuresPage.newOwnerTextbox).type('notAnActualUser')
+        cy.get(MeasuresPage.transferContinueButton).click()
+        cy.get(MeasuresPage.newOwnerErrorText).should('contain.text', 'The provided HARP ID is not associated with an active MADiE user.')
+        
+        cy.get(MeasuresPage.newOwnerTextbox).clear().type(harpUserALT)
 
         //Select Retain Share Access checkbox
         cy.get('[data-testid="retainShareAccess"]').click()
