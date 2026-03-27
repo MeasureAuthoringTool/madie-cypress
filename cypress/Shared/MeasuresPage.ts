@@ -44,6 +44,7 @@ export class MeasuresPage {
 
     //transfer
     public static readonly newOwnerTextbox = '[data-testid="harp-id-input"]'
+    public static readonly newOwnerErrorText = '[data-testid="harp-id-input-helper-text"]'
     public static readonly transferContinueButton = '[data-testid="transfer-save-button"]'
 
     //history

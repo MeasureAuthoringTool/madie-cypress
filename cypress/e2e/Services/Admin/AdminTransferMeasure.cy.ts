@@ -26,19 +26,45 @@ describe('Transfer ownership of measure via Admin API', () => {
 
     it('Request sent with no measure data returns 400', () => {
         const currentUser = Cypress.env('selectedUser')
+        const altUserName = OktaLogin.getUser(true)
         OktaLogin.setupAdminSession()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/admin/measures/ownership?harpId=' + currentUser,
+                url: '/api/measures/transfer?retainShareAccess=false',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
+                    harpid: altUserName
                 },
                 method: 'PUT',
                 body: []
             }).then((response) => {
                 expect(response.status).to.eql(400)
+            })
+        })
+    })
+
+    // added for https://jira.cms.gov/browse/MAT-9627
+    it('Admin transfer requires valid target user', () => {
+        const currentUser = Cypress.env('selectedUser')
+        OktaLogin.setupAdminSession()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId3) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/transfer?retainShareAccess=false',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        harpid: 'notAnActualUser'
+                    },
+                    method: 'PUT',
+                    body: [measureId3]
+                }).then((response) => {
+                    expect(response.status).to.eql(400)
+                    expect(response.body.message).to.eql('The provided HARP ID is not associated with an active MADiE user.')
+                })
             })
         })
     })
@@ -52,9 +78,10 @@ describe('Transfer ownership of measure via Admin API', () => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId3').should('exist').then((measureId3) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/admin/measures/ownership?harpId=' + altUserName,
+                    url: '/api/measures/transfer?retainShareAccess=false',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
+                        harpid: altUserName
                     },
                     method: 'PUT',
                     body: [measureId3]
@@ -82,9 +109,10 @@ describe('Transfer ownership of measure via Admin API', () => {
 
                         cy.request({
                             failOnStatusCode: false,
-                            url: '/api/admin/measures/ownership?harpId=' + altUserName,
+                            url:'/api/measures/transfer?retainShareAccess=false',
                             headers: {
                                 authorization: 'Bearer ' + accessToken.value,
+                                harpid: altUserName
                             },
                             method: 'PUT',
                             body: [measureId, measureId1, measureId2]
