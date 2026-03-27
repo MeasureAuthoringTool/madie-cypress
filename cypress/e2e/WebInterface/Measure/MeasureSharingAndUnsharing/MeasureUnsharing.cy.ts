@@ -48,9 +48,9 @@ describe('Measure Un Sharing', () => {
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully unshared.')
 
-        //Login as ALT user and verify Measure is not visible on My Measures page
+        //Login as ALT user and verify Measure is not visible on Shared Measures page
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(LandingPage.sharedMeasures).click()
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 
@@ -75,9 +75,9 @@ describe('Measure Un Sharing', () => {
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully unshared.')
 
-        //Login as ALT user and verify Measure is not visible on My Measures page
+        //Login as ALT user and verify Measure is not visible on Shared Measures page
         OktaLogin.AltLogin()
-        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(LandingPage.sharedMeasures).click()
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 
