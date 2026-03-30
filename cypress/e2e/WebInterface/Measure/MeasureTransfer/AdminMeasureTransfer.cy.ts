@@ -43,7 +43,13 @@ describe('Measure Transfer performed by Admin user', () => {
         // initiate transfer to altUser, with retain
         MeasuresPage.actionCenter('transfer')
 
-        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        // added for https://jira.cms.gov/browse/MAT-9627
+        cy.get(MeasuresPage.newOwnerTextbox).type('notAnActualUser')
+        cy.get(MeasuresPage.transferContinueButton).click()
+        cy.get(MeasuresPage.newOwnerErrorText).should('contain.text', 'The provided HARP ID is not associated with an active MADiE user.')
+       
+
+        cy.get(MeasuresPage.newOwnerTextbox).clear().type(harpUserALT)
         cy.get('[data-testid="retainShareAccess"]').click()
         cy.get(MeasuresPage.transferContinueButton).click()
         

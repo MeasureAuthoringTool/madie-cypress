@@ -72,7 +72,13 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         MeasuresPage.actionCenter('transfer', 1)
         //Verify message on the transfer pop up screen
         cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the 1 selected measure(s) below. All versions and drafts will be transferred, but only the most recent measure name appears in the list below.This action cannot be undone.')
-        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+       
+        // added for https://jira.cms.gov/browse/MAT-9627
+        cy.get(MeasuresPage.newOwnerTextbox).type('notAnActualUser')
+        cy.get(MeasuresPage.transferContinueButton).click()
+        cy.get(MeasuresPage.newOwnerErrorText).should('contain.text', 'The provided HARP ID is not associated with an active MADiE user.')
+       
+        cy.get(MeasuresPage.newOwnerTextbox).clear().type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
         OktaLogin.UILogout()
 
