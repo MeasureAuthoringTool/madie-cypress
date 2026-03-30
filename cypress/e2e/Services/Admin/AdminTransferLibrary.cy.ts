@@ -31,14 +31,41 @@ describe('Transfer ownership of library via Admin API', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/cql-libraries/admin/ownership?harpId=' + currentUser,
+                url: '/api/cql-libraries/transfer=retainShareAcess=false',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken.value,
+                    harpid: currentUser
                 },
                 method: 'PUT',
                 body: []
             }).then((response) => {
                 expect(response.status).to.eql(400)
+            })
+        })
+    })
+
+    // added for https://jira.cms.gov/browse/MAT-9630
+    it('Admin transfer requires valid user', () => {
+        const currentUser = Cypress.env('selectedUser')
+        const altUserName = OktaLogin.getUser(true)
+
+        OktaLogin.setupAdminSession()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2').should('exist').then((measureId3) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/cql-libraries/transfer?retainShareAcess=false',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        harpid: 'notAnActualUser'
+                    },
+                    method: 'PUT',
+                    body: [measureId3]
+                }).then((response) => {
+                    expect(response.status).to.eql(400)
+                    expect(response.body.message).to.eql('The provided HARP ID is not associated with an active MADiE user.')
+                })
             })
         })
     })
@@ -53,9 +80,10 @@ describe('Transfer ownership of library via Admin API', () => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2').should('exist').then((measureId3) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/cql-libraries/admin/ownership?harpId=' + altUserName,
+                    url: '/api/cql-libraries/transfer?retainShareAcess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken.value,
+                        harpid: altUserName
                     },
                     method: 'PUT',
                     body: [measureId3]
@@ -81,9 +109,10 @@ describe('Transfer ownership of library via Admin API', () => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId1').should('exist').then((measureId1) => {
                     cy.request({
                         failOnStatusCode: false,
-                        url: '/api/cql-libraries/admin/ownership?harpId=' + altUserName,
+                        url: '/api/cql-libraries/transfer?retainShareAcess=false',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken.value,
+                            harpid: altUserName
                         },
                         method: 'PUT',
                         body: [measureId, measureId1]

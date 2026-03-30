@@ -313,8 +313,7 @@ describe('Share CQL Library using Action Center buttons', () => {
         //Share the Library with same user again
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
-        cy.get('[data-testid="harp-id-input-helper-text"]').should('contain.text', 'The selected library(s) are already shared with this user.')
-
+        cy.get(MeasuresPage.newOwnerErrorText).should('contain.text', 'The selected library(s) are already shared with this user.')
     })
 })
 
