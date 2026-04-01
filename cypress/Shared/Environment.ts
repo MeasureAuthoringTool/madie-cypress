@@ -50,16 +50,26 @@ export class Environment {
                     adminPassword: Cypress.env('TEST_ADMIN_PASSWORD')
                 }
             }
-            // case 'impl': {
-            //     return {
-            //         harpUser: Cypress.env('IMPL_USERNAME'),
-            //         password: Cypress.env('IMPL_PASSWORD'),
-            //         harpUserALT: Cypress.env('IMPL_ALT_USERNAME'),
-            //         passwordALT: Cypress.env('IMPL_ALT_PASSWORD'),
-            //         umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-            //         adminApiKey: Cypress.env('IMPL_ADMIN_API_KEY')
-            //     }
-            // }
+            case 'impl': {
+                return {
+                    harpUser: Cypress.env('IMPL_USERNAME'),
+                    password: Cypress.env('IMPL_PASSWORD'),
+                    harpUser2: null,
+                    password2: null,
+                    harpUser3: null,
+                    password3: null,
+                    altHarpUser: Cypress.env('IMPL_ALT_USERNAME'),
+                    altHarpUser2: null,
+                    altHarpUser3: null,
+                    passwordALT: Cypress.env('IMPL_ALT_PASSWORD'),
+                    passwordALT2: null,
+                    passwordALT3: null,
+                    umls_API_KEY: Cypress.env('VSAC_API_KEY'),
+                    adminApiKey: null,
+                    adminUser: null,
+                    adminPassword: null
+                }
+            }
         }
     }
 
