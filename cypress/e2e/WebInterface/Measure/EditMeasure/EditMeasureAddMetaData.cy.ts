@@ -66,25 +66,25 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type(description)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(description)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
         //Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type(copyright)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(copyright)
         cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
         cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
 
         //Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type(disclaimer)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(disclaimer)
         cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
         cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
 
         //Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type(rationale)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(rationale)
         cy.get(EditMeasurePage.measureRationaleSaveButton).click()
         cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
 
@@ -119,13 +119,13 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type(guidance)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(guidance)
         cy.get(EditMeasurePage.measureGuidanceSaveButton).click()
         cy.get(EditMeasurePage.measureGuidanceSuccessMessage).should('be.visible')
 
         //Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type(clinicalRecommendation)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(clinicalRecommendation)
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
