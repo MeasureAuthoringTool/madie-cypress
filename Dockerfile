@@ -6,8 +6,12 @@ WORKDIR /app
 RUN wget -q -O /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 && \
   chmod +x /usr/local/bin/jq
 
-# install aws cli v2 (standalone installer, no apt-get needed)
-RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip && \
+# install aws cli v2 (standalone installer, using wget since curl is not available)
+RUN wget -q "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -O /tmp/awscliv2.zip && \
+  if ! command -v unzip >/dev/null 2>&1; then \
+    wget -q http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-28_amd64.deb -O /tmp/unzip.deb && \
+    dpkg -i /tmp/unzip.deb && rm /tmp/unzip.deb; \
+  fi && \
   unzip -q /tmp/awscliv2.zip -d /tmp && \
   /tmp/aws/install && \
   rm -rf /tmp/awscliv2.zip /tmp/aws
