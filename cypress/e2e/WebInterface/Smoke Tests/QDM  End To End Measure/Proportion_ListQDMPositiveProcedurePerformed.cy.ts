@@ -147,7 +147,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //Element - Condition:Diagnosis: Disorders of Visual Corte
         QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
         QDMElements.addTimingPrevalencePeriodDateTime('01/03/2012 01:15 PM', '03/01/2012 01:15 PM')
-        QDMElements.addCode('Icd10CM', 'H47.611')
+        QDMElements.addCode('ICD10CM', 'H47.611')
 
         //Element - Procedure:Performed: Cataract Surgery
         QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
