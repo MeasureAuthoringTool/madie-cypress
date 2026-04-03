@@ -95,11 +95,15 @@ export class QDMElements {
 
     }
 
-    // Fallback URI prefixes for code systems whose data-testid may have changed
+    // Fallback URI prefixes (or alternate names) for code systems whose data-testid may have changed
     private static readonly codeSystemFallbacks: Record<string, string> = {
         'SNOMEDCT': 'http://snomed',
         'ICD10CM': 'http://hl7.org/fhir/sid/icd-10-cm',
         'ICD10PCS': 'http://www.cms.gov/Medicare/Coding/ICD10',
+        'SOP': 'SOPT',
+        'SOPT': 'SOP',
+        'RxNORM': 'RXNORM',
+        'RXNORM': 'RxNORM',
     }
 
     public static addCode(codeSystem: string, code: string): void {
