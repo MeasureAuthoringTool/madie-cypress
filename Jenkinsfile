@@ -117,7 +117,7 @@ pipeline {
       when { expression { params.BUILD_CONTAINER == 'yes' } }
       steps {
         sh '''
-          docker build -t madie-dev-cypress-ecr .
+          docker build --no-cache -t madie-dev-cypress-ecr .
           docker tag madie-dev-cypress-ecr:latest ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest
           docker push ${AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest
         '''
