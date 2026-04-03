@@ -42,7 +42,7 @@ const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     'valueset "Unilateral Mastectomy Left": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1133\' \n' +
     'valueset "Unilateral Mastectomy Right": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1134\' \n' +
     'valueset "Unilateral Mastectomy, Unspecified Laterality": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1071\' \n' +
-    'valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
+    '//valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
     'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
     '\n' +
     'code "Female (finding)": \'248152002\' from "SNOMEDCT" display \'Female (finding)\'\n' +
@@ -238,7 +238,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('10/26/2012 08:00 AM', '10/26/2012 08:15 AM')
         //add Code
-        QDMElements.addCode('Icd10PCS', '0HTT0ZZ')
+        QDMElements.addCode('ICD10PCS', '0HTT0ZZ')
         //Close the Element
         QDMElements.closeElement()
 
@@ -248,7 +248,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('10/26/2012 08:00 AM', '10/26/2012 08:15 AM')
         //add Code
-        QDMElements.addCode('Icd10PCS', '0HTT0ZZ')
+        QDMElements.addCode('ICD10PCS', '0HTT0ZZ')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

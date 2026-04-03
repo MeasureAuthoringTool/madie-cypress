@@ -95,14 +95,33 @@ export class QDMElements {
 
     }
 
+    // Fallback URI prefixes for code systems whose data-testid may have changed
+    private static readonly codeSystemFallbacks: Record<string, string> = {
+        'SNOMEDCT': 'http://snomed',
+        'ICD10CM': 'http://hl7.org/fhir/sid/icd-10-cm',
+        'ICD10PCS': 'http://www.cms.gov/Medicare/Coding/ICD10',
+    }
+
     public static addCode(codeSystem: string, code: string): void {
 
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.ExpandedOSSDetailCardTabCodes, 120000)
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get(TestCasesPage.codeSystemSelector).click()
-        Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 120000)
-        cy.get('[data-testid="code-system-option-' + codeSystem + '"]').click()
+
+        const exactSelector = '[data-testid="code-system-option-' + codeSystem + '"]'
+        const fallbackPrefix = this.codeSystemFallbacks[codeSystem]
+
+        cy.get('body').then($body => {
+            if ($body.find(exactSelector).length > 0) {
+                cy.get(exactSelector).click()
+            } else if (fallbackPrefix) {
+                cy.get('[data-testid^="code-system-option-' + fallbackPrefix + '"]').first().click()
+            } else {
+                // no fallback — use exact selector so it fails with a clear message
+                cy.get(exactSelector).click()
+            }
+        })
 
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-' + code + '"]').click()
@@ -132,6 +151,25 @@ export class QDMElements {
 
         cy.get(TestCasesPage.addAttribute).click()
 
+    }
+
+    /**
+     * Click a code-system option by data-testid, falling back to a URI-prefix match
+     * if the exact testid isn't in the DOM.
+     */
+    public static selectCodeSystemOption(codeSystem: string): void {
+        const exactSelector = '[data-testid="code-system-option-' + codeSystem + '"]'
+        const fallbackPrefix = this.codeSystemFallbacks[codeSystem]
+
+        cy.get('body').then($body => {
+            if ($body.find(exactSelector).length > 0) {
+                cy.get(exactSelector).click()
+            } else if (fallbackPrefix) {
+                cy.get('[data-testid^="code-system-option-' + fallbackPrefix + '"]').first().click()
+            } else {
+                cy.get(exactSelector).click()
+            }
+        })
     }
 
     public static closeElement(): void {

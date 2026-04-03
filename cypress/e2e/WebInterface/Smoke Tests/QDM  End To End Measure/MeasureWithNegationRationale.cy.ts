@@ -227,7 +227,7 @@ describe('Measure with Negation Rationale', () => {
         //Element - Condition, Diagnosis: Bladder Cancer for Urology Care
         QDMElements.addElement('condition', 'Diagnosis: Bladder Cancer for Urology Care')
         QDMElements.addTimingPrevalencePeriodDateTime('09/30/2011 08:00 AM', ' ')
-        QDMElements.addCode('Icd10CM', 'C67.3')
+        QDMElements.addCode('ICD10CM', 'C67.3')
 
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
         QDMElements.addElement('medication', 'Administered: BCG Bacillus Calmette Guerin for Urology Care')
