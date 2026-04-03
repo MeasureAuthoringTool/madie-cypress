@@ -1,25 +1,16 @@
-FROM cypress/base:22.17.0
+FROM cypress/browsers:node-22.17.0-chrome-138.0.7204.157-1-ff-140.0.4-edge-138.0.3351.83-1
 
 WORKDIR /app
 
-# Fix broken libgcrypt20 in base image.
-# apt-get crashes due to corrupted libgcrypt, so we use wget+dpkg
-# (which don't depend on libgcrypt) to reinstall the correct package.
-RUN wget -q http://deb.debian.org/debian/pool/main/libg/libgcrypt20/libgcrypt20_1.10.1-3_amd64.deb -O /tmp/libgcrypt20.deb && \
-  dpkg -i /tmp/libgcrypt20.deb && \
-  rm /tmp/libgcrypt20.deb
+# install jq (static binary, no apt-get needed)
+RUN wget -q -O /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 && \
+  chmod +x /usr/local/bin/jq
 
-# install Chrome browser
-RUN \
-  apt-get update && apt-get install -y gnupg dbus-x11 ca-certificates wget && \
-  wget -q -O /usr/share/keyrings/google-chrome.gpg https://dl.google.com/linux/linux_signing_key.pub && \
-  echo "deb [signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-  apt-get update && apt-get install -y dbus-x11 google-chrome-stable && \
-  apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# install aws cli and other tools
-RUN apt-get update && apt-get install -y awscli jq && \
-  apt-get clean && rm -rf /var/lib/apt/lists/*
+# install aws cli v2 (standalone installer, no apt-get needed)
+RUN curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip && \
+  unzip -q /tmp/awscliv2.zip -d /tmp && \
+  /tmp/aws/install && \
+  rm -rf /tmp/awscliv2.zip /tmp/aws
 
 # package
 COPY package.json package.json
