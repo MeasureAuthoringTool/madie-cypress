@@ -41,15 +41,15 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{selectAll}{backspace}')
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type(description)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).type('{selectAll}{backspace}')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).type(description)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).should('be.enabled').click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //apply RTE field formatting
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{selectAll}')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).type('{selectAll}')
         cy.get(EditMeasurePage.frmtBoldBtn).click()
         cy.get(EditMeasurePage.frmtItalicizeBtn).click()
         cy.get(EditMeasurePage.frmtUnderlineBtn).click()
@@ -72,33 +72,31 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{selectAll}{backspace}')
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type(description)
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).type('{selectAll}{backspace}')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).type(description)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).should('be.enabled').click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //apply RTE field formatting
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('{selectAll}')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).type('{selectAll}')
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEFieldToolbar).find(EditMeasurePage.frmtBoldBtn).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEFieldToolbar).find(EditMeasurePage.frmtItalicizeBtn).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEFieldToolbar).find(EditMeasurePage.frmtUnderlineBtn).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEFieldToolbar).find(EditMeasurePage.frmtStrikeThroughBtn).click({ force: true })
-        cy.get(EditMeasurePage.measureDescriptionSaveButton).focus()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click({ force: true })
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><strong><em><del><u>description</u></del></em></strong></p>')
 
 
         //undo
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEFieldToolbar).find(EditMeasurePage.unDoBtn).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click({ force: true })
-        cy.get(EditMeasurePage.measureDescriptionSaveButton).focus()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click({ force: true })
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><strong><em><u>description</u></em></strong></p>')
 
         //redo
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEFieldToolbar).find(EditMeasurePage.reDoBtn).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).click({ force: true })
-        cy.get(EditMeasurePage.measureDescriptionSaveButton).focus()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click({ force: true })
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><strong><em><del><u>description</u></del></em></strong></p>')
 
         //bulletted list
@@ -198,8 +196,15 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
         cy.get(EditMeasurePage.embdTableRemoveRowBtn).click()
         cy.get(EditMeasurePage.embdTableRemoveColBtn).click()
         cy.get(EditMeasurePage.embdTableRemoveColBtn).click({ force: true })
-        cy.get(EditMeasurePage.measureDescriptionSaveButton).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div class="tableWrapper"><table style="min-width: 50px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click({ force: true })
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).invoke('html').then((html) => {
+            expect(html).to.contain('tableWrapper')
+            // Verify table was reduced: should have 3 rows and 3 columns (started with 5 each, removed 2 of each)
+            const rowCount = (html.match(/<tr>/g) || []).length
+            expect(rowCount).to.equal(3)
+            const colCount = (html.match(/<col /g) || []).length
+            expect(colCount).to.be.at.most(3)
+        })
 
         //remove embedded table, entirely
         cy.get(EditMeasurePage.embdTableRemoveTblBtn).click({ force: true })

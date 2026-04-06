@@ -306,7 +306,7 @@ export class MeasureGroupPage {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).find('input').type('Process').type('{downArrow}').type('{enter}')
         // this clears the previous step's dropdown
         cy.get(this.QDMPopCriteria1Desc).click()
 
@@ -950,7 +950,7 @@ export class MeasureGroupPage {
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type(type).type('{downArrow}').type('{enter}')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).find('input').type(type).type('{downArrow}').type('{enter}')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
     }
 

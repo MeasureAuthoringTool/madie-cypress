@@ -208,10 +208,10 @@ describe('CQL Library List Page Sort by Columns', () => {
 
         cy.get('thead tr').first().then(headerRow => {
 
-            // checkbox
-            cy.wrap(headerRow.children().eq(0).find('button')).should('not.have.class', 'header-button')
-            // action button
-            cy.wrap(headerRow.children().eq(8).find('button')).should('not.have.class', 'header-button')
+            // checkbox column should not have a sortable header button
+            cy.wrap(headerRow.children().eq(0)).find('.header-button').should('not.exist')
+            // action button column should not have a sortable header button
+            cy.wrap(headerRow.children().last()).find('.header-button').should('not.exist')
         })
     })
 })
