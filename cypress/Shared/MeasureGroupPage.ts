@@ -129,7 +129,7 @@ export class MeasureGroupPage {
     public static readonly keepGroupModalbtn = '[data-testid="delete-measure-group-modal-cancel-btn"]'
     public static readonly deleteMeasureGroupConfirmationMsg = '.MuiDialogContent-root > div'
     //Reporting tab fields
-    public static readonly rateAggregation = '[data-testid="rate-aggregation-rich-text-editor"]'
+    public static readonly rateAggregation = '[data-testid="rateAggregation-rich-text-editor-content"]'
     public static readonly readOnlyRateAggregation = '#rateAggregation'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-rich-text-editor"]'
@@ -456,7 +456,7 @@ export class MeasureGroupPage {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -570,7 +570,7 @@ export class MeasureGroupPage {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -665,7 +665,7 @@ export class MeasureGroupPage {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -714,6 +714,9 @@ export class MeasureGroupPage {
     public static CreateCohortMeasureGroupWithoutTypeAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string): string {
         let currentUser = Cypress.env('selectedUser')
 
+        if ((altUser === undefined) || (altUser === null)) {
+            altUser = false
+        }
 
         let user = ''
         let measurePath = ''
@@ -747,7 +750,7 @@ export class MeasureGroupPage {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -901,7 +904,7 @@ export class MeasureGroupPage {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -980,7 +983,7 @@ export class MeasureGroupPage {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
@@ -993,7 +996,7 @@ export class MeasureGroupPage {
                         url: '/api/measures/' + fileContents + '/groups',
                         method: 'POST',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         body: groupWithAddedStrats
                     }).then((response) => {

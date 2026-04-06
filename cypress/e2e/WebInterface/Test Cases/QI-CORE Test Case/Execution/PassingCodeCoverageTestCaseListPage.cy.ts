@@ -22,7 +22,7 @@ describe('Code Coverage Highlighting', () => {
 
     beforeEach('Create Measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false,
             'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, false, true)
