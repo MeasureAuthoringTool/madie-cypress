@@ -26,11 +26,6 @@ describe('Validate Measure Group', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -62,7 +57,7 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Measure group description
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //select a group type
         Utilities.setMeasureGroupType()
@@ -85,7 +80,7 @@ describe('Validate Measure Group', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -146,7 +141,7 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Measure group description
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //select a group type
         Utilities.setMeasureGroupType()
@@ -169,7 +164,7 @@ describe('Validate Measure Group', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -216,7 +211,7 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Measure group description
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //select a group type
         Utilities.setMeasureGroupType()
@@ -239,7 +234,7 @@ describe('Validate Measure Group', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -311,7 +306,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -342,7 +337,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -370,7 +365,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -393,7 +388,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -427,7 +422,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -514,7 +509,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -557,7 +552,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -581,7 +576,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -634,7 +629,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
@@ -662,7 +657,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('not.exist')
 
         //verify IP1 and the other population field values are unchanged
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Surgical Absence of Cervix')
         cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Surgical Absence of Cervix')
         cy.get(MeasureGroupPage.denominatorExclusionSelect).should('contain.text', 'Surgical Absence of Cervix')
         cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix')

@@ -35,8 +35,6 @@ describe('Measure Observations', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
@@ -150,7 +148,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -209,7 +207,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save Measure Group
@@ -306,8 +304,6 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
@@ -460,7 +456,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -554,8 +550,6 @@ describe('Measure Observation - Expected Values', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
@@ -611,7 +605,7 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -686,7 +680,7 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save Measure Group
@@ -777,8 +771,6 @@ describe('Validate Measure Observation Parameters', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)

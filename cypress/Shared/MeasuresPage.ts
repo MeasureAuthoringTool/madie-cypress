@@ -177,7 +177,7 @@ export class MeasuresPage {
                     Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 60000)
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').click().wait(2000)
+                    cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView().click({ force: true }).wait(2000)
                     Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
 
                 })
@@ -190,7 +190,7 @@ export class MeasuresPage {
                     Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 60000)
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+                    cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView().click({ force: true })
                 })
                 break
             }

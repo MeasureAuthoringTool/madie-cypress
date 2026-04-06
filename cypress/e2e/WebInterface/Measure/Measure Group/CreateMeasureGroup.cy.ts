@@ -49,8 +49,8 @@ describe('Validate Measure Group -- scoring and populations', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-        
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
     })
 
     it('"Please complete the CQL Editor process before continuing" appears when there are issues with entered CQL', () => {
@@ -98,7 +98,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -119,7 +119,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -180,7 +180,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -192,7 +192,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
@@ -251,7 +251,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -320,7 +320,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -363,7 +363,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -405,8 +405,8 @@ describe('Validate Population Basis', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-        
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
     })
 
     it('Verify default Value and if no value is selected for Population Basis, the save button is unavailable', () => {
@@ -419,7 +419,7 @@ describe('Validate Population Basis', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -458,7 +458,7 @@ describe('Validate Population Basis', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
