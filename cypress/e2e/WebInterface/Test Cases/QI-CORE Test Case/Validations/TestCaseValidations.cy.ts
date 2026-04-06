@@ -130,7 +130,7 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).type(twoFiftyTwoCharacters)
-        cy.contains('Add').click()
+        cy.get('[data-testid*="Add"]').last().click()
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.testCaseGroupInlineError).contains('Test Case Group cannot be more ' +
             'than 250 characters.')
