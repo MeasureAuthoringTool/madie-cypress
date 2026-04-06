@@ -129,7 +129,8 @@ describe('QDM CQL Definitions', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 30000)
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -315,7 +316,7 @@ describe('QDM CQL Definitions', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -352,7 +353,8 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.saveDefinitionBtn).click()
 
         //Verify Updated Comment
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 30000)
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -401,12 +403,12 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get('[data-testid="measure-details-tab"]').click().wait(2000)
         cy.get(EditMeasurePage.cqlEditorTab).click().wait(3000)
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
         /*                 cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
@@ -444,7 +446,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="group-form-submit-btn"]').click().wait(1000)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Navigate to Definitions tab and verify no error message appears
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -458,18 +460,14 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         Utilities.waitForElementVisible('#content', 60000)
 
         //Navigate to Definitions tab — expand CQL builder if collapsed
-        cy.get('body').then(($body) => {
-            if ($body.find(CQLEditorPage.expandCQLBuilder).length > 0) {
-                cy.get(CQLEditorPage.expandCQLBuilder).click()
-            }
-        })
-        cy.get(CQLEditorPage.definitionsTab).wait(1000).click()
+        CQLEditorPage.expandCQLBuilderPanel()
+        cy.get(CQLEditorPage.definitionsTab).click()
         Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 30000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
         //Verify Expression editor name dropdown is disabled when there are CQL errors
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (0)').click()
-        cy.get('[class="Definitions___StyledTd-sc-cj02bv-0 kITigf"]').should('contain.text', 'No Results were found')
+        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
     })
 
     it('QDM CQL Definitions throws specific error when Definition has no name', () => {
@@ -497,37 +495,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="select-option-measure-group-population"]').eq(5).should('have.attr', 'data-value', 'n').click()
         cy.get('[data-testid="group-form-submit-btn"]').click().wait(1000)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
-    })
-
-    it('QDM CQL Definitions throws specific error when Definition name is a reserved keyword', () => {
-
-        randValue = (Math.floor((Math.random() * 1000) + 3))
-        CqlLibraryName = CqlLibraryName + randValue
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
-        OktaLogin.Login()
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
-        cy.get('[data-testid="groups-tab"]').click()
-        cy.get('[data-testid="base-configuration-types-input"]').click()
-            .type('{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{enter}')
-        cy.get('[id="scoring-select"]').click()
-        cy.get('[data-testid="scoring-option-COHORT"]').click()
-        cy.get('[data-testid="measure-Base Configuration-save"]').wait(1000).click().wait(1000)
-        cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(1000).click()
-        cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(5).should('have.attr', 'data-value', 'n').click()
-        cy.get('[data-testid="group-form-submit-btn"]').wait(1000).click().wait(2000)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
     })
@@ -555,7 +523,7 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()

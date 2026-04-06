@@ -46,7 +46,7 @@ describe('QDM Library Includes fields', () => {
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -63,7 +63,7 @@ describe('QDM Library Includes fields', () => {
         //Search for FHIR Library
         cy.get(CQLEditorPage.librarySearchTextBox).type('fhir')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('.Results___StyledTd-sc-18pioce-0').should('contain.text', 'No Results were found')
+        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
 
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('sdoh')
@@ -167,7 +167,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -205,7 +205,7 @@ describe('QDM Library Includes fields', () => {
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
@@ -219,7 +219,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -245,7 +245,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
         //Deletes the library from the Saved Libraries grid
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab / number in parentheses has been updated
@@ -266,7 +266,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -288,12 +288,12 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.tcSearchIcone).first().click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
         //Deletes the library from the Saved Libraries grid
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab / number in parentheses has been updated
@@ -312,7 +312,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -351,7 +351,7 @@ describe('QDM Library Includes fields', () => {
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
@@ -365,7 +365,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -415,7 +415,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -494,7 +494,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Includes tab — expand CQL builder if collapsed
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
         Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 60000)
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')

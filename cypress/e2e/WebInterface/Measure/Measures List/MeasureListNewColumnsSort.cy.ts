@@ -259,11 +259,11 @@ describe('Measure List Page Sort by Columns', () => {
         cy.get('thead tr').first().then(headerRow => {
 
             // checkbox
-            cy.wrap(headerRow.children().eq(0).find('button')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(0)).find('.header-button').should('not.exist')
             // action button
-            cy.wrap(headerRow.children().eq(9).find('button')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().eq(9)).find('.header-button').should('not.exist')
             // expansion button
-            cy.wrap(headerRow.children().eq(10).find('span')).should('not.have.class', 'header-button')
+            cy.wrap(headerRow.children().last()).find('.header-button').should('not.exist')
         })
     })
 })
