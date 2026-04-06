@@ -1,28 +1,43 @@
-cypress/e2e/Services/CQL Library Service/CreateCQL-Library.cy.ts
-cypress/e2e/Services/Measure Service/DeleteCMSID.cy.ts
-cypress/e2e/Services/Measure Service/DeleteTest-Case.cy.ts
 cypress/e2e/Services/Measure Service/EditMeasure.cy.ts
 cypress/e2e/Services/Measure Service/Measure.cy.ts
-cypress/e2e/Services/Measure Service/MeasureBundle.cy.ts
-cypress/e2e/Services/Measure Service/MeasureExport.cy.ts
 cypress/e2e/Services/Measure Service/MeasureGroup.cy.ts
-cypress/e2e/Services/Measure Service/MeasureSearching.cy.ts
+cypress/e2e/Services/Measure Service/MeasureSharing.cy.ts
+cypress/e2e/Services/Measure Service/MeasureTranslatorVersion.cy.ts
 cypress/e2e/Services/Measure Service/MeasureVersion.cy.ts
-cypress/e2e/Services/Measure Service/QI Core Test-Cases.cy.ts
 cypress/e2e/Services/Measure Service/TestCaseImport.cy.ts
-cypress/e2e/WebInterface/CQL Library/CQL Library Lock And Unlock/CQLLibraryLocking.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQL Editor/ValidateCQLLibraryEditor.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQL Library Sharing And Unsharing/CQLLibrarySharing.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQL Library Sharing And Unsharing/CQLLibraryUnsharing.cy.ts
 cypress/e2e/WebInterface/CQL Library/CQL Library Transfer/AdminLibraryTransfer.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQL Library Transfer/CQLLibraryTransfer.cy.ts
+cypress/e2e/WebInterface/CQL Library/CQLLibraryListPageColumnSort.cy.ts
 cypress/e2e/WebInterface/Measure/EditMeasure/RTEField.cy.ts
+cypress/e2e/WebInterface/Measure/Measure Group/CreateMeasureGroup.cy.ts
+cypress/e2e/WebInterface/Measure/Measure Group/MeasureObservations.cy.ts
+cypress/e2e/WebInterface/Measure/Measure Group/MeasurePopulations.cy.ts
+cypress/e2e/WebInterface/Measure/Measure Group/UpdateMeasureGroup.cy.ts
 cypress/e2e/WebInterface/Measure/MeasureSharingAndUnsharing/MeasureSharing.cy.ts
-cypress/e2e/WebInterface/Measure/MeasureTransfer/AdminMeasureTransfer.cy.ts
 cypress/e2e/WebInterface/Measure/MeasureTransfer/MeasureTransfer.cy.ts
+cypress/e2e/WebInterface/Measure/Measures List/MeasureListNewColumnsSort.cy.ts
 cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMCQLDefinitions.cy.ts
+cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMCQLFunctions.cy.ts
+cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMCQLParameters.cy.ts
+cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMCodeSearch.cy.ts
 cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMLibraryIncludes.cy.ts
-cypress/e2e/WebInterface/Measure/QI Core CQL Editor/MeasureBundle.cy.ts
+cypress/e2e/WebInterface/Measure/QDM EditMeasure/QDMMeasureSet.cy.ts
+cypress/e2e/WebInterface/Measure/QDM EditMeasure/QDMMeasureTransmissionFormat.cy.ts
+cypress/e2e/WebInterface/Measure/QDMMeasureExport/ViewQDMMeasureHR.cy.ts
+cypress/e2e/WebInterface/Measure/QDMMeasureGroup/QDMPopulationCriteriaPage.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/CQLCodeSystem.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreCQLDefinitions.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreCQLFunctions.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreCQLParameters.cy.ts
 cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreCodeSearch.cy.ts
 cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreLibraryIncludes.cy.ts
-cypress/e2e/WebInterface/Smoke Tests/QICORE 6.0.0 End To End Measure and Test Cases/ProportionBoolean600.cy.ts
-cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/Execution/ExecuteTestCasesByNonMeasureOwner.cy.ts
-cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/Execution/ExecutionAndCoverageValidations.cy.ts
-cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/TestCaseExportImport/ExpectedValuesForObservations.cy.ts
-cypress/e2e/WebInterface/Test Cases/Versioned Measure/VersionedMeasure_CreateEditDeleteTestCase.cy.ts
+cypress/e2e/WebInterface/Measure/QI Core CQL Editor/QiCoreLibraryIncludesEditDelete.cy.ts
+cypress/e2e/WebInterface/Test Cases/MinimizeAlerts.cy.ts
+cypress/e2e/WebInterface/Test Cases/QDM Test Case/QDM Test Case Validations/QDMTestCaseValidations.cy.ts
+cypress/e2e/WebInterface/Test Cases/QDM Test Case/Reports/QDMOverlappingValuesetsReport.cy.ts
+cypress/e2e/WebInterface/Test Cases/QDM Test Case/ShiftTestCaseDates/QDMShiftTestCaseDatesValidations.cy.ts
+cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/Execution/PassingCodeCoverageTestCaseListPage.cy.ts
+cypress/e2e/WebInterface/Test Cases/QI-CORE Test Case/Validations/TestCaseValidations.cy.ts
