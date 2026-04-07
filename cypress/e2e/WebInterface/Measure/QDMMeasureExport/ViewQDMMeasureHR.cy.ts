@@ -58,7 +58,7 @@ describe('View Human Readable for QDM Measure', () => {
 
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
-        cy.get(':nth-child(4) > tbody > :nth-child(1) > td').should('contain.text', measureQDM)
+        cy.get(EditMeasurePage.humanReadableEcqmTitle).should('contain.text', measureQDM)
     })
 
     it('View Human Readable for QDM 5.6 Measure on All Measures page', () => {
@@ -69,7 +69,7 @@ describe('View Human Readable for QDM Measure', () => {
 
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
-        cy.get(':nth-child(4) > tbody > :nth-child(1) > td').should('contain.text', measureQDM)
+        cy.get(EditMeasurePage.humanReadableEcqmTitle).should('contain.text', measureQDM)
     })
 
     it('Export measure from HR modal', () => {

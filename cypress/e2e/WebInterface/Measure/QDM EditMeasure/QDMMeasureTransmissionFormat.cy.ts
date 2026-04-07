@@ -41,7 +41,7 @@ describe('QDM Measure: Transmission Format', () => {
 
         //Add Definition
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
-        cy.get(EditMeasurePage.transmissionFormatDescription).type('Test Transmission format')
+        cy.get(EditMeasurePage.transmissionFormatDescription).find(EditMeasurePage.transmissionFormatContentField).type('Test Transmission format')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Transmission Format Saved Successfully')
     })
@@ -52,7 +52,7 @@ describe('QDM Measure: Transmission Format', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
-        cy.get(EditMeasurePage.transmissionFormatDescription).type('Test Transmission format')
+        cy.get(EditMeasurePage.transmissionFormatDescription).find(EditMeasurePage.transmissionFormatContentField).type('Test Transmission format')
         cy.get(Utilities.DiscardCancelBtn).click()
         Utilities.clickOnDiscardChanges()
         cy.get(EditMeasurePage.transmissionFormatDescription).should('not.contain.text')
