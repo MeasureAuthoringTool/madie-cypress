@@ -39,7 +39,7 @@ describe('QDM Measure Set', () => {
 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
-        cy.get(EditMeasurePage.measureSetText).type('Measure Set')
+        cy.get(EditMeasurePage.measureSetText).find(EditMeasurePage.RTEContentField).type('Measure Set')
         cy.get(EditMeasurePage.measureSetSaveBtn).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Measure Set Information Saved Successfully')
         cy.get(EditMeasurePage.measureSetText).should('contain.text', 'Measure Set')
@@ -51,7 +51,7 @@ describe('QDM Measure Set', () => {
 
         //Navigate to Measure set page
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
-        cy.get(EditMeasurePage.measureSetText).type('Measure Set')
+        cy.get(EditMeasurePage.measureSetText).find(EditMeasurePage.RTEContentField).type('Measure Set')
         cy.get(Utilities.DiscardButton).click()
         Utilities.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureSetText).should('not.contain.text')

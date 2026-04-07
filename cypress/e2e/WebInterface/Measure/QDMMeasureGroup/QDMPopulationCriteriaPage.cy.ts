@@ -38,7 +38,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
@@ -278,7 +278,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
-        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).type('Initial Population Description')
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).find(MeasureGroupPage.riskAdjustmentDescriptionTextBox).type('Initial Population Description')
 
         //save the Risk Adjustment data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
@@ -288,7 +288,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
         cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).click()
         cy.get(MeasureGroupPage.QDMSupplementalDataElementsListBox).contains('ipp').click()
-        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).type('Initial Population Description')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
 
         //save Supplemental data Elements
         cy.get(MeasureGroupPage.QDMSaveSupplementalDataElements).click()
@@ -363,7 +363,7 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
@@ -420,7 +420,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
@@ -480,7 +480,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {

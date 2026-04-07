@@ -39,6 +39,7 @@ export class EditMeasurePage {
     public static readonly viewHistoryActionBtn = '[data-testid="ViewHistory"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
+    public static readonly humanReadableEcqmTitle = '.ecqm-title'
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
@@ -134,6 +135,7 @@ export class EditMeasurePage {
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="transmission-format-rich-text-editor"]'
+    public static readonly transmissionFormatContentField = '[data-testid="transmissionFormat-rich-text-editor-content"]'
     public static readonly readOnlyTFDesc = '#transmissionFormat'
 
     //Measure CQL Page
