@@ -3,10 +3,10 @@ import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {QdmCql} from "../../../../../Shared/QDMMeasuresCQL"
-import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
     /*
         This test scenario does not require creation of a measure.
@@ -19,11 +19,12 @@ const originalMeasure = {
     title: '2026Cesarean Birth CMS334'
 }
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let measureCQL = QdmCql.QDMSimpleCQL
+const now = Date.now()
+let measureName = 'QDMOverlapReport' + now
+let CqlLibraryName = 'QDMOverlapReportLib' + now
+const measureCQL = QdmCql.QDMSimpleCQL
 const testCaseTitle = 'DENEXStrat1Fail 2RUnilateralMxProc'
-const testCaseDescription = 'DENOMFail' + Date.now()
+const testCaseDescription = 'DENOMFail' + now
 const testCaseSeries = 'SBTestSeries'
 
 describe('Generate the Overlapping Value Set report for a QDM measure', () => {
@@ -33,11 +34,6 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
     beforeEach('Login', () => {
 
         OktaLogin.Login()
-    })
-
-    afterEach('Logout', () => {
-
-        
     })
 
     it('View CMS 334 and generate the Overlapping Value Set report', () => {
@@ -138,8 +134,7 @@ describe('Overlapping Value Set report validations', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-        
+        Utilities.deleteMeasure() 
     })
 
     it('Reports button disabled when there are errors in Measure CQL', () => {
@@ -175,7 +170,7 @@ describe('Overlapping Value Set report validations', () => {
         Utilities.waitForElementVisible(TestCasesPage.reportsButton, 12500)
         cy.get(TestCasesPage.reportsButton).click()
         cy.get(TestCasesPage.overlappingCodesButton).click()
-        cy.get('[class="OverlappingCodesDialog___StyledTd-sc-cyxsx0-0 iDUEmy"]').should('contain.text', 'There are no overlapping codes')
+        cy.get(TestCasesPage.overlappingCodesTable).should('contain.text', 'There are no overlapping codes')
         cy.get(TestCasesPage.overlappingCodesExportBtn).should('be.disabled')
     })
 })

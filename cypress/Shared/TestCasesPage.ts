@@ -196,6 +196,7 @@ export class TestCasesPage {
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly overlappingCodesButton = '[data-testid="overlapping-codes"]'
     public static readonly overlappingCodesExportBtn = '[data-testid="overlapping-codes-report-export-btn"]'
+    public static readonly overlappingCodesTable = '[data-testid="overlapping-codes-tbl"]'
     public static readonly exportSuccessMsg = '[data-testid="overlapping-codes-success-text"]'
     public static readonly tcSearchInput = '[data-testid="test-case-list-search-input"]'
     public static readonly tcTriggerSearch = '[data-testid="test-cases-trigger-search"]'

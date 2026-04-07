@@ -121,6 +121,6 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
          cy.contains('h2', 'Overlapping Codes').should('be.visible')
  
          // confirm empty message
-         cy.get('[data-testid="overlapping-codes-tbl"]').should('contain.text', 'There are no overlapping codes')
+         cy.get(TestCasesPage.overlappingCodesTable).should('contain.text', 'There are no overlapping codes')
     })
 })
