@@ -28,12 +28,11 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-
         
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
-    it('Test case list throws error for no population criteria', () => {
+    it('Minimize alert when Test Case list throws error for no population criteria', () => {
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -58,8 +57,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.get(TestCasesPage.testCaseExecutionError).should('be.visible')
     })
 
-    // was skipped for MAT-8410
-    it('Test case shift dates failure shows error', () => {
+    it('Minimize alert when Test Case shift dates failure shows error', () => {
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -74,6 +72,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         TestCasesPage.createTestCase('empty testcase', 'nothing', 'abc')
 
         // shift dates 2 years
+        cy.get(TestCasesPage.leftNavExpand).click()
         cy.get(TestCasesPage.testCaseDataSideLink).click()
         Utilities.waitForElementVisible(TestCasesPage.shiftAllTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftAllTestCaseDates).type('2')
@@ -120,18 +119,14 @@ describe('Minimize Alerts - Non-owner can also minimize to review the test cases
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
         
-
         OktaLogin.SessionAltLogin()
-        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
-        cy.get(MeasuresPage.ownedMeasures).wait(1000).click()
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         MeasuresPage.actionCenter('edit')
     })
 
     afterEach('Clean up and Logout', () => {
-
         
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner can perform minimize action', () => {
