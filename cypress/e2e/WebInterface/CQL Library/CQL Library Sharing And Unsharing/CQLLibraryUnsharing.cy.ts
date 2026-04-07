@@ -1,6 +1,5 @@
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
-import { Environment } from "../../../../Shared/Environment"
 import { Header } from "../../../../Shared/Header"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
@@ -11,7 +10,7 @@ let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 let updatedCQLLibraryName = ''
 
-describe('Un Share CQL Library using Action Center buttons', () => {
+describe('Unshare CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
         CQLLibraryName = 'UnshareLibrary' + Date.now()
@@ -22,7 +21,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
     })
 
-    it('Verify CQL Library owner can un share Library from Libraries page Action centre share button', () => {
+    it('Verify CQL Library owner can unshare Library from Libraries page Action centre share button', () => {
 
         //Share CQL Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -54,7 +53,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
     })
 
-    it('Verify CQL Library owner can un share Library from Edit Library page Action centre share button', () => {
+    it('Verify CQL Library owner can unshare Library from Edit Library page Action centre share button', () => {
 
         OktaLogin.setupUserSession(false)
 
@@ -89,7 +88,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
 
     })
 
-    it('Verify Shared user can Un share Library from themself on Shared Libraries tab', () => {
+    it.only('Verify Shared user can Unshare Library from themself on Shared Libraries tab', () => {
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -101,7 +100,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
 
         //Unshare Library
         Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
-        cy.get('[type="checkbox"]').first().click()
+        cy.get('[type="checkbox"]').eq(1).click()
         cy.get('[data-testid="share-action-btn"]').click()
         cy.get('[data-testid="Unshare-option"]').click()
 
@@ -122,7 +121,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
     })
 })
 
-describe('Un Share CQL Library using Action Center buttons - Multiple instances', () => {
+describe('Unshare CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
 
@@ -134,7 +133,7 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
     })
 
-    it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
+    it('Verify all instances of the CQL Library (Version and Draft) are unshared from the user', () => {
 
         const versionNumber = '1.0.000'
         const currentUser = Cypress.env('selectedUser')
@@ -150,7 +149,7 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId,

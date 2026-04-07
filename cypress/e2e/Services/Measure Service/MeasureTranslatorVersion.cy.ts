@@ -15,7 +15,7 @@ const qdmMeasureName = 'QDMTranslatorVersion' + timestamp
 const qdmCqlLibraryName = 'QDMTranslatorVersionLibrary' + timestamp
 const qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
 
-const expectedQiCoreVersion = '4.4.0'
+const expectedQiCoreVersion = '4.5.0'
 const expectedQdmVersion = '3.29.0'
 const measureData: CreateMeasureOptions = {}
 
@@ -53,7 +53,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     cy.request({
                         url: '/api/fhir/translator-version?draft=true',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET'
                     }).then((response) => {
@@ -65,7 +65,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/version?versionType=major',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT'
                     }).then((response) => {
@@ -117,7 +117,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                     cy.request({
                         url: '/api/qdm/translator-version?draft=true',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET'
                     }).then((response) => {
@@ -129,7 +129,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/version?versionType=major',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT'
                     }).then((response) => {
