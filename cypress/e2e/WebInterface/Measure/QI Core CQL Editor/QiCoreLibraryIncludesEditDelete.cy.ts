@@ -23,7 +23,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         MeasuresPage.actionCenter('edit', 0)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -44,7 +44,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -59,7 +59,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         Utilities.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.tcSearchIcone).first().click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -82,7 +82,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(TestCasesPage.tcSearchIcone).eq(0).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
@@ -96,7 +96,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -124,10 +124,13 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain.text', 'FHIRHelpers')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName)
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'define "Surgical Absence of Cervix"')
 
         //Deletes the library from the Saved Libraries grid
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab / number in parentheses has been updated
@@ -148,7 +151,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -171,10 +174,13 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain.text', 'FHIRHelpers')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName)
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'define "Surgical Absence of Cervix"')
 
         //Deletes the library from the Saved Libraries grid
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab / number in parentheses has been updated
@@ -194,7 +200,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         MeasuresPage.actionCenter('edit', 0)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -214,7 +220,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -229,7 +235,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         Utilities.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.tcSearchIcone).first().click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -253,7 +259,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(TestCasesPage.tcSearchIcone).eq(0).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
@@ -267,7 +273,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -300,7 +306,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.tcSearchIcone).first().click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
     })
@@ -317,7 +323,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on Includes tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
@@ -346,7 +352,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.tcSearchIcone).first().click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
     })

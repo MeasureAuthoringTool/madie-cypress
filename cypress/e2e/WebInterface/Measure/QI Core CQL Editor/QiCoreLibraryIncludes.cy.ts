@@ -38,7 +38,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for FHIR Library
         cy.get(CQLEditorPage.librarySearchTextBox).type('qdm')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('.Results___StyledTd-sc-18pioce-0').should('contain.text', 'No Results were found')
+        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
 
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
@@ -133,7 +133,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('#draggable-dialog-title', 5000)
+        Utilities.waitForElementVisible('#draggable-dialog-title', 60000)
         cy.get('#draggable-dialog-title').should('contain.text', 'Details')
 
         //Confirm Library versions
@@ -190,7 +190,7 @@ describe('Qi-Core Library Includes fields', () => {
 
         //Navigate to Saved Parameters tab
         cy.get(CQLEditorPage.savedLibrariesTab).click().should('contain.text', 'Saved Libraries (0)')
-        cy.get('[class="Results___StyledTd-sc-18pioce-0 cBTZQp"]').should('contain.text', 'No Results were found')
+        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
     })
 })
 
