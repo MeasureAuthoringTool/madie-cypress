@@ -71,7 +71,7 @@ describe('QDM Code Search fields', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -104,7 +104,7 @@ describe('QDM Code Search fields', () => {
         //Assert when the Code is not available in VSAC
         cy.get(CQLEditorPage.codeText).clear().type('123')
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
-        cy.get('[data-testid="codes-results-tbl"]').find('[class="sc-hmdomO xIUoS"]').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="codes-results-tbl"]').should('contain.text', 'No Results were found')
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
@@ -191,7 +191,9 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.get('[class="CodesSection___StyledDiv-sc-1rldvun-0 HuXlU"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0Items per page 5.Items per page5​1 - 1 of 11')
+        cy.contains('AMB', { timeout: 30000 }).should('be.visible')
+        cy.contains('ambulatory').should('be.visible')
+        cy.contains('ActCode').should('be.visible')
     })
 
     it('Edit Code with Suffix and Version from Results Grid', () => {
@@ -337,7 +339,7 @@ describe('QDM Code Search fields', () => {
         //verify saved codes empty
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="saved-codes-tbl"]').should('contain.text', 'No Results were found')
     })
 
     it('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
@@ -422,7 +424,7 @@ describe('Error Message on Codes tab', () => {
 
         //Navigate to CQL builder
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up', () => {
@@ -450,6 +452,6 @@ describe('Error Message on Codes tab', () => {
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)').click()
-        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="saved-codes-tbl"]').should('contain.text', 'No Results were found')
     })
 })

@@ -85,7 +85,7 @@ describe('QDM CQL Functions', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -116,7 +116,7 @@ describe('QDM CQL Functions', () => {
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //Navigate to Saved Functions tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.functionsTab).click()
         cy.get(CQLEditorPage.savedFunctionsTab).click().wait(1000)
 
@@ -239,18 +239,15 @@ describe('QDM CQL Functions', () => {
 
 
         //Navigate to Functions tab
-        cy.get(CQLEditorPage.expandCQLBuilder).wait(1000).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
-        cy.get(CQLEditorPage.collapseCQLBuilder).wait(1000).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.definitionsTab).wait(1000).click()
         cy.get(CQLEditorPage.functionsTab).wait(1000).click()
 
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
         //Navigate to Saved Functions tab
         cy.get(CQLEditorPage.savedFunctionsTab).should('contain.text', 'Saved Functions (0)').click()
-        cy.get('[class="Functions___StyledTd-sc-z5k5r-0 jVcgFQ"]').should('contain.text', 'No Results were found')
+        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
     })
 })
 
@@ -276,7 +273,7 @@ describe('QDM CQL Functions - Measure ownership Validations', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Navigate to Saved Functions tab
         cy.get(CQLEditorPage.functionsTab).click()

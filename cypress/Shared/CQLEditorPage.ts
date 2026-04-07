@@ -218,4 +218,48 @@ export class CQLEditorPage {
         Utilities.typeFileContents(filePath, EditMeasurePage.cqlEditorTextBox)
     }
 
+    // Clicking expand can trigger a URL navigation that collapses the panel.
+    // This helper clicks expand, waits for the page to stabilise, and retries
+    // up to several times until the definitions tab is finally visible.
+    // Note: jQuery :visible does not detect CSS clipping (overflow:hidden),
+    // so we check for the collapse button as the reliable "panel is open" signal.
+    public static expandCQLBuilderPanel(): void {
+        const maxRetries = 5
+
+        const attemptExpand = (attempt: number): void => {
+            cy.get('body').then(($body) => {
+                // The collapse button is only rendered when the panel is truly open
+                const panelOpen = $body.find(CQLEditorPage.collapseCQLBuilder).length > 0
+                    && $body.find(CQLEditorPage.collapseCQLBuilder).is(':visible')
+
+                if (panelOpen) {
+                    cy.log('CQL Builder panel already expanded')
+                    return
+                }
+                // If the expand button is present, click it
+                if ($body.find(CQLEditorPage.expandCQLBuilder).length > 0) {
+                    cy.log(`Expanding CQL Builder panel (attempt ${attempt + 1}/${maxRetries})`)
+                    cy.get(CQLEditorPage.expandCQLBuilder).first().scrollIntoView().click({ force: true })
+                    // Wait for any navigation / page reload to settle
+                    cy.wait(4000)
+                    // Recurse if we haven't exceeded retries
+                    if (attempt + 1 < maxRetries) {
+                        attemptExpand(attempt + 1)
+                    }
+                } else {
+                    // Neither expand nor collapse button found — page may still be loading
+                    cy.log(`Neither expand nor collapse button found (attempt ${attempt + 1}/${maxRetries}), waiting...`)
+                    cy.wait(3000)
+                    if (attempt + 1 < maxRetries) {
+                        attemptExpand(attempt + 1)
+                    }
+                }
+            })
+        }
+
+        attemptExpand(0)
+        // Final assertion: use exist + scrollIntoView to avoid overflow:hidden failures
+        cy.get(CQLEditorPage.definitionsTab, { timeout: 30000 }).should('exist').scrollIntoView().should('be.visible')
+    }
+
 }
