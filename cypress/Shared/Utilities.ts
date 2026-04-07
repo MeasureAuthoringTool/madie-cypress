@@ -60,7 +60,7 @@ export class Utilities {
                         url: '/api/measures/' + id,
                         method: 'PUT',
                         headers: {
-                            Authorization: 'Bearer ' + accessToken.value
+                            Authorization: 'Bearer ' + accessToken?.value
                         },
                         body: {
                             'id': id,
@@ -138,7 +138,7 @@ export class Utilities {
         if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
-        if (measureNumber > 0) {
+        if (measureNumber && measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
@@ -162,7 +162,7 @@ export class Utilities {
                     url: `/api/measures/${id}/delete`,
                     method: 'DELETE',
                     headers: {
-                        Authorization: `Bearer ${accessToken.value}`,
+                        Authorization: `Bearer ${accessToken?.value}`,
                     },
                     failOnStatusCode: false,
                 }).then((response) => {
@@ -218,7 +218,7 @@ export class Utilities {
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value,
+                        Authorization: 'Bearer ' + accessToken?.value,
                         'api-key': adminApiKey,
                         'harpId': user
                     },
@@ -490,7 +490,7 @@ export class Utilities {
                     failOnStatusCode: false,
                     url: '/api/' + urlPath,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'api-key': adminApiKey
                     },
                     method: 'PUT',
@@ -532,7 +532,7 @@ export class Utilities {
 
         OktaLogin.setupUserSession(false)
 
-        if (libraryNumber > 0) {
+        if (libraryNumber && libraryNumber > 0) {
             libraryPath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
 
@@ -552,7 +552,7 @@ export class Utilities {
                     url: '/api/cql-libraries/' + id,
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value
+                        Authorization: 'Bearer ' + accessToken?.value
                     },
                     failOnStatusCode: false,
                 }).then((response) => {
@@ -570,12 +570,14 @@ export class Utilities {
 
         const currentUser = Cypress.env('selectedUser')
 
-
         let action = 'PUT'
         if (!lockObject) {
             action = 'DELETE'
         }
 
+        if (altUser === undefined || altUser === null) {
+            altUser = false
+        }
         OktaLogin.setupUserSession(altUser)
 
         switch (type) {
@@ -586,7 +588,7 @@ export class Utilities {
                         cy.request({
                             url: '/api/measures/' + id + '/measure-lock',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value,
+                                authorization: 'Bearer ' + accessToken?.value,
                             },
                             method: action
                         }).then((response) => {
@@ -609,7 +611,7 @@ export class Utilities {
                             cy.request({
                                 url: lockUrl,
                                 headers: {
-                                    authorization: 'Bearer ' + accessToken.value,
+                                    authorization: 'Bearer ' + accessToken?.value,
                                 },
                                 method: action
                             }).then((response) => {
@@ -627,7 +629,7 @@ export class Utilities {
                         cy.request({
                             url: '/api/cql-libraries/' + id + '/lock',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value,
+                                authorization: 'Bearer ' + accessToken?.value,
                             },
                             method: action
                         }).then((response) => {
@@ -662,7 +664,7 @@ export class Utilities {
                         cy.request({
                             url: '/api/measures/unlock',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value,
+                                authorization: 'Bearer ' + accessToken?.value,
                             },
                             method: 'DELETE'
                         }).then((response) => {
@@ -690,7 +692,7 @@ export class Utilities {
                         cy.request({
                             url: '/api/cql-libraries/unlock',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value,
+                                authorization: 'Bearer ' + accessToken?.value,
                             },
                             method: 'DELETE'
                         }).then((response) => {
