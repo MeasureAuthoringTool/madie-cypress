@@ -11,7 +11,7 @@ describe('User Details with HARPID', () => {
                 url: '/api/users/' + harpUser,
                 method: 'GET',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
             }).then((response) => {
                 expect(response.status).to.eql(200)
@@ -30,7 +30,7 @@ describe('User Details with HARPID', () => {
                 url: '/api/users/abc',
                 method: 'PUT',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
             }).then((response) => {
                 expect(response.status).to.eql(403)
