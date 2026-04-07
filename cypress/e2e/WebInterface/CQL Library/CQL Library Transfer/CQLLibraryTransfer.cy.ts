@@ -32,7 +32,7 @@ describe('CQL Library Transfer', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -64,7 +64,7 @@ describe('CQL Library Transfer', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -115,7 +115,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         CQLLibrariesPage.cqlLibraryActionCenter('transfer')
 
         //Verify message on the transfer pop up screen
-        cy.get('.transfer-dialog-info-text > :nth-child(1)').should('contain.text', 'You are about to Transfer ownership of the following library(s). All versions and drafts will be transferred. So only the most recent library name appears here.')
+        cy.get('.transfer-dialog-info-text > :nth-child(1)').should('contain.text', 'You are about to Transfer ownership of the 1 selected library(s) below. All versions and drafts will be transferred, but only the most recent library name appears in the list below.')
         
         // added for https://jira.cms.gov/browse/MAT-9630
         cy.get(MeasuresPage.newOwnerTextbox).type('notAnActualUser')
@@ -174,7 +174,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         CQLLibraryPage.actionCenter(EditLibraryActions.transfer)
 
         //Verify message on the transfer pop up screen
-        cy.get('.transfer-dialog-info-text > :nth-child(1)').should('contain.text', 'You are about to Transfer ownership of the following library(s). All versions and drafts will be transferred. So only the most recent library name appears here.')
+        cy.get('.transfer-dialog-info-text > :nth-child(1)').should('contain.text', 'You are about to Transfer ownership of the 1 selected library(s) below. All versions and drafts will be transferred, but only the most recent library name appears in the list below.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
         cy.get(MeasuresPage.transferContinueButton).click()
 
@@ -267,7 +267,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
     afterEach('LogOut', () => {
 
         OktaLogin.setupUserSession(true)
-        Utilities.deleteLibrary(null, true)
+        Utilities.deleteLibrary('nothing', true)
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Transferred to the new owner', () => {
@@ -305,7 +305,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         })
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', request?.response?.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
@@ -319,7 +319,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],

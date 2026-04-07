@@ -30,6 +30,7 @@ describe('CQL Library Transfer performed by Admin user', () => {
         CQLLibrariesPage.cqlLibraryActionCenter('transfer')
 
         // added for https://jira.cms.gov/browse/MAT-9630
+        Utilities.waitForElementWriteEnabled(MeasuresPage.newOwnerTextbox, 5500)
         cy.get(MeasuresPage.newOwnerTextbox).type('notAnActualUser')
         cy.get(MeasuresPage.transferContinueButton).click()
         cy.get(MeasuresPage.newOwnerErrorText).should('contain.text', 'The provided HARP ID is not associated with an active MADiE user.')
