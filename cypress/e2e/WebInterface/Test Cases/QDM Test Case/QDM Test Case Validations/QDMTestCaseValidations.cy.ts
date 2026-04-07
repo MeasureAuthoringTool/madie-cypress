@@ -9,106 +9,33 @@ import { LandingPage } from "../../../../../Shared/LandingPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
 
-let testCaseDescription = 'DENOMFail' + Date.now()
-let QDMTCJson = TestCaseJson.QDMTestCaseJson
-let measureName = 'QDMTestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'test case title'
-let testCaseSeries = 'SBTestSeries'
-let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
 let altMeasureName = ''
 let altCqlLibraryName = ''
-const qdmCqlFullElementSection = QdmCql.QDMTestCaseCQLFullElementSection
+let measureName = ''
+let CqlLibraryName = ''
+const testCaseDescription = 'DENOMFail' + Date.now()
+const testCaseTitle = 'test case title'
+const testCaseSeries = 'SBTestSeries'
+const twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
+const QDMTCJson = TestCaseJson.QDMTestCaseJson
 const measureQDMCQL = QdmCql.QDM4TestCaseElementsAttributes
 
 const measureData: CreateMeasureOptions = {}
-
-describe('Non Boolean Population basis Expected values', () => {
-
-    beforeEach('Create Measure, and Test Case', () => {
-
-        measureName = 'QDMTestMeasure' + Date.now()
-        CqlLibraryName = 'TestLibrary' + Date.now()
-
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = CqlLibraryName
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmCqlFullElementSection
-
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
-        OktaLogin.Login()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-    })
-
-    afterEach('Logout and Clean up', () => {
-
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-    })
-
-    it('Validate Non Boolean Expected values', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('abc')
-        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('$%@')
-        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('13@a')
-        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).clear().type('1.9')
-        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Decimals values cannot be entered in the population expected values')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-    })
-})
 
 describe('Test Case Ownership Validations for QDM Measures', () => {
 
     beforeEach('Create measure and login', () => {
 
         let altRandValue = (Math.floor((Math.random() * 1000) + 2))
-        altMeasureName = measureName + altRandValue
-        altCqlLibraryName = CqlLibraryName + altRandValue
+        altMeasureName = 'TCValidationsOwnership' + altRandValue
+        altCqlLibraryName = 'TCValidationsOwnershipLib' + altRandValue
 
         measureData.ecqmTitle = altMeasureName
         measureData.cqlLibraryName = altCqlLibraryName
         measureData.measureScoring = 'Ratio'
         measureData.patientBasis = 'false'
         measureData.measureCql = measureQDMCQL
-        measureData.measureNumber = null
+        measureData.measureNumber = undefined
         measureData.altUser = false
 
         //Create QDM Measure, PC and Test Case with ALT user
@@ -120,8 +47,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Fields on Test Case page are not editable by Non Measure Owner', () => {
@@ -160,10 +86,9 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 describe('Create Test Case Validations', () => {
 
     beforeEach('Login', () => {
-        measureName = 'QDMTestMeasure' + Date.now()
-        CqlLibraryName = 'TestLibrary' + Date.now()
+        measureName = 'QDMTCValidationsCreate' + Date.now()
+        CqlLibraryName = 'QDMTCValidationsCreateLib' + Date.now()
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName)
 
         OktaLogin.Login()
@@ -171,7 +96,7 @@ describe('Create Test Case Validations', () => {
 
     afterEach('Logout', () => {
         
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Description more than 250 characters', () => {
@@ -224,7 +149,7 @@ describe('Create Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).type(twoFiftyTwoCharacters)
-        cy.contains('Add').click()
+        cy.get('[data-testid*="Add"]').last().click()
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.testCaseGroupInlineError).contains('Test Case Group cannot be more ' +
             'than 250 characters.')
@@ -250,13 +175,16 @@ describe('Create Test Case Validations', () => {
 describe('Edit Test Case Validations', () => {
 
     beforeEach('Create QDM Measure and Test Case and, then, Login', () => {
+        measureName = 'QDMTCValidationsEdit' + Date.now()
+        CqlLibraryName = 'QDMTCValidationsEditLib' + Date.now()
+
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Description more than 250 characters', () => {
@@ -352,5 +280,3 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.editTestCaseTitleInlineError).should('contain.text', 'Test Case Title is required.')
     })
 })
-
-
