@@ -63,7 +63,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         let currentUser = Cypress.env('selectedUser')
         cy.wait('@drafted').then(int => {
             // capture measureId of new draft
-            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int?.response?.body.id)
         })
         cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
@@ -159,7 +159,7 @@ describe('Delete Test Case with Transferred user', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'You are choosing to delete the following Test Case(s)!'+ testCaseDescription + ' - '+ testCaseTitle)
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
