@@ -5,11 +5,11 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
+let CQLLibraryName = 'LibrarySharing' + Date.now()
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedCQLLibraryName = ''
-let randomCQLLibraryName = 'TestCQLLibrary' + randValue + 5
+let randomCQLLibraryName = 'LibrarySharing' + randValue + 5
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 let versionNumber = '1.0.000'
@@ -110,7 +110,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request?.response?.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
@@ -205,7 +205,7 @@ describe('Share CQL Library using Action Center buttons', () => {
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
-    it('Verify CQL Library owner can share Library from Action centre share button and shred user is able to edit Library', () => {
+    it('Verify CQL Library owner can share Library from Action centre share button and shared user is able to edit Library', () => {
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
@@ -377,7 +377,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request?.response?.body.id)
         })
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
