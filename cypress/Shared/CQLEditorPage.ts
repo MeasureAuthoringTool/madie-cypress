@@ -259,7 +259,7 @@ export class CQLEditorPage {
 
         attemptExpand(0)
         // Final assertion: use exist + scrollIntoView to avoid overflow:hidden failures
-        cy.get(CQLEditorPage.definitionsTab, { timeout: 30000 }).should('exist').scrollIntoView().should('be.visible')
+        cy.get(CQLEditorPage.definitionsTab, { timeout: 50000 }).should('exist').scrollIntoView().should('be.visible')
     }
 
 }

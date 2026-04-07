@@ -95,7 +95,7 @@ describe('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //Navigate to Saved Functions tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.functionsTab).click()
         cy.get(CQLEditorPage.savedFunctionsTab).click().wait(1000)
 
@@ -216,13 +216,13 @@ describe('Qi Core CQL Functions', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Navigate to Functions tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.functionsTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
         //Navigate to Saved Functions tab
         cy.get(CQLEditorPage.savedFunctionsTab).should('contain.text', 'Saved Functions (0)').click()
-        cy.get('[class="Functions___StyledTd-sc-z5k5r-0 jVcgFQ"]').should('contain.text', 'No Results were found')
+        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
     })
 })
 

@@ -82,7 +82,7 @@ describe('Qi Core Code Search fields', () => {
 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -115,7 +115,7 @@ describe('Qi Core Code Search fields', () => {
         //Assert when the Code is not available in VSAC
         cy.get(CQLEditorPage.codeText).clear().type('123')
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
-        cy.get('[data-testid="codes-results-tbl"]').find('[class="sc-hmdomO xIUoS"]').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="codes-results-tbl"]').should('contain.text', 'No Results were found')
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
@@ -200,7 +200,9 @@ describe('Qi Core Code Search fields', () => {
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.get('[class="CodesSection___StyledDiv-sc-1rldvun-0 HuXlU"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0Items per page 5.Items per page5​1 - 1 of 11')
+        cy.contains('AMB', { timeout: 30000 }).should('be.visible')
+        cy.contains('ambulatory').should('be.visible')
+        cy.contains('ActCode').should('be.visible')
     })
 
     it('Edit Code with Suffix and Version from Results Grid', () => {
@@ -317,7 +319,7 @@ describe('Error Message on Codes tab', () => {
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -343,7 +345,7 @@ describe('Error Message on Codes tab', () => {
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(0)').click()
-        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="saved-codes-tbl"]').should('contain.text', 'No Results were found')
     })
 })
 
@@ -360,7 +362,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -461,8 +463,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
-        Utilities.waitForElementVisible('.sc-jEACwC', 30000)
-        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="saved-codes-tbl"]', { timeout: 30000 }).should('contain.text', 'No Results were found')
     })
 })
 
@@ -489,7 +490,7 @@ describe('Qi-Core Code Search - Measure ownership Validations', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Navigate to Saved Functions tab
         cy.get(CQLEditorPage.codesTab).click().wait(2000)

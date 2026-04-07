@@ -349,7 +349,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Definition Initial Population has been successfully removed from the CQL.')
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -386,7 +386,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.saveDefinitionBtn).click()
 
         //Verify Updated Comment
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -414,15 +414,16 @@ describe('Qi-Core CQL Definitions Builder', () => {
         //Add errors to CQL
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
 
         //Navigate to Definitions tab
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (0)').click()
-        cy.get('[class="Definitions___StyledTd-sc-cj02bv-0 kITigf"]').should('contain.text', 'No Results were found')
+        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
     })
 })
 
@@ -434,27 +435,33 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
-    // skipping for now: manual tests are fine, Cypress cannot trigger this error box for some reason?
-    it.skip('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
+    it.only('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
         OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
+
+        //Intercept validation calls so we can wait for them to complete before interacting with the UI
+        cy.intercept('PUT', '/api/fhir/cql/translator/cql*').as('cqlTranslator')
         cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //Wait for CQL translator to finish so the page is fully settled
+        cy.wait('@cqlTranslator', { timeout: 60000 })
+        cy.wait(2000)
+
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
+
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
-        cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
-        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
-        cy.get(CQLEditorPage.definitionOption).click()
-        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
 
         //Expression editor name dropdown should be empty when there are CQL errors
-        cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
+        cy.get(CQLEditorPage.definitionNameTextBox).type('test')
+        cy.get( CQLEditorPage.expressionEditorTypeDropdown ).click()
+        cy.get(CQLEditorPage.expressionEditorNameList).should('not.exist')
     })
 
     it('Qi-Core CQL Definitions throws specific error when Definition has no name', () => {

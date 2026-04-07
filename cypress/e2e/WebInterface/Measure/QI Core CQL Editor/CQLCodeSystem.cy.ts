@@ -40,12 +40,13 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:110 | Invalid Code system')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(3) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:110 | Unable to find a code system version')
 
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:110 | Invalid Code system")
+        cy.wait(2000)
+        cy.get(CQLEditorPage.errorMsg).should('contain', "VSAC: 0:110 | Unable to find a code system version")
     })
 
     it('Verify proper error(s) appear in CQL Editor, when a user includes version and there is no vsac version', () => {
@@ -70,7 +71,8 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:72 | Version not found.")
+        cy.wait(2000)
+        cy.get(CQLEditorPage.errorMsg).should('contain', "VSAC: 0:72 | Version not found.")
     })
 
     it('Verify proper error(s) appear in CQL Editor, when a user does not include version and there is no vsac', () => {
@@ -93,7 +95,8 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Code: 0:57 | Code not found.")
+        cy.wait(2000)
+        cy.get(CQLEditorPage.errorMsg).should('contain', "Code: 0:57 | Code not found.")
     })
 
     it('Verify proper error(s) appear in CQL Editor, when a user provides no version and vsac exists', () => {
@@ -161,10 +164,19 @@ describe('Validations around code system in Measure CQL', () => {
 
         cy.get('.page-header').click()
 
+        //Intercept VSAC validation and CQL translator calls so we can wait for them
+        cy.intercept('PUT', '/api/vsac/validations/codes*').as('vsacValidation')
+        cy.intercept('PUT', '/api/fhir/cql/translator/cql*').as('cqlTranslator')
+
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:107 | Version not found.")
+
+        //Wait for VSAC validation and CQL translator to complete before checking errors
+        cy.wait('@vsacValidation', { timeout: 60000 })
+        cy.wait('@cqlTranslator', { timeout: 60000 })
+        cy.wait(2000)
+        cy.get(CQLEditorPage.errorMsg).should('contain', "VSAC: 0:107 | Version not found.")
     })
 
     it('Verify proper error(s) appear in CQL Editor, when user provides invalid value set format ', () => {
