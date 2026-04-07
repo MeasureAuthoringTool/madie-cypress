@@ -1,16 +1,13 @@
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
-import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin";
 
 const measureName = 'ServiceMeasureSharing' + Date.now()
 const cqlLibraryName = 'ServiceMeasureSharingLib' + Date.now()
 const measureCQL = MeasureCQL.SBTEST_CQL
-let measureSharingAPIKey = Environment.credentials().adminApiKey
 let harpUserALT = ''
 let harpUser = ''
-
 
 describe('Measure Sharing Service', () => {
 
@@ -27,33 +24,26 @@ describe('Measure Sharing Service', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Successful Measure sharing', () => {
+    it('Successful Measure sharing as admin', () => {
         let currentUser = Cypress.env('selectedUser')
         
         OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
+
                 cy.request({
-                    url: '/api/admin/measures/' + id + '/acls',
+                    url: '/api/measures/shared',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT',
                     body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
+                        [measureId]: [harpUserALT]
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
+                    expect(response.body[measureId][0].userId).to.eql(harpUserALT)
+                    expect(response.body[measureId][0].roles[0]).to.eql('SHARED_WITH')
                 })
             })
         })
@@ -67,7 +57,7 @@ describe('Measure Sharing Service', () => {
                     failOnStatusCode: false,
                     url: '/api/admin/measures/' + id + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT',
                     body: {
@@ -98,7 +88,7 @@ describe('Measure Sharing Service', () => {
                     failOnStatusCode: false,
                     url: '/api/admin/measures/' + id+5 + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT',
                     body: {
@@ -128,7 +118,7 @@ describe('Measure Sharing Service', () => {
                 cy.request({
                     url: '/api/admin/measures/sharedWith?measureids=' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpId': harpUser
                     },
                     method: 'GET'
@@ -151,7 +141,7 @@ describe('Measure Sharing Service', () => {
                     failOnStatusCode: false,
                     url: '/api/admin/measures/sharedWith?measureids=' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpId': harpUserALT
                     },
                     method: 'GET'
