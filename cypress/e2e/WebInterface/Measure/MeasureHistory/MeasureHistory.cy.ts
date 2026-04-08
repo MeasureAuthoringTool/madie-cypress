@@ -107,8 +107,7 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
                             url: '/api/admin/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
                             method: 'DELETE',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value,
-                              //  'api-key': measureSharingAPIKey,
+                                authorization: 'Bearer ' + accessToken?.value,
                                 'harpId': harpUser
                             }
                         }).then((response) => {
@@ -142,7 +141,6 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
         cy.get(EditMeasurePage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(EditMeasurePage.saveUserBtn).click()
@@ -266,7 +264,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
         //Create New QDM Measure
         //0
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
 
          //Create new QI Core measure
         //1
@@ -296,7 +294,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
-        Utilities.deleteMeasure(null, null, false, false, 1)
+        Utilities.deleteMeasure(undefined, undefined, false, false, 1)
     })
 
     it('Verify that Associate Measure actions are recorded in Measure History', () => {
@@ -321,7 +319,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {}
@@ -432,7 +430,7 @@ describe('Measure History - QDM Export Test case Action', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1')
 
         OktaLogin.Login()

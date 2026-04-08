@@ -30,7 +30,7 @@ describe('Measure Un Sharing', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Verify Measure owner can un share Measure from Measures page Action centre share button', () => {
+    it('Verify Measure owner can unshare Measure from Measures page Action centre share button', () => {
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
@@ -41,7 +41,6 @@ describe('Measure Un Sharing', () => {
         //Un Share Measure
         MeasuresPage.actionCenter('share')
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.unshareCheckBox).click()
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.acceptBtn).click()
@@ -54,7 +53,7 @@ describe('Measure Un Sharing', () => {
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 
-    it('Verify Measure owner can un share Measure from Edit Measure page Action centre share button', () => {
+    it('Verify Measure owner can unshare Measure from Edit Measure page Action centre share button', () => {
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
@@ -68,7 +67,6 @@ describe('Measure Un Sharing', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
         EditMeasurePage.actionCenter(EditMeasureActions.share)
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.unshareCheckBox).eq(1).click()
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.acceptBtn).click()
@@ -81,7 +79,7 @@ describe('Measure Un Sharing', () => {
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 
-    it('Verify Shared user can Un share Measure from themself on Shared Measures tab', () => {
+    it('Verify Shared user can Unshare Measure from themself on Shared Measures tab', () => {
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)

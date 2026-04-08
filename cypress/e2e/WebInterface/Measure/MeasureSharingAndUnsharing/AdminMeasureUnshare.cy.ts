@@ -11,8 +11,7 @@ let cqlLibraryName = ''
 let harpUserALT = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 
-// depends on status of ff AdminMeasureShare
-describe.skip('Admin Measure Unshare', () => {
+describe('Admin Measure Unshare', () => {
 
     measureName = 'AdminMeasureUnshare' + Date.now()
     cqlLibraryName = 'AdminMeasureUnshareLib' + Date.now()
@@ -42,7 +41,6 @@ describe.skip('Admin Measure Unshare', () => {
         //Unshare Measure
         MeasuresPage.actionCenter('share')
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.unshareCheckBox).click()
         cy.get(EditMeasurePage.saveUserBtn).click()
         cy.get(EditMeasurePage.acceptBtn).click()

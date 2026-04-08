@@ -42,7 +42,7 @@ describe('Delete measure on the measure edit page', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create new QI Core measure
@@ -126,9 +126,8 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         measureData.mpStartDate = '2025-01-01'
         measureData.mpEndDate = '2025-12-31'
 
-        //Create Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         OktaLogin.Login()
@@ -185,9 +184,8 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
 
     beforeEach('Create Measure', () => {
 
-        //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.Login()
 
@@ -255,7 +253,7 @@ describe('Export measure on the Edit Measure page', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         measureQICore = 'QICoreExportMeasure' + date
@@ -365,7 +363,6 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(EditMeasurePage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(EditMeasurePage.saveUserBtn).click()
@@ -439,7 +436,6 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(EditMeasurePage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(EditMeasurePage.saveUserBtn).click()
@@ -514,7 +510,7 @@ describe('Dirty Check Validations', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create new QI Core measure
@@ -589,7 +585,7 @@ describe('View measure Human Readable on the Edit Measure page', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         measureQICore = 'QICoreExportMeasure' + date
