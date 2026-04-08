@@ -233,11 +233,25 @@ pipeline {
 
           echo '=== RERUN #1 ==='
           npm run delete:reports
+          rm -f ${WORKSPACE}/mochawesome.json || true
+          rm -rf ${WORKSPACE}/mochawesome-report || true
           : > ${WORKSPACE}/test-files.txt
           cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run ${RERUN_SCRIPT} || true
+
+          # Run the rerun — for IMPL, invoke cypress directly from the shell
+          # (bypasses Node wrapper which triggers Cypress 15 reporter serialization bug)
+          case "${TEST_SCRIPT}" in
+            impl:*)
+              SPEC_LIST=$(cat ${WORKSPACE}/test-files.txt | tr '\n' ',' | sed 's/,$//')
+              echo "IMPL rerun specs: ${SPEC_LIST}"
+              NO_COLOR=1 npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome || true
+              ;;
+            *)
+              npm run ${RERUN_SCRIPT} || true
+              ;;
+          esac
 
           # Extract failures from rerun #1
           case "${TEST_SCRIPT}" in
@@ -274,11 +288,24 @@ pipeline {
 
           echo '=== RERUN #2 ==='
           npm run delete:reports
+          rm -f ${WORKSPACE}/mochawesome.json || true
+          rm -rf ${WORKSPACE}/mochawesome-report || true
           : > ${WORKSPACE}/test-files.txt
           cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
           rm -rf ${WORKSPACE}/runner-results/* || true
           mkdir -p ${WORKSPACE}/runner-results
-          npm run ${RERUN_SCRIPT} || true
+
+          # Run the rerun — for IMPL, invoke cypress directly from the shell
+          case "${TEST_SCRIPT}" in
+            impl:*)
+              SPEC_LIST=$(cat ${WORKSPACE}/test-files.txt | tr '\n' ',' | sed 's/,$//')
+              echo "IMPL rerun specs: ${SPEC_LIST}"
+              NO_COLOR=1 npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome || true
+              ;;
+            *)
+              npm run ${RERUN_SCRIPT} || true
+              ;;
+          esac
 
           # Extract failures from rerun #2
           case "${TEST_SCRIPT}" in
