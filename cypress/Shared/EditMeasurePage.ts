@@ -125,7 +125,7 @@ export class EditMeasurePage {
     public static readonly shareOption = '[data-testid="Share With-option"]'
     public static readonly unshareOption = '[data-testid="Unshare-option"]'
     public static readonly harpIdInputTextBox = '[data-testid="harp-id-input"]'
-    public static readonly addBtn = '[id="add-user-btn"]'
+    public static readonly addBtn = '[data-testid="add-user-btn"]'
     public static readonly expandArrow = '[data-testid="KeyboardArrowRightIcon"]'
     public static readonly sharedUserTable = '[data-testid="row-item"]'
     public static readonly saveUserBtn = '[data-testid="share-save-button"]'
@@ -353,6 +353,7 @@ export class EditMeasurePage {
 
         cy.contains('td', term).should('be.visible')
     }
+    
     public static addMeasureDefinitionNonQDM(term: string, definitionText: string) {
 
         cy.get(this.createDefinitionBtn).click()

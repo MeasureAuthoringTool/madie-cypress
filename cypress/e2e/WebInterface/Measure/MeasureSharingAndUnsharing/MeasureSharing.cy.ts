@@ -118,7 +118,7 @@ describe('Measure Sharing', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
 
-    it('Verify Measure owner can share Measure from Action centre share button and shred user is able to edit Measure', () => {
+    it('Verify Measure owner can share Measure from Action centre share button and shared user is able to edit Measure', () => {
         let currentUser = Cypress.env('selectedUser')
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
@@ -129,7 +129,6 @@ describe('Measure Sharing', () => {
         cy.get(EditMeasurePage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(EditMeasurePage.saveUserBtn).click()

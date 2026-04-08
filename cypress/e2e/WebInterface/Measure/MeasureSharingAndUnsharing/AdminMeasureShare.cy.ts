@@ -11,8 +11,7 @@ const cqlLibraryName = 'AdminMeasureShareLib' + Date.now()
 const measureCQL = MeasureCQL.SBTEST_CQL
 let harpUserALT = ''
 
-// depends on status of ff AdminMeasureShare
-describe.skip('Admin Measure Share', () => {
+describe('Admin Measure Share', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -57,7 +56,6 @@ describe.skip('Admin Measure Share', () => {
         cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
         cy.get(EditMeasurePage.addBtn).click()
 
-        cy.get(EditMeasurePage.expandArrow).click()
         cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
         
         cy.get(EditMeasurePage.saveUserBtn).click()
