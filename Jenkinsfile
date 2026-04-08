@@ -22,7 +22,7 @@ pipeline {
         'test:ui:smoketests:endtoend:RatioEpisodeSingleIPNoMO',
         'test:ui:testcases:versionedmeasure:VersionedMeasure_CreateEditDeleteTestCase',
         'test:ui:measure:qdmexportvalidations',
-        'impl:all:tests','impl:all:ui:tests','impl:all:services:tests','impl:ui:smoketests'
+        'impl:all:tests','impl:all:ui:tests','impl:all:services:tests','impl:ui:smoketests','impl:debug:pipeline'
       ],
       description: 'Choose the Test script to run',
       name: 'TEST_SCRIPT'
@@ -161,20 +161,7 @@ pipeline {
           case "${TEST_SCRIPT}" in
             impl:*)
               echo "IMPL mode: extracting failures from mochawesome reports..."
-              node -e "
-                const fs=require('fs'), path=require('path');
-                const out=process.argv[1], dir=path.join('cypress','results');
-                if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}
-                const failed=new Set();
-                fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{
-                  try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));
-                    if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}
-                  }catch(e){}
-                });
-                const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join('\n')+'\n':'');
-                console.log('Extracted '+arr.length+' failing spec(s)');
-                arr.forEach(s=>console.log('  - '+s));
-              " ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
+              node -e "const fs=require('fs'),path=require('path');const out=process.argv[1],dir=path.join('cypress','results');if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}const failed=new Set();fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}}catch(e){}});const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join(String.fromCharCode(10))+String.fromCharCode(10):'');console.log('Extracted '+arr.length+' failing spec(s)');arr.forEach(s=>console.log('  - '+s));" ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
               ;;
             *)
               if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -255,19 +242,7 @@ pipeline {
           # Extract failures from rerun #1
           case "${TEST_SCRIPT}" in
             impl:*)
-              node -e "
-                const fs=require('fs'), path=require('path');
-                const out=process.argv[1], dir=path.join('cypress','results');
-                if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}
-                const failed=new Set();
-                fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{
-                  try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));
-                    if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}
-                  }catch(e){}
-                });
-                const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join('\n')+'\n':'');
-                console.log('Extracted '+arr.length+' failing spec(s)');
-              " ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+              node -e "const fs=require('fs'),path=require('path');const out=process.argv[1],dir=path.join('cypress','results');if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}const failed=new Set();fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}}catch(e){}});const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join(String.fromCharCode(10))+String.fromCharCode(10):'');console.log('Extracted '+arr.length+' failing spec(s)');" ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
               ;;
             *)
               if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
@@ -307,19 +282,7 @@ pipeline {
           # Extract failures from rerun #2
           case "${TEST_SCRIPT}" in
             impl:*)
-              node -e "
-                const fs=require('fs'), path=require('path');
-                const out=process.argv[1], dir=path.join('cypress','results');
-                if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}
-                const failed=new Set();
-                fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{
-                  try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));
-                    if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}
-                  }catch(e){}
-                });
-                const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join('\n')+'\n':'');
-                console.log('Extracted '+arr.length+' failing spec(s)');
-              " ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+              node -e "const fs=require('fs'),path=require('path');const out=process.argv[1],dir=path.join('cypress','results');if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}const failed=new Set();fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}}catch(e){}});const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join(String.fromCharCode(10))+String.fromCharCode(10):'');console.log('Extracted '+arr.length+' failing spec(s)');" ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
               ;;
             *)
               if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
