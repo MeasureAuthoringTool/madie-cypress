@@ -261,7 +261,8 @@ pipeline {
             npm run generateOne:report
             tar -czf ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
           else
-            echo "No mochawesome JSON for rerun #1; creating empty bundle."
+            echo "WARNING: No mochawesome JSON for rerun #1 (possible crash). Carrying forward previous failures."
+            cp ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
             : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
           fi
 
@@ -301,7 +302,8 @@ pipeline {
             npm run generateOne:report
             tar -czf ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
           else
-            echo "No mochawesome JSON for rerun #2; creating empty bundle."
+            echo "WARNING: No mochawesome JSON for rerun #2 (possible crash). Carrying forward previous failures."
+            cp ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
             : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
           fi
         '''
