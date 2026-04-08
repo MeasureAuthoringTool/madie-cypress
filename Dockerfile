@@ -25,6 +25,7 @@ RUN npm install
 RUN npx cypress verify
 
 COPY ./test-files.txt ./test-files.txt
+COPY ./scripts ./scripts
 COPY ./cypress ./cypress
 COPY ./cypress.config.ts ./cypress.config.ts
 COPY ./tsconfig.json ./tsconfig.json
