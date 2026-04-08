@@ -158,14 +158,22 @@ pipeline {
         // Initial failures list
         sh '''
           cd ${WORKSPACE}
-          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-            cat ${WORKSPACE}/runner-results/*.json \
-              | jq -r 'select(.failures > 0) | .file' \
-              | sed '/^null$/d' \
-              > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
-          else
-            : > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
-          fi
+          case "${TEST_SCRIPT}" in
+            impl:*)
+              echo "IMPL mode: extracting failures from mochawesome reports..."
+              node scripts/extract-failures.js ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
+              ;;
+            *)
+              if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+                cat ${WORKSPACE}/runner-results/*.json \
+                  | jq -r 'select(.failures > 0) | .file' \
+                  | sed '/^null$/d' \
+                  > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
+              else
+                : > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
+              fi
+              ;;
+          esac
         '''
 
         // Initial per-run Mochawesome bundle
@@ -204,6 +212,9 @@ pipeline {
 
           # Determine which rerun script to use based on the initial TEST_SCRIPT
           case "${TEST_SCRIPT}" in
+            impl:*)
+              RERUN_SCRIPT="impl:rerun:failures"
+              ;;
             *hcqis*|*hqcis*)
               RERUN_SCRIPT="test:specific:files:parallel:hqcis:rerun"
               ;;
@@ -228,14 +239,22 @@ pipeline {
           mkdir -p ${WORKSPACE}/runner-results
           npm run ${RERUN_SCRIPT} || true
 
-          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-            cat ${WORKSPACE}/runner-results/*.json \
-              | jq -r 'select(.failures > 0) | .file' \
-              | sed '/^null$/d' \
-              > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-          else
-            : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-          fi
+          # Extract failures from rerun #1
+          case "${TEST_SCRIPT}" in
+            impl:*)
+              node scripts/extract-failures.js ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+              ;;
+            *)
+              if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+                cat ${WORKSPACE}/runner-results/*.json \
+                  | jq -r 'select(.failures > 0) | .file' \
+                  | sed '/^null$/d' \
+                  > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+              else
+                : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+              fi
+              ;;
+          esac
 
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
             npm run combine:reports
@@ -260,14 +279,22 @@ pipeline {
           mkdir -p ${WORKSPACE}/runner-results
           npm run ${RERUN_SCRIPT} || true
 
-          if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-            cat ${WORKSPACE}/runner-results/*.json \
-              | jq -r 'select(.failures > 0) | .file' \
-              | sed '/^null$/d' \
-              > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-          else
-            : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-          fi
+          # Extract failures from rerun #2
+          case "${TEST_SCRIPT}" in
+            impl:*)
+              node scripts/extract-failures.js ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+              ;;
+            *)
+              if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
+                cat ${WORKSPACE}/runner-results/*.json \
+                  | jq -r 'select(.failures > 0) | .file' \
+                  | sed '/^null$/d' \
+                  > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+              else
+                : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+              fi
+              ;;
+          esac
 
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
             npm run combine:reports
