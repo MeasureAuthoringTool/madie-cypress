@@ -35,8 +35,6 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         //Share Library with ALT user
         CQLLibrariesPage.cqlLibraryActionCenter('share')
         cy.get(CQLLibrariesPage.unshareOption).click({ force: true })
-        cy.get(CQLLibrariesPage.expandArrow).click()
-
         cy.get(CQLLibrariesPage.unshareCheckBox).click()
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         cy.get(CQLLibrariesPage.acceptBtn).click()
@@ -50,7 +48,8 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
     })
 
     it('Verify CQL Library owner can unshare Library from Edit Library page Action centre share button', () => {
@@ -70,8 +69,6 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         //Un share Library
         CQLLibraryPage.actionCenter(EditLibraryActions.share)
         cy.get(CQLLibrariesPage.unshareOption).click({ force: true })
-        cy.get(CQLLibrariesPage.expandArrow).click()
-
         cy.get(CQLLibrariesPage.unshareCheckBox).eq(1).click()
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         cy.get(CQLLibrariesPage.acceptBtn).click()
@@ -84,11 +81,11 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
-
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
     })
 
-    it.only('Verify Shared user can Unshare Library from themself on Shared Libraries tab', () => {
+    it('Verify Shared user can Unshare Library from themself on Shared Libraries tab', () => {
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -178,16 +175,15 @@ describe('Unshare CQL Library using Action Center buttons - Multiple instances',
         cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
         cy.get(CQLLibrariesPage.unshareOption).click({ force: true })
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
-        //Verify information text on share screen
-        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a Library, all versions and drafts are shared, so only the most recent library name appears here.Deselect the users with whom you want to unshare the library(s).')
-        cy.get(CQLLibrariesPage.expandArrow).eq(0).click()
 
-        cy.get(CQLLibrariesPage.unshareCheckBox).click()
+        //Verify information text on share screen
+        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'Please note: When sharing a library, all versions and drafts are\n                shared, but only the most recent library name appears below. To\n                unshare library(s), deselect the usernames from whom you want to\n                unshare the library(s), then click the \'Unshare\' button.')
+        cy.get(CQLLibrariesPage.unshareCheckBox).first().click()
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         cy.get(CQLLibrariesPage.acceptBtn).click()
 
-        Utilities.waitForElementVisible('[class="MuiAlert-message css-127h8j3"]', 60000)
-        cy.get('[class="MuiAlert-message css-127h8j3"]').should('contain.text', 'The Library(s) were successfully unshared.')
+        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryGreenToast, 60000)
+        cy.get(CQLLibraryPage.cqlLibraryGreenToast).should('contain.text', 'The Library(s) were successfully unshared.')
 
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
@@ -195,8 +191,8 @@ describe('Unshare CQL Library using Action Center buttons - Multiple instances',
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        Utilities.waitForElementVisible('[class="cql-library-table"]', 60000)
-        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
-        cy.get('[class="cql-library-table"]').should('not.contain', updatedCQLLibraryName)
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
+        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', updatedCQLLibraryName)
     })
 })
