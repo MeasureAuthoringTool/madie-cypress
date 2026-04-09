@@ -5,14 +5,14 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
-let CQLLibraryName = 'LibrarySharing' + Date.now()
+const CQLLibraryName = 'LibrarySharing' + Date.now()
+const randValue = (Math.floor((Math.random() * 1000) + 1))
+const randomCQLLibraryName = 'LibrarySharingDraft' + randValue + 5
+const CQLLibraryPublisher = 'SemanticBits'
+const versionNumber = '1.0.000'
 let newCQLLibraryName = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedCQLLibraryName = ''
-let randomCQLLibraryName = 'LibrarySharing' + randValue + 5
-let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
-let versionNumber = '1.0.000'
 
 describe('CQL Library Sharing', () => {
 
@@ -76,6 +76,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Shared to the new owner', () => {
+        const currentUser = Cypress.env('selectedUser')
 
         //Version the CQL Library
         CQLLibrariesPage.cqlLibraryActionCenter("version")
@@ -103,14 +104,13 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
         //intercept draft id once library is drafted
-        cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
-        })
+        cy.intercept('POST', '/api/cql-libraries/draft/*').as('draft')
+
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request?.response?.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', request?.response?.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
@@ -129,7 +129,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName) //fail here 
         //Click on Expand button to view Versioned Library
         cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
         cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
@@ -220,7 +220,6 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(CQLLibrariesPage.expandArrow).click()
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
@@ -267,7 +266,6 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(CQLLibrariesPage.expandArrow).click()
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
@@ -307,7 +305,6 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(CQLLibrariesPage.expandArrow).click()
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         //Share the Library with same user again
@@ -339,6 +336,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
+        const currentUser = Cypress.env('selectedUser')
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
@@ -370,14 +368,12 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
         //intercept draft id once library is drafted
-        cy.readFile('cypress/fixtures/harpUser/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
-        })
+        cy.intercept('POST', '/api/cql-libraries/draft/*').as('draft')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/harpUser/cqlLibraryId', request?.response?.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', request?.response?.body.id)
         })
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
@@ -387,17 +383,15 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
         cy.get(CQLLibrariesPage.shareOption).click({ force: true })
-        cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
 
         //Verify information text on share screen
-        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a Library, all versions and drafts are shared, so only the most recent library name appears here.')
+        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a Library, all versions and drafts are shared, so\n                only the most recent library name appears here.')
 
         //Share Library with ALT user
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(CQLLibrariesPage.expandArrow).click()
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()

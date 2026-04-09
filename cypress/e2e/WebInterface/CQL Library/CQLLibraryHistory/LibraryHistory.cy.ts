@@ -54,7 +54,6 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         cy.get(CQLLibrariesPage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(CQLLibrariesPage.expandArrow).click()
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
@@ -76,7 +75,6 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         //Un Share Library
         CQLLibraryPage.actionCenter(EditLibraryActions.share)
         cy.get(CQLLibrariesPage.unshareOption).click({ force: true })
-        cy.get(CQLLibrariesPage.expandArrow).click()
 
         cy.get(CQLLibrariesPage.unshareCheckBox).eq(1).click()
         cy.get(CQLLibrariesPage.saveUserBtn).click()
@@ -170,7 +168,7 @@ describe('Library History - Transfer action', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     method: 'PUT',

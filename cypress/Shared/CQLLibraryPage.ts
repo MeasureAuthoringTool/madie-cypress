@@ -33,7 +33,7 @@ export class CQLLibraryPage {
     public static readonly allLibrariesTab = '[data-testid="all-libraries-tab"]'
 
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
-    public static readonly cqlLibrarySuccessfulDeleteMsgBox = '[data-testid="cql-library-list-snackBar"]'
+    public static readonly cqlLibraryGreenToast = '[data-testid="cql-library-list-snackBar"]'
     public static readonly applyEditsSavedLibraryBtn = '[data-testid="apply-button"]'
     public static readonly cqlLibraryDeleteDialogCancelBtn = '[data-testid="delete-dialog-cancel-button"]'
     public static readonly cqlLibraryDeleteDialog = '[data-testid="delete-dialog"]'
@@ -136,8 +136,8 @@ export class CQLLibraryPage {
         cy.get(this.saveCQLLibraryBtn).click()
         //saving measureID to file to use later
         cy.wait('@' + alias).then(({ response }) => {
-            expect(response.statusCode).to.eq(201)
-            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
+            expect(response?.statusCode).to.eq(201)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response?.body.id)
         })
     }
 
@@ -159,7 +159,7 @@ export class CQLLibraryPage {
             cy.request({
                 url: '/api/cql-libraries',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 method: 'POST',
                 body: {
@@ -210,7 +210,7 @@ export class CQLLibraryPage {
             cy.request({
                 url: '/api/cql-libraries',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 method: 'POST',
                 body: {
@@ -263,7 +263,7 @@ export class CQLLibraryPage {
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
 
                 }).then((response) => {
@@ -387,7 +387,7 @@ export class CQLLibraryPage {
             cy.request({
                 url: '/api/cql-libraries',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 method: 'POST',
                 body: {

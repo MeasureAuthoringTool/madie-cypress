@@ -67,8 +67,8 @@ describe('Delete CQL Library', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
-        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
-        cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')
+        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryGreenToast, 50000)
+        cy.get(CQLLibraryPage.cqlLibraryGreenToast).should('contain.text', 'The Draft CQL Library has been deleted.')
 
         //Verify the deleted library is not on My Libraries page list
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', libraryName)

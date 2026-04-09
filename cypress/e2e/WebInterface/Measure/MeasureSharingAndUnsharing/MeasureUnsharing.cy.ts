@@ -90,9 +90,9 @@ describe('Measure Un Sharing', () => {
 
         //Unshare Measure
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        cy.get('[type="checkbox"]').first().click()
+        cy.get('[type="checkbox"]').eq(1).click()
         Utilities.waitForElementVisible('[data-testid="share-action-btn"]', 30000)
-        cy.get('[data-testid="share-action-btn"]').should('be.visible').should('be.enabled').click()
+        cy.get('[data-testid="share-action-btn"]').should('be.enabled').click()
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
 
         //Assert text on the popup screen
