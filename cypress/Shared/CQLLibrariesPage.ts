@@ -73,7 +73,7 @@ export class CQLLibrariesPage {
             cy.get('[data-testid="cql-library-action-' + fileContents + '"]').wait(2000).click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {
-                expect(response.statusCode).to.eq(200)
+                expect(response?.statusCode).to.eq(200)
             })
         })
         cy.get('[data-testid="CQL Library Details"]').click()
@@ -110,7 +110,7 @@ export class CQLLibrariesPage {
             cy.get('[data-testid=cql-library-action-' + fileContents + ']').click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {
-                expect(response.statusCode).to.eq(200)
+                expect(response?.statusCode).to.eq(200)
             })
         })
     }
@@ -146,7 +146,7 @@ export class CQLLibrariesPage {
             cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         }
 
-        if ((libraryNumber > 0)) {
+        if (libraryNumber && libraryNumber > 0) {
 
             Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]', 60000)
             cy.get('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()

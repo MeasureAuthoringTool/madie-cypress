@@ -69,8 +69,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
-        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
-        cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')
+        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryGreenToast, 50000)
+        cy.get(CQLLibraryPage.cqlLibraryGreenToast).should('contain.text', 'The Draft CQL Library has been deleted.')
         cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
             Utilities.waitForElementToNotExist('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
         })
