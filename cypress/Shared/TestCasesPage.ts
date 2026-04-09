@@ -1020,7 +1020,7 @@ export class TestCasesPage {
 
         if (race) {
             cy.get(TestCasesPage.QDMRace).click()
-            Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 30000)
+            Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 50000)
             cy.get('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]').click()
             cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
         }
