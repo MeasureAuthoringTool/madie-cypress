@@ -177,7 +177,7 @@ describe('Unshare CQL Library using Action Center buttons - Multiple instances',
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
 
         //Verify information text on share screen
-        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'Please note: When sharing a library, all versions and drafts are\n                shared, but only the most recent library name appears below. To\n                unshare library(s), deselect the usernames from whom you want to\n                unshare the library(s), then click the \'Unshare\' button.')
+        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'Please note: When sharing a library, all versions and drafts are shared, but only the most recent library name appears below.To unshare library(s), deselect the usernames from whom you want to unshare the library(s), then click the \'Unshare\' button.')
         cy.get(CQLLibrariesPage.unshareCheckBox).first().click()
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         cy.get(CQLLibrariesPage.acceptBtn).click()
