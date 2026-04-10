@@ -38,7 +38,7 @@
 		"delete:mochawesome": "rm mochawesome.json",
 		"delete:reports": "rm -f cypress/results/*.json",
 		"cy:run:impl:headed": "NO_COLOR=1 cypress run --env configFile=impl --browser chrome --headed",
-		"impl:ui:smoketests": "NO_COLOR=1 cypress run --env configFile=impl --spec 'cypress/e2e/WebInterface/Smoke Tests/**/*.cy.ts' --browser chrome",
+		"impl:ui:smoketests": "NO_COLOR=1 cypress run --env configFile=impl --spec 'cypress/e2e/WebInterface/Smoke Tests/**/*.cy.ts' --browser chrome --headed",
 		"impl:ui:smoketests:headed": "NO_COLOR=1 cypress run --env configFile=impl --spec 'cypress/e2e/WebInterface/Smoke Tests/**/*.cy.ts' --browser chrome --headed",
 		"impl:debug:pipeline": "NO_COLOR=1 cypress run --env configFile=impl --spec 'cypress/e2e/WebInterface/Smoke Tests/LoginPageLayout.cy.ts,cypress/e2e/WebInterface/Smoke Tests/EditCQLLibrary.cy.ts,cypress/e2e/WebInterface/Smoke Tests/DeleteMeasure.cy.ts,cypress/e2e/WebInterface/Smoke Tests/CreateNewMeasure.cy.ts,cypress/e2e/WebInterface/Smoke Tests/MeasureVersion.cy.ts,cypress/e2e/WebInterface/Smoke Tests/QICORE 6.0.0 End To End Measure and Test Cases/ProportionBoolean600.cy.ts' --browser chrome",
 		"impl:rerun:failures": "node scripts/impl-rerun.js",
