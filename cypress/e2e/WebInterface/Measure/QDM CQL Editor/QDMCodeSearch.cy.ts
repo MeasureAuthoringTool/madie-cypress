@@ -184,10 +184,9 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.applyCodeBtn).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Code AMB has already been defined in CQL.')
 
-        // commented out until https://jira.cms.gov/browse/MAT-9848 is fixed
         //Save and Discard changes button should be disabled
-        //cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
-        //cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.disabled')
+        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
+        cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.disabled')
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).click()
