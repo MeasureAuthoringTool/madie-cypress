@@ -36,7 +36,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit', null)
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{end}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

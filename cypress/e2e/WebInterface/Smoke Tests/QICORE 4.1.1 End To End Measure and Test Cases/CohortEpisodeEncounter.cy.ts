@@ -27,7 +27,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
     before('Create Measure and Test Case', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2012-01-02', '2013-01-01')
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -37,7 +37,6 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

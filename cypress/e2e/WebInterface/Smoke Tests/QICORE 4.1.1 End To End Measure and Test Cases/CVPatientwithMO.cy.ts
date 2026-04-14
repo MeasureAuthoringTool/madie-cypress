@@ -44,17 +44,16 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2012-01-01', '2012-12-31')
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.ContinousVariable, 
-                        pops, false, null, null, cvPops)
+                        pops, false, undefined, undefined, cvPops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
 
-        
         Utilities.deleteMeasure()
     })
 

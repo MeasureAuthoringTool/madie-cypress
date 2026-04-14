@@ -4,7 +4,7 @@ import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../Shared/Header"
 import { Utilities } from "../../../Shared/Utilities"
 import { umlsLoginForm } from "../../../Shared/umlsLoginForm"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -26,7 +26,6 @@ describe('Edit CQL Library validations', () => {
 
     afterEach('Logout', () => {
 
-        
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 

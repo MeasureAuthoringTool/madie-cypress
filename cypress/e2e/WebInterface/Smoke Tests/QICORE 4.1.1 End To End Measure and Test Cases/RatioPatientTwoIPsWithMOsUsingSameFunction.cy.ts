@@ -55,7 +55,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
 
     before('Create Measure and Test Case', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, undefined, false,
             '2023-01-01', '2024-01-01')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIpp1Pass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
@@ -66,7 +66,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -112,8 +112,6 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
     })
 
     after('Clean up', () => {
-
-        OktaLogin.UILogout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })

@@ -12,15 +12,11 @@ let TCSeries = []
 let TCTitle = []
 let TCDescription = []
 
-let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
@@ -42,7 +38,7 @@ describe('Test Case List Pagination', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'POST',
                         body: {
@@ -68,7 +64,7 @@ describe('Test Case List Pagination', () => {
 
     afterEach('Delete Measure', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify pagination', () => {

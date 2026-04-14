@@ -16,11 +16,6 @@ describe('Delete CQL Library', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
-
-        
-    })
-
     it('Verify Library Owner can Delete Library through Action center on Library list Page', () => {
 
         let ownedCountBefore: number, 

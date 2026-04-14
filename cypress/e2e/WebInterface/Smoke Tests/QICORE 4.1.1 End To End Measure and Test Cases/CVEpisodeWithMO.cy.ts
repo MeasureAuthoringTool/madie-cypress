@@ -66,10 +66,10 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
             }
         }
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2023-01-01', '2023-12-31')
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.ContinousVariable, 
-            pops, false, null, null, cvPops)
+            pops, false, undefined, undefined, cvPops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -77,7 +77,6 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

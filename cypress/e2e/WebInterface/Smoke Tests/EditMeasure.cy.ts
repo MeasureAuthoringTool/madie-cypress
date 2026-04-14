@@ -25,7 +25,7 @@ describe('Edit Measure', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -49,8 +49,7 @@ describe('Edit Measure', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-        
+        Utilities.deleteMeasure()
     })
 
     it('Edit Measure Name and verify the measure name is updated on Measures page', () => {

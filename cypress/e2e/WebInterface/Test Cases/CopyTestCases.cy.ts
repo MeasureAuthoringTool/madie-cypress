@@ -47,7 +47,7 @@ describe('Copy QDM Test Cases', () => {
         //Create QDM Measure, PC and Test Case
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureDataQDM)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 1)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, null, false, false, 1)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, undefined, false, false, 1)
 
         //Create 2nd QDM Measure
         measureDataQDM2.ecqmTitle = secondMeasureName + randValue

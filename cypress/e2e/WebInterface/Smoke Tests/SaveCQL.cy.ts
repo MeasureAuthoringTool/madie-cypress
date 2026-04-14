@@ -17,7 +17,7 @@ describe('Save CQL on CQL Editor Page', () => {
 
     afterEach('Logout', () => {
         
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Create New Measure and Add CQL to the Measure', () => {

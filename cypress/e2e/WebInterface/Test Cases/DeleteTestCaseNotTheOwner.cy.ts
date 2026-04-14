@@ -29,7 +29,7 @@ describe('Delete Test Case', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2012-01-02', '2013-01-01')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -41,15 +41,14 @@ describe('Delete Test Case', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
-            null, null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, undefined, undefined, undefined, undefined, undefined,
+            undefined, undefined, 'Procedure')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
