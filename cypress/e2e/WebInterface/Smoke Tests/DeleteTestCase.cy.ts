@@ -34,10 +34,10 @@ describe('Delete Test Case', () => {
         CqlLibraryName = 'DeleteTCLib' + newTimestamp
         measureCQL = MeasureCQL.ICFCleanTest_CQL.replace('SimpleFhirLibrary', CqlLibraryName)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2012-01-02', '2013-01-01')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
-            null, null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, undefined, undefined, undefined, undefined, undefined,
+            undefined, undefined, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')

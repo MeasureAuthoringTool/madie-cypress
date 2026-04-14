@@ -55,7 +55,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2023-01-01', '2023-12-31')
             MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -65,8 +65,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Proportion Episode Measure, Pass Result', () => {

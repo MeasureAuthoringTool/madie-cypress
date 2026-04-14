@@ -54,7 +54,6 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         denomExclusion: 'Denominator Exclusions',
         numerator: 'Numerator',
         numExclusion: 'Numerator Exclusions'
-
     }
 
     beforeEach('Create Measure and Test Case', () => {
@@ -64,7 +63,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         CqlLibraryName = 'RatioEpSglIPNoMO' + newTimestamp
         measureCQL = baseMeasureCQL.replace('library RatioEpisodeSingleIPNoMO', 'library RatioEpSglIPNoMO' + newTimestamp)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2022-01-01', '2022-12-31')
             MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Ratio, pops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
@@ -83,7 +82,6 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
     afterEach('Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

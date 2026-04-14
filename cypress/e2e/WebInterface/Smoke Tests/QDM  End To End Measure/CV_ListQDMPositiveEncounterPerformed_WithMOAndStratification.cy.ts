@@ -143,14 +143,13 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
+        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
 
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
 
-        
         Utilities.deleteMeasure()
     })
 

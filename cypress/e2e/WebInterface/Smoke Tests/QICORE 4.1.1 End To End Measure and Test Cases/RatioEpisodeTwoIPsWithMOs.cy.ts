@@ -21,7 +21,7 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2022-01-01', '2022-12-31')
         TestCasesPage.CreateTestCaseAPI(testCaseTitlePass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
@@ -82,7 +82,6 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

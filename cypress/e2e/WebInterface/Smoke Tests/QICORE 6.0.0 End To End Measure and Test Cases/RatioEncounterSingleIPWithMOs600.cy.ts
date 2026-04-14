@@ -48,7 +48,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 8500)

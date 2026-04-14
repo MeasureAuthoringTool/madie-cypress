@@ -71,7 +71,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
     before('Create Measure, Test Case and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6, opts)
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.ContinousVariable, pops, false, null, null, cvPops)
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.ContinousVariable, pops, false, undefined, undefined, cvPops)
         MeasureGroupPage.addStratificationDataAPI(strats)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 

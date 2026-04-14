@@ -16,7 +16,6 @@ describe('Create CQL Library', () => {
 
     afterEach('Logout', () => {
 
-        
         Utilities.deleteLibrary(CQLLibraryName)
     })
 

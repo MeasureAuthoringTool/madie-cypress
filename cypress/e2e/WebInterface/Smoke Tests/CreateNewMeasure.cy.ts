@@ -36,8 +36,6 @@ describe('Create New Measure', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         //Verify the deleted measure on All Measures page list
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
-
-        
     })
 
     it('Create QI Core 4.1.1 Measure', () => {

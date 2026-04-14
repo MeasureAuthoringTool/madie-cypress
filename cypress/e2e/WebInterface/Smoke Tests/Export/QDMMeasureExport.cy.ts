@@ -44,7 +44,7 @@ describe('Successful QDM Measure Export', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureDataNonPB)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'SDE Payer',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'SDE Payer',
             'SDE Payer', '', 'SDE Payer', '', 'SDE Payer')
 
         OktaLogin.Login()
@@ -135,7 +135,7 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
         measureData.measureCql = qdmCMSMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false,
             'Qualifying Encounters', 'Denominator Exclusions', '',
             'Encounter without Food Screening', '', 'Qualifying Encounters')
 

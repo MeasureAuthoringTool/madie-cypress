@@ -39,7 +39,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create Second QDM Measure
@@ -66,13 +66,13 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         measureData.measureCql = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 
         CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 3)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 3)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', undefined, 3)
 
         //Create second QI Core measure
         measureQICore2 = 'QICore600Measure2' + Date.now() + randValue + 2 + randValue
 
         CreateMeasurePage.CreateMeasureAPI(measureQICore2, measureQICore2, SupportedModels.qiCore6, measureData, 4)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 4)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', undefined, 4)
 
         OktaLogin.Login()
 
@@ -287,13 +287,13 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         //validation test: both measures the user is not the owner of
         let measureQICore3 = 'QICore600Measure3' + Date.now() + randValue + 9 + randValue
         CreateMeasurePage.CreateMeasureAPI(measureQICore3, measureQICore3, SupportedModels.qiCore6, options, 5)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population', null, 5)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population', undefined, 5)
 
         OktaLogin.AltLogin()
         MeasuresPage.actionCenter('edit', 5, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)

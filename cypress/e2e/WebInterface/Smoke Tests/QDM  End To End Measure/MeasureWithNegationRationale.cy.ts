@@ -147,7 +147,6 @@ describe('Measure with Negation Rationale', () => {
 
     after('Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

@@ -23,7 +23,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')

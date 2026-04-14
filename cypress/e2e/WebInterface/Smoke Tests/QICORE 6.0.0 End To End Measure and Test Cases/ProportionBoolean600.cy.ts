@@ -93,7 +93,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
-
         //verify Passing Tab's text
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
@@ -104,7 +103,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '95%')
-
 
         //after versioning, there should be no change to test results or coverage
 

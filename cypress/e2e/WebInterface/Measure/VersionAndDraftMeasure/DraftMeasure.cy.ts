@@ -89,7 +89,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         })
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile(filePath, request.response.body.id)
+            cy.writeFile(filePath, request?.response?.body.id)
         })
         cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
@@ -132,7 +132,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         // capture measureId for new draft
         let draftId
         cy.wait('@newDraft', { timeout: 25000 }).then(int => {
-            draftId = int.response.body.id
+            draftId = int?.response?.body.id
 
             Utilities.waitForElementVisible('[data-testid=measure-action-' + draftId + ']', 30000)
             Utilities.waitForElementEnabled('[data-testid=measure-action-' + draftId + ']', 30000)
@@ -286,7 +286,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToenEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()

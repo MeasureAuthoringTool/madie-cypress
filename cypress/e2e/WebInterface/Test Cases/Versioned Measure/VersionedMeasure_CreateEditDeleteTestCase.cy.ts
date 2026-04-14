@@ -8,7 +8,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
-import { Toasts } from "../../../../Shared/Toasts"
 
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
@@ -17,40 +16,29 @@ let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.ProportionEpisode_PASS
-let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
-    'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
-    '\n' +
-    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n' +
-    '\n' +
-    'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'codesystem "SNOMED": \'http://snomed.info/sct\'\n\n' +
+    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
+    'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   [Encounter: "Encounter Inpatient"] InptEncounter\n' +
-    '      where InptEncounter.status = \'finished\' \n' +
-    '       \n' +
+    '      where InptEncounter.status = \'finished\' \n\n' +
     'define "Denominator":\n' +
     '    "Initial Population" IP\n' +
-    '      where IP.period ends during day of "Measurement Period"\n' +
-    '\n' +
+    '      where IP.period ends during day of "Measurement Period"\n\n' +
     'define "Numerator":\n' +
     '    "Denominator" denom \n' +
-    '    where Global."LengthInDays"(denom.period) > 120\n' +
-    '\n' +
+    '    where Global."LengthInDays"(denom.period) > 120\n\n' +
     'define function "Measure Observation"(Encounter Encounter): \n' +
     '  Count({\n' +
     '        Encounter Enc\n' +
-    '          where Enc.priority ~ "Unscheduled (qualifier value)"          \n' +
+    '          where Enc.priority ~ "Unscheduled (qualifier value)"\n' +
     '          })'
 
 
@@ -60,10 +48,10 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
 
         CqlLibraryName = 'ProportionEpisode' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2023-01-01', '2023-12-31')
 
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population',
             '', '', 'Numerator', '', 'Denominator', 'Encounter')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -104,9 +92,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
 
     after('Clean up', () => {
 
-        
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Versioned Measure: Create New Test Case, delete is enabled', () => {
@@ -156,7 +142,6 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
-
         //verify user can delete newly created test case after versioning
         TestCasesPage.checkTestCase(2)
         TestCasesPage.checkTestCase(2)
@@ -177,7 +162,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         })
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile(filePath, request.response.body.id)
+            cy.writeFile(filePath, request?.response?.body.id)
         })
         cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
@@ -199,7 +184,6 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 
     it('Versioned Measure: Edit Test Case, delete is disabled', () => {
@@ -261,7 +245,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         })
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile(filePath, request.response.body.id)
+            cy.writeFile(filePath, request?.response?.body.id)
         })
         cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
@@ -283,7 +267,5 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
-
 })

@@ -74,7 +74,6 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
 
     after('Logout and Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

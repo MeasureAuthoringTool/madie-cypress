@@ -29,8 +29,8 @@ describe('QI-Core Measure Export', () => {
 
     before('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
     })
@@ -165,8 +165,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         measureNameFC = 'HRExport1' + Date.now()
         CqlLibraryNameFC = 'HRExport1Lib' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent, null, false, mpStartDate, mpEndDate)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent, 0, false, mpStartDate, mpEndDate)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
 
@@ -366,8 +366,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         measureNameFC = 'HRExport2' + Date.now()
         CqlLibraryNameFC = 'HRExport2Lib' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent, null, false, mpStartDate, mpEndDate)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent, 0, false, mpStartDate, mpEndDate)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
 

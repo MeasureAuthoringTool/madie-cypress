@@ -24,14 +24,13 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-01', '2012-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
+        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
+       Utilities.deleteMeasure()
     })
 
     it('End to End Cohort ListQDMPositiveEncounterPerformed', () => {
