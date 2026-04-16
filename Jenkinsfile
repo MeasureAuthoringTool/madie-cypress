@@ -6,8 +6,8 @@ pipeline {
   parameters {
     choice(
       choices: [
-        'cy:parallel:test','cy:parallel:test:ui:smoketests','cy:parallel:test:ui:smoketests:hqcis','cy:parallel:dev:ui:smoketests','cy:parallel:dev:ui:smoketests:hqcis',
-        'cy:parallel:test:all:tests','cy:parallel:hcqis-test:all:tests','test:specific:files:parallel', 'test:specific:files:parallel:hqcis','dev:all:ui:tests','dev:all:tests',
+        'cy:parallel:test','cy:parallel:test:ui:smoketests','cy:parallel:dev:ui:smoketests',
+        'cy:parallel:test:all:tests','test:specific:files:parallel','dev:all:ui:tests','dev:all:tests',
         'dev:ui:smoketests','dev:ui:cqllibrary:cqlEditor','dev:ui:cqllibrary','dev:ui:measure:cqlEditor',
         'dev:measure:editMeasure:ui:tests','dev:ui:testCases:testCasePopulationValues',
         'dev:ui:cqllibrary:versionAndDraft','dev:all:services:tests','dev:services:measureService:tests',
@@ -214,9 +214,6 @@ pipeline {
           case "${TEST_SCRIPT}" in
             impl:*)
               RERUN_SCRIPT="impl:rerun:failures"
-              ;;
-            *hcqis*|*hqcis*)
-              RERUN_SCRIPT="test:specific:files:parallel:hqcis:rerun"
               ;;
             *)
               RERUN_SCRIPT="test:specific:files:parallel"
