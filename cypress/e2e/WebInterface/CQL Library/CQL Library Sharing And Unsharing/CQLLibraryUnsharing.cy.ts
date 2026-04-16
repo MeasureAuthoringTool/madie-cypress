@@ -116,6 +116,40 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
     })
+
+    it('Verify admin user can perform an unshare action on a library they do not own', () => {
+
+         //Share Library with ALT User
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+
+        OktaLogin.AdminLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+
+        //Un share Library
+        //CQLLibraryPage.actionCenter(EditLibraryActions.share)
+        // standard share functions won't work here - data-testid's are generated differently based on the admin permissions
+        cy.get(CQLLibraryPage.actionCenterButton).click()
+        cy.wait(250)
+        cy.get('[data-testid="Share/Unshare"]').click()
+        cy.get(CQLLibrariesPage.unshareOption).click({ force: true })
+        cy.get(CQLLibrariesPage.unshareCheckBox).eq(1).click()
+        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.get(CQLLibrariesPage.acceptBtn).click()
+
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(s) were successfully unshared.')
+
+        //Login as ALT user and verify CQL Library is not visible on My Libraries page
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+        cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
+
+    })
 })
 
 describe('Unshare CQL Library using Action Center buttons - Multiple instances', () => {
