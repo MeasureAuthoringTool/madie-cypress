@@ -15,7 +15,6 @@ describe('Version CQL Library with errors', () => {
 
     beforeEach('Login', () => {
 
-        //Create CQL Library
         CqlLibraryOther = 'CQLLibraryWithErrors' + Date.now()
         CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
 
@@ -24,7 +23,6 @@ describe('Version CQL Library with errors', () => {
 
     afterEach('Logout', () => {
 
-        
         Utilities.deleteLibrary(CqlLibraryOther)
     })
 

@@ -7,11 +7,11 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'MeasureSDEValidations' + Date.now()
+let CqlLibraryName = 'MeasureSDEValidationsLib' + Date.now()
 let measureCQL = MeasureCQL.zipfileExportQICore
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -23,15 +23,14 @@ describe('Validations between Supplemental Data Elements with the CQL definition
     beforeEach('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'ipp', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'ipp', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.SessionLogin()
     })
 
     afterEach('Log out', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Removing definition related to the SD alerts user.', () => {
@@ -164,7 +163,6 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         Utilities.waitForElementToNotExist(EditMeasurePage.errorMessage, 75)
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
-
     })
 
     it('Placing definition back into CQL and saving resolves the alert.', () => {

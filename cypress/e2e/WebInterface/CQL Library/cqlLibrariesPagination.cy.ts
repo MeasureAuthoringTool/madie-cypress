@@ -2,8 +2,8 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Utilities } from "../../../Shared/Utilities"
 import { Header } from "../../../Shared/Header"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage";
-import { SupportedModels } from "../../../Shared/CreateMeasurePage";
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -18,11 +18,6 @@ describe('Validate QDM CQL on CQL Library page', () => {
             CQLLibraryPage.createLibraryAPI(apiCQLLibraryName + x, SupportedModels.QDM, { publisher: CQLLibraryPublisher })      
         }
         OktaLogin.SessionLogin()
-    })
-
-    afterEach('Logout', () => {
-
-        
     })
 
     it('Verify Pagination for "All Libraries"', () => {

@@ -23,8 +23,7 @@ describe('Qi Core Measure Reference', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Add and Edit Qi Core Measure reference', () => {
@@ -43,7 +42,7 @@ describe('Qi Core Measure Reference', () => {
         })
         cy.get(EditMeasurePage.saveButton).click()
         cy.wait('@references', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/referenceId', request.response.body.measureMetaData.references[0].id)
+            cy.writeFile('cypress/fixtures/referenceId', request?.response?.body.measureMetaData.references[0].id)
         })
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
@@ -70,7 +69,6 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'JustificationUpdated Measure Reference')
     })
 
-    //pass
     it('Discard changes button', () => {
 
         MeasuresPage.actionCenter('edit')
@@ -138,7 +136,6 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
         cy.get(EditMeasurePage.measureReferenceTable).should('include.text', 'Test')
         cy.get(EditMeasurePage.measureReferenceTable).should('not.contain', 'Measure Reference')
-
     })
 })
 
@@ -148,18 +145,15 @@ describe('Add Qi Core Measure Reference - ownership validation', () => {
 
         measureName = 'MeasureRef1' + Date.now()
         cqlLibraryName = 'MeasureRef1Lib' + Date.now()
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
         OktaLogin.AltLogin()
     })
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
-    //pass
     it('Non Measure owner unable to add Qi Core Measure References', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -178,7 +172,6 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
 
         measureName = 'MeasureRef2' + Date.now()
         cqlLibraryName = 'MeasureRef2Lib' + Date.now()
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
 
         //Login to UI and Add Measure reference
@@ -198,8 +191,7 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Non Measure owner unable to delete or edit Qi Core Measure reference', () => {

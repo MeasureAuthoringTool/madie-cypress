@@ -25,16 +25,15 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, undefined, false,
             '2012-01-02', '2013-01-01')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

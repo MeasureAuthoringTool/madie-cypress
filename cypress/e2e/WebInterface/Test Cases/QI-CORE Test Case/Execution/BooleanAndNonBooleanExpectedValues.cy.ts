@@ -22,7 +22,7 @@ describe('Non Boolean Population Basis Expected values', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -33,7 +33,6 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -272,7 +271,7 @@ describe('Boolean Population Basis Expected Values', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -283,7 +282,6 @@ describe('Boolean Population Basis Expected Values', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -484,7 +482,6 @@ describe('Expected values for second initial population', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

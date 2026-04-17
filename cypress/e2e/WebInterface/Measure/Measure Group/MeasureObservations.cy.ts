@@ -35,9 +35,7 @@ describe('Measure Observations', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Add Measure Observations for Ratio Measure', () => {
@@ -304,9 +302,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Non-owner of measure cannot change measure observation', () => {
@@ -550,9 +546,7 @@ describe('Measure Observation - Expected Values', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Expected values for Boolean Type Continuous Variable Measure Observations', () => {
@@ -771,9 +765,7 @@ describe('Validate Measure Observation Parameters', () => {
 
     afterEach(' Clean up and Logout', () => {
 
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {

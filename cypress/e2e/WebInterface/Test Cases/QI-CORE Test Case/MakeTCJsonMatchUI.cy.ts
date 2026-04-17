@@ -22,7 +22,7 @@ describe('Success Scenario - Make Test Case Json match UI', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
@@ -39,7 +39,6 @@ describe('Success Scenario - Make Test Case Json match UI', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -89,7 +88,7 @@ describe('Error message when making Test case match', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
 
@@ -106,7 +105,6 @@ describe('Error message when making Test case match', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

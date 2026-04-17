@@ -349,7 +349,7 @@ export class CQLLibraryPage {
         }
     }
 
-    public static createLibraryAPI(libraryName: string, model: SupportedModels, options: CreateLibraryOptions) {
+    public static createLibraryAPI(libraryName: string, model: SupportedModels, options?: CreateLibraryOptions) {
 
         let user: string, description: string, publisher: string, cql: string, cqlErrors = false, altUser = false
 

@@ -11,13 +11,11 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 const measureCQL_WithWarnings = QiCore4Cql.intentionalWarningCql
 
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
+    'using QDM version \'5.6\'\n\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient\n' +
     'define "SDE Ethnicity":\n' +
@@ -41,9 +39,6 @@ let newMeasureName = ''
 let tempCqlLibName = ''
 let QDMmeasureName = 'QDMMeasureSearch' + Date.now()
 let QDMCqlLibraryName = 'QDMMeasureSearchLib' + Date.now()
-let currentUser = Cypress.env('selectedUser')
-let measureSetFilePath = 'cypress/fixtures/' + currentUser + '/measureSetId'
-
 
 describe('Measure List Page Searching', () => {
 
@@ -58,11 +53,6 @@ describe('Measure List Page Searching', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 39500)
-    })
-
-    afterEach('Logout', () => {
-
-        OktaLogin.UILogout()
     })
 
     it('Measure search on My Measures and All Measures tab', () => {
@@ -100,7 +90,6 @@ describe('Measure List Page Searching', () => {
         cy.reload()
         cy.get(MeasuresPage.searchInputBox).clear().type(measureName).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('not.exist')
-
     })
 
     it('Verify warning message on Measure list page', () => {
@@ -147,7 +136,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Encounter')
 
         //Create New QDM Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(QDMmeasureName, QDMCqlLibraryName, measureCQL, false, false, null, null, 1)
+        CreateMeasurePage.CreateQDMMeasureAPI(QDMmeasureName, QDMCqlLibraryName, measureCQL, false, false, undefined, undefined, 1)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 1)
 
         OktaLogin.Login()
@@ -178,11 +167,10 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         })
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.wait('@cmdIdGen', { timeout: 90000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/cmsId4QiCore', (request.response.body.cmsId).toString())
+            cy.writeFile('cypress/fixtures/cmsId4QiCore', (request?.response?.body.cmsId).toString())
         })
         cy.get(EditMeasurePage.cmsIdInput).should('not.be.null')
         cy.get(Header.mainMadiePageButton).click()
-
 
         //Click on Edit Button for QDM measure
         MeasuresPage.actionCenter('edit', 1)
@@ -193,16 +181,14 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         })
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.wait('@cmdIdGen', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/cmsId4QDM', (request.response.body.cmsId).toString())
+            cy.writeFile('cypress/fixtures/cmsId4QDM', (request?.response?.body.cmsId).toString())
         })
         cy.get(EditMeasurePage.cmsIdInput).should('not.be.null')
         cy.get(Header.mainMadiePageButton).click()
-
     })
 
     after('Logout', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
         Utilities.deleteMeasure(QDMmeasureName, QDMCqlLibraryName, false, false, 1)
     })

@@ -25,7 +25,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -73,8 +73,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(null, null)
+        Utilities.deleteMeasure()
     })
 
     it('Run / Execute single passing Test Case, on the Test Case list page, where the user is not the owner nor shared' +
@@ -117,7 +116,6 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
             //logout as Regular user and, then, log in as ALT user
-            
 
             OktaLogin.AltLogin()
 
@@ -150,7 +148,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
-        })
+    })
 
     it('Run / Execute single passing Test Case, on the Test Case details page, where the user is not the owner nor shared' +
         ' -- Run button is available and correct results are provided', () => {
@@ -194,7 +192,6 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
             //logout as Regular user and, then, log in as Alt user
-            
 
             OktaLogin.AltLogin()
 
@@ -229,7 +226,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.tctExpectedActualSubTab).click()
             cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
             cy.get(TestCasesPage.measureActualCheckbox).should('be.checked')
-        })
+    })
 
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning -- when user is not the owner', () => {
 

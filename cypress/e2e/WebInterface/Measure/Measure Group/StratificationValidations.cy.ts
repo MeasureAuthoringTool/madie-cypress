@@ -16,7 +16,7 @@ describe('Validating Stratification tabs', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
         OktaLogin.SessionLogin()
 
         //Click on Edit Measure
@@ -29,7 +29,6 @@ describe('Validating Stratification tabs', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
         Utilities.deleteMeasure()
     })
 

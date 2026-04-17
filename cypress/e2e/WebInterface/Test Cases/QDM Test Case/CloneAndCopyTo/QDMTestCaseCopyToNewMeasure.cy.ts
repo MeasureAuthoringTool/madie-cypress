@@ -246,8 +246,8 @@ describe('Copy to new measure - partial success case', () => {
 
         CreateMeasurePage.CreateMeasureAPI('M2' + measureName, 'M2' + cqlLibraryName, SupportedModels.QDM, measure2Options)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean', 1)
-        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 1)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, null, false, true, false, 1)
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, undefined, false, false, false, 1)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, undefined, false, true, false, 1)
 
         OktaLogin.Login()
     })

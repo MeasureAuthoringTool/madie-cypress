@@ -32,11 +32,11 @@ describe('Measure Locking Validations', () => {
         OktaLogin.Login()
 
         cy.wait('@measureUnlock', { timeout: 20000 }).then(mUnlock => {
-            expect(mUnlock.response.statusCode).to.eql(200)
+            expect(mUnlock?.response?.statusCode).to.eql(200)
         })
 
         cy.wait('@libraryUnlock', { timeout: 20000 }).then(lUnlock => {
-            expect(lUnlock.response.statusCode).to.eql(200)
+            expect(lUnlock?.response?.statusCode).to.eql(200)
         })
 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)

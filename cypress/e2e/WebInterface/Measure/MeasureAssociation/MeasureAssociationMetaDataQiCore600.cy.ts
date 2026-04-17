@@ -49,7 +49,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create new QI Core 6.0.0 measure
@@ -58,7 +58,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         measureData.measureCql = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 
         CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 2)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 2)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', undefined, 2)
 
         OktaLogin.Login()
 
@@ -88,7 +88,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).should('contain.value', QDMmeasurePStartD)
         cy.get(EditMeasurePage.mpEnd).should('contain.value', QDMmeasurePEndD)
-
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -168,7 +167,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
-
     })
 
     afterEach('Log Out', () => {

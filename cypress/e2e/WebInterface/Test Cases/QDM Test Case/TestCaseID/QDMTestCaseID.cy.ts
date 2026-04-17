@@ -46,7 +46,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
 
@@ -240,7 +240,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateTestCaseAPI(testCase1.group, testCase1.title, testCase1.description)
         OktaLogin.Login()
 
@@ -339,7 +339,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
 

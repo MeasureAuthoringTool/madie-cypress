@@ -28,7 +28,7 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -117,7 +117,7 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(null, null, 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
 
         MeasuresPage.actionCenter("edit")
@@ -266,7 +266,7 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(null, false, 'Qualifying Encounters','Qualifying Encounters','Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Qualifying Encounters','Qualifying Encounters','Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()

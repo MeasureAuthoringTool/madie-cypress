@@ -2,8 +2,8 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 
-let measureName = []
-let CqlLibraryName = []
+let measureName = new Array<string>
+let CqlLibraryName = new Array<string>
 let measureIds = []
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
@@ -32,7 +32,7 @@ describe('Measure List Pagination', () => {
                     cy.request({
                         url: '/api/measure',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'POST',
                         body: {
@@ -90,7 +90,7 @@ describe('Measure List Pagination', () => {
                                 url: '/api/measures/' + id,
                                 method: 'PUT',
                                 headers: {
-                                    Authorization: 'Bearer ' + accessToken.value
+                                    Authorization: 'Bearer ' + accessToken?.value
                                 },
                                 body: {
                                     "id": id,

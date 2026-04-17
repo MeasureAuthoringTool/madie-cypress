@@ -18,11 +18,6 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
-
-        OktaLogin.UILogout()
-    })
-
     it('Add Version to the CQL Library from My Libraries', () => {
 
         cy.get(Header.cqlLibraryTab).click()

@@ -17,7 +17,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
     beforeEach('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '',
             'num', '', 'ipp', 'boolean')
 
         OktaLogin.SessionLogin()
@@ -33,8 +33,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
     afterEach('Log out', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Removing definition related to the RA alerts user.', () => {
@@ -78,7 +77,6 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
-
     })
 
     it('Placing definition back into CQL and saving resolves the alert.', () => {

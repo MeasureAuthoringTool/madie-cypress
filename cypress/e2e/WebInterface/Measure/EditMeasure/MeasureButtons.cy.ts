@@ -69,13 +69,6 @@ describe('Delete measure on the measure edit page', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
-
-    })
-
-    afterEach('Log Out', () => {
-
-        
-
     })
 
     it('Delete measure on the edit page for a measure', () => {
@@ -93,7 +86,6 @@ describe('Delete measure on the measure edit page', () => {
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
         cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
 
-
         //QDM
         MeasuresPage.actionCenter('edit')
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
@@ -106,7 +98,6 @@ describe('Delete measure on the measure edit page', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
         cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
-
     })
 })
 
@@ -143,7 +134,6 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
 
     afterEach('Log Out and Clean up', () => {
 
-        
         Utilities.deleteVersionedMeasure(measureQDM, qdmCQLLibrary)
     })
 
@@ -173,7 +163,6 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
 
         cy.log('Draft Created Successfully')
     })
-
 })
 
 describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
@@ -200,7 +189,6 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
 
     afterEach('Log Out and Clean up', () => {
 
-        
         Utilities.deleteVersionedMeasure(measureQICore, qiCoreCQLLibrary)
     })
 
@@ -418,7 +406,6 @@ describe('Share measure from the Edit Measure page', () => {
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
     })
 
     it('Verify Measure owner can share Qi Core Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
@@ -489,7 +476,6 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
-
     })
 })
 
@@ -523,10 +509,8 @@ describe('Dirty Check Validations', () => {
 
     after('Log Out', () => {
 
-        
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
-
     })
 
     it('Dirty check pops up when QDM Measure has unsaved changes and user try to Version', () => {
@@ -545,7 +529,6 @@ describe('Dirty Check Validations', () => {
 
         //Validate Dirty check modal
         cy.get(Utilities.discardChangesConfirmationModal).should('exist')
-
     })
 
     it('Dirty check pops up when Qi Core Measure has unsaved changes and user try to Version', () => {
@@ -564,7 +547,6 @@ describe('Dirty Check Validations', () => {
 
         //Validate Dirty check modal
         cy.get(Utilities.discardChangesConfirmationModal).should('exist')
-
     })
 })
 

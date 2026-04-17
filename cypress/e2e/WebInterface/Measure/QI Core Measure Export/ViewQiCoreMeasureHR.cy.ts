@@ -18,7 +18,7 @@ describe('View Human Readable for Qi Core Measure', () => {
     before(() => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")

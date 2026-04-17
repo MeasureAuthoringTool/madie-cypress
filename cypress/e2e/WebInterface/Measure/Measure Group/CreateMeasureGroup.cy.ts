@@ -11,30 +11,21 @@ let measureName = 'CreateMeasureGroup' + Date.now()
 let CqlLibraryName = 'CreateMeasureGroupLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n' +
-    '\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
+    'using FHIR version \'4.0.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\n' +
-        ' true\n' +
-        '\n' +
-        'define "Initial Population2":\n' +
-        '  true\n' +
-        '\n' +
-        'define "Denominator":\n' +
-        '   \t"Initial Population"\n' +
-        '\n' +
-        'define "Denominator Exclusion":\n' +
-        '\ttrue\n' +
-        '\n' +
-        'define "Numerator":\n' +
-        '\ttrue'
+    '\ttrue\n\n' +
+    'define "Initial Population2":\n' +
+    '\ttrue\n\n' +
+    'define "Denominator":\n' +
+    '\t"Initial Population"\n\n' +
+    'define "Denominator Exclusion":\n' +
+    '\ttrue\n\n' +
+    'define "Numerator":\n' +
+    '\ttrue'
 
 describe('Validate Measure Group -- scoring and populations', () => {
 
@@ -49,8 +40,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('"Please complete the CQL Editor process before continuing" appears when there are issues with entered CQL', () => {
@@ -306,7 +296,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Ratio')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Initial Population')
-
     })
 
     it('Add Scoring Precision to the Measure Group', () => {
@@ -405,8 +394,7 @@ describe('Validate Population Basis', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify default Value and if no value is selected for Population Basis, the save button is unavailable', () => {

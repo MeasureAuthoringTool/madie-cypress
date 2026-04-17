@@ -27,9 +27,8 @@ describe('Validating that the valueset version is removed and message appears, o
         measureData.mpStartDate = '2025-01-01'
         measureData.mpEndDate = '2025-12-31'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -37,21 +36,15 @@ describe('Validating that the valueset version is removed and message appears, o
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        //logout of MADiE
-        OktaLogin.UILogout()
     })
 
     afterEach('Clean up', () => {
 
-        
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Valueset version removed and user is informed', () => {
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //add new value set and also specify a version
         cy.get(EditMeasurePage.cqlEditorTextBox)
@@ -65,5 +58,4 @@ describe('Validating that the valueset version is removed and message appears, o
         cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'Adolescent depression screening assessment with version')
         cy.get(EditMeasurePage.cqlEditorTextBox).should('not.include.text',  'version \'urn:hl7:version:20240307\'')
     })
-
 })

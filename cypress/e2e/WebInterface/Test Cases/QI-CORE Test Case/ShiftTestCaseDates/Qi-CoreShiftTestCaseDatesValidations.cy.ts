@@ -28,8 +28,7 @@ const testCase2: TestCase = {
 const testCaseErrorTst: TestCase = {
     title: 'Erroring Test case',
     description: 'Erroring Test Group',
-    group: 'SBTestSeriesError',
-    json: null
+    group: 'SBTestSeriesError'
 }
 
 describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
@@ -37,7 +36,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false,
             'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
 
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
@@ -94,7 +93,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
 
@@ -115,7 +114,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId2,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
 
@@ -171,7 +170,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
 
@@ -192,7 +191,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false,
             'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
 
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)

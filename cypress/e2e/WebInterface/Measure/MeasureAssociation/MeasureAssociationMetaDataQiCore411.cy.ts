@@ -47,7 +47,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create new QI Core measure

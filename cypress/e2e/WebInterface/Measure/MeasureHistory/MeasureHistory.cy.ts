@@ -84,8 +84,8 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
-            const cmsId = val.toString().valueOf()
-            cy.writeFile('cypress/fixtures/' + currentUser + '/cmsId', cmsId)
+            const cmsId = val?.toString().valueOf()
+            cy.writeFile('cypress/fixtures/' + currentUser + '/cmsId', cmsId!)
             cy.log('CMS ID Generated successfully: ' + cmsId)
         })
 

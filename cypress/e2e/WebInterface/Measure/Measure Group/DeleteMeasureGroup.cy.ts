@@ -16,8 +16,8 @@ let description = 'Some Test Description'
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let validJsonValue = TestCaseJson.API_TestCaseJson_Valid
 let measureTwo = measureOne + "Second"
-var newCqlLibraryName = null
-var randValue = null
+let newCqlLibraryName: string
+let randValue: number
 
 describe('Validate Measure Group deletion functionality', () => {
 
@@ -25,18 +25,16 @@ describe('Validate Measure Group deletion functionality', () => {
         randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName1 + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null,
-            null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, undefined, undefined, undefined, undefined, undefined, undefined,
+            undefined, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(title1, series, description, validJsonValue)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
-
         
-        Utilities.deleteMeasure(measureOne, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Delete button brings up confirmation modal and clicking yes, removes the existing Measure group', () => {
@@ -170,17 +168,15 @@ describe('Ownership test when deleting groups', () => {
         randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName1 + randValue
 
-        //create new measure via temp user
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, newCqlLibraryName + "ALT", measureCQL, 1, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, true, null, null, null,
-            null, null, null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, true, undefined, undefined, undefined,
+            undefined, undefined, undefined, 'Procedure')
 
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "ALT", false, true, 1)
     })
 

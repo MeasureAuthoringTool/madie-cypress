@@ -18,8 +18,7 @@ describe('Measure Group', () => {
 
     afterEach('Logout and Cleanup', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Measure Group Population based on Scoring Rule', () => {

@@ -24,7 +24,7 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
 
         // need QiCore measure in measureId
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreMeasureName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
 
         const qdmMeasure: CreateMeasureOptions = {
@@ -73,7 +73,7 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
     afterEach('Clean up', () => {
 
         Utilities.deleteMeasure()
-        Utilities.deleteMeasure(null, null, true, false, 2)
+        Utilities.deleteMeasure(undefined, undefined, true, false, 2)
     })
 
     it('When QiCore measure is locked & lock is visible, the action center button is disabled with message tooltip', () => {

@@ -38,14 +38,13 @@ describe('Test Case sorting by Test Case number', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
             '2012-01-02', '2013-01-01')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Qi Core Test Case number and sorting behavior', () => {
@@ -148,18 +147,10 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         TestCasesPage.CreateTestCaseAPI('secondMeasure' + testCase1.title, 'secondMeasure' + testCase1.group, 'secondMeasure' + testCase1.description, testCase1.json, false, false, false, 2)
         TestCasesPage.CreateTestCaseAPI('secondMeasure' + testCase2.title, 'secondMeasure' + testCase2.group, 'secondMeasure' + testCase2.description, validTestCaseJsonBobby, false, true, false, 2)
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(measureName + 'firstMeasure', CqlLibraryName + 'firstMeasure')
         Utilities.deleteMeasure(measureName + 'secondMeasure', CqlLibraryName + 'secondMeasure', false, false, 2)
@@ -221,7 +212,7 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         selector: https://www.geeksforgeeks.org/how-to-select-first-and-last-td-in-a-row-with-css/
         process: https://glebbahmutov.com/cypress-examples/recipes/get-text-list.html#collect-the-items-then-assert-the-list
         */
-        const ascCases = []
+        const ascCases = new Array<string>
         cy.get('tr td:nth-child(2)').each(el => {
             ascCases.push(el.text())
         })
@@ -231,7 +222,7 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
 
-        const descCases = []
+        const descCases = new Array<string>
         cy.get('tr td:nth-child(2)').each(el => {
             descCases.push(el.text())
         })

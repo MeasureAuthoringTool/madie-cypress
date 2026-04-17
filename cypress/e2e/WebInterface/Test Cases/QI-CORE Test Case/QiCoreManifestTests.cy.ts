@@ -20,7 +20,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI('passing test', 'abc', 'example', testCaseJson)
 
         OktaLogin.SessionLogin()
@@ -72,13 +72,13 @@ describe('Validating QICore Expansion -> Manifest', () => {
         // intercept expansion API call & check for expected versions
         const expectedVersions = ['20170504', '20190315', '20240110', '20180310']
         cy.wait('@expansion', { timeout: 30000 }).then(expansion => {
-            expect(expansion.response.body).to.have.length(5)
+            expect(expansion?.response?.body).to.have.length(5)
             // no guarantee of return order, and this avoids a for loop
-            expect(expansion.response.body[0].version).to.be.oneOf(expectedVersions)
-            expect(expansion.response.body[1].version).to.be.oneOf(expectedVersions)
-            expect(expansion.response.body[2].version).to.be.oneOf(expectedVersions)
-            expect(expansion.response.body[3].version).to.be.oneOf(expectedVersions)
-            expect(expansion.response.body[4].version).to.be.oneOf(expectedVersions)
+            expect(expansion?.response?.body[0].version).to.be.oneOf(expectedVersions)
+            expect(expansion?.response?.body[1].version).to.be.oneOf(expectedVersions)
+            expect(expansion?.response?.body[2].version).to.be.oneOf(expectedVersions)
+            expect(expansion?.response?.body[3].version).to.be.oneOf(expectedVersions)
+            expect(expansion?.response?.body[4].version).to.be.oneOf(expectedVersions)
         })
 
         // execute tests

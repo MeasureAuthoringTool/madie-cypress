@@ -32,7 +32,7 @@ describe('View Human Readable for QDM Measure', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         OktaLogin.Login()

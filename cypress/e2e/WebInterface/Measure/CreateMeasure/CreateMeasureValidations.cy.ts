@@ -581,7 +581,7 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
             cql: LibraryCQL.validCQL4QDMLib
         }
         CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.QDM, opts)
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, measureCQLLibName, null, null, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, measureCQLLibName, undefined, undefined, false)
         OktaLogin.SessionLogin()
     })
 
@@ -636,7 +636,7 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
             cql: LibraryCQL.validCQL4QICORELib
         }
         CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.qiCore4, opts)
-        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, measureCQLLibName, null, false, false)
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, measureCQLLibName, undefined, false, false)
         OktaLogin.SessionLogin()
     })
 

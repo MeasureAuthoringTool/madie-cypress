@@ -7,7 +7,6 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Toasts } from "../../../../../Shared/Toasts"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
@@ -29,7 +28,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
         Utilities.deleteMeasure()
     })
 

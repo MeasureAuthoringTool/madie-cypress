@@ -117,7 +117,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         })
         cy.get(MeasuresPage.createDraftContinueBtn).wait(2000).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/' + currentUser + '/measureDraftId', request.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureDraftId', request?.response?.body.id)
         })
         cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
         cy.readFile('cypress/fixtures/' + currentUser + '/measureDraftId').should('exist').then((fileDraftContents) => {

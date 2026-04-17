@@ -17,14 +17,13 @@ describe('Validating Population tabs', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Can successfully update / change score and population value and save on population tab', () => {
@@ -303,14 +302,13 @@ describe('Validating Reporting tabs', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Reporting tab contains Rate Aggregation and Improvement Notation info', () => {
@@ -442,15 +440,14 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
     beforeEach('Create measure, Measure Group and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify that description entered for each RA Definition is accurate', () => {

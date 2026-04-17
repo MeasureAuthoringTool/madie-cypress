@@ -22,12 +22,6 @@ describe('CQL Library Sharing', () => {
         harpUserALT = OktaLogin.getUser(true)
     })
 
-    afterEach('LogOut', () => {
-
-        
-    })
-
-
     it('Verify check box for CQL Libraries appear and can be checked / used', () => {
 
         //Share Library with ALT User

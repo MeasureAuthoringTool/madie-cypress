@@ -23,8 +23,8 @@ describe('Compare Measure Versions', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureData.ecqmTitle, measureData.cqlLibraryName, measureData.measureCql)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureData.ecqmTitle!, measureData.cqlLibraryName!, measureData.measureCql)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -39,7 +39,7 @@ describe('Compare Measure Versions', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
-        Utilities.deleteMeasure(null, null, false, false, 1)
+        Utilities.deleteMeasure(undefined, undefined, false, false, 1)
     })
 
     it('Compare two Versions of a Measure', () => {
@@ -70,7 +70,7 @@ describe('Compare Measure Versions', () => {
 
         cy.wait('@drafted').then(int => {
             // capture measureId of new draft
-            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int?.response?.body.id)
         })
         cy.get(Toasts.successToast, { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
