@@ -71,5 +71,7 @@ describe('Young measure locks are not deleted to protect against race conditions
                 })
             })
         })
+
+        cy.wait(200)
     })
 })
