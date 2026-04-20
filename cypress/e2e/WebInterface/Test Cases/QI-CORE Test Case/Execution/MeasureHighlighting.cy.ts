@@ -29,10 +29,8 @@ const tcDFNJson = TestCaseJson.tcJson_value
 const tcResultJson = TestCaseJson.tcResultsJson
 const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 
-let measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine = 'library Library7027567898767 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+let measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine = 'library Library7027567898767 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include CQMCommon version \'2.1.000\' called CQMCommon\n' +
     'include QICoreCommon version \'2.1.000\' called QICoreCommon\n' +
     'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
@@ -371,54 +369,46 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     'valueset "Gynecological Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.257\'\n' +
     'valueset "Hemorrhagic Stroke": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.212\'\n' +
     'valueset "Ischemic Stroke": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.247\'\n' +
-    'valueset "Hip Fracture Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.258\' \n' +
-    'valueset "Hip Replacement Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.259\' \n' +
-    'valueset "Injectable Factor Xa Inhibitor for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.211\' \n' +
-    'valueset "INR": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.213\' \n' +
-    'valueset "Intensive Care Unit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1029.206\' \n' +
-    'valueset "Intermittent pneumatic compression devices": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.214\' \n' +
-    'valueset "Intracranial Neurosurgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.260\' \n' +
-    'valueset "Intravenous route": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.222\' \n' +
-    'valueset "Knee Replacement Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.261\' \n' +
-    'valueset "Low Dose Unfractionated Heparin for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1045.39\' \n' +
-    'valueset "Low Molecular Weight Heparin for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.219\' \n' +
-    'valueset "Low Risk": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.400\' \n' +
-    'valueset "Medical Reason For Not Providing Treatment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.473\' \n' +
-    'valueset "Mental Health Diagnoses": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.105.12.1004\' \n' +
-    'valueset "Obstetrical or Pregnancy Related Conditions": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.263\' \n' +
-    'valueset "Obstetrics VTE": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.264\' \n' +
-    'valueset "Oral Factor Xa Inhibitor for VTE Prophylaxis or VTE Treatment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.134\' \n' +
-    'valueset "Patient Refusal": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.93\' \n' +
-    'valueset "Rivaroxaban for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.50\' \n' +
-    'valueset "Subcutaneous route": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.223\' \n' +
-    'valueset "Unfractionated Heparin": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.218\' \n' +
-    'valueset "Urological Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.272\' \n' +
-    'valueset "Venous foot pumps": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.230\' \n' +
-    'valueset "Venous Thromboembolism": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.279\' \n' +
-    'valueset "Warfarin": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.232\'\n' +
-    '\n' +
-    'code "Risk for venous thromboembolism": \'72136-5\' from "LOINC" display \'Risk for venous thromboembolism\'\n' +
-    '\n' +
+    'valueset "Hip Fracture Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.258\'\n' +
+    'valueset "Hip Replacement Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.259\'\n' +
+    'valueset "Injectable Factor Xa Inhibitor for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.211\'\n' +
+    'valueset "INR": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.213\'\n' +
+    'valueset "Intensive Care Unit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1029.206\'\n' +
+    'valueset "Intermittent pneumatic compression devices": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.214\'\n' +
+    'valueset "Intracranial Neurosurgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.260\'\n' +
+    'valueset "Intravenous route": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.222\'\n' +
+    'valueset "Knee Replacement Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.261\'\n' +
+    'valueset "Low Dose Unfractionated Heparin for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1045.39\'\n' +
+    'valueset "Low Molecular Weight Heparin for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.219\'\n' +
+    'valueset "Low Risk": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.400\'\n' +
+    'valueset "Medical Reason For Not Providing Treatment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.473\'\n' +
+    'valueset "Mental Health Diagnoses": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.105.12.1004\'\n' +
+    'valueset "Obstetrical or Pregnancy Related Conditions": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.263\'\n' +
+    'valueset "Obstetrics VTE": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.264\'\n' +
+    'valueset "Oral Factor Xa Inhibitor for VTE Prophylaxis or VTE Treatment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.134\'\n' +
+    'valueset "Patient Refusal": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.93\'\n' +
+    'valueset "Rivaroxaban for VTE Prophylaxis": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.50\'\n' +
+    'valueset "Subcutaneous route": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.223\'\n' +
+    'valueset "Unfractionated Heparin": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.218\'\n' +
+    'valueset "Urological Surgery": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.272\'\n' +
+    'valueset "Venous foot pumps": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.230\'\n' +
+    'valueset "Venous Thromboembolism": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.279\'\n' +
+    'valueset "Warfarin": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.232\'\n\n' +
+    'code "Risk for venous thromboembolism": \'72136-5\' from "LOINC" display \'Risk for venous thromboembolism\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n\n' +
     'context Patient\n\n' +
     'define "SDE Ethnicity":\n' +
-    '  SDE."SDE Ethnicity"\n' +
-    '\n' +
+    '  SDE."SDE Ethnicity"\n\n' +
     'define "SDE Payer":\n' +
-    '  SDE."SDE Payer"\n' +
-    '\n' +
+    '  SDE."SDE Payer"\n\n' +
     'define "SDE Race":\n' +
-    '  SDE."SDE Race"\n' +
-    '\n' +
+    '  SDE."SDE Race"\n\n' +
     'define "SDE Sex":\n' +
-    '  SDE."SDE Sex"\n' +
-    '\n' +
+    '  SDE."SDE Sex"\n\n' +
     'define "Initial Population":\n' +
-    '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"\n' +
-    '\n' +
+    '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"\n\n' +
     'define "Denominator":\n' +
-    '  "Initial Population"\n' +
-    '\n' +
+    '  "Initial Population"\n\n' +
     'define "Denominator Exclusions":\n' +
     '  "Encounter Less Than 2 Days"\n' +
     '      union "Encounter with ICU Location Stay 1 Day or More"\n' +
@@ -1075,7 +1065,7 @@ describe('Measure Highlighting', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
@@ -1092,7 +1082,6 @@ describe('Measure Highlighting', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
         Utilities.deleteMeasure()
     })
 
@@ -1134,7 +1123,7 @@ describe('Measure Highlighting', () => {
         Utilities.waitForElementEnabled(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -1153,7 +1142,7 @@ describe('Measure Highlighting', () => {
         // 1
         cy.wait('@expansion', { timeout: 35000 }).then(expansion => {
 
-            for (let valueset of expansion.response.body) {
+            for (let valueset of expansion?.response?.body) {
                 // 2
                 const codes: Array<string> = valueset.expansion.contains.map(a => a.code)
 
@@ -1260,7 +1249,7 @@ describe('Highlighting accurately appears for a single PC measure', () => {
         Utilities.waitForElementEnabled(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -1373,7 +1362,7 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -1412,7 +1401,7 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureSecondGroupPath, request.response.body.id)
+            cy.writeFile(measureSecondGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -1654,7 +1643,7 @@ describe('Highlighting tab shows Results, Definitions, Functions, and Unused sec
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -1788,7 +1777,7 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -1874,8 +1863,8 @@ describe('Highlighting accurately appears for a measure with same Definition in 
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine, null, false, '2025-01-01', '2025-12-31')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'Encounter')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withDuplicateLibraryDefinition_wNoUnusedDefine, undefined, false, '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcJson)
     })
 
@@ -2013,7 +2002,7 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
         Utilities.waitForElementEnabled(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message

@@ -28,11 +28,6 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout', () => {
-
-        
-    })
-
     it('User cannot create a draft of a draft that already exists, while the version is still open', () => {
 
         let versionNumber = '1.0.000'

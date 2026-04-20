@@ -171,23 +171,21 @@ describe('Copy to new measure - partial success case', () => {
     beforeEach('Create measure, measure group, test case and login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, { measureCql: basicCql })
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         CreateMeasurePage.CreateMeasureAPI('M2' + measureName, 'M2' + cqlLibraryName, SupportedModels.qiCore4, measureOptions)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 1)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, null, false, true, false, 1)
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, undefined, false, false, false, 1)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, undefined, false, true, false, 1)
 
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
         Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 1)
     })
-
 
     it('All test cases copy - even new, "empty", or "invalid"', () => {
 

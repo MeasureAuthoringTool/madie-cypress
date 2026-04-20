@@ -288,7 +288,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         CqlLibraryName = 'ImportValidation3Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
         OktaLogin.Login()
@@ -303,8 +303,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     afterEach('Logout and Clean up Measures', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-        
+        Utilities.deleteMeasure()
     })
 
     it('Importing: not a .zip file', () => {
@@ -442,7 +441,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         
 
         Utilities.deleteMeasure()
-        Utilities.deleteMeasure(measureName + 'b', CqlLibraryName,null,null, 2)
+        Utilities.deleteMeasure(measureName + 'b', CqlLibraryName, undefined, undefined, 2)
     })
 
     it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {

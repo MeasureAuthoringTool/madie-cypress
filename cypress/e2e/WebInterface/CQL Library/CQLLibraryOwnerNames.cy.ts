@@ -12,7 +12,7 @@ describe('Library Owner Names Display', () => {
 
     before('Login', () => {
 
-        CQLLibraryPage.createLibraryAPI(CqlLibraryName, SupportedModels.qiCore6, null)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryName, SupportedModels.qiCore6)
     })
 
     it('Making a new CQL Library shows the username on All Libraries tabs & on the Details screen', () => {
@@ -51,5 +51,4 @@ describe('Library Owner Names Display', () => {
 
         cy.get('[data-testid="library-owner-text-field"]').should('have.text', '-')
     })
-
 })

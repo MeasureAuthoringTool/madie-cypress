@@ -4,7 +4,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QiCoreParamsMeasure' + Date.now()
@@ -22,9 +21,7 @@ let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     ' default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
     ' context Patient\n' +
     ' define "Initial Population":\n' +
-    '   true\n' +
-    '          \n' +
-    '                                                                 \n' +
+    '   true\n\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '  (Enc E where E.status = \'finished\') is not null '
 
@@ -32,18 +29,15 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
 
     beforeEach('Create Measure', () => {
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false, '2025-01-01', '2025-12-31')
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'boolean', null)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, undefined, false, '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'boolean')
 
         OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Search, filter and apply Value Set to CQL', () => {
@@ -131,7 +125,6 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
-
     })
 
     it('Value set Details screen', () => {
@@ -167,7 +160,6 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"url": "http://cts.nlm.nih.gov' +
             '/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217"')
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology Author"')
-
     })
 
     it('Edit Value Set with suffix and apply to CQL', () => {

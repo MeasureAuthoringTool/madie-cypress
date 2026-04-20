@@ -32,14 +32,9 @@ describe('Edit Measure: Add Meta Data', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
-
-        
-    })
-
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify the entry, save and retrieval of all Measure Meta Data', () => {
@@ -116,7 +111,6 @@ describe('Edit Measure: Add Meta Data', () => {
         Utilities.waitForElementToNotExist(EditMeasurePage.measurePurposeSavedMsg, 50000)
         cy.log('Purpose was added successfully')
 
-
         //Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(guidance)
@@ -128,7 +122,6 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type(clinicalRecommendation)
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
-
 
         //Definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
@@ -197,7 +190,6 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.measureRTEPurposeContentField).should('contain.text', 'This is a purpose updated.')
         cy.log('Measure Purpose updated successfully')
 
-
         //guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('contain.text', guidance)
@@ -249,7 +241,6 @@ describe('Edit Measure: Add Meta Data', () => {
         EditMeasurePage.addMeasureDefinitionNonQDM('ten', defText)
         EditMeasurePage.addMeasureDefinitionNonQDM('eight', defText)
 
-
         const expectedOrder = ['eight', 'eleven', 'five', 'four', 'nine', 'one', 'seven', 'six', 'ten', 'ThisIsTheDefinitionTermValue']
         const pageTwoOrder = ['three', 'twelve', 'two']
 
@@ -278,14 +269,11 @@ describe('Verify Measure Id and Version Id', () => {
     before('Login', () => {
 
         OktaLogin.Login()
-
     })
 
     after('Log out and Clean up', () => {
 
-        
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify that the Measure Id and Version Id are auto generated for new Measures', () => {
@@ -313,20 +301,17 @@ describe('Generate CMS ID for QI-Core Measure', () => {
 
     before('Login', () => {
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, undefined, false,
             '2012-01-02', '2013-01-01')
 
         OktaLogin.Login()
-
     })
 
     after('Log out and Clean up', () => {
 
-        
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
+
     it('Verify that the CMS ID can be generated successfully for QI-Core Measure', () => {
 
         //Click on Edit Measure
@@ -353,7 +338,6 @@ describe('Generate CMS ID for QI-Core Measure', () => {
         })
 
         cy.log('CMS ID Generated successfully')
-
     })
 })
 
@@ -364,20 +348,17 @@ describe('Generate CMS ID for QDM Measure', () => {
 
     before('Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
             '2012-01-02', '2013-01-01')
 
         OktaLogin.Login()
-
     })
 
-    after('Log out and Clean up', () => {
+    after('Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
+
     it('Verify that the CMS ID can be generated successfully for QDM Measure', () => {
 
         //Click on Edit Measure
@@ -407,7 +388,6 @@ describe('Generate CMS ID for QDM Measure', () => {
         })
 
         cy.log('CMS ID Generated successfully')
-
     })
 })
 
@@ -420,17 +400,13 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
 
         harpUserALT = OktaLogin.getUser(true)
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
             '2012-01-02', '2013-01-01')
-
     })
 
-    afterEach('Log out and Clean up', () => {
+    afterEach('Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify that the Generate CMS ID button is disabled for Non Measure owners', () => {
@@ -447,7 +423,6 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
 
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
         cy.get(EditMeasurePage.generateCmsIdButton).should('not.be.enabled')
-
     })
 
     it('Verify that the Generate CMS ID button is disabled for Shared owners', () => {
@@ -466,6 +441,5 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
 
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
         cy.get(EditMeasurePage.generateCmsIdButton).should('not.be.enabled')
-
     })
 })

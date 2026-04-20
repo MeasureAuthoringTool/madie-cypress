@@ -52,7 +52,7 @@ describe('QI-Core Measure Export with Info', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 60000)
 
-        MeasuresPage.actionCenter('export', null, exportOptions)
+        MeasuresPage.actionCenter('export', undefined, exportOptions)
         cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
@@ -65,7 +65,7 @@ describe('QI-Core Measure Export with Info', () => {
 
     after('Clean up and Logout', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate CQL info appears as annotations on the library JSON', () => {
@@ -118,7 +118,7 @@ describe('QI-Core Measure Export for Publish', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 60000)
 
-        MeasuresPage.actionCenter('export', null, exportOptions)
+        MeasuresPage.actionCenter('export', undefined, exportOptions)
         cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
@@ -131,7 +131,7 @@ describe('QI-Core Measure Export for Publish', () => {
 
     after('Clean up and Logout', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate CQL info appears as annotations on the library JSON', () => {

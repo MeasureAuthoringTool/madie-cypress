@@ -100,7 +100,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         // rav's declared here will match selections from MeasureGroupPage.leftPanelRiskAdjustmentTab
         cy.wait('@cqm').then(cqmMeasure => {
-            const body = cqmMeasure.response.body.population_sets[0]
+            const body = cqmMeasure?.response?.body.population_sets[0]
             expect(body.risk_adjustment_variables.length).eq(4)
             // no guarantee - but seems like statement_name sorts by alphabetical order
             expect(body.risk_adjustment_variables[0].statement_name).eq('SDE Ethnicity')

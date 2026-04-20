@@ -15,11 +15,6 @@ describe('CQL Library List Page Sort by Columns', () => {
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout', () => {
-
-        
-    })
-
     it('CQL Library sorting by columns on All Libraries tab', () => {
 
         //Library Sort

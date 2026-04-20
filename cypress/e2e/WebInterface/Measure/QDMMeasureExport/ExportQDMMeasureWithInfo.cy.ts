@@ -34,7 +34,7 @@ describe('Successful QDM Measure Export with Info', () => {
         measureData.measureCql = qdmMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population',
             '', '', 'Numerator 1 Delivery Encounters With Severe Obstetric Complications', '', 'Denominator')
 
         OktaLogin.Login()
@@ -49,7 +49,7 @@ describe('Successful QDM Measure Export with Info', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.actionCenter('export', null, exportOptions)
+        MeasuresPage.actionCenter('export', undefined, exportOptions)
         cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', {timeout: 5500})
         cy.log('Successfully verified zip file export')
 
@@ -62,7 +62,7 @@ describe('Successful QDM Measure Export with Info', () => {
 
     after('Clean up and Logout', () => {
 
-        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate CQL info appears as annotations on the library JSON', () => {
@@ -100,7 +100,7 @@ describe('Successful QDM Measure Export for Publish', () => {
         measureData.measureCql = qdmMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population',
             '', '', 'Numerator 1 Delivery Encounters With Severe Obstetric Complications', '', 'Denominator')
 
         OktaLogin.Login()
@@ -115,7 +115,7 @@ describe('Successful QDM Measure Export for Publish', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.actionCenter('export', null, exportOptions)
+        MeasuresPage.actionCenter('export', undefined, exportOptions)
         cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', {timeout: 5500})
         cy.log('Successfully verified zip file export')
 

@@ -55,7 +55,7 @@ describe('Test Case Attributes', () => {
         measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -86,8 +86,7 @@ describe('Test Case Attributes', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.UILogout()
+        
         Utilities.deleteMeasure()
     })
 

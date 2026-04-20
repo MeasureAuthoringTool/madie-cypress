@@ -13,7 +13,6 @@ describe('Edit Measure Validations', () => {
         measureName = 'TestMeasure' + Date.now() + randValue
         CqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-
     })
 
     beforeEach('Login', () => {
@@ -22,7 +21,7 @@ describe('Edit Measure Validations', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error messages when the edit measure name entered is invalid', () => {
@@ -50,7 +49,6 @@ describe('Edit Measure Validations', () => {
             'validation.This test is for measure name validation.This test is for measure name validation.This test ' +
             'is for measure name validation.This test is')
         cy.get(EditMeasurePage.measureNameFieldLevelError).should('contain.text', 'A Measure name cannot be more than 500 characters.')
-
     })
 
     it('Verify error message when the eCQM abbreviated title entered is invalid or empty', () => {
@@ -86,7 +84,6 @@ describe('Edit Measure Validations', () => {
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
 
         cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Endorser Number is Required')
-
     })
 })
 
@@ -98,16 +95,13 @@ describe('Measurement Period Validations', () => {
         measureName = 'TestMeasure' + Date.now() + randValue
         CqlLibraryName = 'MeasurementPeriodTestLibrary' + Date.now() + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.SessionLogin()
-
     })
 
     afterEach('Clean up Measures', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
@@ -118,7 +112,6 @@ describe('Measurement Period Validations', () => {
         cy.get(EditMeasurePage.mpStart).clear().type('12/01/2022')
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period ' +
             'end date should be greater than measurement period start date.')
-
     })
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
@@ -156,5 +149,4 @@ describe('Measurement Period Validations', () => {
         cy.get(EditMeasurePage.mpStart).click()
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
     })
-
 })

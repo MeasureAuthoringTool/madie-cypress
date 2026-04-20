@@ -26,7 +26,7 @@ describe('Validate Measure Group', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('All population selections are saved to the database', () => {
@@ -274,6 +274,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -282,23 +284,14 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 22700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false,
-            'Surgical Absence of Cervix', 'Surgical Absence of Cervix',
-            'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate that when an second Initial Population is added, associations appear for IP1 and IP2', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -328,8 +321,6 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
     })
 
     it('Validate that when the association for IP1 changes, IP2 associations also change', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -356,9 +347,6 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
 
     it('Validate association for IP2 is read only', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -379,8 +367,6 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
 
     it('Validate that save can occur once a value has been indicated for IP2', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -413,8 +399,6 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
     })
 
     it('Validate that changing the association when a value has been indicated for IP 2, allows user to save new association', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -480,6 +464,8 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 
+            'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -488,20 +474,14 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate that when an second Initial Population is deleted / removed, the associations are removed', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -543,9 +523,6 @@ describe('Delete second Initial Population -- Ratio score only', () => {
 
     it('Validate that when an second Initial Population is added, a delete / remove button becomes available', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -566,9 +543,6 @@ describe('Delete second Initial Population -- Ratio score only', () => {
     })
 
     it('Validate that when the delete / remove button is clicked, for the second IP, the IP is removed', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -620,8 +594,6 @@ describe('Delete second Initial Population -- Ratio score only', () => {
 
     it('Validate that when the delete button is clicked, for the second IP, the first IP remains the same', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

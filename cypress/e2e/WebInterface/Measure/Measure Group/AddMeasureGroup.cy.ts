@@ -15,15 +15,14 @@ describe('Validate Measure Group additions', () => {
     beforeEach('Create Measure, Measure Group and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName1, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null,
-            null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, undefined, undefined, undefined, undefined, undefined, undefined,
+            undefined, 'Procedure')
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Cleanup', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName1)
+        Utilities.deleteMeasure()
     })
 
     it('Able to add complete group to a measure whom already has a group and previous group is not affected', () => {

@@ -8,6 +8,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { Header } from "../../../../Shared/Header"
 
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let measureName = 'TestMeasure' + Date.now()
@@ -21,26 +22,24 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     beforeEach('Create Measure, Measure Group, and Test Case with alt userLogin', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, null, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, undefined, true)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, true, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, false, true)
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
-        MeasuresPage.actionCenter('edit', null, { altUser: true })
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / succesful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
 
-        OktaLogin.Login()
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout and clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
     })
 
@@ -56,7 +55,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //edit the measure that was not created by logged-in user
-        MeasuresPage.actionCenter('edit', null, { altUser: true }) // this seems wrong, but is needed to get the right measure
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true }) // this seems wrong, but is needed to get the right measure
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
         cy.get(EditMeasurePage.readOnlyMPStartDt).should('have.attr', 'readonly', 'readonly')
@@ -105,13 +104,14 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //edit the measure that was not created by logged-in user
-        MeasuresPage.actionCenter('edit', null, { altUser: true })
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
 
         //confirm that the CQL Editor tab is available and click on it
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('Test for ownership')
 
+        // ToDo: check this
         cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).eq(null)
     })
 
@@ -127,7 +127,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //edit the measure that was not created by logged-in user
-        MeasuresPage.actionCenter('edit', null, { altUser: true })
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
 
         //confirm that the test case tab is available and click on it
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -163,7 +163,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //edit the measure that was not created by logged-in user
-        MeasuresPage.actionCenter('edit', null, { altUser: true })
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Verify that the Add Population Criteria button is not shown

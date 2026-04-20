@@ -1,14 +1,13 @@
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import {QdmCql} from "../../../../Shared/QDMMeasuresCQL";
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
+import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -25,68 +24,52 @@ let updatedTestCaseTitle = testCaseTitle + ' ' + 'UpdatedTestCaseTitle'
 let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'ICFTestSeries'
 let measureCQLWithElements = QdmCql.QDMTestCaseCQLFullElementSection
-const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
-    '\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
+const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n\n' +
+    'using QDM version \'5.6\'\n\n' +
     'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
     'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
     'include HospiceQDM version \'1.0.000\' called Hospice\n' +
     'include PalliativeCareQDM version \'4.0.000\' called PalliativeCare\n' +
-    'include AdvancedIllnessandFrailtyQDM version \'1.0.000\' called AIFrailLTCF\n' +
-    '\n' +
-    'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\' \n' +
-    'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\' \n' +
-    '\n' +
-    'valueset "Bilateral Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1005\' \n' +
-    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
-    'valueset "History of bilateral mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1068\' \n' +
-    'valueset "Mammography": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1018\' \n' +
-    '\n' +
-    'valueset "Outpatient": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1087\' \n' +
-    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
-    'valueset "Status Post Left Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1069\' \n' +
-    'valueset "Status Post Right Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1070\' \n' +
-    'valueset "Unilateral Mastectomy Left": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1133\' \n' +
-    'valueset "Unilateral Mastectomy Right": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1134\' \n' +
-    'valueset "Unilateral Mastectomy, Unspecified Laterality": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1071\' \n' +
-    '//valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
-    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
-    '\n' +
+    'include AdvancedIllnessandFrailtyQDM version \'1.0.000\' called AIFrailLTCF\n\n' +
+    'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\'\n' +
+    'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\'\n\n' +
+    'valueset "Bilateral Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1005\'\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "History of bilateral mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1068\'\n' +
+    'valueset "Mammography": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1018\ \n' +
+    'valueset "Outpatient": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1087\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    'valueset "Status Post Left Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1069\'\n' +
+    'valueset "Status Post Right Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1070\'\n' +
+    'valueset "Unilateral Mastectomy Left": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1133\'\n' +
+    'valueset "Unilateral Mastectomy Right": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1134\'\n' +
+    'valueset "Unilateral Mastectomy, Unspecified Laterality": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1071\'\n' +
+    '//valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\'\n' +
+    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n\n' +
     'code "Female (finding)": \'248152002\' from "SNOMEDCT" display \'Female (finding)\'\n' +
     'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n' +
-    'code "Right (qualifier value)": \'24028007\' from "SNOMEDCT" display \'Right (qualifier value)\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'code "Right (qualifier value)": \'24028007\' from "SNOMEDCT" display \'Right (qualifier value)\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "SDE Ethnicity":\n' +
-    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
-    '\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
     'define "SDE Payer":\n' +
-    '  ["Patient Characteristic Payer": "Payer"]\n' +
-    '\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n\n' +
     'define "SDE Race":\n' +
-    '  ["Patient Characteristic Race": "Race"]\n' +
-    '\n' +
+    '  ["Patient Characteristic Race": "Race"]\n\n' +
     'define "SDE Sex":\n' +
-    '    ["Patient Characteristic Sex": "CMS Sex"]\n' +
-    '\n' +
+    '    ["Patient Characteristic Sex": "CMS Sex"]\n\n' +
     'define "Bilateral Mastectomy Diagnosis":\n' +
     '  ["Diagnosis": "History of bilateral mastectomy"] BilateralMastectomyHistory\n' +
     '    where BilateralMastectomyHistory.prevalencePeriod starts on or before \n' +
-    '    end of "Measurement Period"\n' +
-    '\n' +
+    '    end of "Measurement Period"\n\n' +
     'define "Bilateral Mastectomy Procedure":\n' +
     '  ["Procedure, Performed": "Bilateral Mastectomy"] BilateralMastectomyPerformed\n' +
     '    where Global."NormalizeInterval" ( BilateralMastectomyPerformed.relevantDatetime, BilateralMastectomyPerformed.relevantPeriod ) ends on or before \n' +
-    '    end of "Measurement Period"\n' +
-    '\n' +
+    '    end of "Measurement Period"\n\n' +
     'define "Denominator":\n' +
-    '  "Initial Population"\n' +
-    '\n' +
+    '  "Initial Population"\n\n' +
     'define "Denominator Exclusions":\n' +
     '  Hospice."Has Hospice Services"\n' +
     '    or ( ( exists ( "Right Mastectomy Diagnosis" )\n' +
@@ -100,34 +83,29 @@ const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     '    or exists "Bilateral Mastectomy Procedure"\n' +
     '    or AIFrailLTCF."Is Age 66 or Older with Advanced Illness and Frailty"\n' +
     '    or AIFrailLTCF."Is Age 66 or Older Living Long Term in a Nursing Home"\n' +
-    '    or PalliativeCare."Has Palliative Care in the Measurement Period"\n' +
-    '\n' +
+    '    or PalliativeCare."Has Palliative Care in the Measurement Period"\n\n' +
     'define "Left Mastectomy Diagnosis":\n' +
     '  ( ["Diagnosis": "Status Post Left Mastectomy"]\n' +
     '    union ( ["Diagnosis": "Unilateral Mastectomy, Unspecified Laterality"] UnilateralMastectomyDiagnosis\n' +
     '        where UnilateralMastectomyDiagnosis.anatomicalLocationSite ~ "Left (qualifier value)"\n' +
     '    ) ) LeftMastectomy\n' +
     '    where LeftMastectomy.prevalencePeriod starts on or before \n' +
-    '    end of "Measurement Period"\n' +
-    '\n' +
+    '    end of "Measurement Period"\n\n' +
     'define "Left Mastectomy Procedure":\n' +
     '  ["Procedure, Performed": "Unilateral Mastectomy Left"] UnilateralMastectomyLeftPerformed\n' +
     '    where Global."NormalizeInterval" ( UnilateralMastectomyLeftPerformed.relevantDatetime, UnilateralMastectomyLeftPerformed.relevantPeriod ) ends on or before \n' +
-    '    end of "Measurement Period"\n' +
-    '\n' +
+    '    end of "Measurement Period"\n\n' +
     'define "Right Mastectomy Diagnosis":\n' +
     '  ( ["Diagnosis": "Status Post Right Mastectomy"] RightMastectomyProcedure\n' +
     '    union ( ["Diagnosis": "Unilateral Mastectomy, Unspecified Laterality"] UnilateralMastectomyDiagnosis\n' +
     '        where UnilateralMastectomyDiagnosis.anatomicalLocationSite ~ "Right (qualifier value)"\n' +
     '    ) ) RightMastectomy\n' +
     '    where RightMastectomy.prevalencePeriod starts on or before \n' +
-    '    end of "Measurement Period"\n' +
-    '\n' +
+    '    end of "Measurement Period"\n\n' +
     'define "Right Mastectomy Procedure":\n' +
     '  ["Procedure, Performed": "Unilateral Mastectomy Right"] UnilateralMastectomyRightPerformed\n' +
     '    where Global."NormalizeInterval" ( UnilateralMastectomyRightPerformed.relevantDatetime, UnilateralMastectomyRightPerformed.relevantPeriod ) ends on or before \n' +
-    '    end of "Measurement Period"\n' +
-    '\n' +
+    '    end of "Measurement Period"\n\n' +
     'define "Initial Population":\n' +
     '  exists ( ["Patient Characteristic Sex": "Female (finding)"] )\n' +
     '    and AgeInYearsAt(date from \n' +
@@ -143,8 +121,7 @@ const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     '  )\n' +
     '\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
-    '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)\n' +
-    '  '
+    '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 const measureData: CreateMeasureOptions = {}
 
 describe('Create and Update QDM Test Case', () => {
@@ -160,7 +137,6 @@ describe('Create and Update QDM Test Case', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQLPatient
 
-        //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
@@ -169,9 +145,7 @@ describe('Create and Update QDM Test Case', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Create and Update Test Case for QDM Measure', () => {
@@ -284,18 +258,14 @@ describe('Non Boolean Test case Expected Values', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQLWithElements
 
-        //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'SDE Ethnicity')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Add Test Case Expected values for Non Boolean Measure', () => {
@@ -323,7 +293,6 @@ describe('Non Boolean Test case Expected Values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-
     })
 })
 
@@ -334,17 +303,13 @@ describe('Create and update QDM Test case validations', () => {
 
     beforeEach('Create measure and login', () => {
 
-        //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Create Test case Validation: Test case Title has special characters', () => {
@@ -381,7 +346,6 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
         cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
-
     })
 
     it('Create Test case Validation: Test Case Group has special characters', () => {
@@ -418,7 +382,6 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
         cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
-
     })
 
     it('Edit Test case Validation: Test case Title has special characters', () => {
@@ -442,7 +405,6 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
-
     })
 
     it('Edit Test case Validation: Test case Group has special characters', () => {
@@ -466,6 +428,5 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
-
     })
 })

@@ -48,7 +48,7 @@ describe('CompareLibraryVersions', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 
         cy.wait('@draft', {timeout: 60000}).then((request) => {
-            cy.writeFile(filePath2, request.response.body.id)
+            cy.writeFile(filePath2, request?.response?.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')

@@ -1,7 +1,6 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 
@@ -20,8 +19,7 @@ describe('Create New Measure with very long name', () => {
 
     afterEach('Cleanup and Logout', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Create QI Core 4.1.1 Measure', () => {

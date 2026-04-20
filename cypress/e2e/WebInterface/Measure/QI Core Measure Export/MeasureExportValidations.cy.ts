@@ -45,7 +45,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                 url: '/api/measure?addDefaultCQL=false',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -66,7 +66,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
         })
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -109,7 +109,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     beforeEach('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
     })
@@ -211,7 +211,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
     })
@@ -278,7 +278,7 @@ describe('Error Message on Measure Export when the PC does not have Improvement 
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,

@@ -147,7 +147,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
 
@@ -188,7 +188,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {
@@ -306,7 +306,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {
@@ -344,7 +344,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {

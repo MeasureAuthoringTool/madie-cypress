@@ -77,7 +77,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -157,7 +157,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message
@@ -251,7 +251,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful save message
@@ -351,7 +351,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request.response.body.id)
+            cy.writeFile(measureGroupPath, request?.response?.body.id)
         })
 
         //validation successful save message
@@ -375,7 +375,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         })
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureSecondGroupPath, request.response.body.id)
+            cy.writeFile(measureSecondGroupPath, request?.response?.body.id)
         })
 
         //validation successful update message

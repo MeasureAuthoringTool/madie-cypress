@@ -28,8 +28,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
 
     afterEach('Logout', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify the entry, save and the resulting HTML text formatting that in the RTE field', () => {
@@ -88,7 +87,6 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click({ force: true })
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><strong><em><del><u>description</u></del></em></strong></p>')
 
-
         //undo
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEFieldToolbar).find(EditMeasurePage.unDoBtn).click()
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).click({ force: true })
@@ -144,8 +142,7 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
 
     afterEach('Logout', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify the ability to embed a table into a RTE field as well as to add and remove columns and rows', () => {
@@ -215,7 +212,5 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p><br class="ProseMirror-trailingBreak"></p>')
-
-
     })
 })

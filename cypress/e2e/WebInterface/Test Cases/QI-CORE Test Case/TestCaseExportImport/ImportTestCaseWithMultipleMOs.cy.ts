@@ -21,7 +21,7 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
 
     before('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, undefined, false,
             '2022-01-01', '2022-12-31')
 
         OktaLogin.Login()

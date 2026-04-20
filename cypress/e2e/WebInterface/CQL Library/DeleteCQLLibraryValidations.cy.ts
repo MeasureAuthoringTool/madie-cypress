@@ -50,7 +50,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -118,7 +118,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -198,7 +198,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -262,7 +262,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],

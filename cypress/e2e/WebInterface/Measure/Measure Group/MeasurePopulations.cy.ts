@@ -12,29 +12,19 @@ let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n' +
-    '\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
+    'using FHIR version \'4.0.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "ipp":\n' +
-    '  exists ["Encounter"] E where E.period.start during "Measurement Period"\n' +
-    '  \n' +
+    '  exists ["Encounter"] E where E.period.start during "Measurement Period"\n\n' +
     'define "denom":\n' +
-    '  "ipp"\n' +
-    '  \n' +
+    '  "ipp"\n\n' +
     'define "num":\n' +
-    '  exists ["Encounter"] E where E.status ~ \'finished\'\n' +
-    '  \n' +
+    '  exists ["Encounter"] E where E.status ~ \'finished\'\n\n' +
     'define "numeratorExclusion":\n' +
-    '    "num"\n' +
-    '    \n' +
-    '    \n' +
+    '    "num"\n\n' +
     'define function ToCode(coding FHIR.Coding):\n' +
     ' if coding is null then\n' +
     '   null\n' +
@@ -44,11 +34,9 @@ let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n' +
     '           system: coding.system.value,\n' +
     '           version: coding.version.value,\n' +
     '           display: coding.display.value\n' +
-    '           }\n' +
-    '           \n' +
+    '           }\n\n' +
     'define function fun(notPascalCase Integer ):\n' +
-    '  true\n' +
-    '  \n' +
+    '  true\n\n' +
     'define function "isFinishedEncounter"():\n' +
     '  true'
 let measureCQL_multiplePopulations = MeasureCQL.CQL_Multiple_Populations
@@ -61,7 +49,6 @@ describe('Measure Populations', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
@@ -72,14 +59,11 @@ describe('Measure Populations', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(Header.measures).click()
-
     })
 
     afterEach('Logout', () => {
 
-        
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Validate if the Measure populations reset on Measure Group Scoring change', () => {
@@ -152,7 +136,6 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.numeratorExclusionSelect).should('contain.text', 'Select Numerator Exclusion')
 
         cy.log('Measure Populations reset successfully')
-
     })
 
     it('Measure group created successfully when the population basis match with population return type', () => {
@@ -198,7 +181,6 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
     })
 
     it('Verify error message when the population basis does not match with population return type', () => {
@@ -236,7 +218,6 @@ describe('Measure Populations', () => {
 
         //Verify save button is disabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
-
     })
 })
 
@@ -248,30 +229,22 @@ describe('Warning Messages on Population updates', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL_multiplePopulations)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
-        OktaLogin.SessionLogin()
-
     })
 
     afterEach('Logout', () => {
 
-        
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify warning message when the Measure scoring is updated', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the population criteria tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -291,13 +264,9 @@ describe('Warning Messages on Population updates', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-
     })
 
     it('Verify warning message when the Population basis is updated', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the population criteria tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -320,6 +289,5 @@ describe('Warning Messages on Population updates', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.')
         cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
-
     })
 })
