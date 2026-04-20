@@ -6,30 +6,15 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { Header } from "../../../Shared/Header"
 import { Toasts } from "../../../Shared/Toasts"
 import { MeasureActionOptions } from "../../../Shared/MeasuresPage"
-const dayjs = require('dayjs')
-
-const now = Date.now()
-const measure = {
-    name: 'AdminCorrectExpValues' + now,
-    libraryName: 'ACExpValuesLib' + now,
-    ecqmTitle: 'ACEV',
-    model: SupportedModels.qiCore4,
-    mpStartDate: dayjs().subtract('1', 'year').format('YYYY-MM-DD'),
-    mpEndDate: dayjs().format('YYYY-MM-DD')
-}
-
-let harpUser = ''
 
 let newMeasureName = ''
 let newCQLLibraryName = ''
-let qdmMeasureCQLVm = MeasureCQL.CQLQDMObservationRun
-let measureCQL = MeasureCQL.SBTEST_CQL
-let qdmMeasureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
-
+const qdmMeasureCQLVm = MeasureCQL.CQLQDMObservationRun
+const measureCQL = MeasureCQL.SBTEST_CQL
+const qdmMeasureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 const measureData: CreateMeasureOptions = {}
 const actionOptions: MeasureActionOptions = {
     altUser: false
@@ -46,22 +31,18 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
         newMeasureName = 'TestMeasureA' + Date.now() + randVal
         newCqlLibraryName = 'TestCqlA' + Date.now() + randVal
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-
-        OktaLogin.setupUserSession(false)
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('View Measure Human Readable for Qi Core Draft Measure', () => {
@@ -71,7 +52,7 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
                 cy.request({
                     url: '/api/humanreadable/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET'
                 }).then((response) => {
@@ -94,22 +75,18 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
         newMeasureName = 'TestMeasureB' + Date.now() + randVal
         newCqlLibraryName = 'TestCqlB' + Date.now() + randVal
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-
-        OktaLogin.setupUserSession(false)
     })
 
     afterEach('Clean up', () => {
 
         Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('View Measure Human Readable for Qi Core Versioned Measure', () => {
@@ -120,7 +97,7 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -135,7 +112,7 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
                 cy.request({
                     url: '/api/humanreadable/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET'
                 }).then((response) => {
@@ -164,22 +141,18 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
         measureData.measureCql = qdmMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-
-        OktaLogin.setupUserSession(false)
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('View Measure Human Readable for QDM Draft Measure', () => {
@@ -189,7 +162,7 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
                 cy.request({
                     url: '/api/humanreadable/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET'
                 }).then((response) => {
@@ -207,9 +180,6 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
     let localCqlLibraryName = ''
 
     beforeEach('Create Measure', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
 
         let randVal = (Math.floor((Math.random() * 2000) + 3))
         localMeasureName = 'TestMeasureD' + Date.now() + randVal
@@ -229,13 +199,9 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
     })
 
     afterEach('Clean up', () => {
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
 
         Utilities.deleteVersionedMeasure(localMeasureName, localCqlLibraryName)
     })
@@ -249,7 +215,7 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -266,7 +232,7 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
                     url: '/api/humanreadable/' + id,
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -334,12 +300,11 @@ describe('Measure Human Readable comparison', () => {
 
         cy.wait('@drafted').then(int => {
             // capture measureId of new draft
-            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int?.response?.body.id)
         })
         cy.get(Toasts.successToast, { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
         cy.log('Draft Created Successfully')
-
 
         //version two
         cy.get(Header.measures).click()
@@ -357,7 +322,6 @@ describe('Measure Human Readable comparison', () => {
         MeasuresPage.validateVersionNumber('2.0.000', 1)
         cy.log('Version Created Successfully')
 
-
         //Add Draft to Versioned Measure
         MeasuresPage.actionCenter('draft', 1, actionOptions)
         cy.intercept('/api/measures/*/draft').as('drafted')
@@ -366,19 +330,15 @@ describe('Measure Human Readable comparison', () => {
 
         cy.wait('@drafted').then(int => {
             // capture measureId of new draft
-            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId2', int.response.body.id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId2', int?.response?.body.id)
         })
         cy.get(Toasts.successToast, { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
         cy.log('Draft Created Successfully')
-
-        //log out
-        OktaLogin.UILogout()
-
     })
 
     it('Successful Human Readable comparison, on versioned measures, via API call', () => {
-        harpUser = OktaLogin.setupUserSession(false)
+        OktaLogin.setupUserSession(false)
         const currentUser = Cypress.env('selectedUser')
         //version measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -387,7 +347,7 @@ describe('Measure Human Readable comparison', () => {
                     cy.request({
                         url: '/api/html-diff?newMeasureId=' + measureId + '&oldMeasureId=' + measureId1,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET'
                     }).then((response) => {
@@ -395,7 +355,6 @@ describe('Measure Human Readable comparison', () => {
                         expect(response.body.differences[0].field).to.eql('GUID (Version Specific)')
                         expect(response.body.differences[1].field).to.eql('Version')
                         expect(response.body.differences[2].field).to.eql('Title')
-
                     })
                 })
             })
@@ -426,8 +385,7 @@ describe('Measure Service: Verify error message when there is no Population Crit
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message when there is no Population Criteria for QDM Measure', () => {
@@ -438,7 +396,7 @@ describe('Measure Service: Verify error message when there is no Population Crit
                     failOnStatusCode: false,
                     url: '/api/humanreadable/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET'
                 }).then((response) => {
