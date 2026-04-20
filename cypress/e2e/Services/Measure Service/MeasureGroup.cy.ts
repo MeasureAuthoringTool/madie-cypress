@@ -4,13 +4,27 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 import { OktaLogin } from "../../../Shared/OktaLogin"
 
-let measureName = 'MeasureName ' + Date.now()
-let CqlLibraryName = 'CQLLibraryName' + Date.now()
-let measureScoring = 'Proportion'
+const measureName = 'MeasureGroup ' + Date.now()
+const CqlLibraryName = 'MeasureGroupLib' + Date.now()
+const measureScoring = 'Proportion'
+const popMeasureCQL = MeasureCQL.SBTEST_CQL
+const measureCQL = 'library CQLLibraryName1662121072763538 version \'0.0.000\'\n\n' +
+    'using FHIR version \'4.0.1\'\n\ninclude FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\ncontext Patient\n\n' +
+    'define "ipp":\n  true\n\ndefine "denom":\n "ipp"\n\ndefine "num":\n  exists [\"Encounter\"] E where E.status ~ \'finished\'\n\n' +
+    'define \"numeratorExclusion\":\n\t\"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n\tnull\n\telse\n\tSystem.Code {\n' +
+    '\t\tcode: coding.code.value,\n\t\tsystem: coding.system.value,\n\t\tversion: coding.version.value,\n\t\tdisplay: coding.display.value\n\t}\n\n' +
+    'define function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true'
+const measureCQL2 = 'library SimpleFhirMeasure version \'0.0.001\'\n\nusing FHIR version \'4.0.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\n' +
+    'context Patient\n\ndefine "ipp":\n  exists ["Encounter"] E where E.period.start during "Measurement Period"\n\n' +
+    'define "denom":\n "ipp"\n\ndefine "num":\n  exists ["Encounter"] E where E.status ~ \'finished\'\n\n' +
+    'define "numeratorExclusion":\n"num"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\nnull\nelse\nSystem.Code {\n\tcode: coding.code.value,\n' +
+    '\tsystem: coding.system.value,\n\tversion: coding.version.value,\n\tdisplay: coding.display.value\n}\n\n' +
+    'define function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"():\n  true'
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let popMeasureCQL = MeasureCQL.SBTEST_CQL
-let currentUser = null
+let currentUser = ''
 let PopIniPop = ''
 let PopNum = ''
 let PopDenom = ''
@@ -24,8 +38,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     before('Create Measure', () => {
@@ -33,12 +46,10 @@ describe('Measure Service: Measure Group Endpoints', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-        let measureCQL = "library CQLLibraryName1662121072763538 version '0.0.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  true\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n\n\n\n"
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-
     })
+
     it('Create Proportion measure group', () => {
         let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
@@ -51,7 +62,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -104,7 +115,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -161,7 +172,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -202,7 +213,6 @@ describe('Measure Service: Measure Group Endpoints', () => {
                 })
             })
         })
-
     })
 
     it('Update UCUM Scoring unit for the Measure Group', () => {
@@ -217,7 +227,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -258,7 +268,6 @@ describe('Measure Service: Measure Group Endpoints', () => {
                 })
             })
         })
-
     })
 
     it('Add Second Initial Population for Ratio Measure', () => {
@@ -274,7 +283,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -337,7 +346,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -392,7 +401,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -437,28 +446,25 @@ describe('Measure Service: Measure Group Endpoints', () => {
 })
 
 describe('Measure Service: Edit Measure group / Population Criteria: composite score', () => {
+    
     beforeEach('Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
     })
+
     before('Create Measure', () => {
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-        let measureCQL = "library CQLLibraryName1662121072763538 version '0.0.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  true\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n\n\n\n"
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, null, false, '2022-01-01', '2023-01-01', true)
-
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, undefined, false, '2022-01-01', '2023-01-01', true)
     })
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
-
 
     it('Add Population Criteria Data: composite score value of "All-or-nothing", to the measure', () => {
         currentUser = Cypress.env('selectedUser')
@@ -472,7 +478,7 @@ describe('Measure Service: Edit Measure group / Population Criteria: composite s
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -528,7 +534,7 @@ describe('Measure Service: Edit Measure group / Population Criteria: composite s
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -584,7 +590,7 @@ describe('Measure Service: Edit Measure group / Population Criteria: composite s
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -627,8 +633,6 @@ describe('Measure Service: Edit Measure group / Population Criteria: composite s
             })
         })
     })
-
-
 })
 
 describe('Measure Populations', () => {
@@ -638,7 +642,6 @@ describe('Measure Populations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, popMeasureCQL)
 
         OktaLogin.setupUserSession(false)
@@ -646,8 +649,7 @@ describe('Measure Populations', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify that 400 level response is returned when Population Basis is not included, when trying to create a group', () => {
@@ -664,7 +666,7 @@ describe('Measure Populations', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -708,7 +710,6 @@ describe('Measure Populations', () => {
                 }).then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(400)
-                    //expect(response.body.validationErrors.populationBasis).to.eql('Population Basis is required.')
                 })
             })
         })
@@ -728,7 +729,7 @@ describe('Measure Populations', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -793,7 +794,7 @@ describe('Measure Populations', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -854,8 +855,7 @@ describe('Measure Observations', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     before('Create Measure', () => {
@@ -863,10 +863,8 @@ describe('Measure Observations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-        let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"():\n  true\n\n\n\n"
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL2)
     })
 
     it('Add Measure Observations for Ratio Measure', () => {
@@ -881,7 +879,7 @@ describe('Measure Observations', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -959,7 +957,7 @@ describe('Measure Observations', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1007,11 +1005,16 @@ describe('Measure Stratifications', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        let stratMeasureCQL = "library CQLLibraryName1662480444560541 version '0.0.000'\nusing FHIR version '4.0.1'\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\nvalueset \"Office Visit\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001'\nparameter \"Measurement Period\" Interval<DateTime>\ncontext Patient\ndefine \"ipp\":\nexists [\"Encounter\": \"Office Visit\"] E where E.period.start during \"Measurement Period\"\ndefine \"denom\":\n\"ipp\"\ndefine \"num\":\nexists [\"Encounter\": \"Office Visit\"] E where E.status ~ 'finished'\ndefine \"Surgical Absence of Cervix\":\n    [Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n        where NoCervixHysterectomy.status = 'completed'    \n"
+        let stratMeasureCQL = 'library CQLLibraryName1662480444560541 version \'0.0.000\'\nusing FHIR version \'4.0.1\'\n' +
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\nvalueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n\ncontext Patient\n\n' +
+        'define "ipp":\nexists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period"\n\n' +
+        'define "denom":\n"ipp"\ndefine "num":\nexists ["Encounter": "Office Visit"] E where E.status ~ \'finished\'\n' +
+        'define "Surgical Absence of Cervix":\n[Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy\n\twhere NoCervixHysterectomy.status = \'completed\''
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-        //Create New Measure
+
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, stratMeasureCQL)
 
         OktaLogin.setupUserSession(false)
@@ -1019,8 +1022,7 @@ describe('Measure Stratifications', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Measure group created successfully when the population basis match with Stratification return type', () => {
@@ -1037,7 +1039,7 @@ describe('Measure Stratifications', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1118,7 +1120,7 @@ describe('Measure Stratifications', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1197,7 +1199,7 @@ describe('Measure Stratifications', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1283,7 +1285,7 @@ describe('Measure Stratifications', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1366,7 +1368,7 @@ describe('Measure Stratifications', () => {
                         url: 'api/measures/' + fileContents + '/groups/' + measureGroupId + '/stratification',
                         method: 'POST',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         body: {
                             "description": "",
@@ -1395,7 +1397,7 @@ describe('Measure Stratifications', () => {
                             url: 'api/measures/' + fileContents + '/groups/' + measureGroupId + '/stratification',
                             method: 'PUT',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value
+                                authorization: 'Bearer ' + accessToken?.value
                             },
                             body: {
                                 "id": stratificationId,
@@ -1425,7 +1427,7 @@ describe('Measure Stratifications', () => {
                             url: 'api/measures/' + fileContents + '/groups/' + measureGroupId + '/stratification/' + stratificationId,
                             method: 'DELETE',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value
+                                authorization: 'Bearer ' + accessToken?.value
                             }
                         }).then((response) => {
                             expect(response.status).to.eql(200)
@@ -1438,6 +1440,7 @@ describe('Measure Stratifications', () => {
         })
     })
 })
+
 describe('Creating a group / PC with description for various fields', () => {
 
     beforeEach('Set Access Token', () => {
@@ -1445,16 +1448,15 @@ describe('Creating a group / PC with description for various fields', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-        let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"():\n  true\n\n\n\n"
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL2)
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
+
     it('Description is added to all fields are saved -- no second IP', () => {
         let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
@@ -1469,7 +1471,7 @@ describe('Creating a group / PC with description for various fields', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1550,13 +1552,14 @@ describe('Creating a group / PC with description for various fields', () => {
                 })
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1637,8 +1640,8 @@ describe('Creating a group / PC with description for various fields', () => {
                 })
             })
         })
-
     })
+
     it('Description is added to all fields are saved -- second IP', () => {
         let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
@@ -1652,7 +1655,7 @@ describe('Creating a group / PC with description for various fields', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1741,13 +1744,14 @@ describe('Creating a group / PC with description for various fields', () => {
                 })
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1837,6 +1841,7 @@ describe('Creating a group / PC with description for various fields', () => {
             })
         })
     })
+
     it('Description is added to all fields are saved -- CV Score -- Measure Population', () => {
         let currentUser = Cypress.env('selectedUser')
         let PopIniPop = 'ipp'
@@ -1848,7 +1853,7 @@ describe('Creating a group / PC with description for various fields', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,
@@ -1897,13 +1902,14 @@ describe('Creating a group / PC with description for various fields', () => {
                 })
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
                 cy.request({
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": fileContents,

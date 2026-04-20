@@ -3,21 +3,21 @@ import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import {OktaLogin} from "../../../Shared/OktaLogin";
-import {MeasuresPage} from "../../../Shared/MeasuresPage";
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage";
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
+import { OktaLogin } from "../../../Shared/OktaLogin";
+import { MeasuresPage } from "../../../Shared/MeasuresPage";
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage";
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
 
-let measureName = 'MeasureExport' + Date.now()
-let CqlLibraryName = 'MeasureExportLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+const measureName = 'MeasureExport' + Date.now()
+const CqlLibraryName = 'MeasureExportLibrary' + Date.now()
+const randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 const now = require('dayjs')
-let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
-let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
-let measureCQL_WithErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
+const mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
+const mpEndDate = now().format('YYYY-MM-DD')
+const qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
+const measureCQL_WithErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' \n' +
     'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4\' \n' +
@@ -33,36 +33,27 @@ let measureCQL_WithErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
     'valueset "HPV Test": \'\'\n' +
     'define "ipp": true)'
 
-let measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
-    '\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+const measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n\n' +
+    'using FHIR version \'4.0.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "ipp":\n' +
-    '  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n' +
-    '  \n' +
+    '  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period"\n\n' +
     'define "denom":\n' +
-    '    "ipp"\n' +
-    '    \n' +
+    '    "ipp"\n\n' +
     'define "num":\n' +
-    '    exists ["Encounter"] E where E.status ~ \'finished\'\n' +
-    '      \n' +
+    '    exists ["Encounter"] E where E.status ~ \'finished\'\n\n' +
     'define "numeratorExclusion":\n' +
     '    "num"'
 
-let PopIniPop = 'ipp'
-let PopNum = 'num'
-let PopDenom = 'denom'
-let PopDenex = 'ipp'
-let PopDenexcep = 'denom'
-let PopNumex = 'numeratorExclusion'
+const PopIniPop = 'ipp'
+const PopNum = 'num'
+const PopDenom = 'denom'
+const PopDenex = 'ipp'
+const PopDenexcep = 'denom'
+const PopNumex = 'numeratorExclusion'
 
 const measureData: CreateMeasureOptions = {}
 
@@ -73,7 +64,6 @@ describe('QI-Core Measure Export', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -82,14 +72,13 @@ describe('QI-Core Measure Export', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": 'Proportion',
@@ -155,8 +144,7 @@ describe('QI-Core Measure Export', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Confirm the export end point returns a contentType of "application/zip" for QI-Core Measure', () => {
@@ -167,7 +155,7 @@ describe('QI-Core Measure Export', () => {
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -179,7 +167,6 @@ describe('QI-Core Measure Export', () => {
     })
 })
 
-//Need to revisit the error message after bug fix
 describe('Error Message on Measure Export when the Measure does not have CQL', () => {
 
     before('Create New Measure and Login', () => {
@@ -187,14 +174,12 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
         newMeasureName = measureName + 1 + randValue
         newCqlLibraryName = CqlLibraryName + 1 + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-
     })
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
@@ -206,7 +191,7 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -218,7 +203,6 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
     })
 })
 
-//Need to revisit the error message after bug fix
 describe('Error Message on Measure Export when the Measure CQL has errors', () => {
 
     before('Create New Measure and Login', () => {
@@ -226,14 +210,12 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
         newMeasureName = measureName + 2 + randValue
         newCqlLibraryName = CqlLibraryName + 2 + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL_WithErrors)
-
     })
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
@@ -245,7 +227,7 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -264,14 +246,12 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         newMeasureName = measureName + 3 + randValue
         newCqlLibraryName = CqlLibraryName + 3 + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-
     })
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
@@ -283,7 +263,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -310,7 +290,7 @@ describe('Error Message on Measure Export when the Measure does not have Steward
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": newMeasureName,
@@ -332,14 +312,12 @@ describe('Error Message on Measure Export when the Measure does not have Steward
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
-
         })
-
     })
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure does not have Steward and Developer', () => {
@@ -351,7 +329,7 @@ describe('Error Message on Measure Export when the Measure does not have Steward
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -372,13 +350,12 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
         OktaLogin.setupUserSession(false)
 
-        //Create Measure with out Steward and Developer
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": newMeasureName,
@@ -413,14 +390,12 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
             })
-
         })
-
     })
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description', () => {
@@ -432,7 +407,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -459,23 +434,19 @@ describe('QDM Measure Export', () => {
 
         OktaLogin.setupUserSession(false)
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Successful QDM Measure Export', () => {
@@ -486,7 +457,7 @@ describe('QDM Measure Export', () => {
                     url: '/api/measures/' + id + '/exports',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)

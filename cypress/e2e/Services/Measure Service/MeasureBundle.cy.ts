@@ -7,21 +7,20 @@ import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { Header } from "../../../Shared/Header"
 
-let measureName = 'MeasureBundle' + Date.now()
-let CqlLibraryName = 'MeasureBundleLibrary' + Date.now()
+const measureName = 'MeasureBundle' + Date.now()
+const CqlLibraryName = 'MeasureBundleLibrary' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let newmeasureCQL = MeasureCQL.CQL_Multiple_Populations
+const newmeasureCQL = MeasureCQL.CQL_Multiple_Populations
 const now = require('dayjs')
-let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
-let updatedMeasureName = measureName + randValue
-let updatedCQLLibraryName = CqlLibraryName + randValue
+const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+const mpEndDate = now().format('YYYY-MM-DD')
+const updatedMeasureName = measureName + randValue
+const updatedCQLLibraryName = CqlLibraryName + randValue
 
-let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000\'\n\n' +
+const measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000\'\n\n' +
     'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include Hospice version \'6.0.000\' called Hospice\n\n' +
@@ -38,7 +37,7 @@ let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000
     '    Hospice."Has Hospice Services"\n\n' +
     'define "test":\n' +
     '    true'
-let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n\n' +
+const CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n\n' +
     'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n\n' +
@@ -65,12 +64,12 @@ let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n\n'
     '  true\n\n' +
     'define function "isFinishedEncounter"():\n' +
     '  true'
-let PopIniPop = 'num'
-let PopNum = 'num'
-let PopDenom = 'test'
-let PopDenex = 'num'
-let PopDenexcep = 'num'
-let PopNumex = 'numeratorExclusion'
+const PopIniPop = 'num'
+const PopNum = 'num'
+const PopDenom = 'test'
+const PopDenex = 'num'
+const PopDenexcep = 'num'
+const PopNumex = 'numeratorExclusion'
 
 describe('Proportion Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
@@ -88,10 +87,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-
-        //add meta data, still in progress, needs more work cvasile 2/23/23
-        //Utilities.UpdateMeasureAddMetaDataAPI(newMeasureName, newCqlLibraryName, measureCQL)
-
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
@@ -99,7 +94,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": 'Proportion',
@@ -181,7 +176,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -240,7 +235,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                         cy.request({
                             url: '/api/measures/' + id,
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value
+                                authorization: 'Bearer ' + accessToken?.value
                             },
                             method: 'PUT',
                             body: {
@@ -324,7 +319,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                             url: '/api/measures/' + id + '/bundle',
                             method: 'GET',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value
+                                authorization: 'Bearer ' + accessToken?.value
                             }
                         }).then((response) => {
                             console.log(response)
@@ -359,7 +354,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -406,7 +401,7 @@ describe('Measure Observation Validation', () => {
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": 'Continuous Variable',
@@ -470,7 +465,6 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
 
         OktaLogin.Login()
@@ -480,8 +474,6 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-
-
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
@@ -489,7 +481,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": 'Continuous Variable',
@@ -539,7 +531,6 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                 })
             })
         })
-
     })
 
     beforeEach('Set Access Token', () => {
@@ -560,7 +551,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -605,7 +596,7 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": newMeasureName,
@@ -641,7 +632,7 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(409)
@@ -672,7 +663,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
                     url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": 'Proportion',
@@ -743,7 +734,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
@@ -786,15 +777,14 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
     before('Create Measure', () => {
         const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(true)
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, null, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, undefined, true)
+         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', null, { altUser: true })
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')       
     })
 
     beforeEach('Set Access Token', () => {
@@ -815,7 +805,7 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -854,7 +844,7 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(409)
@@ -872,6 +862,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, newmeasureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -885,8 +876,6 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
     })
 
     afterEach('Clean up', () => {
@@ -902,7 +891,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     console.log(response)
@@ -939,7 +928,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
                 failOnStatusCode: false,
                 url: '/api/measure',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 method: 'POST',
                 body: {
@@ -994,6 +983,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
             })
         })
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'num', '', '', 'num', '', 'numeratorExclusion')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -1004,9 +994,6 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(Header.measures).click()
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'num', '', '', 'num', '', 'numeratorExclusion')
     })
 
     after('Clean up', () => {
@@ -1022,7 +1009,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
@@ -1049,7 +1036,6 @@ describe('Measure bundle end point returns Measure Population Description', () =
         Utilities.deleteMeasure()
     })
 
-
     it('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
         let currentUser = Cypress.env('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
@@ -1059,7 +1045,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
                     url: '/api/measures/' + id + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": id,
@@ -1131,7 +1117,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
                     url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
