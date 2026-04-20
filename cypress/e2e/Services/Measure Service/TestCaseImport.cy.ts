@@ -58,7 +58,7 @@ describe('Test Case Import', () => {
         newCQLLibraryName = cqlLibraryName + randValue + 4
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
@@ -80,7 +80,7 @@ describe('Test Case Import', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: [{
@@ -107,7 +107,7 @@ describe('Test Case Import', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases/imports',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT',
                     body: [{
@@ -135,7 +135,7 @@ describe('Test Case Import', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: [{
@@ -163,7 +163,7 @@ describe('Test Case Import -- Non Measure owner validation', () => {
         newCQLLibraryName = cqlLibraryName + randValue + 2
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
@@ -180,7 +180,7 @@ describe('Test Case Import -- Non Measure owner validation', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: [{
@@ -208,7 +208,7 @@ describe('Test Case import for versioned Measure', () => {
         OktaLogin.setupUserSession(false)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -229,7 +229,7 @@ describe('Test Case import for versioned Measure', () => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -246,7 +246,7 @@ describe('Test Case import for versioned Measure', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: [{
@@ -271,7 +271,7 @@ describe('Multiple Test Case Import', () => {
         newCQLLibraryName = cqlLibraryName + randValue + 6
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
         TestCasesPage.CreateTestCaseAPI(secondTCTitle, secondTCDescription, secondTCSeries, TCJson)
@@ -294,7 +294,7 @@ describe('Multiple Test Case Import', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/imports',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: [

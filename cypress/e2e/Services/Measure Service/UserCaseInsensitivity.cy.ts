@@ -1,37 +1,36 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
-let measureName = ''
-let CQLLibraryName = ''
-let model = 'QI-Core v4.1.1'
 let harpUser = ''
+const measureName = 'UserCaseInsensitivity' + Date.now()
+const CQLLibraryName = 'UserCaseInsensitivityLib' + Date.now()
+const model = 'QI-Core v4.1.1'
 const now = require('dayjs')
-let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
-let eCQMTitle = 'eCQMTitle'
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+const mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
+const mpEndDate = now().format('YYYY-MM-DD')
+const eCQMTitle = 'eCQMTitle'
+const randValue = (Math.floor((Math.random() * 1000) + 1))
 
-describe('Measure Service: Create Measure', function () {
-    beforeEach('Set Access Token', function () {
+describe('Measure Service: Create Measure', () => {
+    beforeEach('Set Access Token', () => {
 
         harpUser = OktaLogin.setupUserSession(false)
     })
-    after('Clean up', function () {
-        Utilities.deleteMeasure(measureName, CQLLibraryName)
+    afterEach('Clean up', () => {
+        Utilities.deleteMeasure()
     })
 
-    it('Create New Measure, with user name typed in regular case', function () {
+    it('Create New Measure, with user name typed in regular case', () => {
         let currentUser = Cypress.env('selectedUser')
-        measureName = 'TestMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
+
         //create measure
-        cy.getCookie('accessToken').then(function (accessToken) {
+        cy.getCookie('accessToken').then(accessToken => {
             cy.request({
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -61,7 +60,7 @@ describe('Measure Service: Create Measure', function () {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET'
                 }).then(function (response) {
