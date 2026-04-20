@@ -11,31 +11,38 @@ import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 let harpUserALT = ''
 let harpUser = ''
-let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
-let TCJsonRace_Update = TestCaseJson.TCJsonRaceOMBRaceDetailed_Update
-let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
+let measureName = 'ServiceQiCoreTC' + Date.now()
+let cqlLibraryName = 'ServiceQiCoreTCLib' + Date.now()
+const TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
+const TCJsonRace_Update = TestCaseJson.TCJsonRaceOMBRaceDetailed_Update
+const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
+const measureCQL = MeasureCQL.ICFTest_CQL
 
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestLibrary' + Date.now()
-let measureScoring = 'Proportion'
-let measureCQL = MeasureCQL.ICFTest_CQL
+const measureScoring = 'Proportion'
+const PopIniPop = 'ipp'
+const PopNum = 'num'
+const PopDenom = 'denom'
+const PopDenex = 'denom'
+const PopDenexcep = 'denom'
+const PopNumex = 'num'
 
-let PopIniPop = 'ipp'
-let PopNum = 'num'
-let PopDenom = 'denom'
-let PopDenex = 'denom'
-let PopDenexcep = 'denom'
-let PopNumex = 'num'
+const TCName = 'TCName' + Date.now()
+const TCSeries = 'SBTestSeries'
+const TCTitle = 'test case title'
+const TCDescription = 'DENOMFail1651609688032'
+const randValue = (Math.floor((Math.random() * 1000) + 1))
+const TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },' +
+'"type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter", "resource": { "id":"1", "resourceType": "Encounter","meta": {' +
+'"versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated",' +
+'"div":"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Sep 9th 2021 for Asthma<a name=\\\"mm\\\"/></div>"}, "status": "finished","class":' + 
+'{ "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],' +
+'"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],' +
+'"period": { "start": "2023-09-10T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2", "resourceType": "Patient",' +
+'"text": { "status": "generated","div": "<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Lizzy Health</div>"},"identifier": [ { "system": ' +
+'"http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", "text": "Lizzy Health",' +
+'"family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
 
-let TCName = 'TCName' + Date.now()
-let TCSeries = 'SBTestSeries'
-let TCTitle = 'test case title'
-let TCDescription = 'DENOMFail1651609688032'
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter", "resource": { "id":"1", "resourceType": "Encounter","meta": { "versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated","div":"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Sep 9th 2021 for Asthma<a name=\\\"mm\\\"/></div>"}, "status": "finished","class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],"period": { "start": "2023-09-10T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2", "resourceType": "Patient","text": { "status": "generated","div": "<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Lizzy Health</div>"},"identifier": [ { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
-
-// attempt to edit a test case with whom the measure has not been shared and whom is also not the owner
-describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to update Json with a user whom is not the owner nor has the measure been shared', () => {
+describe('User without edit access attempts to change a test case', () => {
 
     before('Create Measure', () => {
 
@@ -43,9 +50,9 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         cqlLibraryName = 'TestCql' + Date.now()
 
         //Create Measure as the alt user
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt, null, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt, undefined, true)
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', null, { altUser: true })
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{movetoEnd}{enter}')
@@ -66,7 +73,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
     })
 
-    it('Attempt to enter valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
+    it('Attempt to enter valid Test Case Json with SDE when the measure has not been shared with the user', () => {
 
         const currentUser = Cypress.env('selectedAltUser')
         harpUser = OktaLogin.getUser(false)
@@ -80,7 +87,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -110,7 +117,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -150,7 +157,7 @@ describe('Test Case population values based on Measure Group population definiti
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": measureScoring,
@@ -199,14 +206,13 @@ describe('Test Case population values based on Measure Group population definiti
             })
         })
 
-
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/' + currentUser + '/groupId').should('exist').then((groupIdFc) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'POST',
                         body: {
@@ -254,7 +260,6 @@ describe('Test Case population values based on Measure Group population definiti
                                         "expected": false,
                                         "actual": false
                                     }
-
                                 ]
                             }]
                         }
@@ -279,7 +284,7 @@ describe('Test Case population values based on Measure Group population definiti
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
@@ -293,7 +298,7 @@ describe('Test Case population values based on Measure Group population definiti
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
                     }).then((response) => {
@@ -325,7 +330,7 @@ describe('Test Case population values based on Measure Group population definiti
                     url: '/api/measures/' + measureIdFc + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": measureScoring,
@@ -374,7 +379,7 @@ describe('Test Case population values based on Measure Group population definiti
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
                     }).then((response) => {
@@ -406,7 +411,7 @@ describe('Test Case population values based on Measure Group population definiti
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": measureScoring,
@@ -462,7 +467,7 @@ describe('Test Case population values based on Measure Group population definiti
                         cy.request({
                             url: '/api/measures/' + id + '/test-cases/' + testCaseIdFc,
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value
+                                authorization: 'Bearer ' + accessToken?.value
                             },
                             method: 'PUT',
                             body: {
@@ -535,7 +540,7 @@ describe('Test Case population values based on Measure Group population definiti
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
                     }).then((response) => {
@@ -579,7 +584,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": measureScoring,
@@ -634,7 +639,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'POST',
                         body: {
@@ -699,15 +704,9 @@ describe('Measure Service: Test Case Endpoints', () => {
         })
     })
 
-    // beforeEach('Set Access Token', () => {
-
-    //     OktaLogin.setupUserSession(false)
-
-    // })
-
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureNameLocal, newCqlLibraryNameLocal)
+        Utilities.deleteMeasure()
     })
 
     it('Create Test Case', () => {
@@ -725,7 +724,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                 cy.request({
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -762,7 +761,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -797,7 +796,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                 cy.request({
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
 
@@ -820,7 +819,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
 
@@ -869,7 +868,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -901,7 +900,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -934,7 +933,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -966,7 +965,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -1018,7 +1017,7 @@ describe('Test Case Json Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -1047,7 +1046,7 @@ describe('Test Case Json Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -1078,7 +1077,7 @@ describe('Test Case Json Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -1109,7 +1108,7 @@ describe('Test Case Json Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -1156,7 +1155,7 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
                 cy.request({
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value + 'TEST'
+                        authorization: 'Bearer ' + accessToken?.value + 'TEST'
                     },
                     method: 'POST',
                     body: {
@@ -1193,7 +1192,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": measureScoring,
@@ -1245,7 +1244,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
@@ -1259,7 +1258,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases/list',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: [{
@@ -1307,7 +1306,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
     afterEach('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMName, newCqlLibName)
+        Utilities.deleteMeasure()
     })
 
     it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
@@ -1321,7 +1320,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -1346,7 +1345,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
         OktaLogin.setupUserSession(false)
 
         //Create second Test case
-        TestCasesPage.CreateTestCaseAPI('SecondTCTitle', 'SecondTCSeries', 'SecondTCDescription', null, false, true)
+        TestCasesPage.CreateTestCaseAPI('SecondTCTitle', 'SecondTCSeries', 'SecondTCDescription', undefined, false, true)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
@@ -1355,7 +1354,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'POST',
                         body: {
