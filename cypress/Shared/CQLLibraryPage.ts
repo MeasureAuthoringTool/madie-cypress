@@ -69,8 +69,8 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryExperimentalChkBox = '[id="experimental"]'
     public static readonly editSavedLibraryAlias = '[data-testid="library-alias-input"]'
     public static readonly libraryInfoPanel = '#page-header'
-    public static readonly draftBubble = '[data-testid="draft-bubble"]'
-
+    public static readonly draftBubble = '[data-testid="draft-chip"]'
+    
     // Edit page action center
     public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
     public static readonly actionCenterDelete = '[data-testid="DeleteLibrary"]'

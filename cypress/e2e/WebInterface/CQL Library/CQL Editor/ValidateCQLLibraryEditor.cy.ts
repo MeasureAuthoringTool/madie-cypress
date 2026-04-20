@@ -20,11 +20,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout', () => {
-
-        
-    })
-
     it('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
@@ -288,11 +283,6 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
         CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
 
         OktaLogin.SessionLogin()
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        
     })
 
     it('Value Sets are valid', () => {
