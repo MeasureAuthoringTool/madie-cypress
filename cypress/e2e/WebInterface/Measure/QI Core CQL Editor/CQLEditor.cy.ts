@@ -32,35 +32,23 @@ let measureQICoreCQL_with_different_Lib_name =
     '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
     '		where NoCervixHysterectomy.status = \'completed\''
 
-let qdmUsingStatementCql = 'library TestCql1733741911531 version \'0.0.000\'\n' +
-                                '\n' +
-                                'using QDM version \'5.6\'\n\n' +
-                                '\n' +
-                                'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-                                '\n' +
-                                'parameter "Measurement Period" Interval<DateTime>\n' +
-                                '\n' +
-                                'context Patient'
-
-let fhirUsingStatement = 'library TestLibrary17337661869931379 version \'0.0.000\'\n' +
-    '\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
+let qdmUsingStatementCql = 'library TestCql1733741911531 version \'0.0.000\'\n\n' +
+    'using QDM version \'5.6\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
     'context Patient'
 
-let fhirandQicoreUsingStatements = 'library TestLibrary17337661869931379 version \'0.0.000\'\n' +
-    '\n' +
+let fhirUsingStatement = 'library TestLibrary17337661869931379 version \'0.0.000\'\n\n' +
+    'using FHIR version \'4.0.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient'
+
+let fhirandQicoreUsingStatements = 'library TestLibrary17337661869931379 version \'0.0.000\'\n\n' +
     'using QICore version \'4.1.1\'\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
+    'using FHIR version \'4.0.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
     'context Patient'
 
 
@@ -77,12 +65,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate Save and Discard buttons -- text, functionality, and availability', () => {
@@ -114,7 +97,6 @@ describe('Validate CQL Editor tab sticky footer', () => {
         //confirm that CQL Editor object is empty
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', '')
     })
-
 })
 
 describe('Measure: CQL Editor', () => {
@@ -130,12 +112,7 @@ describe('Measure: CQL Editor', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load', () => {
@@ -400,7 +377,6 @@ describe('Measure: CQL Editor', () => {
 
         cy.get('[data-testid="generic-errors-text-list"]').should('contain.text', 'ELM: 0:0 | Measure CQL must contain a Context.')
         cy.get('[data-testid="CancelIcon"]').should('be.visible')
-
     })
 
     it('Verify error message when Context is anything except Patient', () => {
@@ -455,9 +431,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Value Sets are valid', () => {
@@ -502,7 +476,6 @@ describe('Measure: CQL Editor: valueSet', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:102 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.1059999 " +
             "location = 36:0-36:102")
-
     })
 
     //needs some love, maybe new CQL to test
@@ -545,12 +518,7 @@ describe('CQL errors with included libraries', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify errors appear on CQL Editor page when multiple versions of CQL library is included ', () => {
@@ -577,7 +545,7 @@ describe('CQL errors with included libraries', () => {
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 0:0 | Library FHIRHelpers is already in use in this library.')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 1:56 | Identifier FHIRHelpers is already in use in this library.')
     })
 
     it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
@@ -620,8 +588,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(newCQLTestMeasureName, newCQLTestCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message when there is no using statement in the CQL', () => {
@@ -707,8 +674,7 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(newCQLTestMeasureName, newCQLTestCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message when there is an using statement in the CQL, but it is invalid', () => {
