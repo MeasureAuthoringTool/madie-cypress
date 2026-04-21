@@ -245,8 +245,11 @@ export class OktaLogin {
             cy.visitWithRetry('/');
         }
 
-        // 3) First attempt: wait for login form or landing page
-        waitForEither(35000).then((state) => {
+        // 3) First attempt: wait for login form or landing page.
+        // Bumped to 60s because the alt-user cookie path can take longer
+        // (extra Okta introspect → token → userinfo → user PUT round-trips
+        // before /login redirects to /measures).
+        waitForEither(60000).then((state) => {
             cy.log(`${logPrefix}: UI state after first wait: ${state}`);
 
             if (state === 'landing') {
@@ -262,26 +265,45 @@ export class OktaLogin {
             }
 
             // state === 'timeout'
-            // Cookie-based auth likely failed. The app may be mid-redirect
-            // (e.g. briefly hit /measures then bounced to /login).
-            // We need to get to the login form and enter credentials.
-            cy.log(`${logPrefix}: Timed out detecting UI state. Falling back to form-based login...`);
-
-            // Clear cookies since the cookie-based token was rejected
-            cy.clearAllCookies();
-            cy.clearLocalStorage();
+            // Cookie-based auth likely failed OR the redirect chain just hadn't
+            // finished yet. Re-probe after navigating to /login. Important: do
+            // NOT clear cookies up-front — if the cookie auth actually did work
+            // we'd be throwing away a valid session and forcing form login,
+            // which then fails because /login auto-redirects to /measures.
+            cy.log(`${logPrefix}: Timed out detecting UI state. Re-probing after /login navigation...`);
 
             // Re-register UMLS intercept before navigating — previous alias
             // may have been consumed by earlier page loads.
             cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
 
-            // Navigate directly to /login (with retry on network errors)
+            // Navigate directly to /login (with retry on network errors).
+            // If cookies are still valid, the app will bounce to /measures.
             cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
 
-            // Wait for the login form to appear with a generous timeout
-            cy.get(selectors.username, { timeout: 60000 }).should('be.visible').then(() => {
-                cy.log(`${logPrefix}: Login form visible after fallback — performing form-based login.`);
-                doFormLogin();
+            waitForEither(60000).then((state2) => {
+                cy.log(`${logPrefix}: UI state after fallback wait: ${state2}`);
+
+                if (state2 === 'landing') {
+                    // Cookie auth completed during the fallback — we're in.
+                    return;
+                }
+
+                if (state2 === 'login') {
+                    cy.log(`${logPrefix}: Login form visible after fallback — performing form-based login.`);
+                    doFormLogin();
+                    return;
+                }
+
+                // Still neither: cookie was truly rejected and form never showed.
+                // Last resort: clear cookies and force the form to render.
+                cy.log(`${logPrefix}: Still no UI state. Clearing cookies and forcing form login.`);
+                cy.clearAllCookies();
+                cy.clearLocalStorage();
+                cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
+                cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
+                cy.get(selectors.username, { timeout: 60000 }).should('be.visible').then(() => {
+                    doFormLogin();
+                });
             });
         });
 

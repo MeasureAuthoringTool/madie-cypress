@@ -88,7 +88,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -109,7 +109,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -137,7 +137,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         })
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Initial Population')
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[role="textbox"]').should('contain.text', 'MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).should('contain.text', 'MeasureGroup Description value')
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('contain.value', 'mL')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('contain.text', 'Process')
     })
@@ -170,7 +170,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -182,7 +182,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
@@ -241,7 +241,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -309,7 +309,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -352,7 +352,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -407,7 +407,7 @@ describe('Validate Population Basis', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 
@@ -446,7 +446,7 @@ describe('Validate Population Basis', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //fill in a description value
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         Utilities.setMeasureGroupType()
 

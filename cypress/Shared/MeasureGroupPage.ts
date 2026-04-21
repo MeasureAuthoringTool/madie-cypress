@@ -132,10 +132,13 @@ export class MeasureGroupPage {
     public static readonly rateAggregation = '[data-testid="rateAggregation-rich-text-editor-content"]'
     public static readonly readOnlyRateAggregation = '#rateAggregation'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
-    public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-rich-text-editor"]'
+    // The outer `improvement-notation-description-rich-text-editor` is now just a wrapper
+    // that includes a non-typeable toolbar; the actual contenteditable lives at the
+    // `improvementNotationDescription-rich-text-editor-content` testid.
+    public static readonly improvementNotationDescText = '[data-testid="improvementNotationDescription-rich-text-editor-content"]'
     public static readonly readOnlyImpNotationDescription = '#improvementNotationDescription'
     // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
-    public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description-rich-text-editor"]'
+    public static readonly improvementNotationDescQiCore = '[data-testid="improvementNotationDescription-rich-text-editor-content"]'
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
 

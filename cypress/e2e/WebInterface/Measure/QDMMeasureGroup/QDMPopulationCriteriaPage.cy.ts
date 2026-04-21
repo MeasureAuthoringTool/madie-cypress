@@ -149,9 +149,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.rateAggregation).type('Aggregation')
 
         //Add Improvement Notation --'Increased score indicates improvement'
-        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'false')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('have.attr', 'contenteditable', 'false')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('have.attr', 'contenteditable', 'true')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -176,7 +176,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Add Improvement Notation --'Decreased score indicates improvement'
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Decreased score indicates improvement')
-        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('have.attr', 'contenteditable', 'true')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -201,7 +201,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Add Improvement Notation --'Other'
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Other')
-        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('have.attr', 'contenteditable', 'true')
 
         Utilities.waitForElementDisabled(MeasureGroupPage.measureReportingSaveBtn, 30000)
 

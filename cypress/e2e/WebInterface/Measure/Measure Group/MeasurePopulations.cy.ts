@@ -81,7 +81,7 @@ describe('Measure Populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
         //measure group description
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         //Add Measure Populations for Ratio Measure
         cy.get(MeasureGroupPage.popBasis).should('exist')
@@ -102,7 +102,7 @@ describe('Measure Populations', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -153,7 +153,7 @@ describe('Measure Populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         //measure group description
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         //Add Measure Populations for Ratio Measure
         cy.get(MeasureGroupPage.popBasis).should('exist')
@@ -174,7 +174,7 @@ describe('Measure Populations', () => {
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.rateAggregation).find('[contenteditable]').type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
@@ -198,7 +198,7 @@ describe('Measure Populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         //measure group description
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[contenteditable]').type('MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
         //Add Measure Populations for Ratio Measure
         cy.get(MeasureGroupPage.popBasis).should('exist')
