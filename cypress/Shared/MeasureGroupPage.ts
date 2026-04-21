@@ -218,7 +218,7 @@ export class MeasureGroupPage {
     public static readonly popBasisOption = '#populationBasis-option-0'
 
     //Measure group description
-    public static readonly measureGroupDescriptionBox = '[data-testid="group-description-rich-text-editor"]'
+    public static readonly measureGroupDescriptionBox = '[data-testid="groupDescription-rich-text-editor-content"]'
 
     //saved message
     public static readonly successfulSaveMeasureGroupMsg = '[data-testid="population-criteria-success"]'
