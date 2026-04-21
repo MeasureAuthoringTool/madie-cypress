@@ -9,7 +9,6 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
-import { Toasts } from "../../../../../Shared/Toasts"
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
@@ -54,14 +53,11 @@ describe('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Measure is not owned by nor shared with user: import button is not available', () => {
@@ -439,7 +435,6 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
     afterEach('Logout and Clean up Measures', () => {
         
-
         Utilities.deleteMeasure()
         Utilities.deleteMeasure(measureName + 'b', CqlLibraryName, undefined, undefined, 2)
     })
@@ -463,7 +458,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+        cy.get('[data-testid="populations[0].description-rich-text-editor-content"]')
             .click()
             .type('Some description')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -547,12 +542,10 @@ describe('Test case uniqueness error validation', () => {
 
     afterEach('Logout and Clean up Measures', () => {
         
-
-        Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Export existing test case, then delete the existing test case, then create new test case with previous series and title and, then, attempt to import previously exported test case: verify uniqueness error', () => {
-
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, false, false, false)
 
@@ -664,8 +657,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
     afterEach('Logout and Clean up Measures', () => {
         
-
-        Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Importing two new test cases with the pc not matching on the measure in which the test cases is being imported into', () => {
