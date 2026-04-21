@@ -198,7 +198,9 @@ export class EditMeasurePage {
     public static readonly measureDevelopersAlertMsg = '[data-testid="developers-helper-text"]'
 
     //Description Page
-    public static readonly measureGenericFieldRTETextBox = '[data-testid="generic-field-rich-text-editor"]'
+    // The element with this testid is now itself the contenteditable; the outer
+    // [data-testid="generic-field-rich-text-editor"] is just a non-typeable wrapper.
+    public static readonly measureGenericFieldRTETextBox = '[data-testid="genericField-rich-text-editor-content"]'
     public static readonly measureRTEPurposeContentField = '[data-testid="genericField-rich-text-editor-content"]'
     public static readonly measureDescriptionSaveButton = '[data-testid="measure-description-save"]'
     public static readonly measureDescriptionSuccessMessage = '[data-testid="measureDescriptionSuccess"]'

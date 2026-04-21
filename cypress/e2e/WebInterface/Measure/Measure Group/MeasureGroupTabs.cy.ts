@@ -75,7 +75,7 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.attr', 'contenteditable', 'true')
         cy.get(MeasureGroupPage.rateAggregation).clear()
         cy.get(MeasureGroupPage.rateAggregation).type('{selectAll}{backspace}Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
@@ -108,8 +108,8 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.html', '<p>Typed some value for Rate Aggregation text area field</p>')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.html', '<p>Typed some value for Rate Aggregation text area field</p>')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
@@ -133,8 +133,8 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.html', '<p>Typed some value for Rate Aggregation text area field</p>')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.html', '<p>Typed some value for Rate Aggregation text area field</p>')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
@@ -237,7 +237,7 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the 3 fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.attr', 'contenteditable', 'true')
         cy.get(MeasureGroupPage.rateAggregation).clear()
         cy.get(MeasureGroupPage.rateAggregation).type('{selectAll}{backspace}')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
@@ -274,7 +274,7 @@ describe('Validating Population tabs', () => {
 
 
         //assert that all fields appear on the reporting tab and are blank / without a selected value
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.attr', 'contenteditable', 'true')
         cy.get(MeasureGroupPage.rateAggregation).should('not.contain.text')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
@@ -328,7 +328,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert expected fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.attr', 'contenteditable', 'true')
         cy.get(MeasureGroupPage.rateAggregation).should('not.contain.text')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
@@ -352,7 +352,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the three fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('have.attr', 'contenteditable', 'true')
         cy.get(MeasureGroupPage.rateAggregation).should('not.contain.text')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
