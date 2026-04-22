@@ -55,7 +55,7 @@ export class CQLEditorPage {
     public static readonly applyCodeBtn = '[data-testid="apply-code-0"]'
     public static readonly removeCodeBtn = '[data-testid="remove-code-0"]'
     public static readonly selectDropdownBtn = '[data-testid="select-action-0_apply"]'
-    public static readonly confirmationMsgRemoveDelete = '[class="dialog-warning-body"]'
+    public static readonly confirmationMsgRemoveDelete = '.dialog-warning-body'
 
     //Value Sets page / tab
     public static readonly valueSetsTab = '[data-testid="valueSets-tab"]'
