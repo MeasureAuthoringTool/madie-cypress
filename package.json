@@ -115,7 +115,7 @@
 		"@madie/madie-models": "^1.4.52",
 		"fs-extra": "^11.3.2",
 		"unzipper": "^0.12.3",
-		"uuid": "^13.0.0",
+		"uuid": "^14.0.0",
 		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
 		"xml2js": "^0.6.2"
 	},
