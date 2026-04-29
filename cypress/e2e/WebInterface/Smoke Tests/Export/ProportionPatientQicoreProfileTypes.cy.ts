@@ -31,36 +31,37 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 30000)
     })
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
 
         cy.get(EditMeasurePage.measureDetailsTab).should('be.visible')
         cy.get(EditMeasurePage.measureDetailsTab).click()
-
+       
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type('Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery')
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
         //Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
         cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
 
         //Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
         cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
 
         //Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureRationaleSaveButton).click()
         cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
 
@@ -84,13 +85,13 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         //Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureGuidanceSaveButton).click()
         cy.get(EditMeasurePage.measureGuidanceSuccessMessage).should('be.visible')
 
         //Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
