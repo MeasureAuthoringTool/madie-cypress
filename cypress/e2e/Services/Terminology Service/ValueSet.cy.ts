@@ -15,7 +15,7 @@ describe('Terminology Service: Value Set', () => {
                 url: '/api/vsac/valueset',
                 method: 'GET',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 qs: {
                     oid: '2.16.840.1.113762.1.4.1'
@@ -36,7 +36,7 @@ describe('Terminology Service: Value Set', () => {
                 url: '/api/vsac/valueset',
                 method: 'GET',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 qs: {
                     oid: '2.16.840.1.11356762.1.4.1'
@@ -66,7 +66,7 @@ describe('Terminology Service: Value Set: Authentication', () => {
                 url: '/api/vsac/valueset',
                 method: 'GET',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value + 'test'
+                    Authorization: 'Bearer ' + accessToken?.value + 'test'
                 },
                 qs: {
                     oid: '2.16.840.1.11356762.1.4.1'

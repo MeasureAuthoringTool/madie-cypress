@@ -67,7 +67,7 @@ describe('Test Case population values based on Measure Group population definiti
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": "Cohort",
@@ -104,7 +104,7 @@ describe('Test Case population values based on Measure Group population definiti
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'POST',
                         body: {
@@ -186,7 +186,7 @@ describe('Test Case population values based on Measure Group population definiti
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET',
                     }).then((response) => {
@@ -250,7 +250,7 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
                 cy.request({
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -285,7 +285,7 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -348,7 +348,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -377,7 +377,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -407,7 +407,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -435,7 +435,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -478,7 +478,7 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
         editOptions.altUser = true
 
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', null, editOptions)
+        MeasuresPage.actionCenter('edit', undefined, editOptions)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -497,7 +497,7 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -554,7 +554,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": measureScoring,
@@ -596,7 +596,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                     failOnStatusCode: false,
                     url: '/api/measures/' + id + '/test-cases/list',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: [

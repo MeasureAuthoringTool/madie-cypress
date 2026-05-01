@@ -47,7 +47,7 @@ describe('Version and Draft CQL Library', () => {
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId,
@@ -72,7 +72,7 @@ describe('Version and Draft CQL Library', () => {
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId,
@@ -97,7 +97,7 @@ describe('Version and Draft CQL Library', () => {
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId,
@@ -125,7 +125,7 @@ describe('Version and Draft CQL Library', () => {
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
 
                 }).then((response) => {
@@ -162,7 +162,7 @@ describe('Draft and Version Validations', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId,
@@ -189,7 +189,7 @@ describe('Draft and Version Validations', () => {
                 url: '/api/cql-libraries/versioned?name=' + CqlLibraryOne + '&version=1.0.000',
                 method: 'GET',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
@@ -221,7 +221,7 @@ describe('Version CQL Library without CQL', () => {
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)
@@ -254,7 +254,7 @@ describe('Version CQL Library with invalid CQL', () => {
                     url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)

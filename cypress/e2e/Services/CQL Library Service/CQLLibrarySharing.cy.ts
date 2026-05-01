@@ -37,7 +37,7 @@ describe('CQL Library Sharing Service', () => {
                 cy.request({
                     url: '/api/cql-libraries/admin/sharedWith?libraryids=' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpId': harpUser
                     },
                     method: 'GET'
@@ -75,7 +75,7 @@ describe('CQL Library sharing Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/' + id + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'api-key': '1233'
                     },
                     method: 'PUT',
@@ -107,7 +107,7 @@ describe('CQL Library sharing Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/' + id + 5 + 'z' + '/acls',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT',
                     body: {
@@ -139,7 +139,7 @@ describe('CQL Library sharing Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/sharedWith?libraryids=' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpId': harpUserALT
                     },
                     method: 'GET'

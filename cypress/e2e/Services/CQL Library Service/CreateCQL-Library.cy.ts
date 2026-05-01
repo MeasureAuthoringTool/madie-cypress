@@ -21,7 +21,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -51,7 +51,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -79,7 +79,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                 url: '/api/cql-libraries/searches',
                 method: 'PUT',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     'searchField': "", optionalSearchProperties: [""]  //can be ["libraryName", "version"]
@@ -104,7 +104,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
@@ -124,7 +124,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                 url: '/api/cql-libraries/searches?currentUser=true',
                 method: 'PUT',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     'searchField': "", optionalSearchProperties: [""]  //can be ["libraryName", "version"]
@@ -167,7 +167,7 @@ describe('CQL Library Name validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -192,7 +192,7 @@ describe('CQL Library Name validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -216,7 +216,7 @@ describe('CQL Library Name validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -240,7 +240,7 @@ describe('CQL Library Name validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -264,7 +264,7 @@ describe('CQL Library Name validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -288,7 +288,7 @@ describe('CQL Library Name validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -312,7 +312,7 @@ describe('CQL Library Name validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -344,7 +344,7 @@ describe('CQL Library Model Validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
@@ -368,7 +368,7 @@ describe('CQL Library Model Validations', () => {
                 url: '/api/cql-libraries',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
