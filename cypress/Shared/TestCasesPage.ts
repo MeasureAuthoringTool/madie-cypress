@@ -428,7 +428,7 @@ export class TestCasesPage {
             eleTableEntry = 1
         }
         cy.get(TestCasesPage.qdmTCElementTable).find('tr').eq(eleTableEntry).find('[class="MuiSpeedDial-root MuiSpeedDial-directionRight css-td7g9m"]').then(($element) => {
-            attrData = $element.attr('data-testid').toString().valueOf()
+            attrData = $element.attr('data-testid')!.toString().valueOf()
             return attrData
         }).then((attrData) => {
             elementId = attrData.split('-', 4)
@@ -461,7 +461,7 @@ export class TestCasesPage {
             .find('button.qpp-c-button')
             .invoke('attr', 'data-testid')
             .then(idValue => {
-                testCaseId = idValue.split('-')[5].toString().valueOf()
+                testCaseId = idValue!.split('-')[5].toString().valueOf()
                 cy.writeFile(testCaseIdPath, testCaseId)
             })
     }
@@ -479,9 +479,9 @@ export class TestCasesPage {
             cy.get(this.createTestCaseSaveButton).wait(3000).click()
             //saving testCaseId to file to use later
             cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
-                expect(response.statusCode).to.eq(201)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
-                cy.log(response.body.message)
+                expect(response?.statusCode).to.eq(201)
+                cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response?.body.id)
+                cy.log(response?.body.message)
             })
         })
 
@@ -905,7 +905,7 @@ export class TestCasesPage {
                 cy.request({
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
@@ -975,7 +975,7 @@ export class TestCasesPage {
                 cy.request({
                     url: '/api/measures/' + id + '/test-cases',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'POST',
                     body: {
