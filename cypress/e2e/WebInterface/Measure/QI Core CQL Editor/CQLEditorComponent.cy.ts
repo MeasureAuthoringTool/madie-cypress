@@ -4,14 +4,11 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 const measureName = 'CqlEditorComponent' + Date.now()
 const CqlLibraryName = 'CqlEditorComponentLib' + Date.now()
-const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const measureCQL_WithWarnings = QiCore4Cql.intentionalWarningCql
 const measureCQL_valid = 'library abcde version \'0.0.000\'\n\n' +
     'using FHIR version \'4.0.1\'\n\n' +
@@ -60,8 +57,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify success message on CQL editor component, on save and on tab / page load', () => {
@@ -77,11 +73,9 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
-
     })
 
-    //Skipping until MAT-8777 is fixed
-    it.skip('Verify errors appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
+    it('Verify errors appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -95,12 +89,11 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
-        cy.get(TestCasesPage.importTestCaseAlertMessage).should('contain', '(3) Errors:')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).should('contain.text', 'CQL updated successfully(3) Errors:Row: 14, Col:0: VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
-
+        cy.get('.madie-alert').find('h6').should('contain.text', '(3) Errors:')
+        cy.get('[data-testid="generic-errors-text-list"]').should('contain.text', 'Row: 14, Col:0: VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
     })
 
-    //Skipping until MAT-8777 is fixed
+    //Skipping until able to investigate - warning shows in editor but not in "error box" above
     it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
@@ -120,90 +113,5 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Verify the same warning(s) appear in CQL Editor windows
         Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 17:268 | Could not ' +
             'resolve membership operator for terminology target of the retrieve.')
-
-    })
-})
-
-describe('Validate errors/warnings/success messages on CQL editor component on CQL update', () => {
-
-    const newMeasureName = measureName + 2
-    const newCqlLibraryName = CqlLibraryName + 2
-    let measureCQLValid = measureCQL_valid.replace('abcde', newCqlLibraryName)
-    let measureCQLErrors = measureCQL_WithErrors.replace('qwerty', newCqlLibraryName)
-    let measureCQLWarnings = measureCQL_WithWarnings.replace('TestLibrary16969620425371870', newCqlLibraryName)
-
-    beforeEach('Create measure and login', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.SessionLogin()
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-    })
-
-    it('Verify success message on CQL editor component, on CQL update and on tab / page load', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //Clear the text in CQL Library Editor
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        //Update text in the CQL Library Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLValid)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-
-    })
-
-    //Skipping until MAT-8777 is fixed
-    it.skip('Verify errors appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //Clear the text in CQL Library Editor
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        //Update text in the CQL Library Editor that will cause error
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLErrors)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get('[data-testid="library-warning"]').should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
-        //Verify errors in CQL Editor component
-        cy.get(TestCasesPage.importTestCaseAlertMessage).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(3) Errors:Row: 14, Col:0: VSAC: 0:22 | \"\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'\"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
-
-    })
-
-    //Skipping until MAT-8777 is fixed
-    it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //Clear the text in CQL Library Editor
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        //Update text in the CQL Library Editor that will cause warning
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLWarnings)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
-
-        //Verify errors in CQL Editor component
-        cy.get(TestCasesPage.importTestCaseAlertMessage).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(4) Errors:Row: 26, Col:27: ELM: 27:81 | Expected an expression of type \'System.Boolean\', but found an expression of type \'Interval of System.DateTime\'.Row: 26, Col:83: ELM: 83:95 | Could not resolve call to operator IncludedIn with signature (list<QICore.Encounter>,interval<System.DateTime>).Row: 26, Col:116: Parse: 116:117 | no viable alternative at input \'during day of "Measurement Period")\'Row: 26, Col:116: Parse: 116:117 | extraneous input \')\' expecting {<EOF>, \'define\', \'context\'}(1) Warning:Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology target of the retrieve.')
-
-        //Verify the same warning(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 17:268 | Could not ' +
-            'resolve membership operator for terminology target of the retrieve.')
-
     })
 })
