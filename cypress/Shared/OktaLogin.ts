@@ -356,7 +356,7 @@ export class OktaLogin {
 
 
     public static setupUserSession(altUser: boolean) {
-        let user: string
+        let user = ''
 
         const currentAltUser = Cypress.env('selectedAltUser')
         const currentUser = Cypress.env('selectedUser')
@@ -398,9 +398,9 @@ export class OktaLogin {
                     user = Environment.credentials().harpUser
             }
         }
-        if (!user) {
+        if (user == '') {
             cy.log(`⚠️ setupUserSession: User credential is not set. altUser=${altUser}, selectedAltUser=${currentAltUser}, selectedUser=${currentUser}. Ensure the corresponding environment variables (e.g. TEST_ALT_USERNAME) are configured.`)
-            return ''
+            return user
         }
         cy.log('Current user is: ' + user)
         // doing this here to match dev work, rather than trying to track down each individual config

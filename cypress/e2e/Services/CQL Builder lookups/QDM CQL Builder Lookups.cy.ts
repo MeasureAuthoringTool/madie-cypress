@@ -142,13 +142,13 @@ describe('CQL Builder Lookups: QDM', () => {
     it('Verify QDM CQL is parsed correctly', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.log(accessToken.value)
+
             cy.request({
                 failOnStatusCode: false,
                 url: '/api/qdm/cql-builder-lookups',
                 method: 'PUT',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value,
+                    Authorization: 'Bearer ' + accessToken?.value,
                     'Content-Type': 'text/plain'
                 },
                 body: cql

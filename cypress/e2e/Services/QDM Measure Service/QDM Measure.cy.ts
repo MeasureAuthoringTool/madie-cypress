@@ -36,7 +36,7 @@ describe('Measure Service: QDM Measure', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -82,7 +82,7 @@ describe('Measure Service: QDM Measure', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -131,7 +131,7 @@ describe('Measure Service: QDM Measure', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -212,7 +212,7 @@ describe('QDM Measure: Transmission format', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {

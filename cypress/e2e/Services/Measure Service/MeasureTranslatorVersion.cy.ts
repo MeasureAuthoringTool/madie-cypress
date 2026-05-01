@@ -15,7 +15,7 @@ const qdmMeasureName = 'QDMTranslatorVersion' + timestamp
 const qdmCqlLibraryName = 'QDMTranslatorVersionLibrary' + timestamp
 const qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
 
-const expectedQiCoreVersion = '4.6.0'
+const expectedQiCoreVersion = '4.7.0'
 const expectedQdmVersion = '3.29.0'
 const measureData: CreateMeasureOptions = {}
 

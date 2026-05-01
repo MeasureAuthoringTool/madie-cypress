@@ -29,7 +29,7 @@ describe('Delete CQL Library', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'DELETE'
                 }).then((response) => {
@@ -48,7 +48,7 @@ describe('Delete CQL Library', () => {
                 cy.request({
                     url: '/api/cql-libraries/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'DELETE'
                 }).then((response) => {
@@ -68,7 +68,7 @@ describe('Delete CQL Library', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -84,7 +84,7 @@ describe('Delete CQL Library', () => {
                     cy.request({
                         url: '/api/cql-libraries/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'DELETE'
                     }).then((response) => {
@@ -108,7 +108,7 @@ describe('Delete CQL Library', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'DELETE'
                 }).then((response) => {
@@ -130,7 +130,7 @@ describe('Delete CQL Library', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'DELETE'
                 }).then((response) => {
@@ -150,7 +150,7 @@ describe('Delete CQL Library', () => {
                 cy.request({
                     url: '/api/cql-libraries/transfer?retainShareAccess=false',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpid': harpUserALT
                     },
                     body: [id],
@@ -169,7 +169,7 @@ describe('Delete CQL Library', () => {
                         failOnStatusCode: false,
                         url: '/api/cql-libraries/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'DELETE'
                     }).then((response) => {
@@ -192,7 +192,7 @@ describe('Delete CQL Library', () => {
                     url: '/api/cql-libraries/draft/' + cqlLibraryId,
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId,
@@ -211,7 +211,7 @@ describe('Delete CQL Library', () => {
             cy.request({
                 url: '/api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value,
+                    authorization: 'Bearer ' + accessToken?.value,
                     'harpId': harpUser
                 },
                 method: 'DELETE'
@@ -229,7 +229,7 @@ describe('Delete CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(404)
@@ -250,7 +250,7 @@ describe('Delete CQL Library', () => {
                     failOnStatusCode: false,
                     url: '/api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value,
+                        authorization: 'Bearer ' + accessToken?.value,
                         'harpId': harpUserALT
                     },
                     method: 'DELETE'
@@ -268,7 +268,7 @@ describe('Delete CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'GET',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)

@@ -213,15 +213,16 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
             expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\n')
 
-            expect(bodyText).to.include('\nStatus\tdraft\nSteward (Publisher)\tSemanticBits\nDeveloper' +
-                '\tAcademy of Nutrition and Dietetics\nDescription\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\n' +
-                'TEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\nTESTING\n\n\t\n\n\t\n\n' +
-                'This is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\tUNKNOWN\n' +
-                'Disclaimer\tUNKNOWN\nCitation\t\n\nText 1\n\n\nJustification\tDescription:\n\nText 3\n\n\n' +
-                'Definition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\nGuidance (Usage)\t\n\n' +
-                'this is a meta guidance (usage) value -- for the \'Clinical Usage\' field')
+            expect(bodyText).to.include('\nStatus\tdraft\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition and Dietetics\n' +
+                'Description\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\nTEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\n' +
+                'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\t{"extension":' +
+                '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
+                '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nCitation\t\n\nText 1\n\n\n' +
+                'Justification\tDescription:\n\nText 3\n\n\nDefinition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' + 
+                'Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field')
 
             //measure group meta data
+            cy.log('made it to Measure Group (Rate)')
             expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
                 'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
                 'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
@@ -265,6 +266,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 '    where ValidEncounter.period during "Measurement Period"')
 
             //logic definitions
+            cy.log('made it to Logic Definitions')
             expect(bodyText).to.include('Logic Definitions\n' +
                 'Logic Definition\tLibrary Name: ' + CqlLibraryNameFC + '\n' +
                 '\n' +
@@ -306,6 +308,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
 
             //Dependencies
+            cy.log('made it to Dependencies')
             expect(bodyText).to.include('Dependencies\n' +
                 'Dependency\tDescription: QICore model information\n' +
                 'Resource: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
@@ -350,7 +353,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Code Filter(s):\n' +
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
-            expect(bodyText).to.include('Generated using version 0.5.3 of the sample-content-ig Liquid templates')
+
+            expect(bodyText).to.include('Generated using version 0.5.4 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -441,15 +445,16 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
             expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\n')
 
-            expect(bodyText).to.include('\nSteward (Publisher)\tSemanticBits\nDeveloper' +
-                '\tAcademy of Nutrition and Dietetics\nDescription\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\n' +
-                'TEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\nTESTING\n\n\t\n\n\t\n\n' +
-                'This is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\tUNKNOWN\n' +
-                'Disclaimer\tUNKNOWN\nCitation\t\n\nText 1\n\n\nJustification\tDescription:\n\nText 3\n\n\n' +
-                'Definition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\nGuidance (Usage)\t\n\n' +
-                'this is a meta guidance (usage) value -- for the \'Clinical Usage\' field')
+            expect(bodyText).to.include('\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition and Dietetics\n' +
+                'Description\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\nTEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\n' +
+                'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\t{"extension":' +
+                '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
+                '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nCitation\t\n\nText 1\n\n\n' +
+                'Justification\tDescription:\n\nText 3\n\n\nDefinition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' + 
+                'Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field')
 
             //measure group meta data
+            cy.log('made it to Measure Group (Rate)')
             expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
                 'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
                 'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
@@ -493,6 +498,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 '    where ValidEncounter.period during "Measurement Period"')
 
             //logic definitions
+            cy.log('made it to Logic Definitions')
             expect(bodyText).to.include('Logic Definitions\n' +
                 'Logic Definition\tLibrary Name: ' + CqlLibraryNameFC + '\n' +
                 '\n' +
@@ -534,6 +540,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
 
             //Dependencies
+            cy.log('made it to Dependencies')
             expect(bodyText).to.include('Dependencies\n' +
                 'Dependency\tDescription: QICore model information\n' +
                 'Resource: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
@@ -578,7 +585,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Code Filter(s):\n' +
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
-            expect(bodyText).to.include('Generated using version 0.5.3 of the sample-content-ig Liquid templates')
+
+            expect(bodyText).to.include('Generated using version 0.5.4 of the sample-content-ig Liquid templates')
         })
     })
 })

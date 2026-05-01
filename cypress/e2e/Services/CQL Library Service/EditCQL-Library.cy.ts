@@ -36,7 +36,7 @@ describe('Edit CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId,
@@ -68,7 +68,7 @@ describe('Edit CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
@@ -96,7 +96,7 @@ describe('Edit CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
@@ -124,7 +124,7 @@ describe('Edit CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
@@ -152,7 +152,7 @@ describe('Edit CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
@@ -180,7 +180,7 @@ describe('Edit CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
@@ -208,7 +208,7 @@ describe('Edit CQL Library', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
@@ -253,7 +253,7 @@ describe('Edi CQL Library - Ownership Validations', () => {
                     url: '/api/cql-libraries/' + cqlLibraryId2,
                     method: 'PUT',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "id": cqlLibraryId2,

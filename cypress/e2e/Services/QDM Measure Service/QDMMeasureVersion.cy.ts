@@ -112,7 +112,7 @@ describe('Measure Versioning', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -140,7 +140,7 @@ describe('Measure Versioning', () => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -180,7 +180,7 @@ describe('Measure Version : Non Measure owner validation', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -203,7 +203,7 @@ describe('Version Measure without CQL', () => {
         measureData.cqlLibraryName = newCQLLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
-        measureData.measureCql = null
+        measureData.measureCql = undefined
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
@@ -224,7 +224,7 @@ describe('Version Measure without CQL', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -274,7 +274,7 @@ describe('Version Measure with invalid CQL', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {

@@ -55,7 +55,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": "Cohort",
@@ -127,7 +127,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
                     url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     body: {
                         "scoring": "Cohort",

@@ -28,7 +28,7 @@ describe('Verify Library usage and Delete Library', () => {
                 url: '/api/cql-libraries/usage?libraryName=MATGlobalCommonFunctionsQDM',
                 method: 'GET',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 }
             }).then((response) => {
                 console.log(response)
@@ -59,7 +59,7 @@ describe('Verify Library usage and Delete Library', () => {
                 url: '/api/measures/library/usage?libraryName=AlaraCommonFunctions',
                 method: 'GET',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
@@ -77,7 +77,7 @@ describe('Verify Library usage and Delete Library', () => {
                 url: 'api/cql-libraries/admin/FHIRHelpers/delete-all-versions',
                 method: 'DELETE',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value,
+                    authorization: 'Bearer ' + accessToken?.value,
                     'harpId': harpUser
                 }
             }).then((response) => {
@@ -96,7 +96,7 @@ describe('Verify Library usage and Delete Library', () => {
                 url: 'api/cql-libraries/admin/' + CQLLibraryName + '/delete-all-versions',
                 method: 'DELETE',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value,
+                    authorization: 'Bearer ' + accessToken?.value,
                     'harpId': harpUser
                 }
             }).then((response) => {

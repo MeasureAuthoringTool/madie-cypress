@@ -76,14 +76,21 @@ export class QDMElements {
 
     public static addTimingLocationPeriodDateTime(startDateAndTime?: string, endDateAndTime?: string): void {
 
-        cy.get(TestCasesPage.locationPeriodStartDate).type(startDateAndTime)
-        cy.get(TestCasesPage.locationPeriodEndDate).type(endDateAndTime)
+        if(startDateAndTime) {
+            cy.get(TestCasesPage.locationPeriodStartDate).type(startDateAndTime)
+        }
+        if(endDateAndTime) {
+            cy.get(TestCasesPage.locationPeriodEndDate).type(endDateAndTime)
+        }
     }
 
     public static addTimingRelevantPeriodDateTime(startDateAndTime: string, endDateAndTime?: string): void {
 
         cy.get(TestCasesPage.relevantPeriodStartDate).type(startDateAndTime)
-        cy.get(TestCasesPage.relevantPeriodEndDate).type(endDateAndTime)
+
+        if(endDateAndTime) {
+            cy.get(TestCasesPage.relevantPeriodEndDate).type(endDateAndTime)
+        }
     }
 
     public static addTimingPrevalencePeriodDateTime(startDateAndTime: string, endDateAndTime?: string): void {

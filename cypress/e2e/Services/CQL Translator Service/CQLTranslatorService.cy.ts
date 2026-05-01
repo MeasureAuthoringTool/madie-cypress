@@ -16,7 +16,7 @@ describe('CQL Translation Service', () => {
                     'disable-list-promotion=true&disable-method-invocation=true&validate-units=true',
                 method: 'PUT',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value,
+                    authorization: 'Bearer ' + accessToken?.value,
                     'Content-Type': 'text/plain',
                     'Accept': 'application/json, text/plain, */*'
                 },
