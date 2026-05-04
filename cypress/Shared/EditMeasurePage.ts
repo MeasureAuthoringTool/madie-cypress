@@ -158,6 +158,7 @@ export class EditMeasurePage {
     //Measure MetaData
 
     //RTE field button(s)
+    public static readonly readOnlyRTEBlock = '[class="rich-text-editor_read_only"]'
     public static readonly RTEContentField = '[data-testid="genericField-rich-text-editor-content"]'
     public static readonly RTEFieldToolbar = '[data-testid="genericField-rich-text-editor-toolbar"]'
     public static readonly rteToolBar = '[data-testid="rich-text-editor-toolbar"]'
@@ -274,7 +275,7 @@ export class EditMeasurePage {
                 cy.wait(1000)
 
                 cy.get('#new-version').invoke('val').then(value => {
-                    cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value.toString())
+                    cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value!.toString())
                 })
 
                 cy.get(MeasuresPage.measureVersionContinueBtn).click()
