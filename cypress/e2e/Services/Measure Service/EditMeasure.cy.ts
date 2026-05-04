@@ -37,8 +37,7 @@ describe('Measure Service: Edit Measure', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Update Measure details', () => {
@@ -50,7 +49,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -115,7 +114,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -200,7 +199,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -256,7 +255,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -320,7 +319,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -376,7 +375,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -432,7 +431,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -488,7 +487,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -544,7 +543,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -600,7 +599,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -656,7 +655,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -709,7 +708,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -756,13 +755,14 @@ describe('Measure Service: Edit Measure', () => {
                 })
             })
         })
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -820,7 +820,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -888,7 +888,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -954,7 +954,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1020,7 +1020,7 @@ describe('Measure Service: Edit Measure', () => {
                     cy.request({
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1074,7 +1074,6 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
     updatedMeasureName = measureName + 1 + randValue
     updatedCQLLibraryName = cqlLibraryName + 1 + randValue
 
-
     beforeEach('Create Measure and Set Access Token', () => {
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
@@ -1083,9 +1082,7 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
         let newMName = 'TestMeasureB' + Date.now() + randVal
         let newCqlLibName = 'TestCqlB' + Date.now() + randVal
 
-        //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMName, newCqlLibName, measureCQL)
-
     })
 
     it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
@@ -1101,7 +1098,7 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1144,7 +1141,6 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
                     }).then((response) => {
                         expect(response.status).to.eql(403)
                         expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + id)
-                        //' + harpUser + ' 
                     })
                 })
             })
@@ -1171,8 +1167,7 @@ describe('Edit Measure Validations', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMName, newCqlLibName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message when the measure name is empty', () => {
@@ -1184,7 +1179,7 @@ describe('Edit Measure Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT',
                     body: {
@@ -1238,7 +1233,7 @@ describe('Edit Measure Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1295,7 +1290,7 @@ describe('Edit Measure Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1352,7 +1347,7 @@ describe('Edit Measure Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1417,7 +1412,7 @@ describe('Edit Measure Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1487,8 +1482,7 @@ describe('Measurement Period Validations', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMNameD, newCqlLibNameD)
-
+        Utilities.deleteMeasure()
     })
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
@@ -1501,7 +1495,7 @@ describe('Measurement Period Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1538,7 +1532,7 @@ describe('Measurement Period Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1574,7 +1568,7 @@ describe('Measurement Period Validations', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'PUT',
                         body: {
@@ -1609,7 +1603,7 @@ describe('Measurement Period Validations', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT',
                     body: {
