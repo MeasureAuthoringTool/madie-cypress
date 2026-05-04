@@ -1350,7 +1350,6 @@ describe('Measure Stratifications', () => {
                         ],
                         "improvementNotation": "Increased score indicates improvement",
                         "improvementNotationDescription": "<p>test iND</p>"
-
                     }
                 }).then((response) => {
                     console.log(response)
@@ -1960,5 +1959,3 @@ describe('Creating a group / PC with description for various fields', () => {
         })
     })
 })
-
-
