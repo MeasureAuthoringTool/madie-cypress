@@ -29,7 +29,6 @@ describe('CQL Library Sharing', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -97,7 +96,6 @@ describe('CQL Library Sharing - Multiple instances', () => {
 
     afterEach('LogOut', () => {
 
-        
         Utilities.deleteLibrary(randomCQLLibraryName)
     })
 
@@ -169,7 +167,6 @@ describe('Remove user\'s share access from a library', () => {
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 
         // initial share to harpUserAlt
@@ -178,7 +175,6 @@ describe('Remove user\'s share access from a library', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -227,7 +223,6 @@ describe('Share CQL Library using Action Center buttons', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -296,7 +291,6 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(s) were successfully shared.')
-
     })
 
     it('Action centre share button disabled for Non Library Owner', () => {
@@ -357,7 +351,6 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
 
     afterEach('LogOut', () => {
 
-        
         OktaLogin.setupUserSession(false)
         Utilities.deleteLibrary(updatedCQLLibraryName, false)
     })
