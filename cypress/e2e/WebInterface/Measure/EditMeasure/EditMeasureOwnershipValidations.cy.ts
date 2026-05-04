@@ -8,22 +8,22 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { Header } from "../../../../Shared/Header"
 
-let measureCQL = MeasureCQL.ICFCleanTest_CQL
-let measureName = 'TestMeasure' + Date.now()
-let cqlLibraryName = 'TestLibrary' + Date.now()
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const measureName = 'EMOwnershipValidations' + Date.now()
+const cqlLibraryName = 'EMOwnershipValidationsLib' + Date.now()
 
-let TCSeries = 'SBTestSeries'
-let TCTitle = 'test case title'
-let TCDescription = 'DENOMFail1651609688032'
+const TCSeries = 'SBTestSeries'
+const TCTitle = 'test case title'
+const TCDescription = 'DENOMFail1651609688032'
 
 describe('Read only for measure, measure group, and test cases that user does not own', () => {
 
     beforeEach('Create Measure, Measure Group, and Test Case with alt userLogin', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, undefined, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, true, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0, true, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, false, true)
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -35,7 +35,8 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        cy.get(Header.mainMadiePageButton).click()
+        OktaLogin.SessionLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
 
     afterEach('Logout and clean up', () => {
@@ -44,10 +45,6 @@ describe('Read only for measure, measure group, and test cases that user does no
     })
 
     it('Measure fields on detail page are not editable', () => {
-
-        //page loads
-        cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //navigate to the all measures tab
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
@@ -71,23 +68,23 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[data-testid="genericField-value"]').should('exist')
+        cy.get(EditMeasurePage.readOnlyRTEBlock).should('be.visible')
 
         cy.get(EditMeasurePage.leftPanelCopyright).should('be.visible')
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[class="rich-text-editor_read_only"]').should('exist')
+        cy.get(EditMeasurePage.readOnlyRTEBlock).should('be.visible')
 
         cy.get(EditMeasurePage.leftPanelDisclaimer).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[class="rich-text-editor_read_only"]').should('exist')
+        cy.get(EditMeasurePage.readOnlyRTEBlock).should('be.visible')
 
         cy.get(EditMeasurePage.leftPanelRationale).should('be.visible')
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[class="rich-text-editor_read_only"]').should('exist')
+        cy.get(EditMeasurePage.readOnlyRTEBlock).should('be.visible')
 
         cy.get(EditMeasurePage.leftPanelGuidance).should('be.visible')
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('[class="rich-text-editor_read_only"]').should('exist')
+        cy.get(EditMeasurePage.readOnlyRTEBlock).should('be.visible')
 
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
@@ -95,8 +92,6 @@ describe('Read only for measure, measure group, and test cases that user does no
     })
 
     it('CQL value on the measure CQL Editor tab cannot be changed', () => {
-
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //navigate to the all measures tab
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
@@ -111,52 +106,12 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('Test for ownership')
 
-        // ToDo: check this
-        cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).eq(null)
-    })
-
-    it('Test Cases are read / view only', () => {
-        // since altUser created the measure & tc
-        let currentUser = Cypress.env('selectedAltUser')
-        
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
-
-        //navigate to the all measures tab
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        cy.get(LandingPage.allMeasuresTab).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
-
-        //edit the measure that was not created by logged-in user
-        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
-
-        //confirm that the test case tab is available and click on it
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.checkTestCase(1)
-        cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((fileContents) => {
-
-            //confirm that view button for test case is available and click on the view button
-            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('have.text', 'View')
-            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').click()
-        })
-
-        //confirm that the text boxes, for the test case fields are not visible
-        cy.get(TestCasesPage.detailsTab).click()
-        //<textarea rows="1" readonly="" id="test-case-title" placeholder="Test Case Title" name="title" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">test case title</textarea>
-        cy.get('[id="test-case-title"]').should('have.attr', 'readonly', 'readonly')
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'readonly', 'readonly')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'readonly', 'readonly')
+        cy.get('[class="ace_tooltip ace_dark ace-monokai"]').should('have.text', 'Editing is disabled')
+        cy.get(EditMeasurePage.saveButton).should('not.exist')
     })
 
     it('Fields on Measure Group page are not editable', () => {
 
-        //page loads
-        cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
-
         //navigate to the all measures tab
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
         cy.get(LandingPage.allMeasuresTab).click()
@@ -164,6 +119,7 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         //edit the measure that was not created by logged-in user
         MeasuresPage.actionCenter('edit', undefined, { altUser: true })
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Verify that the Add Population Criteria button is not shown
@@ -198,5 +154,39 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(MeasureGroupPage.reportingTab).click()
         cy.get('[data-testid="rich-text-editor-content"]').should('not.exist')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('have.attr', 'readonly', 'readonly')
+    })
+
+    it('Test Cases are read / view only', () => {
+        // since altUser created the measure & tc
+        let ownerAccount = Cypress.env('selectedAltUser')
+
+        //navigate to the all measures tab
+        cy.get(LandingPage.allMeasuresTab).should('be.visible')
+        cy.get(LandingPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+
+        //edit the measure that was not created by logged-in user
+        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
+
+        //confirm that the test case tab is available and click on it
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.checkTestCase(1)
+        cy.readFile('cypress/fixtures/' + ownerAccount + '/testCaseId').should('exist').then((fileContents) => {
+
+            //confirm that view button for test case is available and click on the view button
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('have.text', 'View')
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').click()
+        })
+
+        //confirm that the text boxes, for the test case fields are not visible
+        cy.get(TestCasesPage.detailsTab).click()
+        //<textarea rows="1" readonly="" id="test-case-title" placeholder="Test Case Title" name="title" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">test case title</textarea>
+        cy.get('[id="test-case-title"]').should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'readonly', 'readonly')
     })
 })
