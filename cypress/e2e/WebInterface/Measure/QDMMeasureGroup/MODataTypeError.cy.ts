@@ -13,7 +13,7 @@ let measureCQL = 'library MOError1690893365906 version \'0.0.000\'\n\n' +
     'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n\n' +
     'valueset "Admit Inpatient": \'urn:oid:2.16.840.1.113762.1.4.1111.164\'\n' +
     'valueset "Decision to Admit to Hospital Inpatient": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.295\'\n' +
-    'valueset "Emergency Department Evaluation": \'urn:oid:2.16.840.1.113762.1.4.1111.163\ \n' +
+    'valueset "Emergency Department Evaluation": \'urn:oid:2.16.840.1.113762.1.4.1111.163\'\n' +
     'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "Hospital Settings": \'urn:oid:2.16.840.1.113762.1.4.1111.126\'\n' +

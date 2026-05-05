@@ -8,16 +8,15 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Toasts } from "../../../../../Shared/Toasts"
 import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
 
 const measureName = 'ETCByNonOwner' + Date.now()
 const CqlLibraryName = 'ETCByNonOwnerLib' + Date.now()
 const testCaseTitle = 'test case title'
+const testCaseSeries = 'SBTestSeries'
 const testCaseDescription = 'DENOMFail' + Date.now()
 const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
-const testCaseSeries = 'SBTestSeries'
 const measureCQLPFTests = QiCore4Cql.reduced_CQL_Multiple_Populations
 
 describe('Ability to run valid test cases whether or not the user is the owner of the measure or if the measure has not been shared with the user', () => {
