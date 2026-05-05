@@ -152,11 +152,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
@@ -220,23 +215,19 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMdescription + '</p>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<p>' + QDMdescription + '</p>')
 
         //Confirm Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMcopyright + '</p>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<p>' + QDMcopyright + '</p>')
 
         //Confirm Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMdisclaimer + '</p>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<p>' + QDMdisclaimer + '</p>')
 
         //Confirm Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMrationale + '</p>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<p>' + QDMrationale + '</p>')
 
         //Confirm Steward & Developers
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
@@ -250,13 +241,11 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMguidance + '</p>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<p>' + QDMguidance + '</p>')
 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).focus()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<p>' + QDMclinicalRecommendation + '</p>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<p>' + QDMclinicalRecommendation + '</p>')
     })
 })
 
