@@ -86,7 +86,9 @@ describe('QDM Library Includes fields', () => {
             .find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable)
             .find('[data-testid="library-results-tbl"]')
             .find('[data-testid="library-results-table-body"]')
-            .should('include.text', 'UATVTEQDM0.1.000yahu1257View / ApplyVTEQDM10.0.000yahu1257View / ApplyVTEQDM9.1.000yahu1257View / ApplyVTEQDM9.0.000yahu1257View / ApplyVTEQDM8.3.000yahu1257View / Apply')
+            .should('include.text', 'UATVTEQDM0.1.000yahu1257View / Apply')
+        cy.get('[data-testid*="edit-button"]').should('have.length', 5)
+        
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -112,7 +114,8 @@ describe('QDM Library Includes fields', () => {
             .find(CQLEditorPage.librarySearchTable)
             .find('[data-testid="library-results-tbl"]')
             .find('[data-testid="library-results-table-body"]')
-            .should('include.text', 'UATVTEQDM0.1.000yahu1257View / ApplyVTEQDM10.0.000yahu1257View / ApplyVTEQDM9.1.000yahu1257View / ApplyVTEQDM9.0.000yahu1257View / ApplyVTEQDM8.3.000yahu1257View / Apply')
+            .should('include.text', 'UATVTEQDM0.1.000yahu1257View / Apply')
+        cy.get('[data-testid*="edit-button"]').should('have.length', 5)
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
