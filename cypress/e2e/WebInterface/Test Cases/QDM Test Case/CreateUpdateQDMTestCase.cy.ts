@@ -36,7 +36,7 @@ const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n\n' +
     'valueset "Bilateral Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1005\'\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "History of bilateral mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1068\'\n' +
-    'valueset "Mammography": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1018\ \n' +
+    'valueset "Mammography": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1018\'\n' +
     'valueset "Outpatient": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1087\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
     'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
@@ -140,7 +140,6 @@ describe('Create and Update QDM Test Case', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -241,7 +240,6 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-
     })
 })
 
