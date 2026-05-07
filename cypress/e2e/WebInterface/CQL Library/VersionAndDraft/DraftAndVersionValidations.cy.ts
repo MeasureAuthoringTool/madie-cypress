@@ -3,34 +3,33 @@ import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
 let CqlLibraryOne = ''
 let CqlLibraryOther = ''
 let updatedCqlLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
+const versionNumber = '1.0.000'
 const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
+const validCql = LibraryCQL.validCQL4QICORELib
 
 describe('Action Center Buttons - Draft and Version Validations', () => {
 
     before('Create CQL Library for duplicate name test', () => {
         //create a single use CQL Library with invalid CQL (used for duplicate-name draft test)
         CqlLibraryOther = 'Another' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { cql: invalidLibraryCql, cqlErrors: true })
     })
 
     beforeEach('Create CQL Library and Login', () => {
         //create a fresh CQL Library with valid CQL for versioning
         CqlLibraryOne = 'VersionLib' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
         OktaLogin.SessionLogin()
     })
 
     it('User cannot create a draft of a draft that already exists, while the version is still open', () => {
 
-        let versionNumber = '1.0.000'
         updatedCqlLibraryName = 'UpdatedCQLLibraryOne' + Date.now()
 
         cy.get(Header.cqlLibraryTab).click()
@@ -56,7 +55,6 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
 
     it('Verify the CQL Library updates are restricted after Version is created', () => {
 
-        let versionNumber = '1.0.000'
         updatedCqlLibraryName = 'UpdatedCQLLibraryOne' + Date.now()
 
         cy.get(Header.cqlLibraryTab).click()
@@ -72,8 +70,6 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
     })
 
     it('Draft cannot be saved with a name that exists for a different library', () => {
-
-        let versionNumber = '1.0.000'
 
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('version')
@@ -103,7 +99,7 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate(true)
+        Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 15000)
 
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('version')

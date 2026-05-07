@@ -4,17 +4,19 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
 let CqlLibraryOne: string
-let CQLLibraryPublisher = 'SemanticBits'
-let versionNumber = '1.0.000'
+const versionNumber = '1.0.000'
+const validCql = LibraryCQL.validCQL4QICORELib
 
 describe('Action Center Buttons - Add Version to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
         CqlLibraryOne = 'AddLibraryVersion' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
         OktaLogin.Login()
     })
 

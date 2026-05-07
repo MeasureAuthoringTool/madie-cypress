@@ -4,32 +4,30 @@ import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibrar
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
-const CQLLibraryName = 'LibrarySharing' + Date.now()
-const randValue = (Math.floor((Math.random() * 1000) + 1))
-const randomCQLLibraryName = 'LibrarySharingDraft' + randValue + 5
-const CQLLibraryPublisher = 'SemanticBits'
+const now = Date.now()
+const randomCQLLibraryName = 'LibrarySharingDraft' + now
+const updatedCQLLibraryName = 'NewNameForLibrarySharing' + now
 const versionNumber = '1.0.000'
-let newCQLLibraryName = ''
-let updatedCQLLibraryName = ''
+const validCql = LibraryCQL.validCQL4QICORELib
 let harpUserALT = ''
+let CQLLibraryName = ''
 
 describe('CQL Library Sharing', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
-        updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
-
-        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
-
+        CQLLibraryName = 'LibrarySharing' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
+
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
     })
 
     afterEach('LogOut', () => {
 
-        Utilities.deleteLibrary(newCQLLibraryName)
+        Utilities.deleteLibrary()
     })
 
     it('Verify CQL Library can be edited by the shared user', () => {
@@ -84,23 +82,22 @@ describe('CQL Library Sharing - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
-
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
-
+        CQLLibraryName = 'LibrarySharing' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
-        OktaLogin.Login()
-        cy.get(Header.cqlLibraryTab).click()
+
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
     })
 
     afterEach('LogOut', () => {
 
-        Utilities.deleteLibrary(randomCQLLibraryName)
+        Utilities.deleteLibrary()
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Shared to the new owner', () => {
         const currentUser = Cypress.env('selectedUser')
+
+        OktaLogin.Login()
+        cy.get(Header.cqlLibraryTab).click()
 
         //Version the CQL Library
         CQLLibrariesPage.cqlLibraryActionCenter("version")
@@ -142,7 +139,6 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.log('Draft Created Successfully')
         //Share Library with ALT User
 
-        OktaLogin.setupUserSession(false)
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
@@ -156,7 +152,11 @@ describe('CQL Library Sharing - Multiple instances', () => {
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName) //fail here 
         //Click on Expand button to view Versioned Library
         cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
-        cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
+        cy.get('[data-testid="table-body"]').should('contain', CQLLibraryName)
+
+        // return to list so library unlocks
+        cy.get(Header.cqlLibraryTab).click()
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 15000)
     })
 })
 
@@ -164,10 +164,10 @@ describe('Remove user\'s share access from a library', () => {
 
     beforeEach('Create library and Set Access Token', () => {
 
-        OktaLogin.setupUserSession(false)
+        CQLLibraryName = 'LibrarySharing' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
 
         // initial share to harpUserAlt
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -175,7 +175,7 @@ describe('Remove user\'s share access from a library', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        Utilities.deleteLibrary(newCQLLibraryName)
+        Utilities.deleteLibrary()
     })
 
     it('After removing access, user can no longer edit the library', () => {
@@ -211,19 +211,15 @@ describe('Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        OktaLogin.setupUserSession(false)
+        CQLLibraryName = 'LibrarySharing' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
-        updatedCQLLibraryName = CQLLibraryName + randValue + 5
-
-        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
     })
 
     afterEach('LogOut', () => {
 
-        Utilities.deleteLibrary(newCQLLibraryName)
+        Utilities.deleteLibrary()
     })
 
     it('Verify CQL Library owner can share Library from Action centre share button and shared user is able to edit Library', () => {
@@ -277,7 +273,6 @@ describe('Share CQL Library using Action Center buttons', () => {
         OktaLogin.Login()
 
         //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Share Library with ALT user
@@ -339,20 +334,15 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
 
     beforeEach('Create CQL Library', () => {
 
-        OktaLogin.setupUserSession(false)
+        CQLLibraryName = 'LibrarySharing' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
-        updatedCQLLibraryName = CQLLibraryName + randValue + 5
-
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
     })
 
     afterEach('LogOut', () => {
 
-        OktaLogin.setupUserSession(false)
-        Utilities.deleteLibrary(updatedCQLLibraryName, false)
+        Utilities.deleteLibrary()
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
@@ -373,7 +363,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.createVersionContinueButton).should('be.visible')
         cy.get(CQLLibrariesPage.createVersionContinueButton).click()
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New version of CQL Library is Successfully created')
-        CQLLibrariesPage.validateVersionNumber(newCQLLibraryName, versionNumber)
+        CQLLibrariesPage.validateVersionNumber(CQLLibraryName, versionNumber)
         cy.log('Version Created Successfully')
 
         //Add Draft to Versioned Library
@@ -429,6 +419,6 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
         //Click on Expand button to view Versioned Library
         cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
-        cy.get('[data-testid="table-body"]').should('contain.text', newCQLLibraryName)
+        cy.get('[data-testid="table-body"]').should('contain.text', CQLLibraryName)
     })
 })

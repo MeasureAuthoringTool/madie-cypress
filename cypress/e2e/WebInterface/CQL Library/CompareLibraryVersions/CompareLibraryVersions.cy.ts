@@ -4,22 +4,25 @@ import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
 let CqlLibraryOne: string
-const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
+const validCql = LibraryCQL.validCQL4QICORELib
 
 describe('CompareLibraryVersions', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
         CqlLibraryOne = 'CompareLibraryVersion' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
         CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
+    
     afterEach('Logout and Clean up CQL Libraries', () => {
 
-        OktaLogin.UILogout()
+        //manually captured cqlLibrary2 as part of the test
         Utilities.deleteLibrary(CqlLibraryOne, false, 2)
     })
 

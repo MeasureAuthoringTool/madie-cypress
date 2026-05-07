@@ -2,17 +2,18 @@ import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 import { LibraryCQL } from "../../../Shared/LibraryCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
+let harpUser = ''
+let harpUserALT = ''
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
 let updatedCqlLibraryName = 'UpdatedTestLibrary' + Date.now()
-let harpUser = ''
-let harpUserALT = ''
 const model = 'QI-Core v4.1.1'
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
 const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
+const validCql = LibraryCQL.validCQL4QICORELib
 
 describe('Version and Draft CQL Library', () => {
 
@@ -26,11 +27,11 @@ describe('Version and Draft CQL Library', () => {
 
         //Create CQL Library with Regular User
         CqlLibraryOne = 'TestLibrary1' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
 
         //Create Measure with Alternate User
         CqlLibraryTwo = 'TestLibrary2' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryTwo, CQLLibraryPublisher, true, true)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryTwo, SupportedModels.qiCore4, { cql: validCql, libraryNumber: 2, altUser: true })
     })
 
     it('Add Version to the CQL Library', () => {
@@ -127,7 +128,6 @@ describe('Version and Draft CQL Library', () => {
                     headers: {
                         authorization: 'Bearer ' + accessToken?.value
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(403)
                     expect(response.body.message).to.eql('User ' + harpUserALT + ' cannot modify resource CQL Library with id: ' + cqlLibraryId)
@@ -145,7 +145,7 @@ describe('Draft and Version Validations', () => {
         harpUserALT = OktaLogin.getUser(true)
 
         CqlLibraryOne = 'TestLibraryOne' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
     })
 
     it('Verify the CQL Library updates are restricted after Version is created', () => {
@@ -208,7 +208,7 @@ describe('Version CQL Library without CQL', () => {
         harpUserALT = OktaLogin.getUser(true)
 
         CqlLibraryOne = 'CQLLibraryWithoutCQL' + Date.now()
-        CQLLibraryPage.createCQLLibraryAPI(CqlLibraryOne, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4)
     })
 
     it('User can not version CQL Library if there is no CQL', () => {
@@ -264,4 +264,3 @@ describe('Version CQL Library with invalid CQL', () => {
         })
     })
 })
-

@@ -4,11 +4,13 @@ import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibrar
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
 let CQLLibraryName = ''
 let harpUserALT = ''
-const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
+const validCql = LibraryCQL.validCQL4QICORELib
 
 describe('CQL Library Transfer', () => {
 
@@ -16,7 +18,7 @@ describe('CQL Library Transfer', () => {
 
         CQLLibraryName = 'TransferLibrary' + Date.now()
 
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
 
         harpUserALT = OktaLogin.getUser(true)
     })
@@ -95,8 +97,8 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         CQLLibraryName = 'ACTransferLibrary' + Date.now()
 
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
-        OktaLogin.setupUserSession(false)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
+
         harpUserALT = OktaLogin.getUser(true)
     })
 
@@ -258,7 +260,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
 
         CQLLibraryName = 'TransferMultipleLibraries' + Date.now()
 
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
 
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
