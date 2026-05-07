@@ -77,7 +77,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
-    public static readonly actionCenterTransfer = '[data-testid="Transfer"]' //'[data-testid="Youcannottransferalibraryyoudonotown."]' 
+    public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
 
     //CQL Editor
@@ -169,8 +169,7 @@ export class CQLLibraryPage {
                     "librarySetId": uuidv4(),
                     "description": "description",
                     "publisher": CQLLibraryPublisher,
-                    'cql': cql//,
-                    //"programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
+                    'cql': cql
                 }
             }).then((response) => {
                 let currentUser = Cypress.env('selectedUser')
@@ -181,56 +180,6 @@ export class CQLLibraryPage {
                 {
                     currentUser = Cypress.env('selectedAltUser')
                 }
-                if (twoLibraries === true) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2', response.body.id)
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
-                }
-
-            })
-        })
-        return user
-    }
-
-    public static createAPICQLLibraryWithValidCQL(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
-        const currentUser = Cypress.env('selectedUser')
-
-        let user = ''
-
-        if (altUser === undefined || altUser === null)
-        {
-            altUser = false
-        }
-
-        user = OktaLogin.setupUserSession(altUser)
-
-        //Create New CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
-                method: 'POST',
-                body: {
-                    'cqlLibraryName': CqlLibraryName,
-                    'model': 'QI-Core v4.1.1',
-                    'cql': "library SupplementalDataElementsQICore4 version '2.0.0'\n" +
-                        "\n" +
-                        "using QICore version '4.1.1'\n" +
-                        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-                        "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'\n" +
-                        "context Patient",
-                    "librarySetId": uuidv4(),
-                    "description": "description",
-                    "publisher": CQLLibraryPublisher,
-                    'createdBy': user
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
                 if (twoLibraries === true) {
                     cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2', response.body.id)
                 }

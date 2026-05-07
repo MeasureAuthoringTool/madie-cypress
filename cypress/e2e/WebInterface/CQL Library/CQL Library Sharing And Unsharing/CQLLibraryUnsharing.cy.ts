@@ -4,11 +4,13 @@ import { Header } from "../../../../Shared/Header"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
-let CQLLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
+let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
+const validCql = LibraryCQL.validCQL4QICORELib
 
 describe('Unshare CQL Library using Action Center buttons', () => {
 
@@ -18,7 +20,7 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
     })
 
     it('Verify CQL Library owner can unshare Library from Libraries page Action centre share button', () => {
@@ -161,7 +163,7 @@ describe('Unshare CQL Library using Action Center buttons - Multiple instances',
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are unshared from the user', () => {

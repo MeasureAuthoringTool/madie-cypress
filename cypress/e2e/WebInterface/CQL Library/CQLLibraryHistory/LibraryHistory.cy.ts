@@ -3,12 +3,14 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
 let CQLLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = ''
 let harpUser = ''
 let updatedCQLLibraryName = ''
+const validCql = LibraryCQL.validCQL4QICORELib
 
 describe('Library History - Create, Update, Sharing and Unsharing Actions', () => {
 
@@ -19,7 +21,7 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
         OktaLogin.Login()
     })
 
@@ -102,7 +104,7 @@ describe('Library History - Version and Draft actions', () => {
 
         updatedCQLLibraryName = CQLLibraryName + 'Updated'
 
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
         OktaLogin.Login()
     })
 
@@ -155,7 +157,7 @@ describe('Library History - Transfer action', () => {
 
         updatedCQLLibraryName = CQLLibraryName + 'Updated'
 
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
     })
 
     it('Verify that Transfer Library action is recorded in Library History', () => {
