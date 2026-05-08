@@ -11,20 +11,23 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { Toasts } from "../../../../Shared/Toasts"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let missingResourceIDTCJson = TestCaseJson.TestCaseJson_missingResourceIDs
-let missingResourceIDTCJsonButHasFullUrlExt = TestCaseJson.TestCaseJson_missingResourceIDsHasfullUrlExt
-let emptyResourceIDTCJson = TestCaseJson.TestCaseJson_emptyResourceIDs
-let missingMetaProfile = TestCaseJson.TestCaseJson_missingMetaProfile
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let cardInvalidTCJson = TestCaseJson.tcCardErrorJson
-let testCaseSeries = 'SBTestSeries'
-let measureCQL = MeasureCQL.CQL_Multiple_Populations
-let measureCQLPFTests = MeasureCQL.CQL_Populations
-let CQLForCVMeasure = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
+const measureName = 'JSONTerminology'
+const CqlLibraryName = 'JSONTerminologyLib'
+const testCaseTitle = 'test case title'
+const testCaseDescription = 'example test case'
+const testCaseSeries = 'SBTestSeries'
+const missingResourceIDTCJson = TestCaseJson.TestCaseJson_missingResourceIDs
+const missingResourceIDTCJsonButHasFullUrlExt = TestCaseJson.TestCaseJson_missingResourceIDsHasfullUrlExt
+const emptyResourceIDTCJson = TestCaseJson.TestCaseJson_emptyResourceIDs
+const missingMetaProfile = TestCaseJson.TestCaseJson_missingMetaProfile
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+const cardInvalidTCJson = TestCaseJson.tcCardErrorJson
+const dupResourceIDTCJson = TestCaseJson.TCJsonTerminologyTsts
+
+const measureCQL = MeasureCQL.CQL_Multiple_Populations
+const measureCQLPFTests = MeasureCQL.CQL_Populations
+const measureCQLCardTests = MeasureCQL.zipfileExportQICore
+const CQLForCVMeasure = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     'using FHIR version \'4.0.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
@@ -48,16 +51,14 @@ let CQLForCVMeasure = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     'define function "booleanFunction"():\n' +
     '  true'
 
-let measureCQLCardTests = MeasureCQL.zipfileExportQICore
-let dupResourceIDTCJson = TestCaseJson.TCJsonTerminologyTsts
-
 describe('Warning modal on Test Case JSON Editor', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        const libName = CqlLibraryName + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, libName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -66,24 +67,14 @@ describe('Warning modal on Test Case JSON Editor', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify warning modal when the Test Case JSON has unsaved changes', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and create Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -139,44 +130,26 @@ describe('JSON Resource ID tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        const libName = CqlLibraryName + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, libName, measureCQLPFTests)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 27700)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTextBox, 27700)
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 27700)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('JSON contains empty Resource ID values', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -262,9 +235,6 @@ describe('JSON Resource ID tests', () => {
     it('JSON missing Resource IDs; the fullUrl value will automatically update with an ending ' +
         'slash and should result with an update but with errors', () => {
 
-            //Click on Edit Measure
-            MeasuresPage.actionCenter('edit')
-
             //Add second Measure Group with return type as Boolean
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -344,9 +314,6 @@ describe('JSON Resource ID tests', () => {
 
     it('JSON missing Resource IDs', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -420,9 +387,6 @@ describe('JSON Resource ID tests', () => {
     })
 
     it('JSON has Resource IDs duplicated for different resources', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -504,9 +468,6 @@ describe('JSON Resource ID tests', () => {
 
     it('Verify warning message for missing Meta.Profile Values on Resources in Test case Json', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Navigate to Test Cases page and add Test Case details
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 27700)
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -571,40 +532,26 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        const libName = CqlLibraryName + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, libName, measureCQLPFTests)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Expect / Actual Labels are correct', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -688,20 +635,15 @@ describe('JSON Resource ID tests -- CV', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        const libName = CqlLibraryName + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, CQLForCVMeasure)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, libName, CQLForCVMeasure)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Measure bundle end point returns stratifications for Continuous Variable Measure', () => {
@@ -753,13 +695,10 @@ describe('JSON Resource ID tests -- CV', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
@@ -786,31 +725,27 @@ describe('Tests around cardinality violations', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLCardTests)
+        const libName = CqlLibraryName + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, libName, measureCQLCardTests)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, cardInvalidTCJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, cardInvalidTCJson)
-        OktaLogin.Login()
     })
 
     afterEach('Log out', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify error is returned when there is a model violation -- use an object where expecting an array', () => {
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).click()

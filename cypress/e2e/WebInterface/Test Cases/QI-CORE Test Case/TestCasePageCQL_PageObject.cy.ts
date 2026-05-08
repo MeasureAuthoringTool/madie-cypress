@@ -7,44 +7,38 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let validMeasureCQL = 'library TestLibrary1736348266658 version \'0.0.000\'\n' +
+const now = Date.now()
+const measureName = 'CQLPageObject' + now
+const CqlLibraryName = 'CQLPageObjectLib' + now
+const validMeasureCQL = 'library TestLibrary1736348266658 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
     'context Patient'
-let measureCQL = 'library SimpleFhirLibrary version \'0.0.004\'\n' + 'using QICore version \'4.1.1\'\n' + 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n'
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let validTerminologyFHIR_and_QICORETestCaseJson = TestCaseJson.TestCaseJson_Valid
-let testCaseSeries = 'SBTestSeries'
+const measureCQL = 'library SimpleFhirLibrary version \'0.0.004\'\n' + 
+    'using QICore version \'4.1.1\'\n' + 
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers'
+const testCaseTitle = 'test case title'
+const testCaseSeries = 'SBTestSeries'
+const testCaseDescription = 'DENOMFail' + Date.now()
+const tcJson = TestCaseJson.TestCaseJson_Valid
 
 describe('Test Case Page CQL page object', () => {
 
     beforeEach('Create Measure, TestCase and Login', () => {
-        //Create New Measure
+
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, validMeasureCQL)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, tcJson)
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Updates applied and saved from the Measure CQL page / tab are updated and reflective in the Test Case Page', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //edit created test case
-        TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -69,26 +63,22 @@ describe('Test Case Page CQL page object', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //confirm that CQL field, on the Test Case page, reflects the additional text
-        cy.log(measureCQL)
         cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'define "ipp": true')
-
     })
 })
 
 describe('Test Case Page CQL page object', () => {
 
     beforeEach('Create Measure, TestCase and Login', () => {
-        //Create New Measure
+
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, tcJson)
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('A message is displayed if there are issues with the CQL', () => {
@@ -106,5 +96,4 @@ describe('Test Case Page CQL page object', () => {
         cy.get(TestCasesPage.cqlHasErrorsMsg).should('be.visible')
         cy.get(TestCasesPage.cqlHasErrorsMsg).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab')
     })
-
 })
