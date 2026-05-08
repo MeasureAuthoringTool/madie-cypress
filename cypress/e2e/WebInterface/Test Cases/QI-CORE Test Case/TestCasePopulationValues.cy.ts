@@ -30,7 +30,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.UILogout()
+
         Utilities.deleteMeasure()
     })
 
@@ -46,8 +46,6 @@ describe('Test Case Expected Measure Group population values based on initial me
 
     it('Validate Population Values check boxes are correct based on measure scoring value that is applied, ' +
         'when the measure is initially created (default measure group)', () => {
-
-            cy.log('Continuous Variable')
 
             //Add Measure Group
             MeasureGroupPage.createMeasureGroupforProportionMeasure()
@@ -211,7 +209,6 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseNUMEXExpected).type('2')
 
-
             cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
@@ -260,7 +257,7 @@ describe('Test Case Expected Measure Group population values based on initial me
                 cy.url({ timeout: 30000 }).should('include', '/edit/test-cases')
 
                 cy.wait('@testCase').then(({ response }) => {
-                    expect(response.statusCode).to.eq(200)
+                    expect(response?.statusCode).to.eq(200)
                 })
             })
             TestCasesPage.clickEditforCreatedTestCase()
@@ -297,7 +294,6 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.log('Proportion')
         Utilities.setMeasureGroupType()
 
         //select scoring on measure
@@ -364,7 +360,7 @@ describe('Test Case Population dependencies', () => {
     before('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, proportionMeasureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial PopulationOne', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne', 'Boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial PopulationOne', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne', 'Boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -373,19 +369,14 @@ describe('Test Case Population dependencies', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Verify Test Case population dependencies for Proportion Measures', () => {
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -503,7 +494,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(null, null, null, null, null, 'Procedure')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, undefined, undefined, undefined, 'Procedure')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -512,19 +503,14 @@ describe('Test Case Expected Measure Group population values based on initial me
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group', () => {
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')

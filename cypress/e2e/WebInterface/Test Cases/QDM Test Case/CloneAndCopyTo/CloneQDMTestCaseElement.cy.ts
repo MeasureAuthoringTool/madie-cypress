@@ -9,7 +9,6 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
 import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
-import { Header } from "../../../../../Shared/Header"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -32,8 +31,8 @@ describe('Clone QDM Test Case', () => {
         measureData.mpStartDate = '2023-01-01'
         measureData.mpEndDate = '2024-12-31'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -43,30 +42,19 @@ describe('Clone QDM Test Case', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         
-        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-
-        OktaLogin.Login()
-
-        //adding supplemental data
-        MeasuresPage.actionCenter('edit')
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         MeasureGroupPage.includeSdeData()
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
-    it('Clone QDM Test Case Element - Success scenario', () => {
 
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
+    it('Clone QDM Test Case Element - Success scenario', () => {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -201,10 +189,8 @@ describe('Clone QDM Test Case', () => {
         cy.get("tr").eq(1).should('contain', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM')
 
     })
-    it('Clone QDM Test Case Element - Non Measure owner unable to clone', () => {
 
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
+    it('Clone QDM Test Case Element - Non Measure owner unable to clone', () => {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
