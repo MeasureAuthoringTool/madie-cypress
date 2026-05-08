@@ -1,12 +1,12 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
 
-let measureName = 'TestCasePaginationMeasure' + Date.now()
-let CqlLibraryName = 'TestCasePaginationLibrary' + Date.now()
+const measureName = 'TestCasePaginationMeasure' + Date.now()
+const CqlLibraryName = 'TestCasePaginationLibrary' + Date.now()
 let TCName = []
 let TCSeries = []
 let TCTitle = []
@@ -116,6 +116,5 @@ describe('Test Case List Pagination', () => {
         cy.get(TestCasesPage.paginationLimitSelect).should('contain', 'All')
 
         cy.get(TestCasesPage.countVisibleTestCases).should('have.length', 16)
-
     })
 })

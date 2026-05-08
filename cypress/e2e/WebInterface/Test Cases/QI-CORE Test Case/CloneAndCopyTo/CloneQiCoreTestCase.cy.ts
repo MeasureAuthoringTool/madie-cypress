@@ -1,28 +1,25 @@
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import {TestCaseAction, TestCasesPage} from "../../../../../Shared/TestCasesPage"
+import { TestCaseAction, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
-let testCaseDescription = 'DENOMFail' + Date.now()
-let measureName = 'QiCoreTestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'test case title'
-let longTcTitle = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345dfghjkljhgfhjkldvdjhgskdfhdkjf6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrst'
-let testCaseSeries = 'SBTestSeries'
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
+const now = Date.now()
+const measureName = 'QiCoreTestMeasure' + now
+const CqlLibraryName = 'TestLibrary' + now
+const testCaseTitle = 'test case title'
+const longTcTitle = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345dfghjkljhgfhjkldvdjhgskdfhdkjf6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrst'
+const testCaseSeries = 'SBTestSeries'
+const testCaseDescription = 'DENOMFail' + now
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+const measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
@@ -30,20 +27,17 @@ describe('Clone Qi Core Test Case', () => {
 
     before('Create measure and login', () => {
 
-        //Create Qi Core Measure, PC and Test Case
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         OktaLogin.Login()
-
     })
 
     after('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
+
     it('Clone Qi Core Test Case - Success scenario', () => {
 
         //click on Edit button to edit measure
@@ -74,7 +68,6 @@ describe('Clone Qi Core Test Case', () => {
 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
-
     })
 })
 
@@ -82,19 +75,15 @@ describe('Clone Invalid Qi Core Test Case', () => {
 
     before('Create measure and login', () => {
 
-        //Create Qi Core Measure, PC and Test Case
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
-
     })
 
     after('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Clone button not visible when the Test case is Invalid/does not have Json', () => {
@@ -107,28 +96,22 @@ describe('Clone Invalid Qi Core Test Case', () => {
 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
-
     })
 })
-
 
 describe('Clone Qi Core Test Case validations', () => {
 
     before('Create measure and login', () => {
 
-        //Create Qi Core Measure, PC and Test Case
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(longTcTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         OktaLogin.Login()
-
     })
 
     after('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Clone button disabled when the Test case title is more than 226 characters', () => {
@@ -145,6 +128,5 @@ describe('Clone Qi Core Test Case validations', () => {
         //Assert tool tip
         cy.get('[data-testid="clone-tooltip"]').trigger('mouseover')
         cy.get('.MuiTooltip-tooltip').should('contain.text', 'The test case title is too long to clone')
-
     })
 })

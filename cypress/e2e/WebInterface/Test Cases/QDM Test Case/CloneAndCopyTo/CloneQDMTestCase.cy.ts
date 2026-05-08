@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
@@ -37,8 +37,7 @@ describe('Clone QDM Test Case', () => {
 
     after('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Clone QDM Test Case - Success scenario', () => {

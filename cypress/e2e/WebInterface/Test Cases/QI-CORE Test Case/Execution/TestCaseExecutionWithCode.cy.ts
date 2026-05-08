@@ -6,7 +6,6 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { Toasts } from "../../../../../Shared/Toasts"
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
@@ -29,7 +28,6 @@ describe('Test Case Execution with codes', () => {
 
     after('Logout', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

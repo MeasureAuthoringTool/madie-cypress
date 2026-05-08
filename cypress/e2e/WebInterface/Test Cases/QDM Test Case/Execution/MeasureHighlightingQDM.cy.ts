@@ -8,38 +8,36 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header"
 
-let measureCQLPFTests = MeasureCQL.QDMHighlightingTab_CQL
-let measureCQLDUTest = MeasureCQL.QDMHightlightingTabDefUsed_CQL
-let scoringPropValue = 'Proportion'
-let QDMTCJson = TestCaseJson.tcJSON_QDM_Value
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
 let newMeasureName = ''
 let newCqlLibraryName = ''
+const measureName = 'MeasureHighlightQDM'
+const CqlLibraryName = 'MeasureHighlightQDMLib'
+const scoringPropValue = 'Proportion'
+const testCaseTitle = 'test case title'
+const testCaseDescription = 'example test case'
+const testCaseSeries = 'SBTestSeries'
+const measureCQLPFTests = MeasureCQL.QDMHighlightingTab_CQL
+const measureCQLDUTest = MeasureCQL.QDMHightlightingTabDefUsed_CQL
+const QDMTCJson = TestCaseJson.tcJSON_QDM_Value
 
 const measureData: CreateMeasureOptions = {}
 
-describe('QDM: Test Case Highlighting Left navigation panel: Includes validate / verify the Definitions Used section / label', () => {
+describe('QDM Test Case Highlighting', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = CqlLibraryName
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = scoringPropValue
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQLDUTest
         measureData.mpStartDate = '2025-01-01'
         measureData.mpEndDate = '2025-12-31'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
@@ -53,11 +51,10 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
-    it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs -- "Definitions Used" is present', () => {
+    it('Highlighting happens & presents "Definitions used"', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -100,26 +97,24 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         cy.get(TestCasesPage.qdmTCHighlightingDU).should('be.visible')
-
     })
 })
 
-describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+describe('QDM Test Case Highlighting - Definitions, Functions, and Unused sections', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = CqlLibraryName
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = scoringPropValue
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQLPFTests
         measureData.mpStartDate = '2025-01-01'
         measureData.mpEndDate = '2025-12-31'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
@@ -133,11 +128,10 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
-    it('QDM: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
+    it('Secondary tabs in Highlighting section populate after execution', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -192,26 +186,24 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(1)', 35000)
         cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should('contain.text', 'define "Denominator Exclusion":\n' +
             '  ["Encounter, Performed": "Ethnicity"] E where (duration in days of E.relevantPeriod) > 10')
-
     })
 })
 
-describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
+describe('QDM Test Case Highlighting accurately appears for a single PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = CqlLibraryName
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = scoringPropValue
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQLPFTests
         measureData.mpStartDate = '2025-01-01'
         measureData.mpEndDate = '2025-12-31'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
@@ -225,11 +217,10 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
-    it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC and will show Test case Results', () => {
+    it('Hightlighting happens & presents "Results" data', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -293,22 +284,21 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
     })
 })
 
-describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
+describe('QDM Test Case Highlighting accurately appears for a multiple PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        measureData.ecqmTitle = measureName
-        measureData.cqlLibraryName = CqlLibraryName
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = scoringPropValue
         measureData.patientBasis = 'false'
         measureData.measureCql = measureCQLPFTests
         measureData.mpStartDate = '2025-01-01'
         measureData.mpEndDate = '2025-12-31'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
@@ -323,12 +313,10 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
-
     })
 
-    it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
+    it('Both PCs populate highlighting upon execution', () => {
         let currentUser = Cypress.env('selectedUser')
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         let measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
