@@ -1,9 +1,8 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import {CreateMeasurePage, SupportedModels} from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
-import { Header } from "../../../Shared/Header"
 
 let measureName = ''
 let CqlLibraryName = ''
@@ -18,24 +17,7 @@ describe('Create New Measure', () => {
 
     afterEach('Cleanup and Logout', () => {
 
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
-        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
-        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 5000)
-        cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 5000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
-
-        //Verify the deleted measure on My Measures page list
-        cy.get(Header.measures).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
-
-        //Navigate to All Measures tab
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        //Verify the deleted measure on All Measures page list
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
+        Utilities.deleteMeasure()
     })
 
     it('Create QI Core 4.1.1 Measure', () => {
@@ -44,7 +26,6 @@ describe('Create New Measure', () => {
         CqlLibraryName = 'QICore4TestLibrary' + Date.now()
 
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
-        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
 
@@ -61,7 +42,6 @@ describe('Create New Measure', () => {
         CqlLibraryName = 'QDMTestLibrary' + Date.now()
 
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.QDM)
-        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
 
@@ -78,8 +58,6 @@ describe('Create New Measure', () => {
         CqlLibraryName = 'QICore6TestLibrary' + Date.now()
 
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore6)
-
-        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
 
