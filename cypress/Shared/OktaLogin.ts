@@ -1,16 +1,13 @@
 import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { umlsLoginForm } from "./umlsLoginForm"
-import { Utilities } from "./Utilities"
 import { Header } from "./Header"
 
-//MADiE OKTA Login Class
 export class OktaLogin {
 
-    //Commented locators are for the new Okta Login page
-    public static readonly usernameInput = '[id="input28"]' //'#okta-signin-username'
-    public static readonly passwordInput = '[id="input36"]' //'#okta-signin-password'
-    public static readonly signInButton = '[class="button button-primary"]' //'#okta-signin-submit'
+    public static readonly usernameInput = '[id="input28"]'
+    public static readonly passwordInput = '[id="input36"]'
+    public static readonly signInButton = '[class="button button-primary"]'
 
     public static readonly needHelpButton = 'a[data-se="needhelp"]'
     public static readonly forgotPassword = '[data-se="forgot-password"]'
