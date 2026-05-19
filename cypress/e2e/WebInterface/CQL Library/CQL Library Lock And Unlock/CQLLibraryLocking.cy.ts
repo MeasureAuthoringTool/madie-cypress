@@ -4,7 +4,7 @@ import { MadieObject, Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
+let CQLLibraryName = 'LibraryLocking' + Date.now()
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let CQLLibraryPublisher = 'SemanticBits'
@@ -21,8 +21,7 @@ describe('CQL Library Locking Validations', () => {
 
     afterEach('LogOut', () => {
 
-        
-        Utilities.deleteLibrary(newCQLLibraryName)
+        Utilities.deleteLibrary()
     })
 
     it('User unable to delete CQL Library, when the Library is locked by a different User', () => {
@@ -46,7 +45,6 @@ describe('CQL Library Locking Validations', () => {
 
     it('Pop up on Edit CQL Library screen, when the Library is locked by a different User', () => {
 
-        let currentUser = Cypress.env('selectedUser')
         harpUserAlt = OktaLogin.getUser(true)
 
         //Lock CQL Library with ALT User

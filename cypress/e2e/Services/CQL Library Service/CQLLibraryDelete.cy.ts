@@ -1,6 +1,5 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 
