@@ -6,6 +6,7 @@ import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -18,11 +19,11 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
         CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
         OktaLogin.SessionLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
     })
 
     it('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
@@ -47,8 +48,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
     })
 
     it('Verify errors appear on CQL Library page and in the CQL Editor object, on save and on tab / page load', () => {
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //Clear the text in CQL Library Editor
@@ -100,8 +100,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
     })
 
     it('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load, when included library is not found', () => {
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //Clear the text in CQL Library Editor
@@ -137,7 +136,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('FHIRHelpers library alias is force corrected when changed by the user', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Clear the text in CQL Library Editor
@@ -154,7 +152,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('Verify that adding a definition without a name will throw an exact error for that issue', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefNoName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -172,7 +169,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('Verify that adding a definition named a reserved keyword will throw an exact error for that issue', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefReservedKeyword.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -189,7 +185,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('Verify error message when Code System name is missing from Code declaration', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithoutCodeSystemName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -209,7 +204,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/QiCoreCQLWithoutIncludedLibraryVersion.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -226,7 +220,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('Verify error message on CQL Editor page when CQL contains an access modifier like "private"', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/QiCoreLibraryPrivateAccessModifier.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -242,7 +235,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('Verify error message when context is set to anything except Patient', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -258,7 +250,6 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('When Concept constructor is used in the Library CQL, the constructor was removed and a success message is displayed while saving CQL', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithConceptConstructor.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -283,11 +274,11 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
         CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
 
         OktaLogin.SessionLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
     })
 
     it('Value Sets are valid', () => {
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/ValueSetTestingEntryValid.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
@@ -308,8 +299,7 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
     })
 
     it('Value Set Invalid', () => {
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/ValueSetTestingEntryInValid.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
@@ -343,8 +333,7 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
     })
 
     it('Dirty Check Modal is displayed', () => {
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/ValueSetTestingEntryInValid.txt', CQLLibraryPage.cqlLibraryEditorTextBox)

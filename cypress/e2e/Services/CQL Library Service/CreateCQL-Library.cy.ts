@@ -1,6 +1,6 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
@@ -140,7 +140,6 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 })
 
-
 describe('CQL Library Name validations', () => {
 
     let apiCQLLibraryName = 'TestLibrary' + Date.now()
@@ -157,7 +156,6 @@ describe('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name empty', () => {
-
 
         CQLLibraryName = " "
 

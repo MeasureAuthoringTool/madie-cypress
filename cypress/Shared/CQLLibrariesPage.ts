@@ -44,12 +44,10 @@ export class CQLLibrariesPage {
 
     public static clickEditforCreatedLibrary(libraryNumber?: number, altUser?:boolean): void {
         let currentUser = ''
-        if (altUser)
-        {
+        if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
         }
-        else
-        {
+        else {
             currentUser = Cypress.env('selectedUser')
         }
 

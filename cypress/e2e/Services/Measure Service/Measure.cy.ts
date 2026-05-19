@@ -1,6 +1,5 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { Environment } from "../../../Shared/Environment"
 import { CreateMeasurePage, CreateMeasureOptions, SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
@@ -45,7 +44,7 @@ describe('Measure Service: QICore Measure', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -81,7 +80,7 @@ describe('Measure Service: QICore Measure', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -141,7 +140,7 @@ describe('Measure Service: GET Requests tests', () => {
                 url: '/api/measures',
                 method: 'GET',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
@@ -161,7 +160,7 @@ describe('Measure Service: GET Requests tests', () => {
                 url: '/api/measures?ownershipTypes=OWNED',
                 method: 'GET',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
@@ -193,7 +192,7 @@ describe('Measure Service: Error validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -222,7 +221,7 @@ describe('Measure Service: Error validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -252,7 +251,7 @@ describe('Measure Service: Error validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -285,7 +284,7 @@ describe('Measure Service: Error validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -315,7 +314,7 @@ describe('Measure Service: Error validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -343,7 +342,7 @@ describe('Measure Service: Error validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -381,7 +380,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -412,7 +411,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -443,7 +442,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -471,7 +470,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureNameU,
@@ -500,7 +499,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureNameU,
@@ -531,7 +530,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -562,7 +561,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -594,7 +593,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value
+                    authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": 'measureName6677',
@@ -637,7 +636,7 @@ describe('Measure Service: Authentication', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    authorization: 'Bearer ' + accessToken.value + 'TEST'
+                    authorization: 'Bearer ' + accessToken?.value + 'TEST'
                 },
                 body: {
                     "measureName": measureName,
@@ -683,7 +682,7 @@ describe('Measure Service: Update Delete Flag', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
 
@@ -712,7 +711,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         url: '/api/measures/' + id,
                         method: 'PUT',
                         headers: {
-                            Authorization: 'Bearer ' + accessToken.value
+                            Authorization: 'Bearer ' + accessToken?.value
                         },
                         body: {
                             "id": id,
@@ -762,7 +761,7 @@ describe('Measure Service: Update Delete Flag', () => {
                 cy.request({
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {
@@ -788,7 +787,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         url: '/api/measures/' + id + '1',
                         method: 'PUT',
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         body: {
                             "id": id + 1,
@@ -850,7 +849,7 @@ describe('Measure Service: Update Delete Flag', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET'
                 }).then((response) => {
@@ -866,7 +865,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET'
                     }).then((response) => {
@@ -925,7 +924,7 @@ describe('Delete QI-Core Measure with admin access', () => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -944,7 +943,7 @@ describe('Delete QI-Core Measure with admin access', () => {
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value,
+                        Authorization: 'Bearer ' + accessToken?.value,
                         'harpId': harpUser
                     }
                 }).then((response) => {
@@ -963,7 +962,7 @@ describe('Delete QI-Core Measure with admin access', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {
@@ -987,7 +986,7 @@ describe('Delete QI-Core Measure with admin access', () => {
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value,
+                        Authorization: 'Bearer ' + accessToken?.value,
                         'harpId': harpUser
                     }
                 }).then((response) => {
@@ -1006,7 +1005,7 @@ describe('Delete QI-Core Measure with admin access', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {
@@ -1030,7 +1029,7 @@ describe('Delete QI-Core Measure with admin access', () => {
                     url: '/api/measures/' + id + '/delete',
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value
+                        Authorization: 'Bearer ' + accessToken?.value
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(403)
@@ -1080,7 +1079,7 @@ describe('Delete QDM Measure with admin access', () => {
                 cy.request({
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -1099,7 +1098,7 @@ describe('Delete QDM Measure with admin access', () => {
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value,
+                        Authorization: 'Bearer ' + accessToken?.value,
                         'harpId': defaultUser
                     }
                 }).then((response) => {
@@ -1118,7 +1117,7 @@ describe('Delete QDM Measure with admin access', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {
@@ -1140,7 +1139,7 @@ describe('Delete QDM Measure with admin access', () => {
                     url: '/api/admin/measures/' + id,
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value,
+                        Authorization: 'Bearer ' + accessToken?.value,
                         'harpId': defaultUser
                     }
                 }).then((response) => {
@@ -1159,7 +1158,7 @@ describe('Delete QDM Measure with admin access', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + id,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET',
                 }).then((response) => {
@@ -1182,7 +1181,7 @@ describe('Delete QDM Measure with admin access', () => {
                     url: '/api/measures/' + id + '/delete',
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value,
+                        Authorization: 'Bearer ' + accessToken?.value,
                         'harpId': defaultUser
                     }
                 }).then((response) => {
@@ -1212,7 +1211,7 @@ describe('Measurement Period Validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -1242,7 +1241,7 @@ describe('Measurement Period Validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -1272,7 +1271,7 @@ describe('Measurement Period Validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -1302,7 +1301,7 @@ describe('Measurement Period Validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -1332,7 +1331,7 @@ describe('Measurement Period Validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -1371,7 +1370,7 @@ describe('Measure Service: eCQM abbreviated title validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
@@ -1401,7 +1400,7 @@ describe('Measure Service: eCQM abbreviated title validations', () => {
                 url: '/api/measure',
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + accessToken.value
+                    Authorization: 'Bearer ' + accessToken?.value
                 },
                 body: {
                     "measureName": measureName,
