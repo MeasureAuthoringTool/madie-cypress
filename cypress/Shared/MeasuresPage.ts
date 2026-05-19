@@ -28,12 +28,12 @@ export class MeasuresPage {
     public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
     public static readonly filterSearchInputBox = '[data-testid="measure-search-input"]'
     public static readonly searchInputBox = '[data-testid="measure-list-search-input"]'
-    public static readonly filterByDropdown = '[data-testid="filter-by"]'
-    public static readonly filterNoOption = '[data-testid="--option"]'
-    public static readonly filterMeasureOption = '[data-testid="Measure-option"]'
-    public static readonly filterVersionOption = '[data-testid="Version-option"]'
-    public static readonly filterModelOption = '[data-testid="Model-option"]'
-    public static readonly filterCMSIdOption = '[data-testid="CMS ID-option"]'
+    public static readonly filterByDropdown = '[data-testid="filter-by-select"]'
+    public static readonly filterNoOption = '[data-testid="filter-by--"]'
+    public static readonly filterMeasureOption = '[data-testid="filter-by-Measure"]'
+    public static readonly filterVersionOption = '[data-testid="filter-by-Version"]'
+    public static readonly filterModelOption = '[data-testid="filter-by-Model"]'
+    public static readonly filterCMSIdOption = '[data-testid="filter-by-CMS ID"]'
 
     //export
     public static readonly exportNonPublishingOption = '[data-testid="export-option"]'
