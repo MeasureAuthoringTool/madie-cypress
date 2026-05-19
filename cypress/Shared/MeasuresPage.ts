@@ -27,7 +27,7 @@ export class MeasuresPage {
     public static readonly sharedMeasures = '[data-testid="shared-measures-tab"]'
     public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
     public static readonly filterSearchInputBox = '[data-testid="measure-search-input"]'
-    public static readonly searchInputBox = '[data-testid="measure-search-input"]'
+    public static readonly searchInputBox = '[data-testid="measure-list-search-input"]'
     public static readonly filterByDropdown = '[data-testid="filter-by"]'
     public static readonly filterNoOption = '[data-testid="--option"]'
     public static readonly filterMeasureOption = '[data-testid="Measure-option"]'
