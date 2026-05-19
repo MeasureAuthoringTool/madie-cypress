@@ -28,7 +28,7 @@ describe('Compare Measure Versions', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
@@ -37,7 +37,6 @@ describe('Compare Measure Versions', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
         Utilities.deleteMeasure(undefined, undefined, false, false, 1)
     })

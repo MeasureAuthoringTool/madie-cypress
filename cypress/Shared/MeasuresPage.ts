@@ -203,11 +203,13 @@ export class MeasuresPage {
                 cy.get('[data-testid="export-action-btn"]').click()
 
                 if (exportForPublish) {
-                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 60000)
-                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 15000)
+                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing')
+                    cy.get(MeasuresPage.exportPublishingOption).click()
                 } else {
-                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 60000)
-                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 15000)
+                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export')
+                    cy.get(MeasuresPage.exportNonPublishingOption).click()
                 }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
