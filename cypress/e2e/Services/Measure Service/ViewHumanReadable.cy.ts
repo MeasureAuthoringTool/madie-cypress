@@ -247,7 +247,6 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
 
 describe('Measure Human Readable comparison', () => {
 
-
     beforeEach('Create Measure and Set Access Token', () => {
 
         OktaLogin.setupUserSession(false)
@@ -260,7 +259,6 @@ describe('Measure Human Readable comparison', () => {
         newMeasureName = 'TestMeasureE' + Date.now() + randVal
         newCQLLibraryName = 'TestCqlE' + Date.now() + randVal
         let firstVersionedMeasureName = 'FirstVersioned' + newMeasureName + Date.now()
-        cy.wait(2000)
         let secondVersionedMeasureName = 'SecondVersioned' + newMeasureName + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
@@ -293,6 +291,7 @@ describe('Measure Human Readable comparison', () => {
         cy.log('Version Created Successfully')
 
         //Add Draft to Versioned Measure
+        MeasuresPage.selectMeasure()
         MeasuresPage.actionCenter('draft', 0, actionOptions)
         cy.intercept('/api/measures/*/draft').as('drafted')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(firstVersionedMeasureName)
@@ -323,6 +322,7 @@ describe('Measure Human Readable comparison', () => {
         cy.log('Version Created Successfully')
 
         //Add Draft to Versioned Measure
+        MeasuresPage.selectMeasure(1)
         MeasuresPage.actionCenter('draft', 1, actionOptions)
         cy.intercept('/api/measures/*/draft').as('drafted')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(secondVersionedMeasureName + "Dif")

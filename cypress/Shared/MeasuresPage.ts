@@ -160,7 +160,7 @@ export class MeasuresPage {
         if (measureNumber > 0) {
             filePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
-        cy.log('File path is ' + filePath)
+
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.log('File contents is ' + fileContents)
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 60000)
@@ -298,6 +298,8 @@ export class MeasuresPage {
         }
     }
 
+    // in sequences where we have back-to-back actions in the action center, this function is needed to re-check after the 1st action
+    // as of 5/20/26 we seem to be carrying the visual of the 1st check forward, but Madie does not actually register the check as real
     public static selectMeasure(measureNumber?: number): void {
         const currentUser = Cypress.env('selectedUser')
 
