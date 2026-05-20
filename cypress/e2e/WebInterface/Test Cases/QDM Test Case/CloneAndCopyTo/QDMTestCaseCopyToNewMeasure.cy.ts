@@ -21,6 +21,7 @@ const testCase: TestCase = {
     description: 'any value',
     group: 'NUMFail'
 }
+
 const existingMeasureCql = QdmCql.stiForPeopleWithHIV.replace('HIVSTITesting', measureName)
 const basicCql = QdmCql.QDMSimpleCQL.replace('ProportionPatient1689182327602', measureName)
 
@@ -41,6 +42,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         denominator: 'Initial Population',
         numerator: 'Numerator'
     }
+
     beforeEach('Create measure, measure group, test case and login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.QDM, measureOptions)
@@ -52,6 +54,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.wait(4500)
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
@@ -68,7 +71,6 @@ describe('Copy test cases from existing measure into new measure', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
@@ -77,14 +79,14 @@ describe('Copy test cases from existing measure into new measure', () => {
         // switch to all measure tab, search for original measure, view
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 56500)
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.dropdownSelect(MeasuresPage.filterByDropdown, 'CMS ID')
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)
-        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
-
+        cy.get('[data-testid="row-item"]').contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -172,10 +174,11 @@ describe('Copy test cases from existing measure into new measure', () => {
         // switch to all measure tab, search for original measure, view
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.dropdownSelect(MeasuresPage.filterByDropdown, 'CMS ID')
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
+        cy.get('[data-testid="row-item"]').contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -254,11 +257,9 @@ describe('Copy to new measure - partial success case', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
         Utilities.deleteMeasure(measureName, cqlLibraryName)
         Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 1)
     })
-
 
     it('All test cases copy - even new, "empty", or "invalid"', () => {
 
