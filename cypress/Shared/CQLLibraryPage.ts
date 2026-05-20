@@ -77,6 +77,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
     public static readonly actionCenterShare = '[data-testid="ShareLibrary"]'
+    public static readonly actionCenterSecondaryShare = '[data-testid="Share/Unshare"]' // in case we need both
     public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
 

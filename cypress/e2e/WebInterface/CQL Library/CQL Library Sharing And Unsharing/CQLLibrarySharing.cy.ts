@@ -19,7 +19,7 @@ describe('CQL Library Sharing', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        CQLLibraryName = 'LibrarySharing' + Date.now()
+        CQLLibraryName = 'LibrarySharing1' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
@@ -82,7 +82,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        CQLLibraryName = 'LibrarySharing' + Date.now()
+        CQLLibraryName = 'LibrarySharing2' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
@@ -211,7 +211,7 @@ describe('Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
 
-        CQLLibraryName = 'LibrarySharing' + Date.now()
+        CQLLibraryName = 'LibrarySharing3' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
@@ -292,6 +292,7 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         //Login as Alt User
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
 
         //Navigate to All Libraries tab
         cy.get(Header.cqlLibraryTab).click().wait(2000)
@@ -334,7 +335,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
 
     beforeEach('Create CQL Library', () => {
 
-        CQLLibraryName = 'LibrarySharing' + Date.now()
+        CQLLibraryName = 'LibrarySharing4' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
