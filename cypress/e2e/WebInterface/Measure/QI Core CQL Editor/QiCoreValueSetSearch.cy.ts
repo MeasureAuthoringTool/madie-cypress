@@ -59,13 +59,13 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
@@ -78,7 +78,7 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         cy.get(CQLEditorPage.valueSetSearchFilterApplyBtn).click()
 
         //results grid is updated to only show one entry, now, after filter
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
 
         //Apply Value Set to the Measure
         cy.get(CQLEditorPage.applyValueSet).click()
@@ -124,7 +124,7 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
     })
 
     it('Value set Details screen', () => {
@@ -147,8 +147,7 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
-            'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
-            '•••')
+            'Cancer Stage IAmerican Society of Clinical Oncologyurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
@@ -157,9 +156,8 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         cy.get(CQLEditorPage.valueSetActionCentreBtn).click()
         cy.get(CQLEditorPage.viewValueSetDetails).click()
 
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"url": "http://cts.nlm.nih.gov' +
-            '/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217"')
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology Author"')
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"id": "2.16.840.1.113883.3.1444.3.217-20240810"')
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology"')
     })
 
     it('Edit Value Set with suffix and apply to CQL', () => {
@@ -182,8 +180,8 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
-            'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
-            '•••')
+            'Cancer Stage IAmerican Society of Clinical Oncologyurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE•••' + 
+            'Cancer Stage IAmerican Society of Clinical Oncologyurn:oid:2.16.840.1.113883.3.1444.3.217RETIRED•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()

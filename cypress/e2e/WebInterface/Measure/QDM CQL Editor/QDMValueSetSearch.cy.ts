@@ -159,13 +159,13 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
@@ -178,7 +178,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(CQLEditorPage.valueSetSearchFilterApplyBtn).click()
 
         //results grid is updated to only show one entry, now, after filter
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
 
         //Apply Value Set to the Measure
         cy.get(CQLEditorPage.applyValueSet).click()
@@ -212,7 +212,8 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(CQLEditorPage.valueSetSearchDefinitionVersion).should('not.exist')
 
         //Verify that the Search Definition Version field is enabled after selecting OID/URL field
-        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).clear().type('OID/URL')
+        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).type('{selectall}{backspace}')
+        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).type('OID/URL')
         cy.get(CQLEditorPage.valueSetSearchCategoryListBox).contains('OID/URL').click()
         cy.get(CQLEditorPage.valueSetSearchOIDURLText).type('2.16.840.1.113883.3.464.1003.101.12.1001')
         cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).click()
@@ -224,7 +225,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
     })
 
     it('Value set Details screen', () => {
@@ -247,8 +248,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
-            'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
-            '•••')
+            'Cancer Stage IAmerican Society of Clinical Oncologyurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
@@ -259,7 +259,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"resourceType": "ValueSet"')
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-valueset-cqfm"')
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology Author"')
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology"')
     })
 
     it('Edit Value Set with suffix and apply to CQL', () => {
@@ -282,8 +282,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
-            'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
-            '•••')
+            'Cancer Stage IAmerican Society of Clinical Oncologyurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
