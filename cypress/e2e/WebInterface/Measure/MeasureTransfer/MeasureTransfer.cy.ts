@@ -55,6 +55,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure
+        MeasuresPage.selectMeasure()
         MeasuresPage.actionCenter('draft')
         cy.intercept('/api/measures/*/draft').as('drafted')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(randomMeasureName)

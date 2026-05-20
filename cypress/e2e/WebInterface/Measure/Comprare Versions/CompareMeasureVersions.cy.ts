@@ -62,6 +62,7 @@ describe('Compare Measure Versions', () => {
         cy.log('Version Created Successfully')
 
         //Add Draft to Versioned Measure
+        MeasuresPage.selectMeasure()
         MeasuresPage.actionCenter('draft')
         cy.intercept('/api/measures/*/draft').as('drafted')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasureName)
