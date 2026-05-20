@@ -167,7 +167,7 @@ export class Utilities {
         cy.get(pageResource).should('be.visible')
         cy.get(pageResource).click()
         cy.readFile(file).should('exist').then((fileContents) => {
-            cy.get(pageResource).focused().type(fileContents)
+            cy.get(pageResource).focused().type(fileContents, { force: true })
         })
     }
 

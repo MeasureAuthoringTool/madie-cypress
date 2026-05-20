@@ -212,7 +212,8 @@ export class CQLEditorPage {
 
     public static replaceCqlDocument(filePath: string) {
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
+        cy.wait(2000)
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         Utilities.typeFileContents(filePath, EditMeasurePage.cqlEditorTextBox)
