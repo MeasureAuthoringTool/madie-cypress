@@ -8,13 +8,11 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Header } from "../../../../Shared/Header"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Toasts } from "../../../../Shared/Toasts"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const timestamp = Date.now()
-let measureName = 'QiCoreTestCaseId' + timestamp
-let CqlLibraryName = 'QiCoreTestCaseIdLib' + timestamp
+const measureName = 'QiCoreTestCaseId' + timestamp
+const CqlLibraryName = 'QiCoreTestCaseIdLib' + timestamp
 const testCase1: TestCase = {
     title: 'Test Case 1',
     description: 'Description 1',
@@ -27,113 +25,17 @@ const testCase2: TestCase = {
     group: 'Test Series 2',
     json: TestCaseJson.TestCaseJson_Valid
 }
-let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
-let versionNumber = '1.0.000'
-let measureCQLPFTests = MeasureCQL.CQL_Populations.replace('TestLibrary4664', measureName)
-let measureCQL = MeasureCQL.CQL_Multiple_Populations.replace('TestLibrary4664', measureName)
+const validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
+const measureCQLPFTests = MeasureCQL.CQL_Populations.replace('TestLibrary4664', measureName)
 
-describe('Test Case sorting by Test Case number', () => {
-
-    beforeEach('Create measure and login', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2012-01-02', '2013-01-01')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-        
-        Utilities.deleteMeasure()
-    })
-
-    it('Qi Core Test Case number and sorting behavior', () => {
-
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #1: Test Series 1 - Test Case 1')
-
-        TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group, testCase2.json)
-
-        const descList = 'Case #StatusGroupTitleDescriptionLast SavedAction2N/A' + testCase2.group + testCase2.title + testCase2.description
-        const descList2 = '(UTC)Edit1N/A'
-        const descList3 = testCase1.group + testCase1.title + testCase1.description
-        const descList4 = '(UTC)Edit'
-        const ascList = 'Case #StatusGroupTitleDescriptionLast SavedAction1N/A' + testCase1.group + testCase1.title + testCase1.description
-        const ascList2 = '(UTC)Edit2N/A'
-        const ascList3 = testCase2.group + testCase2.title + testCase2.description
-        const ascList4 = '(UTC)Edit'
-
-        //test case numbers appear and first click sorts list in ascending order based on test case number / ID
-        Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList2)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList3)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList4)
-
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList2)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList3)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList4)
-
-        //second click sorts in descending order
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList)
-
-        //thrid click removes sorting
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
-        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList)
-
-        //sort by case number and then edit some test case that is not at the top -- once user navigates back to the test case list page default sorting should appear
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList)
-
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-        cy.get(TestCasesPage.testCaseTitle).click()
-        cy.get(TestCasesPage.testCaseTitle).type('{moveToEnd}')
-        cy.get(TestCasesPage.testCaseTitle).type('12')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
-        cy.get(TestCasesPage.testCaseTitle).click()
-        cy.get(TestCasesPage.testCaseTitle).type('{moveToEnd}')
-        cy.get(TestCasesPage.testCaseTitle).type('{backspace}{backspace}')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
-        //Navigate back to Test Cases page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList)
-    })
-})
+// functionality for test case Id's is equivalent across models - see QDMTestCaseID.cy.ts for other coverage scenarios
+// scenario below is unique to QiCore since we do not allow test case import for QDM
 
 describe('Import Test cases onto an existing Qi Core measure via file and ensure test case ID / numbering appears', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure and login', () => {
-
-        CqlLibraryName = 'TestLibrary5' + Date.now()
 
         //create first measure and two test cases on it
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'firstMeasure', CqlLibraryName + 'firstMeasure', measureCQLPFTests)
@@ -231,151 +133,5 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-    })
-})
-
-describe('Qi Core Measure - Test case number on a Draft Measure', () => {
-
-    beforeEach('Create Measure, Test case & Login', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
-        OktaLogin.Login()
-    })
-
-    afterEach('Delete Measure and Logout', () => {
-
-        OktaLogin.UILogout
-        Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
-    })
-
-    it('Test case number assigned to a Draft Measure for Qi Core Measure', () => {
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Version the Measure
-        MeasuresPage.actionCenter('version')
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(versionNumber)
-        cy.log('Version Created Successfully')
-
-        //Draft the Versioned Measure
-        MeasuresPage.actionCenter('draft')
-
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(measureName)
-        cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
-        cy.log('Draft Created Successfully')
-
-        cy.get('[data-testid="row-item"]').eq(0).contains('Edit').click()
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.newTestCaseButton).click()
-
-        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
-        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
-
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase2.title)
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase2.description)
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase2.group)
-        cy.contains(testCase2.group).click()
-
-        cy.get(TestCasesPage.createTestCaseSaveButton).click()
-
-        //Navigate to test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        //Validate Test case ID for Draft Measure
-        TestCasesPage.grabValidateTestCaseNumber(2)
-    })
-})
-
-describe('QICore Test Case - Deleting all test cases resets test case counter', () => {
-
-    beforeEach('Create measure and login', () => {
-
-        CqlLibraryName = 'TestLibrary6' + Date.now()
-
-        //create measure and two test cases on it
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
-        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, validTestCaseJsonBobby, false, true)
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        OktaLogin.Login()
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-    })
-
-    it('Test case number resets when test case count equals 0', () => {
-
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        // verify there are 2 test cases shown
-        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 2)
-
-        // delete test case #1
-        TestCasesPage.checkTestCase(1)
-        cy.get(TestCasesPage.actionCenterDelete).click()
-
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'You are choosing to delete the following Test Case(s)!' + testCase1.group + ' - ' + testCase1.title)
-        cy.get(CQLEditorPage.deleteContinueButton).click()
-
-        // verify test case #1 no longer shown, test case #2 is still shown
-        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase2.title, testCase2.group)
-
-        // delete test case #2
-        TestCasesPage.checkTestCase(2)
-        cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(CQLEditorPage.deleteContinueButton).click()
-
-        // verify no test cases associated with this measure
-        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 0)
-        cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (0)')
-
-        // create new case
-        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
-
-        // verify one test case shown
-        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 1)
-        cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (1)')
-
-        // verify test case is test case #1
-        TestCasesPage.grabValidateTestCaseNumber(1)
     })
 })
