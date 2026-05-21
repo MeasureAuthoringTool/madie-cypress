@@ -33,8 +33,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
     beforeEach('Create Measure', () => {
 
-        let currentUser = Cypress.env('selectedUser')
-        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureData: CreateMeasureOptions = {
             ecqmTitle: measureQDMManifestName,
             cqlLibraryName: CqlLibraryName,
@@ -49,10 +47,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
-
-        cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-        })
 
         MeasuresPage.actionCenter('edit')
 
@@ -75,9 +69,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
     it('QDM Test Case number and sorting behavior', () => {
 
-        let currentUser = Cypress.env('selectedUser')
-        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -94,16 +85,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-
-        //navigate back to main measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-        })
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -178,9 +159,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
     it('QDM Test Case number appears on cloned test case', () => {
 
-        let currentUser = Cypress.env('selectedUser')
-        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -198,18 +176,6 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-
-        //navigate back to main measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        cy.reload()
-
-        cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-        })
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -229,8 +195,6 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     beforeEach('Create Measure, Test case & Login', () => {
 
-        let currentUser = Cypress.env('selectedUser')
-        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureData: CreateMeasureOptions = {
             ecqmTitle: measureQDMManifestName,
             cqlLibraryName: CqlLibraryName,
@@ -243,10 +207,6 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateTestCaseAPI(testCase1.group, testCase1.title, testCase1.description)
         OktaLogin.Login()
-
-        cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-        })
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
@@ -281,6 +241,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure
+        MeasuresPage.selectMeasure()
         MeasuresPage.actionCenter('draft')
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(newMeasureName)
@@ -326,8 +287,6 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
     beforeEach('Create Measure', () => {
 
-        let currentUser = Cypress.env('selectedUser')
-        const measureId = 'cypress/fixtures/' + currentUser + '/measureId'
         const measureData: CreateMeasureOptions = {
             ecqmTitle: qdmMeasureName,
             cqlLibraryName: qdmCqlLibraryName,
@@ -342,10 +301,6 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
-
-        cy.readFile(measureId).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-        })
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
