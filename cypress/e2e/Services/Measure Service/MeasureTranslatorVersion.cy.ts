@@ -15,8 +15,8 @@ const qdmMeasureName = 'QDMTranslatorVersion' + timestamp
 const qdmCqlLibraryName = 'QDMTranslatorVersionLibrary' + timestamp
 const qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
 
-const expectedQiCoreVersion = '4.7.0'
-const expectedQdmVersion = '3.29.0'
+const expectedQiCoreVersion = '4.8.0'
+const expectedQdmVersion = '4.8.0'
 const measureData: CreateMeasureOptions = {}
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
@@ -136,7 +136,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                         expect(response.status).to.eql(200)
                         expect(response.body.version).to.include('1.0.000')
                         // versioned measures read translator version from ELM
-                        expect(response.body.elmJson).to.include('"translatorVersion" : "' + expectedQdmVersion + '"')
+                        expect(response.body.elmJson).to.include('translatorVersion":"' + expectedQdmVersion + '"')
                     })
                 })
             })
