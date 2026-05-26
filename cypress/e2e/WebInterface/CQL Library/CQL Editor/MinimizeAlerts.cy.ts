@@ -14,10 +14,8 @@ describe('Minimize Alerts - Library with a CQL error', () => {
 
     beforeEach('Create Library and Login', () => {
 
-       // CQLLibraryPage.createCQLLibraryAPI(libraryName, 'ICF', false, false, errorCql)
         CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.qiCore6, { cql: errorCql })
         OktaLogin.SessionLogin()
-     //   cy.get(Header.cqlLibraryTab).click()
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -79,8 +77,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the Library', 
 
     beforeEach('Create Library and Login', () => {
 
-     //   CQLLibraryPage.createCQLLibraryAPI(libraryName, 'ICF', false, false, errorCql) 
-     CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.qiCore6, { cql: errorCql })
+        CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.qiCore6, { cql: errorCql })
         OktaLogin.Login()
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
