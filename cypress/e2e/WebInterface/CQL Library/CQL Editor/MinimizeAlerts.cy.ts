@@ -1,22 +1,23 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 
-const now = Date.now()
-const libraryName = 'MinimizeAlertsLib' + now
-const errorCql = QiCore4Cql.intentionalErrorCql.replace('TestLibrary16969620425371870', libraryName)
+const libraryName = 'MinimizeAlertsLib' + Date.now()
+const errorCql = QiCore6Cql.intentionalErrorCql
 
 describe('Minimize Alerts - Library with a CQL error', () => {
 
     beforeEach('Create Library and Login', () => {
 
-        CQLLibraryPage.createCQLLibraryAPI(libraryName, 'ICF', false, false, errorCql) 
+       // CQLLibraryPage.createCQLLibraryAPI(libraryName, 'ICF', false, false, errorCql)
+        CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.qiCore6, { cql: errorCql })
         OktaLogin.SessionLogin()
-        cy.get(Header.cqlLibraryTab).click()
+     //   cy.get(Header.cqlLibraryTab).click()
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -28,8 +29,7 @@ describe('Minimize Alerts - Library with a CQL error', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        
-        Utilities.deleteLibrary(libraryName)
+        Utilities.deleteLibrary()
     })
 
     it('On CQL Editor, user can minimize and then maximize the error list', () => {
@@ -79,17 +79,15 @@ describe('Minimize Alerts - Non-owner can also minimize to review the Library', 
 
     beforeEach('Create Library and Login', () => {
 
-        CQLLibraryPage.createCQLLibraryAPI(libraryName, 'ICF', false, false, errorCql) 
+     //   CQLLibraryPage.createCQLLibraryAPI(libraryName, 'ICF', false, false, errorCql) 
+     CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.qiCore6, { cql: errorCql })
         OktaLogin.Login()
-        cy.get(Header.cqlLibraryTab).click()
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Save CQL
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 25000)
-        
 
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
@@ -98,9 +96,8 @@ describe('Minimize Alerts - Non-owner can also minimize to review the Library', 
     })
 
     afterEach('Clean up and Logout', () => {
-
         
-        Utilities.deleteLibrary(libraryName)
+        Utilities.deleteLibrary()
     })
 
     it('Verify Non-owner can perform minimize action', () => {

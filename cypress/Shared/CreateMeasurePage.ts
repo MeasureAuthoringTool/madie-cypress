@@ -10,13 +10,12 @@ export enum SupportedModels {
     QDM = 'QDM v5.6',
     qiCore4 = 'QI-Core v4.1.1',
     qiCore6 = 'QI-Core v6.0.0',
-    qiCore7 = 'QI-Core v7.0.0'
+    USQC = 'US Quality Core v0.5.0'
 }
 
 export enum SupportedCompositeModels {
     qiCore4 = 'QI-Core v4.1.1',
-    qiCore6 = 'QI-Core v6.0.0',
-    qiCore7 = 'QI-Core v7.0.0'
+    qiCore6 = 'QI-Core v6.0.0'
 }
 
 export type CreateMeasureOptions = {
@@ -812,8 +811,8 @@ export class CreateMeasurePage {
             ecqmTitle = 'AutoTestTitle',
             measureCql,
             elmJson,
-            patientBasis,
-            measureScoring,
+            patientBasis: string,
+            measureScoring: string,
             measureMetadata
 
         if (optionalParams && optionalParams.altUser) {

@@ -5,6 +5,8 @@ import { CQLLibraryPage } from "./CQLLibraryPage"
 
 export class CQLLibrariesPage {
 
+    public static readonly librariesList = '[data-testid="library-list-tbl"]'
+
     //Version and Draft CQL Library
     public static readonly versionLibraryRadioButton = '[name="type"]'
     public static readonly createVersionContinueButton = '[data-testid="create-version-continue-button"] > :nth-child(1)'
@@ -60,7 +62,7 @@ export class CQLLibrariesPage {
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        Utilities.waitForElementVisible(this.librariesList, 35000)
         cy.readFile(filePath).should('exist').then((fileContents) => {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
@@ -84,12 +86,12 @@ export class CQLLibrariesPage {
         if (libraryNumber) {
             filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
         }
-        if (altUserAction === true) {
+        if (altUserAction) {
             //Navigate to CQL Library Page
             cy.get(Header.cqlLibraryTab).should('exist')
             cy.get(Header.cqlLibraryTab).should('be.visible')
             cy.get(Header.cqlLibraryTab).click()
-            Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 50000)
+            Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 35000)
             cy.get(CQLLibraryPage.allLibrariesTab).wait(2000).click()
         } else {
             //Navigate to CQL Library Page
@@ -97,7 +99,7 @@ export class CQLLibrariesPage {
             cy.get(Header.cqlLibraryTab).should('be.visible')
             cy.get(Header.cqlLibraryTab).click()
         }
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        Utilities.waitForElementVisible(this.librariesList, 35000)
         cy.readFile(filePath).should('exist').then((fileContents) => {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
