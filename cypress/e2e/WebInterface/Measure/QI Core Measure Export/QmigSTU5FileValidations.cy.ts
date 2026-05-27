@@ -13,6 +13,7 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const qiCoreCommonLib = 'resources/library-QICoreCommon-2.1.000.json'
 
+// ToDo: these need new CQLs & upgrades to 6.0.0
 describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
     const measureName = 'Stu5ProportionExport' + Date.now()
