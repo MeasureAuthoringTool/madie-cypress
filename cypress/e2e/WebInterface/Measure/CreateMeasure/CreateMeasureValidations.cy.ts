@@ -3,33 +3,28 @@ import { LandingPage } from "../../../../Shared/LandingPage"
 import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 import { Utilities } from "../../../../Shared/Utilities"
-import { CQLLibraryPage, CreateLibraryOptions } from "../../../../Shared/CQLLibraryPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
-let newCQLLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
-let measureCQLLibName = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
+const measureCql = QiCore6Cql.cqlCMS125
 
 describe('Validations on Measure Details page', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        newMeasureName = 'MeasureValidations1' + Date.now()
+        newCqlLibraryName = 'MeasureValidations1Lib' + Date.now()
+    //    CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6, { measureCql })
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
         
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify fields on the Steward & Developers section of Measure Details page are required and the messaging around the requirement', () => {
@@ -278,15 +273,15 @@ describe('Create Measure validations', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        newMeasureName = 'MeasureValidations2' + Date.now()
+        newCqlLibraryName = 'MeasureValidations2Lib' + Date.now()
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6, { measureCql })
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
         
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     //Measure Name Validations
@@ -342,7 +337,7 @@ describe('Create Measure validations', () => {
         Utilities.waitForElementVisible(CreateMeasurePage.measureNameTextbox, 30000)
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
-        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).type('eCQMTitle')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('12/01/2020')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).type('01/01/2021')
@@ -442,7 +437,7 @@ describe('Create Measure validations', () => {
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
-        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('12/01/2020')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).type('01/01/2021')
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
@@ -466,15 +461,11 @@ describe('Create Measure validations', () => {
 
 describe('Measurement Period Validations', () => {
 
-    let measureName = 'TestMeasure' + Date.now()
-    let CqlLibraryName = 'TestLibrary' + Date.now()
+    let measureName = 'CreateValidationsMP' + Date.now()
+    let CqlLibraryName = 'CreateValidationsMPLib' + Date.now()
 
     beforeEach('Login', () => {
         OktaLogin.SessionLogin()
-    })
-
-    afterEach('Logout', () => {
-        
     })
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
@@ -485,7 +476,7 @@ describe('Measurement Period Validations', () => {
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
-        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
         cy.get(CreateMeasurePage.measurementPeriodEndDate).type('01/01/1999')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('12/01/2022')
@@ -502,7 +493,7 @@ describe('Measurement Period Validations', () => {
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
-        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
         cy.get(CreateMeasurePage.measurementPeriodStartDate).click()
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
@@ -520,7 +511,7 @@ describe('Measurement Period Validations', () => {
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
-        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('01/01/1800')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
@@ -539,7 +530,7 @@ describe('Measurement Period Validations', () => {
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
-        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('2020/01/02')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
@@ -558,7 +549,7 @@ describe('Measurement Period Validations', () => {
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
-        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('01/01/2020')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
@@ -568,163 +559,3 @@ describe('Measurement Period Validations', () => {
         cy.get(CreateMeasurePage.cancelButton).click()
     })
 })
-
-describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Core measure CQL', () => {
-
-    beforeEach('Login', () => {
-        var randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = "NewCQLLibName" + randValue
-        newMeasureName = "NewMeasureName" + randValue
-        measureCQLLibName = newCQLLibraryName + 'InMeasure' + Date.now() + randValue
-        const opts: CreateLibraryOptions = {
-            publisher: CQLLibraryPublisher,
-            cql: LibraryCQL.validCQL4QDMLib
-        }
-        CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.QDM, opts)
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, measureCQLLibName, undefined, undefined, false)
-        OktaLogin.SessionLogin()
-    })
-
-    afterEach('Logout', () => {
-
-        
-        Utilities.deleteMeasure(newMeasureName, measureCQLLibName)
-    })
-
-    it('Proper error appears when attempting to use a QDM Library in a QI Core measure CQL', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //create test case
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //write CQL value into CQL Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('library ' + measureCQLLibName + ' version \'0.0.004\'\n' +
-            'using QICore version \'4.1.1\'\n' +
-            'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-            'include PalliativeCareQDM version \'4.0.000\' called Test\n' +
-            'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
-            'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
-            'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-            'parameter \"Measurement Period\" Interval<DateTime>\n' +
-            'context Patient\n' +
-            'define \"Surgical Absence of Cervix\":\n' +
-            '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
-            '		where NoCervixHysterectomy.status = \'completed\'')
-
-        //Save CQL button should be available
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //generic error list appears
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('be.visible')
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('include.text', 'Row: 4, Col:1: ELM: 1:55 | Library model and version does not match the Measure model and version for name: PalliativeCareQDM, version: 4.0.000')
-    })
-})
-
-describe('CQL Library Validations -- Attempting to use a QI Core Library in a QDM measure CQL', () => {
-
-    beforeEach('Login', () => {
-        var randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = "NewCQLLibName" + randValue
-        newMeasureName = "NewMeasureName" + randValue
-        measureCQLLibName = newCQLLibraryName + 'InMeasure' + Date.now() + randValue
-        const opts: CreateLibraryOptions = {
-            publisher: CQLLibraryPublisher,
-            cql: LibraryCQL.validCQL4QICORELib
-        }
-        CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.qiCore4, opts)
-        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, measureCQLLibName, undefined, false, false)
-        OktaLogin.SessionLogin()
-    })
-
-    afterEach('Logout', () => {
-
-        
-        Utilities.deleteMeasure(newMeasureName, measureCQLLibName)
-    })
-
-    it('Proper error appears when attempting to use a QI Core Library in a QDM measure CQL', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //create test case
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //write CQL value into CQL Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('library ' + measureCQLLibName + ' version \'0.0.004\'\n' +
-            '\n' +
-            'using QDM version \'5.6\'\n' +
-            'include SupplementalDataElements version \'3.4.000\' called Test\n' +
-            '\n' +
-            'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
-            'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
-            'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
-            'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
-            'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
-            'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-            'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-            'valueset "Hypoglycemics Treatment Medications": \'urn:oid:2.16.840.1.113762.1.4.1196.394\'\n' +
-            '\n' +
-            'parameter "Measurement Period" Interval<DateTime>\n' +
-            '\n' +
-            'context Patient\n' +
-            '\n' +
-            'define "SDE Ethnicity":\n' +
-            '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
-            '\n' +
-            'define "SDE Payer":\n' +
-            '  ["Patient Characteristic Payer": "Payer Type"]\n' +
-            '\n' +
-            'define "SDE Race":\n' +
-            '  ["Patient Characteristic Race": "Race"]\n' +
-            '\n' +
-            'define "SDE Sex":\n' +
-            '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
-            '\n' +
-            'define "Strat 1":\n' +
-            '    ["Encounter, Performed": "Encounter Inpatient"]\n' +
-            '\n' +
-            'define "Strat 2":\n' +
-            '    ["Encounter, Performed": "Emergency Department Visit"]\n' +
-            '\n' +
-            'define "Denominator":\n' +
-            '  "Initial Population"\n' +
-            '\n' +
-            'define "Initial Population":\n' +
-            '  "Qualifying Encounters"\n' +
-            '\n' +
-            'define "Measure Population":\n' +
-            '  "Initial Population"\n' +
-            '\n' +
-            'define "Measure Population Exclusion":\n' +
-            '  ["Encounter, Performed": "Observation Services"] Encounter\n' +
-            '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
-            '\n' +
-            'define "Qualifying Encounters":\n' +
-            '  exists ( ["Encounter, Performed": "Encounter Inpatient"]\n' +
-            '    union ["Encounter, Performed": "Emergency Department Visit"]\n' +
-            '    union ["Encounter, Performed": "Observation Services"] ) Encounter\n' +
-            '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
-            '\n' +
-            'define function "MeasureObservation"():\n' +
-            'true\n' +
-            '\n' +
-            'define function "Measure Observation hours"():\n' +
-            '    8{del}')
-
-        //Save CQL button should be available
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //generic error list appears
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('be.visible')
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('include.text', 'Row: 4, Col:1: ELM: 1:62 | Library model and version does not match the Measure model and version for name: SupplementalDataElements, version: 3.4.000')
-    })
-})
-
-

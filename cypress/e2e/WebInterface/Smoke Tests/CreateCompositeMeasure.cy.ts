@@ -1,10 +1,10 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {Utilities} from "../../../Shared/Utilities"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {Header} from "../../../Shared/Header"
-import {CreateMeasurePage, SupportedCompositeModels} from "../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { Utilities } from "../../../Shared/Utilities"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { Header } from "../../../Shared/Header"
+import { CreateMeasurePage, SupportedCompositeModels } from "../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
 let measureName = ''
 let CqlLibraryName = ''
@@ -20,7 +20,6 @@ describe.skip('Create Composite Measure', () => {
 
     afterEach('Cleanup and Logout', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -30,7 +29,7 @@ describe.skip('Create Composite Measure', () => {
         CqlLibraryName = 'CompositeTestLibrary' + Date.now()
         const currentUser = Cypress.env('selectedUser')
 
-        CreateMeasurePage.CreateCompositeMeasure(measureName, CqlLibraryName, SupportedCompositeModels.qiCore4)
+        CreateMeasurePage.CreateCompositeMeasure(measureName, CqlLibraryName, SupportedCompositeModels.qiCore6)
         cy.get(Header.mainMadiePageButton).click()
 
         //Edit Measure

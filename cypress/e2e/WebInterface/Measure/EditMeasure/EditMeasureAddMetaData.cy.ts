@@ -4,7 +4,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Header } from "../../../../Shared/Header"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
-import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
@@ -14,7 +14,7 @@ let measureName = 'MeasureDefs' + now
 let CqlLibraryName = 'MeasureDefsLib' + now
 let newCqlLibraryName = ''
 let newMeasureName = ''
-const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
+const measureCql = QiCore6Cql.cqlCMS125
 let harpUserALT = ''
 
 describe('Edit Measure: Add Meta Data', () => {
@@ -24,7 +24,7 @@ describe('Edit Measure: Add Meta Data', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue + 2
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6, { measureCql })
     })
 
     beforeEach('Login', () => {
@@ -240,8 +240,8 @@ describe('Edit Measure: Add Meta Data', () => {
         EditMeasurePage.addMeasureDefinitionNonQDM('ten', defText)
         EditMeasurePage.addMeasureDefinitionNonQDM('eight', defText)
 
-        const expectedOrder = ['eight', 'eleven', 'five', 'four', 'nine', 'one', 'seven', 'six', 'ten', 'ThisIsTheDefinitionTermValue']
-        const pageTwoOrder = ['three', 'twelve', 'two']
+        const expectedOrder = ['eight', 'eleven', 'five', 'four', 'nine', 'one', 'seven', 'six', 'ten', 'three']
+        const pageTwoOrder = ['twelve', 'two']
 
         cy.get(EditMeasurePage.definitionMetaTableBody).find('tr > td:first-child').each((el, index) => {
             cy.wrap(el).invoke('text').then(textValue => {
@@ -281,7 +281,7 @@ describe('Verify Measure Id and Version Id', () => {
         Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 50000)
 
         //Create New Measure
-        CreateMeasurePage.CreateMeasure(newMeasureName, newCqlLibraryName, SupportedModels.qiCore4)
+        CreateMeasurePage.CreateMeasure(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6)
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -300,8 +300,7 @@ describe('Generate CMS ID for QI-Core Measure', () => {
 
     before('Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, undefined, false,
-            '2012-01-02', '2013-01-01')
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6, { measureCql })
 
         OktaLogin.Login()
     })
@@ -347,7 +346,7 @@ describe('Generate CMS ID for QDM Measure', () => {
 
     before('Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCql, false, false,
             '2012-01-02', '2013-01-01')
 
         OktaLogin.Login()
@@ -399,7 +398,7 @@ describe('Generate CMS ID - Non Measure and Shared Measure Owner validations', (
 
         harpUserALT = OktaLogin.getUser(true)
 
-        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCql, false, false,
             '2012-01-02', '2013-01-01')
     })
 
