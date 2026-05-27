@@ -4,7 +4,7 @@ import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasur
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
-import { QiCore4Cql } from "../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../Shared/FHIRMeasuresCQL"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
@@ -18,21 +18,16 @@ const measure = {
     name: 'AdminCorrectExpValues' + now,
     libraryName: 'ACExpValuesLib' + now,
     ecqmTitle: 'ACEV',
-    model: SupportedModels.qiCore4,
+    model: SupportedModels.qiCore6,
     mpStartDate: dayjs().subtract('1', 'year').format('YYYY-MM-DD'),
     mpEndDate: dayjs().format('YYYY-MM-DD')
 }
-const measureCQL = QiCore4Cql.CQL_Populations.replace('TestLibrary4664', measure.name)
-const testCase = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
+const measureCQL = QiCore6Cql.cqlCMS1017
+const testCase = TestCaseJson.fromCMS1017NumPass
 const adminAPIKey = Environment.credentials().adminApiKey
 let harpUser = ''
 
 describe('Admin API - Reset test case expected values', () => {
-
-    beforeEach('Set Access Token', () => {
-
-        harpUser = OktaLogin.setupUserSession(false)
-    })
 
     afterEach('Clean up', () => {
 
@@ -43,8 +38,8 @@ describe('Admin API - Reset test case expected values', () => {
     it('Reset test case expected values of current draft back to state from last version of the measure', () => {
         const currentUser = Cypress.env('selectedUser')
         // establish original measure - measureId
-        CreateMeasurePage.CreateQICoreMeasureAPI(measure.name, measure.libraryName, measureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'boolean')
+        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI('title', 'series', 'desc', testCase)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -65,7 +60,7 @@ describe('Admin API - Reset test case expected values', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + tcId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET'
                     }).then((response) => {
@@ -75,16 +70,16 @@ describe('Admin API - Reset test case expected values', () => {
 
                             const tcExpectedValue: GroupPopulation = {
                                 "groupId": gId,
-                                "populationBasis": "boolean",
+                                "populationBasis": "Encounter",
                                 "populationValues": [
                                     {
-                                        "actual": true,
-                                        "expected": true,
+                                        "actual": 1,
+                                        "expected": 1,
                                         "id": uuidv4(),
                                         "name": PopulationType.INITIAL_POPULATION
                                     }
                                 ],
-                                "scoring": "Cohort",
+                                "scoring": "Ratio",
                                 "stratificationValues": []
                             }
 
@@ -95,7 +90,7 @@ describe('Admin API - Reset test case expected values', () => {
                                 failOnStatusCode: false,
                                 url: '/api/measures/' + measureId + '/test-cases/' + tcId,
                                 headers: {
-                                    authorization: 'Bearer ' + accessToken.value
+                                    authorization: 'Bearer ' + accessToken?.value
                                 },
                                 body: updatedTestCase,
                                 method: 'PUT'
@@ -115,7 +110,7 @@ describe('Admin API - Reset test case expected values', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'PUT'
                 }).then((response) => {
@@ -134,7 +129,7 @@ describe('Admin API - Reset test case expected values', () => {
                             url: '/api/measures/' + measureAID + '/draft',
                             method: 'POST',
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value
+                                authorization: 'Bearer ' + accessToken?.value
                             },
                             body: {
                                 'measureSetId': mSetId,
@@ -177,7 +172,7 @@ describe('Admin API - Reset test case expected values', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + tcId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET'
                     }).then((response) => {
@@ -191,7 +186,7 @@ describe('Admin API - Reset test case expected values', () => {
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/test-cases/' + tcId,
                             headers: {
-                                authorization: 'Bearer ' + accessToken.value
+                                authorization: 'Bearer ' + accessToken?.value
                             },
                             method: 'PUT',
                             body: testCaseResponse
@@ -211,7 +206,7 @@ describe('Admin API - Reset test case expected values', () => {
                     failOnStatusCode: false,
                     url: '/api/measures/' + measureId,
                     headers: {
-                        authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken?.value
                     },
                     method: 'GET'
                 }).then((response) => {
@@ -227,7 +222,7 @@ describe('Admin API - Reset test case expected values', () => {
                                 failOnStatusCode: false,
                                 url: '/api/admin/measures/' + measureId2,
                                 headers: {
-                                    authorization: 'Bearer ' + accessToken.value,
+                                    authorization: 'Bearer ' + accessToken?.value,
                                     'api-key': adminAPIKey
                                 },
                                 method: 'PUT',
@@ -251,12 +246,12 @@ describe('Admin API - Reset test case expected values', () => {
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/test-cases/' + tcId,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value
+                            authorization: 'Bearer ' + accessToken?.value
                         },
                         method: 'GET'
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body.groupPopulations[0].populationValues[0].expected).eql(true)
+                        expect(response.body.groupPopulations[0].populationValues[0].expected).eql(1)
                     })
                 })
             })

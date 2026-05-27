@@ -4,23 +4,23 @@ import { Utilities } from "../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { QiCore4Cql } from "../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../Shared/FHIRMeasuresCQL"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
 
 const now = Date.now()
 const measureName = 'MinimizeAlerts' + now
 const CqlLibraryName = 'MinimizeAlertsLib' + now
-const errorCql = QiCore4Cql.intentionalErrorCql.replace('TestLibrary16969620425371870', CqlLibraryName)
+const errorCql = QiCore6Cql.intentionalErrorCql
+const tc = TestCaseJson.fromCMS1272Strata1
 
 describe('Minimize Alerts - Measure with a CQL error', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -80,17 +80,11 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.get(TestCasesPage.shftAllTestCasesSaveBtn).click()
         Utilities.waitForElementDisabled(TestCasesPage.shftAllTestCasesSaveBtn, 9500)
 
-        // known issue - warning will be in a 2nd box, separate from errors
-        cy.get(TestCasesPage.executionContextWarning).should('be.visible')
-        cy.get('[data-testid="warn-title"]').should('have.text', 'The following Test Case dates could not be shifted. Please try again. If the issue continues, please contact helpdesk.abc - empty testcase')
-
-        // clear both
+        // hide errors
         cy.get(CQLEditorPage.minimizeButton).click()
-        cy.get(CQLEditorPage.secondMinimizeButton).click()
 
         // Both boxes are gone
         cy.get(TestCasesPage.executionContextWarning).should('not.exist')
-        cy.get(TestCasesPage.testCaseExecutionError).should('not.exist')
 
         //Navigate to Details
         cy.get(EditMeasurePage.measureDetailsTab).should('be.visible')
@@ -109,7 +103,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the test cases
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
 

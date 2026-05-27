@@ -4,12 +4,12 @@ import { Utilities } from "../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { QiCore4Cql } from "../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../Shared/FHIRMeasuresCQL"
 
 const now = Date.now()
 const measureName = 'MinimizeAlerts' + now
 const CqlLibraryName = 'MinimizeAlertsLib' + now
-const errorCql = QiCore4Cql.intentionalErrorCql.replace('TestLibrary16969620425371870', CqlLibraryName)
+const errorCql = QiCore6Cql.intentionalErrorCql
 
 describe('Minimize Alerts - Measure with a CQL error', () => {
 
@@ -18,8 +18,6 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -28,8 +26,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('On CQL Editor, user can minimize and then maximize the error list', () => {
@@ -105,7 +102,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the measure', 
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
@@ -124,8 +121,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the measure', 
 
     afterEach('Clean up and Logout', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner can perform minimize action', () => {

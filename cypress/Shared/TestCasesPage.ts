@@ -606,14 +606,9 @@ export class TestCasesPage {
             //edit test test case
             this.clickEditforCreatedTestCase()
 
-            // check ff & handle possible extra tab showing
-            cy.readFile('cypress/fixtures/featureFlags').then(flags => {
-                const ff = JSON.parse(flags)
-
-                if (ff.qiCoreElementsTab && handleElementsTab) {
-                    cy.get(TestCasesPage.jsonTab).click()
-                }
-            })
+            if (handleElementsTab) {
+                cy.get(TestCasesPage.jsonTab).click()
+            }
 
             // modify testcase JSON
             Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
@@ -623,7 +618,8 @@ export class TestCasesPage {
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
             cy.wait(1500)
-            cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
+            cy.get(this.aceEditor).type('{selectAll}{backspace}')
+            cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: true })
 
             cy.get(this.detailsTab).click()
 

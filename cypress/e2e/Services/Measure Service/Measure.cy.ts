@@ -666,7 +666,7 @@ describe('Measure Service: Update Delete Flag', () => {
         harpUser = OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        defaultUser = CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCQLLibraryName, SupportedModels.qiCore4)
+        defaultUser = CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCQLLibraryName, SupportedModels.qiCore6)
     })
 
     it('Update / delete measure', () => {
