@@ -1,25 +1,25 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Toasts } from "../../../../Shared/Toasts"
 
-let measureName = 'RatioPatientSingleIPNoMODRC' + Date.now()
-let CqlLibraryName = 'RatioPatientSingleIPNoMODRC' + Date.now()
-let testCaseTitleIppPass = 'IPP PASS'
-let testCaseTitleDrcPass = 'DRC PASS'
-let testCaseDescription = 'PASS' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let testCaseJsonIppPass = TestCaseJson.RatioPatientSingleIPNoMO_IPP_PASS
-let testCaseJsonDrcPass = TestCaseJson.RatioPatientSingleIPNoMO_DRC_PASS
-let measureCQL = 'library RatioPatientSingleIPNoMO version \'0.0.000\'\n\n' +
-    'using QICore version \'4.1.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+const measureName = 'RatioPatientSingleIPNoMODRC' + Date.now()
+const CqlLibraryName = 'RatioPatientSingleIPNoMODRC' + Date.now()
+const testCaseTitleIppPass = 'IPP PASS'
+const testCaseTitleDrcPass = 'DRC PASS'
+const testCaseDescription = 'PASS' + Date.now()
+const testCaseSeries = 'SBTestSeries'
+const testCaseJsonIppPass = TestCaseJson.RatioPatientSingleIPNoMO_IPP_PASS
+const testCaseJsonDrcPass = TestCaseJson.RatioPatientSingleIPNoMO_DRC_PASS
+const measureCQL = 'library RatioPatientSingleIPNoMO version \'0.0.000\'\n\n' +
+    'using QICore version \'6.0.0\'\n\n' +
+    'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
+    'include CQMCommon version \'4.1.000\' called Global\n\n' +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
     'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'\n\n' +
     'valueset "Emergency Department Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.292\'\n' +
@@ -67,16 +67,16 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
 
     before('Create Measure and Test Case', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2022-01-01', '2022-12-31')
-            MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Ratio, pops)
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, 
+            { measureCql: measureCQL, mpStartDate: '2022-01-01', mpEndDate: '2022-12-31'})
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Ratio, pops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure()
+       // Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, IPP Pass Result', () => {
@@ -101,12 +101,9 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).click()
         cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
+        
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
@@ -123,15 +120,18 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, DRC Pass Result', () => {
-        let randValueTitle = (Math.floor((Math.random() * 1000) + 1))
-        let randValueSeries = (Math.floor((Math.random() * 2000) + 1))
 
-        TestCasesPage.CreateTestCaseAPI(testCaseTitleDrcPass + randValueTitle, testCaseDescription, testCaseSeries + randValueSeries, testCaseJsonDrcPass)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitleDrcPass, testCaseDescription, testCaseSeries, testCaseJsonDrcPass)
 
         OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -160,12 +160,9 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMEXExpected).click()
         cy.get(TestCasesPage.testCaseNUMEXExpected).check().should('be.checked')
-
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
+        
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
