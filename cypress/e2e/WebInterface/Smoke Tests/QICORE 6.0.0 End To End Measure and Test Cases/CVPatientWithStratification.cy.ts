@@ -1,23 +1,24 @@
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Toasts } from "../../../../Shared/Toasts"
 
-let measureName = 'CVPatientWithStratification' + Date.now()
-let CqlLibraryName = 'CVPatientWithStratification' + Date.now()
-let testCaseTitle = 'PASS'
-let testCaseDescription = 'PASS' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.CVPatientWithStratification_PASS
-let measureCQL = 'library CVPatientWithStratification version \'0.0.000\'\n\n' +
+const measureName = 'CVPatientWithStratification' + Date.now()
+const CqlLibraryName = 'CVPatientWithStratification' + Date.now()
+const testCaseTitle = 'PASS'
+const testCaseDescription = 'PASS'
+const testCaseSeries = 'SBTestSeries'
+const testCaseJson = TestCaseJson.CVPatientWithStratification_PASS
+const measureCQL = 'library CVPatientWithStratification version \'0.0.000\'\n\n' +
     'using QICore version \'4.1.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
+    'include CQMCommon version \'4.1.000\' called Global\n\n' +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n\n' +
     'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
     'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n\n' +
@@ -56,8 +57,9 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
     before('Create Measure, Test Case and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2012-01-01', '2012-12-31')
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, 
+            { measureCql: measureCQL, mpStartDate: '2012-01-01', mpEndDate: '2012-12-31'}
+        )
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
@@ -138,17 +140,11 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 

@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
@@ -7,22 +7,23 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { Toasts } from "../../../../Shared/Toasts"
 
-let measureName = 'CohortEpisodeWithStrat' + Date.now()
-let CqlLibraryName = 'CohortEpisodeWithStrat' + Date.now()
-let testCaseTitle = 'PASS'
-let testCaseDescription = 'PASS' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
-let measureCQL = QiCore4Cql.EpisodeWithStrat
+const measureName = 'CohortEpisodeWithStrat' + Date.now()
+const CqlLibraryName = 'CohortEpisodeWithStrat' + Date.now()
+const testCaseTitle = 'PASS'
+const testCaseDescription = 'PASS'
+const testCaseSeries = 'SBTestSeries'
+const testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
+const measureCQL = QiCore6Cql.EpisodeWithStrat
 
 describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2022-01-01', '2023-01-01')
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, 
+            { measureCql: measureCQL, mpStartDate: '2022-01-01', mpEndDate: '2023-01-01' })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
@@ -71,13 +72,8 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
 
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.enabled')
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
-
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

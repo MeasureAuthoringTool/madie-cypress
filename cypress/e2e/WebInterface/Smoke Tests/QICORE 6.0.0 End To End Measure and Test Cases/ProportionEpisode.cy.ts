@@ -1,6 +1,6 @@
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -13,17 +13,18 @@ import {
     MeasureType, 
     PopulationBasis 
 } from "../../../../Shared/MeasureGroupPage"
+import { Toasts } from "../../../../Shared/Toasts"
 
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
 let testCaseTitle = 'PASS'
-let testCaseDescription = 'PASS' + Date.now()
+let testCaseDescription = 'PASS'
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.ProportionEpisode_PASS
 let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n\n' +
-    'using QICore version \'4.1.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+    'using QICore version \'6.0.0\'\n\n' +
+    'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
+    'include CQMCommon version \'4.1.000\' called Global\n\n' +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n\n' +
     'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
     'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n\n' +
@@ -55,9 +56,11 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2023-01-01', '2023-12-31')
-            MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
+        // CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
+        //     '2023-01-01', '2023-12-31')
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6,
+            { measureCql: measureCQL, mpStartDate: '2023-01-01', mpEndDate: '2023-12-31' })
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -91,14 +94,12 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
-
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-
+        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
+        
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })

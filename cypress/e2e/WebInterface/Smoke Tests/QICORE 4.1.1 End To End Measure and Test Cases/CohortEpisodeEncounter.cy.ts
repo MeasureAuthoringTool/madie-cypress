@@ -23,6 +23,7 @@ let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
+// upgraded in CohortEncounter600
 describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
     before('Create Measure and Test Case', () => {

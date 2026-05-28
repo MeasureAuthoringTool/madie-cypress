@@ -17,6 +17,7 @@ let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeTwoIPsWithMOs_PASS
 let measureCQL = QiCore4Cql.ratioEpisodeTwoIPTwoMO
 
+// upgraded into RatioEncounterSingleIPWithMOs600.cy.ts
 describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {

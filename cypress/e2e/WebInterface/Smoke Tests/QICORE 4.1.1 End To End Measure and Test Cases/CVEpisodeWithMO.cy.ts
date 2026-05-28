@@ -46,6 +46,7 @@ let measureCQL = 'library TestLibrary356786y8 version \'0.0.000\'\n\n' +
     '          where Enc.priority ~ "Unscheduled (qualifier value)"\n' +
     '          })'.replace('TestLibrary356786y8', CqlLibraryName)
 
+// upgraded in CVEncounterWithMOandStrat600
 describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
     before('Create Measure, Test Case and Login', () => {

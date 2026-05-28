@@ -45,7 +45,7 @@ describe('Delete Measure ownership validation', () => {
 
         measureTwo = 'DeleteMeasure2' + now
         CqlLibraryTwo = 'DeleteLibrary2' + now
-        CreateMeasurePage.CreateMeasureAPI(measureTwo, CqlLibraryTwo, SupportedModels.qiCore4)
+        CreateMeasurePage.CreateMeasureAPI(measureTwo, CqlLibraryTwo, SupportedModels.qiCore6)
 
         OktaLogin.AltLogin()
     })
