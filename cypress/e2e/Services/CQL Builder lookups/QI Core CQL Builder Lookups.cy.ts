@@ -1,7 +1,7 @@
-import { QiCore4Cql } from "../../../Shared/FHIRMeasuresCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { QiCore6Cql } from "../../../Shared/FHIRMeasuresCQL"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
-const cql = QiCore4Cql.EpisodeWithStrat
+const cql = QiCore6Cql.EpisodeWithStrat
 
 describe('CQL Builder Lookups: QI Core', () => {
 
