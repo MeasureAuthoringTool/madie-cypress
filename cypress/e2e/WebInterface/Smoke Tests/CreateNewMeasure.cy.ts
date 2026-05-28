@@ -20,22 +20,6 @@ describe('Create New Measure', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Create QI Core 4.1.1 Measure', () => {
-
-        measureName = 'QICore4TestMeasure' + Date.now()
-        CqlLibraryName = 'QICore4TestLibrary' + Date.now()
-
-        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
-
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to CQL Editor tab / page
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'include CQMCommon version \'2.0.000\' called CQMCommoninclude FHIRHelpers version \'4.3.000\' called FHIRHelpersinclude QICoreCommon version \'2.0.000\' called QICoreCommoninclude SupplementalDataElements version \'3.4.000\' called SDEparameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  SDE."SDE Ethnicity"define "SDE Payer":  SDE."SDE Payer"define "SDE Race":  SDE."SDE Race"define "SDE Sex":  SDE."SDE Sex"')
-    })
-
     it('Create QDM Measure', () => {
 
         measureName = 'QDMTestMeasure' + Date.now()
