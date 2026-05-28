@@ -46,6 +46,7 @@ const baseMeasureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n\n
     '        where Numer.class ~ "Emergency"'
 let measureCQL = baseMeasureCQL
 
+// upgraded into RatioEncounterSingleIPWithMOs600.cy.ts
 describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
     const pops: MeasureGroups = {

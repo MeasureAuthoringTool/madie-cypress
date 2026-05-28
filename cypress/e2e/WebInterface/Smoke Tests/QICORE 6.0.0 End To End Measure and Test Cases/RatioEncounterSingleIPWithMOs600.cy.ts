@@ -25,6 +25,7 @@ const opts: CreateMeasureOptions = {
     mpEndDate: '2026-12-31'
 }
 
+// covers both RatioEpisodeSingleIPNoMO and RatioEpisodeTwoIPsWithMOs
 describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
