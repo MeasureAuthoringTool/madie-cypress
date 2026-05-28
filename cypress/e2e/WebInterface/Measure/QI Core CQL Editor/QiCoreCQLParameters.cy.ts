@@ -8,10 +8,10 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 let measureName = 'QiCoreParamsMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreParamsLibrary' + Date.now()
 let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
+    'using QICore version \'6.0.0\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
-    'include CQMCommon version \'2.2.000\' called CQMCommon\n' +
+    'include SupplementalDataElements version \'5.1.000\' called SupplementalData\n' +
+    'include CQMCommon version \'4.1.000\' called CQMCommon\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -24,16 +24,14 @@ let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     '   exists "Qualifying Encounters"\n' +
     '   define "Qualifying Encounters":\n' +
     '      (\n' +
-    '          [Encounter: "Office Visit"]\n' +
-    '                   union [Encounter: "Annual Wellness Visit"]\n' +
-    '                            union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
-    '                                     union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
-    '                                              union [Encounter: "Home Healthcare Services"]\n' +
-    '                                               ) ValidEncounter\n' +
-    '                                                       where ValidEncounter.period during "Measurement Period"\n' +
-    '                                                                 and ValidEncounter.isFinishedEncounter()\n' +
-    '          \n' +
-    '                                                                 \n' +
+    '        [Encounter: "Office Visit"]\n' +
+    '          union [Encounter: "Annual Wellness Visit"]\n' +
+    '          union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+    '          union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+    '          union [Encounter: "Home Healthcare Services"]\n' +
+    '      ) ValidEncounter\n' +
+    '          where ValidEncounter.period during "Measurement Period"\n' +
+    '            and ValidEncounter.isFinishedEncounter()\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '  (Enc E where E.status = \'finished\') is not null '
 
@@ -42,11 +40,9 @@ describe('Qi-Core CQL Parameters', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -57,7 +53,7 @@ describe('Qi-Core CQL Parameters', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Validate default Parameters tab and basic form functions', () => {
@@ -296,11 +292,9 @@ describe('Delete Saved Parameters', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.expandCQLBuilderPanel()
     })
@@ -382,7 +376,7 @@ describe('Qi-Core CQL Parameters - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
         OktaLogin.SessionAltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })

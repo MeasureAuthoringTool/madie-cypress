@@ -1,20 +1,34 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { CVGroups, MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
 import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
-import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 const now = Date.now()
 const qdmMeasureName = 'LockBlockQDM' + now
 const qicoreMeasureName = 'LockBlockQicore' + now
-let harpUserALT = ''
 const qdmManifestTestCQL = QdmCql.qdmCQLManifestTest
-const measureCQLPFTests = QiCore4Cql.CQL_Populations
+const qiCoreCql = QiCore6Cql.cqlCMS1272
+let harpUserALT = ''
+
+const pops: MeasureGroups = {
+    initialPopulation: '',
+    numerator: '',
+    denominator: ''
+}
+const cvPops: CVGroups = {
+    initialPopulation: 'Initial Population',
+    measurePopulation: 'Measure Population',
+    observation: {
+        aggregateMethod: "Median",
+        definition: "Measure Observation"
+    }
+}
 
 describe('Measure Association is not allowed when QiCore measure is locked', () => {
 
@@ -23,9 +37,8 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
         harpUserALT = OktaLogin.getUser(true)
 
         // need QiCore measure in measureId
-        CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreMeasureName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '',
-            'Initial Population', '', 'Initial Population', 'boolean')
+        CreateMeasurePage.CreateMeasureAPI(qicoreMeasureName, qicoreMeasureName, SupportedModels.qiCore6, { measureCql: qiCoreCql })
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.ContinousVariable, pops, false, undefined, undefined, cvPops)
 
         const qdmMeasure: CreateMeasureOptions = {
             ecqmTitle: qdmMeasureName,

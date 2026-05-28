@@ -1,17 +1,18 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { Header } from "../../../Shared/Header"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { Utilities } from "../../../Shared/Utilities"
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+
+const measureName = 'SaveCQL' + Date.now()
+const CqlLibraryName = 'SaveCQLLib' + Date.now()
 
 describe('Save CQL on CQL Editor Page', () => {
 
     beforeEach('Login', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
         OktaLogin.Login()
     })
 
@@ -25,6 +26,7 @@ describe('Save CQL on CQL Editor Page', () => {
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
+        // this is a 4.1.1 CQL but appears to still be valid as 6.0.0
         cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })

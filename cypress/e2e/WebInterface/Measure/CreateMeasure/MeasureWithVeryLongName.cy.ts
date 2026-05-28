@@ -5,7 +5,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 
 const now = Date.now()
-const measureName = 'QICore4TestMeasure with an incredibly long name for no apparent reason \
+const measureName = 'QICore6TestMeasure with an incredibly long name for no apparent reason \
 other than just to test the limits of the system' + now + now
 const CqlLibraryName = 'LongNameLib' + now
 
@@ -22,9 +22,9 @@ describe('Create New Measure with very long name', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Create QI Core 4.1.1 Measure', () => {
+    it('Create QI Core 6.0.0 Measure', () => {
         let currentUser = Cypress.env('selectedUser')
-        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
+        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore6)
         cy.get(Header.mainMadiePageButton).click()
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {

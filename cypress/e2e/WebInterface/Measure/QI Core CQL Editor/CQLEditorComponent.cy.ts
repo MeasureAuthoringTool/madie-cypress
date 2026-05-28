@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -7,6 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
+// ToDo: replace the 4.1.1 CQLs for 6.0.0
 const measureName = 'CqlEditorComponent' + Date.now()
 const CqlLibraryName = 'CqlEditorComponentLib' + Date.now()
 const measureCQL_WithWarnings = QiCore4Cql.intentionalWarningCql
@@ -51,7 +52,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6)
         OktaLogin.SessionLogin()
     })
 

@@ -14,15 +14,10 @@ describe('Delete Measure', () => {
 
     beforeEach('Create measure and Login', () => {
 
-        measureOne = 'TestMeasure1' + now
-        CqlLibraryOne = 'TestLibrary1' + now
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, CqlLibraryOne)
+        measureOne = 'DeleteMeasure1' + now
+        CqlLibraryOne = 'DeleteLibrary1' + now
+        CreateMeasurePage.CreateMeasureAPI(measureOne, CqlLibraryOne, SupportedModels.qiCore6)
         OktaLogin.Login()
-    })
-
-    afterEach('Logout', () => {
-
-        OktaLogin.UILogout()
     })
 
     it('Verify Measure Owner can Delete Measure through Action center', () => {
@@ -48,9 +43,8 @@ describe('Delete Measure ownership validation', () => {
 
     beforeEach('Create measure and Login as ALT User', () => {
 
-        //Create Measure with Regular User
-        measureTwo = 'TestMeasure2' + now
-        CqlLibraryTwo = 'TestLibrary2' + now
+        measureTwo = 'DeleteMeasure2' + now
+        CqlLibraryTwo = 'DeleteLibrary2' + now
         CreateMeasurePage.CreateMeasureAPI(measureTwo, CqlLibraryTwo, SupportedModels.qiCore4)
 
         OktaLogin.AltLogin()
@@ -58,7 +52,6 @@ describe('Delete Measure ownership validation', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

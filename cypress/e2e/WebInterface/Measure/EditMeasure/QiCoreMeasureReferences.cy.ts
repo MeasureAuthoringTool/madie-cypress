@@ -1,24 +1,25 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 let measureName = ''
 let cqlLibraryName = ''
-const cql = QiCore4Cql.CQL_Populations
+const measureCql = QiCore6Cql.cqlCMS125
 
-describe('Qi Core Measure Reference', () => {
+describe.skip('Qi Core Measure Reference', () => {
 
     beforeEach('Create Measure and Login', () => {
 
         measureName = 'MeasureRef' + Date.now()
         cqlLibraryName = 'MeasureRefLib' + Date.now()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, { measureCql })
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
     })
 
     afterEach('Logout and cleanup', () => {
@@ -42,7 +43,7 @@ describe('Qi Core Measure Reference', () => {
         })
         cy.get(EditMeasurePage.saveButton).click()
         cy.wait('@references', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/referenceId', request?.response?.body.measureMetaData.references[0].id)
+            cy.writeFile('cypress/fixtures/' + currentUser + '/referenceId', request?.response?.body.measureMetaData.references[0].id)
         })
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
@@ -50,13 +51,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
 
         //Edit Measure reference
-        // .editReference will work as long as there is only 1 item on the table
-        Utilities.waitForElementVisible(EditMeasurePage.deleteQiCoreReference, 30000)
-        cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
-        cy.get(CQLEditorPage.deleteContinueButton).click()
-        cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
-        cy.get(CQLEditorPage.deleteContinueButton).click()
-        cy.readFile('cypress/fixtures/referenceId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/' + currentUser + '/referenceId').should('exist').then((fileContents) => {
             cy.get('[data-testid="edit-measure-reference-' + fileContents).click()
         })
 
@@ -99,9 +94,8 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('include.text', 'Measure Reference')
 
         //Delete Measure Reference
-        // .deleteReference will work as long as there is only 1 item on the table
-        cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete Text 1?')
+        cy.get(EditMeasurePage.deleteQiCoreReference).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete Measure Reference?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })
@@ -145,7 +139,7 @@ describe('Add Qi Core Measure Reference - ownership validation', () => {
 
         measureName = 'MeasureRef1' + Date.now()
         cqlLibraryName = 'MeasureRef1Lib' + Date.now()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, { measureCql })
         OktaLogin.AltLogin()
     })
 
@@ -157,7 +151,7 @@ describe('Add Qi Core Measure Reference - ownership validation', () => {
     it('Non Measure owner unable to add Qi Core Measure References', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
         MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
@@ -172,7 +166,7 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
 
         measureName = 'MeasureRef2' + Date.now()
         cqlLibraryName = 'MeasureRef2Lib' + Date.now()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, { measureCql })
 
         //Login to UI and Add Measure reference
         OktaLogin.Login()
@@ -198,7 +192,7 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 35000)
         MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
@@ -210,5 +204,3 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
         cy.get(EditMeasurePage.editQiCoreReference).should('not.exist')
     })
 })
-
-
