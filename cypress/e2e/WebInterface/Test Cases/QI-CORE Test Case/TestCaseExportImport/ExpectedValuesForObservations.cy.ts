@@ -14,7 +14,7 @@ const now = Date.now()
 const measure = {
     name: 'ObsExpValuesMeasure' + now,
     libName: 'ObsExpValuesLib' + now,
-    model: SupportedModels.qiCore4
+    model: SupportedModels.qiCore6
 }
 const cql = MeasureCQL.measureCQL_5138_test.replace('Library4969', measure.name)
 const testCase = {
@@ -56,9 +56,8 @@ describe('Ratio based measure with measure observations', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        
-        Utilities.deleteMeasure(measure.name, measure.libName)
+      
+        Utilities.deleteMeasure()
     })
 
     it('Test Case Export & Import - Persist expected values through the process', () => {
@@ -86,6 +85,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
 
         // validate JSON - this value need to be in the initial load, cannot scroll down
+        cy.get(TestCasesPage.jsonTab).click()
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
 
         // set expected values
@@ -123,6 +123,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // re-import immediately
+        cy.wait(2000)
         cy.get(TestCasesPage.importTestCasesBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 6500)
         //Upload valid Json file via drag and drop
@@ -160,8 +161,7 @@ describe('Proportion based measure with no observations', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        
-        Utilities.deleteMeasure(measure.name, measure.libName)
+        Utilities.deleteMeasure()
     })
 
     it('Test Case Export & Import - Persist expected values through the process', () => {
@@ -189,6 +189,7 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
 
         // validate JSON - this value need to be in the initial load, cannot scroll down
+        cy.get(TestCasesPage.jsonTab).click()
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
 
         // set expected values
@@ -223,6 +224,7 @@ describe('Proportion based measure with no observations', () => {
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // re-import immediately
+        cy.wait(2000)
         cy.get(TestCasesPage.importTestCasesBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 6500)
         //Upload valid Json file via drag and drop
