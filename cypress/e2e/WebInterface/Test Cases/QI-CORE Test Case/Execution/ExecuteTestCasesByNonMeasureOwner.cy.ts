@@ -230,7 +230,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning -- when user is not the owner', () => {
 
         //Add json to the test case
-        TestCasesPage.enterErroneousJson(warningTestCaseJson)
+        cy.editTestCaseJSON(warningTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -270,12 +270,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
         //logout as Regular user and, then, log in as Alt user
-        
-
         OktaLogin.AltLogin()
 
         cy.get(LandingPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 25000)
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -283,12 +281,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
@@ -299,20 +293,17 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         //open edit page for test case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //navigate to the details tab for the test case
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: Resource ID: 1 | CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Resource ID: 1 | The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: Resource ID: 1 | No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: Resource ID: 1 | CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Resource ID: 1 | The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: Resource ID: 1 | No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
     })
 })

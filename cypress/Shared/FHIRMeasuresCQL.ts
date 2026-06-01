@@ -1352,4 +1352,46 @@ public static intentionalErrorCql = 'library TestLibrary16969620425371870 versio
     'define "Stratificaction 1":\n' +
     ' "Qualifying Encounters" Enc\n' +
     ' where Enc.type in "Annual Wellness Visit"'
+
+    public static readonly CQL_Populations = 'library TestLibrary4664 version \'0.0.000\'\n' +
+    'using QICore version \'6.0.0\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+    'valueset \"Annual Wellness Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
+    'valueset \"Preventive Care Services - Established Office Visit, 18 and Up\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+    'valueset \"Preventive Care Services-Initial Office Visit, 18 and Up\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
+    'valueset \"Home Healthcare Services\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+    'parameter \"Measurement Period\" Interval<DateTime>\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
+    'context Patient\n' +
+    'define \"Initial Population\":\n' +
+    'exists \"Qualifying Encounters\"\n' +
+    'define \"Qualifying Encounters\":\n' +
+    '(\n' +
+    '[Encounter: \"Office Visit\"]\n' +
+    'union [Encounter: \"Annual Wellness Visit"]\n' +
+    'union [Encounter: \"Preventive Care Services - Established Office Visit, 18 and Up\"]\n' +
+    'union [Encounter: \"Preventive Care Services-Initial Office Visit, 18 and Up\"]\n' +
+    'union [Encounter: \"Home Healthcare Services\"]\n' +
+    ') ValidEncounter\n' +
+    'where ValidEncounter.period during \"Measurement Period\"\n' +
+    'define \"Initial PopulationOne\":\n' +
+    'true\n'
+
+    public static readonly reduced_CQL_Multiple_Populations = 'library TestLibrary4664 version \'0.0.000\'\n' +
+    'using QICore version \'6.0.0\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+    'valueset \"Annual Wellness Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
+    'valueset \"Preventive Care Services - Established Office Visit, 18 and Up\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+    'valueset \"Preventive Care Services-Initial Office Visit, 18 and Up\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
+    'valueset \"Home Healthcare Services\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+    'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\' \n' +
+    'parameter \"Measurement Period\" Interval<DateTime>\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
+    'context Patient\n' +
+    'define \"Initial PopulationOne\":\n' +
+    'true\n' +
+    'define "Initial Population":\n' +
+    '   true\n'
 }
