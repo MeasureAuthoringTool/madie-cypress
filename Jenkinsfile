@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'dev-madie' }
+  agent { label 'madie' }
 
   options { buildDiscarder(logRotator(numToKeepStr: '20')) }
 
