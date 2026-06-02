@@ -48,12 +48,15 @@ describe('CQL Library List Page Sort by Columns', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
 
         // sort by Library ASC
-        cy.contains('.col-header', 'Library').click()
+        //cy.contains('.header-cell', 'Library').click()
+        cy.get('[data-testid="header-cqlLibraryName"]').click()
+        //cy.wait('@sort',{timeout:1100})
         cy.wait('@sort')
         cy.wait(1100)
         cy.get('.table-body tr').first().find('td').eq(1).invoke('text').then(ascName => {
             // sort by Library DESC
-            cy.contains('.col-header', 'Library').click()
+            //cy.contains('.header-cell', 'Library').click()
+            cy.get('[data-testid="header-cqlLibraryName"]').click()
             cy.wait('@sort2')
             cy.wait(1100)
             cy.get('.table-body tr').first().find('td').eq(1).invoke('text').then(descName => {
@@ -63,12 +66,14 @@ describe('CQL Library List Page Sort by Columns', () => {
         })
 
         // sort by Version ASC
-        cy.contains('.col-header', 'Version').click()
+       //cy.contains('.header-cell', 'Version').click()
+        cy.get('[data-testid="header-version"]').click()
         cy.wait('@sort3')
         cy.wait(1100)
         cy.get('.table-body tr').first().find('td').eq(2).invoke('text').then(ascVersion => {
             // sort by Version DESC
-            cy.contains('.col-header', 'Version').click()
+            //cy.contains('.header-cell', 'Version').click()
+            cy.get('[data-testid="header-version"]').click()
             cy.wait('@sort4')
             cy.wait(1100)
             cy.get('.table-body tr').first().find('td').eq(2).invoke('text').then(descVersion => {
@@ -78,12 +83,14 @@ describe('CQL Library List Page Sort by Columns', () => {
         })
 
         // sort by Status ASC
-        cy.contains('.col-header', 'Status').click()
+        //cy.contains('.header-cell', 'Status').click()
+        cy.get('[data-testid="header-draft"]').click()
         cy.wait('@sort5')
         cy.wait(1100)
         cy.get('.table-body tr').first().find('td').eq(3).invoke('text').then(ascStatus => {
             // sort by Status DESC
-            cy.contains('.col-header', 'Status').click()
+            //cy.contains('.header-cell', 'Status').click()
+            cy.get('[data-testid="header-draft"]').click()
             cy.wait('@sort6')
             cy.wait(1100)
             cy.get('.table-body tr').first().find('td').eq(3).invoke('text').then(descStatus => {
@@ -94,12 +101,14 @@ describe('CQL Library List Page Sort by Columns', () => {
         })
 
         // sort by Model ASC
-        cy.contains('.col-header', 'Model').click()
+        //cy.contains('.header-cell', 'Model').click()
+        cy.get('[data-testid="header-model"]').click()
         cy.wait('@sort7')
         cy.wait(1100)
         cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(ascModel => {
             // sort by Model DESC
-            cy.contains('.col-header', 'Model').click()
+            //cy.contains('.header-cell', 'Model').click()
+            cy.get('[data-testid="header-model"]').click()
             cy.wait('@sort8')
             cy.wait(1100)
             cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(descModel => {
@@ -111,22 +120,26 @@ describe('CQL Library List Page Sort by Columns', () => {
         })
 
         // sort by Shared ASC
-        cy.contains('.col-header', 'Shared').click()
+        //cy.contains('.header-cell', 'Shared').click()
+        cy.get('[data-testid="header-librarySet.acls"]').click()
         cy.wait('@sort9')
         cy.wait(1100)
         // sort by Shared DESC - verify the shared icon appears on the first row
-        cy.contains('.col-header', 'Shared').click()
+        //cy.contains('.header-cell', 'Shared').click()
+        cy.get('[data-testid="header-librarySet.acls"]').click()
         cy.wait('@sort10')
         cy.wait(1100)
         cy.get('.table-body tr').first().find('td').eq(5).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
 
         // sort by Updated ASC - oldest first
-        cy.contains('.col-header', 'Updated').click()
+        //cy.contains('.header-cell', 'Updated').click()
+        cy.get('[data-testid="header-lastModifiedAt"]').click()
         cy.wait('@sort11')
         cy.wait(1100)
         cy.get('.table-body tr').first().find('td').eq(7).invoke('text').then(ascDate => {
             // sort by Updated DESC - newest first
-            cy.contains('.col-header', 'Updated').click()
+            //cy.contains('.header-cell', 'Updated').click()
+            cy.get('[data-testid="header-lastModifiedAt"]').click()
             cy.wait('@sort12')
             cy.wait(1100)
             cy.get('.table-body tr').first().find('td').eq(7).invoke('text').then(descDate => {
@@ -160,7 +173,7 @@ describe('CQL Library List Page Sort by Columns', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
 
         // sort by model ASC
-        cy.contains('.col-header', 'Model').click()
+        cy.contains('.header-cell', 'Model').click()
         cy.wait('@sort')
         cy.wait(1100)
         cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(ascModel => {
@@ -179,7 +192,7 @@ describe('CQL Library List Page Sort by Columns', () => {
             })
 
             // sort by model DESC to reset
-            cy.contains('.col-header', 'Model').click()
+            cy.contains('.header-cell', 'Model').click()
             cy.wait('@sort2')
             cy.wait(1100)
             cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(descModel => {
