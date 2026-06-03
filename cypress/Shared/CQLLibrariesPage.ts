@@ -19,9 +19,9 @@ export class CQLLibrariesPage {
     public static readonly cqlLibraryDirtyCheck = '.MuiDialogContent-root'
 
     //Libraries row 0 elements
-    public static readonly cqlLibraryVersionList = '[data-testid="header-version"]'
-    public static readonly row0_Status = '[data-testid="header-draft"]'
-    public static readonly row0_ExpandArrow = '[data-testid="header-expandArrow"]'
+    public static readonly cqlLibraryVersionList = '[data-testid="measure-name-0_version"]'
+    public static readonly row0_Status = '[data-testid="measure-name-0-draft"]'
+    public static readonly row0_ExpandArrow = '[data-testid="measure-name-0-expandArrow"]'
 
     //Action Center buttons
     public static readonly actionCenterDeleteBtn = '[data-testid="delete-action-btn"]'
