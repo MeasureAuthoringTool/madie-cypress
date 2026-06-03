@@ -122,8 +122,8 @@ export class CQLLibraryPage {
 
         cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
 
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', CQLLibraryName)
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-model-content"]').should('contain', 'QI-Core')
+            cy.get('[data-testid="measure-name-' + fileContents + '-content"]').should('contain', CQLLibraryName)
+            cy.get('[data-testid="measure-name-' + fileContents + '-model-content"]').should('contain', 'QI-Core')
         })
         cy.log('QI-Core CQL Library Created Successfully')
     }
@@ -196,7 +196,7 @@ export class CQLLibraryPage {
     //input the library that is on page to check it's checkbox (ie: if it is the first library that we want checked, enter 0)
     public static checkLibrary(libraryOnPage: number): void {
 
-        cy.get('[data-testid*="cqlLibrary-button-' + libraryOnPage + '_select"]')
+        cy.get('[data-testid*="measure-name-' + libraryOnPage + '_select"]')
             .parent('tr')
             .find('input[type="checkbox"]')
             .check()
