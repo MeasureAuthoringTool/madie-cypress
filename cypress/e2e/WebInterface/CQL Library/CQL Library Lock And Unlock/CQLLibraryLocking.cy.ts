@@ -34,8 +34,9 @@ describe('CQL Library Locking Validations', () => {
         OktaLogin.SessionLogin()
         cy.get(Header.cqlLibraryTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="main-nav-bar-cql-library"]', 30000)
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
 
