@@ -44,6 +44,14 @@ export class CQLLibrariesPage {
     public static readonly unshareCheckBox = '.PrivateSwitchBase-input'
     public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
+    //Library List Columns
+    public static readonly hdrLibrary = '[data-testid="header-cqlLibraryName"]' 
+    public static readonly hdrVersion = '[data-testid="header-version"]' 
+    public static readonly hdrStatus = '[data-testid="header-draft"]' 
+    public static readonly hdrModel = '[data-testid="header-model"]' 
+    public static readonly hdrShared = '[data-testid="header-librarySet.acls"]' 
+    public static readonly hdrUpdated = '[data-testid="header-lastModifiedAt"]'
+
     public static clickEditforCreatedLibrary(libraryNumber?: number, altUser?:boolean): void {
         let currentUser = ''
         if (altUser) {
