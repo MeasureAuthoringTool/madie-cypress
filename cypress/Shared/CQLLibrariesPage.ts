@@ -134,7 +134,7 @@ export class CQLLibrariesPage {
         const currentUser = Cypress.env('selectedUser')
         cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
 
-            cy.get('[data-testid="measure-name-' + fileContents + '-content"]')
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]')
                 .should('contain.text', expectedValue)
                 .parent()
                 .invoke('data', 'testid')
