@@ -19,9 +19,9 @@ export class CQLLibrariesPage {
     public static readonly cqlLibraryDirtyCheck = '.MuiDialogContent-root'
 
     //Libraries row 0 elements
-    public static readonly cqlLibraryVersionList = '[data-testid="cqlLibrary-button-0_version"]'
-    public static readonly row0_Status = '[data-testid="cqlLibrary-button-0_draft"]'
-    public static readonly row0_ExpandArrow = '[data-testid="cqlLibrary-button-0_expandArrow"]'
+    public static readonly cqlLibraryVersionList = '[data-testid="measure-name-0_version"]'
+    public static readonly row0_Status = '[data-testid="measure-name-0-draft"]'
+    public static readonly row0_ExpandArrow = '[data-testid="measure-name-0-expandArrow"]'
 
     //Action Center buttons
     public static readonly actionCenterDeleteBtn = '[data-testid="delete-action-btn"]'
@@ -140,7 +140,7 @@ export class CQLLibrariesPage {
                 .invoke('data', 'testid')
                 .then(testId => {
                     const value: string = (testId.split('_')[0]).slice(-1) // extract row index value
-                    cy.get('[data-testid="cqlLibrary-button-' + value + '_version"]').should('contain.text', versionNumber)
+                    cy.get('[data-testid="measure-name-' + value + '_version"]').should('contain.text', versionNumber)
                 })
         })
     }
@@ -149,16 +149,17 @@ export class CQLLibrariesPage {
 
         if ((libraryNumber === undefined) || (libraryNumber === null)) {
 
-            Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 60000)
-            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+            Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 60000)
+            cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         }
 
         if (libraryNumber && libraryNumber > 0) {
 
-            Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]', 60000)
-            cy.get('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+            
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + libraryNumber + '_select"]', 60000)
+            cy.get('[data-testid="measure-name-' + libraryNumber + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         }
 
         switch ((action.valueOf()).toString().toLowerCase()) {
