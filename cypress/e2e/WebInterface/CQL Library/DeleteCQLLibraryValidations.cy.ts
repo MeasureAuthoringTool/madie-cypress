@@ -34,8 +34,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -85,8 +85,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -101,8 +101,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -132,8 +132,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -152,8 +152,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
