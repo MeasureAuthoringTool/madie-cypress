@@ -20,8 +20,8 @@ export class CQLLibrariesPage {
 
     //Libraries row 0 elements
     public static readonly cqlLibraryVersionList = '[data-testid="measure-name-0_version"]'
-    public static readonly row0_Status = '[data-testid="measure-name-0-draft"]'
-    public static readonly row0_ExpandArrow = '[data-testid="measure-name-0-expandArrow"]'
+    public static readonly row0_Status = '[data-testid="measure-name-0_draft"]'
+    public static readonly row0_ExpandArrow = '[data-testid="measure-name-0_expandArrow"]'
 
     //Action Center buttons
     public static readonly actionCenterDeleteBtn = '[data-testid="delete-action-btn"]'

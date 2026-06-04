@@ -66,8 +66,8 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 600000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         //Verify that the Version button is disabled for Non Measure owner
         cy.get(CQLLibrariesPage.actionCenterVersionBtn).should('be.visible')
