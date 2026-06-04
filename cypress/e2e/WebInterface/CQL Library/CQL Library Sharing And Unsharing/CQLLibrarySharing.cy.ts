@@ -151,8 +151,8 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName) //fail here 
         //Click on Expand button to view Versioned Library
-        cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
-        cy.get('[data-testid="table-body"]').should('contain', CQLLibraryName)
+        cy.get('[data-testid="measure-name-0_expandArrow"]').click()
+        cy.get('[data-testid="library-list-tbl"]').should('contain', CQLLibraryName)
 
         // return to list so library unlocks
         cy.get(Header.cqlLibraryTab).click()
@@ -253,8 +253,8 @@ describe('Share CQL Library using Action Center buttons', () => {
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
         //Delete button disabled for shared owner
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
 
@@ -300,8 +300,8 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         cy.get('[data-testid="share-action-btn"]').should('be.visible')
         cy.get('[data-testid="share-action-btn"]').should('be.disabled')
@@ -391,7 +391,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.log('Draft Created Successfully')
 
         //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
         cy.get(CQLLibrariesPage.shareOption).click({ force: true })
 
@@ -417,9 +417,9 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-        cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
+        cy.get('[data-testid="measure-name-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
         //Click on Expand button to view Versioned Library
-        cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
-        cy.get('[data-testid="table-body"]').should('contain.text', CQLLibraryName)
+        cy.get('[data-testid="measure-name-0_expandArrow"]').click()
+        cy.get('[data-testid="library-list-tbl"]').should('contain.text', CQLLibraryName)
     })
 })
