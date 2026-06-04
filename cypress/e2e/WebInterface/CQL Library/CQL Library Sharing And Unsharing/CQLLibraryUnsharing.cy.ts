@@ -206,7 +206,7 @@ describe('Unshare CQL Library using Action Center buttons - Multiple instances',
         cy.get(Header.cqlLibraryTab).click()
 
         //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get('[data-testid="cqlLibrary-button-1_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
         cy.get(CQLLibrariesPage.unshareOption).click({ force: true })

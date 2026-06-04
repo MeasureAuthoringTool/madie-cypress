@@ -212,8 +212,8 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         //Select the Library
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         cy.get('[data-testid="transfer-action-tooltip"]').should('not.be.enabled')
         cy.get('[data-testid="transfer-action-tooltip"]').trigger('mouseover')
@@ -340,7 +340,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
         //Click on Expand button to view Versioned Library
-        cy.get('[data-testid="cqlLibrary-button-0_expandArrow"]').click()
+        cy.get('[data-testid="measure-name-0_expandArrow"]').click()
         cy.get('[data-testid="table-body"]').should('contain', CQLLibraryName)
     })
 })
