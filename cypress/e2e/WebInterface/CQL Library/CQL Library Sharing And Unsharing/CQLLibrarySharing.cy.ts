@@ -331,7 +331,7 @@ describe('Share CQL Library using Action Center buttons', () => {
     })
 })
 
-describe.only('Share CQL Library using Action Center buttons - Multiple instances', () => {
+describe('Share CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
 
