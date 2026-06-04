@@ -27,7 +27,7 @@ describe('Library Owner Names Display', () => {
 
             const expectedName = nameData[harpId] as string
 
-            cy.get('[data-testid="cqlLibrary-button-0_Owner"]').should('contain.text', expectedName)
+            cy.get('[data-testid="measure-name-0_Owner"]').should('contain.text', expectedName)
 
             CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -45,7 +45,7 @@ describe('Library Owner Names Display', () => {
         Utilities.dropdownSelect(CQLLibraryPage.filterByDropdown, 'Library')
         cy.get(CQLLibraryPage.LibFilterTextField).clear().type('PBDHospiceQDM{enter}')
 
-        cy.get('[data-testid="cqlLibrary-button-0_Owner"]').should('contain.text', 'pauld@mitre.org')
+        cy.get('[data-testid="measure-name-0_Owner"]').should('contain.text', 'pauld@mitre.org')
 
         cy.contains('View').click()
 

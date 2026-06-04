@@ -73,9 +73,9 @@ describe('CompareLibraryVersions', () => {
         cy.log('Draft Created Successfully')
 
         //Check Draft Library
-        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 30000)
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
 
         //Expand arrow and check Versioned Library
         cy.readFile(filePath).should('exist').then((fileContents) => {
@@ -91,5 +91,6 @@ describe('CompareLibraryVersions', () => {
         //Verify Popup Screen
         cy.contains('h2', 'Compare Library Versions').should('be.visible')
         cy.get('[data-testid="library-name"]').should('contain.text', '-- ' + CqlLibraryOne + ' ++ ' + updatedCqlLibraryName)
+        cy.pause()
     })
 })
