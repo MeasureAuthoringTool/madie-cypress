@@ -71,7 +71,6 @@ export class MeasuresPage {
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
     public static readonly draftModalSelectionBox = '[data-testid="measure-model-select"]'
     public static readonly draftModalVersionSix = '[data-testid="measure-model-option-QI-Core v6.0.0"]'
-    public static readonly draftModalVersionSeven = '[data-testid="measure-model-option-QI-Core v7.0.0"]'
     public static readonly draftModalVersionFourOneOne = '[data-testid="measure-model-option-QI-Core v4.1.1"]'
     public static readonly measureVersionTypeDropdown = '[id="version-type"]'
     public static readonly measureVersionMajor = '[data-testid="major-option"]'
