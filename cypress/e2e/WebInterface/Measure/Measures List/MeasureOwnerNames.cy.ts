@@ -58,8 +58,7 @@ describe('Measure Owner Names Display', () => {
 
         cy.get(MeasuresPage.searchInputBox).type('1290').type('{enter}')
 
-        cy.get('[data-testid*="_ownerDisplayName"]').find('span').should('contain.html', 'gcwinters808')
-
+        cy.get('[data-testid*="_ownerDisplayName"]').find('span').should('contain.html', 'Gail Winters')
         cy.contains('View').click()
 
         cy.get('[data-testid="measure-owner-text-field"]').should('have.text', '-')
