@@ -169,7 +169,6 @@ describe('CQL Library Search Validations -- User ownership', () => {
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
         cy.get(CQLLibraryPage.LibFilterTextField).clear().type( CQLLibraryNameAlt + '{enter}')
-
         cy.get(CQLLibraryPage.cqlLibSearchResultsTable).should('contain.text', 'No results were found')
 
         // do a search based on the CQL Library name on "Shared Libraries" tab

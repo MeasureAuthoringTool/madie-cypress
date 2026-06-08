@@ -38,7 +38,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryDeleteDialogCancelBtn = '[data-testid="delete-dialog-cancel-button"]'
     public static readonly cqlLibraryDeleteDialog = '[data-testid="delete-dialog"]'
     public static readonly cqlLibSaveSuccessMessage = '[class="madie-alert success"]'
-    public static readonly cqlLibSearchResultsTable = '[data-testid="table-body"]'
+    public static readonly cqlLibSearchResultsTable = '[data-testid="library-list-tbl"]'
     public static readonly createCQLLibraryBtn = '[data-testid="create-new-cql-library-button"]'
     public static readonly cqlLibraryNameTextbox = '[data-testid="cql-library-name-text-field-input"]'
     public static readonly readOnlyCqlLibraryName = '[data-testid="cql-library-name-text-field"]'
