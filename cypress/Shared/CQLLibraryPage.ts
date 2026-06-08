@@ -46,7 +46,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryStickySave = '[data-testid="cql-library-save-button"]'
     public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
     public static readonly LibFilterTextField = '[data-testid="library-list-search-input"]'
-    public static readonly filterByDropdown = '[data-testid="filter-by-select"]'
+    public static readonly filterByDropdown = '[data-testid="filter-by"]'
     public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly saveCQLLibraryBtn = '[data-testid="continue-button"]'
     public static readonly updateCQLLibraryBtn = '[data-testid="cql-library-save-button"]'

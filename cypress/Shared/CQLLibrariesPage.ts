@@ -126,7 +126,7 @@ export class CQLLibrariesPage {
     public static validateCQLLibraryName(expectedValue: string): void {
         const currentUser = Cypress.env('selectedUser')
         cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', expectedValue)
+            cy.get('[data-testid="measure-name-0-' + fileContents + '-content"]').should('contain', expectedValue)
         })
     }
 

@@ -97,18 +97,26 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
+        //Add Library name in the filter text box and verify Library is displayed in the list
+        //Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        cy.get(CQLLibraryPage.LibFilterTextField).click().type(CQLLibraryName)
+        .should('have.value', CQLLibraryName)
+        .type('{enter}')
+
         //Unshare Library
         Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
         cy.get('[type="checkbox"]').eq(1).click()
         cy.get('[data-testid="share-action-btn"]').click()
         cy.get('[data-testid="Unshare-option"]').click()
 
+
         //Assert text on the popup screen
         Utilities.waitForElementVisible('.MuiBox-root', 60000)
-        cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
-        cy.get('.MuiDialogContent-root').should('contain.text', 'You are about to unshare' + CQLLibraryName + ' with the following users:')
-        const nameRegex = RegExp(harpUserALT, 'i')
-        cy.get('.MuiDialogContent-root').find('li').text().should('match', nameRegex)
+        cy.get('.confirmation-dialog-content').first().should('contain.text', 'You are about to unshare')
+        cy.get('.library-name').should('have.text', CQLLibraryName)
+        cy.get('#discard-changes-dialog-body').should('contain.text', 'with the following users:')
+        cy.get('#discard-changes-dialog-body li')
+        .should(($li) => {expect($li.text().trim().toLowerCase()).to.equal(harpUserALT.toLowerCase())})
 
         //Click on Accept button and Un share Library
         cy.get(EditMeasurePage.acceptBtn).click()
@@ -207,9 +215,8 @@ describe('Unshare CQL Library using Action Center buttons - Multiple instances',
 
         //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library
         cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-        cy.get('[data-testid="cqlLibrary-button-1_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-        cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
-        cy.get(CQLLibrariesPage.unshareOption).click({ force: true })
+        cy.get(CQLLibrariesPage.actionCenterShareBtn).click({force: true})
+        cy.get(CQLLibrariesPage.unshareOption).scrollIntoView().click({ force: true })
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
 
         //Verify information text on share screen
