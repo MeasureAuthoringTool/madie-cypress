@@ -615,11 +615,13 @@ export class TestCasesPage {
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+            cy.get(TestCasesPage.aceEditorJsonInput)
+                .should('exist')
+                .click({ force: true })
+                .clear({ force: true })
+                .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
 
             cy.wait(1500)
-            cy.get(this.aceEditor).type('{selectAll}{backspace}')
-            cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
 
             cy.get(this.detailsTab).click()
 

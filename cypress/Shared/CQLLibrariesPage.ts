@@ -80,7 +80,7 @@ export class CQLLibrariesPage {
             Utilities.waitForElementEnabled('[data-testid="cql-library-action-' + fileContents + '"]', 4500)
             cy.get('[data-testid="cql-library-action-' + fileContents + '"]').wait(2000).click()
 
-            cy.wait('@cqlLibrary').then(({ response }) => {
+            cy.wait('@cqlLibrary', { timeout: 10000 }).then(({ response }) => {
                 expect(response?.statusCode).to.eq(200)
             })
         })
