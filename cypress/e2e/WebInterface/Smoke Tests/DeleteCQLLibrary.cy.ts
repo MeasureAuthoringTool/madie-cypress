@@ -55,7 +55,7 @@ describe('Delete CQL Library', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
         //verify cancel and Library remains
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn).click()
-        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         CQLLibrariesPage.cqlLibraryActionCenter('delete')
 
         //verify deleting Library removes it from library list

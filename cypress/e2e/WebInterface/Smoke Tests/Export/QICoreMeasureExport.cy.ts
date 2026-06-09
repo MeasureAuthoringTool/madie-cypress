@@ -354,7 +354,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
 
-            expect(bodyText).to.include('Generated using version 0.5.4 of the sample-content-ig Liquid templates')
+            expect(bodyText).to.include('Generated using version 0.5.5 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -586,7 +586,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Path: type\n' +
                 'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
 
-            expect(bodyText).to.include('Generated using version 0.5.4 of the sample-content-ig Liquid templates')
+            expect(bodyText).to.include('Generated using version 0.5.5 of the sample-content-ig Liquid templates')
         })
     })
 })
