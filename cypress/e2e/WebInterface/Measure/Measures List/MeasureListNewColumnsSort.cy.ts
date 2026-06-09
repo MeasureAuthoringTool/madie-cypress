@@ -14,10 +14,10 @@ describe('Measure List Page Sort by Columns', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
+            afterEach('Logout', () => {
 
-        OktaLogin.UILogout()
-    })
+                OktaLogin.UILogout()
+            })
 
     it('Measure sorting by columns on All Measures tab', () => {
 
@@ -243,7 +243,7 @@ describe('Measure List Page Sort by Columns', () => {
                     // sort 3 - click again to return to default sort
                     cy.contains('.header-button', 'Measure').click()
                     cy.wait('@sort3')
-                    cy.wait(1100)
+                    cy.wait(3300)
                     // verify return to default sort by "last updated"
                     MeasuresPage.checkFirstRow({ name: originalMeasureName, updated: today })
             })

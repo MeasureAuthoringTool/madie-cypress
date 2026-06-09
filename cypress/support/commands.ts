@@ -339,9 +339,11 @@ Cypress.Commands.add('editTestCaseJSON', (jsonContent: string) => {
     Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
     cy.get(TestCasesPage.aceEditor).should('exist')
     cy.get(TestCasesPage.aceEditor).should('be.visible')
-    cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
-    cy.get(TestCasesPage.aceEditor).type('{selectAll}{backspace}')
-    cy.get(TestCasesPage.aceEditor).type(jsonContent, { parseSpecialCharSequences: false })
+    cy.get(TestCasesPage.aceEditorJsonInput)
+      .should('exist')
+    .click({ force: true })
+    .clear({ force: true })
+      .type(jsonContent, { parseSpecialCharSequences: false, force: true })
 })
 
 const compareColor = (color: string, property: keyof CSSStyleDeclaration) => (

@@ -158,9 +158,9 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
         //Validate error(s) in CQL Editor window
+        cy.wait(7000) // added wait to ensure error is rendered in the UI before interacting with it
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')

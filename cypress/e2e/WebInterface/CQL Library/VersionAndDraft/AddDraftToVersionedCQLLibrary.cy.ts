@@ -58,8 +58,9 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
-            cy.get('[data-testid="measure-name-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
-            cy.get('[data-testid="measure-name-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
+            //Nested objects are using cqlLibrary-button abd not measue-name, so changing to cqlLibrary-button for nested objects
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
             cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.visible')
             cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.enabled')
         })

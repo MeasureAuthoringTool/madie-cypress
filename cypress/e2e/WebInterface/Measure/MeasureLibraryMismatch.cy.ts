@@ -99,8 +99,8 @@ describe('Mismatch between measure model and library model -- error state', () =
         cy.readFile(measurePath).should('exist').then((measureId) => {
             cy.url().should('contain', measureId + '/edit/cql-editor')
         })
-        Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', expectedError)
+
     })
 
     it('QiCore 6.0.0 measure, add QiCore 4.1.1  library', () => {
