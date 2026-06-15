@@ -5,6 +5,7 @@ import dateTimeISO = CypressCommandLine.dateTimeISO
 import { CQLEditorPage } from "./CQLEditorPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { OktaLogin } from "./OktaLogin";
+import { step } from "../utils/step"
 
 export type TestCase = {
     title: string,
@@ -23,6 +24,13 @@ export enum TestCaseAction {
 }
 
 export class TestCasesPage {
+    //Composite Measure Test Case Page
+    public static readonly compositeAvailableTab  = '[data-testid="create-tab"]'
+    public static readonly compositeAddedTab  = '[data-testid="elements-tab"]'
+    public static readonly compositeJsonTab  = '[data-testid="json-tab"]'
+    public static readonly compositeInsertTestCaseBtn = '[data-testid="insert-test-case-button"]'
+    public static readonly compositeBackToAllProfilesBtn = '[data-testid="back-to-all-profiles-button"]'
+
     //Qi Core 6
     public static readonly topElementsTab = '[data-testid="elements-tab"]'
     public static readonly topJsonTab = '[data-testid="json-tab"]'
@@ -467,6 +475,7 @@ export class TestCasesPage {
     }
 
     public static clickCreateTestCaseButton(): void {
+        step('Click Create Test Case Button')
         const currentUser = Cypress.env('selectedUser')
         //setup for grabbing the measure create call
         let measureID = null
@@ -570,7 +579,7 @@ export class TestCasesPage {
     }
 
     public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson?: string, handleElementsTab?: boolean): void {
-
+        step('Create a Test Case with Title: ' + testCaseTitle + ', Description: ' + testCaseDescription + ', Series: ' + testCaseSeries + (testCaseJson ? ', and JSON: ' + testCaseJson : ''))
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()

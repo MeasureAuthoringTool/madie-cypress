@@ -5,12 +5,16 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Header } from "../../../Shared/Header"
 import { CreateMeasurePage, SupportedCompositeModels } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+
 
 let measureName = ''
 let CqlLibraryName = ''
+const testCase = TestCaseJson.fromCMS1017NumPass 
 
 //Skipping until Feature flag 'QICoreCompositeMeasure' is turned on
-describe.skip('Create Composite Measure', () => {
+describe('Create Composite Measure', () => {
 
     beforeEach('Login', () => {
         OktaLogin.Login()
@@ -59,4 +63,41 @@ describe.skip('Create Composite Measure', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     })
+    it('Validate Composite Test Case Tabs', () => {
+
+        measureName = 'CompositeTestMeasure' + Date.now()
+        CqlLibraryName = 'CompositeTestLibrary' + Date.now()
+        const currentUser = Cypress.env('selectedUser')
+
+        CreateMeasurePage.CreateCompositeMeasure(measureName, CqlLibraryName, SupportedCompositeModels.qiCore6)
+        cy.get(Header.mainMadiePageButton).click()
+        MeasuresPage.actionCenter('edit', 0, { expectCqlEditorTab: false })
+        TestCasesPage.createTestCase('title', 'series', 'desc')
+        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.compositeAvailableTab).should('be.visible')
+        .and('have.attr', 'aria-selected', 'true')
+        .and('contain.text', 'Available')
+        cy.get(TestCasesPage.compositeAddedTab).should('be.visible')
+        .and('contain.text', 'Added')
+        cy.get(TestCasesPage.compositeJsonTab).should('be.visible')
+        .and('contain.text', 'JSON')
+       })
+
+       it('Validate Composite Measure Insert Existing Test Case Button Functionality', () => {
+
+        measureName = 'CompositeTestMeasure' + Date.now()
+        CqlLibraryName = 'CompositeTestLibrary' + Date.now()
+        const currentUser = Cypress.env('selectedUser')
+
+        CreateMeasurePage.CreateCompositeMeasure(measureName, CqlLibraryName, SupportedCompositeModels.qiCore6)
+        cy.get(Header.mainMadiePageButton).click()
+        MeasuresPage.actionCenter('edit', 0, { expectCqlEditorTab: false })
+        TestCasesPage.createTestCase('title', 'series', 'desc')
+        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.compositeInsertTestCaseBtn).should('be.visible')
+        cy.get(TestCasesPage.compositeInsertTestCaseBtn).click()
+        cy.get(TestCasesPage.compositeBackToAllProfilesBtn).should('be.visible')
+        cy.get(TestCasesPage.compositeBackToAllProfilesBtn).click()
+
+       })
 })
