@@ -1,12 +1,12 @@
-import { Header } from "./Header"
-import { Environment } from "./Environment"
-import { Utilities } from "./Utilities"
+import { Header } from './Header'
+import { Environment } from './Environment'
+import { Utilities } from './Utilities'
 import { v4 as uuidv4 } from 'uuid'
-import { CQLLibrariesPage } from "./CQLLibrariesPage"
-import { CQLEditorPage } from "./CQLEditorPage"
-import { SupportedModels } from "./CreateMeasurePage"
-import { MeasureRow } from "./MeasuresPage"
-import { OktaLogin } from "./OktaLogin"
+import { CQLLibrariesPage } from './CQLLibrariesPage'
+import { CQLEditorPage } from './CQLEditorPage'
+import { SupportedModels } from './CreateMeasurePage'
+import { MeasureRow } from './MeasuresPage'
+import { OktaLogin } from './OktaLogin'
 
 export enum EditLibraryActions {
     delete,
@@ -14,18 +14,17 @@ export enum EditLibraryActions {
     draft,
     share,
     transfer,
-    viewHistory
+    viewHistory,
 }
 
 export type CreateLibraryOptions = {
-    cql?: string,
-    cqlErrors?: boolean,
-    description?: string,
-    altUser?: boolean,
-    libraryNumber?: number,
+    cql?: string
+    cqlErrors?: boolean
+    description?: string
+    altUser?: boolean
+    libraryNumber?: number
     publisher?: string
 }
-
 
 export class CQLLibraryPage {
     public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
@@ -46,7 +45,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryStickySave = '[data-testid="cql-library-save-button"]'
     public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
     public static readonly LibFilterTextField = '[data-testid="library-list-search-input"]'
-    public static readonly filterByDropdown = '[data-testid="filter-by"]'
+    public static readonly filterByDropdown = '[data-testid="filter-by-select"]'
     public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly saveCQLLibraryBtn = '[data-testid="continue-button"]'
     public static readonly updateCQLLibraryBtn = '[data-testid="cql-library-save-button"]'
@@ -70,7 +69,7 @@ export class CQLLibraryPage {
     public static readonly editSavedLibraryAlias = '[data-testid="library-alias-input"]'
     public static readonly libraryInfoPanel = '#page-header'
     public static readonly draftBubble = '[data-testid="draft-chip"]'
-    
+
     // Edit page action center
     public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
     public static readonly actionCenterDelete = '[data-testid="DeleteLibrary"]'
@@ -94,7 +93,6 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryModelQDM = '[data-testid="cql-library-model-option-QDM v5.6"]'
 
     public static createCQLLibrary(CQLLibraryName: string, CQLLibraryPublisher: string): void {
-
         const currentUser = Cypress.env('selectedUser')
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
@@ -120,11 +118,12 @@ export class CQLLibraryPage {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
-
-            cy.get('[data-testid="measure-name-' + fileContents + '-content"]').should('contain', CQLLibraryName)
-            cy.get('[data-testid="measure-name-' + fileContents + '-model-content"]').should('contain', 'QI-Core')
-        })
+        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '-content"]').should('contain', CQLLibraryName)
+                cy.get('[data-testid="measure-name-' + fileContents + '-model-content"]').should('contain', 'QI-Core')
+            })
         cy.log('QI-Core CQL Library Created Successfully')
     }
 
@@ -142,14 +141,19 @@ export class CQLLibraryPage {
         })
     }
 
-    public static createCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean, cql?: string): string {
+    public static createCQLLibraryAPI(
+        CqlLibraryName: string,
+        CQLLibraryPublisher: string,
+        twoLibraries?: boolean,
+        altUser?: boolean,
+        cql?: string,
+    ): string {
         let user = ''
-        if ((cql === undefined) || (cql === null)) {
-            cql = ""
+        if (cql === undefined || cql === null) {
+            cql = ''
         }
 
-        if (altUser === undefined || altUser === null)
-        {
+        if (altUser === undefined || altUser === null) {
             altUser = false
         }
 
@@ -160,34 +164,31 @@ export class CQLLibraryPage {
             cy.request({
                 url: '/api/cql-libraries',
                 headers: {
-                    authorization: 'Bearer ' + accessToken?.value
+                    authorization: 'Bearer ' + accessToken?.value,
                 },
                 method: 'POST',
                 body: {
-                    'cqlLibraryName': CqlLibraryName,
-                    'model': 'QI-Core v4.1.1',
-                    'createdBy': user,
-                    "librarySetId": uuidv4(),
-                    "description": "description",
-                    "publisher": CQLLibraryPublisher,
-                    'cql': cql
-                }
+                    cqlLibraryName: CqlLibraryName,
+                    model: 'QI-Core v4.1.1',
+                    createdBy: user,
+                    librarySetId: uuidv4(),
+                    description: 'description',
+                    publisher: CQLLibraryPublisher,
+                    cql: cql,
+                },
             }).then((response) => {
                 let currentUser = Cypress.env('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (altUser)
-                {
+                if (altUser) {
                     currentUser = Cypress.env('selectedAltUser')
                 }
                 if (twoLibraries === true) {
                     cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2', response.body.id)
-                }
-                else {
+                } else {
                     cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
                 }
-
             })
         })
         return user
@@ -195,7 +196,6 @@ export class CQLLibraryPage {
 
     //input the library that is on page to check it's checkbox (ie: if it is the first library that we want checked, enter 0)
     public static checkLibrary(libraryOnPage: number): void {
-
         cy.get('[data-testid*="measure-name-' + libraryOnPage + '_select"]')
             .parent('tr')
             .find('input[type="checkbox"]')
@@ -203,37 +203,33 @@ export class CQLLibraryPage {
     }
 
     public static versionLibraryAPI(expectedVersionNumber: string) {
-
         const currentUser = Cypress.env('selectedUser')
         const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(filePath).should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql(expectedVersionNumber)
-
+            cy.readFile(filePath)
+                .should('exist')
+                .then((cqlLibraryId) => {
+                    cy.request({
+                        url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
+                        method: 'PUT',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken?.value,
+                        },
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.version).to.eql(expectedVersionNumber)
+                    })
                 })
-            })
         })
     }
 
     public static actionCenter(action: EditLibraryActions): void {
-
         cy.get(this.actionCenterButton).click()
         cy.wait(250)
 
         switch (action) {
-
             case EditLibraryActions.delete: {
-
                 cy.get(this.actionCenterDelete).should('be.visible')
                 cy.get(this.actionCenterDelete).should('be.enabled')
                 cy.get(this.actionCenterDelete).click()
@@ -248,7 +244,6 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.version: {
-
                 cy.get(this.actionCenterVersion).should('be.visible')
                 cy.get(this.actionCenterVersion).should('be.enabled')
                 cy.get(this.actionCenterVersion).click()
@@ -260,7 +255,6 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.draft: {
-
                 cy.get(this.actionCenterDraft).should('be.visible')
                 cy.get(this.actionCenterDraft).should('be.enabled')
                 cy.get(this.actionCenterDraft).click()
@@ -272,7 +266,6 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.share: {
-
                 cy.get(this.actionCenterShare).should('be.visible')
                 cy.get(this.actionCenterShare).should('be.enabled')
                 cy.get(this.actionCenterShare).click()
@@ -280,7 +273,6 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.transfer: {
-
                 cy.get(this.actionCenterTransfer).should('be.visible')
                 cy.get(this.actionCenterTransfer).should('be.enabled')
                 cy.get(this.actionCenterTransfer).click()
@@ -288,45 +280,45 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.viewHistory: {
-
                 cy.get(this.actionCenterHistory).should('be.visible')
                 cy.get(this.actionCenterHistory).should('be.enabled')
                 cy.get(this.actionCenterHistory).click()
 
                 break
             }
-            default: { }
+            default: {
+            }
         }
     }
 
     public static createLibraryAPI(libraryName: string, model: SupportedModels, options?: CreateLibraryOptions) {
-
-        let user: string, description: string, publisher: string, cql: string, cqlErrors = false, altUser = false
+        let user: string,
+            description: string,
+            publisher: string,
+            cql: string,
+            cqlErrors = false,
+            altUser = false
 
         const currentUser = Cypress.env('selectedUser')
 
-        if (options && options.altUser)
-        {
+        if (options && options.altUser) {
             altUser = true
         }
         user = OktaLogin.setupUserSession(altUser)
 
         if (options && options.description) {
             description = options.description
-        }
-        else {
+        } else {
             description = 'testing library functionality'
         }
         if (options && options.publisher) {
             publisher = options.publisher
-        }
-        else {
+        } else {
             publisher = 'ICF'
         }
         if (options && options.cql) {
             cql = options.cql
-        }
-        else {
+        } else {
             cql = ''
         }
         if (options && options.cqlErrors) {
@@ -337,27 +329,29 @@ export class CQLLibraryPage {
             cy.request({
                 url: '/api/cql-libraries',
                 headers: {
-                    authorization: 'Bearer ' + accessToken?.value
+                    authorization: 'Bearer ' + accessToken?.value,
                 },
                 method: 'POST',
                 body: {
-                    'cqlLibraryName': libraryName,
-                    'model': model,
-                    'createdBy': user,
-                    "librarySetId": uuidv4(),
-                    "description": description,
-                    "publisher": publisher,
-                    'cql': cql,
-                    'cqlErrors': cqlErrors
-                }
+                    cqlLibraryName: libraryName,
+                    model: model,
+                    createdBy: user,
+                    librarySetId: uuidv4(),
+                    description: description,
+                    publisher: publisher,
+                    cql: cql,
+                    cqlErrors: cqlErrors,
+                },
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(libraryName)
                 if (options && options.libraryNumber) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId' + options.libraryNumber, response.body.id)
-                }
-                else {
+                    cy.writeFile(
+                        'cypress/fixtures/' + currentUser + '/cqlLibraryId' + options.libraryNumber,
+                        response.body.id,
+                    )
+                } else {
                     cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
                 }
             })
@@ -368,28 +362,27 @@ export class CQLLibraryPage {
     public static checkFirstRow(expectedData: MeasureRow) {
         cy.wait(1100)
 
-        cy.get('.table-body tr').first().then(firstRow => {
-
-            if (expectedData.name) {
-                cy.wrap(firstRow.children().eq(1)).should('have.text', expectedData.name)
-            }
-            if (expectedData.version) {
-                cy.wrap(firstRow.children().eq(2)).should('have.text', expectedData.version)
-            }
-            if (expectedData.status) {
-                cy.wrap(firstRow.children().eq(3)).should('have.text', expectedData.status)
-            }
-            if (expectedData.model) {
-                cy.wrap(firstRow.children().eq(4)).should('have.text', expectedData.model)
-            }
-            if (expectedData.shared) {
-                cy.wrap(firstRow.children().eq(5)).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
-            }
-            if (expectedData.updated) {
-                cy.wrap(firstRow.children().eq(7)).should('have.text', expectedData.updated)
-            }
-
-        })
-
+        cy.get('.table-body tr')
+            .first()
+            .then((firstRow) => {
+                if (expectedData.name) {
+                    cy.wrap(firstRow.children().eq(1)).should('have.text', expectedData.name)
+                }
+                if (expectedData.version) {
+                    cy.wrap(firstRow.children().eq(2)).should('have.text', expectedData.version)
+                }
+                if (expectedData.status) {
+                    cy.wrap(firstRow.children().eq(3)).should('have.text', expectedData.status)
+                }
+                if (expectedData.model) {
+                    cy.wrap(firstRow.children().eq(4)).should('have.text', expectedData.model)
+                }
+                if (expectedData.shared) {
+                    cy.wrap(firstRow.children().eq(5)).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
+                }
+                if (expectedData.updated) {
+                    cy.wrap(firstRow.children().eq(7)).should('have.text', expectedData.updated)
+                }
+            })
     }
 }
