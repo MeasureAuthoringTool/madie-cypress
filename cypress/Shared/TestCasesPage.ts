@@ -1,1093 +1,1235 @@
-import { EditMeasurePage } from "./EditMeasurePage"
-import { Environment } from "./Environment"
-import { Utilities } from "./Utilities"
+import { EditMeasurePage } from './EditMeasurePage'
+import { Environment } from './Environment'
+import { Utilities } from './Utilities'
 import dateTimeISO = CypressCommandLine.dateTimeISO
-import { CQLEditorPage } from "./CQLEditorPage"
-import { MeasuresPage } from "./MeasuresPage"
-import { OktaLogin } from "./OktaLogin";
-import { step } from "../utils/step"
+import { CQLEditorPage } from './CQLEditorPage'
+import { MeasuresPage } from './MeasuresPage'
+import { OktaLogin } from './OktaLogin'
+import { step } from '../utils/step'
 
 export type TestCase = {
-    title: string,
-    description: string,
-    group: string,
-    json?: string
+  title: string
+  description: string
+  group: string
+  json?: string
 }
 
 export enum TestCaseAction {
-    clone,
-    copyToMeasure,
-    delete,
-    exportCollection,
-    exportTransaction,
-    shiftDates
+  clone,
+  copyToMeasure,
+  delete,
+  exportCollection,
+  exportTransaction,
+  shiftDates,
 }
 
 export class TestCasesPage {
-    //Composite Measure Test Case Page
-    public static readonly compositeAvailableTab  = '[data-testid="create-tab"]'
-    public static readonly compositeAddedTab  = '[data-testid="elements-tab"]'
-    public static readonly compositeJsonTab  = '[data-testid="json-tab"]'
-    public static readonly compositeInsertTestCaseBtn = '[data-testid="insert-test-case-button"]'
-    public static readonly compositeBackToAllProfilesBtn = '[data-testid="back-to-all-profiles-button"]'
+  //Composite Measure Test Case Page
+  public static readonly compositeAvailableTab = '[data-testid="create-tab"]'
+  public static readonly compositeAddedTab = '[data-testid="elements-tab"]'
+  public static readonly compositeAddedPanel = '[data-testid=added-panel]'
+  public static readonly compositeJsonTab = '[data-testid="json-tab"]'
+  public static readonly compositeInsertTestCaseBtn = '[data-testid="insert-test-case-button"]'
+  public static readonly compositeBackToAllProfilesBtn = '[data-testid="back-to-all-profiles-button"]'
+  public static readonly compositeTestCaseTitle = '[data-testid="composite-test-case-title"]'
+  public static readonly compositeTCAddedTable = '[class="data-elements-table test-case-summary-table"]'
+  public static readonly compositeTCHowItWorksContent = '[data-testid="how-it-works-content"]'
+  public static readonly compositeTCHowItWorksLink = '[data-testid="how-it-works-link"]'
+  public static readonly compositeTCHowItWorksLinkCloseBtn = '[data-testid="how-it-works-close"]'
 
-    //Qi Core 6
-    public static readonly topElementsTab = '[data-testid="elements-tab"]'
-    public static readonly topJsonTab = '[data-testid="json-tab"]'
-    public static readonly testCaseAvailableElementTab = '[data-testid="available-tab"]'
-    public static readonly testCaseAddedElementTab = '[data-testid="added-tab"]'
-    public static readonly elementActionBtn = '[id="basic-button"]'
-    public static readonly elementActionEditBtn = '[class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-1km1ehz"]'
-    public static readonly elementMetaTabBtn = '[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1dwgyyd"]'
-    public static readonly elementActionCenterBtn = '[data-testid="elements-action-center-button"]'
-    public static readonly elementActionCenterBtnIcon = '[data-testid="elements-action-center-actual-icon"]'
-    public static readonly elementActionCenterDeleteBtn = '[data-testid="DeleteOutlinedIcon"]'
-    public static readonly elementActionCenterConfirmDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3nccws react-draggable"]'
-    public static readonly actionConfirmDialogMsg = '[class="dialog-warning-body"]'
+  //Qi Core 6
+  public static readonly topElementsTab = '[data-testid="elements-tab"]'
+  public static readonly topJsonTab = '[data-testid="json-tab"]'
+  public static readonly testCaseAvailableElementTab = '[data-testid="available-tab"]'
+  public static readonly testCaseAddedElementTab = '[data-testid="added-tab"]'
+  public static readonly elementActionBtn = '[id="basic-button"]'
+  public static readonly elementActionEditBtn =
+    '[class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-1km1ehz"]'
+  public static readonly elementMetaTabBtn =
+    '[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1dwgyyd"]'
+  public static readonly elementActionCenterBtn = '[data-testid="elements-action-center-button"]'
+  public static readonly elementActionCenterBtnIcon = '[data-testid="elements-action-center-actual-icon"]'
+  public static readonly elementActionCenterDeleteBtn = '[data-testid="DeleteOutlinedIcon"]'
+  public static readonly elementActionCenterConfirmDialog =
+    '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3nccws react-draggable"]'
+  public static readonly actionConfirmDialogMsg = '[class="dialog-warning-body"]'
 
-    //observation fields
-    public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
-    public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
-    public static readonly denom2Observation = '[id="denominatorObservation2-expected-cb"]'
-    public static readonly numer0Observation = '[id="numeratorObservation0-expected-cb"]'
-    public static readonly numer1Observation = '[id="numeratorObservation1-expected-cb"]'
-    public static readonly numer2Observation = '[id="numeratorObservation2-expected-cb"]'
+  //observation fields
+  public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
+  public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
+  public static readonly denom2Observation = '[id="denominatorObservation2-expected-cb"]'
+  public static readonly numer0Observation = '[id="numeratorObservation0-expected-cb"]'
+  public static readonly numer1Observation = '[id="numeratorObservation1-expected-cb"]'
+  public static readonly numer2Observation = '[id="numeratorObservation2-expected-cb"]'
 
-    //QDM Bread Crumb
-    public static readonly testCasesBCLink = '[id="edit-test-case-bread-crumbs"]'
-    public static readonly testCasesBCText = '[data-testid="qdm-test-cases-testcase"]'
+  //QDM Bread Crumb
+  public static readonly testCasesBCLink = '[id="edit-test-case-bread-crumbs"]'
+  public static readonly testCasesBCText = '[data-testid="qdm-test-cases-testcase"]'
 
-    //QDM Shift Test Case dates
-    public static readonly testCaseDataSideLink = '[data-testid="test-case-data"]'
-    public static readonly shiftAllTestCaseDates = '[data-testid="shift-test-case-dates-input"]'
-    public static readonly shftAllTestCasesSaveBtn = '[data-testid="test-case-data-save"]'
-    public static readonly shiftAllTestCasesSuccessMsg = '[data-testid="shift-all-test-case-dates-success-text"]'
-    public static readonly shiftSpecificTestCaseDates = '[data-testid="shift-dates-input"]'
-    public static readonly shiftSpecificTestCasesCancelBtn = '[data-testid="shift-dates-cancel-button"]'
-    public static readonly shiftSpecificTestCasesSaveBtn = '[data-testid="shift-dates-save-button"]'
-    public static readonly TestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
-    public static readonly executionContextWarning = '[data-testid="warn-title"]'
+  //QDM Shift Test Case dates
+  public static readonly testCaseDataSideLink = '[data-testid="test-case-data"]'
+  public static readonly shiftAllTestCaseDates = '[data-testid="shift-test-case-dates-input"]'
+  public static readonly shftAllTestCasesSaveBtn = '[data-testid="test-case-data-save"]'
+  public static readonly shiftAllTestCasesSuccessMsg = '[data-testid="shift-all-test-case-dates-success-text"]'
+  public static readonly shiftSpecificTestCaseDates = '[data-testid="shift-dates-input"]'
+  public static readonly shiftSpecificTestCasesCancelBtn = '[data-testid="shift-dates-cancel-button"]'
+  public static readonly shiftSpecificTestCasesSaveBtn = '[data-testid="shift-dates-save-button"]'
+  public static readonly TestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
+  public static readonly executionContextWarning = '[data-testid="warn-title"]'
 
-    //QDM Test Case Demographics elements
-    public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
-    public static readonly QDMLivingStatus = '[id="demographics-living-status-selector"]'
-    public static readonly QDMLivingStatusOPtion = '[data-value="Living"]'
-    public static readonly QDMRace = '[id="demographics-race-selector"]'
+  //QDM Test Case Demographics elements
+  public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
+  public static readonly QDMLivingStatus = '[id="demographics-living-status-selector"]'
+  public static readonly QDMLivingStatusOPtion = '[data-value="Living"]'
+  public static readonly QDMRace = '[id="demographics-race-selector"]'
 
-    // changed label to "sex" - only label text changed, all these selectors are the same 12/30/24
-    public static readonly QDMGender = '[id="demographics-gender-selector"]'
-    public static readonly SelectionOptionChoice = '.MuiList-root'
-    public static readonly QDMEthnicity = '[id="demographics-ethnicity-selector"]'
+  // changed label to "sex" - only label text changed, all these selectors are the same 12/30/24
+  public static readonly QDMGender = '[id="demographics-gender-selector"]'
+  public static readonly SelectionOptionChoice = '.MuiList-root'
+  public static readonly QDMEthnicity = '[id="demographics-ethnicity-selector"]'
 
-    //QDM Test Case Demographics herlper text elements
-    public static readonly QDMDOBHelperTxt = '[id="birth-date-helper-text"]'
+  //QDM Test Case Demographics herlper text elements
+  public static readonly QDMDOBHelperTxt = '[id="birth-date-helper-text"]'
 
-    //QDM Test Case Elements elements / objects -- sub tabs sections
-    public static readonly ElementsSubTabHeading = '[class="test-case-tab-heading"]'
-    public static readonly AssessmentElementTab = '[data-testid="elements-tab-assessment"]'
-    public static readonly CareGoalElementTab = '[data-testid="elements-tab-care_goal"]'
-    public static readonly ConditionElementTab = '[data-testid="elements-tab-condition"]'
-    public static readonly MedicationElementTab = '[data-testid="elements-tab-medication"]'
-    public static readonly EncounterElementTab = '[data-testid="elements-tab-encounter"]'
-    public static readonly CharacteristicElementTab = '[data-testid="elements-tab-patient_characteristic"]'
-    public static readonly qdmTCElementTable = '[class="data-elements-table"]'
+  //QDM Test Case Elements elements / objects -- sub tabs sections
+  public static readonly ElementsSubTabHeading = '[class="test-case-tab-heading"]'
+  public static readonly AssessmentElementTab = '[data-testid="elements-tab-assessment"]'
+  public static readonly CareGoalElementTab = '[data-testid="elements-tab-care_goal"]'
+  public static readonly ConditionElementTab = '[data-testid="elements-tab-condition"]'
+  public static readonly MedicationElementTab = '[data-testid="elements-tab-medication"]'
+  public static readonly EncounterElementTab = '[data-testid="elements-tab-encounter"]'
+  public static readonly CharacteristicElementTab = '[data-testid="elements-tab-patient_characteristic"]'
+  public static readonly qdmTCElementTable = '[class="data-elements-table"]'
 
-    //QDM Test Case Elements elements / objects -- Encounter
-    public static readonly ExpandedOSSDetailCard = '[data-testid="data-element-card"]'
-    public static readonly ExpandedOSSDetailCardClose = '[data-testid="close-element-card"]'
-    public static readonly ExpandedOSSDetailCardTitle = '[class="title"]'
-    public static readonly ExpandedOSSDetailCardTitleSubDetail = '[class="sub-text"]'
-    public static readonly ExpandedOSSDetailCardTiming = '[class="timing"]'
-    public static readonly ExpandedOSSDetailCardTabCodes = '[data-testid="sub-navigation-tab-codes"]'
-    public static readonly ExpandedOSSDetailCardTabAttributes = '[data-testid="sub-navigation-tab-attributes"]'
-    public static readonly EncounterEDVCard = '[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]'
-    public static readonly EncounterEICard = '[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]'
-    public static readonly EncounterOSCard = '[data-testid="data-type-Encounter, Performed: Observation Services"]'
+  //QDM Test Case Elements elements / objects -- Encounter
+  public static readonly ExpandedOSSDetailCard = '[data-testid="data-element-card"]'
+  public static readonly ExpandedOSSDetailCardClose = '[data-testid="close-element-card"]'
+  public static readonly ExpandedOSSDetailCardTitle = '[class="title"]'
+  public static readonly ExpandedOSSDetailCardTitleSubDetail = '[class="sub-text"]'
+  public static readonly ExpandedOSSDetailCardTiming = '[class="timing"]'
+  public static readonly ExpandedOSSDetailCardTabCodes = '[data-testid="sub-navigation-tab-codes"]'
+  public static readonly ExpandedOSSDetailCardTabAttributes = '[data-testid="sub-navigation-tab-attributes"]'
+  public static readonly EncounterEDVCard = '[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]'
+  public static readonly EncounterEICard = '[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]'
+  public static readonly EncounterOSCard = '[data-testid="data-type-Encounter, Performed: Observation Services"]'
 
-    //QDM Test Case Elements elements / objects -- Laboratory
-    public static readonly locationPeriodStartDate = '[data-testid="location-period-start-input"]'
-    public static readonly locationPeriodEndDate = '[data-testid="location-period-end-input"]'
-    public static readonly relevantPeriodStartDate = '[data-testid="relevant-period-start-input"]'
-    public static readonly relevantPeriodEndDate = '[data-testid="relevant-period-end-input"]'
-    public static readonly authorDateTime = '[data-testid="author-datetime-input"]'
-    public static readonly prevalencePeriodStartDate = '[data-testid="prevalence-period-start-input"]'
-    public static readonly prevalencePeriodEndDate = '[data-testid="prevalence-period-end-input"]'
+  //QDM Test Case Elements elements / objects -- Laboratory
+  public static readonly locationPeriodStartDate = '[data-testid="location-period-start-input"]'
+  public static readonly locationPeriodEndDate = '[data-testid="location-period-end-input"]'
+  public static readonly relevantPeriodStartDate = '[data-testid="relevant-period-start-input"]'
+  public static readonly relevantPeriodEndDate = '[data-testid="relevant-period-end-input"]'
+  public static readonly authorDateTime = '[data-testid="author-datetime-input"]'
+  public static readonly prevalencePeriodStartDate = '[data-testid="prevalence-period-start-input"]'
+  public static readonly prevalencePeriodEndDate = '[data-testid="prevalence-period-end-input"]'
 
-    //QDM Test Case Elements elements / objects -- Characteristic
-    public static readonly CharacteristicMAPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare Advantage payer"]'
-    public static readonly CharacteristicMFFSPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]'
+  //QDM Test Case Elements elements / objects -- Characteristic
+  public static readonly CharacteristicMAPCard =
+    '[data-testid="data-type-Patient Characteristic Payer: Medicare Advantage payer"]'
+  public static readonly CharacteristicMFFSPCard =
+    '[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]'
 
-    //QDM misc test case page objects
-    public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
-    public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
+  //QDM misc test case page objects
+  public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
+  public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
 
-    //SDE Sub tab
-    public static readonly qdmSDESidNavLink = '[data-testid="nav-link-sde"]'
-    public static readonly qdmSDESubTab = '[data-testid="sde-tab"]'
-    public static readonly saveSDEOption = '[data-testid="sde-save"]'
+  //SDE Sub tab
+  public static readonly qdmSDESidNavLink = '[data-testid="nav-link-sde"]'
+  public static readonly qdmSDESubTab = '[data-testid="sde-tab"]'
+  public static readonly saveSDEOption = '[data-testid="sde-save"]'
 
-    // RAV sub stab
-    public static readonly qdmRAVSideNavLink = '[data-testid="nav-link-rav"]'
-    public static readonly qdmRAVSubTab = '[data-testid="rav-tab"]'
-    public static readonly saveRAVOption = '[data-testid="rav-save"]'
-    public static readonly discardRavChangesOption = '[data-testid="cancel-button"]'
+  // RAV sub stab
+  public static readonly qdmRAVSideNavLink = '[data-testid="nav-link-rav"]'
+  public static readonly qdmRAVSubTab = '[data-testid="rav-tab"]'
+  public static readonly saveRAVOption = '[data-testid="rav-save"]'
+  public static readonly discardRavChangesOption = '[data-testid="cancel-button"]'
 
-    //Execution Options sub tab
-    public static readonly executionOptionsSubTab = '[data-testid="nav-link-execution-options"]'
-    public static readonly executeInvalidTestCasesCheckBox = '[data-testid="execute-invalid-test-cases"]'
-    public static readonly saveExecutionOptionsBtn = '[data-testid="execution-options-save"]'
-    public static readonly executionOptionsSuccessMsg = '[class="toast success"]'
-    public static readonly executionOptionsToastMsg = '[data-testid="warn-title"]'
+  //Execution Options sub tab
+  public static readonly executionOptionsSubTab = '[data-testid="nav-link-execution-options"]'
+  public static readonly executeInvalidTestCasesCheckBox = '[data-testid="execute-invalid-test-cases"]'
+  public static readonly saveExecutionOptionsBtn = '[data-testid="execution-options-save"]'
+  public static readonly executionOptionsSuccessMsg = '[class="toast success"]'
+  public static readonly executionOptionsToastMsg = '[data-testid="warn-title"]'
 
-    //Test case QRDA Export
-    public static readonly testcaseQRDAExportBtn = '[data-testid="export-action-icon"]'
-    public static readonly successMsg = '.toast'
+  //Test case QRDA Export
+  public static readonly testcaseQRDAExportBtn = '[data-testid="export-action-icon"]'
+  public static readonly successMsg = '.toast'
 
-    //TC error concerning CQL and PC mismatch
-    public static readonly testCaseResultrow = '[data-testid="test-case-row-0"]'
-    public static readonly testCaseResultrow2 = '[data-testid="test-case-row-1"]'
+  //TC error concerning CQL and PC mismatch
+  public static readonly testCaseResultrow = '[data-testid="test-case-row-0"]'
+  public static readonly testCaseResultrow2 = '[data-testid="test-case-row-1"]'
 
-    //edit test case without knowing test case ID
-    public static readonly actionBtnNoId = '[class="action-button"]'
-    public static readonly btnContainer = '[class="btn-container"]'
+  //edit test case without knowing test case ID
+  public static readonly actionBtnNoId = '[class="action-button"]'
+  public static readonly btnContainer = '[class="btn-container"]'
 
-    //tabs on the test case page
-    public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
-    public static readonly detailsTab = '[data-testid="details-tab"]'
-    public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
+  //tabs on the test case page
+  public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
+  public static readonly detailsTab = '[data-testid="details-tab"]'
+  public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
 
-    //QDM Test Case
-    public static readonly qdmExpansionRadioOptionGroup = '[data-testid="manifest-expansion-radio-buttons-group"]'
-    public static readonly qdmExpansionSubTab = '[data-testid="nav-link-expansion"]'
-    public static readonly qdmManifestSelectDropDownBox = '[id="manifest-select"]'
-    public static readonly qdmMantifestMayFailTestOption = '[data-testid="manifest-option-ecqm-update-2022-05-05"]'
-    public static readonly qdmManifestSaveBtn = '[data-testid="manifest-expansion-save-button"]'
-    public static readonly qdmManifestSuccess = '[data-testid="manifest-expansion-success-text"]'
+  //QDM Test Case
+  public static readonly qdmExpansionRadioOptionGroup = '[data-testid="manifest-expansion-radio-buttons-group"]'
+  public static readonly qdmExpansionSubTab = '[data-testid="nav-link-expansion"]'
+  public static readonly qdmManifestSelectDropDownBox = '[id="manifest-select"]'
+  public static readonly qdmMantifestMayFailTestOption = '[data-testid="manifest-option-ecqm-update-2022-05-05"]'
+  public static readonly qdmManifestSaveBtn = '[data-testid="manifest-expansion-save-button"]'
+  public static readonly qdmManifestSuccess = '[data-testid="manifest-expansion-success-text"]'
 
-    //CQL area on Test Case page
-    public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
+  //CQL area on Test Case page
+  public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
 
-    //misc test case page objects
-    public static readonly tcColumnAscendingArrow = '[data-testid="KeyboardArrowUpIcon"]'
-    public static readonly tcColumnDescendingArrow = '[data-testid="KeyboardArrowDownIcon"]'
-    public static readonly tcColumnHeading = '[class="cursor-pointer select-none header-button"]'
-    public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
-    public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
-    public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
-    public static readonly tcCQLHighlightingDetails = '[data-testid="cql-highlighting"]'
-    public static readonly tcHLCollapseResultBtn = '[data-testid="ExpandLessIcon"]'
-    public static readonly tcHLResultsSection = '[data-testid="results-section"]'
-    public static readonly tcDENOMHighlightingDetails = '[data-testid="DENOM-highlighting"]'
-    public static readonly tcNUMERHighlightingDetails = '[data-testid="NUMER-highlighting"]'
-    public static readonly tcDEFINITIONSHighlightingDetails = '[data-testid="definitions-highlighting"]'
-    public static readonly tcFUNCTIONSHighlightingDetails = '[data-testid="functions-highlighting"]'
-    public static readonly tcUNUSEDHightlightingDetails = '[data-testid="unused-highlighting"]'
-    public static readonly tcHighlightingTab = '[data-testid="highlighting-tab"]'
-    public static readonly ippActualCheckBox = '[data-testid="test-population-initialPopulation-actual"]'
-    public static readonly numActualCheckBox = '[data-testid="test-population-numerator-actual"]'
-    public static readonly denomActualCheckBox = '[data-testid="test-population-denominator-actual"]'
-    public static readonly denomExclusionActualCheckBox = '[data-testid="test-population-denominatorExclusion-actual"]'
-    public static readonly newTestCaseButton = '[data-testid="create-new-test-case-button"]'
-    public static readonly testCaseDescriptionTextBox = '[data-testid=test-case-description]'
-    public static readonly meassureCQLVOTab = '[data-testid="measurecql-tab"]'
-    public static readonly voTCCQLobject = '[id="ace-editor-wrapper"]'
-    public static readonly voTCCQLEditor = '[class="ace_text-input"]'
-    public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
-    public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
-    public static readonly editTCSaveTooltip = '[data-testid="save-button-tooltip"]'
-    public static readonly errorToastMsg = '[data-testid="error-toast"]'
-    public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
-    public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
-    public static readonly testCaseTitle = '[data-testid="test-case-title"]'
-    public static readonly roTestCaseTitle = '[id="test-case-title"]'
-    public static readonly reportsButton = '[data-testid="reports-button"]'
-    public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
-    public static readonly overlappingCodesButton = '[data-testid="overlapping-codes"]'
-    public static readonly overlappingCodesExportBtn = '[data-testid="overlapping-codes-report-export-btn"]'
-    public static readonly overlappingCodesTable = '[data-testid="overlapping-codes-tbl"]'
-    public static readonly exportSuccessMsg = '[data-testid="overlapping-codes-success-text"]'
-    public static readonly tcSearchInput = '[data-testid="test-case-list-search-input"]'
-    public static readonly tcTriggerSearch = '[data-testid="test-cases-trigger-search"]'
-    public static readonly tcSearchIcone = '[data-testid="SearchIcon"]'
-    public static readonly tcClearSearch = '[data-testid="test-cases-clear-search"]'
-    public static readonly clearIconBtn = '[data-testid="ClearIcon"]'
-    public static readonly tcFilterInput = '[data-testid="filter-by-select"]'
-    public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
-    public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
-    public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
-    public static readonly testCaseJson = '[class="ace_content"]'
+  //misc test case page objects
+  public static readonly tcColumnAscendingArrow = '[data-testid="KeyboardArrowUpIcon"]'
+  public static readonly tcColumnDescendingArrow = '[data-testid="KeyboardArrowDownIcon"]'
+  public static readonly tcColumnHeading = '[class="cursor-pointer select-none header-button"]'
+  public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
+  public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
+  public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
+  public static readonly tcCQLHighlightingDetails = '[data-testid="cql-highlighting"]'
+  public static readonly tcHLCollapseResultBtn = '[data-testid="ExpandLessIcon"]'
+  public static readonly tcHLResultsSection = '[data-testid="results-section"]'
+  public static readonly tcDENOMHighlightingDetails = '[data-testid="DENOM-highlighting"]'
+  public static readonly tcNUMERHighlightingDetails = '[data-testid="NUMER-highlighting"]'
+  public static readonly tcDEFINITIONSHighlightingDetails = '[data-testid="definitions-highlighting"]'
+  public static readonly tcFUNCTIONSHighlightingDetails = '[data-testid="functions-highlighting"]'
+  public static readonly tcUNUSEDHightlightingDetails = '[data-testid="unused-highlighting"]'
+  public static readonly tcHighlightingTab = '[data-testid="highlighting-tab"]'
+  public static readonly ippActualCheckBox = '[data-testid="test-population-initialPopulation-actual"]'
+  public static readonly numActualCheckBox = '[data-testid="test-population-numerator-actual"]'
+  public static readonly denomActualCheckBox = '[data-testid="test-population-denominator-actual"]'
+  public static readonly denomExclusionActualCheckBox = '[data-testid="test-population-denominatorExclusion-actual"]'
+  public static readonly newTestCaseButton = '[data-testid="create-new-test-case-button"]'
+  public static readonly testCaseDescriptionTextBox = '[data-testid=test-case-description]'
+  public static readonly meassureCQLVOTab = '[data-testid="measurecql-tab"]'
+  public static readonly voTCCQLobject = '[id="ace-editor-wrapper"]'
+  public static readonly voTCCQLEditor = '[class="ace_text-input"]'
+  public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
+  public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
+  public static readonly editTCSaveTooltip = '[data-testid="save-button-tooltip"]'
+  public static readonly errorToastMsg = '[data-testid="error-toast"]'
+  public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
+  public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
+  public static readonly testCaseTitle = '[data-testid="test-case-title"]'
+  public static readonly roTestCaseTitle = '[id="test-case-title"]'
+  public static readonly reportsButton = '[data-testid="reports-button"]'
+  public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
+  public static readonly overlappingCodesButton = '[data-testid="overlapping-codes"]'
+  public static readonly overlappingCodesExportBtn = '[data-testid="overlapping-codes-report-export-btn"]'
+  public static readonly overlappingCodesTable = '[data-testid="overlapping-codes-tbl"]'
+  public static readonly exportSuccessMsg = '[data-testid="overlapping-codes-success-text"]'
+  public static readonly tcSearchInput = '[data-testid="test-case-list-search-input"]'
+  public static readonly tcTriggerSearch = '[data-testid="test-cases-trigger-search"]'
+  public static readonly tcSearchIcone = '[data-testid="SearchIcon"]'
+  public static readonly tcClearSearch = '[data-testid="test-cases-clear-search"]'
+  public static readonly clearIconBtn = '[data-testid="ClearIcon"]'
+  public static readonly tcFilterInput = '[data-testid="filter-by-select"]'
+  public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
+  public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
+  public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
+  public static readonly testCaseJson = '[class="ace_content"]'
 
-    public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
-    public static readonly testCaseGroupInlineError = '[data-testid="test-case-series-helper-text"]'
-    public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
-    public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
-    public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
-    public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
-    public static readonly testCaseExecutionError = '[data-testid="generic-fail-text-list"]'
-    public static readonly testCaseSyntaxError = '[data-testid="test-case-alerts"]'
-    public static readonly runTestButton = '[data-testid="run-test-case-button"]'
-    public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
-    public static readonly testCaseListPassingPercTab = '[data-testid="passing-tab"]'
-    public static readonly testCaseListCoveragePercTab = '[data-testid="coverage-tab"]'
-    public static readonly testCaseListValidationPercTab = '[data-testid="validation-tab"]'
-    public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
-    public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
-    public static readonly testCaseAction0Btn = '[data-testid="test-case-title-0_action"]'
-    public static readonly tcCoverageTabIPpop = '[data-testid="Initial Population-population"]'
-    public static readonly tcCoverageTabDenompop = '[data-testid="Denominator-population"]'
-    public static readonly tcCoverageTabDenomExcludepop = '[data-testid="Denominator Exclusion-population"]'
-    public static readonly tcCoverageTabNumpop = '[data-testid="Numerator-population"]'
-    public static readonly tcCoverageTabUsedDef = '[data-testid="Definitions-definition"]'
-    public static readonly tcCoverageTabFunctsDef = '[data-testid="Functions-definition"]'
-    public static readonly tcCoverageTabUnusedDef = '[data-testid="Unused-definition"]'
-    public static readonly tcCoverageSections = '[class="accordion-section"]'
-    public static readonly tcCoverageContent = '[class="accordion-content"]'
-    public static readonly testCaseCountByCaseNumber = '[data-testid*="_caseNumber"]'
-    public static readonly editTestcaseSDEWarning = '[data-testid="test_case_execution_warnings"]'
-    public static readonly editTestcaseRelevantElementsWarning = '[data-testid="test_case_missing_data_elements"]'
+  public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
+  public static readonly testCaseGroupInlineError = '[data-testid="test-case-series-helper-text"]'
+  public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
+  public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
+  public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
+  public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
+  public static readonly testCaseExecutionError = '[data-testid="generic-fail-text-list"]'
+  public static readonly testCaseSyntaxError = '[data-testid="test-case-alerts"]'
+  public static readonly runTestButton = '[data-testid="run-test-case-button"]'
+  public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
+  public static readonly testCaseListPassingPercTab = '[data-testid="passing-tab"]'
+  public static readonly testCaseListCoveragePercTab = '[data-testid="coverage-tab"]'
+  public static readonly testCaseListValidationPercTab = '[data-testid="validation-tab"]'
+  public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
+  public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
+  public static readonly testCaseAction0Btn = '[data-testid="test-case-title-0_action"]'
+  public static readonly tcCoverageTabIPpop = '[data-testid="Initial Population-population"]'
+  public static readonly tcCoverageTabDenompop = '[data-testid="Denominator-population"]'
+  public static readonly tcCoverageTabDenomExcludepop = '[data-testid="Denominator Exclusion-population"]'
+  public static readonly tcCoverageTabNumpop = '[data-testid="Numerator-population"]'
+  public static readonly tcCoverageTabUsedDef = '[data-testid="Definitions-definition"]'
+  public static readonly tcCoverageTabFunctsDef = '[data-testid="Functions-definition"]'
+  public static readonly tcCoverageTabUnusedDef = '[data-testid="Unused-definition"]'
+  public static readonly tcCoverageSections = '[class="accordion-section"]'
+  public static readonly tcCoverageContent = '[class="accordion-content"]'
+  public static readonly testCaseCountByCaseNumber = '[data-testid*="_caseNumber"]'
+  public static readonly editTestcaseSDEWarning = '[data-testid="test_case_execution_warnings"]'
+  public static readonly editTestcaseRelevantElementsWarning = '[data-testid="test_case_missing_data_elements"]'
 
+  //Test Case Population Values
+  public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
+  public static readonly testCaseNUMERExpected = '[data-testid="test-population-numerator-expected"]'
+  public static readonly testCaseNUMEXExpected = '[data-testid="test-population-numeratorExclusion-expected"]'
+  public static readonly testCaseDENOMExpected = '[data-testid="test-population-denominator-expected"]'
+  public static readonly testCaseDENEXExpected = '[data-testid="test-population-denominatorExclusion-expected"]'
+  public static readonly testCaseDENEXCEPTxpected = '[data-testid="test-population-denominatorException-expected"]'
+  public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
+  public static readonly testCaseMSRPOPLEXExpected =
+    '[data-testid="test-population-measurePopulationExclusion-expected"]'
+  public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
+  public static readonly initialPopulationRow = '[data-testid="test-row-population-id-initialPopulation"]'
+  public static readonly numeratorRow = '[data-testid="test-row-population-id-numerator"]'
+  public static readonly numeratorExclusionRow = '[data-testid="test-row-population-id-numeratorExclusion"]'
+  public static readonly denominatorRow = '[data-testid="test-row-population-id-denominator"]'
+  public static readonly denominatorExclusionRow = '[data-testid="test-row-population-id-denominatorExclusion"]'
+  public static readonly denominatorExceptionRow = '[data-testid="test-row-population-id-denominatorException"]'
+  public static readonly measureObservationRow = '[data-testid="test-population-measurePopulationObservation-expected"]'
+  public static readonly numeratorObservationRow = '[data-testid="test-population-numeratorObservation-expected"]'
+  public static readonly measureGroup1Label = '[data-testid="measure-group-1"]'
+  public static readonly measureGroup2Label = '[data-testid="measure-group-2"]'
+  public static readonly denominatorObservationExpectedRow =
+    '[data-testid="test-population-denominatorObservation-expected"]'
 
-    //Test Case Population Values
-    public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
-    public static readonly testCaseNUMERExpected = '[data-testid="test-population-numerator-expected"]'
-    public static readonly testCaseNUMEXExpected = '[data-testid="test-population-numeratorExclusion-expected"]'
-    public static readonly testCaseDENOMExpected = '[data-testid="test-population-denominator-expected"]'
-    public static readonly testCaseDENEXExpected = '[data-testid="test-population-denominatorExclusion-expected"]'
-    public static readonly testCaseDENEXCEPTxpected = '[data-testid="test-population-denominatorException-expected"]'
-    public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
-    public static readonly testCaseMSRPOPLEXExpected = '[data-testid="test-population-measurePopulationExclusion-expected"]'
-    public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
-    public static readonly initialPopulationRow = '[data-testid="test-row-population-id-initialPopulation"]'
-    public static readonly numeratorRow = '[data-testid="test-row-population-id-numerator"]'
-    public static readonly numeratorExclusionRow = '[data-testid="test-row-population-id-numeratorExclusion"]'
-    public static readonly denominatorRow = '[data-testid="test-row-population-id-denominator"]'
-    public static readonly denominatorExclusionRow = '[data-testid="test-row-population-id-denominatorExclusion"]'
-    public static readonly denominatorExceptionRow = '[data-testid="test-row-population-id-denominatorException"]'
-    public static readonly measureObservationRow = '[data-testid="test-population-measurePopulationObservation-expected"]'
-    public static readonly numeratorObservationRow = '[data-testid="test-population-numeratorObservation-expected"]'
-    public static readonly measureGroup1Label = '[data-testid="measure-group-1"]'
-    public static readonly measureGroup2Label = '[data-testid="measure-group-2"]'
-    public static readonly denominatorObservationExpectedRow = '[data-testid="test-population-denominatorObservation-expected"]'
+  //QDM Test Case Page
+  public static readonly elementsTab = '[data-testid=elements-tab]'
+  public static readonly jsonTab = '[data-testid=json-tab]'
+  public static readonly runQDMTestCaseBtn = '[data-testid="qdm-test-case-run-button"]'
 
-    //QDM Test Case Page
-    public static readonly elementsTab = '[data-testid=elements-tab]'
-    public static readonly jsonTab = '[data-testid=json-tab]'
-    public static readonly runQDMTestCaseBtn = '[data-testid="qdm-test-case-run-button"]'
+  //Test Case Page
+  public static readonly dobSelectValueElementTab = '[class="MuiFormControl-root MuiTextField-root css-1uwaluo"]'
+  public static readonly ethnicityDetailedElementTab = '[data-testid="demographics-ethnicity-detailed-input"]'
+  public static readonly ethnicityOmbElementTab = '[id="demographics-ethnicity-omb-select-id"]'
+  public static readonly raceDetailedElementTab = '[data-testid="demographics-race-detailed-input"]'
+  public static readonly raceOmbselectBoxElementTab = '[id="raceOMB"]'
+  public static readonly raceOmbElementTab = '[data-testid="demographics-race-omb"]'
+  public static readonly genderDdOnElementTab = '[id="gender-selector"]'
+  public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
+  public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
+  public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
+  public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
+  public static readonly testCaseListCheckBox = '.px-1 > input'
 
-    //Test Case Page
-    public static readonly dobSelectValueElementTab = '[class="MuiFormControl-root MuiTextField-root css-1uwaluo"]'
-    public static readonly ethnicityDetailedElementTab = '[data-testid="demographics-ethnicity-detailed-input"]'
-    public static readonly ethnicityOmbElementTab = '[id="demographics-ethnicity-omb-select-id"]'
-    public static readonly raceDetailedElementTab = '[data-testid="demographics-race-detailed-input"]'
-    public static readonly raceOmbselectBoxElementTab = '[id="raceOMB"]'
-    public static readonly raceOmbElementTab = '[data-testid="demographics-race-omb"]'
-    public static readonly genderDdOnElementTab = '[id="gender-selector"]'
-    public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
-    public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
-    public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
-    public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
-    public static readonly testCaseListCheckBox = '.px-1 > input'
+  //Stratifications
+  public static readonly initialPopulationStratificationExpectedValue =
+    '[data-testid="Strata 1-initialPopulation-expected"]'
+  public static readonly measurePopulationStratificationExpectedValue =
+    '[data-testid="Strata 1-measurePopulation-expected"]'
+  public static readonly initialPopulationStrata2ExpectedValue = '[data-testid="Strata 2-initialPopulation-expected"]'
+  public static readonly measurePopulationStrata2ExpectedValue = '[data-testid="Strata 2-measurePopulation-expected"]'
 
-    //Stratifications
-    public static readonly initialPopulationStratificationExpectedValue = '[data-testid="Strata 1-initialPopulation-expected"]'
-    public static readonly measurePopulationStratificationExpectedValue = '[data-testid="Strata 1-measurePopulation-expected"]'
-    public static readonly initialPopulationStrata2ExpectedValue = '[data-testid="Strata 2-initialPopulation-expected"]'
-    public static readonly measurePopulationStrata2ExpectedValue = '[data-testid="Strata 2-measurePopulation-expected"]'
+  //measure versioning attempt with invalid test case
+  public static readonly versionMeasureWithTCErrors =
+    '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
+  public static readonly versionMeasurewithTCErrorsCancel = '[data-testid="invalid-test-dialog-cancel-button"]'
+  public static readonly versionMeasurewithTCErrorsContinue = '[data-testid="invalid-test-dialog-continue-button"]'
 
-    //measure versioning attempt with invalid test case
-    public static readonly versionMeasureWithTCErrors = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
-    public static readonly versionMeasurewithTCErrorsCancel = '[data-testid="invalid-test-dialog-cancel-button"]'
-    public static readonly versionMeasurewithTCErrorsContinue = '[data-testid="invalid-test-dialog-continue-button"]'
+  //Test Case Expected/Actual Values
+  public static readonly nonBooleanExpectedValueError = '[class="qpp-error-message"]'
+  public static readonly measureObservationExpectedValueError =
+    '[data-testid="measurePopulationObservation-error-helper-text"]'
+  public static readonly denominatorObservationExpectedValueError =
+    '[data-testid="denominatorObservation-error-helper-text"]'
+  public static readonly numeratorObservationExpectedValueError =
+    '[data-testid="numeratorObservation-error-helper-text"]'
+  public static readonly cvMeasureObservationActualValue =
+    '[data-testid="test-population-measurePopulationObservation-actual"]'
+  public static readonly denominatorMeasureObservationActualValue =
+    '[data-testid="test-population-denominatorObservation-actual"]'
+  public static readonly numeratorMeasureObservationActualValue =
+    '[data-testid="test-population-numeratorObservation-actual"]'
+  public static readonly measureActualCheckbox = '[class="madie-check actual"]'
 
-    //Test Case Expected/Actual Values
-    public static readonly nonBooleanExpectedValueError = '[class="qpp-error-message"]'
-    public static readonly measureObservationExpectedValueError = '[data-testid="measurePopulationObservation-error-helper-text"]'
-    public static readonly denominatorObservationExpectedValueError = '[data-testid="denominatorObservation-error-helper-text"]'
-    public static readonly numeratorObservationExpectedValueError = '[data-testid="numeratorObservation-error-helper-text"]'
-    public static readonly cvMeasureObservationActualValue = '[data-testid="test-population-measurePopulationObservation-actual"]'
-    public static readonly denominatorMeasureObservationActualValue = '[data-testid="test-population-denominatorObservation-actual"]'
-    public static readonly numeratorMeasureObservationActualValue = '[data-testid="test-population-numeratorObservation-actual"]'
-    public static readonly measureActualCheckbox = '[class="madie-check actual"]'
+  //New Test Case Modal
+  public static readonly createTestCaseDialog = '[data-testid="dialog-form"]'
+  public static readonly createTestCaseTitleInput = '[data-testid="create-test-case-title-input"]'
+  public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description"]'
+  public static readonly createTestCaseGroupInput = '[id="test-case-series"]'
+  public static readonly createTestCaseSaveButton = '[data-testid="create-test-case-save-button"]'
 
-    //New Test Case Modal
-    public static readonly createTestCaseDialog = '[data-testid="dialog-form"]'
-    public static readonly createTestCaseTitleInput = '[data-testid="create-test-case-title-input"]'
-    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description"]'
-    public static readonly createTestCaseGroupInput = '[id="test-case-series"]'
-    public static readonly createTestCaseSaveButton = '[data-testid="create-test-case-save-button"]'
+  //import test case
+  public static readonly importTestCasesBtn = '[data-testid="import-test-cases-button"]'
+  public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
+  public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
+  public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
 
-    //import test case
-    public static readonly importTestCasesBtn = '[data-testid="import-test-cases-button"]'
-    public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
-    public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
-    public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
+  //Warning Modal
+  public static readonly discardChangesConfirmationBody = '[id="discard-changes-dialog-body"]'
 
-    //Warning Modal
-    public static readonly discardChangesConfirmationBody = '[id="discard-changes-dialog-body"]'
+  //Delete Test Case
+  public static readonly deleteAllTestCasesBtn = '[data-testid="delete-all-test-cases-button"]'
 
-    //Delete Test Case
-    public static readonly deleteAllTestCasesBtn = '[data-testid="delete-all-test-cases-button"]'
+  //Import Test cases
+  public static readonly importTestCaseBtnOnModal = '[data-testid="test-case-import-import-btn"]'
+  public static readonly importTestCaseCancelBtnOnModal = '[data-testid="test-case-import-cancel-btn"]'
+  public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
+  public static readonly importTestCaseBtn = '[data-testid="import-test-case-btn"]'
+  public static readonly tcFileDrop = '[data-testid="file-drop-div"]'
+  public static readonly tcImportButton = '[data-testid="select-file-button"]'
+  public static readonly tcImportError = '[data-testid="test-case-import-error-div"]'
+  public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
+  public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile =
+    '[data-testid="test-case-preview-header"]'
+  public static readonly importTestCaseSuccessInfo = '[id="content"]'
 
-    //Import Test cases
-    public static readonly importTestCaseBtnOnModal = '[data-testid="test-case-import-import-btn"]'
-    public static readonly importTestCaseCancelBtnOnModal = '[data-testid="test-case-import-cancel-btn"]'
-    public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
-    public static readonly importTestCaseBtn = '[data-testid="import-test-case-btn"]'
-    public static readonly tcFileDrop = '[data-testid="file-drop-div"]'
-    public static readonly tcImportButton = '[data-testid="select-file-button"]'
-    public static readonly tcImportError = '[data-testid="test-case-import-error-div"]'
-    public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
-    public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[data-testid="test-case-preview-header"]'
-    public static readonly importTestCaseSuccessInfo = '[id="content"]'
+  //Export Test Cases
+  public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
+  public static readonly exportTransactionTypeOption = '[data-testid="export-transaction-bundle"]'
+  public static readonly exportCollectionTypeOption = '[data-testid="export-collection-bundle"]'
 
-    //Export Test Cases
-    public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
-    public static readonly exportTransactionTypeOption = '[data-testid="export-transaction-bundle"]'
-    public static readonly exportCollectionTypeOption = '[data-testid="export-collection-bundle"]'
+  //QDM Test Case Elements Tab
+  public static readonly QDMElementsTab = '[data-testid="elements-section"]'
 
-    //QDM Test Case Elements Tab
-    public static readonly QDMElementsTab = '[data-testid="elements-section"]'
+  //QDM Test Case Attributes
+  public static readonly laboratoryElement = '[data-testid="elements-tab-laboratory_test"]'
+  public static readonly plusIcon = '[data-testid="AddCircleOutlineIcon"]'
+  public static readonly addAttribute = '[data-testid="add-attribute-button"]'
+  public static readonly selectAttributeDropdown = '[id="attribute-select"]'
+  public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
+  public static readonly interpretationAttribute = '[data-testid="option-Interpretation"]'
+  public static readonly resultAttribute = '[data-testid="option-Result"]'
+  public static readonly valueSetSelector = '[data-testid="value-set-selector"]'
+  public static readonly ABEMBDiathesisValue = '[data-testid="option-2.16.840.1.113883.3.3157.4036"]'
+  public static readonly attributeType = '[id="type-select"]'
+  public static readonly quantityType = '[data-testid="option-Quantity"]'
+  public static readonly quantityValueInput = '[data-testid="quantity-value-input-quantity"]'
+  public static readonly quantityUnitInput = '[data-testid="quantity-unit-input-quantity-input"]'
+  public static readonly attributeChip = 'tbody > tr > :nth-child(3)'
+  public static readonly codeSystemSelector = '[id="code-system-selector"]'
+  public static readonly codeSNOMEDCTValue = '[data-testid="option-SNOMEDCT"]'
+  public static readonly codeLOINCValue = '[data-testid="code-system-option-LOINC"]'
+  public static readonly codeSystemValueSelector = '[data-testid="code-selector"]'
+  public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
+  public static readonly codeSelector = '[id="code-selector"]'
 
-    //QDM Test Case Attributes
-    public static readonly laboratoryElement = '[data-testid="elements-tab-laboratory_test"]'
-    public static readonly plusIcon = '[data-testid="AddCircleOutlineIcon"]'
-    public static readonly addAttribute = '[data-testid="add-attribute-button"]'
-    public static readonly selectAttributeDropdown = '[id="attribute-select"]'
-    public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
-    public static readonly interpretationAttribute = '[data-testid="option-Interpretation"]'
-    public static readonly resultAttribute = '[data-testid="option-Result"]'
-    public static readonly valueSetSelector = '[data-testid="value-set-selector"]'
-    public static readonly ABEMBDiathesisValue = '[data-testid="option-2.16.840.1.113883.3.3157.4036"]'
-    public static readonly attributeType = '[id="type-select"]'
-    public static readonly quantityType = '[data-testid="option-Quantity"]'
-    public static readonly quantityValueInput = '[data-testid="quantity-value-input-quantity"]'
-    public static readonly quantityUnitInput = '[data-testid="quantity-unit-input-quantity-input"]'
-    public static readonly attributeChip = 'tbody > tr > :nth-child(3)'
-    public static readonly codeSystemSelector = '[id="code-system-selector"]'
-    public static readonly codeSNOMEDCTValue = '[data-testid="option-SNOMEDCT"]'
-    public static readonly codeLOINCValue = '[data-testid="code-system-option-LOINC"]'
-    public static readonly codeSystemValueSelector = '[data-testid="code-selector"]'
-    public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
-    public static readonly codeSelector = '[id="code-selector"]'
+  //Pagination
+  public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
+  public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'
+  public static readonly paginationLimitSelect = '#pagination-limit-select'
+  public static readonly paginationLimitEquals25 = '[data-value="25"]'
+  public static readonly paginationLimitAll = '[data-value="All"]'
+  public static readonly countVisibleTestCases = 'tr[data-testid*="test-case-row-"]'
 
-    //Pagination
-    public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
-    public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'
-    public static readonly paginationLimitSelect = '#pagination-limit-select'
-    public static readonly paginationLimitEquals25 = '[data-value="25"]'
-    public static readonly paginationLimitAll = '[data-value="All"]'
-    public static readonly countVisibleTestCases = 'tr[data-testid*="test-case-row-"]'
+  //QDM Test Case Negation tab and associated fields
+  public static readonly negationTab = '[data-testid="sub-navigation-tab-negation_rationale"]'
+  public static readonly valueSetDirectRefCode = '[id="value-set-selector"]'
+  public static readonly valueSetOptionValue = '[data-testid="option-2.16.840.1.113883.3.117.1.7.1.93"]'
 
-    //QDM Test Case Negation tab and associated fields
-    public static readonly negationTab = '[data-testid="sub-navigation-tab-negation_rationale"]'
-    public static readonly valueSetDirectRefCode = '[id="value-set-selector"]'
-    public static readonly valueSetOptionValue = '[data-testid="option-2.16.840.1.113883.3.117.1.7.1.93"]'
+  // test case list Action Center
+  public static readonly actionCenterDelete = '[data-testid="delete-action-btn"]'
+  public static readonly actionCenterClone = '[data-testid="clone-action-btn"]'
+  public static readonly actionCenterCopyToMeasure = '[data-testid="copy-action-btn"]'
+  public static readonly actionCenterExport = 'form [data-testid="export-action-btn"]'
+  public static readonly actionCenterShiftDates = '[data-testid="shift-test-case-dates-action-btn"]'
 
-    // test case list Action Center
-    public static readonly actionCenterDelete = '[data-testid="delete-action-btn"]'
-    public static readonly actionCenterClone = '[data-testid="clone-action-btn"]'
-    public static readonly actionCenterCopyToMeasure = '[data-testid="copy-action-btn"]'
-    public static readonly actionCenterExport = 'form [data-testid="export-action-btn"]'
-    public static readonly actionCenterShiftDates = '[data-testid="shift-test-case-dates-action-btn"]'
+  // copy to modal
+  public static readonly copyToSave = '[data-testid="copy-test-cases-continue-button"]'
 
-    // copy to modal
-    public static readonly copyToSave = '[data-testid="copy-test-cases-continue-button"]'
+  // left nav expand (means we are already collapsed)/collapse (means we are expanded/normal)
+  public static readonly leftNavCollapse = '[data-testid="test-case-sidebar-collapse-icon"]'
+  public static readonly leftNavExpand = '[data-testid="test-case-sidebar-expand-icon"]'
+  public static readonly leftNavMenuList = '[data-testid="test-case-sidebar"]'
 
-    // left nav expand (means we are already collapsed)/collapse (means we are expanded/normal)
-    public static readonly leftNavCollapse = '[data-testid="test-case-sidebar-collapse-icon"]'
-    public static readonly leftNavExpand = '[data-testid="test-case-sidebar-expand-icon"]'
-    public static readonly leftNavMenuList = '[data-testid="test-case-sidebar"]'
+  public static readonly openDateCalculator = '[data-testid="editor-calculator-button"]'
+  public static readonly calculatorTool = {
+    durDiffTab: '[data-testid="duration-difference-tab"]',
+    startDate: '[data-testid="start-date-input"]',
+    endDate: '[data-testid="end-date-input"]',
+    precision: '#precision-select',
+    includeEndDateCheckbox: '#endDateInclusive',
+    calculateDuration: '[data-testid="calculate-duration"]',
+    durationResults: '[data-testid="duration-result"]',
+    differenceResults: '[data-testid="difference-result"]',
+    computedDateTab: '[data-testid="computed-date-tab"]',
+    initialDate: '[data-testid="initial-date-input"]',
+    addRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:first',
+    subtractRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:last',
+    dwmyInput: '[data-testid="precision-number-input"]',
+    dwmyUnitsSelect: '[data-testid="precision-select"]',
+    calculateDate: '[data-testid="calculate-computed-date"]',
+    computedDateResults: '[data-testid="computed-date-result"]',
+    copyComputedDate: '[data-testid="copy-computed-date"]',
+    close: '[data-testid="calculation-close-button"]',
+  }
 
-    public static readonly openDateCalculator = '[data-testid="editor-calculator-button"]'
-    public static readonly calculatorTool = {
-        durDiffTab: '[data-testid="duration-difference-tab"]',
-        startDate: '[data-testid="start-date-input"]',
-        endDate: '[data-testid="end-date-input"]',
-        precision: '#precision-select',
-        includeEndDateCheckbox: '#endDateInclusive',
-        calculateDuration: '[data-testid="calculate-duration"]',
-        durationResults: '[data-testid="duration-result"]',
-        differenceResults: '[data-testid="difference-result"]',
-        computedDateTab: '[data-testid="computed-date-tab"]',
-        initialDate: '[data-testid="initial-date-input"]',
-        addRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:first',
-        subtractRadio: '[data-testid="add-subtract-option-radio-buttons-group"] input[type="radio"]:last',
-        dwmyInput: '[data-testid="precision-number-input"]',
-        dwmyUnitsSelect: '[data-testid="precision-select"]',
-        calculateDate: '[data-testid="calculate-computed-date"]',
-        computedDateResults: '[data-testid="computed-date-result"]',
-        copyComputedDate: '[data-testid="copy-computed-date"]',
-        close: '[data-testid="calculation-close-button"]'
+  //This function grabs the data-testid value off of the view button and extracts the id out of it.
+  //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
+  //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries
+  //on the element table and you want to grab the id off of the second entry, then you would pass a simple 2
+  //digit into the function call. If no value is given for this optional parameter, then it will assume the
+  //value needs to be 1 -- the first entry in the table.
+  public static grabElementId(eleTableEntry?: number): void {
+    const currentUser = Cypress.env('selectedUser')
+    let attrData = ''
+    let elemid = ''
+    let elementId = []
+    let elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
+    if (eleTableEntry === null || eleTableEntry === undefined) {
+      eleTableEntry = 1
+    }
+    cy.get(TestCasesPage.qdmTCElementTable)
+      .find('tr')
+      .eq(eleTableEntry)
+      .find('[class="MuiSpeedDial-root MuiSpeedDial-directionRight css-td7g9m"]')
+      .then(($element) => {
+        attrData = $element.attr('data-testid')!.toString().valueOf()
+        return attrData
+      })
+      .then((attrData) => {
+        elementId = attrData.split('-', 4)
+        cy.log('The data-testid value is ' + attrData)
+        console.log('The data-testid value is ' + attrData)
+        cy.log(attrData)
+        cy.log('The data-testid value is ' + attrData)
+        console.log('The element id value is ' + elementId[2])
+        cy.log(elementId[2])
+        elemid = elementId[2].toString().valueOf()
+        cy.writeFile(elementIdPath, elemid)
+      })
+  }
+
+  public static grabAddedId(eleTableEntry?: number): void {
+    const currentUser = Cypress.env('selectedUser')
+    let elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
+
+    if (eleTableEntry === null || eleTableEntry === undefined) {
+      eleTableEntry = 1
     }
 
-    //This function grabs the data-testid value off of the view button and extracts the id out of it.
-    //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
-    //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries
-    //on the element table and you want to grab the id off of the second entry, then you would pass a simple 2
-    //digit into the function call. If no value is given for this optional parameter, then it will assume the
-    //value needs to be 1 -- the first entry in the table.
-    public static grabElementId(eleTableEntry?: number): void {
-        const currentUser = Cypress.env('selectedUser')
-        let attrData = ''
-        let elemid = ''
-        let elementId = []
-        let elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
-        if (eleTableEntry === null || eleTableEntry === undefined) {
-            eleTableEntry = 1
-        }
-        cy.get(TestCasesPage.qdmTCElementTable).find('tr').eq(eleTableEntry).find('[class="MuiSpeedDial-root MuiSpeedDial-directionRight css-td7g9m"]').then(($element) => {
-            attrData = $element.attr('data-testid')!.toString().valueOf()
-            return attrData
-        }).then((attrData) => {
-            elementId = attrData.split('-', 4)
-            cy.log('The data-testid value is ' + attrData)
-            console.log('The data-testid value is ' + attrData)
-            cy.log(attrData)
-            cy.log('The data-testid value is ' + attrData)
-            console.log('The element id value is ' + elementId[2])
-            cy.log(elementId[2])
-            elemid = (elementId[2]).toString().valueOf()
-            cy.writeFile(elementIdPath, elemid)
-        })
+    cy.get(TestCasesPage.compositeTCAddedTable)
+      .find('tr')
+      .eq(eleTableEntry)
+      .find('[data-testid^="action-center-"]')
+      .invoke('attr', 'data-testid')
+      .then((attrData) => {
+        expect(attrData).to.exist
 
+        const elemid = attrData!.replace('action-center-', '')
 
-    }
+        cy.log('The data-testid value is ' + attrData)
+        cy.log('The element id value is ' + elemid)
 
-    /*
+        cy.writeFile(elementIdPath, elemid)
+      })
+  }
+
+  /*
         this is functionally similar to the above grabElementId, but works with testCaseId
         the primary use-case for grabTestCaseId would be to prep for using testCaseAction()
     */
-    public static grabTestCaseId(testCaseNumber: number): void {
-        const currentUser = Cypress.env('selectedUser')
-        // ToDo: expand to allow option for testCaseId2
+  public static grabTestCaseId(testCaseNumber: number): void {
+    const currentUser = Cypress.env('selectedUser')
+    // ToDo: expand to allow option for testCaseId2
 
-        let testCaseId: string
-        const testCaseIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId'
+    let testCaseId: string
+    const testCaseIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId'
 
-        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
-            .parent('tr')
-            .find('button.qpp-c-button')
-            .invoke('attr', 'data-testid')
-            .then(idValue => {
-                testCaseId = idValue!.split('-')[5].toString().valueOf()
-                cy.writeFile(testCaseIdPath, testCaseId)
-            })
-    }
+    cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+      .parent('tr')
+      .find('button.qpp-c-button')
+      .invoke('attr', 'data-testid')
+      .then((idValue) => {
+        testCaseId = idValue!.split('-')[5].toString().valueOf()
+        cy.writeFile(testCaseIdPath, testCaseId)
+      })
+  }
 
-    public static clickCreateTestCaseButton(): void {
-        step('Click Create Test Case Button')
-        const currentUser = Cypress.env('selectedUser')
-        //setup for grabbing the measure create call
-        let measureID = null
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-            measureID = id
-            cy.intercept('POST', '/api/measures/' + measureID + '/test-cases').as('testcase')
-            cy.get(this.createTestCaseSaveButton).should('exist')
-            Utilities.waitForElementVisible(this.createTestCaseSaveButton, 50000)
-            Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 50000)
-            cy.get(this.createTestCaseSaveButton).wait(3000).click()
-            //saving testCaseId to file to use later
-            cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
-                expect(response?.statusCode).to.eq(201)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response?.body.id)
-                cy.log(response?.body.message)
-            })
+  public static clickCreateTestCaseButton(): void {
+    step('Click Create Test Case Button')
+    const currentUser = Cypress.env('selectedUser')
+    //setup for grabbing the measure create call
+    let measureID = null
+    cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+      .should('exist')
+      .then((id) => {
+        measureID = id
+        cy.intercept('POST', '/api/measures/' + measureID + '/test-cases').as('testcase')
+        cy.get(this.createTestCaseSaveButton).should('exist')
+        Utilities.waitForElementVisible(this.createTestCaseSaveButton, 50000)
+        Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 50000)
+        cy.get(this.createTestCaseSaveButton).wait(3000).click()
+        //saving testCaseId to file to use later
+        cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
+          expect(response?.statusCode).to.eq(201)
+          cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response?.body.id)
+          cy.log(response?.body.message)
         })
+      })
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-    }
+    cy.get(EditMeasurePage.testCasesTab).click()
+  }
 
-    public static grabValidateTestCaseNumber(testCaseNumber: number): void {
+  public static grabValidateTestCaseNumber(testCaseNumber: number): void {
+    cy.get('[data-testid="test-case-title-0_caseNumber"]').should('be.visible')
+    cy.get('[data-testid="test-case-title-0_caseNumber"]')
+      .invoke('text')
+      .then((visibleNumber) => {
+        expect(visibleNumber).to.include(testCaseNumber)
+      })
+  }
 
-        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('be.visible')
-        cy.get('[data-testid="test-case-title-0_caseNumber"]').invoke('text').then(
-            (visibleNumber) => {
-                expect(visibleNumber).to.include(testCaseNumber)
-            })
-    }
+  public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
+    cy.get('[data-testid="test-case-title-0_series"]').should('be.visible').wait(1000)
+    cy.get('[data-testid="test-case-title-0_series"]')
+      .invoke('text')
+      .then((seriesText) => {
+        expect(seriesText).to.include(testCaseSeries)
+      })
 
-    public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
-
-        cy.get('[data-testid="test-case-title-0_series"]').should('be.visible').wait(1000)
-        cy.get('[data-testid="test-case-title-0_series"]').invoke('text').then(
-            (seriesText) => {
-                expect(seriesText).to.include(testCaseSeries)
-            })
-
-        cy.get('[data-testid="test-case-title-0_title"]').should('be.visible').wait(1000)
-        cy.get('[data-testid="test-case-title-0_title"]').invoke('text').then(
-            (titleText) => {
-                expect(titleText).to.include(testCaseTitle)
-
-            })
-    }
-    //Similar to our other action functions for test cases and measures,
-    //this function gives it's user the ability to pass a required text that
-    //indicates one of the available actions that can be done on an element(ie: Edit, Clone, Delete)
-    //**NOTE**: Before this function can be called, the grabElementId(eleTableEntry) function must be called, first.
-    public static qdmTestCaseElementAction(action: string): void {
-        const currentUser = Cypress.env('selectedUser')
-        let elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
-        cy.readFile(elementIdPath).should('exist').then((fileContents) => {
+    cy.get('[data-testid="test-case-title-0_title"]').should('be.visible').wait(1000)
+    cy.get('[data-testid="test-case-title-0_title"]')
+      .invoke('text')
+      .then((titleText) => {
+        expect(titleText).to.include(testCaseTitle)
+      })
+  }
+  //Similar to our other action functions for test cases and measures,
+  //this function gives it's user the ability to pass a required text that
+  //indicates one of the available actions that can be done on an element(ie: Edit, Clone, Delete)
+  //**NOTE**: Before this function can be called, the grabElementId(eleTableEntry) function must be called, first.
+  public static qdmTestCaseElementAction(action: string): void {
+    const currentUser = Cypress.env('selectedUser')
+    let elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
+    cy.readFile(elementIdPath)
+      .should('exist')
+      .then((fileContents) => {
+        cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
+        cy.scrollTo(0, 500)
+        Utilities.waitForElementVisible('[data-testid="action-center-' + fileContents + '"]', 50000)
+        cy.get('[data-testid="action-center-' + fileContents + '"]').should('be.visible')
+        switch (action.valueOf().toString().toLowerCase()) {
+          case 'edit': {
             cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
             cy.scrollTo(0, 500)
+            cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
             Utilities.waitForElementVisible('[data-testid="action-center-' + fileContents + '"]', 50000)
             cy.get('[data-testid="action-center-' + fileContents + '"]').should('be.visible')
-            switch ((action.valueOf()).toString().toLowerCase()) {
-                case "edit": {
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-                    cy.scrollTo(0, 500)
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-                    Utilities.waitForElementVisible('[data-testid="action-center-' + fileContents + '"]', 50000)
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').should('be.visible')
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').click()
-                    cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
-                    Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="edit-element-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    break
-                }
-                case 'clone': {
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-                    cy.scrollTo(0, 500)
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
-                    Utilities.waitForElementVisible('[data-testid="clone-element-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView()
-                    cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="clone-element-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    break
-                }
-                case 'delete': {
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-                    cy.scrollTo(0, 500)
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
-                    Utilities.waitForElementVisible('[data-testid="delete-element-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="delete-element-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="delete-element-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    break
-                }
-                default: { }
-            }
-        })
-
-    }
-
-    public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson?: string, handleElementsTab?: boolean): void {
-        step('Create a Test Case with Title: ' + testCaseTitle + ', Description: ' + testCaseDescription + ', Series: ' + testCaseSeries + (testCaseJson ? ', and JSON: ' + testCaseJson : ''))
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(this.newTestCaseButton).should('be.visible')
-        cy.get(this.newTestCaseButton).should('be.enabled')
-        cy.get(this.newTestCaseButton).click()
-
-        cy.get(this.createTestCaseDialog).should('exist')
-        cy.get(this.createTestCaseDialog).should('be.visible')
-
-        cy.get(this.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
-        Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
-        cy.get(this.createTestCaseGroupInput).should('exist')
-        cy.get(this.createTestCaseGroupInput).should('be.visible')
-        cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
-        cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
-        cy.get(this.createTestCaseDescriptionInput).should('exist')
-        cy.get(this.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(this.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(this.createTestCaseDescriptionInput).focus()
-        cy.get(this.createTestCaseDescriptionInput).type(testCaseDescription)
-
-        this.clickCreateTestCaseButton()
-
-        //Verify created test case Title and Series exists on Test Cases Page
-        this.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
-
-        cy.log('Test Case created successfully')
-
-        if (testCaseJson) {
-
-            //edit test test case
-            this.clickEditforCreatedTestCase()
-
-            if (handleElementsTab) {
-                cy.get(TestCasesPage.jsonTab).click()
-            }
-
-            // modify testcase JSON
-            Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-            Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-            cy.get(TestCasesPage.aceEditor).should('exist')
-            cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput)
-                .should('exist')
-                .click({ force: true })
-                .clear({ force: true })
-                .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
-
-            cy.wait(1500)
-
-            cy.get(this.detailsTab).click()
-
-            //Save edited / updated to test case
-            cy.get(this.editTestCaseSaveButton).click()
-            Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 9500)
-            cy.log('JSON added to test case successfully')
-
-            cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
+            cy.get('[data-testid="action-center-' + fileContents + '"]').click()
+            cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
+            Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
+            cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="edit-element-' + fileContents + '"]', 55000)
+            cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="edit-element-' + fileContents + '"]')
+              .scrollIntoView()
+              .click({ force: true })
+            break
+          }
+          case 'clone': {
+            cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
+            cy.scrollTo(0, 500)
+            cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
+            Utilities.waitForElementVisible('[data-testid="clone-element-' + fileContents + '"]', 55000)
+            cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView()
+            cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="clone-element-' + fileContents + '"]', 55000)
+            cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="clone-element-' + fileContents + '"]')
+              .scrollIntoView()
+              .click({ force: true })
+            break
+          }
+          case 'delete': {
+            cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
+            cy.scrollTo(0, 500)
+            cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
+            Utilities.waitForElementVisible('[data-testid="delete-element-' + fileContents + '"]', 55000)
+            cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="delete-element-' + fileContents + '"]', 55000)
+            cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="delete-element-' + fileContents + '"]')
+              .scrollIntoView()
+              .click({ force: true })
+            break
+          }
+          default: {
+          }
         }
+      })
+  }
+
+  public static compositeTestCaseAddedAction(action: string): void {
+    const currentUser = Cypress.env('selectedUser')
+    const elementIdPath = 'cypress/fixtures/' + currentUser + '/elementId'
+
+    cy.readFile(elementIdPath)
+      .should('exist')
+      .then((fileContents) => {
+        // Click tooltip first
+        cy.get('[data-testid="action-center-tooltip-' + fileContents + '"]')
+          .should('be.visible')
+          .click({ force: true })
+
+        switch (action.toLowerCase()) {
+          case 'edit':
+            cy.get('[data-testid="action-center-' + fileContents + '_Edit"]')
+              .should('be.visible')
+              .click({ force: true })
+            break
+
+          case 'clone':
+          case 'copy':
+            cy.get('[data-testid="action-center-' + fileContents + '_Clone"]')
+              .should('be.visible')
+              .click({ force: true })
+            break
+
+          case 'delete':
+          case 'remove':
+            cy.get('[data-testid="action-center-' + fileContents + '_Remove"]')
+              .should('be.visible')
+              .click({ force: true })
+            break
+
+          default:
+            throw new Error(`Unsupported action: ${action}`)
+        }
+      })
+  }
+
+  public static createTestCase(
+    testCaseTitle: string,
+    testCaseDescription: string,
+    testCaseSeries: string,
+    testCaseJson?: string,
+    handleElementsTab?: boolean,
+  ): void {
+    step(
+      'Create a Test Case with Title: ' +
+        testCaseTitle +
+        ', Description: ' +
+        testCaseDescription +
+        ', Series: ' +
+        testCaseSeries +
+        (testCaseJson ? ', and JSON: ' + testCaseJson : ''),
+    )
+    //Navigate to Test Cases page and add Test Case details
+    cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+    cy.get(EditMeasurePage.testCasesTab).click()
+    cy.get(this.newTestCaseButton).should('be.visible')
+    cy.get(this.newTestCaseButton).should('be.enabled')
+    cy.get(this.newTestCaseButton).click()
+
+    cy.get(this.createTestCaseDialog).should('exist')
+    cy.get(this.createTestCaseDialog).should('be.visible')
+
+    cy.get(this.createTestCaseTitleInput).should('exist')
+    Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
+    Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
+    cy.get(this.createTestCaseGroupInput).should('exist')
+    cy.get(this.createTestCaseGroupInput).should('be.visible')
+    cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+    cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
+    cy.get(this.createTestCaseDescriptionInput).should('exist')
+    cy.get(this.createTestCaseDescriptionInput).should('be.visible')
+    cy.get(this.createTestCaseDescriptionInput).should('be.enabled')
+    cy.get(this.createTestCaseDescriptionInput).focus()
+    cy.get(this.createTestCaseDescriptionInput).type(testCaseDescription)
+
+    this.clickCreateTestCaseButton()
+
+    //Verify created test case Title and Series exists on Test Cases Page
+    this.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+
+    cy.log('Test Case created successfully')
+
+    if (testCaseJson) {
+      //edit test test case
+      this.clickEditforCreatedTestCase()
+
+      if (handleElementsTab) {
+        cy.get(TestCasesPage.jsonTab).click()
+      }
+
+      // modify testcase JSON
+      Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+      Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
+      cy.get(TestCasesPage.aceEditor).should('exist')
+      cy.get(TestCasesPage.aceEditor).should('be.visible')
+      cy.get(TestCasesPage.aceEditorJsonInput)
+        .should('exist')
+        .click({ force: true })
+        .clear({ force: true })
+        .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
+
+      cy.wait(1500)
+
+      cy.get(this.detailsTab).click()
+
+      //Save edited / updated to test case
+      cy.get(this.editTestCaseSaveButton).click()
+      Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 9500)
+      cy.log('JSON added to test case successfully')
+
+      cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+      cy.get(EditMeasurePage.testCasesTab).click()
+    }
+  }
+
+  public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false): void {
+    if (navigateToJsonTab) {
+      cy.get(TestCasesPage.jsonTab).click()
     }
 
-    public static updateTestCase(
-        updatedTestCaseTitle: string,
-        updatedTestCaseDescription: string,
-        updatedTestCaseSeries: string
-    ): void {
-        cy.intercept('PUT', '/api/measures/**/test-cases/**').as('saveTestCase');
+    Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+    Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
+    cy.get(TestCasesPage.aceEditor).should('exist')
+    cy.get(TestCasesPage.aceEditor).should('be.visible')
+    cy.get(TestCasesPage.aceEditorJsonInput)
+      .should('exist')
+      .click({ force: true })
+      .clear({ force: true })
+      .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
+  }
 
-        cy.get(this.detailsTab).click();
+  public static updateTestCase(
+    updatedTestCaseTitle: string,
+    updatedTestCaseDescription: string,
+    updatedTestCaseSeries: string,
+  ): void {
+    cy.intercept('PUT', '/api/measures/**/test-cases/**').as('saveTestCase')
 
-        // Title
-        cy.get(this.testCaseTitle).should('exist').and('be.visible').and('be.enabled');
-        this.clearAndTypeStable(this.testCaseTitle, updatedTestCaseTitle);
+    cy.get(this.detailsTab).click()
 
-        // Description
-        this.clearAndTypeStable(this.testCaseDescriptionTextBox, updatedTestCaseDescription);
+    // Title
+    cy.get(this.testCaseTitle).should('exist').and('be.visible').and('be.enabled')
+    this.clearAndTypeStable(this.testCaseTitle, updatedTestCaseTitle)
 
-        // Series (avoid Enter → click option or blur to commit)
-        Utilities.waitForElementVisible(this.createTestCaseGroupInput, 5000);
+    // Description
+    this.clearAndTypeStable(this.testCaseDescriptionTextBox, updatedTestCaseDescription)
 
-        // Try the autocomplete option-click path (uncomment the freeSolo fallback if needed)
-        this.commitSeriesViaOptionClick(this.createTestCaseGroupInput, updatedTestCaseSeries, {
-            // If options come from API, intercept before typing and pass the alias here:
-            // searchAlias: 'seriesSearch'
-        });
-        // Fallback if your field is freeSolo/plain input:
-        // this.commitSeriesFreeSolo(this.createTestCaseGroupInput, updatedTestCaseSeries);
+    // Series (avoid Enter → click option or blur to commit)
+    Utilities.waitForElementVisible(this.createTestCaseGroupInput, 5000)
 
-        // Save (either becomes enabled, or you might have autosave—in either case we wait for PUT)
-        cy.get(this.editTestCaseSaveButton, { timeout: 20000 })
-            .should('be.visible')
-            .should(($btn) => {
-                const disabled =
-                    $btn.prop('disabled') ||
-                    $btn.attr('aria-disabled') === 'true' ||
-                    $btn.hasClass('Mui-disabled');
-                expect(disabled, 'Save should be enabled').to.eq(false);
-            })
-            .click();
+    // Try the autocomplete option-click path (uncomment the freeSolo fallback if needed)
+    this.commitSeriesViaOptionClick(this.createTestCaseGroupInput, updatedTestCaseSeries, {
+      // If options come from API, intercept before typing and pass the alias here:
+      // searchAlias: 'seriesSearch'
+    })
+    // Fallback if your field is freeSolo/plain input:
+    // this.commitSeriesFreeSolo(this.createTestCaseGroupInput, updatedTestCaseSeries);
 
-        cy.wait('@saveTestCase', { timeout: 60000 })
-            .its('response.statusCode')
-            .should('be.oneOf', [200, 202]);
+    // Save (either becomes enabled, or you might have autosave—in either case we wait for PUT)
+    cy.get(this.editTestCaseSaveButton, { timeout: 20000 })
+      .should('be.visible')
+      .should(($btn) => {
+        const disabled = $btn.prop('disabled') || $btn.attr('aria-disabled') === 'true' || $btn.hasClass('Mui-disabled')
+        expect(disabled, 'Save should be enabled').to.eq(false)
+      })
+      .click()
 
-        cy.get(this.successMsg, { timeout: 60000 }).each((msg) => {
-            expect(msg.text()).to.be.oneOf([
-                'Test case updated successfully!',
-                'Test case updated successfully with errors in JSON',
-                'Test case updated successfully with warnings in JSON',
-                'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
-            ]);
-        });
+    cy.wait('@saveTestCase', { timeout: 60000 }).its('response.statusCode').should('be.oneOf', [200, 202])
 
-        cy.get(EditMeasurePage.testCasesTab).scrollIntoView();
-        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000);
-        cy.get(EditMeasurePage.testCasesTab).click();
+    cy.get(this.successMsg, { timeout: 60000 }).each((msg) => {
+      expect(msg.text()).to.be.oneOf([
+        'Test case updated successfully!',
+        'Test case updated successfully with errors in JSON',
+        'Test case updated successfully with warnings in JSON',
+        'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+      ])
+    })
 
-        this.grabValidateTestCaseTitleAndSeries(updatedTestCaseTitle, updatedTestCaseSeries);
+    cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
+    Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
+    cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.log('Test Case updated successfully');
-    }
+    this.grabValidateTestCaseTitleAndSeries(updatedTestCaseTitle, updatedTestCaseSeries)
 
-    // -----------------------------
-    // PRIVATE STATIC HELPERS
-    // -----------------------------
+    cy.log('Test Case updated successfully')
+  }
 
-    /** Robust clear → assert empty → type → assert value → blur */
-    private static clearAndTypeStable(selector: string, value: string) {
-        cy.get(selector, { timeout: 20000 })
-            .should('be.visible')
-            .should('be.enabled')
-            .focus()
-            .type('{selectAll}{del}')
-            .should('have.value', '')
-            .type(value)
-            .should('have.value', value)
-            .blur();
-    }
+  // -----------------------------
+  // PRIVATE STATIC HELPERS
+  // -----------------------------
 
-    /** Commit to a MUI-like Autocomplete by clicking option (no Enter to avoid bubbling) */
-    private static commitSeriesViaOptionClick(
-        inputWrapperSelector: string,
-        series: string,
-        opts: {
-            listboxSelector?: string;
-            optionSelector?: string;
-            searchAlias?: string | null;
-        } = {}
-    ) {
-        const {
-            listboxSelector = '[role="listbox"], .MuiAutocomplete-listbox',
-            optionSelector = '[role="option"], .MuiAutocomplete-option',
-            searchAlias = null,
-        } = opts;
+  /** Robust clear → assert empty → type → assert value → blur */
+  private static clearAndTypeStable(selector: string, value: string) {
+    cy.get(selector, { timeout: 20000 })
+      .should('be.visible')
+      .should('be.enabled')
+      .focus()
+      .type('{selectAll}{del}')
+      .should('have.value', '')
+      .type(value)
+      .should('have.value', value)
+      .blur()
+  }
 
-        // Many MUI inputs wrap an inner <input>. Try inner input first, fallback to the wrapper.
-        const inputOrInner = `${inputWrapperSelector} input, ${inputWrapperSelector}`;
+  /** Commit to a MUI-like Autocomplete by clicking option (no Enter to avoid bubbling) */
+  private static commitSeriesViaOptionClick(
+    inputWrapperSelector: string,
+    series: string,
+    opts: {
+      listboxSelector?: string
+      optionSelector?: string
+      searchAlias?: string | null
+    } = {},
+  ) {
+    const {
+      listboxSelector = '[role="listbox"], .MuiAutocomplete-listbox',
+      optionSelector = '[role="option"], .MuiAutocomplete-option',
+      searchAlias = null,
+    } = opts
 
-        cy.get(inputOrInner, { timeout: 20000 })
-            .should('be.visible')
-            .should('be.enabled')
-            .focus()
-            .type('{selectAll}{del}')
-            .should('have.value', '')
-            .type(series, { delay: 0 });
+    // Many MUI inputs wrap an inner <input>. Try inner input first, fallback to the wrapper.
+    const inputOrInner = `${inputWrapperSelector} input, ${inputWrapperSelector}`
 
-        if (searchAlias) cy.wait(searchAlias, { timeout: 15000 });
+    cy.get(inputOrInner, { timeout: 20000 })
+      .should('be.visible')
+      .should('be.enabled')
+      .focus()
+      .type('{selectAll}{del}')
+      .should('have.value', '')
+      .type(series, { delay: 0 })
 
-        cy.get(listboxSelector, { timeout: 20000 }).should('be.visible');
-        cy.get(listboxSelector)
-            .find(optionSelector)
-            .should('have.length.greaterThan', 0)
-            .then(($opts) => {
-                const exact = [...$opts].find((el) => el.textContent?.trim() === series);
-                if (exact) {
-                    cy.wrap(exact).click({ force: true });
-                } else {
-                    cy.contains(optionSelector, series, { matchCase: false }).first().click({ force: true });
-                }
-            });
+    if (searchAlias) cy.wait(searchAlias, { timeout: 15000 })
 
-        cy.get(inputOrInner).blur(); // commit
-    }
-
-    /** For freeSolo/plain inputs: type and blur to commit (no Enter used) */
-    private static commitSeriesFreeSolo(inputWrapperSelector: string, series: string) {
-        const inputOrInner = `${inputWrapperSelector} input, ${inputWrapperSelector}`;
-        cy.get(inputOrInner, { timeout: 20000 })
-            .should('be.visible')
-            .should('be.enabled')
-            .focus()
-            .type('{selectAll}{del}')
-            .should('have.value', '')
-            .type(series)
-            .should('have.value', series)
-            .blur(); // commit without Enter
-    }
-
-    public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
-        const currentUser = Cypress.env('selectedUser')
-        let testCasePIdPath = ''
-
-        if (secondTestCase) {
-            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
+    cy.get(listboxSelector, { timeout: 20000 }).should('be.visible')
+    cy.get(listboxSelector)
+      .find(optionSelector)
+      .should('have.length.greaterThan', 0)
+      .then(($opts) => {
+        const exact = [...$opts].find((el) => el.textContent?.trim() === series)
+        if (exact) {
+          cy.wrap(exact).click({ force: true })
         } else {
-            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId'
+          cy.contains(optionSelector, series, { matchCase: false }).first().click({ force: true })
         }
+      })
 
-        let callstackIntercepted = false
+    cy.get(inputOrInner).blur() // commit
+  }
 
-        cy.intercept('PUT', '/api/fhir/cql/callstacks', (req) => {
-            callstackIntercepted = true
-        }).as('callstacks')
+  /** For freeSolo/plain inputs: type and blur to commit (no Enter used) */
+  private static commitSeriesFreeSolo(inputWrapperSelector: string, series: string) {
+    const inputOrInner = `${inputWrapperSelector} input, ${inputWrapperSelector}`
+    cy.get(inputOrInner, { timeout: 20000 })
+      .should('be.visible')
+      .should('be.enabled')
+      .focus()
+      .type('{selectAll}{del}')
+      .should('have.value', '')
+      .type(series)
+      .should('have.value', series)
+      .blur() // commit without Enter
+  }
 
-        cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
-            const buttonSelector = `[data-testid=view-edit-test-case-button-${tcId}]`
+  public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+    const currentUser = Cypress.env('selectedUser')
+    let testCasePIdPath = ''
 
-            cy.get(buttonSelector).scrollIntoView()
-            cy.get(buttonSelector).should('be.enabled')
-            cy.get(buttonSelector).click()
-
-            cy.wait(1000).then(() => {
-                if (callstackIntercepted) {
-                    cy.wait('@callstacks', { timeout: 90000 })
-                } else {
-                    cy.log('No callstack request detected, continuing...')
-                }
-            })
-        })
+    if (secondTestCase) {
+      testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
+    } else {
+      testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCaseId'
     }
 
-    public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
-        let user = ''
-        let currentUser = ''
-        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        let testCasePath = ''
-        let testCasePIdPath = ''
-        if ((altUser === undefined) || (altUser === null)) {
-            altUser = false
-        }
+    let callstackIntercepted = false
 
-        user = OktaLogin.setupUserSession(altUser)
-        cy.log('Current user is: ' + user)
+    cy.intercept('PUT', '/api/fhir/cql/callstacks', (req) => {
+      callstackIntercepted = true
+    }).as('callstacks')
 
-        if (altUser) {
-            currentUser = Cypress.env('selectedAltUser')
+    cy.readFile(testCasePIdPath)
+      .should('exist')
+      .then((tcId) => {
+        const buttonSelector = `[data-testid=view-edit-test-case-button-${tcId}]`
+
+        cy.get(buttonSelector).scrollIntoView()
+        cy.get(buttonSelector).should('be.enabled')
+        cy.get(buttonSelector).click()
+
+        cy.wait(1000).then(() => {
+          if (callstackIntercepted) {
+            cy.wait('@callstacks', { timeout: 90000 })
+          } else {
+            cy.log('No callstack request detected, continuing...')
+          }
+        })
+      })
+  }
+
+  public static CreateTestCaseAPI(
+    title: string,
+    series: string,
+    description: string,
+    jsonValue?: string,
+    secondMeasure?: boolean,
+    twoTestCases?: boolean,
+    altUser?: boolean,
+    measureNumber?: number,
+  ): string {
+    let user = ''
+    let currentUser = ''
+    let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+    let testCasePath = ''
+    let testCasePIdPath = ''
+    if (altUser === undefined || altUser === null) {
+      altUser = false
+    }
+
+    user = OktaLogin.setupUserSession(altUser)
+    cy.log('Current user is: ' + user)
+
+    if (altUser) {
+      currentUser = Cypress.env('selectedAltUser')
+    } else {
+      currentUser = Cypress.env('selectedUser')
+    }
+
+    if (measureNumber === undefined || measureNumber === null) {
+      measureNumber = 0
+      measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+    }
+    if (measureNumber > 0) {
+      measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
+    }
+    if (secondMeasure === true) {
+      measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
+    } else {
+      measurePath = measurePath
+    }
+    if (twoTestCases === true) {
+      testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
+      testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId2'
+    } else {
+      testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
+      testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
+    }
+
+    //Add Test Case to the Measure
+    cy.getCookie('accessToken').then((accessToken) => {
+      cy.readFile(measurePath)
+        .should('exist')
+        .then((id) => {
+          cy.request({
+            url: '/api/measures/' + id + '/test-cases',
+            headers: {
+              authorization: 'Bearer ' + accessToken?.value,
+            },
+            method: 'POST',
+            body: {
+              name: 'TEST',
+              series: series,
+              title: title,
+              description: description,
+              json: jsonValue,
+              hapiOperationOutcome: {
+                code: 201,
+                message: null,
+                outcomeResponse: null,
+              },
+            },
+          }).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            expect(response.body.series).to.eql(series)
+            expect(response.body.title).to.eql(title)
+            expect(response.body.description).to.eql(description)
+            cy.writeFile(testCasePath, response.body.id)
+            cy.writeFile(testCasePIdPath, response.body.patientId)
+          })
+        })
+    })
+    return user
+  }
+
+  public static CreateQDMTestCaseAPI(
+    title: string,
+    series: string,
+    description: string,
+    jsonValue?: string,
+    twoTestCases?: boolean,
+    altUser?: boolean,
+    measureNumber?: number,
+  ): string {
+    let currentUser = Cypress.env('selectedUser')
+    let user = ''
+    let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+    let testCasePath = ''
+
+    if (!altUser || altUser === undefined) {
+      altUser = false
+      currentUser = Cypress.env('selectedUser')
+    } else {
+      altUser = true
+      currentUser = Cypress.env('selectedAltUser')
+    }
+
+    user = OktaLogin.setupUserSession(altUser)
+
+    if (twoTestCases === true) {
+      testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
+    } else {
+      testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
+    }
+
+    if (measureNumber === undefined || measureNumber === null || measureNumber === 0) {
+      measureNumber = 0
+      measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+    }
+
+    if (measureNumber > 0) {
+      measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
+    }
+
+    //Add Test Case to the Measure
+    cy.getCookie('accessToken').then((accessToken) => {
+      cy.readFile(measurePath)
+        .should('exist')
+        .then((id) => {
+          cy.request({
+            url: '/api/measures/' + id + '/test-cases',
+            headers: {
+              authorization: 'Bearer ' + accessToken?.value,
+            },
+            method: 'POST',
+            body: {
+              name: 'TEST',
+              series: series,
+              title: title,
+              description: description,
+              json: jsonValue,
+            },
+          }).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            expect(response.body.series).to.eql(series)
+            //expect(response.body.json).to.eql(jsonValue)
+            expect(response.body.title).to.eql(title)
+            expect(response.body.description).to.eql(description)
+            cy.writeFile(testCasePath, response.body.id)
+          })
+        })
+    })
+    return user
+  }
+
+  public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string): void {
+    cy.get(this.tcSearchIcone).click()
+    cy.get('input.ace_search_field').first().type(ValueToBeAdded)
+
+    cy.get(this.aceEditor)
+      .invoke('text')
+      .then((text) => {
+        expect(text).to.contain(ValueToBeAdded)
+      })
+  }
+
+  public static enterPatientDemographics(
+    dob?: dateTimeISO,
+    livingStatus?: string,
+    race?: string,
+    gender?: string,
+    ethnicity?: string,
+  ): void {
+    if (livingStatus) {
+      Utilities.waitForElementVisible(TestCasesPage.QDMLivingStatus, 50000)
+      cy.get(TestCasesPage.QDMLivingStatus).click()
+      cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
+    }
+
+    if (race) {
+      cy.get(TestCasesPage.QDMRace).click()
+      Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 50000)
+      cy.get('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]').click()
+      cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
+    }
+
+    if (gender) {
+      cy.get(TestCasesPage.QDMGender).click()
+      Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 30000)
+      cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
+    }
+
+    if (ethnicity) {
+      cy.get(TestCasesPage.QDMEthnicity).click()
+
+      const ethnicityOne = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.837"]`
+      const ethnicityTwo = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.877"]`
+
+      cy.get('body', { timeout: 10000 }).then(($body: JQuery<HTMLElement>) => {
+        if ($body.find(ethnicityOne).length > 0) {
+          Utilities.waitForElementVisible(ethnicityOne, 30000)
+          cy.get(ethnicityOne).click()
+        } else if ($body.find(ethnicityTwo).length > 0) {
+          Utilities.waitForElementVisible(ethnicityTwo, 30000)
+          cy.get(ethnicityTwo).click()
         } else {
-            currentUser = Cypress.env('selectedUser')
+          throw new Error('No matching ethnicity element found in the DOM.')
         }
-
-        if ((measureNumber === undefined) || (measureNumber === null)) {
-            measureNumber = 0
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        }
-        if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
-        }
-        if (secondMeasure === true) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
-        }
-        else {
-            measurePath = measurePath
-        }
-        if (twoTestCases === true) {
-            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
-            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId2'
-        }
-        else {
-            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
-            testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
-        }
-
-        //Add Test Case to the Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'POST',
-                    body: {
-                        'name': "TEST",
-                        'series': series,
-                        'title': title,
-                        'description': description,
-                        'json': jsonValue,
-                        'hapiOperationOutcome': {
-                            "code": 201,
-                            "message": null,
-                            "outcomeResponse": null
-                        }
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    expect(response.body.series).to.eql(series)
-                    expect(response.body.title).to.eql(title)
-                    expect(response.body.description).to.eql(description)
-                    cy.writeFile(testCasePath, response.body.id)
-                    cy.writeFile(testCasePIdPath, response.body.patientId)
-                })
-
-            })
-        })
-        return user
+      })
     }
 
-    public static CreateQDMTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
-        let currentUser = Cypress.env('selectedUser')
-        let user = ''
-        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        let testCasePath = ''
-
-        if (!altUser || altUser === undefined) {
-            altUser = false
-            currentUser = Cypress.env('selectedUser')
-        }
-        else {
-            altUser = true
-            currentUser = Cypress.env('selectedAltUser')
-        }
-
-        user = OktaLogin.setupUserSession(altUser)
-
-        if (twoTestCases === true) {
-            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId2'
-        }
-        else {
-            testCasePath = 'cypress/fixtures/' + currentUser + '/testCaseId'
-        }
-
-        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
-            measureNumber = 0
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        }
-
-
-        if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
-        }
-
-        //Add Test Case to the Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'POST',
-                    body: {
-                        'name': "TEST",
-                        'series': series,
-                        'title': title,
-                        'description': description,
-                        'json': jsonValue
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    expect(response.body.series).to.eql(series)
-                    //expect(response.body.json).to.eql(jsonValue)
-                    expect(response.body.title).to.eql(title)
-                    expect(response.body.description).to.eql(description)
-                    cy.writeFile(testCasePath, response.body.id)
-                })
-            })
-        })
-        return user
+    if (dob) {
+      cy.get(TestCasesPage.QDMDob).clear().click()
+      cy.get(TestCasesPage.QDMDob).wait(500).type(dob).click().wait(500)
     }
+  }
 
-    public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string): void {
+  // input the visible "Case #" value to have that test case's checkbox toggled from its current status
+  public static checkTestCase(testCaseNumber: number): void {
+    cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+      .parent('tr')
+      .find('input[type="checkbox"]')
+      .click()
+      .wait(200)
+  }
 
-        cy.get(this.tcSearchIcone).click()
-        cy.get('input.ace_search_field').first().type(ValueToBeAdded)
-
-        cy.get(this.aceEditor).invoke('text').then(
-            (text) => {
-                expect(text).to.contain(ValueToBeAdded)
-            })
-    }
-
-    public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
-
-        if (livingStatus) {
-            Utilities.waitForElementVisible(TestCasesPage.QDMLivingStatus, 50000)
-            cy.get(TestCasesPage.QDMLivingStatus).click()
-            cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
-        }
-
-        if (race) {
-            cy.get(TestCasesPage.QDMRace).click()
-            Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 50000)
-            cy.get('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]').click()
-            cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
-        }
-
-        if (gender) {
-            cy.get(TestCasesPage.QDMGender).click()
-            Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 30000)
-            cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
-        }
-
-        if (ethnicity) {
-            cy.get(TestCasesPage.QDMEthnicity).click()
-
-            const ethnicityOne = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.837"]`
-            const ethnicityTwo = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.877"]`
-
-            cy.get('body', { timeout: 10000 }).then(($body: JQuery<HTMLElement>) => {
-                if ($body.find(ethnicityOne).length > 0) {
-                    Utilities.waitForElementVisible(ethnicityOne, 30000)
-                    cy.get(ethnicityOne).click()
-                } else if ($body.find(ethnicityTwo).length > 0) {
-                    Utilities.waitForElementVisible(ethnicityTwo, 30000)
-                    cy.get(ethnicityTwo).click()
-                } else {
-                    throw new Error('No matching ethnicity element found in the DOM.')
-                }
-            })
-
-        }
-
-        if (dob) {
-            cy.get(TestCasesPage.QDMDob).clear().click()
-            cy.get(TestCasesPage.QDMDob).wait(500).type(dob).click().wait(500)
-        }
-    }
-
-    // input the visible "Case #" value to have that test case's checkbox toggled from its current status
-    public static checkTestCase(testCaseNumber: number): void {
-
-        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
-            .parent('tr')
-            .find('input[type="checkbox"]')
-            .click()
-            .wait(200)
-    }
-
-    /*
+  /*
         actionCenter() assumes that you have already applied the correct
         set of checkmarks for your test scenario
     */
-    public static actionCenter(action: TestCaseAction) {
-        let currentUser = Cypress.env('selectedUser')
-        switch (action) {
+  public static actionCenter(action: TestCaseAction) {
+    let currentUser = Cypress.env('selectedUser')
+    switch (action) {
+      case TestCaseAction.clone:
+        let originalCount: number
 
-            case TestCaseAction.clone:
-                let originalCount: number
+        cy.get('[data-testid="test-case-title-0_caseNumber"]')
+          .invoke('text')
+          .then((maxCaseNumber) => {
+            originalCount = Number(maxCaseNumber)
+          })
 
-                cy.get('[data-testid="test-case-title-0_caseNumber"]')
-                    .invoke('text').then(maxCaseNumber => {
-                        originalCount = Number(maxCaseNumber)
-                    })
+        cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
 
-                cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
-                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
+        cy.get('[data-testid="test-case-title-0_caseNumber"]')
+          .invoke('text')
+          .then((newMaxNumber) => {
+            expect(originalCount + 1).eq(Number(newMaxNumber))
+          })
+        break
 
-                cy.get('[data-testid="test-case-title-0_caseNumber"]')
-                    .invoke('text').then(newMaxNumber => {
-                        expect(originalCount + 1).eq(Number(newMaxNumber))
-                    })
-                break
+      case TestCaseAction.copyToMeasure:
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
 
-            case TestCaseAction.copyToMeasure:
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+          .should('exist')
+          .then((id) => {
+            Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+            cy.get('[data-testid="measure-name-' + id + '_select"]')
+              .find('input')
+              .focus()
+              .check()
+          })
+        cy.get(TestCasesPage.copyToSave).scrollIntoView().click()
+        break
 
-                cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
+      case TestCaseAction.delete:
+        cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
+        break
 
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                    Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-                    cy.get('[data-testid="measure-name-' + id + '_select"]')
-                        .find('input')
-                        .focus()
-                        .check()
-                })
-                cy.get(TestCasesPage.copyToSave).scrollIntoView().click()
-                break
+      case TestCaseAction.exportCollection:
+        cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).should('be.visible').click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 7500)
+        break
 
-            case TestCaseAction.delete:
+      case TestCaseAction.exportTransaction:
+        cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
+        cy.get(TestCasesPage.exportTransactionTypeOption).should('be.visible').click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 7500)
+        break
 
-                cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
-                cy.get(CQLEditorPage.deleteContinueButton).click()
-                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
-                break
+      // ToDo: maybe add exportQrda & exportExcel here, if it seems worthwhile
 
-            case TestCaseAction.exportCollection:
-
-                cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
-                cy.get(TestCasesPage.exportCollectionTypeOption).should('be.visible').click()
-                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 7500)
-                break
-
-            case TestCaseAction.exportTransaction:
-
-                cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
-                cy.get(TestCasesPage.exportTransactionTypeOption).should('be.visible').click()
-                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 7500)
-                break
-
-            // ToDo: maybe add exportQrda & exportExcel here, if it seems worthwhile
-
-            case TestCaseAction.shiftDates:
-                // still coming, tbd
-                break
-        }
+      case TestCaseAction.shiftDates:
+        // still coming, tbd
+        break
     }
+  }
 }
