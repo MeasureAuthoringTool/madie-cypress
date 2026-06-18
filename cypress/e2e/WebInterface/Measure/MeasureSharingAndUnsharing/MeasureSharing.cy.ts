@@ -1,15 +1,15 @@
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { LandingPage } from "../../../../Shared/LandingPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { Header } from "../../../../Shared/Header"
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MadieObject, PermissionActions, Utilities } from '../../../../Shared/Utilities'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { LandingPage } from '../../../../Shared/LandingPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { Header } from '../../../../Shared/Header'
 
 const measureName = 'MeasureSharing' + Date.now()
 const cqlLibraryName = 'MeasureSharingLib' + Date.now()
@@ -24,382 +24,394 @@ let updatedMeasuresPageName = ''
 let harpUserALT = ''
 
 describe('Measure Sharing', () => {
+  let randValue = Math.floor(Math.random() * 1000 + 1)
+  let newMeasureName = measureName + randValue
+  let newCqlLibraryName = cqlLibraryName + randValue
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = measureName + randValue
-    let newCqlLibraryName = cqlLibraryName + randValue
+  beforeEach('Create Measure and Set Access Token', () => {
+    harpUserALT = OktaLogin.getUser(true)
 
-    beforeEach('Create Measure and Set Access Token', () => {
+    CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+    OktaLogin.Login()
+    MeasuresPage.actionCenter('edit')
+    cy.get(EditMeasurePage.cqlEditorTab).click()
+    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+    cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+    //wait for alert / successful save message to appear
+    Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+    cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    OktaLogin.UILogout()
+  })
 
-        harpUserALT = OktaLogin.getUser(true)
+  afterEach('Log out and Clean up', () => {
+    Utilities.deleteMeasure()
+  })
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-    })
+  it('Verify shared Measure is viewable under Shared Measure tab', () => {
+    //Share Measure with ALT User
+    Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
-    afterEach('Log out and Clean up', () => {
+    //Login as ALT User
+    OktaLogin.AltLogin()
+    Utilities.waitForElementVisible(MeasuresPage.sharedMeasures, 50000)
+    cy.get(MeasuresPage.sharedMeasures).click()
+    cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
+  })
 
-        Utilities.deleteMeasure()
-    })
+  it('Verify Measure can be edited by the shared user', () => {
+    //Share Measure with ALT User
+    Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
-    it('Verify shared Measure is viewable under Shared Measure tab', () => {
+    //Login as ALT User
+    OktaLogin.AltLogin()
 
-        //Share Measure with ALT User
-        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+    //Edit Measure details
+    cy.get(LandingPage.sharedMeasures).click()
+    MeasuresPage.actionCenter('edit')
+    cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
+    cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
+    cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+    cy.get(EditMeasurePage.successfulMeasureSaveMsg).should(
+      'contain.text',
+      'Measurement Information Updated Successfully',
+    )
 
-        //Login as ALT User
-        OktaLogin.AltLogin()
-        Utilities.waitForElementVisible(MeasuresPage.sharedMeasures, 50000)
-        cy.get(MeasuresPage.sharedMeasures).click()
-        cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
-    })
+    //Edit Measure CQL
+    cy.get(EditMeasurePage.cqlEditorTab).click()
+    cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
-    it('Verify Measure can be edited by the shared user', () => {
+    Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
 
-        //Share Measure with ALT User
-        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+    //save CQL on measure
+    cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+    cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+    cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+    cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Login as ALT User
-        OktaLogin.AltLogin()
+    //Click on the measure group tab
+    cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+    cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+    cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //Edit Measure details
-        cy.get(LandingPage.sharedMeasures).click()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
-        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
-        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+    cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+    MeasureGroupPage.setMeasureGroupType()
 
-        //Edit Measure CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+    Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+    Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+    cy.get(MeasureGroupPage.reportingTab).click()
 
-        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
+    Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
 
-        //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
-        //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
+    Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        MeasureGroupPage.setMeasureGroupType()
+    //Create New Test case
+    TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+  })
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
-        cy.get(MeasureGroupPage.reportingTab).click()
+  it('Verify Measure owner can share Measure from Action centre share button and shared user is able to edit Measure', () => {
+    let currentUser = Cypress.env('selectedUser')
+    //Login as Regular user and share Measure with ALT user
+    OktaLogin.Login()
 
-        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+    MeasuresPage.actionCenter('share')
+    cy.get(EditMeasurePage.shareOption).click({ force: true })
+    cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
+    cy.get(EditMeasurePage.addBtn).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+    //Verify that the Harp id is added to the table
+    cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
+    cy.get(EditMeasurePage.saveUserBtn).click()
+    cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
 
-        //Create New Test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-    })
+    //Login as ALT User
+    OktaLogin.AltLogin()
+    Utilities.waitForElementVisible(LandingPage.sharedMeasures, 50000)
+    cy.get(LandingPage.sharedMeasures).click()
+    cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
 
-    it('Verify Measure owner can share Measure from Action centre share button and shared user is able to edit Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
-        //Login as Regular user and share Measure with ALT user
-        OktaLogin.Login()
+    //Delete button disabled for shared owner
+    cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+      .should('exist')
+      .then((fileContents) => {
+        Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
+        cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+          .find('[class="px-1"]')
+          .find('[class=" cursor-pointer"]')
+          .scrollIntoView()
+          .click()
+      })
+    cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
 
-        MeasuresPage.actionCenter('share')
-        cy.get(EditMeasurePage.shareOption).click({ force: true })
-        cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
-        cy.get(EditMeasurePage.addBtn).click()
+    //Edit Measure details
+    cy.get(LandingPage.sharedMeasures).click()
+    MeasuresPage.actionCenter('edit')
+    cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
+    cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
+    cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+    cy.get(EditMeasurePage.successfulMeasureSaveMsg).should(
+      'contain.text',
+      'Measurement Information Updated Successfully',
+    )
 
-        //Verify that the Harp id is added to the table
-        cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
+    //Edit Measure CQL
+    cy.get(EditMeasurePage.cqlEditorTab).click()
+    cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
-        cy.get(EditMeasurePage.saveUserBtn).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+    Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
 
-        //Login as ALT User
-        OktaLogin.AltLogin()
-        Utilities.waitForElementVisible(LandingPage.sharedMeasures, 50000)
-        cy.get(LandingPage.sharedMeasures).click()
-        cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
+    //save CQL on measure
+    cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+    cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+    cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+    cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Delete button disabled for shared owner
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-        })
-        cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
+    //Click on the measure group tab
+    cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+    cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+    cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //Edit Measure details
-        cy.get(LandingPage.sharedMeasures).click()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
-        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
-        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+    cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+    MeasureGroupPage.setMeasureGroupType()
 
-        //Edit Measure CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+    Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+    Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+    cy.get(MeasureGroupPage.reportingTab).click()
 
-        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
+    Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
 
-        //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
-        //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
+    Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        MeasureGroupPage.setMeasureGroupType()
+    //Create New Test case
+    TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+  })
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
-        cy.get(MeasureGroupPage.reportingTab).click()
+  it('Action centre share button disabled for Non Measure Owner', () => {
+    let currentUser = Cypress.env('selectedUser')
 
-        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+    //Login
+    OktaLogin.AltLogin()
 
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
-
-        //Create New Test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
-    })
-
-    it('Action centre share button disabled for Non Measure Owner', () => {
-        let currentUser = Cypress.env('selectedUser')
-
-        //Login
-        OktaLogin.AltLogin()
-
-        //Navigate to All Measures tab
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', newMeasureName)
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
-        })
-        cy.get('[data-testid="share-action-btn"]').should('be.visible')
-        cy.get('[data-testid="share-action-btn"]').should('be.disabled')
-    })
+    //Navigate to All Measures tab
+    cy.get(MeasuresPage.allMeasuresTab).click()
+    cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
+    cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', newMeasureName)
+    cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+      .should('exist')
+      .then((fileContents) => {
+        Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
+        cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+          .find('[type="checkbox"]')
+          .scrollIntoView()
+        cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+          .find('[type="checkbox"]')
+          .check()
+      })
+    cy.get('[data-testid="share-action-btn"]').should('be.visible')
+    cy.get('[data-testid="share-action-btn"]').should('be.disabled')
+  })
 })
 
 describe('Measure Sharing - Multiple instances', () => {
+  let randValue = Math.floor(Math.random() * 1000 + 1)
+  let newMeasureName = measureName + randValue
+  let newCqlLibraryName = cqlLibraryName + randValue
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = measureName + randValue
-    let newCqlLibraryName = cqlLibraryName + randValue
+  beforeEach('Create Measure and Set Access Token', () => {
+    harpUserALT = OktaLogin.getUser(true)
 
-    beforeEach('Create Measure and Set Access Token', () => {
+    CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+    MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+    OktaLogin.Login()
+    MeasuresPage.actionCenter('edit')
+    cy.get(EditMeasurePage.cqlEditorTab).click()
+    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+    cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+    //wait for alert / successful save message to appear
+    Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+    cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        harpUserALT = OktaLogin.getUser(true)
+    //Click on the measure group tab
+    cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+    cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+    cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    cy.get(MeasureGroupPage.reportingTab).click()
 
-        //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+    Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
 
-        cy.get(MeasureGroupPage.reportingTab).click()
+    Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
-        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+    Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationDescQiCore, 5000)
 
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+    cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('some imporvement notation description')
 
-        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationDescQiCore, 5000)
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+    cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
+    Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
-        cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('some imporvement notation description')
+    cy.get(Header.measures).click()
+  })
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
+  afterEach('Log out and Clean up', () => {
+    Utilities.deleteMeasure()
+  })
 
-        cy.get(Header.measures).click()
+  it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
+    let currentUser = Cypress.env('selectedUser')
+    let versionNumber = '1.0.000'
+    updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
+    let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
+
+    //Version the Measure
+    MeasuresPage.actionCenter('version')
+    cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+    cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+    cy.get(MeasuresPage.measureVersionContinueBtn).click()
+    cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
+    MeasuresPage.validateVersionNumber(versionNumber)
+    cy.log('Version Created Successfully')
+
+    //Draft the Versioned Measure
+    cy.readFile(filePath)
+      .should('exist')
+      .then((fileContents) => {
+        cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+          .find('[class="px-1"]')
+          .find('[class=" cursor-pointer"]')
+          .scrollIntoView()
+          .click()
+        cy.get('[data-testid="draft-action-btn"]').should('be.visible')
+        cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
+        cy.get('[data-testid="draft-action-btn"]').click()
+      })
+    cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
+    //intercept draft id once measure is drafted
+    cy.readFile(filePath)
+      .should('exist')
+      .then((fileContents) => {
+        cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
+      })
+    cy.get(MeasuresPage.createDraftContinueBtn).click()
+    cy.wait('@draft', { timeout: 60000 }).then((request) => {
+      cy.writeFile(filePath, request?.response?.body.id)
     })
+    cy.get('.toast').should('contain.text', 'New draft created successfully.')
+    cy.log('Draft Created Successfully')
 
-    afterEach('Log out and Clean up', () => {
+    //Share Measure with ALT User
+    Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
-        Utilities.deleteMeasure()
-    })
-
-    it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
-        let currentUser = Cypress.env('selectedUser')
-        let versionNumber = '1.0.000'
-        updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
-        let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        //Version the Measure
-        MeasuresPage.actionCenter('version')
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(versionNumber)
-        cy.log('Version Created Successfully')
-
-        //Draft the Versioned Measure
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-            cy.get('[data-testid="draft-action-btn"]').should('be.visible')
-            cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
-            cy.get('[data-testid="draft-action-btn"]').click()
-        })
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
-        //intercept draft id once measure is drafted
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
-        })
-        cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile(filePath, request?.response?.body.id)
-        })
-        cy.get('.toast').should('contain.text', 'New draft created successfully.')
-        cy.log('Draft Created Successfully')
-
-        //Share Measure with ALT User
-        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
-
-        //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(LandingPage.sharedMeasures).wait(500).click()
-        cy.get('[class="measure-table"]').should('contain', updatedMeasuresPageName)
-
-    })
+    //Login as ALT User
+    OktaLogin.AltLogin()
+    cy.get(LandingPage.sharedMeasures).wait(500).click()
+    cy.get('[class="measure-table"]').should('contain', updatedMeasuresPageName)
+  })
 })
 
 describe('Delete Test Case with Shared user', () => {
+  let randValue = Math.floor(Math.random() * 1000 + 1)
+  let newMeasureName = measureName + randValue
+  let newCqlLibraryName = cqlLibraryName + randValue
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = measureName + randValue
-    let newCqlLibraryName = cqlLibraryName + randValue
+  beforeEach('Create Measure and Set Access Token', () => {
+    harpUserALT = OktaLogin.getUser(true)
 
-    beforeEach('Create Measure and Set Access Token', () => {
+    CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+    TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+  })
 
-        harpUserALT = OktaLogin.getUser(true)
+  afterEach('Log out and Clean up', () => {
+    Utilities.deleteMeasure()
+  })
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-    })
+  it('Verify Test Case can be deleted by the shared user', () => {
+    //Share Measure with ALT User
+    Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
-    afterEach('Log out and Clean up', () => {
+    //Login as Alt User
+    OktaLogin.AltLogin()
+    cy.get(LandingPage.sharedMeasures).click()
+    MeasuresPage.actionCenter('edit')
 
-        Utilities.deleteMeasure()
-    })
+    cy.get(EditMeasurePage.testCasesTab).click()
 
-    it('Verify Test Case can be deleted by the shared user', () => {
+    TestCasesPage.checkTestCase(1)
+    cy.get(TestCasesPage.actionCenterDelete).click()
 
-        //Share Measure with ALT User
-        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+    cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should(
+      'contain.text',
+      'You are choosing to delete the following Test Case(s)!' + testCaseDescription + ' - ' + testCaseTitle,
+    )
+    cy.get(CQLEditorPage.deleteContinueButton).click()
 
-        //Login as Alt User
-        OktaLogin.AltLogin()
-        cy.get(LandingPage.sharedMeasures).click()
+    cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
+  })
+})
+
+describe("Remove user's share access from a measure", () => {
+  beforeEach('Create Measure and Set Access Token', () => {
+    harpUserALT = OktaLogin.getUser(true)
+
+    CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+
+    // initial share to harpUserAlt
+    Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+  })
+
+  afterEach('Log out and Clean up', () => {
+    Utilities.deleteMeasure()
+  })
+
+  it('After removing access, user can no longer edit on the measure', () => {
+    OktaLogin.AltLogin()
+    cy.get(LandingPage.sharedMeasures).click()
+
+    // captures name of measure in 2nd row
+    cy.get('[data-testid*="_measureName"]')
+      .eq(1)
+      .then((secondMeasure) => {
+        let capturedName = secondMeasure.text()
+
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.checkTestCase(1)
-        cy.get(TestCasesPage.actionCenterDelete).click()
+        // add a test case to prove edit access
+        TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS', 'null')
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'You are choosing to delete the following Test Case(s)!'+ testCaseDescription + ' - '+ testCaseTitle)
-        cy.get(CQLEditorPage.deleteContinueButton).click()
+        // Log out ALT user and revoke share as the measure owner
+        OktaLogin.UILogout()
+        OktaLogin.setupUserSession(false)
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
 
-        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
-    })
-})
-
-describe('Remove user\'s share access from a measure', () => {
-
-    beforeEach('Create Measure and Set Access Token', () => {
-
-        harpUserALT = OktaLogin.getUser(true)
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
-
-        // initial share to harpUserAlt
-        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
-    })
-
-    afterEach('Log out and Clean up', () => {
-
-        Utilities.deleteMeasure()
-    })
-
-    it('After removing access, user can no longer edit on the measure', () => {
-
+        // Log back in as ALT user and verify edit access was removed
         OktaLogin.AltLogin()
         cy.get(LandingPage.sharedMeasures).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
 
-        // captures name of measure in 2nd row
-        cy.get('[data-testid*="_measureName"]').eq(1).then(secondMeasure => {
-
-            let capturedName = secondMeasure.text()
-
-            MeasuresPage.actionCenter('edit')
-
-            cy.get(EditMeasurePage.testCasesTab).click()
-
-            // add a test case to prove edit access
-            TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS', 'null')
-
-            // Log out ALT user and revoke share as the measure owner
-            OktaLogin.UILogout()
-            OktaLogin.setupUserSession(false)
-            Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
-
-            // Log back in as ALT user and verify edit access was removed
-            OktaLogin.AltLogin()
-            cy.get(LandingPage.sharedMeasures).click()
-            Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
-
-            // proves that edit access was removed — measure that was 2nd is now 1st
-            MeasuresPage.checkFirstRow( {name: capturedName} )
-        })
-    })
+        // proves that edit access was removed — measure that was 2nd is now 1st
+        MeasuresPage.checkFirstRow({ name: capturedName })
+      })
+  })
 })
