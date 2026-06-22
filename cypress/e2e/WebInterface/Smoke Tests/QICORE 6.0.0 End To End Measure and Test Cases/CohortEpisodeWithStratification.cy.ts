@@ -1,14 +1,14 @@
-import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
-import { Toasts } from "../../../../Shared/Toasts"
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
+import { Toasts } from '../../../../Shared/Toasts'
 
 const measureName = 'CohortEpisodeWithStrat' + Date.now()
 const CqlLibraryName = 'CohortEpisodeWithStrat' + Date.now()
@@ -19,30 +19,30 @@ const testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
 const measureCQL = QiCore6Cql.EpisodeWithStrat
 
 describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () => {
-
     before('Create Measure, Test Case and Login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, 
-            { measureCql: measureCQL, mpStartDate: '2022-01-01', mpEndDate: '2023-01-01' })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: measureCQL,
+            mpStartDate: '2022-01-01',
+            mpEndDate: '2023-01-01',
+        })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Episode w/ Stratification, Pass Result', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         // add stratification data to group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -73,7 +73,10 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.enabled')
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
+        cy.get(Toasts.otherSuccessToast).should(
+            'contain.text',
+            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+        )
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

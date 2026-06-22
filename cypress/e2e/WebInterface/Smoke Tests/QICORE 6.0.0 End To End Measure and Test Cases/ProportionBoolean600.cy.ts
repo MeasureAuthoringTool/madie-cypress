@@ -1,12 +1,12 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
 const path = require('path')
 
@@ -15,22 +15,21 @@ let CqlLibraryName = 'ProportionBoolean600' + Date.now()
 const measureCQL = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 
 describe('Measure Creation and Testing: Proportion Episode Measure', () => {
-
     before('Create Measure, Test Case and Login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6,
-            { measureCql: measureCQL, mpStartDate: '2026-01-01', mpEndDate: '2026-12-31' })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: measureCQL,
+            mpStartDate: '2026-01-01',
+            mpEndDate: '2026-12-31',
+        })
 
         OktaLogin.Login()
     })
 
     after('Logout', () => {
-
         OktaLogin.UILogout()
     })
 
     it('End to End Proportion Episode Measure, Pass Result', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -38,6 +37,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).wait(1000).click()
@@ -78,11 +78,17 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 30000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(
+            path.join('cypress/fixtures', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip'),
+            { action: 'drag-drop', force: true },
+        )
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 30000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should(
+            'contain.text',
+            'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip',
+        )
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()

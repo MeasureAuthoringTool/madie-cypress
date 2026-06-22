@@ -1,14 +1,14 @@
-import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
-import { Toasts } from "../../../../Shared/Toasts"
+import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
+import { Toasts } from '../../../../Shared/Toasts'
 
 const now = Date.now()
 const measureName = 'RatioEncWithMOs' + now
@@ -17,42 +17,45 @@ const testCase: TestCase = {
     title: 'ratioEnc with MOs',
     description: 'testing test cases',
     group: 'IPPass',
-    json: TestCaseJson.fromCMS1017NumPass
+    json: TestCaseJson.fromCMS1017NumPass,
 }
 const opts: CreateMeasureOptions = {
     measureCql: QiCore6Cql.cqlCMS1017, // test measure based on CMS1017FHIR
     mpStartDate: '2026-01-01',
-    mpEndDate: '2026-12-31'
+    mpEndDate: '2026-12-31',
 }
 
 // covers both RatioEpisodeSingleIPNoMO and RatioEpisodeTwoIPsWithMOs
 describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () => {
-
     before('Create Measure and Test Case', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6, opts)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'Encounter')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(
+            false,
+            false,
+            'Initial Population',
+            'Numerator',
+            'Denominator',
+            'Encounter',
+        )
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
-
-        
         Utilities.deleteMeasure(measureName, libraryName)
     })
 
     it('End to End - Numerator Pass Result', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 8500)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -100,7 +103,10 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
+        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should(
+            'contain.text',
+            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+        )
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -120,6 +126,5 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })
