@@ -1,15 +1,15 @@
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Toasts } from "../../../../Shared/Toasts"
-import { Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header"
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { Toasts } from '../../../../Shared/Toasts'
+import { Utilities } from '../../../../Shared/Utilities'
+import { Header } from '../../../../Shared/Header'
 
 const now = Date.now()
 const measureName = 'CohortEncounter600' + now
@@ -18,18 +18,16 @@ const testCase: TestCase = {
     title: 'cohortEnc',
     description: 'testing test cases',
     group: 'IPPass',
-    json: TestCaseJson.fromCMS529IPP
+    json: TestCaseJson.fromCMS529IPP,
 }
 const opts: CreateMeasureOptions = {
     measureCql: QiCore6Cql.cqlCMS529, // test measure based on CMS529FHIR
     mpStartDate: '2026-01-01',
-    mpEndDate: '2026-12-31'
+    mpEndDate: '2026-12-31',
 }
 
 describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
-
     before('Create Measure and Test Case', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6, opts)
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
@@ -41,20 +39,17 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
         cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Clean up', () => {
-
-        
-
         Utilities.deleteMeasure(measureName, libraryName)
     })
 
     it('End to End Cohort Episode Encounter, Pass Result', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()

@@ -1,15 +1,22 @@
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CVGroups, MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../Shared/MeasureGroupPage"
-import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
-import { Toasts } from "../../../../Shared/Toasts"
-import { PopulationType, Stratification } from "@madie/madie-models"
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import {
+    CVGroups,
+    MeasureGroupPage,
+    MeasureGroups,
+    MeasureScoring,
+    MeasureType,
+    PopulationBasis,
+} from '../../../../Shared/MeasureGroupPage'
+import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
+import { Toasts } from '../../../../Shared/Toasts'
+import { PopulationType, Stratification } from '@madie/madie-models'
 import { v4 as uuidv4 } from 'uuid'
 
 /*  this test essentially combines the 
@@ -23,55 +30,56 @@ const testCase: TestCase = {
     title: 'cv patient with strat',
     description: 'testing test cases',
     group: 'IPPass',
-    json: TestCaseJson.fromCMS1272Strata1
+    json: TestCaseJson.fromCMS1272Strata1,
 }
 const opts: CreateMeasureOptions = {
     measureCql: QiCore6Cql.cqlCMS1272, // test measure based on CMS1272
     mpStartDate: '2026-01-01',
-    mpEndDate: '2026-12-31'
+    mpEndDate: '2026-12-31',
 }
-// backwards compatability - declare this empty, then in CreateMeasureGroupAPI 
+// backwards compatability - declare this empty, then in CreateMeasureGroupAPI
 // the CVGroups values will overwrite it all
 const pops: MeasureGroups = {
     initialPopulation: '',
     numerator: '',
-    denominator: ''
+    denominator: '',
 }
 const cvPops: CVGroups = {
     initialPopulation: 'Initial Population',
     measurePopulation: 'Measure Population',
     observation: {
-        aggregateMethod: "Median",
-        definition: "Measure Observation"
-    }
+        aggregateMethod: 'Median',
+        definition: 'Measure Observation',
+    },
 }
 const strats: Array<Stratification> = [
     {
-        id:  uuidv4(),
-        description: "Stratification 1: Pain medication administered via parenteral route",
-        cqlDefinition: "Stratification 1",
-        associations: [
-        PopulationType.INITIAL_POPULATION,
-        PopulationType.MEASURE_POPULATION
-        ]
+        id: uuidv4(),
+        description: 'Stratification 1: Pain medication administered via parenteral route',
+        cqlDefinition: 'Stratification 1',
+        associations: [PopulationType.INITIAL_POPULATION, PopulationType.MEASURE_POPULATION],
     },
     {
-        id:  uuidv4(),
-        description: "Stratification 2: Pain medication administered via non-parenteral route",
-        cqlDefinition: "Stratification 2",
-        associations: [
-        PopulationType.INITIAL_POPULATION,
-        PopulationType.MEASURE_POPULATION
-        ]
-    }
+        id: uuidv4(),
+        description: 'Stratification 2: Pain medication administered via non-parenteral route',
+        cqlDefinition: 'Stratification 2',
+        associations: [PopulationType.INITIAL_POPULATION, PopulationType.MEASURE_POPULATION],
+    },
 ]
 
 describe('Measure Creation and Testing: CV Patient Measure With Stratification', () => {
-
     before('Create Measure, Test Case and Login', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6, opts)
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.ContinousVariable, pops, false, undefined, undefined, cvPops)
+        MeasureGroupPage.CreateMeasureGroupAPI(
+            MeasureType.process,
+            PopulationBasis.encounter,
+            MeasureScoring.ContinousVariable,
+            pops,
+            false,
+            undefined,
+            undefined,
+            cvPops,
+        )
         MeasureGroupPage.addStratificationDataAPI(strats)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
@@ -79,21 +87,20 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
     })
 
     after('Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, libraryName)
     })
 
     it('End to End CV Encounter Measure with MO and Stratification, Pass Result', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{upArrow}{upArrow}{end}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 8500)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -114,7 +121,10 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         cy.get(TestCasesPage.measurePopulationStrata2ExpectedValue).type('0')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should('contain.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
+        cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should(
+            'contain.text',
+            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+        )
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

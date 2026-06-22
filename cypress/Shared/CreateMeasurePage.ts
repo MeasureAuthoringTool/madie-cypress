@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
 import { Measure } from "@madie/madie-models"
 import { OktaLogin } from "./OktaLogin"
+import { step } from "../utils/step"
 const now = require('dayjs')
 
 export enum SupportedModels {
@@ -64,13 +65,15 @@ export class CreateMeasurePage {
     public static clickCreateMeasureButton(): void {
 
         let alias = 'measure' + (Date.now() + 1).toString()
+        const waitAlias: `@${string}` = `@${alias}`
+        step('Submit measure creation')
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/measure').as(alias)
 
         cy.get(this.createMeasureButton).click()
 
         //saving measureID to file to use later
-        cy.wait('@' + alias).then(({ response }) => {
+        cy.wait(waitAlias).then(({ response }) => {
             const currentUser = Cypress.env('selectedUser')
             expect(response?.statusCode).to.eq(201)
             cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
@@ -84,13 +87,15 @@ export class CreateMeasurePage {
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureID) => {
 
             let alias = 'draft' + (Date.now() + 1).toString()
+            const waitAlias: `@${string}` = `@${alias}`
+            step('Click Create Draft button')
             //setup for grabbing the measure create call
             cy.intercept('POST', '/api/measures/' + measureID + '/draft').as(alias)
 
             cy.get(MeasuresPage.createDraftContinueBtn).click()
 
             //saving measureID to file to use later
-            cy.wait('@' + alias).then(({ response }) => {
+            cy.wait(waitAlias).then(({ response }) => {
                 const currentUser = Cypress.env('selectedUser')
                 expect(response?.statusCode).to.eq(201)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
@@ -102,6 +107,8 @@ export class CreateMeasurePage {
 
         const now = require('dayjs')
         let startDate = '', endDate = ''
+
+        step('Create New Measure')
 
         if (!mpStartDate) {
             startDate = now().subtract('1', 'year').format('MM/DD/YYYY')
@@ -117,9 +124,9 @@ export class CreateMeasurePage {
 
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
         cy.get(LandingPage.newMeasureButton).wait(2000).click()
-        cy.get(this.measureNameTextbox).type(measureName)
+        cy.get(this.measureNameTextbox).type(measureName)             
         cy.get(this.measureModelDropdown).click()
-        cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]').contains(model).click()
+        cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]').contains(model).click()       
         cy.get(this.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
         cy.get(this.cqlLibraryNameTextbox).type(CqlLibraryName)
 
@@ -138,6 +145,8 @@ export class CreateMeasurePage {
 
         const now = require('dayjs')
         let startDate = '', endDate = ''
+
+        step('Create New Composite Measure')
 
         if (!mpStartDate) {
             startDate = now().subtract('1', 'year').format('MM/DD/YYYY')

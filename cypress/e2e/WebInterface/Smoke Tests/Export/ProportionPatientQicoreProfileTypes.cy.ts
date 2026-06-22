@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../Shared/Header'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
 const measureName = 'PPQiCorePT' + Date.now()
 const CqlLibraryName = 'PPQiCorePTLib' + Date.now()
@@ -17,13 +17,21 @@ const measureCQL = MeasureCQL.CQL_Populations
 const zipFile = 'eCQMTitle4QICore-v1.0.000-FHIR.zip'
 
 describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
-
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean',
+        )
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -37,13 +45,17 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
     })
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
-
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
         cy.get(EditMeasurePage.measureDetailsTab).should('be.visible')
         cy.get(EditMeasurePage.measureDetailsTab).click()
-       
+
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox)
+            .clear()
+            .type(
+                'Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery',
+            )
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
@@ -72,7 +84,11 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
 
         //select a value for Developers
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist').should('be.visible').click().type("ACO Health Solutions")
+        cy.get(EditMeasurePage.measureDeveloperDrpDwn)
+            .should('exist')
+            .should('be.visible')
+            .click()
+            .type('ACO Health Solutions')
         cy.get(EditMeasurePage.measureDevelopersDrpDwnOption).click()
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
@@ -123,15 +139,13 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
     })
 
     it('Unzip the downloaded file and verify file types', () => {
-
         cy.verifyDownload(zipFile)
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: zipFile, path: downloadsFolder })
-            .then(results => {
-                cy.log('unzipFile Task finished')
-                console.log('unzipFile Task finished')
-            })
+        cy.task('unzipFile', { zipFile: zipFile, path: downloadsFolder }).then((results) => {
+            cy.log('unzipFile Task finished')
+            console.log('unzipFile Task finished')
+        })
 
         //Verify all files exist in exported zip file
         cy.readFile(path.join(downloadsFolder, zipFile))

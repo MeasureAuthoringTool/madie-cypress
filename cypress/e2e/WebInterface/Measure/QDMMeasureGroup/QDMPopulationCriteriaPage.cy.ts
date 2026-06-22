@@ -1,12 +1,12 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { Header } from '../../../../Shared/Header'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
 let measureName = 'QDMPopCriteriaPage' + Date.now()
 let CqlLibraryName = 'QDMPopCriteriaPageLib' + Date.now()
@@ -17,14 +17,12 @@ let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
 describe('Validate QDM Population Criteria section -- scoring and populations', () => {
-
     const measureData: CreateMeasureOptions = {}
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let randValue = Math.floor(Math.random() * 1000 + 1)
     newMeasureName = measureName + randValue + 2
     newCqlLibraryName = CqlLibraryName + randValue + 2
 
     beforeEach('Create Measure and login', () => {
-
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -34,11 +32,15 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
+
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
+        //Work around for the CQL Editor to expand the CQL Editor panel to avoid flakiness in the test
+        // Error happening in console of the cql editor for annotations not sure what error is and cannot reproduce manually
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -47,7 +49,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     })
 
     it('Verify Population Criteria page is properly populated, per Scoring type.', () => {
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -69,7 +70,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     })
 
     it('Confirm that a new Population Criteria can be added', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -81,7 +81,10 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
@@ -91,7 +94,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     })
 
     it('Add UCUM Scoring Unit to Population Criteria', () => {
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -112,7 +114,10 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -138,7 +143,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
     //Reporting tab fields
     it('Add Rate Aggregation and Improvement Notation to Population Criteria', () => {
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -172,7 +176,10 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         //Assert Rate Aggregation and Improvement Notation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should(
+            'contain.text',
+            'Increased score indicates improvement',
+        )
 
         //Add Improvement Notation --'Decreased score indicates improvement'
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Decreased score indicates improvement')
@@ -197,7 +204,10 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         //Assert Rate Aggregation and Improvement Notation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Decreased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should(
+            'contain.text',
+            'Decreased score indicates improvement',
+        )
 
         //Add Improvement Notation --'Other'
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Other')
@@ -205,7 +215,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         Utilities.waitForElementDisabled(MeasureGroupPage.measureReportingSaveBtn, 30000)
 
-        cy.get(MeasureGroupPage.improvementNotationDescText).type('This is the required text when IN is set to \"Other\"')
+        cy.get(MeasureGroupPage.improvementNotationDescText).type(
+            'This is the required text when IN is set to \"Other\"',
+        )
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -227,12 +239,14 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Other')
-        cy.get(MeasureGroupPage.improvementNotationDescText).should('contain.text', 'This is the required text when IN is set to \"Other\"')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should(
+            'contain.text',
+            'This is the required text when IN is set to \"Other\"',
+        )
     })
 
     //Reporting tab fields
     it('Add Improvement Notation (Other) to Population Criteria', () => {
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -269,7 +283,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     })
 
     it('Add Risk Adjustment Variables and Supplemental Data Elements to Population Criteria', () => {
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -278,33 +291,41 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
-        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).find(MeasureGroupPage.riskAdjustmentDescriptionTextBox).type('Initial Population Description')
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox)
+            .find(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .type('Initial Population Description')
 
         //save the Risk Adjustment data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Risk Adjustments have been Saved Successfully',
+        )
 
         //click on the Supplemental Data button / link on the left page to populate fields on the right
         cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
         cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).click()
         cy.get(MeasureGroupPage.QDMSupplementalDataElementsListBox).contains('ipp').click()
-        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox)
+            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .type('Initial Population Description')
 
         //save Supplemental data Elements
         cy.get(MeasureGroupPage.QDMSaveSupplementalDataElements).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
     })
 })
 
 describe('No values in QDM PC fields, when no CQL', () => {
-    
     const measureData: CreateMeasureOptions = {}
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let randValue = Math.floor(Math.random() * 1000 + 1)
     newMeasureName = measureName + randValue + 5
     newCqlLibraryName = CqlLibraryName + randValue + 5
 
     beforeEach('Create Measure and login', () => {
-
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -321,7 +342,6 @@ describe('No values in QDM PC fields, when no CQL', () => {
 
     //no definitions in CQL -- no values for PC fields
     it('Verify that when there is no CQL or no definitions in the CQL, QDM Population Criteria fields have no values', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
@@ -343,14 +363,12 @@ describe('No values in QDM PC fields, when no CQL', () => {
 })
 
 describe('Save Population Criteria on QDM measure', () => {
-    
     const measureData: CreateMeasureOptions = {}
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let randValue = Math.floor(Math.random() * 1000 + 1)
     newMeasureName = measureName + randValue + 1
     newCqlLibraryName = CqlLibraryName + randValue + 1
 
     beforeEach('Create Measure and login', () => {
-
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -364,6 +382,7 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -372,7 +391,6 @@ describe('Save Population Criteria on QDM measure', () => {
     })
 
     it('Confirm that initial and new Population Criteria can have values saved', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -384,7 +402,10 @@ describe('Save Population Criteria on QDM measure', () => {
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'SDE Ethnicity')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(2000).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
@@ -395,19 +416,20 @@ describe('Save Population Criteria on QDM measure', () => {
         Utilities.dropdownSelect(MeasureGroupPage.QDMPopCriteria2IP, 'SDE Ethnicity')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
     })
 })
 
 describe('Validations: Population Criteria: Return Types -- Boolean', () => {
-
     const measureData: CreateMeasureOptions = {}
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let randValue = Math.floor(Math.random() * 1000 + 1)
     newMeasureName = measureName + randValue + 8
     newCqlLibraryName = CqlLibraryName + randValue + 8
 
     beforeEach('Create Measure and login', () => {
-
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -421,6 +443,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -429,8 +452,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     })
 
     it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
-
-         //Click on Measure Group tab
+        //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -448,26 +470,30 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(2000).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 30000)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Bilateral Mastectomy Diagnosis')
 
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
-        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should(
+            'contain.text',
+            'For Patient-based Measures, selected definitions must return a Boolean.',
+        )
     })
 })
 
 describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
-
     const measureData: CreateMeasureOptions = {}
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let randValue = Math.floor(Math.random() * 1000 + 1)
     newMeasureName = measureName + randValue + 6
     newCqlLibraryName = CqlLibraryName + randValue + 6
 
     beforeEach('Create Measure and login', () => {
-
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -481,6 +507,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -489,7 +516,6 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
     })
 
     it('Validations when the Patient Basis is set to "No" and return type should be Non-boolean', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -505,7 +531,10 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
-        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean)')
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should(
+            'contain.text',
+            'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean)',
+        )
 
         //select a value that will return the correct boolean type
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')

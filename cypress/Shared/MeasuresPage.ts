@@ -2,12 +2,14 @@ import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 import { SupportedModels } from "./CreateMeasurePage"
 import { EditMeasurePage } from "./EditMeasurePage"
+import { step } from "../utils/step"
 
 export type MeasureActionOptions = {
     exportForPublish?: boolean,
     versionType?: string,
     updateModelVersion?: boolean,
     altUser?: boolean
+    expectCqlEditorTab?: boolean
 }
 
 export type MeasureRow = {
@@ -169,22 +171,35 @@ export class MeasuresPage {
         })
 
         switch ((action.valueOf()).toString().toLowerCase()) {
-
             case 'edit': {
+                step('Select Edit from Action Center')
+
+                const expectCqlEditor = options?.expectCqlEditorTab ?? true
 
                 cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 60000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView().click({ force: true }).wait(2000)
-                    Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
+                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']',
+                    60000
+                        )
 
-                })
-                break
-            }
+                cy.get('[data-testid=measure-action-' + fileContents + ']')
+                    .should('be.visible')
+                    .should('be.enabled')
+                    .scrollIntoView()
+                    .click({ force: true })
+
+        if (expectCqlEditor) {
+            Utilities.waitForElementVisible(
+                EditMeasurePage.cqlEditorTab,
+                60000
+            )
+        }
+    })
+
+    break
+}
 
             case 'view': {
-
+                step('Select View from Action Center')
                 cy.readFile(filePath).should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 60000)
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
@@ -195,7 +210,7 @@ export class MeasuresPage {
             }
 
             case 'export': {
-
+                step('Select Export from Action Center')
                 const exportForPublish = options?.exportForPublish
                 cy.get('[data-testid="export-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
@@ -220,6 +235,7 @@ export class MeasuresPage {
             }
 
             case 'version': {
+                step('Select Version from Action Center')
                 cy.readFile(filePath).should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 60000)
                 })
@@ -230,7 +246,8 @@ export class MeasuresPage {
 
                 break
             }
-            case 'draft': {
+            case 'draft': { 
+                step('Select Create Draft from Action Center')
                 cy.get('[data-testid="draft-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="draft-action-btn"]').click()
@@ -238,6 +255,7 @@ export class MeasuresPage {
                 break
             }
             case 'delete': {
+                step('Select Delete from Action Center')
                 cy.get('[data-testid="delete-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="delete-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="delete-action-btn"]').click()
@@ -245,7 +263,7 @@ export class MeasuresPage {
                 break
             }
             case 'associatemeasure': {
-
+                step('Select Associate Measure from Action Center') 
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
                 cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 60000)
@@ -265,6 +283,7 @@ export class MeasuresPage {
                 break
             }
             case 'share': {
+                step('Select Share from Action Center')
                 cy.get('[data-testid="share-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="share-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="share-action-btn"]').click()
@@ -273,6 +292,7 @@ export class MeasuresPage {
             }
 
             case 'transfer': {
+                step('Select Transfer from Action Center')
                 cy.get('[data-testid="transfer-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="transfer-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="transfer-action-btn"]').click()
@@ -280,6 +300,7 @@ export class MeasuresPage {
                 break
             }
             case 'viewhr': {
+                step('Select View Human Readable from Action Center')
                 cy.get('[data-testid="view-hr-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="view-hr-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="view-hr-action-btn"]').click()
@@ -287,6 +308,7 @@ export class MeasuresPage {
                 break
             }
             case 'viewhistory': {
+                step('Select View History from Action Center')
                 cy.get('[data-testid="history-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="history-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="history-action-btn"]').click()

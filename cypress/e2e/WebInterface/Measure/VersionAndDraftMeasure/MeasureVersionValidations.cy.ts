@@ -1,15 +1,15 @@
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
-import { TestCaseAction, TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Toasts } from "../../../../Shared/Toasts"
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../Shared/Header'
+import { TestCaseAction, TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Toasts } from '../../../../Shared/Toasts'
 
 const measureCQL = MeasureCQL.SBTEST_CQL
 const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
@@ -20,9 +20,12 @@ const testCaseDescription = 'Description' + Date.now()
 const testCaseSeries = 'SBTestSeries'
 
 function generateMeasureCQLWithErrors(libraryName: string): string {
-    return 'library ' + libraryName + ' version \'0.0.000\'\n' +
-        'using QICore version \'4.1.1\'\n' +
-        'include FHIRHelpers version \'4.1.000\' \n' +
+    return (
+        'library ' +
+        libraryName +
+        " version '0.0.000'\n" +
+        "using QICore version '4.1.1'\n" +
+        "include FHIRHelpers version '4.1.000' \n" +
         'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\' \n' +
         'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
         'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
@@ -34,15 +37,14 @@ function generateMeasureCQLWithErrors(libraryName: string): string {
         'valueset "Pap Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
         'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
         'valueset "HPV Test": \'\')'
+    )
 }
 
 describe('Measure Versioning validations', () => {
-
     let newCqlLibraryName = ''
 
     beforeEach('Create Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let randValue = Math.floor(Math.random() * 2000 + 3)
         let newMeasureName = 'VersionValidationsA' + Date.now() + randValue
         newCqlLibraryName = 'VersionValidationsLibA' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
@@ -50,13 +52,11 @@ describe('Measure Versioning validations', () => {
     })
 
     afterEach('Logout and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('User can not version Measure if there is no CQL', () => {
-
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -67,12 +67,13 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get('.toast').should('contain.text', 'Requested measure cannot be versioned')
-        cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
-
+        cy.get(MeasuresPage.measureVersionHelperText).should(
+            'contain.text',
+            'Please include valid CQL in the CQL editor to version before versioning this measure',
+        )
     })
 
     it('User can not Version if the Measure CQL has errors', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
@@ -83,6 +84,7 @@ describe('Measure Versioning validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Navigate to Measures Page
         cy.get(Header.measures).click()
@@ -98,19 +100,19 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get('.toast').should('contain.text', 'Requested measure cannot be versioned')
-        cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
-
+        cy.get(MeasuresPage.measureVersionHelperText).should(
+            'contain.text',
+            'Please include valid CQL in the CQL editor to version before versioning this measure',
+        )
     })
 })
 
 describe('Measure Versioning when the measure has test case with errors', () => {
-
     let newMeasureName = ''
     let newCqlLibraryName = ''
 
     beforeEach('Create Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let randValue = Math.floor(Math.random() * 2000 + 3)
         newMeasureName = 'VersionValidationsB' + Date.now() + randValue
         newCqlLibraryName = 'VersionValidationsLibB' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
@@ -122,10 +124,10 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
@@ -154,16 +156,28 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         Utilities.waitForElementVisible(TestCasesPage.discardChangesConfirmationBody, 20000)
 
-        cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'You have test cases that are invalid.')
-        cy.get(TestCasesPage.discardChangesConfirmationBody).should('not.contain.text', 'Test cases cannot be edited after being versioned')
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should(
+            'contain.text',
+            'You have test cases that are invalid.',
+        )
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should(
+            'not.contain.text',
+            'Test cases cannot be edited after being versioned',
+        )
 
         cy.get(TestCasesPage.versionMeasurewithTCErrorsCancel).click()
 
         Utilities.waitForElementToNotExist(TestCasesPage.discardChangesConfirmationBody, 20000)
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-        })
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[class="px-1"]')
+                    .find('[class=" cursor-pointer"]')
+                    .scrollIntoView()
+                    .click()
+            })
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -186,13 +200,11 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 })
 
 describe('Create Test case for Qi Core Versioned Measure', () => {
-
     let newMeasureName = ''
     let newCqlLibraryName = ''
 
     beforeEach('Create Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let randValue = Math.floor(Math.random() * 2000 + 3)
         newMeasureName = 'VersionValidationsC' + Date.now() + randValue
         newCqlLibraryName = 'VersionValidationsLibC' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
@@ -203,16 +215,15 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Measure owner able to Add, Clone, and Import Test cases to Qi Core Versioned Measure', () => {
-
         //Version the Measure
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
@@ -220,7 +231,10 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(Toasts.successToast, { timeout: 45000 }).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.successToast, { timeout: 45000 }).should(
+            'contain.text',
+            'New version of measure is Successfully created',
+        )
         cy.log('Version Created Successfully')
 
         //Add Test case
@@ -238,13 +252,11 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
 })
 
 describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
-
     let newMeasureName = ''
     let newCqlLibraryName = ''
 
     beforeEach('Create Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let randValue = Math.floor(Math.random() * 2000 + 3)
         newMeasureName = 'VersionValidationsD' + Date.now() + randValue
         newCqlLibraryName = 'VersionValidationsLibD' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
@@ -256,6 +268,7 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Version the Measure
         cy.get(Header.measures).click()
@@ -263,19 +276,20 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000').wait(1000)
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(Toasts.successToast, { timeout: 45000 }).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.successToast, { timeout: 45000 }).should(
+            'contain.text',
+            'New version of measure is Successfully created',
+        )
 
         MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout and Clean up', () => {
-
-        
         Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Measure owner able to Edit Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
-
         //Edit Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -295,7 +309,6 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
     })
 
     it('Measure owner unable to Delete Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
-
         //Edit Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -308,7 +321,6 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
     })
 
     it('Measure owner able to Delete Test case on a Qi Core Versioned Measure, that was created after Versioning', () => {
-
         // //Add Test case
         TestCasesPage.createTestCase('SecondTCTitle', 'SecondTCDescription', 'SecondTCSeries')
 
@@ -320,10 +332,8 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
 })
 
 describe('Non Measure owner unable to create Version', () => {
-
     before('Create Measure with regular user and Login as Alt user', () => {
-
-        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let randValue = Math.floor(Math.random() * 2000 + 3)
         let newMeasureName = 'VersionValidationsE' + Date.now() + randValue
         let newCqlLibraryName = 'VersionValidationsLibE' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
@@ -331,7 +341,6 @@ describe('Non Measure owner unable to create Version', () => {
     })
 
     after('Logout and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
@@ -344,19 +353,32 @@ describe('Non Measure owner unable to create Version', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 30000)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 30000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
+                Utilities.waitForElementVisible(
+                    '[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]',
+                    30000,
+                )
+                Utilities.waitForElementVisible(
+                    '[data-testid="measure-name-' +
+                        fileContents +
+                        '_select"] > [class="px-1"] > [class=" cursor-pointer"]',
+                    30000,
+                )
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[type="checkbox"]')
+                    .scrollIntoView()
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[type="checkbox"]')
+                    .check()
+                cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+                cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
 
-            //Verify version button is not visible
-            cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-        })
-
+                //Verify version button is not visible
+                cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
+                cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            })
     })
 })

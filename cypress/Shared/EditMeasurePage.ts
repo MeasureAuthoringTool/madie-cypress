@@ -1,9 +1,8 @@
-import { MeasureActionOptions, MeasuresPage } from "./MeasuresPage"
-import { Utilities } from "./Utilities"
-import { TestCasesPage } from "./TestCasesPage"
+import { MeasureActionOptions, MeasuresPage } from './MeasuresPage'
+import { Utilities } from './Utilities'
+import { TestCasesPage } from './TestCasesPage'
 
 export enum EditMeasureActions {
-
     export = 'export',
     delete = 'delete',
     version = 'version',
@@ -11,13 +10,13 @@ export enum EditMeasureActions {
     viewHR = 'viewHR',
     share = 'share',
     transfer = 'transfer',
-    viewHistory = 'viewHistory'
+    viewHistory = 'viewHistory',
 }
 
 export class EditMeasurePage {
-
     //dirty modal
-    public static readonly dirtCheckModal = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
+    public static readonly dirtCheckModal =
+        '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
 
     //Edit Measure tab menu
     public static readonly readOnlyMPStartDt = '[id="measurement-period-start"]'
@@ -43,9 +42,12 @@ export class EditMeasurePage {
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
-    public static readonly sureDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3nccws react-draggable"]'
-    public static readonly sureDialogCancelBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-cancel-button"]'
-    public static readonly sureDialogContinueBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-continue-button"]'
+    public static readonly sureDialog =
+        '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3nccws react-draggable"]'
+    public static readonly sureDialogCancelBtn =
+        '[data-testid="associate-cms-identifier-confirmation-dialog-cancel-button"]'
+    public static readonly sureDialogContinueBtn =
+        '[data-testid="associate-cms-identifier-confirmation-dialog-continue-button"]'
     public static readonly associateCmsAssociateBtn = '[data-testid="associate-cms-id-button"]'
     public static readonly associateCopyMetaData = '[data-testid="copy-cms-id-checkbox"]'
 
@@ -78,7 +80,8 @@ export class EditMeasurePage {
     public static readonly leftPanelRationale = '[data-testid="leftPanelMeasureRationale"]'
     public static readonly leftPanelStewardDevelopers = '[data-testid="leftPanelMeasureSteward"]'
     public static readonly leftPanelGuidance = '[data-testid="leftPanelMeasureGuidance"]'
-    public static readonly leftPanelMClinicalGuidanceRecommendation = '[data-testid="leftPanelMeasureClinicalRecommendation"]'
+    public static readonly leftPanelMClinicalGuidanceRecommendation =
+        '[data-testid="leftPanelMeasureClinicalRecommendation"]'
     public static readonly leftPanelModelAndMeasurementPeriod = '[data-testid="leftPanelModelAndMeasurementPeriod"]'
     public static readonly leftPanelReference = '[data-testid="leftPanelMeasureReferences"]'
     public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinition"]'
@@ -135,7 +138,8 @@ export class EditMeasurePage {
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="transmission-format-rich-text-editor"]'
-    public static readonly transmissionFormatContentField = '[data-testid="transmissionFormat-rich-text-editor-content"]'
+    public static readonly transmissionFormatContentField =
+        '[data-testid="transmissionFormat-rich-text-editor-content"]'
     public static readonly readOnlyTFDesc = '#transmissionFormat'
 
     //Measure CQL Page
@@ -149,6 +153,8 @@ export class EditMeasurePage {
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
     //discard changes
     public static readonly cqlEditorDiscardButton = '[data-testid="reset-cql-btn"]'
+    //expand / collapse cql editor panel
+    public static readonly cqlEditorExpandCollapseBtn = '[data-testid="expanded-button"]'
 
     //Delete Measure
     public static readonly deleteMeasureConfirmationMsg = '.message'
@@ -227,17 +233,16 @@ export class EditMeasurePage {
     public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidance (Usage)Success"]'
 
     //Clinical Guidance / Recommendation Page
-    public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measure-clinical-recommendation-statement-save"]'
-    public static readonly measureClinicalRecommendationSuccessMessage = '[data-testid="measureClinical Recommendation StatementSuccess"]'
+    public static readonly measureClinicalRecommendationSaveButton =
+        '[data-testid="measure-clinical-recommendation-statement-save"]'
+    public static readonly measureClinicalRecommendationSuccessMessage =
+        '[data-testid="measureClinical Recommendation StatementSuccess"]'
 
     public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
-
         cy.get(this.editMeasureButtonActionBtn).click()
 
         switch (action) {
-
             case EditMeasureActions.export: {
-
                 const exportForPublish = options?.exportForPublish
 
                 cy.get(this.editMeasureExportActionBtn).should('be.visible')
@@ -261,7 +266,6 @@ export class EditMeasurePage {
             }
 
             case EditMeasureActions.version: {
-
                 cy.get(this.editMeasureVersionActionBtn).should('be.visible')
                 cy.get(this.editMeasureVersionActionBtn).should('be.enabled')
                 cy.get(this.editMeasureVersionActionBtn).click()
@@ -274,9 +278,11 @@ export class EditMeasurePage {
                 // please leave this in place. it needs a short pause here for the modal to present new fields
                 cy.wait(1000)
 
-                cy.get('#new-version').invoke('val').then(value => {
-                    cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value!.toString())
-                })
+                cy.get('#new-version')
+                    .invoke('val')
+                    .then((value) => {
+                        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value!.toString())
+                    })
 
                 cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
@@ -284,7 +290,6 @@ export class EditMeasurePage {
                 break
             }
             case EditMeasureActions.draft: {
-
                 cy.get(this.editMeasureDraftActionBtn).should('be.visible')
                 cy.get(this.editMeasureDraftActionBtn).should('be.enabled')
                 cy.get(this.editMeasureDraftActionBtn).click()
@@ -297,7 +302,6 @@ export class EditMeasurePage {
                 break
             }
             case EditMeasureActions.delete: {
-
                 cy.get(this.editMeasureDeleteActionBtn).should('be.visible')
                 cy.get(this.editMeasureDeleteActionBtn).should('be.enabled')
                 cy.get(this.editMeasureDeleteActionBtn).click()
@@ -308,7 +312,6 @@ export class EditMeasurePage {
                 break
             }
             case EditMeasureActions.viewHR: {
-
                 cy.get(this.viewHRActionBtn).should('be.visible')
                 cy.get(this.viewHRActionBtn).should('be.enabled')
                 cy.get(this.viewHRActionBtn).click()
@@ -340,12 +343,12 @@ export class EditMeasurePage {
                 break
             }
 
-            default: { }
+            default: {
+            }
         }
     }
 
     public static addMeasureDefinition(term: string, definitionText: string) {
-
         cy.get(this.createDefinitionBtn).click()
 
         cy.get(this.definitionTermInput).clear().type(term)
@@ -356,9 +359,8 @@ export class EditMeasurePage {
 
         cy.contains('td', term).should('be.visible')
     }
-    
-    public static addMeasureDefinitionNonQDM(term: string, definitionText: string) {
 
+    public static addMeasureDefinitionNonQDM(term: string, definitionText: string) {
         cy.get(this.createDefinitionBtn).click()
 
         cy.get(this.definitionTermInput).clear().type(term)
@@ -369,5 +371,4 @@ export class EditMeasurePage {
 
         cy.contains('td', term).should('be.visible')
     }
-
 }
