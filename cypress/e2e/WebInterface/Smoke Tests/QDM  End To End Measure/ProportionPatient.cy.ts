@@ -1,13 +1,13 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../Shared/QDMElements"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../Shared/QDMElements'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
 
 const now = Date.now()
 const measureName = 'ProportionPatient' + now
@@ -16,13 +16,14 @@ const firstTestCaseTitle = 'DENEXStrat1Fail 2RUnilateralMxProc'
 const testCaseDescription = 'DENOMFail' + now
 const testCaseSeries = 'SBTestSeries'
 const secondTestCaseTitle = 'DENEXStrat2Pass RLMxDxOnsetsEndOfMP'
-const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n\n' +
-    'using QDM version \'5.6\'\n\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
-    'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
-    'include HospiceQDM version \'1.0.000\' called Hospice\n' +
-    'include PalliativeCareQDM version \'4.0.000\' called PalliativeCare\n' +
-    'include AdvancedIllnessandFrailtyQDM version \'1.0.000\' called AIFrailLTCF\n\n' +
+const measureCQL =
+    "library ICFQDMTEST000001 version '0.0.000'\n\n" +
+    "using QDM version '5.6'\n\n" +
+    "include MATGlobalCommonFunctionsQDM version '1.0.000' called Global\n" +
+    "include AdultOutpatientEncountersQDM version '1.0.000' called AdultOutpatientEncounters\n" +
+    "include HospiceQDM version '1.0.000' called Hospice\n" +
+    "include PalliativeCareQDM version '4.0.000' called PalliativeCare\n" +
+    "include AdvancedIllnessandFrailtyQDM version '1.0.000' called AIFrailLTCF\n\n" +
     'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\'\n' +
     'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\'\n\n' +
     'valueset "Bilateral Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1005\'\n' +
@@ -113,11 +114,16 @@ const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 
 describe('Measure Creation: Proportion Patient Based', () => {
-
     before('Create Measure', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2012-01-01', '2012-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2012-01-01',
+            '2012-12-31',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
 
@@ -125,20 +131,14 @@ describe('Measure Creation: Proportion Patient Based', () => {
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Proportion Patient Based', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true })
 
         //Group Creation
         //Click on Measure Group tab
@@ -161,23 +161,27 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully',
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusions")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.',
+        )
 
         //Add Supplemental Data Elements
         MeasureGroupPage.includeSdeData()
@@ -188,7 +192,13 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('12/31/1966 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '12/31/1966 12:00 AM',
+            'Living',
+            'AMERICAN INDIAN OR ALASKA NATIVE',
+            'Female',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Encounter:Performed: Annual Wellness Visit
         //add Element
@@ -234,7 +244,13 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('12/31/1946 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '12/31/1946 12:00 AM',
+            'Living',
+            'AMERICAN INDIAN OR ALASKA NATIVE',
+            'Female',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Encounter:Performed: Preventive Care Services - Established Office Visit, 18 and Up
         //add Element

@@ -1,13 +1,13 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../Shared/QDMElements"
-import { umlsLoginForm } from "../../../../Shared/umlsLoginForm"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../Shared/QDMElements'
+import { umlsLoginForm } from '../../../../Shared/umlsLoginForm'
 
 const now = Date.now()
 const measureName = 'CVWithMOAndStratification' + now
@@ -16,11 +16,12 @@ const firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
 const testCaseDescription = 'IPPStrat1Pass' + now
 const testCaseSeries = 'SBTestSeries'
 const secondTestCaseTitle = 'Order50AndPriorityAssessment180'
-const measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPatients version \'11.1.000\'\n' +
+const measureCQL =
+    "library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPatients version '11.1.000'\n" +
     '\n' +
-    'using QDM version \'5.6\'\n' +
+    "using QDM version '5.6'\n" +
     '\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
+    "include MATGlobalCommonFunctionsQDM version '1.0.000' called Global\n" +
     '\n' +
     'valueset "Admit Inpatient": \'urn:oid:2.16.840.1.113762.1.4.1111.164\' \n' +
     'valueset "Decision to Admit to Hospital Inpatient": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.295\' \n' +
@@ -137,11 +138,16 @@ const measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedP
     '  )'
 
 describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
-
     before('Create Measure', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2025-01-01',
+            '2025-12-31',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
 
@@ -149,20 +155,15 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true })
 
         //Group Creation
 
@@ -189,8 +190,10 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully',
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
@@ -213,8 +216,10 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.',
+        )
 
         //Add Supplemental Data Elements
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -226,7 +231,10 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -234,7 +242,13 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '06/15/1935 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get(TestCasesPage.EncounterElementTab).click()
@@ -321,7 +335,13 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('11/12/1995 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '11/12/1995 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get(TestCasesPage.EncounterElementTab).click()
