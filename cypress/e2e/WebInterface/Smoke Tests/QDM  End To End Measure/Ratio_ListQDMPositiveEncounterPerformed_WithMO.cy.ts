@@ -1,13 +1,13 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../Shared/QDMElements"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../Shared/QDMElements'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
 const now = Date.now()
 const measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + now
@@ -19,10 +19,16 @@ const secondTestCaseTitle = '2EncBothGlucose1000inAndoutsideOfTimeframe'
 const measureCQL = MeasureCQL.QDMRatio_ListPositiveEncounterPerformed_withMO
 
 describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
-
     before('Create Measure', () => {
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2023-01-01', '2023-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2023-01-01',
+            '2023-12-31',
+        )
 
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
@@ -31,20 +37,19 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     })
 
     after('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Ratio ListQDMPositiveEncounterPerformed with MO', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Group Creation
         //Click on Measure Group tab
@@ -70,14 +75,16 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully',
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -99,8 +106,10 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.',
+        )
 
         //Add Supplemental Data Elements
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -112,7 +121,10 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -120,7 +132,13 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Condition: Diagnosis: Diabetes
         //add Element
@@ -205,7 +223,13 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Condition: Diagnosis: Diabetes
         //add Element

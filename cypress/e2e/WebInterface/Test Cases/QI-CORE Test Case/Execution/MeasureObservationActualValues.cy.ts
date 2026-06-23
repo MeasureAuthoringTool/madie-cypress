@@ -1,12 +1,12 @@
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 let measureName = 'MOActualValues' + now
@@ -15,9 +15,10 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeSingleIPNoMO_IPP_PASS
-let measureCQL = 'library Library4969 version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+let measureCQL =
+    "library Library4969 version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -43,22 +44,18 @@ let measureCQL = 'library Library4969 version \'0.0.000\'\n' +
     '  duration in hours of e.period'
 
 describe('Non Boolean Measure Observation Actual values', () => {
-
     beforeEach('Create Measure, Test Case and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Verify Actual values for Non Boolean CV Measure', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -66,6 +63,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{movetoEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -92,7 +90,10 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -114,7 +115,6 @@ describe('Non Boolean Measure Observation Actual values', () => {
     })
 
     it('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -166,7 +166,10 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -191,22 +194,18 @@ describe('Non Boolean Measure Observation Actual values', () => {
 })
 
 describe('Boolean Measure Observation Actual values', () => {
-
     beforeEach('Create Measure, Test Case and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Verify Actual values for Boolean CV Measure', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -234,7 +233,10 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -256,7 +258,6 @@ describe('Boolean Measure Observation Actual values', () => {
     })
 
     it('Verify Actual values for Boolean Ratio Measure with MO', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -302,7 +303,10 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()

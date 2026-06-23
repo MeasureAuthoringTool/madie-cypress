@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../Shared/QDMElements"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../Shared/QDMElements'
 
 const now = Date.now()
 const measureName = 'MeasureWithNegationRationale' + now
@@ -14,9 +14,10 @@ const CqlLibraryName = 'MeasureWithNegationRationale' + now
 const testCaseTitle = 'BCGNotGivenNormalizeIntervalRelevantDateTimeForCaStaging'
 const testCaseDescription = 'DENEXCEPPass' + now
 const testCaseSeries = 'SBTestSeries'
-const measureCQL = 'library NewCMS646 version \'0.0.000\'\n\n' +
-    'using QDM version \'5.6\'\n\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n\n' +
+const measureCQL =
+    "library NewCMS646 version '0.0.000'\n\n" +
+    "using QDM version '5.6'\n\n" +
+    "include MATGlobalCommonFunctionsQDM version '1.0.000' called Global\n\n" +
     'codesystem "ICD10CM": \'urn:oid:2.16.840.1.113883.6.90\'\n' +
     'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\'\n' +
     'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\'\n\n' +
@@ -136,24 +137,27 @@ const measureCQL = 'library NewCMS646 version \'0.0.000\'\n\n' +
     '  )'
 
 describe('Measure with Negation Rationale', () => {
-
     before('Create Measure', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2012-01-01', '2012-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2012-01-01',
+            '2012-12-31',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Measure with Negation Rationale', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -161,6 +165,7 @@ describe('Measure with Negation Rationale', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Group Creation
 
@@ -187,20 +192,27 @@ describe('Measure with Negation Rationale', () => {
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully',
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'BCG Not Available Within 6 Months After Bladder Cancer Staging')
+        Utilities.dropdownSelect(
+            MeasureGroupPage.initialPopulationSelect,
+            'BCG Not Available Within 6 Months After Bladder Cancer Staging',
+        )
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.',
+        )
 
         //Add Supplemental Data Elements
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -213,7 +225,10 @@ describe('Measure with Negation Rationale', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
 
         //Add Elements to the Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -221,7 +236,13 @@ describe('Measure with Negation Rationale', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('04/10/1942 12:00 AM', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '04/10/1942 12:00 AM',
+            'Living',
+            'White',
+            'Female',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Condition, Diagnosis: Bladder Cancer for Urology Care
         QDMElements.addElement('condition', 'Diagnosis: Bladder Cancer for Urology Care')

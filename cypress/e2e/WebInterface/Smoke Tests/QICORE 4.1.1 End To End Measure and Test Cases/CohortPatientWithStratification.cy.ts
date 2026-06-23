@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let measureName = 'CohortPatientWithStrat' + Date.now()
 let CqlLibraryName = 'CohortPatientWithStrat' + Date.now()
@@ -15,9 +15,10 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
-let measureCQL = 'library CohortPatientWithStrartification version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+let measureCQL =
+    "library CohortPatientWithStrartification version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -30,37 +31,41 @@ let measureCQL = 'library CohortPatientWithStrartification version \'0.0.000\'\n
     'define "Initial Population":\n' +
     '   true\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '(Enc E where E.status = \'finished\') is not null\n\n' +
+    "(Enc E where E.status = 'finished') is not null\n\n" +
     'define "Stratification 1":\n' +
     'true'
 
 describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () => {
-
     before('Create Measure, Test Case and Login', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2022-01-01', '2023-01-01')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            0,
+            false,
+            '2022-01-01',
+            '2023-01-01',
+        )
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Patient w/ Stratification, Pass Result', () => {
-
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         // add stratification data to group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -98,8 +103,10 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should(
+            'contain.text',
+            'Test case updated successfully ' + 'with warnings in JSON',
+        )
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

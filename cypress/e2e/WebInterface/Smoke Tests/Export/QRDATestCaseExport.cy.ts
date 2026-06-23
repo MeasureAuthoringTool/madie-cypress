@@ -1,15 +1,15 @@
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let measureName = 'QDMTestMeasure' + Date.now() + randValue
 let CqlLibraryName = 'QDMCQLLibrary' + Date.now() + randValue
 let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
@@ -29,13 +29,11 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 const measureData: CreateMeasureOptions = {}
 
 describe('QDM Test Cases : Export Test Case', () => {
-
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
-
         let newTimestamp = Date.now()
-        let newRandValue = (Math.floor((Math.random() * 1000) + 1))
+        let newRandValue = Math.floor(Math.random() * 1000 + 1)
         measureName = 'QDMTestMeasure' + newTimestamp + newRandValue
         CqlLibraryName = 'QDMCQLLibrary' + newTimestamp + newRandValue
 
@@ -54,13 +52,11 @@ describe('QDM Test Cases : Export Test Case', () => {
     })
 
     afterEach('Log out and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Successful QRDA Export for QDM Test Cases', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -69,8 +65,11 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
-            'but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should(
+            'contain.text',
+            'CQL updated successfully ' + 'but the following issues were found',
+        )
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -85,24 +84,32 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), { timeout: 60000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), { timeout: 60000 }).should(
+            'exist',
+        )
         cy.log('Successfully verified zip file export')
 
         // unzipping the QRDA Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip', path: downloadsFolder }).then(results => {
-            cy.log('unzipFile Task finished')
-        })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip', path: downloadsFolder }).then(
+            (results) => {
+                cy.log('unzipFile Task finished')
+            },
+        )
 
         //read contents of the html file and compare that with the expected file contents (minus specific measure name)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html')).should('exist').then((exportedFile) => {
-            exported = exportedFile.toString(); //'exportedFile'
-            cy.log('exported file contents is: \n' + exported)
-            cy.readFile(baseHTMLFile).should('exist').then((dataCompared) => {
-                expected = dataCompared.toString() //'compareFile'
-                cy.log('expected file contents is: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'))
+            .should('exist')
+            .then((exportedFile) => {
+                exported = exportedFile.toString() //'exportedFile'
+                cy.log('exported file contents is: \n' + exported)
+                cy.readFile(baseHTMLFile)
+                    .should('exist')
+                    .then((dataCompared) => {
+                        expected = dataCompared.toString() //'compareFile'
+                        cy.log('expected file contents is: \n' + expected)
+                        expect(exported.toString()).to.includes(expected.toString())
+                    })
             })
-        })
 
         //Verify all files exist in exported zip file
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'), null).should('exist')
@@ -113,7 +120,6 @@ describe('QDM Test Cases : Export Test Case', () => {
     })
 
     it('Export Test Case button is disabled until Test cases are executed', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -122,8 +128,11 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
-            'but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should(
+            'contain.text',
+            'CQL updated successfully ' + 'but the following issues were found',
+        )
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -142,14 +151,11 @@ describe('QDM Test Cases : Export Test Case', () => {
 })
 
 describe('Export Test cases by Non Measure Owner', () => {
-
-
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
-
         let newTimestamp = Date.now()
-        let newRandValue = (Math.floor((Math.random() * 1000) + 1))
+        let newRandValue = Math.floor(Math.random() * 1000 + 1)
         measureName = 'QDMTestMeasure' + newTimestamp + newRandValue
         CqlLibraryName = 'QDMCQLLibrary' + newTimestamp + newRandValue
 
@@ -171,19 +177,19 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
-            'but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should(
+            'contain.text',
+            'CQL updated successfully ' + 'but the following issues were found',
+        )
         OktaLogin.UILogout()
     })
 
     afterEach('Log out and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Non Measure Owner should be able to Export Test cases', () => {
-
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
@@ -205,12 +211,9 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get('#export-menu').contains('QRDA').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), { timeout: 60000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), { timeout: 60000 }).should(
+            'exist',
+        )
         cy.log('Successfully verified zip file export')
     })
 })
-
-
-
-
-

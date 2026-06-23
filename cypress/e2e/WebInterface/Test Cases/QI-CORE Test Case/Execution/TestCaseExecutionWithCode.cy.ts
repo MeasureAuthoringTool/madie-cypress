@@ -1,11 +1,11 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
@@ -15,35 +15,36 @@ let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 
 describe('Test Case Execution with codes', () => {
-
     before('Create Measure and Test case', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
 
-        cy.readFile('cypress/fixtures/JSONForCQLWithCodes.txt').should('exist').then((fileContents) => {
-            TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, fileContents)
-        })
+        cy.readFile('cypress/fixtures/JSONForCQLWithCodes.txt')
+            .should('exist')
+            .then((fileContents) => {
+                TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, fileContents)
+            })
         OktaLogin.Login()
     })
 
     after('Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify Test Case Execution for the CQL that uses codes', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLWithCodes.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLWithCodes.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5500)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -81,8 +82,11 @@ describe('Test Case Execution with codes', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
-       
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.',
+        )
+
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')

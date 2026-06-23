@@ -1,11 +1,11 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 
 const measureName = 'DateTimeAndRelated' + Date.now()
 const CqlLibraryName = 'DateTimeAndRelatedLib' + Date.now()
@@ -13,8 +13,9 @@ const measureScoringProportion = 'Proportion'
 const testCaseTitle = 'Title for Auto Test'
 const testCaseDescription = 'DENOMFail' + Date.now()
 const testCaseSeries = 'SBTestSeries'
-const measureCQL = 'library Library5749 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
+const measureCQL =
+    "library Library5749 version '0.0.000'\n" +
+    "using QDM version '5.6'\n" +
     'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
     'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
     'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
@@ -45,9 +46,7 @@ const measureCQL = 'library Library5749 version \'0.0.000\'\n' +
 const measureData: CreateMeasureOptions = {}
 
 describe('Test Case Attributes', () => {
-
     beforeEach('Create measure and login', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringProportion
@@ -55,7 +54,16 @@ describe('Test Case Attributes', () => {
         measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+        )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -66,6 +74,7 @@ describe('Test Case Attributes', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -86,12 +95,10 @@ describe('Test Case Attributes', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        
         Utilities.deleteMeasure()
     })
 
     it('Add Date Time attribute to the Test case', () => {
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -100,7 +107,13 @@ describe('Test Case Attributes', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         cy.get(TestCasesPage.AssessmentElementTab).click()
         cy.get(TestCasesPage.plusIcon).click()
@@ -115,7 +128,6 @@ describe('Test Case Attributes', () => {
     })
 
     it('Add Related To attribute to the Test case', () => {
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -124,7 +136,13 @@ describe('Test Case Attributes', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Add Date Time Attribute
         cy.get(TestCasesPage.AssessmentElementTab).click()
@@ -147,6 +165,8 @@ describe('Test Case Attributes', () => {
         cy.get('[id="data-element-selector"]').click()
         cy.get('[data-testid="Assessment, Performed: Falls Screening-option"]').click() //Select Laboratory Test, Performed: Chlamydia Screening from dropdown
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get('tbody > :nth-child(2)').find('.data-type-container').should('contain.text', 'Assessment, PerformedFalls Screening ')
+        cy.get('tbody > :nth-child(2)')
+            .find('.data-type-container')
+            .should('contain.text', 'Assessment, PerformedFalls Screening ')
     })
 })

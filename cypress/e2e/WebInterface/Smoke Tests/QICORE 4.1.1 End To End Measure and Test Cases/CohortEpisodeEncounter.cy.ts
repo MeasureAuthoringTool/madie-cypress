@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let measureName = 'CohortEpisodeEncounter' + Date.now()
 let CqlLibraryName = 'CohortEpisodeEncounter' + Date.now()
@@ -15,21 +15,27 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 
-let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n\n' +
-    'using QICore version \'4.1.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+let measureCQL =
+    "library CohortEpisodeEncounter1699460161402 version '0.0.000'\n\n" +
+    "using QICore version '4.1.1'\n\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include CQMCommon version '1.0.000' called Global\n\n" +
     'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
 // upgraded in CohortEncounter600
 describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
-
     before('Create Measure and Test Case', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2012-01-02', '2013-01-01')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            0,
+            false,
+            '2012-01-02',
+            '2013-01-01',
+        )
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
@@ -37,19 +43,18 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Episode Encounter, Pass Result', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

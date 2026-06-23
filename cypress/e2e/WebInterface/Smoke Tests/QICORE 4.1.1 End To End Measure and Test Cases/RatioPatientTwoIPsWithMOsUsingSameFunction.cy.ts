@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 const measureName = 'RatioPatientTwoIPsWithMOsUsingSameFunction' + now
@@ -15,9 +15,10 @@ const testCaseTitleIpp1Pass = 'IPP1 PASS'
 const testCaseDescription = 'PASS' + now
 const testCaseSeries = 'SBTestSeries'
 const testCaseJsonIppPass = TestCaseJson.RatioPatientTwoIPsWithMOs_PASS
-const measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+const measureCQL =
+    "library MultipleIPwithObs version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
@@ -43,32 +44,38 @@ const measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
     'union [Encounter: "Annual Wellness Visit"]\n' +
     ') ValidEncounter\n' +
     'where ValidEncounter.period during "Measurement Period"\n' +
-    'and ValidEncounter.status = \'finished\'\n\n' +
+    "and ValidEncounter.status = 'finished'\n\n" +
     'define function "MObsAge"():\n' +
     'CalculateAgeInYearsAt(Patient.birthDate, date from start of "Measurement Period")\n\n' +
     'define function "MOFemale"():\n' +
-    'Patient.gender = \'female\'\n\n' +
+    "Patient.gender = 'female'\n\n" +
     'define function "MOMale"():\n' +
-    'Patient.gender = \'male\''
+    "Patient.gender = 'male'"
 
 describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same Function', () => {
-
     before('Create Measure and Test Case', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, undefined, false,
-            '2023-01-01', '2024-01-01')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            undefined,
+            false,
+            '2023-01-01',
+            '2024-01-01',
+        )
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIpp1Pass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -107,21 +114,17 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-
-        
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('End to End Ratio Patient Two IPs w/ MOs Pass Result', () => {
-
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -166,8 +169,10 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should(
+            'contain.text',
+            'Test case updated successfully ' + 'with warnings in JSON',
+        )
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

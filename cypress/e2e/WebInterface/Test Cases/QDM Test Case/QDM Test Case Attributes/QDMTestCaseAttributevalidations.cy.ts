@@ -1,12 +1,12 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 
 const measureName = 'QDMAttributeTestMeasure' + Date.now()
 const CqlLibraryName = 'QDMAttributeTestLibrary' + Date.now()
@@ -19,9 +19,7 @@ const measureCQL = MeasureCQL.QDM4TestCaseElementsAttributes
 const measureData: CreateMeasureOptions = {}
 
 describe('QDM Test case Attribute validations', () => {
-
     beforeEach('Create measure and login', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringProportion
@@ -29,7 +27,16 @@ describe('QDM Test case Attribute validations', () => {
         measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -40,15 +47,14 @@ describe('QDM Test case Attribute validations', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Remove test case attributes', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -65,7 +71,13 @@ describe('QDM Test case Attribute validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
@@ -80,7 +92,7 @@ describe('QDM Test case Attribute validations', () => {
         cy.get('[id="quantity-unit-input-high"]').click()
         cy.get('[id="quantity-unit-input-high"]').type('m') //Select unit as m meter
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
+        cy.get(TestCasesPage.attributeChip).should('contain.text', "Reference Range - referenceRange 2 'm' - 4 'm'")
 
         //Delete the attribute from Elements table
         // grab the element id of the first entry in the element table
@@ -101,7 +113,6 @@ describe('QDM Test case Attribute validations', () => {
     })
 
     it('Check Result attribute for expanded units past UCUM standard', () => {
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -123,23 +134,23 @@ describe('QDM Test case Attribute validations', () => {
 
         // check all units from https://jira.cms.gov/browse/MAT-7631
         const validUnits = [
-                'years',
-                'year',
-                'months',
-                'month',
-                'weeks',
-                'week',
-                'days',
-                'day',
-                'hours',
-                'hour',
-                'minutes',
-                'minute',
-                'seconds',
-                'second',
-                'milliseconds',
-                'millisecond'
-            ]
+            'years',
+            'year',
+            'months',
+            'month',
+            'weeks',
+            'week',
+            'days',
+            'day',
+            'hours',
+            'hour',
+            'minutes',
+            'minute',
+            'seconds',
+            'second',
+            'milliseconds',
+            'millisecond',
+        ]
 
         cy.get(TestCasesPage.quantityValueInput).type('5')
 
@@ -149,7 +160,7 @@ describe('QDM Test case Attribute validations', () => {
 
             cy.get('[data-testid="quantity-unit-input-quantity-helper-text"]').should('not.exist')
         }
-        
+
         cy.get(TestCasesPage.quantityUnitInput).clear().type('problem')
 
         cy.get('[data-testid="quantity-unit-input-quantity-helper-text"]').should('be.visible')

@@ -1,15 +1,15 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { Header } from "../../../../../Shared/Header"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { CQLLibrariesPage } from "../../../../../Shared/CQLLibrariesPage"
-import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { Header } from '../../../../../Shared/Header'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { CQLLibrariesPage } from '../../../../../Shared/CQLLibrariesPage'
+import { QdmCql } from '../../../../../Shared/QDMMeasuresCQL'
 
 let testCaseDescription = 'DENOMFail' + Date.now()
 let QDMTCJson = TestCaseJson.QDMTestCaseJson
@@ -22,9 +22,7 @@ const measureQDMCQL = QdmCql.QDM4TestCaseElementsAttributes
 const measureData: CreateMeasureOptions = {}
 
 describe('Dirty Check Validations', () => {
-
     beforeEach('Create QDM Measure, Test Case and Login', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Ratio'
@@ -32,7 +30,13 @@ describe('Dirty Check Validations', () => {
         measureData.measureCql = measureQDMCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(
+            false,
+            false,
+            'Initial Population',
+            'Initial Population',
+            'Initial Population',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -45,6 +49,7 @@ describe('Dirty Check Validations', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout and cleanup', () => {
@@ -53,7 +58,6 @@ describe('Dirty Check Validations', () => {
     })
 
     it('Validate dirty check on the test case title, in the test case details tab', () => {
-
         //navigate to the all measures tab
         cy.get(Header.mainMadiePageButton).click()
         //Click on Edit Measure
@@ -103,7 +107,6 @@ describe('Dirty Check Validations', () => {
     })
 
     it('Validate dirty check on Testcase Expected/Actual tab', () => {
-
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -130,4 +133,3 @@ describe('Dirty Check Validations', () => {
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.empty')
     })
 })
-

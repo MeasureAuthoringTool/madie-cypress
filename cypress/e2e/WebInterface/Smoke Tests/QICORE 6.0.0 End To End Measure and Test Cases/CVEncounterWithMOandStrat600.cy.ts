@@ -96,7 +96,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{upArrow}{upArrow}{end}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{upArrow}{upArrow}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 8500)
