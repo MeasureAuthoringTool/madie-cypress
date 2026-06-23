@@ -2,7 +2,7 @@
  * Extract failing Cypress spec files and human-readable failing test details.
  *
  * Usage:
- *   node scripts/extract-failure-details.js <spec-output-file> <details-output-file> [run-label]
+ *   node scripts/extract-failure-details.js spec-output-file details-output-file [run-label]
  *
  * The spec output keeps the existing pipeline contract: one failed spec path
  * per line, suitable for rerunning whole files. The details output is for
@@ -18,31 +18,60 @@ const detailsOutputFile = process.argv[3]
 const runLabel = process.argv[4] || 'Cypress failures'
 
 if (!specOutputFile || !detailsOutputFile) {
-  console.error('Usage: node scripts/extract-failure-details.js <spec-output-file> <details-output-file> [run-label]')
+  console.error('Usage: node scripts/extract-failure-details.js spec-output-file details-output-file [run-label]')
   process.exit(1)
 }
 
 const rootDir = path.resolve(__dirname, '..')
 const mochawesomeDir = path.join(rootDir, 'cypress', 'results')
 const runnerResultsDir = path.join(rootDir, 'runner-results')
+const allowedOutputDirs = [rootDir]
+
+const resolvedSpecOutputFile = resolveOutputPath(specOutputFile)
+const resolvedDetailsOutputFile = resolveOutputPath(detailsOutputFile)
 
 const failedSpecs = new Set()
 const failures = []
 const seenFailures = new Set()
 
+function isInsideDir(filePath, dirPath) {
+  const relativePath = path.relative(dirPath, filePath)
+  return relativePath === '' || (!relativePath.startsWith('..') && !path.isAbsolute(relativePath))
+}
+
+function resolveOutputPath(filePath) {
+  const resolvedPath = path.resolve(filePath)
+
+  if (!allowedOutputDirs.some(dirPath => isInsideDir(resolvedPath, dirPath))) {
+    throw new Error(`Output path must be inside the workspace: ${filePath}`)
+  }
+
+  return resolvedPath
+}
+
+function resolveJsonPath(baseDir, fileName) {
+  const resolvedPath = path.resolve(baseDir, fileName)
+
+  if (!fileName.endsWith('.json') || path.basename(fileName) !== fileName || !isInsideDir(resolvedPath, baseDir)) {
+    throw new Error(`Unexpected report file path: ${fileName}`)
+  }
+
+  return resolvedPath
+}
+
 function ensureParentDir(filePath) {
-  fs.mkdirSync(path.dirname(path.resolve(filePath)), { recursive: true })
+  fs.mkdirSync(path.dirname(filePath), { recursive: true })
 }
 
 function writeOutputs() {
-  ensureParentDir(specOutputFile)
-  ensureParentDir(detailsOutputFile)
+  ensureParentDir(resolvedSpecOutputFile)
+  ensureParentDir(resolvedDetailsOutputFile)
 
   const specs = Array.from(failedSpecs)
-  fs.writeFileSync(specOutputFile, specs.join('\n') + (specs.length ? '\n' : ''))
+  fs.writeFileSync(resolvedSpecOutputFile, specs.join('\n') + (specs.length ? '\n' : ''))
 
   if (!failures.length) {
-    fs.writeFileSync(detailsOutputFile, `${runLabel}\n\nNo failing tests found.\n`)
+    fs.writeFileSync(resolvedDetailsOutputFile, `${runLabel}\n\nNo failing tests found.\n`)
     return
   }
 
@@ -62,7 +91,7 @@ function writeOutputs() {
     lines.push('')
   }
 
-  fs.writeFileSync(detailsOutputFile, lines.join('\n'))
+  fs.writeFileSync(resolvedDetailsOutputFile, lines.join('\n'))
 }
 
 function firstErrorLine(err) {
@@ -139,7 +168,7 @@ function extractFromMochawesome() {
   for (const jsonFile of jsonFiles) {
     let report
     try {
-      report = JSON.parse(fs.readFileSync(path.join(mochawesomeDir, jsonFile), 'utf8'))
+      report = JSON.parse(fs.readFileSync(resolveJsonPath(mochawesomeDir, jsonFile), 'utf8'))
     } catch (err) {
       console.warn(`WARNING: Could not parse ${jsonFile}: ${err.message}`)
       continue
@@ -198,7 +227,7 @@ function extractFallbackFromRunnerResults() {
   for (const jsonFile of jsonFiles) {
     let report
     try {
-      report = JSON.parse(fs.readFileSync(path.join(runnerResultsDir, jsonFile), 'utf8'))
+      report = JSON.parse(fs.readFileSync(resolveJsonPath(runnerResultsDir, jsonFile), 'utf8'))
     } catch (err) {
       console.warn(`WARNING: Could not parse ${jsonFile}: ${err.message}`)
       continue
@@ -217,5 +246,5 @@ if (!hadMochawesome) {
 
 writeOutputs()
 
-console.log(`Extracted ${failedSpecs.size} failing spec(s) -> ${specOutputFile}`)
-console.log(`Wrote failure details -> ${detailsOutputFile}`)
+console.log(`Extracted ${failedSpecs.size} failing spec(s) -> ${resolvedSpecOutputFile}`)
+console.log(`Wrote failure details -> ${resolvedDetailsOutputFile}`)
