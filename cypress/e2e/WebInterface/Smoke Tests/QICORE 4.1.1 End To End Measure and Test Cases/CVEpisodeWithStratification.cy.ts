@@ -1,12 +1,12 @@
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 
 let measureName = 'CVEpisodeWithStratification' + Date.now()
 let CqlLibraryName = 'CVEpisodeWithStratification' + Date.now()
@@ -14,9 +14,10 @@ let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.CVEpisodeWithStratification_PASS
-let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+let measureCQL =
+    "library CVEpisodeWithStratification version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -43,7 +44,7 @@ let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
     'and\n' +
     'ValidEncounter.isFinishedEncounter()\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '(Enc E where E.status = \'finished\') is not null\n\n' +
+    "(Enc E where E.status = 'finished') is not null\n\n" +
     'define function MeasureObservation(e Encounter):\n' +
     '  2\n\n' +
     'define "Stratification 1":\n' +
@@ -55,32 +56,32 @@ let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
 
 // upgraded in CVEncounterWithMOandStrat600
 describe('Measure Creation and Testing: CV Episode Measure With Stratification', () => {
-
     before('Create Measure, Test Case and Login', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, undefined, false,
-            '2021-01-01', '2022-12-31')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            undefined,
+            false,
+            '2021-01-01',
+            '2022-12-31',
+        )
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
 
     after('Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('End to End CV Episode Measure with Stratification, Pass Result', () => {
-
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -150,8 +151,10 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should(
+            'contain.text',
+            'Test case updated successfully ' + 'with warnings in JSON',
+        )
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -163,6 +166,5 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })

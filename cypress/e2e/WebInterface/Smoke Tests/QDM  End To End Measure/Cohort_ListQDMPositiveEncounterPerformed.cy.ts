@@ -1,13 +1,13 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../Shared/QDMElements"
-import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../Shared/QDMElements'
+import { QdmCql } from '../../../../Shared/QDMMeasuresCQL'
 
 let measureName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
 let CqlLibraryName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
@@ -18,32 +18,31 @@ let secondTestCaseTitle = 'SBPFail GT24beforeAndGT2after'
 let measureCQL = QdmCql.QDMTestCaseCQLFullElementSection
 
 describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
-
     before('Create Measure', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2012-01-01', '2012-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2012-01-01',
+            '2012-12-31',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
-
-       Utilities.deleteMeasure()
+        Utilities.deleteMeasure()
     })
 
     it('End to End Cohort ListQDMPositiveEncounterPerformed', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true })
 
         //Group Creation
         //Click on Measure Group tab
@@ -69,8 +68,10 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully',
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
@@ -81,8 +82,10 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.',
+        )
 
         //Add Supplemental Data Elements
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -96,7 +99,10 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
 
         //Add Elements to the Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -104,7 +110,13 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '06/15/1935 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(500).click()
@@ -220,7 +232,13 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '06/15/1935 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(500).click()

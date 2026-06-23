@@ -1,14 +1,14 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { LandingPage } from "../../../../../Shared/LandingPage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { LandingPage } from '../../../../../Shared/LandingPage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { QiCore4Cql } from '../../../../../Shared/FHIRMeasuresCQL'
 
 const measureName = 'ETCByNonOwner' + Date.now()
 const CqlLibraryName = 'ETCByNonOwnerLib' + Date.now()
@@ -20,11 +20,19 @@ const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
 const measureCQLPFTests = QiCore4Cql.reduced_CQL_Multiple_Populations
 
 describe('Ability to run valid test cases whether or not the user is the owner of the measure or if the measure has not been shared with the user', () => {
-
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean',
+        )
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -32,12 +40,13 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{end}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -71,20 +80,19 @@ describe('Ability to run valid test cases whether or not the user is the owner o
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
-    it('Run / Execute single passing Test Case, on the Test Case list page, where the user is not the owner nor shared' +
-        ' -- Run button is available and correct results are provided', () => {
-
+    it(
+        'Run / Execute single passing Test Case, on the Test Case list page, where the user is not the owner nor shared' +
+            ' -- Run button is available and correct results are provided',
+        () => {
             //Add json to the test case
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
             cy.editTestCaseJSON(validTestCaseJson)
-
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -112,7 +120,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             //Verify Highlighting tab before clicking on Run Test button
             cy.get(TestCasesPage.tcHighlightingTab).click()
-            cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+            cy.get(TestCasesPage.runTestAlertMsg).should(
+                'contain.text',
+                "To see the logic highlights, click 'Run Test'",
+            )
 
             //logout as Regular user and, then, log in as ALT user
 
@@ -147,18 +158,19 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
             cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
-    })
+        },
+    )
 
-    it('Run / Execute single passing Test Case, on the Test Case details page, where the user is not the owner nor shared' +
-        ' -- Run button is available and correct results are provided', () => {
-
+    it(
+        'Run / Execute single passing Test Case, on the Test Case details page, where the user is not the owner nor shared' +
+            ' -- Run button is available and correct results are provided',
+        () => {
             //Add json to the test case
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
             cy.editTestCaseJSON(validTestCaseJson)
-
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -188,7 +200,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             //Verify Highlighting tab before clicking on Run Test button
             cy.get(TestCasesPage.tcHighlightingTab).click()
-            cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+            cy.get(TestCasesPage.runTestAlertMsg).should(
+                'contain.text',
+                "To see the logic highlights, click 'Run Test'",
+            )
 
             //logout as Regular user and, then, log in as Alt user
 
@@ -214,21 +229,27 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
             //confirm warning message
-            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should(
+                'contain.text',
+                "No code provided, and a code should be provided from the value set 'US Core Encounter Type' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)",
+            )
             //attempt to click on 'Run Test Case' to run the test case via the edit page
             cy.get(TestCasesPage.runTestButton).should('exist')
             cy.get(TestCasesPage.runTestButton).should('be.visible')
             cy.get(TestCasesPage.runTestButton).should('be.enabled')
             cy.get(TestCasesPage.runTestButton).click()
 
-            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should(
+                'contain.text',
+                "No code provided, and a code should be provided from the value set 'US Core Encounter Type' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)",
+            )
             cy.get(TestCasesPage.tctExpectedActualSubTab).click()
             cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
             cy.get(TestCasesPage.measureActualCheckbox).should('be.checked')
-    })
+        },
+    )
 
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning -- when user is not the owner', () => {
-
         //Add json to the test case
         cy.editTestCaseJSON(warningTestCaseJson)
 
@@ -267,7 +288,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', "To see the logic highlights, click 'Run Test'")
 
         //logout as Regular user and, then, log in as Alt user
         OktaLogin.AltLogin()

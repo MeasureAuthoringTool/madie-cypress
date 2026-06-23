@@ -1,13 +1,19 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../../Shared/QDMElements"
-import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import {
+    MeasureGroupPage,
+    MeasureGroups,
+    MeasureScoring,
+    MeasureType,
+    PopulationBasis,
+} from '../../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../../Shared/QDMElements'
+import { QdmCql } from '../../../../../Shared/QDMMeasuresCQL'
 
 const now = Date.now()
 const measureName = 'RelevantElements' + now
@@ -20,7 +26,6 @@ const measureCQL = QdmCql.qdmMeasureCQLPRODCataracts2040BCVAwithin90Days
 const measureData: CreateMeasureOptions = {}
 
 describe('QDM Test cases - Checks for CQL Changes', () => {
-
     measureData.ecqmTitle = measureName
     measureData.cqlLibraryName = CqlLibraryName
     measureData.measureScoring = 'Proportion'
@@ -31,33 +36,35 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         initialPopulation: 'Initial Population',
         denominator: 'Denominator',
         denomExclusion: 'Denominator Exclusions',
-        numerator: 'Numerator'
+        numerator: 'Numerator',
     }
 
     before('Create Measure', () => {
-
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.episode, MeasureScoring.Proportion, pops)
+        MeasureGroupPage.CreateMeasureGroupAPI(
+            MeasureType.process,
+            PopulationBasis.episode,
+            MeasureScoring.Proportion,
+            pops,
+        )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
     })
 
     after('Clean up', () => {
-
-        
         Utilities.deleteMeasure()
     })
 
     it('Present Relevant Elements warning & SDE changed warning after major CQL changes that affect test cases', () => {
-
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         // //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -72,7 +79,13 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('08/17/1957 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '08/17/1957 12:00 AM',
+            'Living',
+            'AMERICAN INDIAN OR ALASKA NATIVE',
+            'Female',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Condition:Diagnosis: Uveitis
         //add Element
@@ -130,17 +143,21 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         cy.wait('@relevantElements')
 
         // verify 1st warning for SDE changes
-        cy.get(TestCasesPage.editTestcaseSDEWarning).last().should('have.attr', 'aria-live', 'polite')
-            .and('have.text', 'Your measure\'s Race, Sex, or Ethnicity value set has changed. The value in this test case is no longer valid. Please update the value to successfully match your measure.')
+        cy.get(TestCasesPage.editTestcaseSDEWarning)
+            .last()
+            .should('have.attr', 'aria-live', 'polite')
+            .and(
+                'have.text',
+                "Your measure's Race, Sex, or Ethnicity value set has changed. The value in this test case is no longer valid. Please update the value to successfully match your measure.",
+            )
 
         // verify 2nd warning for changes to relevant elements & what element changed
-        cy.get(TestCasesPage.editTestcaseRelevantElementsWarning).last().should('have.attr', 'aria-live', 'polite')
-            .and('have.text', 'The following data elements in this test case are no longer relevant to the measure.Procedure, Performed')
+        cy.get(TestCasesPage.editTestcaseRelevantElementsWarning)
+            .last()
+            .should('have.attr', 'aria-live', 'polite')
+            .and(
+                'have.text',
+                'The following data elements in this test case are no longer relevant to the measure.Procedure, Performed',
+            )
     })
 })
-
-
-
-
-
-

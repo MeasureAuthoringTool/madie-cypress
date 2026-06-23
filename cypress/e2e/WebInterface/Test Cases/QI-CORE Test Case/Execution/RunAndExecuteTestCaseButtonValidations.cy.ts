@@ -1,14 +1,14 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Toasts } from "../../../../../Shared/Toasts"
-import { QiCore6Cql } from "../../../../../Shared/FHIRMeasuresCQL"
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels } from '../../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { Toasts } from '../../../../../Shared/Toasts'
+import { QiCore6Cql } from '../../../../../Shared/FHIRMeasuresCQL'
 
 const now = Date.now()
 const measureName = 'RunExecuteTCButtonValidations' + now
@@ -16,12 +16,12 @@ const CqlLibraryName = 'RETCBVLibrary' + now
 const testCase: TestCase = {
     title: 'test case title',
     description: 'DENOMFail' + now,
-    group: 'SBTestSeries'
+    group: 'SBTestSeries',
 }
 const failingTestCase: TestCase = {
     title: 'Test Case with errors',
     description: 'TCwE',
-    group: 'ICFTCwESeries'
+    group: 'ICFTCwESeries',
 }
 const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
@@ -31,20 +31,16 @@ const measureCQLPFTests = QiCore6Cql.CQL_Populations
 const measureCQL = QiCore6Cql.reduced_CQL_Multiple_Populations
 
 describe('Run / Execute Test Case button validations', () => {
-
     beforeEach('Login and Create Measure', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Run Test Case button is disabled  -- CQL Errors', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -61,6 +57,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 8500)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -88,7 +85,10 @@ describe('Run / Execute Test Case button validations', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
 
@@ -114,6 +114,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
 
@@ -139,6 +140,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -164,7 +166,10 @@ describe('Run / Execute Test Case button validations', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, invalidTestCaseJson, true)
 
@@ -196,6 +201,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -221,7 +227,10 @@ describe('Run / Execute Test Case button validations', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group)
 
@@ -240,11 +249,21 @@ describe('Run / Execute Test Case button validations', () => {
 })
 
 describe('Run / Execute Test case for multiple Population Criteria', () => {
-
     beforeEach('Create measure and login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: measureCQL,
+        })
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean',
+        )
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, validTestCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -255,10 +274,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 50000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -291,9 +310,18 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
-        TestCasesPage.createTestCase(testCase.title + '2', testCase.description + ' 2', testCase.group + '2', validTestCaseJson, true)
+        TestCasesPage.createTestCase(
+            testCase.title + '2',
+            testCase.description + ' 2',
+            testCase.group + '2',
+            validTestCaseJson,
+            true,
+        )
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
@@ -302,18 +330,24 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', "To see the logic highlights, click 'Run Test'")
 
         //Click on Run Test button and verify the text on Highlighting tab
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
-
-            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
-            cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\n   true\nResultstrue Definition(s) Used')
-            cy.get('[data-ref-id="260"]').should('have.color', '#20744c')
-        })
+        cy.readFile(measureGroupPath)
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]')
+                    .contains('NUMER')
+                    .click()
+                Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+                cy.get(TestCasesPage.tcNUMERHighlightingDetails).should(
+                    'contain.text',
+                    '\ndefine "Initial Population":\n   true\nResultstrue Definition(s) Used',
+                )
+                cy.get('[data-ref-id="260"]').should('have.color', '#20744c')
+            })
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
@@ -336,10 +370,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 })
 
 describe('Verify that "Run Test" works with warnings but does not with errors', () => {
-
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: measureCQL,
+        })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -349,17 +383,22 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).wait(1000).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Can "Run Test Case" and "Execute Test Case" when a test case has only a warning', () => {
+        TestCasesPage.createTestCase(
+            testCase.title,
+            testCase.description,
+            testCase.group,
+            errorTestCaseJSON_no_ResourceID,
+            true,
+        )
 
-        TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, errorTestCaseJSON_no_ResourceID, true)
-       
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -382,7 +421,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).wait(1000).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', "To see the logic highlights, click 'Run Test'")
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -398,13 +437,16 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast, { timeout: 16500 }).should('have.text', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.')
+        cy.get(Toasts.otherSuccessToast, { timeout: 16500 }).should(
+            'have.text',
+            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+        )
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-       // cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        // cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 25000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
@@ -433,8 +475,13 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
     })
 
     it('Cannot "Run Test Case" or "Execute Test Case" when a test case has multiple errors and a warning', () => {
-
-        TestCasesPage.createTestCase(failingTestCase.title, failingTestCase.description, failingTestCase.group, errorTestCaseJSON_no_ResourceID, true)
+        TestCasesPage.createTestCase(
+            failingTestCase.title,
+            failingTestCase.description,
+            failingTestCase.group,
+            errorTestCaseJSON_no_ResourceID,
+            true,
+        )
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -478,28 +525,34 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 })
 
 describe('Verify "Run Test Cases" results based on missing/empty group populations are treated as zeroes', () => {
-
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: measureCQLPFTests })
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: measureCQLPFTests,
+        })
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean',
+        )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({
+            collapseEditor: true,
+            successTimeout: 20700,
+        })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        
         Utilities.deleteMeasure()
     })
 
     it('Can "Run Test Cases" on test case list page after when created after pristine groups', () => {
-
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -529,10 +582,13 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.',
+        )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
- 
+
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -550,7 +606,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', "To see the logic highlights, click 'Run Test'")
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -561,9 +617,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
 
-    it('Can "Run Test Cases" on test case list page after a group has its population basis or scoring value changed' +
-        ' (displays pass / fail) and results are the same for individual run on edit page', () => {
-
+    it(
+        'Can "Run Test Cases" on test case list page after a group has its population basis or scoring value changed' +
+            ' (displays pass / fail) and results are the same for individual run on edit page',
+        () => {
             //Add second Measure Group with return type as Boolean
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -579,7 +636,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
             cy.get(MeasureGroupPage.reportingTab).click()
-            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+            Utilities.dropdownSelect(
+                MeasureGroupPage.improvementNotationSelect,
+                'Increased score indicates improvement',
+            )
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -593,7 +653,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //validation successful save message
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+                'contain.text',
+                'Population details for this group updated successfully.',
+            )
 
             TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
 
@@ -614,7 +677,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //Verify Highlighting tab before clicking on Run Test button
             cy.get(TestCasesPage.tcHighlightingTab).click()
-            cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+            cy.get(TestCasesPage.runTestAlertMsg).should(
+                'contain.text',
+                "To see the logic highlights, click 'Run Test'",
+            )
 
             //Click on Execute Test Case button on Edit Test Case page
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -654,18 +720,27 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Qualifying Encounters')
 
             cy.get(MeasureGroupPage.reportingTab).click()
-            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+            Utilities.dropdownSelect(
+                MeasureGroupPage.improvementNotationSelect,
+                'Increased score indicates improvement',
+            )
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-            cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.')
+            cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should(
+                'contain.text',
+                'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.',
+            )
             cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
 
             //validation successful save message
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+                'contain.text',
+                'Population details for this group updated successfully.',
+            )
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
@@ -689,7 +764,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //Verify Highlighting tab before clicking on Run Test button
             cy.get(TestCasesPage.tcHighlightingTab).click()
-            cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+            cy.get(TestCasesPage.runTestAlertMsg).should(
+                'contain.text',
+                "To see the logic highlights, click 'Run Test'",
+            )
 
             //Click on Execute Test Case button on Edit Test Case page
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -722,7 +800,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //validation successful save message
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+                'contain.text',
+                'Population details for this group updated successfully.',
+            )
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
@@ -754,7 +835,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //Verify Highlighting tab before clicking on Run Test button
             cy.get(TestCasesPage.tcHighlightingTab).click()
-            cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+            cy.get(TestCasesPage.runTestAlertMsg).should(
+                'contain.text',
+                "To see the logic highlights, click 'Run Test'",
+            )
 
             //Click on Execute Test Case button on Edit Test Case page
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -783,5 +867,6 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-    })
+        },
+    )
 })

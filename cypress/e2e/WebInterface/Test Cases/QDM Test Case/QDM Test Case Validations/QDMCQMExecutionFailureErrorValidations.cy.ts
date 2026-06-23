@@ -1,13 +1,13 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { QdmCql } from '../../../../../Shared/QDMMeasuresCQL'
 
 const now = Date.now()
 let measureName = 'CQMExecutionFEV' + now
@@ -24,9 +24,7 @@ const QDMTCJson = TestCaseJson.QDMTestCaseJson
 const measureData: CreateMeasureOptions = {}
 
 describe('QDM CQM-Execution failure error validations: CQL Errors and missing group', () => {
-
     beforeEach('Create Measure, and Test Case', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringCohort
@@ -38,13 +36,11 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
     })
 
     afterEach('Logout and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('A message is displayed if there are issues with the CQL', () => {
-
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
         //log into MADiE
@@ -68,6 +64,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 21000)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Navigate to Test Case page
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 50000)
@@ -78,14 +75,16 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
         //add section / line to validate message letting user know of error with CQL
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
-        cy.get(TestCasesPage.testCaseSyntaxError).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab')
+        cy.get(TestCasesPage.testCaseSyntaxError).should(
+            'contain.text',
+            'An error exists with the measure CQL, please review the CQL Editor tab',
+        )
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 
     it('A message is displayed if the measure is missing a group', () => {
-
         //log into MADiE
         OktaLogin.Login()
 
@@ -114,7 +113,10 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
         //add section / line to validate message letting user know of error with CQL
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
-        cy.get(TestCasesPage.testCaseSyntaxError).should('contain.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
+        cy.get(TestCasesPage.testCaseSyntaxError).should(
+            'contain.text',
+            'No Population Criteria is associated with this measure. Please review the Population Criteria tab.',
+        )
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
@@ -122,9 +124,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 })
 
 describe('QDM CQM-Execution failure error validations: Valueset not found in Vsac', () => {
-
     beforeEach('Create Measure, and Test Case', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringCohort
@@ -139,13 +139,11 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
     })
 
     afterEach('Logout and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -157,7 +155,10 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
 
         //add section / line to validate message letting user know of error with CQL
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
-        cy.get(TestCasesPage.testCaseSyntaxError).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
+        cy.get(TestCasesPage.testCaseSyntaxError).should(
+            'contain.text',
+            'An error exists with the measure CQL, please review the CQL Editor tab.',
+        )
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
@@ -165,9 +166,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
 })
 
 describe('QDM CQM-Execution failure error validations: Data transformation- MADiE Measure to CQMMeasure', () => {
-
     beforeEach('Create Measure, and Test Case', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringCohort
@@ -182,13 +181,11 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
     })
 
     afterEach('Logout and Clean up', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -216,10 +213,12 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
 
         //add section / line to validate message letting user know of error with CQL
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
-        cy.get(TestCasesPage.testCaseSyntaxError).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
+        cy.get(TestCasesPage.testCaseSyntaxError).should(
+            'contain.text',
+            'An error exists with the measure CQL, please review the CQL Editor tab.',
+        )
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 })
-

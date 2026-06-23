@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 const measureName = 'MOExpectedValues' + now
@@ -17,21 +17,17 @@ const testCaseSeries = 'SBTestSeries'
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 describe('Measure Observation Expected values', () => {
-
     beforeEach('Create Measure, Test Case and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Validate and save Measure observation for CV measure', () => {
-
         //Create Continuous variable measure group
         MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
 
@@ -48,29 +44,40 @@ describe('Measure Observation Expected values', () => {
 
         //Validate measure observation expected values
         cy.get(TestCasesPage.measureObservationRow).clear().type('@#')
-        cy.get(TestCasesPage.measureObservationExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.measureObservationExpectedValueError).should(
+            'contain.text',
+            'Only positive numeric values can be entered in the expected values',
+        )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.measureObservationRow).clear().type('ab12')
-        cy.get(TestCasesPage.measureObservationExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.measureObservationExpectedValueError).should(
+            'contain.text',
+            'Only positive numeric values can be entered in the expected values',
+        )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.measureObservationRow).clear().type('-15')
-        cy.get(TestCasesPage.measureObservationExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.measureObservationExpectedValueError).should(
+            'contain.text',
+            'Only positive numeric values can be entered in the expected values',
+        )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         //Save measure observation expected values
         cy.get(TestCasesPage.measureObservationRow).clear().type('1.3')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-       // cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
-       cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
-               
+        // cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.',
+        )
+
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.measureObservationRow).should('contain.value', '1.3')
     })
 
     it('Validate and save Measure observation for Ratio measure', () => {
-
         //Create Ratio measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
@@ -95,7 +102,10 @@ describe('Measure Observation Expected values', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.',
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -112,13 +122,22 @@ describe('Measure Observation Expected values', () => {
 
         //Validate measure observation expected values
         cy.get(TestCasesPage.denominatorObservationExpectedRow).type('@#')
-        cy.get(TestCasesPage.denominatorObservationExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.denominatorObservationExpectedValueError).should(
+            'contain.text',
+            'Only positive numeric values can be entered in the expected values',
+        )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.numeratorObservationRow).type('ab12')
-        cy.get(TestCasesPage.numeratorObservationExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.numeratorObservationExpectedValueError).should(
+            'contain.text',
+            'Only positive numeric values can be entered in the expected values',
+        )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.numeratorObservationRow).type('-15')
-        cy.get(TestCasesPage.numeratorObservationExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.numeratorObservationExpectedValueError).should(
+            'contain.text',
+            'Only positive numeric values can be entered in the expected values',
+        )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         //Save measure observation expected values
@@ -136,7 +155,6 @@ describe('Measure Observation Expected values', () => {
     })
 
     it('Verify Expected / Actual page dirty check for Measure Observations', () => {
-
         //Create Continuous variable measure group
         MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
 
@@ -165,33 +183,32 @@ describe('Measure Observation Expected values', () => {
 })
 
 describe('Measure observation expected result', () => {
-
     beforeEach('Create Measure, Test Case and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify Measure Observation expected result for CV measure', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
-        })
+        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -219,7 +236,10 @@ describe('Measure observation expected result', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -240,19 +260,21 @@ describe('Measure observation expected result', () => {
     })
 
     it('Verify Measure Observation expected result for Ratio measure', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -301,7 +323,10 @@ describe('Measure observation expected result', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()

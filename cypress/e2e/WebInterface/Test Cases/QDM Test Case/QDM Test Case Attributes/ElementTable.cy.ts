@@ -1,13 +1,13 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../../Shared/Header'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -20,9 +20,7 @@ let measureCQL = MeasureCQL.QDM4TestCaseElementsAttributes
 const measureData: CreateMeasureOptions = {}
 
 describe('Quantity Attribute -- Adding multiple attributes', () => {
-
     beforeEach('Create measure and login', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoring
@@ -41,16 +39,15 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Add Quantity attribute to the Test case and Edit from Elements table', () => {
-
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
 
@@ -81,7 +78,13 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -160,6 +163,9 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-14463-4"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click() //click the "Add" button
-        cy.get('tbody > tr > :nth-child(1)').should('contain.text', 'Laboratory_test, PerformedChlamydia ScreeningLOINC: 14463-4 ')
+        cy.get('tbody > tr > :nth-child(1)').should(
+            'contain.text',
+            'Laboratory_test, PerformedChlamydia ScreeningLOINC: 14463-4 ',
+        )
     })
 })

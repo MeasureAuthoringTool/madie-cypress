@@ -1,13 +1,13 @@
-import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { TestCase, TestCasesPage } from "../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { TestCaseJson } from '../../../Shared/TestCaseJson'
+import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { Utilities } from '../../../Shared/Utilities'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { TestCase, TestCasesPage } from '../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
+import { MeasureCQL } from '../../../Shared/MeasureCQL'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 let measureName = 'DeleteTC' + now
@@ -17,27 +17,41 @@ const testCase1: TestCase = {
     title: 'Title for Auto Test',
     description: 'DENOMFail test case',
     group: 'SBTestSeries',
-    json: TestCaseJson.TestCaseJson_Valid_w_All_Encounter
+    json: TestCaseJson.TestCaseJson_Valid_w_All_Encounter,
 }
 const testCase2: TestCase = {
     title: 'Another Title',
     description: 'Successful test case',
-    group: 'SBTestSeries'
+    group: 'SBTestSeries',
 }
 
 describe('Delete Test Case', () => {
-
     beforeEach('Create measure and login', () => {
-
         let newTimestamp = Date.now()
         measureName = 'DeleteTC' + newTimestamp
         CqlLibraryName = 'DeleteTCLib' + newTimestamp
         measureCQL = MeasureCQL.ICFCleanTest_CQL.replace('SimpleFhirLibrary', CqlLibraryName)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2012-01-02', '2013-01-01')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, undefined, undefined, undefined, undefined, undefined,
-            undefined, undefined, 'Procedure')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            0,
+            false,
+            '2012-01-02',
+            '2013-01-01',
+        )
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            'Procedure',
+        )
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -48,40 +62,49 @@ describe('Delete Test Case', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Delete single Test Case - Success scenario', () => {
-
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('not.exist')
         cy.get(TestCasesPage.exportTestCasesBtn).should('not.exist')
 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'You are choosing to delete the following Test Case(s)!' + testCase1.group + ' - ' + testCase1.title)
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should(
+            'contain.text',
+            'You are choosing to delete the following Test Case(s)!' + testCase1.group + ' - ' + testCase1.title,
+        )
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
     })
 
     it('Delete multiple Test Cases - Success scenario', () => {
-
         TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         TestCasesPage.checkTestCase(1)
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 
-            'You are choosing to delete the following Test Case(s)!' + testCase2.group + ' - ' + testCase2.title + testCase1.group + ' - ' + testCase1.title)
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should(
+            'contain.text',
+            'You are choosing to delete the following Test Case(s)!' +
+                testCase2.group +
+                ' - ' +
+                testCase2.title +
+                testCase1.group +
+                ' - ' +
+                testCase1.title,
+        )
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)

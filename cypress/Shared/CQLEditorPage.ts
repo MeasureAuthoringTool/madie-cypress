@@ -2,6 +2,14 @@ import { EditMeasurePage } from "./EditMeasurePage"
 import { Utilities } from "./Utilities"
 import { CQLLibraryPage } from "./CQLLibraryPage"
 
+type SaveCqlOptions = {
+    appendNewLine?: boolean
+    appendCommand?: string
+    collapseEditor?: boolean
+    successTimeout?: number
+    waitForDisabled?: boolean
+}
+
 export class CQLEditorPage {
 
     public static readonly mainCqlDocument = '.left-panel'
@@ -200,6 +208,38 @@ export class CQLEditorPage {
                     expect(containsMatch).to.be.true
                 })
         })
+    }
+
+    public static collapseEditor(): void {
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+    }
+
+    public static saveCql(options: SaveCqlOptions = {}): void {
+        const {
+            appendNewLine = true,
+            appendCommand = '{moveToEnd}{end}{enter}',
+            collapseEditor = false,
+            successTimeout = 50000,
+            waitForDisabled = false
+        } = options
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        if (appendNewLine) {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(appendCommand)
+        }
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, successTimeout)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        if (waitForDisabled) {
+            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        }
+
+        if (collapseEditor) {
+            CQLEditorPage.collapseEditor()
+        }
     }
 
     public static applyDefinition(): void {

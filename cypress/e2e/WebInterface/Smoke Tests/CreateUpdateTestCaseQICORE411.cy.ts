@@ -1,13 +1,13 @@
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { Utilities } from "../../../Shared/Utilities"
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { TestCasesPage } from '../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { TestCaseJson } from '../../../Shared/TestCaseJson'
+import { Utilities } from '../../../Shared/Utilities'
+import { MeasureCQL } from '../../../Shared/MeasureCQL'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
@@ -21,26 +21,32 @@ const CqlLibraryName = 'CUTCQiCoreLib' + timestamp
 const testCaseTitle = 'Title for Auto Test'
 const testCaseDescription = 'DENOMFail' + timestamp
 const testCaseSeries = 'SBTestSeries'
-const updatedTestCaseTitle = testCaseTitle + " some update"
+const updatedTestCaseTitle = testCaseTitle + ' some update'
 const updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 const updatedTestCaseSeries = 'CMSTestSeries'
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
 
 describe('Create and Update Test Case for Qi Core 4 Measure', () => {
-
     beforeEach('Create Measure and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Surgical Absence of Cervix',
+            '',
+            '',
+            'Surgical Absence of Cervix',
+            '',
+            'Surgical Absence of Cervix',
+            'Procedure',
+        )
         OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({
+            collapseEditor: true,
+            successTimeout: 20700,
+        })
     })
 
     afterEach('Logout and delete measure', () => {
@@ -49,7 +55,6 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
     })
 
     it('Create and Update Test Case for Qi Core Version 4.1.1 Measure', () => {
-
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         //Verify Last Saved Date on Test case list page

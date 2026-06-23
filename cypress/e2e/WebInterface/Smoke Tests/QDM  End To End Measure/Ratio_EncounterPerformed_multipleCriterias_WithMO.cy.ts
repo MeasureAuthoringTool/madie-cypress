@@ -1,12 +1,12 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../Shared/QDMElements"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../Shared/QDMElements'
 
 const now = Date.now()
 const measureName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + now
@@ -14,8 +14,9 @@ const CqlLibraryName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + now
 const firstTestCaseTitle = 'Test Case'
 const testCaseDescription = 'Test Case' + now
 const testCaseSeries = 'SBTestSeries'
-const measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStratifications version \'0.0.000\'\n\n' +
-    'using QDM version \'5.6\'\n\n' +
+const measureCQL =
+    "library NonPatientBasedRatioMeasureWithMultipleGroupsandStratifications version '0.0.000'\n\n" +
+    "using QDM version '5.6'\n\n" +
     'valueset "Active Bleeding": \'urn:oid:2.16.840.1.113762.1.4.1206.28\'\n' +
     'valueset "Acute Inpatient": \'urn:oid:2.16.840.1.113762.1.4.1182.118\'\n' +
     'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
@@ -63,30 +64,29 @@ const measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStra
     '  duration in hours of Encounter.relevantPeriod'
 
 describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO', () => {
-
     before('Create Measure', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2024-01-01', '2024-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2024-01-01',
+            '2024-12-31',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
     })
 
     after('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Ratio EncounterPerformed, Multiple Criterias With MO', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true })
 
         //Base Config Creation
         //Click on Measure Group tab
@@ -111,13 +111,16 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration Updated Successfully',
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
@@ -136,13 +139,16 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //adding second group
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator 2")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator 2')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
@@ -150,7 +156,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observation')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Count')
 
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator 2")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator 2')
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
@@ -161,7 +167,10 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for this group saved successfully.',
+        )
 
         //Add Supplemental Data Elements
         MeasureGroupPage.includeSdeData()
@@ -172,7 +181,13 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Adding Element data to the test case
 

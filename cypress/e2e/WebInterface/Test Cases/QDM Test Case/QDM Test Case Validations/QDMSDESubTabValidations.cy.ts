@@ -1,12 +1,12 @@
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../../Shared/Utilities"
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../../Shared/Utilities'
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -16,15 +16,13 @@ let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 
 describe('QDM Test Cases : SDE Sub tab validations', () => {
-
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
-
         const createMeasure: CreateMeasureOptions = {
             ecqmTitle: measureName,
             cqlLibraryName: CqlLibraryName,
             measureScoring: 'Cohort',
             patientBasis: 'false',
-            measureCql: qdmMeasureCQL
+            measureCql: qdmMeasureCQL,
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(createMeasure)
@@ -35,13 +33,10 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     })
 
     afterEach('Log out and Clean up', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('SDE sub tab is visible on Edit Test case Highlighting page when SDE is included', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -50,6 +45,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -66,7 +62,10 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -87,7 +86,13 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
@@ -128,15 +133,17 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on SDE Sub tab
         cy.get(TestCasesPage.qdmSDESubTab).click()
         Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(1)', 35000)
-        cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should('contain.text', 'define "SDE Ethnicity":\n' +
-            '  ["Patient Characteristic Ethnicity": "Ethnicity"]')
-        cy.get('[data-testid="cql-highlighting"] > :nth-child(2)').should('contain.text', 'Results[Patient Characteristic Ethnicity: Ethnicity\n' +
-            'CODE: CDCREC 2186-5] ')
-
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should(
+            'contain.text',
+            'define "SDE Ethnicity":\n' + '  ["Patient Characteristic Ethnicity": "Ethnicity"]',
+        )
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(2)').should(
+            'contain.text',
+            'Results[Patient Characteristic Ethnicity: Ethnicity\n' + 'CODE: CDCREC 2186-5] ',
+        )
     })
 
     it('SDE sub tab is not visible on Edit Test case Highlighting page when SDE is not included', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -161,7 +168,10 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -179,11 +189,9 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.tcHighlightingTab).click()
         //Click on SDE Sub tab
         cy.get(TestCasesPage.qdmSDESubTab).should('not.exist')
-
     })
 
     it('Test Case Coverage Percentage updated based on the SDE selection', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -208,7 +216,10 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully',
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -218,7 +229,13 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
@@ -286,11 +303,9 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '6%')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
-
     })
 
     it('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
@@ -320,14 +335,19 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.saveSDEOption).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
-
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter specific values for dob, race, and gender
-        TestCasesPage.enterPatientDemographics('01/01/2001 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2001 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

@@ -1,12 +1,12 @@
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../../Shared/Utilities"
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../../Shared/Utilities'
 
 const now = Date.now()
 const measureName = 'QDMRAVMeasure' + now
@@ -14,19 +14,17 @@ const CqlLibraryName = 'QDMRAVLibrary' + now
 const testCase: TestCase = {
     title: 'PDxNotPsych60MinsDepart',
     description: 'example test case',
-    group: 'SBTestSeries'
+    group: 'SBTestSeries',
 }
 
 describe('QDM Test Cases : RAV Sub tab validations', () => {
-
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
-
         const createMeasure: CreateMeasureOptions = {
             ecqmTitle: measureName,
             cqlLibraryName: CqlLibraryName,
             measureScoring: 'Cohort',
             patientBasis: 'false',
-            measureCql: MeasureCQL.CQLQDMObservationRun
+            measureCql: MeasureCQL.CQLQDMObservationRun,
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(createMeasure)
@@ -37,13 +35,10 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
     })
 
     afterEach('Log out and Clean up', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('RAV sub tab is visible on Edit Test case Highlighting page when RAV is included', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -52,6 +47,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -69,7 +65,10 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Risk Adjustments have been Saved Successfully',
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -79,7 +78,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         Utilities.waitForElementVisible(TestCasesPage.qdmRAVSideNavLink, 30000)
         cy.get(TestCasesPage.qdmRAVSideNavLink).click()
 
-        // go through discard cycle 
+        // go through discard cycle
         // patientBasis works for all 2 choice radios
         cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
         cy.get(TestCasesPage.discardRavChangesOption).click()
@@ -99,7 +98,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // rav's declared here will match selections from MeasureGroupPage.leftPanelRiskAdjustmentTab
-        cy.wait('@cqm').then(cqmMeasure => {
+        cy.wait('@cqm').then((cqmMeasure) => {
             const body = cqmMeasure?.response?.body.population_sets[0]
             expect(body.risk_adjustment_variables.length).eq(4)
             // no guarantee - but seems like statement_name sorts by alphabetical order
@@ -114,7 +113,13 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
@@ -155,14 +160,17 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         //Click on RAV Sub tab
         cy.get(TestCasesPage.qdmRAVSubTab).click()
         Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(1)', 35000)
-        cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should('contain.text', 'define "SDE Ethnicity":\n' +
-            '  ["Patient Characteristic Ethnicity": "Ethnicity"]')
-        cy.get('[data-testid="cql-highlighting"] > :nth-child(2)').should('contain.text', 'Results[Patient Characteristic Ethnicity: Ethnicity\n' +
-            'CODE: CDCREC 2186-5] ')
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should(
+            'contain.text',
+            'define "SDE Ethnicity":\n' + '  ["Patient Characteristic Ethnicity": "Ethnicity"]',
+        )
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(2)').should(
+            'contain.text',
+            'Results[Patient Characteristic Ethnicity: Ethnicity\n' + 'CODE: CDCREC 2186-5] ',
+        )
     })
 
     it('RAV sub tab is not visible on Edit Test case Highlighting page when RAV is not included', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -171,6 +179,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -188,12 +197,14 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Risk Adjustments have been Saved Successfully',
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-
 
         //navigate to the RAV side tab section on the test cases tab
         Utilities.waitForElementVisible(TestCasesPage.qdmRAVSideNavLink, 30000)
@@ -221,11 +232,9 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(TestCasesPage.tcHighlightingTab).click()
         //Click on RAV Sub tab
         cy.get(TestCasesPage.qdmRAVSubTab).should('not.exist')
-
     })
 
     it('Test Case Coverage Percentage updated based on the RAV selection', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -234,6 +243,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -251,7 +261,10 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Risk Adjustments have been Saved Successfully',
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -261,7 +274,13 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino',
+        )
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()

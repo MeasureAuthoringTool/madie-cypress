@@ -1,14 +1,14 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Toasts } from "../../../../../Shared/Toasts"
-import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { Toasts } from '../../../../../Shared/Toasts'
+import { QiCore4Cql } from '../../../../../Shared/FHIRMeasuresCQL'
 
 const now = Date.now()
 const measureName = 'ExecCoverageValidations' + now
@@ -16,35 +16,29 @@ const CqlLibraryName = 'ExecCoverageValidationsLib' + now
 const testCase: TestCase = {
     title: 'test case title',
     description: 'DENOMFail' + now,
-    group: 'SBTestSeries'
+    group: 'SBTestSeries',
 }
 const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 const measureCQL = QiCore4Cql.reduced_CQL_Multiple_Populations
 
 describe('Run / Execute Test case and verify passing percentage and coverage', () => {
-
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({
+            collapseEditor: true,
+            successTimeout: 20700,
+        })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
     it('Run / Execute single passing Test Case', () => {
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
@@ -87,7 +81,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(Toasts.generalToast, { timeout: 6500 }).should(
+            'have.text',
+            'Test case updated successfully with warnings in JSON',
+        )
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -109,7 +106,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', "To see the logic highlights, click 'Run Test'")
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -136,7 +133,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute one passing and one failing Test Cases', () => {
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
@@ -179,7 +175,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should(
+            'have.text',
+            'Test case updated successfully with warnings in JSON',
+        )
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -200,7 +199,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', "To see the logic highlights, click 'Run Test'")
 
         //create a test case that will fail:
 
@@ -248,7 +247,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should(
+            'have.text',
+            'Test case updated successfully with warnings in JSON',
+        )
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -276,7 +278,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute single failing Test Cases', () => {
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
@@ -320,7 +321,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should(
+            'have.text',
+            'Test case updated successfully with warnings in JSON',
+        )
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

@@ -1,12 +1,18 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import {
+    MeasureGroupPage,
+    MeasureGroups,
+    MeasureScoring,
+    MeasureType,
+    PopulationBasis,
+} from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let measureName = 'RatioEpisodeSingleIPNoMO' + Date.now()
 let CqlLibraryName = 'RatioEpisodeSingleIPNoMO' + Date.now()
@@ -16,10 +22,11 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeSingleIPNoMO_IPP_PASS
 let testCaseJsonMultipleEpisodesPass = TestCaseJson.RatioEpisodeSingleIPNoMO_MultipleEpisodes_PASS
-const baseMeasureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n\n' +
-    'using QICore version \'4.1.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+const baseMeasureCQL =
+    "library RatioEpisodeSingleIPNoMO version '0.0.000'\n\n" +
+    "using QICore version '4.1.1'\n\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include CQMCommon version '1.0.000' called Global\n\n" +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
     'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'\n\n' +
     'valueset "Emergency Department Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.292\'\n' +
@@ -31,7 +38,7 @@ const baseMeasureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n\n
     'context Patient\n\n' +
     'define "Initial Population 1":\n' +
     '   [Encounter: "Encounter Inpatient"] InptEncounter\n' +
-    '     where InptEncounter.status = \'finished\'\n\n' +
+    "     where InptEncounter.status = 'finished'\n\n" +
     'define "Denominator":\n' +
     '    "Initial Population 1" IP\n' +
     '      where IP.period ends during day of "Measurement Period"\n\n' +
@@ -48,46 +55,54 @@ let measureCQL = baseMeasureCQL
 
 // upgraded into RatioEncounterSingleIPWithMOs600.cy.ts
 describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
-
     const pops: MeasureGroups = {
         initialPopulation: 'Initial Population 1',
         denominator: 'Denominator',
         denomExclusion: 'Denominator Exclusions',
         numerator: 'Numerator',
-        numExclusion: 'Numerator Exclusions'
+        numExclusion: 'Numerator Exclusions',
     }
 
     beforeEach('Create Measure and Test Case', () => {
-
         let newTimestamp = Date.now()
         measureName = 'RatioEpSglIPNoMO' + newTimestamp
         CqlLibraryName = 'RatioEpSglIPNoMO' + newTimestamp
-        measureCQL = baseMeasureCQL.replace('library RatioEpisodeSingleIPNoMO', 'library RatioEpSglIPNoMO' + newTimestamp)
+        measureCQL = baseMeasureCQL.replace(
+            'library RatioEpisodeSingleIPNoMO',
+            'library RatioEpSglIPNoMO' + newTimestamp,
+        )
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2022-01-01', '2022-12-31')
-            MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Ratio, pops)
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            0,
+            false,
+            '2022-01-01',
+            '2022-12-31',
+        )
+        MeasureGroupPage.CreateMeasureGroupAPI(
+            MeasureType.process,
+            PopulationBasis.encounter,
+            MeasureScoring.Ratio,
+            pops,
+        )
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
-   
+
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true })
     })
 
     afterEach('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Ratio Episode Single IP w/o MO, IPP Pass Result', () => {
-
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
@@ -102,8 +117,10 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should(
+            'contain.text',
+            'Test case updated successfully ' + 'with warnings in JSON',
+        )
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -121,14 +138,18 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO, Multiple Episodes Pass Result', () => {
-
-        TestCasesPage.CreateTestCaseAPI(testCaseTitleMultipleEpisodesPass, testCaseDescription, testCaseSeries, testCaseJsonMultipleEpisodesPass)
+        TestCasesPage.CreateTestCaseAPI(
+            testCaseTitleMultipleEpisodesPass,
+            testCaseDescription,
+            testCaseSeries,
+            testCaseJsonMultipleEpisodesPass,
+        )
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -159,8 +180,10 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should(
+            'contain.text',
+            'Test case updated successfully ' + 'with warnings in JSON',
+        )
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

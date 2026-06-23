@@ -1,13 +1,13 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QDMElements } from "../../../../Shared/QDMElements"
-import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QDMElements } from '../../../../Shared/QDMElements'
+import { QdmCql } from '../../../../Shared/QDMMeasuresCQL'
 
 const now = Date.now()
 const measureName = 'ProportionListQDMPositiveProcedurePerformed' + now
@@ -19,11 +19,16 @@ const secondTestCaseTitle = 'DENEXPass DisorderVisualCortexAfterOneCatSurg'
 const measureCQL = QdmCql.qdmMeasureCQLPRODCataracts2040BCVAwithin90Days
 
 describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () => {
-
     before('Create Measure', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2012-01-01', '2012-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2012-01-01',
+            '2012-12-31',
+        )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
 
@@ -31,20 +36,14 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('End to End Proportion ListQDMPositiveProcedurePerformed', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true })
 
         //Group Creation
         //Click on Measure Group tab
@@ -70,22 +69,26 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully',
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusions")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.',
+        )
 
         //Add Supplemental Data Elements
         MeasureGroupPage.includeSdeData()
@@ -96,7 +99,13 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('08/17/1957 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '08/17/1957 12:00 AM',
+            'Living',
+            'AMERICAN INDIAN OR ALASKA NATIVE',
+            'Female',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Condition:Diagnosis: Uveitis
         //add Element
@@ -141,7 +150,13 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/28/1977 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/28/1977 12:00 AM',
+            'Living',
+            'AMERICAN INDIAN OR ALASKA NATIVE',
+            'Female',
+            'Not Hispanic or Latino',
+        )
 
         //Element - Condition:Diagnosis: Disorders of Visual Corte
         QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
