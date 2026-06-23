@@ -794,7 +794,7 @@ export class TestCasesPage {
     // Try the autocomplete option-click path (uncomment the freeSolo fallback if needed)
     this.commitSeriesViaOptionClick(this.createTestCaseGroupInput, updatedTestCaseSeries, {
       // If options come from API, intercept before typing and pass the alias here:
-      // searchAlias: 'seriesSearch'
+      // searchAlias: '@seriesSearch'
     })
     // Fallback if your field is freeSolo/plain input:
     // this.commitSeriesFreeSolo(this.createTestCaseGroupInput, updatedTestCaseSeries);
@@ -852,7 +852,7 @@ export class TestCasesPage {
     opts: {
       listboxSelector?: string
       optionSelector?: string
-      searchAlias?: string | null
+      searchAlias?: `@${string}` | null
     } = {},
   ) {
     const {
