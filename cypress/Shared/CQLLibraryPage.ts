@@ -130,12 +130,13 @@ export class CQLLibraryPage {
     public static clickCreateLibraryButton(): void {
         const currentUser = Cypress.env('selectedUser')
         let alias = 'library' + (Date.now().valueOf() + 1).toString()
+        const libraryAlias: `@${string}` = `@${alias}`
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/cql-libraries').as(alias)
 
         cy.get(this.saveCQLLibraryBtn).click()
         //saving measureID to file to use later
-        cy.wait('@' + alias).then(({ response }) => {
+        cy.wait(libraryAlias).then(({ response }) => {
             expect(response?.statusCode).to.eq(201)
             cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response?.body.id)
         })

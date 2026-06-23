@@ -976,18 +976,18 @@ export class CreateMeasurePage {
                     authorization: 'Bearer ' + accessToken?.value
                 }
             }).then((response) => {
-                const clonedMeasure = response?.body as Measure
+                const clonedMeasure = response?.body as Partial<Measure>
 
                 // clear out data required to be fresh
                 clonedMeasure.measureName = newName
                 clonedMeasure.cqlLibraryName = newLibrraryName
                 clonedMeasure.measureSetId = uuidv4()
                 clonedMeasure.versionId = uuidv4()
-                clonedMeasure.measureSet = null
-                clonedMeasure.createdAt = null
-                clonedMeasure.createdBy = null
-                clonedMeasure.lastModifiedAt = null
-                clonedMeasure.lastModifiedBy = null
+                delete clonedMeasure.measureSet
+                delete clonedMeasure.createdAt
+                delete clonedMeasure.createdBy
+                delete clonedMeasure.lastModifiedAt
+                delete clonedMeasure.lastModifiedBy
 
                 // example of changing data for new measure
                 if (overrideOptions && overrideOptions.ecqmTitle) {
