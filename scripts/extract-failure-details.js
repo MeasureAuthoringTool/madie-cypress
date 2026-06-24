@@ -2,7 +2,7 @@
  * Extract failing Cypress spec files and human-readable failing test details.
  *
  * Usage:
- *   node scripts/extract-failure-details.js spec-output-file details-output-file [run-label]
+ *   node scripts/extract-failure-details.js spec-output-file details-output-file [summary-json-file] [run-label]
  *
  * The spec output keeps the existing pipeline contract: one failed spec path
  * per line, suitable for rerunning whole files. The details output is for
@@ -15,10 +15,16 @@ const path = require('path')
 
 const specOutputFile = process.argv[2]
 const detailsOutputFile = process.argv[3]
-const runLabel = process.argv[4] || 'Cypress failures'
+const maybeSummaryJsonFile = process.argv[4]
+const hasSummaryOutput = Boolean(
+  maybeSummaryJsonFile &&
+  maybeSummaryJsonFile.endsWith('.json')
+)
+const summaryJsonFile = hasSummaryOutput ? maybeSummaryJsonFile : null
+const runLabel = (hasSummaryOutput ? process.argv[5] : process.argv[4]) || 'Cypress failures'
 
 if (!specOutputFile || !detailsOutputFile) {
-  console.error('Usage: node scripts/extract-failure-details.js spec-output-file details-output-file [run-label]')
+  console.error('Usage: node scripts/extract-failure-details.js spec-output-file details-output-file [summary-json-file] [run-label]')
   process.exit(1)
 }
 
@@ -29,6 +35,7 @@ const allowedOutputDirs = [rootDir]
 
 const resolvedSpecOutputFile = resolveOutputPath(specOutputFile)
 const resolvedDetailsOutputFile = resolveOutputPath(detailsOutputFile)
+const resolvedSummaryJsonFile = summaryJsonFile ? resolveOutputPath(summaryJsonFile) : null
 
 const failedSpecs = new Set()
 const failures = []
@@ -66,12 +73,16 @@ function ensureParentDir(filePath) {
 function writeOutputs() {
   ensureParentDir(resolvedSpecOutputFile)
   ensureParentDir(resolvedDetailsOutputFile)
+  if (resolvedSummaryJsonFile) {
+    ensureParentDir(resolvedSummaryJsonFile)
+  }
 
   const specs = Array.from(failedSpecs)
   fs.writeFileSync(resolvedSpecOutputFile, specs.join('\n') + (specs.length ? '\n' : ''))
 
   if (!failures.length) {
     fs.writeFileSync(resolvedDetailsOutputFile, `${runLabel}\n\nNo failing tests found.\n`)
+    writeSummaryOutputs(specs)
     return
   }
 
@@ -92,6 +103,7 @@ function writeOutputs() {
   }
 
   fs.writeFileSync(resolvedDetailsOutputFile, lines.join('\n'))
+  writeSummaryOutputs(specs)
 }
 
 function firstErrorLine(err) {
@@ -120,6 +132,109 @@ function addFailure(file, title, err) {
 
   seenFailures.add(key)
   failures.push({ file, title: failureTitle, error })
+}
+
+function classifyFailure(error) {
+  if (!error) {
+    return 'Unknown'
+  }
+
+  if (error.includes('No users available') || error.includes('SessionLogin') || error.includes('Okta')) {
+    return 'Authentication or session'
+  }
+
+  if (error.includes('cy.request() failed') || error.includes('status code') || error.includes('ECONNREFUSED') || error.includes('ETIMEDOUT')) {
+    return 'API or network'
+  }
+
+  if (error.includes('Expected to find element') || error.includes('never found it')) {
+    return 'Element not found'
+  }
+
+  if (error.includes('Timed out retrying')) {
+    return 'Timeout'
+  }
+
+  if (error.includes('cy.click() failed because the page updated')) {
+    return 'DOM update during click'
+  }
+
+  if (error.includes('Special character sequence')) {
+    return 'Cypress typing error'
+  }
+
+  if (error.includes('AssertionError')) {
+    return 'Assertion failure'
+  }
+
+  if (error.includes('CypressError')) {
+    return 'Cypress command error'
+  }
+
+  return 'Unclassified'
+}
+
+function normalizeErrorSignature(error) {
+  if (!error) {
+    return 'No error message captured'
+  }
+
+  return error
+    .replace(/after \d+ms/g, 'after <duration>ms')
+    .replace(/#mui-\d+/g, '#mui-<id>')
+    .replace(/[0-9a-f]{8}-[0-9a-f-]{27,}/gi, '<uuid>')
+    .replace(/\b\d{10,}\b/g, '<number>')
+}
+
+function countBy(items, getKey) {
+  return items.reduce((counts, item) => {
+    const key = getKey(item)
+    counts[key] = (counts[key] || 0) + 1
+    return counts
+  }, {})
+}
+
+function topCounts(counts, limit = 10) {
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([value, count]) => ({ value, count }))
+}
+
+function buildSummary(specs) {
+  const enrichedFailures = failures.map(failure => {
+    const errorType = classifyFailure(failure.error)
+    const errorSignature = normalizeErrorSignature(failure.error)
+    return {
+      file: failure.file,
+      title: failure.title,
+      errorType,
+      errorSignature,
+      error: failure.error
+    }
+  })
+
+  const failureTypes = countBy(enrichedFailures, failure => failure.errorType)
+  const errorSignatures = countBy(enrichedFailures, failure => failure.errorSignature)
+
+  return {
+    runLabel,
+    generatedAt: new Date().toISOString(),
+    failedSpecCount: specs.length,
+    failedTestCount: enrichedFailures.length,
+    failureTypes,
+    topErrorSignatures: topCounts(errorSignatures),
+    failures: enrichedFailures
+  }
+}
+
+function writeSummaryOutputs(specs) {
+  if (!resolvedSummaryJsonFile) {
+    return
+  }
+
+  const summary = buildSummary(specs)
+  fs.writeFileSync(resolvedSummaryJsonFile, JSON.stringify(summary, null, 2) + '\n')
 }
 
 function isFailed(item) {
