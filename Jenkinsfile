@@ -155,25 +155,13 @@ pipeline {
           '''
         }
 
-        // Initial failures list
+        // Initial failures list and human-readable failure details
         sh '''
           cd ${WORKSPACE}
-          case "${TEST_SCRIPT}" in
-            impl:*)
-              echo "IMPL mode: extracting failures from mochawesome reports..."
-              node -e "const fs=require('fs'),path=require('path');const out=process.argv[1],dir=path.join('cypress','results');if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}const failed=new Set();fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}}catch(e){}});const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join(String.fromCharCode(10))+String.fromCharCode(10):'');console.log('Extracted '+arr.length+' failing spec(s)');arr.forEach(s=>console.log('  - '+s));" ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
-              ;;
-            *)
-              if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-                cat ${WORKSPACE}/runner-results/*.json \
-                  | jq -r 'select(.failures > 0) | .file' \
-                  | sed '/^null$/d' \
-                  > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
-              else
-                : > ${WORKSPACE}/failures-${BUILD_NUMBER}.txt
-              fi
-              ;;
-          esac
+          node scripts/extract-failure-details.js \
+            ${WORKSPACE}/failures-${BUILD_NUMBER}.txt \
+            ${WORKSPACE}/failure-details-${BUILD_NUMBER}.txt \
+            "Initial run failures"
         '''
 
         // Initial per-run Mochawesome bundle
@@ -193,6 +181,8 @@ pipeline {
         sh '''
           : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
           : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+          printf 'Rerun #1 failures\\n\\nNo rerun performed.\\n' > ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt
+          printf 'Rerun #2 failures\\n\\nNo rerun performed.\\n' > ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt
         '''
       }
     }
@@ -250,22 +240,11 @@ pipeline {
               ;;
           esac
 
-          # Extract failures from rerun #1
-          case "${TEST_SCRIPT}" in
-            impl:*)
-              node -e "const fs=require('fs'),path=require('path');const out=process.argv[1],dir=path.join('cypress','results');if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}const failed=new Set();fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}}catch(e){}});const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join(String.fromCharCode(10))+String.fromCharCode(10):'');console.log('Extracted '+arr.length+' failing spec(s)');" ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-              ;;
-            *)
-              if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-                cat ${WORKSPACE}/runner-results/*.json \
-                  | jq -r 'select(.failures > 0) | .file' \
-                  | sed '/^null$/d' \
-                  > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-              else
-                : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-              fi
-              ;;
-          esac
+          # Extract failures and human-readable failure details from rerun #1
+          node scripts/extract-failure-details.js \
+            ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt \
+            ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt \
+            "Rerun #1 failures"
 
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
             npm run combine:reports
@@ -274,6 +253,7 @@ pipeline {
           else
             echo "WARNING: No mochawesome JSON for rerun #1 (possible crash). Carrying forward previous failures."
             cp ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
+            cp ${WORKSPACE}/failure-details-${BUILD_NUMBER}.txt ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt
             : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
           fi
 
@@ -304,22 +284,11 @@ pipeline {
               ;;
           esac
 
-          # Extract failures from rerun #2
-          case "${TEST_SCRIPT}" in
-            impl:*)
-              node -e "const fs=require('fs'),path=require('path');const out=process.argv[1],dir=path.join('cypress','results');if(!fs.existsSync(dir)){fs.writeFileSync(out,'');process.exit(0);}const failed=new Set();fs.readdirSync(dir).filter(f=>f.endsWith('.json')).forEach(f=>{try{const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));if(j.stats&&j.stats.failures>0){const s=j.results&&j.results[0]&&(j.results[0].fullFile||j.results[0].file);if(s)failed.add(s);}}catch(e){}});const arr=[...failed];fs.writeFileSync(out,arr.length?arr.join(String.fromCharCode(10))+String.fromCharCode(10):'');console.log('Extracted '+arr.length+' failing spec(s)');" ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-              ;;
-            *)
-              if ls ${WORKSPACE}/runner-results/*.json >/dev/null 2>&1; then
-                cat ${WORKSPACE}/runner-results/*.json \
-                  | jq -r 'select(.failures > 0) | .file' \
-                  | sed '/^null$/d' \
-                  > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-              else
-                : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-              fi
-              ;;
-          esac
+          # Extract failures and human-readable failure details from rerun #2
+          node scripts/extract-failure-details.js \
+            ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt \
+            ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt \
+            "Rerun #2 failures"
 
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
             npm run combine:reports
@@ -328,6 +297,7 @@ pipeline {
           else
             echo "WARNING: No mochawesome JSON for rerun #2 (possible crash). Carrying forward previous failures."
             cp ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
+            cp ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt
             : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
           fi
         '''
@@ -343,7 +313,7 @@ pipeline {
         }
       }
       steps {
-        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.txt, failure-details-rerun1-${env.BUILD_NUMBER}.txt, failure-details-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
   }
@@ -375,6 +345,9 @@ pipeline {
           String urlInit = "${env.BUILD_URL}artifact/mochawesome-initial-${bn}.tar.gz"
           String urlR1   = "${env.BUILD_URL}artifact/mochawesome-rerun1-${bn}.tar.gz"
           String urlR2   = "${env.BUILD_URL}artifact/mochawesome-rerun2-${bn}.tar.gz"
+          String urlDetailsInit = "${env.BUILD_URL}artifact/failure-details-${bn}.txt"
+          String urlDetailsR1   = "${env.BUILD_URL}artifact/failure-details-rerun1-${bn}.txt"
+          String urlDetailsR2   = "${env.BUILD_URL}artifact/failure-details-rerun2-${bn}.txt"
 
           String msg = """\
 ${passed ? "All test cases passed" : "Failures remain after 2nd rerun"}
@@ -389,6 +362,11 @@ Reports:
 • initial: ${urlInit}
 • rerun1 : ${urlR1}
 • rerun2 : ${urlR2}
+
+Failure details:
+• initial: ${urlDetailsInit}
+• rerun1 : ${urlDetailsR1}
+• rerun2 : ${urlDetailsR2}
 
 ${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
 """.stripIndent()
