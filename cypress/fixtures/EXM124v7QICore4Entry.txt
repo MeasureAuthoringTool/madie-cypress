@@ -1,16 +1,5 @@
 library EXM124v7QICore4 version '7.0.000'
 
-/*
-Based on CMS124v7 - Cervical Cancer Screening
-*/
-
-/*
-This example is a work in progress and should not be considered a final specification
-or recommendation for guidance. This example will help guide and direct the process
-of finding conventions and usage patterns that meet the needs of the various stakeholders
-in the measure development community.
-*/
-
 using QICore version '4.1.1'
 
 include FHIRHelpers version '4.1.000'
@@ -44,16 +33,12 @@ parameter "Measurement Period" Interval<DateTime>
 
 {home}define "SDE Ethnicity":{enter}
 {home}  SDE."SDE Ethnicity"{enter}
-
 {home}define "SDE Payer":{enter}
 {home}  SDE."SDE Payer"{enter}
-
 {home}define "SDE Race":{enter}
 {home}  SDE."SDE Race"{enter}
-
 {home}define "SDE Sex":{enter}
 {home}  SDE."SDE Sex"{enter}
-
 {home}define "Initial Population":
 {home}  Patient.gender = 'female'
 {home}  	and Global."CalendarAgeInYearsAt"(Patient.birthDate, start of "Measurement Period") in Interval[23, 64]
