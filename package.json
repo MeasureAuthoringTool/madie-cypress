@@ -83,6 +83,7 @@
 		"impl:ui:smoketests:report": "npm run delete:reports; npm run delete:mochawesome; npm run impl:ui:smoketests; npm run combine:reports; npm run generateOne:report",
 		"impl:extract:failures": "node scripts/extract-failures.js",
 		"extract:failure-details": "node scripts/extract-failure-details.js",
+		"summarize:failure-runs": "node scripts/summarize-failure-runs.js",
 		"windows:delete:mochawesome": "del mochawesome.json",
 		"windows:delete:reports": "del .\\cypress\\results\\*.json",
 		"windows:cypress:run": "cypress run --env configFile=dev --spec .\\cypress\\e2e\\**\\*",

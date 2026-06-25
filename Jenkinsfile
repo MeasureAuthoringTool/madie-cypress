@@ -161,6 +161,7 @@ pipeline {
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-${BUILD_NUMBER}.txt \
             ${WORKSPACE}/failure-details-${BUILD_NUMBER}.txt \
+            ${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json \
             "Initial run failures"
         '''
 
@@ -183,6 +184,8 @@ pipeline {
           : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
           printf 'Rerun #1 failures\\n\\nNo rerun performed.\\n' > ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt
           printf 'Rerun #2 failures\\n\\nNo rerun performed.\\n' > ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt
+          printf '{"runLabel":"Rerun #1 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json
+          printf '{"runLabel":"Rerun #2 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json
         '''
       }
     }
@@ -244,6 +247,7 @@ pipeline {
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt \
             ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt \
+            ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json \
             "Rerun #1 failures"
 
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
@@ -254,6 +258,7 @@ pipeline {
             echo "WARNING: No mochawesome JSON for rerun #1 (possible crash). Carrying forward previous failures."
             cp ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
             cp ${WORKSPACE}/failure-details-${BUILD_NUMBER}.txt ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt
+            cp ${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json
             : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
           fi
 
@@ -288,6 +293,7 @@ pipeline {
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt \
             ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt \
+            ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json \
             "Rerun #2 failures"
 
           if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
@@ -298,6 +304,7 @@ pipeline {
             echo "WARNING: No mochawesome JSON for rerun #2 (possible crash). Carrying forward previous failures."
             cp ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
             cp ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt
+            cp ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json
             : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
           fi
         '''
@@ -313,7 +320,16 @@ pipeline {
         }
       }
       steps {
-        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.txt, failure-details-rerun1-${env.BUILD_NUMBER}.txt, failure-details-rerun2-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        sh '''
+          cd ${WORKSPACE}
+          node scripts/summarize-failure-runs.js \
+            ${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json \
+            ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json \
+            ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json \
+            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.json \
+            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.md
+        '''
+        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.txt, failure-details-rerun1-${env.BUILD_NUMBER}.txt, failure-details-rerun2-${env.BUILD_NUMBER}.txt, failure-trend-${env.BUILD_NUMBER}.json, failure-trend-${env.BUILD_NUMBER}.md", onlyIfSuccessful: false
       }
     }
   }
@@ -348,6 +364,7 @@ pipeline {
           String urlDetailsInit = "${env.BUILD_URL}artifact/failure-details-${bn}.txt"
           String urlDetailsR1   = "${env.BUILD_URL}artifact/failure-details-rerun1-${bn}.txt"
           String urlDetailsR2   = "${env.BUILD_URL}artifact/failure-details-rerun2-${bn}.txt"
+          String urlTrend       = "${env.BUILD_URL}artifact/failure-trend-${bn}.md"
 
           String msg = """\
 ${passed ? "All test cases passed" : "Failures remain after 2nd rerun"}
@@ -367,6 +384,9 @@ Failure details:
 • initial: ${urlDetailsInit}
 • rerun1 : ${urlDetailsR1}
 • rerun2 : ${urlDetailsR2}
+
+Failure trend:
+• summary: ${urlTrend}
 
 ${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
 """.stripIndent()
