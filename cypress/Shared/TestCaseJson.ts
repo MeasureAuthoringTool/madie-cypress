@@ -3602,13 +3602,13 @@ export class TestCaseJson {
     public static readonly fromCMS1017NumPass = `{
   "resourceType": "Bundle",
   "id": "tests-NumerPass-RVBMI-bundle",
-  "type": "transaction",
+  "type": "collection",
   "entry": [
     {
-      "fullUrl": "https://madie.cms.gov/Patient/65163106-0b19-4548-a994-f44b35e162e0",
+      "fullUrl": "https://madie.cms.gov/Patient/71c28619-2052-4e52-8856-d0a7327b956f",
       "resource": {
         "resourceType": "Patient",
-        "id": "65163106-0b19-4548-a994-f44b35e162e0",
+        "id": "71c28619-2052-4e52-8856-d0a7327b956f",
         "meta": {
           "profile": [
             "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"
@@ -3670,10 +3670,6 @@ export class TestCaseJson {
         ],
         "gender": "female",
         "birthDate": "1956-01-01"
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
       }
     },
     {
@@ -3704,11 +3700,11 @@ export class TestCaseJson {
           }
         ],
         "subject": {
-          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+          "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
         },
         "period": {
-          "start": "2026-10-19T08:30:00.000+00:00",
-          "end": "2026-10-21T08:15:00.000+00:00"
+          "start": "2026-10-19T08:30:00.000Z",
+          "end": "2026-10-21T08:15:00.000Z"
         },
         "reasonCode": [
           {
@@ -3728,10 +3724,6 @@ export class TestCaseJson {
             ]
           }
         ]
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Encounter/Encounter-2"
       }
     },
     {
@@ -3762,16 +3754,12 @@ export class TestCaseJson {
           }
         ],
         "subject": {
-          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+          "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
         },
         "period": {
-          "start": "2026-10-18T09:15:00.000+00:00",
-          "end": "2026-10-19T08:15:00.000+00:00"
+          "start": "2026-10-18T09:15:00.000Z",
+          "end": "2026-10-19T08:15:00.000Z"
         }
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Encounter/Encounter-1"
       }
     },
     {
@@ -3796,7 +3784,7 @@ export class TestCaseJson {
         },
         "use": "claim",
         "patient": {
-          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+          "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
         },
         "created": "2026-10-22",
         "priority": {
@@ -3847,17 +3835,13 @@ export class TestCaseJson {
             "sequence": 1,
             "focal": true,
             "coverage": {
-              "reference": "Coverage/coverage-1"
+              "reference": "Coverage/d199155a-5e63-4503-a274-e8351402f11e"
             }
           }
         ],
         "provider": {
-          "reference": "Practitioner/practitioner-1"
+          "reference": "Practitioner/c880d1a3-6fef-4b0a-8e63-474b9f324319"
         }
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Claim/Claim-1"
       }
     },
     {
@@ -3882,7 +3866,7 @@ export class TestCaseJson {
         },
         "use": "claim",
         "patient": {
-          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+          "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
         },
         "created": "2026-11-01",
         "priority": {
@@ -3934,17 +3918,13 @@ export class TestCaseJson {
             "sequence": 1,
             "focal": true,
             "coverage": {
-              "reference": "Coverage/coverage-1"
+              "reference": "Coverage/d199155a-5e63-4503-a274-e8351402f11e"
             }
           }
         ],
         "provider": {
-          "reference": "Practitioner/practitioner-1"
+          "reference": "Practitioner/c880d1a3-6fef-4b0a-8e63-474b9f324319"
         }
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Claim/Claim-2"
       }
     },
     {
@@ -3980,19 +3960,15 @@ export class TestCaseJson {
           "text": "BMI"
         },
         "subject": {
-          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+          "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
         },
-        "effectiveDateTime": "2026-10-20T08:00:00.000+00:00",
+        "effectiveDateTime": "2026-10-20T08:00:00.000Z",
         "valueQuantity": {
           "value": 28.3,
           "unit": "kg/m2",
           "system": "http://unitsofmeasure.org",
           "code": "kg/m2"
         }
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Observation/BMI-Observation-1"
       }
     },
     {
@@ -4034,10 +4010,6 @@ export class TestCaseJson {
             ]
           }
         ]
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Practitioner/Practitioner-1"
       }
     },
     {
@@ -4047,17 +4019,14 @@ export class TestCaseJson {
         "id": "Coverage-1",
         "status": "active",
         "beneficiary": {
-          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+          "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
         },
         "payor": [
           {
             "reference": "Organization/Organization-1"
           }
-        ]
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Coverage/Coverage-1"
+        ],
+        "subscriberId": "12345plokm"
       }
     },
     {
@@ -4100,10 +4069,107 @@ export class TestCaseJson {
             "country": "USA"
           }
         ]
-      },
-      "request": {
-        "method": "PUT",
-        "url": "Organization/Organization-1"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Coverage/d199155a-5e63-4503-a274-e8351402f11e",
+      "resource": {
+        "id": "d199155a-5e63-4503-a274-e8351402f11e",
+        "resourceType": "Coverage",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-coverage"
+          ]
+        },
+        "beneficiary": {
+          "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
+        },
+        "payor": [
+          {
+            "reference": "Patient/71c28619-2052-4e52-8856-d0a7327b956f"
+          }
+        ],
+        "relationship": {
+          "coding": [
+            {
+              "system": "https://nahdo.org/sopt",
+              "code": "92",
+              "display": "Other (Non-government)",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/valueset-reference",
+                  "valueUri": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591"
+                }
+              ]
+            }
+          ]
+        },
+        "status": "active",
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "SB",
+                  "display": "Social Beneficiary Identifier",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/valueset-reference",
+                      "valueUri": "http://hl7.org/fhir/ValueSet/identifier-type"
+                    }
+                  ]
+                }
+              ]
+            },
+            "system": "http://abcde.com",
+            "value": "555"
+          }
+        ],
+        "subscriberId": "nofhiohluibds"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Practitioner/c880d1a3-6fef-4b0a-8e63-474b9f324319",
+      "resource": {
+        "id": "c880d1a3-6fef-4b0a-8e63-474b9f324319",
+        "resourceType": "Practitioner",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-practitioner"
+          ]
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MD",
+                  "display": "Medical License number",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/valueset-reference",
+                      "valueUri": "http://hl7.org/fhir/ValueSet/identifier-type"
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": "123456",
+            "system": "http://abcdef.com"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Davis",
+            "given": [
+              "Miles"
+            ]
+          }
+        ]
       }
     }
   ]

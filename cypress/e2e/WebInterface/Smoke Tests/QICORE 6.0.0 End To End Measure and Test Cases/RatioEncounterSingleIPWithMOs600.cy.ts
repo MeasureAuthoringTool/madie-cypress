@@ -43,7 +43,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
     })
 
     after('Clean up', () => {
-        Utilities.deleteMeasure(measureName, libraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End - Numerator Pass Result', () => {
@@ -91,12 +91,11 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
         cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
 
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('0')
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
 
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).type('0')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).type('1')
 
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should(
             'contain.text',

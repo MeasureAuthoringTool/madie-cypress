@@ -5,7 +5,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
-import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from '../../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
 const path = require('path')
@@ -13,6 +13,12 @@ const path = require('path')
 let measureName = 'ProportionBoolean600' + Date.now()
 let CqlLibraryName = 'ProportionBoolean600' + Date.now()
 const measureCQL = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
+const pops: MeasureGroups = {
+    initialPopulation: 'Initial Population',
+    denominator: 'Denominator',
+    numerator: 'Numerator',
+    denomException: 'Denominator Exception'
+}
 
 describe('Measure Creation and Testing: Proportion Episode Measure', () => {
     before('Create Measure, Test Case and Login', () => {
@@ -21,46 +27,20 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
             mpStartDate: '2026-01-01',
             mpEndDate: '2026-12-31',
         })
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Proportion, pops)
 
         OktaLogin.Login()
     })
 
     after('Logout', () => {
-        OktaLogin.UILogout()
+        Utilities.deleteMeasure()
     })
 
     it('End to End Proportion Episode Measure, Pass Result', () => {
-        //Click on Edit Button
+
         MeasuresPage.actionCenter('edit')
 
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).wait(1000).click()
-
-        Utilities.setMeasureGroupType()
-
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('boolean')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Proportion')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Denominator Exception')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-
-        cy.get(MeasureGroupPage.reportingTab).click()
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -75,7 +55,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         //Upload valid Json file via drag and drop
         cy.get(TestCasesPage.filAttachDropBox).selectFile(
-            path.join('cypress/fixtures', 'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip'),
+            path.join('cypress/fixtures', 'CMS645FHIR-v1.0.000-FHIR-TestCases.zip'),
             { action: 'drag-drop', force: true },
         )
 
@@ -83,7 +63,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 30000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should(
             'contain.text',
-            'CMS645FHIR-v1.0.000-FHIR6-TestCases.zip',
+            'CMS645FHIR-v1.0.000-FHIR-TestCases.zip',
         )
 
         //import the tests cases from selected / dragged and dropped .zip file
@@ -95,16 +75,16 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
-        //verify Passing Tab's text
+        //verify Passing Tab's text 
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '94%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(48/51)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(5/5)')
 
-        //Verify Coverage percentage
+        //Verify Coverage percentage 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '95%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '85%')
 
         //after versioning, there should be no change to test results or coverage
 
@@ -131,16 +111,16 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
-        //verify Passing Tab's text after Versioning
+        //verify Passing Tab's text 
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '94%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(48/51)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(5/5)')
 
-        //Verify Coverage percentage after versioning
+        //Verify Coverage percentage 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '95%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '85%')
     })
 })
 
