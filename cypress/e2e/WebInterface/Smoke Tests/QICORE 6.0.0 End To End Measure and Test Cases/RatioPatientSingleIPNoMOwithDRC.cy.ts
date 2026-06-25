@@ -13,6 +13,7 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Toasts } from '../../../../Shared/Toasts'
+import { Utilities } from '../../../../Shared/Utilities'
 
 const measureName = 'RatioPatientSingleIPNoMODRC' + Date.now()
 const CqlLibraryName = 'RatioPatientSingleIPNoMODRC' + Date.now()
@@ -83,7 +84,7 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
     })
 
     after('Clean up', () => {
-        // Utilities.deleteMeasure()
+         Utilities.deleteMeasure()
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, IPP Pass Result', () => {
