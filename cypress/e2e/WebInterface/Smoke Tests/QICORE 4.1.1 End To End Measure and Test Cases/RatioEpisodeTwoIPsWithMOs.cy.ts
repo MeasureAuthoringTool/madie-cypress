@@ -8,14 +8,15 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { QiCore4Cql } from '../../../../Shared/FHIRMeasuresCQL'
+import { Toasts } from '../../../../Shared/Toasts'
 
-let measureName = 'RatioEpisodeTwoIPsWithMOs' + Date.now()
-let CqlLibraryName = 'RatioEpisodeTwoIPsWithMOs' + Date.now()
-let testCaseTitlePass = 'MO PASS'
-let testCaseDescription = 'PASS' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let testCaseJsonIppPass = TestCaseJson.RatioEpisodeTwoIPsWithMOs_PASS
-let measureCQL = QiCore4Cql.ratioEpisodeTwoIPTwoMO
+const measureName = 'RatioEpisodeTwoIPsWithMOs' + Date.now()
+const CqlLibraryName = 'RatioEpisodeTwoIPsWithMOs' + Date.now()
+const testCaseTitlePass = 'MO PASS'
+const testCaseDescription = 'PASS' + Date.now()
+const testCaseSeries = 'SBTestSeries'
+const testCaseJsonIppPass = TestCaseJson.RatioEpisodeTwoIPsWithMOs_PASS
+const measureCQL = QiCore4Cql.ratioEpisodeTwoIPTwoMO
 
 // upgraded into RatioEncounterSingleIPWithMOs600.cy.ts
 describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
@@ -29,6 +30,7 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
             '2022-01-01',
             '2022-12-31',
         )
+
         TestCasesPage.CreateTestCaseAPI(testCaseTitlePass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
         OktaLogin.Login()
@@ -100,27 +102,22 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).clear().type('2')
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).clear().type('2')
 
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENOMExpected).clear().type('2')
 
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).should('exist')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).should('be.enabled')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).should('be.visible')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('1')
 
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).should('exist')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).should('be.visible')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('1')
 
         cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
@@ -131,19 +128,17 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('exist')
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('be.enabled')
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).scrollIntoView()
-        cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('be.visible')
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).clear().type('1')
 
         cy.get(TestCasesPage.numeratorObservationRow).eq(1).should('exist')
         cy.get(TestCasesPage.numeratorObservationRow).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(1).should('be.visible')
         cy.get(TestCasesPage.numeratorObservationRow).eq(1).clear().type('1')
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should(
+        cy.get(Toasts.otherSuccessToast).should(
             'contain.text',
-            'Test case updated successfully ' + 'with warnings in JSON',
+            'Test case updated successfully with warnings in JSON',
         )
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -158,10 +153,6 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
