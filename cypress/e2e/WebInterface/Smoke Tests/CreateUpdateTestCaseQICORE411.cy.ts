@@ -50,7 +50,6 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
     })
 
     afterEach('Logout and delete measure', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
