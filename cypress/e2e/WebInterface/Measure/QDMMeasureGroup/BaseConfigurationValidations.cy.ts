@@ -8,8 +8,8 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'BaseConfig' + Date.now()
-let CqlLibraryName = 'BaseConfigLib' + Date.now()
+let measureName = 'BaseConfig'
+let CqlLibraryName = 'BaseConfigLib'
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let altMeasureName = ''
@@ -22,21 +22,14 @@ const measureData: CreateMeasureOptions = {}
 describe('Validating Population tabs and fields, specific to QDM', () => {
 
     beforeEach('Create measure and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        let altRandValue = (Math.floor((Math.random() * 1000) + 2))
-        altMeasureName = measureName + altRandValue
-        altCqlLibraryName = CqlLibraryName + altRandValue
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
 
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -49,7 +42,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC
@@ -167,7 +159,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC
@@ -328,9 +319,8 @@ describe('Validating Non-owner access to Base Configuration page', () => {
 
     beforeEach('Create measure and login', () => {
 
-        let altRandValue = (Math.floor((Math.random() * 1000) + 2))
-        altMeasureName = measureName + altRandValue
-        altCqlLibraryName = CqlLibraryName + altRandValue
+        altMeasureName = measureName + Date.now()
+        altCqlLibraryName = CqlLibraryName + Date.now()
 
         CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL)
 
@@ -384,9 +374,8 @@ describe('Validating Non-owner access to Base Configuration page', () => {
 
 describe('Updates on Base Configuration page', () => {
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue + 5
-    newCqlLibraryName = CqlLibraryName + randValue + 5
+    newMeasureName = measureName + Date.now()
+    newCqlLibraryName = CqlLibraryName + Date.now()
 
     beforeEach('Create Measure and login', () => {
 
@@ -399,10 +388,7 @@ describe('Updates on Base Configuration page', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
@@ -414,7 +400,6 @@ describe('Updates on Base Configuration page', () => {
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //select 'Cohort' scoring on measure
