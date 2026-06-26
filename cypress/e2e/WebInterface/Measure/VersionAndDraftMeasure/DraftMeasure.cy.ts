@@ -4,15 +4,13 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { LandingPage } from "../../../../Shared/LandingPage"
 import { Toasts } from "../../../../Shared/Toasts"
 
 let updatedMeasuresPageName = ''
 let updatedMeasuresPageNameSecond = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 const cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
@@ -24,8 +22,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
-        newMeasureName = 'DraftVersionValidations' + Date.now() + randValue
-        newCqlLibraryName = 'DraftVersionValidationsLib' + Date.now() + randValue
+        newMeasureName = 'DraftVersionValidations' + Date.now()
+        newCqlLibraryName = 'DraftVersionValidationsLib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
@@ -33,44 +31,16 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        cy.get(Header.mainMadiePageButton).click()
-        cy.get(LandingPage.newMeasureButton).should('be.visible')
-    })
-
-    afterEach('Logout', () => {
-
-        OktaLogin.UILogout()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     it('Add Draft to the versioned measure', () => {
-
-        let currentUser = Cypress.env('selectedUser')
-        const filePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        let versionNumber = '1.0.000'
+    
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        MeasuresPage.actionCenter('version')
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
 
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(versionNumber)
-        cy.log('Version Created Successfully')
-
-        //navigate back to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-        cy.get(LandingPage.newMeasureButton).should('be.visible')
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        cy.reload()
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
@@ -82,6 +52,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         //intercept draft id once measure is drafted
+        let currentUser = Cypress.env('selectedUser')
+        const filePath = 'cypress/fixtures/' + currentUser + '/measureId'
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
         })
@@ -106,13 +78,11 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 
-        MeasuresPage.actionCenter('version')
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
 
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
+        cy.reload()
+
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -142,19 +112,11 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         updatedMeasuresPageName = 'UpdatedDVValidations' + Date.now()
 
-        MeasuresPage.actionCenter('version')
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
 
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumberFirst)
+        cy.reload()
 
-        cy.get('.MuiDialogContent-root').click()
-
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-
-        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.validateVersionNumber(versionNumberFirst)
         cy.log('Major Version Created Successfully')
 
@@ -227,21 +189,12 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
         updatedMeasuresPageNameSecond = 'UpdatedTestMeasures2' + Date.now()
 
-        MeasuresPage.actionCenter('version')
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
 
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumberFirst)
+        cy.reload()
 
-        cy.get('.MuiDialogContent-root').click()
-
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-
-        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.validateVersionNumber(versionNumberFirst)
-        cy.log('v4.1.1 Major Version Created Successfully')
 
         MeasuresPage.selectMeasure()
         MeasuresPage.actionCenter('draft')

@@ -114,10 +114,7 @@ describe('Validating Stratification tabs', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up', () => {
@@ -129,7 +126,6 @@ describe('Validating Stratification tabs', () => {
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC
@@ -199,7 +195,6 @@ describe('Validating Stratification tabs', () => {
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC
@@ -308,13 +303,8 @@ describe('Validating Stratification tabs', () => {
 
     it('Stratification tab is not present / available when the Ratio scoring value is selected', () => {
 
-        //Click on Edit Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC
@@ -357,13 +347,8 @@ describe('Validating Stratification tabs', () => {
 
     it('Verify error message when the Stratification return type does not match with population basis', () => {
 
-        //Click on Edit Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC

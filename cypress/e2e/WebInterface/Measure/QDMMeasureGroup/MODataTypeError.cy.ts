@@ -126,12 +126,7 @@ describe('MO datatype Error', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Group Creation
 
