@@ -93,6 +93,34 @@ npx cypress verify
 
 You should see a success message with the Cypress version.
 
+### Code Formatting
+
+This project uses Prettier for shared code formatting. Prettier is installed as a project dev dependency, so no global Prettier install is required after running `npm install`. The Prettier configuration is committed to the repo so command-line formatting and IDE formatting use the same rules.
+
+Format one or more files:
+
+```bash
+npm run format -- cypress/e2e/path/to/file.cy.ts
+```
+
+Check whether one or more files already match the shared formatting:
+
+```bash
+npm run format:check -- cypress/e2e/path/to/file.cy.ts
+```
+
+Prettier formats the entire file passed to it. To keep PR diffs focused, format the files you are already changing unless the team agrees on a dedicated formatting-only PR.
+
+#### VS Code Users
+
+Install the Prettier extension and enable `prettier.requireConfig` so Prettier only runs in projects that have a repo-level config.
+
+```json
+{
+    "prettier.requireConfig": true
+}
+```
+
 ---
 
 ## 5. Configure Environment Variables

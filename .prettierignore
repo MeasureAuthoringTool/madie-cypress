@@ -1,0 +1,8 @@
+node_modules
+cypress/results
+cypress/screenshots
+cypress/videos
+lighthouse-report
+mochawesome-report
+runner-results
+package-lock.json
