@@ -8,9 +8,11 @@ import { step } from "../utils/step"
 const now = require('dayjs')
 
 export enum SupportedModels {
+    FHIR = 'FHIR v4.0.1',
     QDM = 'QDM v5.6',
     qiCore4 = 'QI-Core v4.1.1',
     qiCore6 = 'QI-Core v6.0.0',
+    usCore = 'US-Core v6.1.0',
     USQC = 'US Quality Core v0.5.0'
 }
 

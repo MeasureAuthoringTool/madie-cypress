@@ -56,8 +56,8 @@ describe('Edit Measure', () => {
 
         //Edit Measure Name
         MeasuresPage.actionCenter("edit")
-
-        cy.get(EditMeasurePage.measureNameTextBox).clear()
+        
+        cy.get(EditMeasurePage.measureNameTextBox).wait(3500).clear()
         cy.get(EditMeasurePage.measureNameTextBox).type(updatedMeasureName)
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
 
@@ -97,6 +97,7 @@ describe('Edit Measure', () => {
 
         //Navigate back to Measures page and verify if the Measure Name is updated
         cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
 
         MeasuresPage.validateMeasureName(updatedMeasureName)
     })

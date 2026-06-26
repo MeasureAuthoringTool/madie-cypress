@@ -1992,6 +1992,8 @@ export class TestCaseJson {
         '\t]\n' +
         '}'
 
+
+
     public static readonly RatioEpisodeTwoIPsWithMOs_PASS = '{\n' +
         '  "id": "60ad199cacdbd5186fd799f3",\n' +
         '  "resourceType": "Bundle",\n' +
@@ -2374,9 +2376,6 @@ export class TestCaseJson {
         '            },\n' +
         '            "period": {\n' +
         '              "start": "1995"\n' +
-        '            },\n' +
-        '            "issuer": {\n' +
-        '              "display": "Example University"\n' +
         '            }\n' +
         '          }\n' +
         '        ]\n' +
@@ -3336,9 +3335,6 @@ export class TestCaseJson {
         '              },' +
         '              "period": {' +
         '                "start": "1995"' +
-        '              },' +
-        '              "issuer": {' +
-        '                "display": "Example University"' +
         '              }' +
         '            }' +
         '          ]' +

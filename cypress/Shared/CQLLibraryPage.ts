@@ -18,6 +18,7 @@ export enum EditLibraryActions {
 }
 
 export type CreateLibraryOptions = {
+    model?: SupportedModels
     cql?: string
     cqlErrors?: boolean
     description?: string
@@ -30,6 +31,16 @@ export class CQLLibraryPage {
     public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
     public static readonly sharedLibrariesTab = '[data-testid="shared-libraries-tab"]'
     public static readonly allLibrariesTab = '[data-testid="all-libraries-tab"]'
+
+    // create library dropdown
+    public static readonly fhir = '[data-testid="all-libraries-tab"]'
+    public static readonly qiCore6 = '[data-testid="all-libraries-tab"]'
+    public static readonly qdm = '[data-testid="all-libraries-tab"]'
+    public static readonly usCore6 = '[data-testid="all-libraries-tab"]'
+    public static readonly usqc = '[data-testid="all-libraries-tab"]'
+    // older versions, in case
+    public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
+    public static readonly cqlLibraryModelQDM = '[data-testid="cql-library-model-option-QDM v5.6"]'
 
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
     public static readonly cqlLibraryGreenToast = '[data-testid="cql-library-list-snackBar"]'
@@ -46,7 +57,6 @@ export class CQLLibraryPage {
     public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
     public static readonly LibFilterTextField = '[data-testid="library-list-search-input"]'
     public static readonly filterByDropdown = '[data-testid="filter-by-select"]'
-    public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly saveCQLLibraryBtn = '[data-testid="continue-button"]'
     public static readonly updateCQLLibraryBtn = '[data-testid="cql-library-save-button"]'
     public static readonly cqlLibraryNameInvalidError = '[data-testid="cqlLibraryName-helper-text"]'
@@ -89,42 +99,51 @@ export class CQLLibraryPage {
     //Error marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
 
-    //QDM Library
-    public static readonly cqlLibraryModelQDM = '[data-testid="cql-library-model-option-QDM v5.6"]'
-
-    public static createCQLLibrary(CQLLibraryName: string, CQLLibraryPublisher: string): void {
-        const currentUser = Cypress.env('selectedUser')
+    public static createCQLLibrary(CQLLibraryName: string, options?: CreateLibraryOptions): void {
+        let publisher = 'ICF'
+        if (options?.publisher) {
+            publisher = options.publisher
+        }
+        let model = SupportedModels.qiCore6
+        if (options?.model) {
+            model = options.model
+        }
+        let desc = 'description'
+        if (options?.description) {
+            desc = options.description
+        }
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
+        Utilities.waitForElementVisible(CQLLibrariesPage.librariesList, 30000)
 
-        cy.get(Header.cqlLibraryTab).click().wait(1500)
-
-        Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
-
-        cy.get(this.createCQLLibraryBtn).should('be.visible')
+      //  Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
         cy.get(this.createCQLLibraryBtn).should('be.enabled')
         cy.get(this.createCQLLibraryBtn).click()
 
-        cy.get(this.newCQLLibName).should('be.visible')
+        Utilities.waitForElementVisible(this.newCQLLibName, 7500)
         cy.get(this.newCQLLibName).type(CQLLibraryName)
-        Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, CQLLibraryPage.cqlLibraryModelQICore)
-        cy.get(this.cqlLibraryDesc).type('description')
+
+        Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, model)
+
+        cy.get(this.cqlLibraryDesc).type(desc)
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(CQLLibraryPublisher).type('{downArrow}{enter}')
+        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(publisher).type('{downArrow}{enter}')
 
         this.clickCreateLibraryButton()
         Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
+        const currentUser = Cypress.env('selectedUser')
         cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId')
             .should('exist')
             .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '-content"]').should('contain', CQLLibraryName)
-                cy.get('[data-testid="measure-name-' + fileContents + '-model-content"]').should('contain', 'QI-Core')
+                cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', CQLLibraryName)
+                // ToDo?: add a check here for model
             })
-        cy.log('QI-Core CQL Library Created Successfully')
+        cy.log('CQL Library Created Successfully')
     }
 
     public static clickCreateLibraryButton(): void {

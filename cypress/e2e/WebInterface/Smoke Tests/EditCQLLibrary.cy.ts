@@ -19,7 +19,7 @@ describe('Smoke test - Edit CQL Library', () => {
     })
 
     afterEach('Logout', () => {
-        OktaLogin.UILogout()
+        Utilities.deleteLibrary()
     })
 
     it('Edit CQL Library Name and verify the library is updated on CQL Library page', () => {

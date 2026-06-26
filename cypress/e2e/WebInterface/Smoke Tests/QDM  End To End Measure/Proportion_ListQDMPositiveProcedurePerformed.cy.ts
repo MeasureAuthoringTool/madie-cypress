@@ -71,7 +71,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
         cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
             'contain.text',
-            'Measure Base Configuration ' + 'Updated Successfully',
+            'Measure Base Configuration Updated Successfully',
         )
 
         //add pop criteria
@@ -87,7 +87,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Population details for ' + 'this group saved successfully.',
+            'Population details for this group saved successfully.',
         )
 
         //Add Supplemental Data Elements
