@@ -3,7 +3,7 @@ import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
 import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
 import { TestCaseAction, TestCasesPage } from '../../../../Shared/TestCasesPage'
@@ -52,7 +52,6 @@ describe('Measure Versioning validations', () => {
     })
 
     afterEach('Logout and Clean up', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -120,15 +119,10 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout', () => {
-        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -211,34 +205,18 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up', () => {
-        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Measure owner able to Add, Clone, and Import Test cases to Qi Core Versioned Measure', () => {
-        //Version the Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('version')
 
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(Toasts.successToast, { timeout: 45000 }).should(
-            'contain.text',
-            'New version of measure is Successfully created',
-        )
-        cy.log('Version Created Successfully')
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
 
-        //Add Test case
-        MeasuresPage.actionCenter('edit')
+        cy.reload()
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         //Clone Test case
@@ -264,25 +242,10 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
-        //Version the Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('version')
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000').wait(1000)
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(Toasts.successToast, { timeout: 45000 }).should(
-            'contain.text',
-            'New version of measure is Successfully created',
-        )
-
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
+        cy.reload()
     })
 
     afterEach('Logout and Clean up', () => {
@@ -290,6 +253,7 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
     })
 
     it('Measure owner able to Edit Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
+        
         //Edit Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -341,7 +305,6 @@ describe('Non Measure owner unable to create Version', () => {
     })
 
     after('Logout and Clean up', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
