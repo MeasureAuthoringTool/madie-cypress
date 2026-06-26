@@ -25,6 +25,8 @@
 		"test:specific:files:parallel": "node -e \"const fs=require('fs');const {spawnSync}=require('child_process');const list='test-files.txt';if(!fs.existsSync(list)){console.error('Missing spec list file:',list);process.exit(1);}const specs=fs.readFileSync(list,'utf8').split(/\\r?\\n/).map(s=>s.trim()).filter(Boolean);if(!specs.length){console.error('Spec list is empty after reading',list);process.exit(1);}const npx=process.platform==='win32'?'npx.cmd':'npx';const args=['cypress-parallel','-s','cy:run:test:headed','-t','3','--spec',...specs,'-p','cypress/parallel-reporter-config.json'];console.log('cypress-parallel args:', args.join(' '));const res=spawnSync(npx,args,{stdio:'inherit',env:{...process.env,NO_COLOR:'1'}});process.exit(res.status||0);\"",
 		"dev:specific:files:parallel": "node -e \"const fs=require('fs');const {spawnSync}=require('child_process');const list='test-files.txt';if(!fs.existsSync(list)){console.error('Missing spec list file:',list);process.exit(1);}const specs=fs.readFileSync(list,'utf8').split(/\\r?\\n/).map(s=>s.trim()).filter(Boolean);if(!specs.length){console.error('Spec list is empty after reading',list);process.exit(1);}const npx=process.platform==='win32'?'npx.cmd':'npx';const args=['cypress-parallel','-s','cy:run:dev:headed','-t','3','--spec',...specs,'-p','cypress/parallel-reporter-config.json'];console.log('cypress-parallel args:', args.join(' '));const res=spawnSync(npx,args,{stdio:'inherit',env:{...process.env,NO_COLOR:'1'}});process.exit(res.status||0);\"",
 		"compile": "tsc --noEmit",
+		"format": "prettier --write",
+		"format:check": "prettier --check",
 		"combine:reports": "npx mochawesome-merge 'cypress/results/*.json' > mochawesome.json",
 		"generateOne:report": "npx marge mochawesome.json",
 		"delete:mochawesome": "rm mochawesome.json",
@@ -111,6 +113,7 @@
 		"cypress-real-events": "^1.15.0",
 		"mochawesome": "^7.1.3",
 		"mochawesome-merge": "^5.1.0",
+		"prettier": "3.8.5",
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
