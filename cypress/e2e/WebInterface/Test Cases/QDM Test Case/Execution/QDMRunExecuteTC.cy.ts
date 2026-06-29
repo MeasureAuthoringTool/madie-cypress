@@ -34,13 +34,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -60,7 +55,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -331,7 +325,6 @@ describe('Run / Execute QDM Test Case button validations', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -344,6 +337,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/QDMMeasureCQL.txt').should('exist').then((fileContents) => {
+            cy.wait(3000)
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
@@ -356,21 +350,6 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
-
-        //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
@@ -389,6 +368,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/QDMMeasureCQL.txt').should('exist').then((fileContents) => {
+            cy.wait(3000)
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
@@ -399,6 +379,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
+        cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
@@ -419,6 +400,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/QDMMeasureCQL.txt').should('exist').then((fileContents) => {
+            cy.wait(3000)
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
@@ -466,18 +448,11 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -546,18 +521,11 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')        
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })       
     })
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 

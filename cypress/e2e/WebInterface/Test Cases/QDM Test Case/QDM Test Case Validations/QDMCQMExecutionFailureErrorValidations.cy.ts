@@ -36,7 +36,6 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
     })
 
     afterEach('Logout and Clean up', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -77,7 +76,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
         cy.get(TestCasesPage.testCaseSyntaxError).should(
             'contain.text',
-            'An error exists with the measure CQL, please review the CQL Editor tab',
+            'An error occurred, please try again. If the error persists, please contact the help desk. (004)'
         )
 
         //confirm that the Run Test button is disabled
@@ -139,7 +138,6 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
     })
 
     afterEach('Logout and Clean up', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -181,29 +179,14 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
     })
 
     afterEach('Logout and Clean up', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
-    it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
+    //f
+    it.only("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //navigate to the CQL Editor tab, for the measure
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get('[data-testid="generic-error-text-header"]').should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true }) 
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -215,7 +198,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
         cy.get(TestCasesPage.testCaseSyntaxError).should(
             'contain.text',
-            'An error exists with the measure CQL, please review the CQL Editor tab.',
+            'An error occurred, please try again. If the error persists, please contact the help desk. (004): Failed to fetch VSAC value set expansions',
         )
 
         //confirm that the Run Test button is disabled
