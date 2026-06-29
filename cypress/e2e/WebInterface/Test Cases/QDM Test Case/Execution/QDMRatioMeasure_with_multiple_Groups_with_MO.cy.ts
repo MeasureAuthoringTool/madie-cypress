@@ -35,45 +35,24 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-
         OktaLogin.Login()
-
-        //adding supplemental data
         MeasuresPage.actionCenter('edit')
-        // add SDE to test case coverage
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
+        // //adding supplemental data
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         MeasureGroupPage.includeSdeData()
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Logout and Clean up', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Test Case execution with patient based groups with MOs', () => {
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Group Creation
         //Click on Measure Group tab
@@ -198,7 +177,6 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
         cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
-
     })
 })
 
@@ -214,47 +192,25 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         measureData.mpStartDate = '2023-01-01'
         measureData.mpEndDate = '2024-12-31'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-
         OktaLogin.Login()
-
-        //adding supplemental data
         MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         MeasureGroupPage.includeSdeData()
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Logout and Clean up', () => {
 
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        Utilities.deleteMeasure()
     })
 
     it('Test Case execution with non-patient based groups with MOs', () => {
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Group Creation
         //Click on Measure Group tab

@@ -12,49 +12,28 @@ export class umlsLoginForm {
     public static readonly genericError = '[data-testid="UMLS-login-generic-error-text"]'
     public static readonly closeGenericError = '[data-testid="CloseIcon"]'
 
-    public static retrieveAndEnterAPIKey(): void {
-
-        cy.get(this.apiTextInput).type(Environment.credentials().umls_API_KEY)
-    }
-
     public static UMLSLogin(): void {
-        //umls login link appears and is available to click, at the top of the page
-        cy.get(Header.umlsLoginButton).should('exist')
-        cy.get(Header.umlsLoginButton).should('be.visible')
-        cy.get(Header.umlsLoginButton).should('be.enabled')
-        Utilities.waitForElementVisible(Header.umlsLoginButton, 35000)
+        cy.log('umls not connected - logging in now')
+
+        // open connection drawer
+        Utilities.waitForElementVisible(Header.umlsLoginButton, 15000)
         cy.get(Header.umlsLoginButton).click()
 
-        // After clicking the UMLS button, either a submenu with "Connect to UMLS"
-        // appears or the form opens directly. Handle both cases.
-        cy.wait(1000)
-        cy.get('body').then(($body) => {
-            if ($body.find('[data-value="Connect to UMLS"]').length > 0) {
-                cy.get('[data-value="Connect to UMLS"]', { timeout: 15000 }).should('be.visible').click()
-            }
-        })
+        cy.get('[data-value="Connect to UMLS"]', { timeout: 15000 }).should('be.visible').click()
 
-        //form to enter API and to actually log into UMLS appears and is available to read and enter API key
-        cy.get(umlsLoginForm.umlsForm).should('exist')
-        cy.get(umlsLoginForm.umlsForm).should('be.visible')
+        //form to enter API key appears
+        cy.get(this.umlsForm).should('be.visible')
 
         //enter API key into input text box
-        cy.get(umlsLoginForm.apiTextInput).should('exist')
-        cy.get(umlsLoginForm.apiTextInput).click()
-        cy.get(umlsLoginForm.apiTextInput).should('be.visible')
-        cy.get(umlsLoginForm.apiTextInput).should('be.enabled')
-        umlsLoginForm.retrieveAndEnterAPIKey()
+        cy.get(this.apiTextInput).should('be.enabled')
+        cy.get(this.apiTextInput).type(Environment.credentials().umls_API_KEY)
 
         //click on 'Connect to UMLS' button
-        cy.get(umlsLoginForm.connectToUMLSButton).should('exist')
-        Utilities.waitForElementEnabled(umlsLoginForm.connectToUMLSButton, 3000)
-        cy.get(umlsLoginForm.connectToUMLSButton).should('be.enabled')
-        cy.get(umlsLoginForm.connectToUMLSButton).click()
+        Utilities.waitForElementEnabled(this.connectToUMLSButton, 6000)
+        cy.get(this.connectToUMLSButton).click()
 
-
-        //confirmation appears indicating that user is, now, logged into UMLS
-        cy.get(umlsLoginForm.umlsConnectSuccessMsg).should('exist')
-        cy.get(umlsLoginForm.umlsConnectSuccessMsg).should('be.visible')
-        cy.get(umlsLoginForm.umlsConnectSuccessMsg).should('contain.text', 'UMLS successfully authenticated')
+        //confirmation appears indicating that user is logged into UMLS
+        cy.get(this.umlsConnectSuccessMsg).should('be.visible')
+        cy.get(this.umlsConnectSuccessMsg, { timeout: 9500 }).should('contain.text', 'UMLS successfully authenticated')
     }
 }

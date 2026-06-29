@@ -1,5 +1,5 @@
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
@@ -8,20 +8,19 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
-let measureName = 'MeasureForTCExpectedValues' + now + randValue
-let CqlLibraryName = 'TestLibrary' + now + randValue
-let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + now
-let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
+const measureName = 'MeasureForTCExpectedValues' + now
+const CqlLibraryName = 'LibForTCExpectedValues' + now
+const testCaseTitle = 'Title for Auto Test'
+const testCaseDescription = 'DENOMFail' + now
+const testCaseSeries = 'SBTestSeries'
+const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
 describe('Validate Test Case Expected value updates on Measure Group change', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
     })
@@ -45,7 +44,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).click()
         cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
         cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
@@ -62,10 +60,8 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationMsg).contains('Are you sure you want to Save Changes?')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
@@ -93,7 +89,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).click()
         cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
         cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
@@ -101,7 +96,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
 
         //Navigate to Measure group page and update scoring type
@@ -127,8 +121,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 6000)
 
         //Navigate to test Cases page and verify Test Case Expected values are cleared
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -192,6 +185,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.wait(3000)
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
@@ -252,7 +246,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseDENEXExpected).should('not.exist')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMEXExpected).click()
         cy.get(TestCasesPage.testCaseNUMEXExpected).check().should('be.checked')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

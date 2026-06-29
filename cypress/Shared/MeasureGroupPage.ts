@@ -341,6 +341,7 @@ export class MeasureGroupPage {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.wait(3000)
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
@@ -382,6 +383,7 @@ export class MeasureGroupPage {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.wait(3000)
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
