@@ -1,7 +1,10 @@
 pipeline {
   agent { label 'madie' }
 
-  options { buildDiscarder(logRotator(numToKeepStr: '20')) }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    timeout(time: 12, unit: 'HOURS')
+  }
 
   parameters {
     choice(
@@ -145,13 +148,19 @@ pipeline {
 
         slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
 
-        catchError(buildResult: 'FAILURE') {
+        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE', catchInterruptions: false) {
           sh '''
             cd ${WORKSPACE}
             # Per-run report: start clean
             npm run delete:reports
-            npm run $TEST_SCRIPT
-            echo $?
+            set +e
+            timeout 8h npm run "$TEST_SCRIPT"
+            TEST_STATUS=$?
+            if [ "$TEST_STATUS" -eq 124 ]; then
+              echo "Initial Cypress run exceeded the 8h timeout."
+              sh scripts/ci-diagnostics.sh
+            fi
+            exit "$TEST_STATUS"
           '''
         }
 
@@ -209,7 +218,7 @@ pipeline {
               RERUN_SCRIPT="impl:rerun:failures"
               ;;
             *)
-              RERUN_SCRIPT="test:specific:files:parallel"
+              RERUN_SCRIPT="test:specific:failed-tests"
               ;;
           esac
           echo "Using rerun script: ${RERUN_SCRIPT}"
@@ -236,12 +245,24 @@ pipeline {
             impl:*)
               SPEC_LIST=$(cat ${WORKSPACE}/test-files.txt | tr '\n' ',' | sed 's/,$//')
               echo "IMPL rerun specs: ${SPEC_LIST}"
-              NO_COLOR=1 npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome || true
+              set +e
+              NO_COLOR=1 timeout 2h npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome
+              RERUN_STATUS=$?
+              set -e
               ;;
             *)
-              npm run ${RERUN_SCRIPT} || true
+              set +e
+              FAILED_TEST_SUMMARY=${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json \
+                CYPRESS_RERUN_CONFIG=test \
+                timeout 4h npm run ${RERUN_SCRIPT}
+              RERUN_STATUS=$?
+              set -e
               ;;
           esac
+          if [ "${RERUN_STATUS:-0}" -eq 124 ]; then
+            echo "Rerun #1 exceeded the 4h timeout."
+            sh scripts/ci-diagnostics.sh
+          fi
 
           # Extract failures and human-readable failure details from rerun #1
           node scripts/extract-failure-details.js \
@@ -282,12 +303,24 @@ pipeline {
             impl:*)
               SPEC_LIST=$(cat ${WORKSPACE}/test-files.txt | tr '\n' ',' | sed 's/,$//')
               echo "IMPL rerun specs: ${SPEC_LIST}"
-              NO_COLOR=1 npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome || true
+              set +e
+              NO_COLOR=1 timeout 2h npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome
+              RERUN_STATUS=$?
+              set -e
               ;;
             *)
-              npm run ${RERUN_SCRIPT} || true
+              set +e
+              FAILED_TEST_SUMMARY=${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json \
+                CYPRESS_RERUN_CONFIG=test \
+                timeout 4h npm run ${RERUN_SCRIPT}
+              RERUN_STATUS=$?
+              set -e
               ;;
           esac
+          if [ "${RERUN_STATUS:-0}" -eq 124 ]; then
+            echo "Rerun #2 exceeded the 4h timeout."
+            sh scripts/ci-diagnostics.sh
+          fi
 
           # Extract failures and human-readable failure details from rerun #2
           node scripts/extract-failure-details.js \
@@ -397,6 +430,7 @@ ${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
           echo "Post summary/Slack failed: ${e}"
         }
       }
+      archiveArtifacts artifacts: "mochawesome-*.tar.gz, failures-*.txt, failure-details-*.txt, failure-summary-*.json, failure-trend-*.json, failure-trend-*.md, cypress/results/*.json, runner-results/*.json", allowEmptyArchive: true, onlyIfSuccessful: false
       cleanWs()
     }
   }
