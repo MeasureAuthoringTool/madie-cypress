@@ -100,14 +100,22 @@ if (failedTestTitles.size) {
 
   const wrapIt = (itFn: any) => {
     const wrapped = function (title: string, fn?: Mocha.Func) {
-      const runnable = failedTestTitles.has(fullTitle(title)) ? itFn : itFn.skip
-      return runnable(title, fn)
+      const shouldRun = failedTestTitles.has(fullTitle(title))
+      const test = itFn(title, shouldRun ? fn : undefined)
+      if (!shouldRun) {
+        test.pending = true
+      }
+      return test
     }
 
     wrapped.only = itFn.only
       ? function (title: string, fn?: Mocha.Func) {
-          const runnable = failedTestTitles.has(fullTitle(title)) ? itFn.only : itFn.skip
-          return runnable(title, fn)
+          const shouldRun = failedTestTitles.has(fullTitle(title))
+          const test = itFn.only(title, shouldRun ? fn : undefined)
+          if (!shouldRun) {
+            test.pending = true
+          }
+          return test
         }
       : undefined
     wrapped.skip = itFn.skip ? itFn.skip.bind(itFn) : undefined
