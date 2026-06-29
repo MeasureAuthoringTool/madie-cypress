@@ -30,6 +30,11 @@ pipeline {
       description: 'Choose the Test script to run',
       name: 'TEST_SCRIPT'
     )
+    text(
+      name: 'MANUAL_SPEC_LIST',
+      defaultValue: '',
+      description: 'Optional newline-separated Cypress spec files. Use with test:specific:files:parallel to create test-files.txt at runtime.'
+    )
     choice(name: 'BUILD_CONTAINER', description: 'Rebuild Cypress Container?', choices: ['no','yes'])
   }
 
@@ -153,6 +158,15 @@ pipeline {
             cd ${WORKSPACE}
             # Per-run report: start clean
             npm run delete:reports
+            if [ -n "${MANUAL_SPEC_LIST:-}" ]; then
+              echo "Writing MANUAL_SPEC_LIST to ${WORKSPACE}/test-files.txt"
+              printf '%s\\n' "${MANUAL_SPEC_LIST}" \
+                | tr -d '\\r' \
+                | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;/^$/d' \
+                > ${WORKSPACE}/test-files.txt
+              echo "Manual spec list contains $(wc -l < ${WORKSPACE}/test-files.txt) spec(s):"
+              cat ${WORKSPACE}/test-files.txt
+            fi
             set +e
             timeout 8h npm run "$TEST_SCRIPT"
             TEST_STATUS=$?
