@@ -1,13 +1,13 @@
-import { CreateMeasurePage, CreateMeasureOptions, SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { TestCase, TestCasesPage } from "../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { QiCore6Cql } from "../../../Shared/FHIRMeasuresCQL"
+import { CreateMeasurePage, CreateMeasureOptions, SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
+import { TestCase, TestCasesPage } from '../../../Shared/TestCasesPage'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { Utilities } from '../../../Shared/Utilities'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { TestCaseJson } from '../../../Shared/TestCaseJson'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { QiCore6Cql } from '../../../Shared/FHIRMeasuresCQL'
 const dayjs = require('dayjs')
 
 const now = Date.now()
@@ -21,16 +21,14 @@ const testCase: TestCase = {
 }
 const opts: CreateMeasureOptions = {
     // test measure based on CMS529FHIR, same config as CohortEncounter600.cy.ts
-    measureCql: QiCore6Cql.cqlCMS529, 
+    measureCql: QiCore6Cql.cqlCMS529,
     mpStartDate: '2026-01-01',
     mpEndDate: '2026-12-31'
 }
 const today = dayjs().format('MM/DD/YYYY')
 
 describe('Check all variations of calculated dates', () => {
-
     beforeEach('Create Measure and Test Case', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6, opts)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
@@ -38,12 +36,7 @@ describe('Check all variations of calculated dates', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -53,12 +46,10 @@ describe('Check all variations of calculated dates', () => {
     })
 
     afterEach('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Check all options in Duration/Difference tab', () => {
-
         // verify initial
         cy.contains('Start Date').should('be.visible')
         cy.contains('End Date').should('be.visible')
@@ -108,7 +99,6 @@ describe('Check all variations of calculated dates', () => {
     })
 
     it('Check all options in Computed Date tab', () => {
-
         cy.get(TestCasesPage.calculatorTool.computedDateTab).click()
 
         // verify initial
