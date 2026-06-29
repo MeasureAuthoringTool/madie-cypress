@@ -1,13 +1,13 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 
 const now = Date.now()
 const measureName = 'QiCoreManifestExpansion' + now
@@ -16,31 +16,31 @@ const measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 describe('Validating QICore Expansion -> Manifest', () => {
-
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean'
+        )
         TestCasesPage.CreateTestCaseAPI('passing test', 'abc', 'example', testCaseJson)
 
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify Madie users can successfully execute test cases against their chosen manifest version', () => {
-
         // set intercept for manifest expansion
         cy.intercept('PUT', '/api/terminology/value-sets/expansion/fhir').as('expansion')
 
@@ -52,10 +52,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
         cy.get(TestCasesPage.qdmExpansionSubTab).click()
 
         // select manifest expansion
-        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
-            .find('[type="radio"]')
-            .last()
-            .click()
+        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup).find('[type="radio"]').last().click()
 
         // choose ecqm-update-2022-0505
         cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
@@ -71,7 +68,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
 
         // intercept expansion API call & check for expected versions
         const expectedVersions = ['20170504', '20190315', '20240110', '20180310']
-        cy.wait('@expansion', { timeout: 30000 }).then(expansion => {
+        cy.wait('@expansion', { timeout: 30000 }).then((expansion) => {
             expect(expansion?.response?.body).to.have.length(5)
             // no guarantee of return order, and this avoids a for loop
             expect(expansion?.response?.body[0].version).to.be.oneOf(expectedVersions)

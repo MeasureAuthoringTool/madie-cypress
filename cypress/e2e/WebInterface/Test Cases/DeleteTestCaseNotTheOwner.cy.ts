@@ -1,13 +1,13 @@
-import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { TestCase, TestCasesPage } from "../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { TestCaseJson } from '../../../Shared/TestCaseJson'
+import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { Utilities } from '../../../Shared/Utilities'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { TestCase, TestCasesPage } from '../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
+import { MeasureCQL } from '../../../Shared/MeasureCQL'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 let measureName = 'DeleteTC' + now
@@ -26,34 +26,40 @@ const testCase2: TestCase = {
 }
 
 describe('Delete Test Case', () => {
-
     beforeEach('Create measure and login', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2012-01-02', '2013-01-01')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            0,
+            false,
+            '2012-01-02',
+            '2013-01-01'
+        )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, undefined, undefined, undefined, undefined, undefined,
-            undefined, undefined, 'Procedure')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            'Procedure'
+        )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify Non owner of the Measure unable to delete Test Case', () => {
-
         TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
 
         OktaLogin.UILogout()
@@ -63,7 +69,7 @@ describe('Delete Test Case', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.allMeasuresTab).click({ force: true })
 
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -79,7 +85,7 @@ describe('Delete Test Case', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.reportsButton).should('be.visible')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        
+
         cy.contains('View').should('be.visible')
     })
 })

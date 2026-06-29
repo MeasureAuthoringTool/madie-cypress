@@ -1,18 +1,18 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Header } from "../../../../Shared/Header"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Header } from '../../../../Shared/Header'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 
 const measureData: CreateMeasureOptions = {
     measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 }
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let QDMdescription = 'QDM description'
 let QDMcopyright = 'QDM copyright'
@@ -32,9 +32,7 @@ let measureQDM = ''
 
 //Utilizing Qi Core 6.0.0
 describe('Measure Association: Transferring meta data and CMS ID from QDM to QI Core 6.0.0 measure, using Qi Core 6.0.0', () => {
-
     beforeEach('Create Measure', () => {
-
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
@@ -49,8 +47,16 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         //Create new QI Core 6.0.0 measure
         measureQICore = 'QICore600Measure' + Date.now() + randValue + 4 + randValue
@@ -82,7 +88,10 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('exist')
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('be.visible')
-        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should(
+            'contain.text',
+            'Measurement Information Updated Successfully'
+        )
 
         //measure period start and end dates
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
@@ -117,7 +126,12 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
 
         //select a value for Steward
-        cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().clear().type(QDMsteward)
+        cy.get(EditMeasurePage.measureStewardDrpDwn)
+            .should('exist')
+            .should('be.visible')
+            .click()
+            .clear()
+            .type(QDMsteward)
         cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
 
         //select a value for Developers
@@ -147,41 +161,38 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Log Out', () => {
-
         OktaLogin.UILogout()
     })
 
-    it('Association: QDM -> Qi Core 6.0.0 measure: Copying meta data and CMS Id from QDM - to - QI Core 6.0.0 measure; also validating the \'are you sure\' modal / dialog window', () => {
-
+    it("Association: QDM -> Qi Core 6.0.0 measure: Copying meta data and CMS Id from QDM - to - QI Core 6.0.0 measure; also validating the 'are you sure' modal / dialog window", () => {
         MeasuresPage.actionCenter('associatemeasure')
 
         cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', 'MeasureVersionModelCMS ID')
-        cy.get('[id="associate-cms-id-dialog"]').should('include.text', 'Associate CMS ID will copy the CMS ID from your QDM measure to your QI-Core measure. To copy QDM metadata to the QI-Core measure as well please select the checkbox below.')
+        cy.get('[id="associate-cms-id-dialog"]').should(
+            'include.text',
+            'Associate CMS ID will copy the CMS ID from your QDM measure to your QI-Core measure. To copy QDM metadata to the QI-Core measure as well please select the checkbox below.'
+        )
         Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 37000)
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.sureDialog, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.sureDialogCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.sureDialogContinueBtn, 35000)
-        cy.get(EditMeasurePage.sureDialog).find(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you wish to associate this CMS ID?This Action cannot be undone.')
+        cy.get(EditMeasurePage.sureDialog)
+            .find(TestCasesPage.discardChangesConfirmationBody)
+            .should('contain.text', 'Are you sure you wish to associate this CMS ID?This Action cannot be undone.')
 
         cy.get(EditMeasurePage.sureDialogCancelBtn).click()
         Utilities.waitForElementToNotExist(EditMeasurePage.sureDialog, 35000)
@@ -195,9 +206,11 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         MeasuresPage.actionCenter('edit', 2)
 
         //confirming the cms id on the QI Core measure
-        cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
-            expect(val).to.contain(newQDMMeasureSetID + 'FHIR')
-        })
+        cy.get(EditMeasurePage.cmsIdInput)
+            .invoke('val')
+            .then((val) => {
+                expect(val).to.contain(newQDMMeasureSetID + 'FHIR')
+            })
 
         //Confirm that eCQM value was not copied over
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('not.contain.value', 'eCQMTitle4QICore')
@@ -235,9 +248,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.measureStewardDrpDwn).find('[id="steward"]').should('contain.value', QDMsteward)
 
         //Confirm Developers
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn)
-            .find('.MuiChip-label')
-            .should('contain.text', QDMstewardDev)
+        cy.get(EditMeasurePage.measureDeveloperDrpDwn).find('.MuiChip-label').should('contain.text', QDMstewardDev)
 
         //Confirm Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
@@ -245,7 +256,9 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<p>' + QDMclinicalRecommendation + '</p>')
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should(
+            'have.html',
+            '<p>' + QDMclinicalRecommendation + '</p>'
+        )
     })
 })
-

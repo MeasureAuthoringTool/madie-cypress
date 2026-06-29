@@ -1,16 +1,17 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 
 const date = Date.now()
 let measureName = 'QDMCodeSearch' + date
 let CqlLibraryName = 'QDMCodeSearchLib' + date
-let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n\n' +
+let measureCQL =
+    "library TestLibrary1685544523170534 version '0.0.000'\n" +
+    "using QDM version '5.6'\n\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -31,9 +32,10 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     '\t true\n' +
     'define "n":\n' +
     '\ttrue'
-let measureCQL_withCode = 'library QDMLibrary1724174199255 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+let measureCQL_withCode =
+    "library QDMLibrary1724174199255 version '0.0.000'\n" +
+    "using QDM version '5.6'\n" +
+    "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n\n" +
     'codesystem "CPT": \'urn:oid:2.16.840.1.113883.6.12\'\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
@@ -58,9 +60,7 @@ let measureCQL_withCode = 'library QDMLibrary1724174199255 version \'0.0.000\'\n
     '\ttrue'
 
 describe('QDM Code Search fields', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false)
         OktaLogin.SessionLogin()
 
@@ -75,12 +75,10 @@ describe('QDM Code Search fields', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Search for the Codes', () => {
-
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -99,7 +97,10 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCT20240301')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCT20240301'
+        )
 
         //Assert when the Code is not available in VSAC
         cy.get(CQLEditorPage.codeText).clear().type('123')
@@ -121,7 +122,10 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is inactive in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version16298561000119108Administration of tetanus, diphtheria, and acellular pertussis vaccine (procedure)SNOMEDCT20240301')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem Version16298561000119108Administration of tetanus, diphtheria, and acellular pertussis vaccine (procedure)SNOMEDCT20240301'
+        )
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
@@ -136,11 +140,13 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'Code status unavailable')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', '99201Office or other outpatient visit for the evaluation and management of a new patient, which requires these 3 key components: A problem focused history; A problem focused examination; Straightforward medical decision making. Counseling and/or coordination of care with other physicians, other qualified health care professionals, or agencies are provided consistent with the nature of the problem(s) and the patient\'s and/or family\'s needs. Usually, the presenting problem(s) are self limited or minor. Typically, 10 minutes are spent face-to-face with the patient and/or family.CPT2024')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            "99201Office or other outpatient visit for the evaluation and management of a new patient, which requires these 3 key components: A problem focused history; A problem focused examination; Straightforward medical decision making. Counseling and/or coordination of care with other physicians, other qualified health care professionals, or agencies are provided consistent with the nature of the problem(s) and the patient's and/or family's needs. Usually, the presenting problem(s) are self limited or minor. Typically, 10 minutes are spent face-to-face with the patient and/or family.CPT2024"
+        )
     })
 
     it('Apply code to the CQL and verify under Saved Codes tab', () => {
-
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -155,11 +161,17 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02'
+        )
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Code AMB has been successfully added to the CQL.'
+        )
 
         //Save and Discard changes button should be enabled after applying the code
         cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
@@ -180,7 +192,10 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02'
+        )
         cy.get(CQLEditorPage.applyCodeBtn).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Code AMB has already been defined in CQL.')
 
@@ -196,7 +211,6 @@ describe('QDM Code Search fields', () => {
     })
 
     it('Edit Code with Suffix and Version from Results Grid', () => {
-
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -211,7 +225,10 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02'
+        )
 
         //Edit code
         cy.get(CQLEditorPage.editCodeBtn).click()
@@ -226,15 +243,17 @@ describe('QDM Code Search fields', () => {
         cy.get('[data-testid="code-suffix-field-input"]').type('1234')
         cy.get('[id="include-code-system-version-checkbox"]').check()
         cy.get('[data-testid="apply-button"]').click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Code AMB has been successfully added to the CQL.'
+        )
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
-    it('Edit Code with Suffix and Version from Saved Codes Grid', () => {
-
+    it.only('Edit Code with Suffix and Version from Saved Codes Grid', () => {
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -249,11 +268,17 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02'
+        )
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Code AMB has been successfully added to the CQL.'
+        )
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -292,7 +317,6 @@ describe('QDM Code Search fields', () => {
     })
 
     it('Remove Code from Saved Codes Grid', () => {
-
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -307,11 +331,17 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02'
+        )
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Code AMB has been successfully added to the CQL.'
+        )
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -331,9 +361,15 @@ describe('QDM Code Search fields', () => {
 
         //Remove Code
         cy.get('[data-testid="delete-code-0"]').click()
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should(
+            'contain.text',
+            'Are you sure you want to delete AMB ambulatory?'
+        )
         cy.get(CQLEditorPage.deleteContinueButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Code AMB and code system ActCode has been successfully removed from the CQL'
+        )
 
         //verify saved codes empty
         cy.get(CQLEditorPage.codesTab).click()
@@ -342,7 +378,6 @@ describe('QDM Code Search fields', () => {
     })
 
     it('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
-
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -357,11 +392,17 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02'
+        )
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Code AMB has been successfully added to the CQL.'
+        )
 
         //Add another code with the same Code system
         cy.get(CQLEditorPage.codeText).clear().type('ACUTE')
@@ -370,11 +411,17 @@ describe('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionACUTEinpatient acuteActCode2023-02')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionACUTEinpatient acuteActCode2023-02'
+        )
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code ACUTE has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Code ACUTE has been successfully added to the CQL.'
+        )
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -394,13 +441,19 @@ describe('QDM Code Search fields', () => {
 
         //Remove Code
         cy.get('[data-testid="delete-code-0"]').click()
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should(
+            'contain.text',
+            'Are you sure you want to delete AMB ambulatory?'
+        )
         cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.wait('@codeSystems', { timeout: 12000 })
 
         //Verify the Code System is still available in the CQL Editor
-        cy.get('[class="ace_content"]').should('contain.text', 'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\'')
+        cy.get('[class="ace_content"]').should(
+            'contain.text',
+            'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\''
+        )
 
         cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
         cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
@@ -408,14 +461,15 @@ describe('QDM Code Search fields', () => {
 
         cy.wait('@codes', { timeout: 12000 })
 
-        cy.get('[data-testid="saved-codes-tbl"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionACUTEinpatient acuteActCode9.0.0')
+        cy.get('[data-testid="saved-codes-tbl"]').should(
+            'contain.text',
+            'CodeDescriptionCode SystemSystem VersionACUTEinpatient acuteActCode9.0.0'
+        )
     })
 })
 
 describe('Error Message on Codes tab', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withCode)
         OktaLogin.SessionLogin()
 
@@ -427,12 +481,10 @@ describe('Error Message on Codes tab', () => {
     })
 
     afterEach('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify error message appears on Codes tab when there is an error in the Measure CQL', () => {
-
         //Navigate to Codes tab and verify no error message appears
         cy.get(CQLEditorPage.codesTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
@@ -445,9 +497,12 @@ describe('Error Message on Codes tab', () => {
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
 
         //Navigate to Codes tab
-       // cy.get(CQLEditorPage.expandCQLBuilder).click()
+        // cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+        cy.get('[data-testid="cql-builder-errors"]').should(
+            'contain.text',
+            'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.'
+        )
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)').click()

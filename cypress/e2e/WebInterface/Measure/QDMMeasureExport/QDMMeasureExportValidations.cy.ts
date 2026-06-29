@@ -1,21 +1,22 @@
-import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Header } from "../../../../Shared/Header"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Header } from '../../../../Shared/Header'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let measureName = 'QDMExportValidations' + Date.now()
 let CqlLibraryName = 'QDMExportValidationsLib' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
-let updatedMeasureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
+let updatedMeasureCQL =
+    "library TestLibrary1685544523170534 version '0.0.000'\n" +
+    "using QDM version '5.6'\n" +
     '\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
@@ -47,15 +48,13 @@ const measureData: CreateMeasureOptions = {
     patientBasis: 'false'
 }
 
-    /*
+/*
         Tests below all involve failures of the export process.
         EditMeasurePage.actionCenter() assumes success, so we can't use it
     */
 
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
-
     before('Create New Measure and Login', () => {
-
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -69,17 +68,10 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     after('Cleanup', () => {
-
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -88,26 +80,36 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         //return to measures list
         cy.get(Header.measures).click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-            cy.get('[data-testid="export-action-btn"]').should('be.visible')
-            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-            cy.get('[data-testid="export-action-btn"]').click()
-            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[class="px-1"]')
+                    .find('[class=" cursor-pointer"]')
+                    .scrollIntoView()
+                    .click()
+                cy.get('[data-testid="export-action-btn"]').should('be.visible')
+                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="export-action-btn"]').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
-            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Measure Developers')
-            cy.get('[class="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
-            cy.get('[class="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
-            cy.get('[class="error-message"] > ul > :nth-child(4)').should('contain.text', 'Measure Type is required')
-        })
+                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+                cy.get('[class="error-message"] > ul > :nth-child(1)').should(
+                    'contain.text',
+                    'Missing Measure Developers'
+                )
+                cy.get('[class="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
+                cy.get('[class="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
+                cy.get('[class="error-message"] > ul > :nth-child(4)').should(
+                    'contain.text',
+                    'Measure Type is required'
+                )
+            })
     })
 })
 
 describe('Error Message on Measure Export when the Measure has missing/invalid CQL', () => {
-
     beforeEach('Create New Measure and Login', () => {
-
         measureData.ecqmTitle = measureName + randValue
         measureData.cqlLibraryName = CqlLibraryName + randValue
 
@@ -118,7 +120,6 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     })
 
     afterEach('Cleanup', () => {
-
         Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
@@ -131,15 +132,21 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(Header.measures).click()
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-            cy.get('[data-testid="export-action-btn"]').should('be.visible')
-            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-            cy.get('[data-testid="export-action-btn"]').click()
-            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[class="px-1"]')
+                    .find('[class=" cursor-pointer"]')
+                    .scrollIntoView()
+                    .click()
+                cy.get('[data-testid="export-action-btn"]').should('be.visible')
+                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="export-action-btn"]').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
-            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-        })
+                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+            })
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
@@ -147,31 +154,40 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         //Update Measure CQL with errors
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(
+            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
+                '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
+                '{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
+                '{backspace}{backspace}'
+        )
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(EditMeasurePage.libWarningTopMsg).should(
+            'contain.text',
+            'Library statement was incorrect. MADiE has overwritten it.'
+        )
 
         cy.get(Header.measures).click()
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-            cy.get('[data-testid="export-action-btn"]').should('be.visible')
-            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-            cy.get('[data-testid="export-action-btn"]').click()
-            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[class="px-1"]')
+                    .find('[class=" cursor-pointer"]')
+                    .scrollIntoView()
+                    .click()
+                cy.get('[data-testid="export-action-btn"]').should('be.visible')
+                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="export-action-btn"]').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
-            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure')
-            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
-        })
+                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure')
+                cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
+            })
     })
 })
 
 describe('Error Message on Measure Export when the Measure does not have Population Criteria', () => {
-
     before('Create New Measure and Login', () => {
-
         measureData.ecqmTitle = measureName + randValue
         measureData.cqlLibraryName = CqlLibraryName + randValue
 
@@ -179,16 +195,10 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     after('Cleanup', () => {
-
         Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
@@ -196,23 +206,30 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         let currentUser = Cypress.env('selectedUser')
         cy.get(Header.measures).click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-            cy.get('[data-testid="export-action-btn"]').should('be.visible')
-            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-            cy.get('[data-testid="export-action-btn"]').click()
-            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[class="px-1"]')
+                    .find('[class=" cursor-pointer"]')
+                    .scrollIntoView()
+                    .click()
+                cy.get('[data-testid="export-action-btn"]').should('be.visible')
+                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="export-action-btn"]').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
-            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Population Criteria')
-        })
+                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+                cy.get('[class="error-message"] > ul > :nth-child(1)').should(
+                    'contain.text',
+                    'Missing Population Criteria'
+                )
+            })
     })
 })
 
 describe('Error Message on Measure Export when the Population Criteria does not match', () => {
-
     before('Create New Measure and Login', () => {
-
         measureData.ecqmTitle = measureName + randValue
         measureData.cqlLibraryName = CqlLibraryName + randValue
 
@@ -223,7 +240,6 @@ describe('Error Message on Measure Export when the Population Criteria does not 
     })
 
     after('Cleanup', () => {
-
         Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
@@ -238,24 +254,35 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(EditMeasurePage.libWarningTopMsg).should(
+            'contain.text',
+            'Library statement was incorrect. MADiE has overwritten it.'
+        )
 
         cy.get(Header.measures).click()
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-            cy.get('[data-testid="export-action-btn"]').should('be.visible')
-            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-            cy.get('[data-testid="export-action-btn"]').click()
-            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[class="px-1"]')
+                    .find('[class=" cursor-pointer"]')
+                    .scrollIntoView()
+                    .click()
+                cy.get('[data-testid="export-action-btn"]').should('be.visible')
+                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="export-action-btn"]').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
-            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Populations Return Types are invalid')
-        })
+                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+                cy.get('[class="error-message"] > ul > :nth-child(1)').should(
+                    'contain.text',
+                    'CQL Populations Return Types are invalid'
+                )
+            })
     })
 })
 
 describe('Error Message on Measure Export for Publish when measure was versioned before Madie 2.2.0', () => {
-
     /* 
         this test will rely on PROD data being available in the lower environments
         this measure must have been versioned prior to Madie 2.2.0 (4/9/2025)
@@ -263,9 +290,8 @@ describe('Error Message on Measure Export for Publish when measure was versioned
         'Antithrombotic Therapy By End of Hospital Day 2FHIR'
         QiCore 4.1.1 v0.7.001
     */
-    
-    it('Verify error message when not able to perform Export for Publish', () => {
 
+    it('Verify error message when not able to perform Export for Publish', () => {
         OktaLogin.Login()
 
         cy.visit('/measures/64f0d9e456d636294b157ea0/edit/details/')
@@ -281,6 +307,9 @@ describe('Error Message on Measure Export for Publish when measure was versioned
 
         // verify error
         cy.get('.loading-title').should('contain.text', 'Your download could not be completed')
-        cy.get('.error-message').should('contain.text', 'Measure cannot be exported for publishing because it was versioned prior to MADiE version 2.2.0. Please use a newer version or select "Export" for this measure.')
+        cy.get('.error-message').should(
+            'contain.text',
+            'Measure cannot be exported for publishing because it was versioned prior to MADiE version 2.2.0. Please use a newer version or select "Export" for this measure.'
+        )
     })
 })

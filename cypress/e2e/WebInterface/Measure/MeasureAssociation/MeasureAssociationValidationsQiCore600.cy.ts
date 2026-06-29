@@ -1,17 +1,17 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Header } from "../../../../Shared/Header"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Header } from '../../../../Shared/Header'
 
 const measureData: CreateMeasureOptions = {
     measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 }
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let measureQICore = ''
 let measureQICore2 = ''
@@ -20,9 +20,7 @@ let measureQDM2 = ''
 
 //Utilizing Qi Core 6.0.0
 describe('Measure Association: Validations using Qi Core 6.0.0', () => {
-
     beforeEach('Create Measure', () => {
-
         //Create New QDM Measure
         measureQDM = 'QDMMeasure4QiCore600' + Date.now() + randValue + 8 + randValue
 
@@ -37,8 +35,16 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         //Create Second QDM Measure
         measureQDM2 = 'QDMMeasure24QiCore600' + Date.now() + randValue + 6 + randValue
@@ -55,8 +61,16 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure2)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            2,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         //Create new QI Core 6.0.0 measure
         measureQICore = 'QICore600Measure' + Date.now() + randValue + 4 + randValue
@@ -75,38 +89,22 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 3)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 4)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 30000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -134,17 +132,25 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
         cy.get('[data-testid="associate-cms-id-action-btn"]').trigger('mouseover', { force: true })
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
-        cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Must select one QDM and one QI-Core measure')
+        cy.get('[data-testid="associate-cms-id-tooltip"]').should(
+            'have.attr',
+            'aria-label',
+            'Must select one QDM and one QI-Core measure'
+        )
 
         //validation test: QDM measure must contain CMS id
         MeasuresPage.selectMeasure(4)
 
         MeasuresPage.selectMeasure()
- 
+
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
         cy.get('[data-testid="associate-cms-id-action-btn"]').trigger('mouseover', { force: true })
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
-        cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'QDM measure must contain a CMS ID')
+        cy.get('[data-testid="associate-cms-id-tooltip"]').should(
+            'have.attr',
+            'aria-label',
+            'QDM measure must contain a CMS ID'
+        )
 
         MeasuresPage.selectMeasure(3)
 
@@ -159,7 +165,10 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         Utilities.waitForElementVisible(MeasuresPage.versionToastSuccessMsg, 30000)
-        cy.get(MeasuresPage.versionToastSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(MeasuresPage.versionToastSuccessMsg).should(
+            'contain.text',
+            'New version of measure is Successfully created'
+        )
         Utilities.waitForElementToNotExist(MeasuresPage.versionToastSuccessMsg, 30000)
 
         MeasuresPage.selectMeasure(2)
@@ -167,7 +176,11 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
         cy.get('[data-testid="associate-cms-id-action-btn"]').trigger('mouseover', { force: true })
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
-        cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'QI-Core measure must be in a draft status')
+        cy.get('[data-testid="associate-cms-id-tooltip"]').should(
+            'have.attr',
+            'aria-label',
+            'QI-Core measure must be in a draft status'
+        )
 
         MeasuresPage.selectMeasure(4)
 
@@ -197,7 +210,11 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
         cy.get('[data-testid="associate-cms-id-action-btn"]').trigger('mouseover', { force: true })
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
-        cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'QI-Core measure must NOT contain a CMS ID')
+        cy.get('[data-testid="associate-cms-id-tooltip"]').should(
+            'have.attr',
+            'aria-label',
+            'QI-Core measure must NOT contain a CMS ID'
+        )
 
         MeasuresPage.selectMeasure(3)
 
@@ -226,22 +243,35 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         // need altUser here, they are the measure owner for 5
-        cy.readFile('cypress/fixtures/' + currentAltUser + '/measureId5').then(measureId => {
-
-            cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        cy.readFile('cypress/fixtures/' + currentAltUser + '/measureId5').then((measureId) => {
+            cy.get('[data-testid="measure-name-' + measureId + '_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .scrollIntoView()
+            cy.get('[data-testid="measure-name-' + measureId + '_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .click()
         })
 
-       cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').then(measureId => {
-
-            cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').then((measureId) => {
+            cy.get('[data-testid="measure-name-' + measureId + '_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .scrollIntoView()
+            cy.get('[data-testid="measure-name-' + measureId + '_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .click()
         })
 
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
         cy.get('[data-testid="associate-cms-id-action-btn"]').trigger('mouseover', { force: true })
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
-        cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Must own both selected measures')
+        cy.get('[data-testid="associate-cms-id-tooltip"]').should(
+            'have.attr',
+            'aria-label',
+            'Must own both selected measures'
+        )
     })
 })
-

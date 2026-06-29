@@ -1,13 +1,13 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let measureName = 'QiCoreTCSearch' + Date.now()
 let CqlLibraryName = 'QiCoreTCSearchLib' + Date.now()
@@ -22,18 +22,32 @@ let testCaseDescription2nd = 'SecondTC-DENOMFail' + Date.now()
 let testCaseSeries2nd = 'SecondTC-SBTestSeries'
 
 describe('Non Boolean Population Basis Expected values', () => {
-
     beforeEach('Create measure and login', () => {
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, undefined, false,
-            '2012-01-02', '2013-01-01')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            undefined,
+            false,
+            '2012-01-02',
+            '2013-01-01'
+        )
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Qualifying Encounters',
+            '',
+            '',
+            'Qualifying Encounters',
+            '',
+            'Qualifying Encounters',
+            'Encounter'
+        )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -41,17 +55,15 @@ describe('Non Boolean Population Basis Expected values', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd, testCaseJson2nd)
-        const expectedTestCaseValue = '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd
+        const expectedTestCaseValue =
+            '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd
         const expectedTestCaseValue2 = '(UTC)Edit'
         //search for something that is in the description field
         cy.get(TestCasesPage.tcSearchInput).type('Second')
@@ -125,17 +137,26 @@ describe('Non Boolean Population Basis Expected values', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 25000)
 
         //verify the results row - only 1 test case, and it passed
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd)
+        cy.get(TestCasesPage.testCaseResultrow)
+            .should(
+                'contain.text',
+                '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd
+            )
             .should('contain.text', '(UTC)Edit')
 
         //clear search to show all test cases
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
 
         // verify the results rows - 2 test cases shown, 1 pass, 1 n/a
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd)
+        cy.get(TestCasesPage.testCaseResultrow)
+            .should(
+                'contain.text',
+                '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd
+            )
             .should('contain.text', '(UTC)Edit')
 
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription)
+        cy.get(TestCasesPage.testCaseResultrow2)
+            .should('contain.text', '1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription)
             .should('contain.text', '(UTC)Edit')
     })
 })

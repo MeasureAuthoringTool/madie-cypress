@@ -1,14 +1,14 @@
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
+import { CreateMeasurePage, CreateMeasureOptions } from '../../../../Shared/CreateMeasurePage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../Shared/Header'
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let measureQDM = ''
 let qdmCQLLibrary = ''
@@ -16,9 +16,7 @@ let qdmCQLLibrary = ''
 const measureData: CreateMeasureOptions = {}
 
 describe('View Human Readable for QDM Measure', () => {
-
     beforeEach(() => {
-
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
@@ -32,28 +30,29 @@ describe('View Human Readable for QDM Measure', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach(() => {
-
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
     })
 
     it('View Human Readable for QDM 5.6 Measure on My Measures page', () => {
-
         MeasuresPage.actionCenter('viewhr')
 
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
@@ -62,7 +61,6 @@ describe('View Human Readable for QDM Measure', () => {
     })
 
     it('View Human Readable for QDM 5.6 Measure on All Measures page', () => {
-
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         MeasuresPage.actionCenter('viewhr')
@@ -73,7 +71,6 @@ describe('View Human Readable for QDM Measure', () => {
     })
 
     it('Export measure from HR modal', () => {
-
         MeasuresPage.actionCenter('viewhr')
 
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
