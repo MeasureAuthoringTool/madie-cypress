@@ -16,6 +16,7 @@
 //import '@undefinedlabs/scope-agent/cypress/support'
 
 // Import commands.js using ES2015 syntax:
+import './failedTestFilter'
 import 'cypress-real-events'
 import './commands'
 import 'cypress-axe'
