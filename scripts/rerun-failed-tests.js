@@ -46,8 +46,12 @@ for (const failure of failures) {
   }
 }
 
+for (const spec of fullSpecFallbacks) {
+  targetTitlesBySpec.delete(spec)
+}
+
 const targetSpecs = Array.from(targetTitlesBySpec.keys())
-const fallbackSpecs = Array.from(fullSpecFallbacks).filter(spec => !targetTitlesBySpec.has(spec))
+const fallbackSpecs = Array.from(fullSpecFallbacks)
 const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx'
 
 function runCypress(specs, extraEnv = {}) {
@@ -91,11 +95,14 @@ function runCypress(specs, extraEnv = {}) {
 let status = 0
 
 if (targetSpecs.length) {
-  const failedTestTitles = Array.from(targetTitlesBySpec.values()).flatMap(titles => Array.from(titles))
-  const encodedTitles = Buffer.from(JSON.stringify(failedTestTitles), 'utf8').toString('base64')
+  const failedTestsBySpec = Object.fromEntries(
+    Array.from(targetTitlesBySpec.entries()).map(([spec, titles]) => [spec, Array.from(titles)])
+  )
+  const failedTestCount = Object.values(failedTestsBySpec).reduce((count, titles) => count + titles.length, 0)
+  const encodedTests = Buffer.from(JSON.stringify(failedTestsBySpec), 'utf8').toString('base64')
 
-  console.log(`Rerunning ${failedTestTitles.length} failed test(s) across ${targetSpecs.length} spec file(s).`)
-  const targetedStatus = runCypress(targetSpecs, { failedTestTitlesBase64: encodedTitles })
+  console.log(`Rerunning ${failedTestCount} failed test(s) across ${targetSpecs.length} spec file(s).`)
+  const targetedStatus = runCypress(targetSpecs, { failedTestsBase64: encodedTests })
   status = status || targetedStatus
 } else {
   console.log('No targetable failed test titles found.')

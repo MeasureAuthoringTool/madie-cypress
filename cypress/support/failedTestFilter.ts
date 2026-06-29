@@ -1,4 +1,5 @@
 const failedTestTitlesBase64 = Cypress.env('failedTestTitlesBase64')
+const failedTestsBase64 = Cypress.env('failedTestsBase64')
 
 function decodeFailedTestTitles(value: unknown): Set<string> {
   if (!value || typeof value !== 'string') {
@@ -21,7 +22,52 @@ function decodeFailedTestTitles(value: unknown): Set<string> {
   return new Set()
 }
 
-const failedTestTitles = decodeFailedTestTitles(failedTestTitlesBase64)
+function normalizeSpecPath(value: string): string {
+  return value.replace(/\\/g, '/')
+}
+
+function decodeFailedTestsBySpec(value: unknown): Map<string, Set<string>> {
+  if (!value || typeof value !== 'string') {
+    return new Map()
+  }
+
+  try {
+    const json = atob(value)
+    const testsBySpec = JSON.parse(json)
+    if (!testsBySpec || typeof testsBySpec !== 'object' || Array.isArray(testsBySpec)) {
+      return new Map()
+    }
+
+    return new Map(
+      Object.entries(testsBySpec)
+        .filter((entry): entry is [string, string[]] => Array.isArray(entry[1]))
+        .map(([spec, titles]) => [
+          normalizeSpecPath(spec),
+          new Set(titles.filter((title): title is string => typeof title === 'string'))
+        ])
+    )
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn(`Unable to parse failed test map filter: ${String(err)}`)
+  }
+
+  return new Map()
+}
+
+function titlesForCurrentSpec(testsBySpec: Map<string, Set<string>>): Set<string> {
+  const relativeSpec = normalizeSpecPath(Cypress.spec.relative || '')
+  const specName = normalizeSpecPath(Cypress.spec.name || '')
+
+  return testsBySpec.get(relativeSpec) ||
+    testsBySpec.get(specName) ||
+    Array.from(testsBySpec.entries()).find(([spec]) => spec.endsWith(`/${specName}`))?.[1] ||
+    new Set()
+}
+
+const failedTestsBySpec = decodeFailedTestsBySpec(failedTestsBase64)
+const failedTestTitles = failedTestsBySpec.size
+  ? titlesForCurrentSpec(failedTestsBySpec)
+  : decodeFailedTestTitles(failedTestTitlesBase64)
 
 if (failedTestTitles.size) {
   const suiteStack: string[] = []
