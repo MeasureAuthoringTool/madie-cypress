@@ -8,11 +8,11 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
+const measureName = 'MeasurePopulations'
+const CqlLibraryName = 'MeasurePopulationsLib'
+const measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
     'using FHIR version \'4.0.1\'\n\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n\n' +
@@ -45,20 +45,13 @@ describe('Measure Populations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(Header.measures).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout', () => {
@@ -67,9 +60,6 @@ describe('Measure Populations', () => {
     })
 
     it('Validate if the Measure populations reset on Measure Group Scoring change', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -140,9 +130,6 @@ describe('Measure Populations', () => {
 
     it('Measure group created successfully when the population basis match with population return type', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -185,9 +172,6 @@ describe('Measure Populations', () => {
 
     it('Verify error message when the population basis does not match with population return type', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -225,18 +209,14 @@ describe('Warning Messages on Population updates', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL_multiplePopulations)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout', () => {

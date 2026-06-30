@@ -55,6 +55,10 @@ describe('Measure List Page Searching', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 39500)
     })
 
+    afterEach('Cleann up', () => {
+        Utilities.deleteMeasure()
+    })
+
     it('Measure search on My Measures and All Measures tab', () => {
 
         //Search for the Measure using Measure name
@@ -142,20 +146,11 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 39500)
         MeasuresPage.actionCenter('edit', 0)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit', 1)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
         cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Button for Qi Core measure
