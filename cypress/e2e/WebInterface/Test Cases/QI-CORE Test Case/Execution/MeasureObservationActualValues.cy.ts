@@ -59,11 +59,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{movetoEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -92,7 +88,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         //Navigate to Test Cases page and add Test Case details
@@ -118,10 +114,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -168,7 +161,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         //Navigate to Test Cases page and add Test Case details
@@ -209,10 +202,7 @@ describe('Boolean Measure Observation Actual values', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -235,7 +225,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         //Navigate to Test Cases page and add Test Case details
@@ -261,10 +251,7 @@ describe('Boolean Measure Observation Actual values', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -305,7 +292,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         //Navigate to Test Cases page and add Test Case details
