@@ -8,44 +8,38 @@ import { Header } from '../../../../Shared/Header'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
-let measureName = 'QDMPopCriteriaPage' + Date.now()
-let CqlLibraryName = 'QDMPopCriteriaPageLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureScoring = 'Cohort'
-let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
-let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL
+const measureName = 'QDMPopCriteriaPage'
+const CqlLibraryName = 'QDMPopCriteriaPageLib'
+const measureScoring = 'Cohort'
+const booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
+const simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
 describe('Validate QDM Population Criteria section -- scoring and populations', () => {
     const measureData: CreateMeasureOptions = {}
-    let randValue = Math.floor(Math.random() * 1000 + 1)
-    newMeasureName = measureName + randValue + 2
-    newCqlLibraryName = CqlLibraryName + randValue + 2
 
     beforeEach('Create Measure and login', () => {
+
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'true'
         measureData.measureCql = simpleQDMMeasureCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
-        //Work around for the CQL Editor to expand the CQL Editor panel to avoid flakiness in the test
-        // Error happening in console of the cql editor for annotations not sure what error is and cannot reproduce manually
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+        Utilities.deleteMeasure()
     })
 
     it('Verify Population Criteria page is properly populated, per Scoring type.', () => {
@@ -321,11 +315,12 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
 describe('No values in QDM PC fields, when no CQL', () => {
     const measureData: CreateMeasureOptions = {}
-    let randValue = Math.floor(Math.random() * 1000 + 1)
-    newMeasureName = measureName + randValue + 5
-    newCqlLibraryName = CqlLibraryName + randValue + 5
 
     beforeEach('Create Measure and login', () => {
+
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -336,8 +331,7 @@ describe('No values in QDM PC fields, when no CQL', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     //no definitions in CQL -- no values for PC fields
@@ -364,11 +358,12 @@ describe('No values in QDM PC fields, when no CQL', () => {
 
 describe('Save Population Criteria on QDM measure', () => {
     const measureData: CreateMeasureOptions = {}
-    let randValue = Math.floor(Math.random() * 1000 + 1)
-    newMeasureName = measureName + randValue + 1
-    newCqlLibraryName = CqlLibraryName + randValue + 1
 
     beforeEach('Create Measure and login', () => {
+
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -378,16 +373,11 @@ describe('Save Population Criteria on QDM measure', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Confirm that initial and new Population Criteria can have values saved', () => {
@@ -425,11 +415,12 @@ describe('Save Population Criteria on QDM measure', () => {
 
 describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     const measureData: CreateMeasureOptions = {}
-    let randValue = Math.floor(Math.random() * 1000 + 1)
-    newMeasureName = measureName + randValue + 8
-    newCqlLibraryName = CqlLibraryName + randValue + 8
 
     beforeEach('Create Measure and login', () => {
+
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -439,16 +430,12 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+        Utilities.deleteMeasure()
     })
 
     it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
@@ -489,11 +476,12 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
 describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
     const measureData: CreateMeasureOptions = {}
-    let randValue = Math.floor(Math.random() * 1000 + 1)
-    newMeasureName = measureName + randValue + 6
-    newCqlLibraryName = CqlLibraryName + randValue + 6
 
     beforeEach('Create Measure and login', () => {
+
+        newMeasureName = measureName + Date.now()
+        newCqlLibraryName = CqlLibraryName + Date.now()
+
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
         measureData.measureScoring = measureScoring
@@ -503,16 +491,12 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.greenMessageBox).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+        Utilities.deleteMeasure()
     })
 
     it('Validations when the Patient Basis is set to "No" and return type should be Non-boolean', () => {
