@@ -1,18 +1,19 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 const measureName = 'QiCoreDefinitions' + now
 const CqlLibraryName = 'QiCoreDefinitionsLib' + now
-const measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
-    'include CQMCommon version \'2.2.000\' called CQMCommon\n\n' +
+const measureCQL =
+    "library QiCoreLibrary1723824228401 version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include SupplementalDataElements version '3.5.000' called SupplementalData\n" +
+    "include CQMCommon version '2.2.000' called CQMCommon\n\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -34,12 +35,13 @@ const measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'where ValidEncounter.period during "Measurement Period"\n' +
     'and ValidEncounter.isFinishedEncounter()\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '   (Enc E where E.status = \'finished\') is not null '
+    "   (Enc E where E.status = 'finished') is not null "
 
-const measureCQL_withError = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n\n' +
+const measureCQL_withError =
+    "library QiCoreLibrary1723824228401 version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include SupplementalDataElements version '3.5.000' called SupplementalData\n\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -60,13 +62,14 @@ const measureCQL_withError = 'library QiCoreLibrary1723824228401 version \'0.0.0
     'where ValidEncounter.period during "Measurement Period"\n' +
     'and ValidEncounter.isFinishedEncounter()test\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '   (Enc E where E.status = \'finished\') is not null'
+    "   (Enc E where E.status = 'finished') is not null"
 
-const cqlMissingDefinitionName = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
-    'include CQMCommon version \'2.2.000\' called CQMCommon\n\n' +
+const cqlMissingDefinitionName =
+    "library QiCoreLibrary1723824228401 version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include SupplementalDataElements version '3.5.000' called SupplementalData\n" +
+    "include CQMCommon version '2.2.000' called CQMCommon\n\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -89,13 +92,14 @@ const cqlMissingDefinitionName = 'library QiCoreLibrary1723824228401 version \'0
     'where ValidEncounter.period during "Measurement Period"\n' +
     'and ValidEncounter.isFinishedEncounter()\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '   (Enc E where E.status = \'finished\') is not null '
+    "   (Enc E where E.status = 'finished') is not null "
 
-const cqlDefinitionNameKeyword = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
-    'include CQMCommon version \'2.2.000\' called CQMCommon\n\n' +
+const cqlDefinitionNameKeyword =
+    "library QiCoreLibrary1723824228401 version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include SupplementalDataElements version '3.5.000' called SupplementalData\n" +
+    "include CQMCommon version '2.2.000' called CQMCommon\n\n" +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -118,24 +122,19 @@ const cqlDefinitionNameKeyword = 'library QiCoreLibrary1723824228401 version \'0
     'where ValidEncounter.period during "Measurement Period"\n' +
     'and ValidEncounter.isFinishedEncounter()\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '   (Enc E where E.status = \'finished\') is not null '
+    "   (Enc E where E.status = 'finished') is not null "
 
 describe('Qi-Core CQL Definitions Builder', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Search for Qi-Core CQL Definitions Expression Editor Name Options', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -157,7 +156,6 @@ describe('Qi-Core CQL Definitions Builder', () => {
     })
 
     it('Search for Qi-Core CQL Definitions Expression Editor Fluent Function Options', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -179,7 +177,6 @@ describe('Qi-Core CQL Definitions Builder', () => {
     })
 
     it('Insert Qi-Core CQL Definitions through Expression Editor and Apply to CQL editor', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -257,14 +254,15 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'define "Test":')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'CQMCommon."Measurement Period"')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"Initial Population"')
-        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'CQMCommon."Emergency Department Arrival Time"()')
+        cy.get(EditMeasurePage.cqlEditorTextBox)
+            .eq(0)
+            .should('contain.text', 'CQMCommon."Emergency Department Arrival Time"()')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"emergencyDepartmentArrivalTime"()')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'after end')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'AgeInDays()')
     })
 
     it('Verify Included Qi-Core CQL Definitions under Saved Definitions tab', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -285,7 +283,6 @@ describe('Qi-Core CQL Definitions Builder', () => {
     })
 
     it('Edit Saved Qi-Core CQL Definitions', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -310,7 +307,6 @@ describe('Qi-Core CQL Definitions Builder', () => {
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -332,7 +328,6 @@ describe('Qi-Core CQL Definitions Builder', () => {
     })
 
     it('Delete saved Qi-Core CQL Definitions', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -346,7 +341,10 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLEditorPage.deleteContinueButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 60000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Definition Initial Population has been successfully removed from the CQL.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Definition Initial Population has been successfully removed from the CQL.'
+        )
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
         CQLEditorPage.expandCQLBuilderPanel()
@@ -361,7 +359,6 @@ describe('Qi-Core CQL Definitions Builder', () => {
     })
 
     it('View and Edit Qi Core CQL Definition Comments from Saved Definitions tab', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -376,7 +373,8 @@ describe('Qi-Core CQL Definitions Builder', () => {
         //Verify Comment
         cy.get('[data-testid="definitions-row-0"] > :nth-child(3)').should('contain.text', 'Test Comments')
 
-        const longComment = 'Adding a comment that is needlessly long for no real reason, other than to' +
+        const longComment =
+            'Adding a comment that is needlessly long for no real reason, other than to' +
             ' annoy any future users of this piece of functionality. It really should not have to be like' +
             ' this but here we are anyway'
         //Edit Comment
@@ -393,13 +391,13 @@ describe('Qi-Core CQL Definitions Builder', () => {
 
         //Navigate to Saved Definitions tab and verify comment
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        const shortenedComment = 'Adding a comment that is needlessly long for no real reason, other than to' +
+        const shortenedComment =
+            'Adding a comment that is needlessly long for no real reason, other than to' +
             ' annoy any future users of this piece of functShow more'
         cy.get('[data-testid="definitions-row-0"] > :nth-child(3)').should('contain.text', shortenedComment)
     })
 
     it('Verify error message appears on Definitions tab when there is an error in the Measure CQL', () => {
-
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -419,7 +417,10 @@ describe('Qi-Core CQL Definitions Builder', () => {
         //Navigate to Definitions tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.definitionsTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+        cy.get('[data-testid="cql-builder-errors"]').should(
+            'contain.text',
+            'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.'
+        )
 
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (0)').click()
@@ -428,15 +429,11 @@ describe('Qi-Core CQL Definitions Builder', () => {
 })
 
 describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
-
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
-    it.only('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
-
+    it('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
         OktaLogin.Login()
 
@@ -456,16 +453,18 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
 
-        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+        cy.get('[data-testid="cql-builder-errors"]').should(
+            'contain.text',
+            'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.'
+        )
 
         //Expression editor name dropdown should be empty when there are CQL errors
         cy.get(CQLEditorPage.definitionNameTextBox).type('test')
-        cy.get( CQLEditorPage.expressionEditorTypeDropdown ).click()
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
         cy.get(CQLEditorPage.expressionEditorNameList).should('not.exist')
     })
 
     it('Qi-Core CQL Definitions throws specific error when Definition has no name', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
         OktaLogin.Login()
 
@@ -474,11 +473,14 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
+        Utilities.validateErrors(
+            CQLEditorPage.errorInCQLEditorWindow,
+            CQLEditorPage.errorContainer,
+            'Parse: 7:8 | Definition is missing a name.'
+        )
     })
 
     it('Qi-Core CQL Definitions throws specific error when Definition name is a reserved keyword', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, cqlDefinitionNameKeyword)
         OktaLogin.Login()
 
@@ -487,27 +489,26 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:13 | Definition names must not be a reserved word.")
+        Utilities.validateErrors(
+            CQLEditorPage.errorInCQLEditorWindow,
+            CQLEditorPage.errorContainer,
+            'Parse: 7:13 | Definition names must not be a reserved word.'
+        )
     })
 })
 
 describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionAltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
-
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)

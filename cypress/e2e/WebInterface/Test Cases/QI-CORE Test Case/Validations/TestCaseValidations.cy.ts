@@ -326,7 +326,7 @@ describe('Attempting to create a test case without a title', () => {
     })
 })
 
-describe.only('Duplicate Test Case Title and Group validations', () => {
+describe('Duplicate Test Case Title and Group validations', () => {
     beforeEach('Create Measure, Test case and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
