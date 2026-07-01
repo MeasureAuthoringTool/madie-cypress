@@ -1,10 +1,6 @@
 import { MeasureCQL } from '../../../Shared/MeasureCQL'
 import { CreateMeasurePage, CreateMeasureOptions } from '../../../Shared/CreateMeasurePage'
 import { Utilities } from '../../../Shared/Utilities'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { TestData } from '../../../Shared/TestData'
 
@@ -24,17 +20,10 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
     beforeEach('Create QI-Core Measure and Set Access Token', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreCqlLibraryName, qicoreMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        cy.log('Updated CQL name, on measure, is ' + qicoreCqlLibraryName)
+        TestData.saveMeasureCql(`${qicoreMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     after('Delete Versioned Measure', () => {
@@ -66,14 +55,10 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${qdmMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     after('Delete Versioned Measure', () => {

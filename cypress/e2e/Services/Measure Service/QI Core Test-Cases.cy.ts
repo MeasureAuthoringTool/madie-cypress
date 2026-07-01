@@ -5,9 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { TestData } from "../../../Shared/TestData"
 
 let harpUserALT = ''
 let harpUser = ''
@@ -51,16 +49,7 @@ describe('User without edit access attempts to change a test case', () => {
 
         //Create Measure as the alt user
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt, undefined, true)
-        OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{movetoEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(`${measureCQLAlt}\n`, { owner: 'selectedAltUser' })
     })
 
     beforeEach('Set Access Token', () => {

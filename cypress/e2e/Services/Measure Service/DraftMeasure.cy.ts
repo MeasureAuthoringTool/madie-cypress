@@ -1,11 +1,8 @@
 import { OktaLogin } from '../../../Shared/OktaLogin'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
 import { MeasureCQL } from '../../../Shared/MeasureCQL'
 import { Utilities } from '../../../Shared/Utilities'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 import { MeasureDraftBody, TestData } from '../../../Shared/TestData'
 
 let randValue = Math.floor(Math.random() * 1000 + 1)
@@ -41,17 +38,10 @@ describe('Version and Draft CQL Library', () => {
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
+        TestData.saveMeasureCql(`${cohortMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
@@ -109,18 +99,10 @@ describe('Draftable API end point tests', () => {
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(`${cohortMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
     it('Draftable end point return measure set id that was used in request and false if the measure is not version', () => {

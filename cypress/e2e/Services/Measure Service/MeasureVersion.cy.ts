@@ -6,9 +6,6 @@ import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../Shared/MeasureCQL'
 import { v4 as uuidv4 } from 'uuid'
 import { OktaLogin } from '../../../Shared/OktaLogin'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 import { TestData } from '../../../Shared/TestData'
 const now = require('dayjs')
 const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
@@ -72,12 +69,10 @@ describe('Measure Versioning', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     it('Successful Measure Versioning', () => {
@@ -185,12 +180,10 @@ describe('Version Measure with invalid test case Json', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     it('User can version Measure if the Test case Json has errors', () => {
@@ -222,12 +215,10 @@ describe('Edit validations for versioned Measure', () => {
             'Encounter'
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL_ProportionMeasure}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     after('Clean up', () => {
@@ -380,12 +371,10 @@ describe('Delete validations for versioned Measure', () => {
             'Encounter'
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL_ProportionMeasure}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     beforeEach('Set Access Token', () => {

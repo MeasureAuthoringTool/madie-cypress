@@ -31,12 +31,10 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
         newCqlLibraryName = 'TestCqlA' + Date.now() + randVal
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {
@@ -61,12 +59,10 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
         newCqlLibraryName = 'TestCqlB' + Date.now() + randVal
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {
@@ -102,12 +98,10 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${qdmMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {
@@ -139,12 +133,10 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${qdmMeasureCQLVm}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {

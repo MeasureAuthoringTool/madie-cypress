@@ -1,11 +1,9 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
+import { TestData } from "../../../Shared/TestData"
 
 const measureName = 'MeasureGroupService' + Date.now()
 const cqlLibraryName = 'MeasureGroupServiceLib' + Date.now()
@@ -32,12 +30,10 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {
@@ -104,12 +100,10 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {

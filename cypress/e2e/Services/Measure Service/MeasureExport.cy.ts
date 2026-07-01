@@ -4,9 +4,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { OktaLogin } from "../../../Shared/OktaLogin";
-import { MeasuresPage } from "../../../Shared/MeasuresPage";
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage";
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
+import { TestData } from "../../../Shared/TestData"
 
 const measureName = 'MeasureExport' + Date.now()
 const CqlLibraryName = 'MeasureExportLibrary' + Date.now()
@@ -65,12 +63,10 @@ describe('QI-Core Measure Export', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
@@ -436,12 +432,10 @@ describe('QDM Measure Export', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${qdmMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {

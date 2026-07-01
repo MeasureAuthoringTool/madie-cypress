@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
+import { OktaLogin } from './OktaLogin'
 
 export type FixtureOwner = 'selectedUser' | 'selectedAltUser'
+export type TestUserScope = FixtureOwner
 
 export type PopulationDefinition = {
     id?: string
@@ -100,6 +102,11 @@ export type CqlTranslationResponse = {
     xml: string
 }
 
+export type MeasureCqlSaveOptions = {
+    measureNumber?: number
+    owner?: TestUserScope
+}
+
 export class TestData {
     public static selectedUser(owner: FixtureOwner = 'selectedUser'): string {
         const user = Cypress.env(owner)
@@ -195,6 +202,10 @@ export class TestData {
         }) as Cypress.Chainable<Cypress.Response<T>>
     }
 
+    public static setupUserScope(owner: TestUserScope = 'selectedUser'): string {
+        return OktaLogin.setupUserSession(owner === 'selectedAltUser')
+    }
+
     public static population(name: string, definition: string, overrides: Partial<PopulationDefinition> = {}) {
         return {
             id: uuidv4(),
@@ -235,9 +246,10 @@ export class TestData {
 
     public static readMeasure<T = MeasureBody>(
         measureNumber = 0,
-        options: Partial<Cypress.RequestOptions> = {}
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
     ): Cypress.Chainable<Cypress.Response<T>> {
-        return this.readMeasureId(measureNumber).then((measureId) => {
+        return this.readMeasureId(measureNumber, owner).then((measureId) => {
             return this.requestWithAccessToken<T>({
                 ...options,
                 url: `/api/measures/${measureId}`,
@@ -306,8 +318,25 @@ export class TestData {
         return this.translateFhirCql(cql)
     }
 
-    public static saveMeasureCql(cql: string, measureNumber = 0): Cypress.Chainable<Cypress.Response<MeasureBody>> {
-        return this.readMeasure<MeasureBody>(measureNumber).then((measureResponse) => {
+    public static saveMeasureCql(
+        cql: string,
+        measureNumberOrOptions: number | MeasureCqlSaveOptions = 0
+    ): Cypress.Chainable<Cypress.Response<MeasureBody>> {
+        const options =
+            typeof measureNumberOrOptions === 'number'
+                ? { measureNumber: measureNumberOrOptions }
+                : measureNumberOrOptions
+
+        return this.saveMeasureCqlFor(cql, options)
+    }
+
+    private static saveMeasureCqlFor(
+        cql: string,
+        { measureNumber = 0, owner = 'selectedUser' }: MeasureCqlSaveOptions = {}
+    ): Cypress.Chainable<Cypress.Response<MeasureBody>> {
+        this.setupUserScope(owner)
+
+        return this.readMeasure<MeasureBody>(measureNumber, {}, owner).then((measureResponse) => {
             expect(measureResponse.status).to.eql(200)
             const normalizedCql = this.normalizedMeasureCql(cql, measureResponse.body)
 

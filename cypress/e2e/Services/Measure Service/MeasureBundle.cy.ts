@@ -3,10 +3,8 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { TestData } from "../../../Shared/TestData"
 
 const measureName = 'MeasureBundle' + Date.now()
 const CqlLibraryName = 'MeasureBundleLibrary' + Date.now()
@@ -80,12 +78,10 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
@@ -467,12 +463,10 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${CVmeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
@@ -650,12 +644,10 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 1, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
@@ -779,12 +771,7 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
         OktaLogin.setupUserSession(true)
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, undefined, true)
          MeasureGroupPage.CreateProportionMeasureGroupAPI(0, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
-        OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', undefined, { altUser: true })
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')       
+        TestData.saveMeasureCql(`${measureCQL}\n`, { owner: 'selectedAltUser' })
     })
 
     beforeEach('Set Access Token', () => {
@@ -863,19 +850,10 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, newmeasureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${newmeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     afterEach('Clean up', () => {
@@ -983,14 +961,10 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
         })
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'num', '', '', 'num', '', 'numeratorExclusion')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     after('Clean up', () => {

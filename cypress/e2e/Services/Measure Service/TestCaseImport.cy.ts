@@ -6,9 +6,6 @@ import { MeasureCQL } from '../../../Shared/MeasureCQL'
 import { Utilities } from '../../../Shared/Utilities'
 import { v4 as uuidv4 } from 'uuid'
 import { OktaLogin } from '../../../Shared/OktaLogin'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 import { TestData, TestCaseImportBody } from '../../../Shared/TestData'
 
 const measureName = 'ImportServiceTest' + Date.now()
@@ -160,12 +157,10 @@ describe('Test Case import for versioned Measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     it('Able to Import Test Cases for Versioned Measures', () => {
