@@ -45,7 +45,6 @@ describe('MADIE Zip Test Case Import', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -250,20 +249,12 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
         TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, false, true)
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('MADIE Zip Test Case Import: error message appears when .madie file is missing from the .zip file', () => {
