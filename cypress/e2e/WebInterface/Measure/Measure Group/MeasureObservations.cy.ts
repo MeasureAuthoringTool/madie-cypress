@@ -1,13 +1,13 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Header } from "../../../../Shared/Header"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { LandingPage } from "../../../../Shared/LandingPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Header } from '../../../../Shared/Header'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { LandingPage } from '../../../../Shared/LandingPage'
 
 let measureName = 'MeasureObservations' + Date.now()
 let CqlLibraryName = 'MeasureObservationsLib' + Date.now()
@@ -15,31 +15,24 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 
 describe('Measure Observations', () => {
-
     beforeEach('Create New Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach(' Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Add Measure Observations for Ratio Measure', () => {
-
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
         //navigate away from measure group page
@@ -73,7 +66,10 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -95,16 +91,17 @@ describe('Measure Observations', () => {
     })
 
     it('Add Measure Observations for Continuous Variable Measure', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 28500)
@@ -173,7 +170,6 @@ describe('Measure Observations', () => {
     })
 
     it('Remove Measure Observations from Ratio Measure', () => {
-
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -214,7 +210,10 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -245,16 +244,17 @@ describe('Measure Observations', () => {
     })
 
     it('Verify drop down values for Measure observation aggregate function', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -282,31 +282,24 @@ describe('Measure Observations', () => {
 })
 
 describe('Measure Observations and Stratification -- non-owner tests', () => {
-
     beforeEach('Create New Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach(' Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Non-owner of measure cannot change measure observation', () => {
-
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -339,7 +332,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -399,16 +395,17 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
     })
 
     it('Measure Observations and stratification cannot be changed by non-owner', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
@@ -526,40 +523,35 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 })
 
 describe('Measure Observation - Expected Values', () => {
-
     beforeEach('Create New Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach(' Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify Expected values for Boolean Type Continuous Variable Measure Observations', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 26500)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -608,7 +600,10 @@ describe('Measure Observation - Expected Values', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //Navigate to Test Cases page and verify Measure Observations
         TestCasesPage.createTestCase('TestCase001', 'testCaseSeries', 'testCaseDescription')
@@ -641,7 +636,6 @@ describe('Measure Observation - Expected Values', () => {
     })
 
     it('Verify Expected values for Boolean Type Ratio Measure Observations', () => {
-
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -683,7 +677,10 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //Navigate to Test Cases page and verify Measure Observations
         TestCasesPage.createTestCase('TestCase002', 'testCaseSeries', 'testCaseDescription')
@@ -745,40 +742,35 @@ describe('Measure Observation - Expected Values', () => {
 })
 
 describe('Validate Measure Observation Parameters', () => {
-
     beforeEach('Create New Measure and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach(' Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
@@ -801,7 +793,10 @@ describe('Validate Measure Observation Parameters', () => {
 
         //Verify error message when the function selected for Measure Observation has parameters for Boolean population basis type
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'isFinishedEncounter') //select isFinishedEncounter
-        cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function can not have parameters')
+        cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should(
+            'contain.text',
+            'Selected function can not have parameters'
+        )
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
@@ -815,7 +810,10 @@ describe('Validate Measure Observation Parameters', () => {
         //Verify error message when the parameter used in function selected for Measure Observation does not match with population basis type
 
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'fun') //select fun
-        cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function must have exactly one parameter of type Encounter')
+        cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should(
+            'contain.text',
+            'Selected function must have exactly one parameter of type Encounter'
+        )
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
     })

@@ -77,7 +77,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
             Utilities.dropdownSelect(
                 MeasureGroupPage.improvementNotationSelect,
-                'Increased score indicates improvement',
+                'Increased score indicates improvement'
             )
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -85,7 +85,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
                 'contain.text',
-                'Population details for this group saved successfully.',
+                'Population details for this group saved successfully.'
             )
 
             //Navigate to Test Cases page and add Test Case details
@@ -121,7 +121,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                     '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                     '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                     '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}',
+                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}'
             )
             //save changes to CQL
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -130,19 +130,19 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 350000)
             cy.get(EditMeasurePage.errorMessage).should(
                 'contain.text',
-                'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.',
+                'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.'
             )
             //navigate to the PC tab and verify mismatch message appears
             cy.get(EditMeasurePage.measureGroupsTab).click()
             cy.get(MeasureGroupPage.CQLPCMismatchError).should(
                 'contain.text',
-                'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.',
+                'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.'
             )
             //navigate to the TC tab and verify mismatch message appears and the execute test case button is disabled
             cy.get(EditMeasurePage.testCasesTab).click()
             cy.get('[data-testid="test-case-alerts"]').should(
                 'contain.text',
-                '2 errors were foundOne or more Population Criteria has a mismatch with CQL return types. Please check the population criteria tab to update.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.',
+                '2 errors were foundOne or more Population Criteria has a mismatch with CQL return types. Please check the population criteria tab to update.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.'
             )
             cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
             TestCasesPage.clickEditforCreatedTestCase()
@@ -161,9 +161,9 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                         cy.request({
                             url: '/api/measures/' + id,
                             headers: {
-                                authorization: 'Bearer ' + accessToken?.value,
+                                authorization: 'Bearer ' + accessToken?.value
                             },
-                            method: 'GET',
+                            method: 'GET'
                         }).then((response) => {
                             expect(response.status).to.eql(200)
                             expect(response.body.errors[0]).to.equal('MISMATCH_CQL_POPULATION_RETURN_TYPES')
@@ -185,7 +185,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //remove the dayObs line(s) from CQL
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
             cy.get(EditMeasurePage.cqlEditorTextBox).type(
-                measureCQL + '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{del}',
+                measureCQL + '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{del}'
             )
 
             //save changes to CQL
@@ -205,16 +205,16 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                         cy.request({
                             url: '/api/measures/' + id,
                             headers: {
-                                authorization: 'Bearer ' + accessToken?.value,
+                                authorization: 'Bearer ' + accessToken?.value
                             },
-                            method: 'GET',
+                            method: 'GET'
                         }).then((response) => {
                             expect(response.status).to.eql(200)
                             expect(response.body.errors).is.empty
                         })
                     })
             })
-        },
+        }
     )
 
     it(
@@ -225,10 +225,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
 
-            cy.get(EditMeasurePage.cqlEditorTab).click()
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-            cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+            CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
             //Click on the measure group tab
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -259,7 +256,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
             Utilities.dropdownSelect(
                 MeasureGroupPage.improvementNotationSelect,
-                'Increased score indicates improvement',
+                'Increased score indicates improvement'
             )
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -267,7 +264,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
                 'contain.text',
-                'Population details for this group saved successfully.',
+                'Population details for this group saved successfully.'
             )
 
             //Navigate to Test Cases page and add Test Case details
@@ -303,7 +300,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                     '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                     '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                     '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}',
+                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}'
             )
             //save changes to CQL
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -312,19 +309,19 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 35000)
             cy.get(EditMeasurePage.errorMessage).should(
                 'contain.text',
-                'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.',
+                'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.'
             )
             //navigate to the PC tab and verify mismatch message appears
             cy.get(EditMeasurePage.measureGroupsTab).click()
             cy.get(MeasureGroupPage.CQLPCMismatchError).should(
                 'contain.text',
-                'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.',
+                'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.'
             )
             //navigate to the TC tab and verify mismatch message appears and the execute test case button is disabled
             cy.get(EditMeasurePage.testCasesTab).click()
             cy.get('[data-testid="test-case-alerts"]').should(
                 'contain.text',
-                '2 errors were foundOne or more Population Criteria has a mismatch with CQL return types. Please check the population criteria tab to update.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.',
+                '2 errors were foundOne or more Population Criteria has a mismatch with CQL return types. Please check the population criteria tab to update.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.'
             )
             cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
             TestCasesPage.clickEditforCreatedTestCase()
@@ -345,9 +342,9 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                         cy.request({
                             url: '/api/measures/' + id,
                             headers: {
-                                authorization: 'Bearer ' + accessToken?.value,
+                                authorization: 'Bearer ' + accessToken?.value
                             },
-                            method: 'GET',
+                            method: 'GET'
                         }).then((response) => {
                             expect(response.status).to.eql(200)
                             expect(response.body.errors[0]).to.equal('MISMATCH_CQL_POPULATION_RETURN_TYPES')
@@ -373,7 +370,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
                 'contain.text',
-                'Population details for this group updated successfully.',
+                'Population details for this group updated successfully.'
             )
 
             //verify that the errors flag contains no errors / has been cleared
@@ -388,15 +385,15 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                         cy.request({
                             url: '/api/measures/' + id,
                             headers: {
-                                authorization: 'Bearer ' + accessToken?.value,
+                                authorization: 'Bearer ' + accessToken?.value
                             },
-                            method: 'GET',
+                            method: 'GET'
                         }).then((response) => {
                             expect(response.status).to.eql(200)
                             expect(response.body.errors).is.empty
                         })
                     })
             })
-        },
+        }
     )
 })

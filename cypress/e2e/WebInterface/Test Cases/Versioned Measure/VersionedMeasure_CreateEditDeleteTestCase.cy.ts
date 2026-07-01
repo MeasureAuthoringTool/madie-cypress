@@ -1,13 +1,13 @@
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Header } from "../../../../Shared/Header"
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Header } from '../../../../Shared/Header'
 
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
@@ -16,10 +16,11 @@ let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.ProportionEpisode_PASS
-let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n\n' +
-    'using QICore version \'4.1.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+let measureCQL =
+    "library ProportionEpisodeMeasure version '0.0.000'\n\n" +
+    "using QICore version '4.1.1'\n\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include CQMCommon version '1.0.000' called Global\n\n" +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n\n' +
     'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
     'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n\n' +
@@ -28,7 +29,7 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n\n' +
     'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   [Encounter: "Encounter Inpatient"] InptEncounter\n' +
-    '      where InptEncounter.status = \'finished\' \n\n' +
+    "      where InptEncounter.status = 'finished' \n\n" +
     'define "Denominator":\n' +
     '    "Initial Population" IP\n' +
     '      where IP.period ends during day of "Measurement Period"\n\n' +
@@ -41,30 +42,40 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n\n' +
     '          where Enc.priority ~ "Unscheduled (qualifier value)"\n' +
     '          })'
 
-
 describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
-
     beforeEach('Create Measure, Test Case and Login', () => {
-
         CqlLibraryName = 'ProportionEpisode' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false,
-            '2023-01-01', '2023-12-31')
+        CreateMeasurePage.CreateQICoreMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            0,
+            false,
+            '2023-01-01',
+            '2023-12-31'
+        )
 
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population',
-            '', '', 'Numerator', '', 'Denominator', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Numerator',
+            '',
+            'Denominator',
+            'Encounter'
+        )
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -91,16 +102,14 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Versioned Measure: Create New Test Case, delete is enabled', () => {
-
         let currentUser = Cypress.env('selectedUser')
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -128,8 +137,10 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should(
+            'contain.text',
+            'Test case updated successfully ' + 'with warnings in JSON'
+        )
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -155,11 +166,15 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
 
         MeasuresPage.actionCenter('draft')
 
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type('DraftedMeasure0001' + Date.now())
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox)
+            .clear()
+            .type('DraftedMeasure0001' + Date.now())
         //intercept draft id once measure is drafted
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
-        })
+        cy.readFile(filePath)
+            .should('exist')
+            .then((fileContents) => {
+                cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
+            })
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request?.response?.body.id)
@@ -170,7 +185,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).scrollIntoView().click()
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -187,12 +202,11 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
     })
 
     it('Versioned Measure: Edit Test Case, delete is disabled', () => {
-
         let currentUser = Cypress.env('selectedUser')
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -215,7 +229,10 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get('[data-testid="test-case-alerts"]').should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        cy.get('[data-testid="test-case-alerts"]').should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
@@ -238,11 +255,15 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
 
         MeasuresPage.actionCenter('draft')
 
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type('DraftedMeasure0001' + Date.now())
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox)
+            .clear()
+            .type('DraftedMeasure0001' + Date.now())
         //intercept draft id once measure is drafted
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
-        })
+        cy.readFile(filePath)
+            .should('exist')
+            .then((fileContents) => {
+                cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
+            })
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request?.response?.body.id)
@@ -253,7 +274,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).scrollIntoView().click()
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

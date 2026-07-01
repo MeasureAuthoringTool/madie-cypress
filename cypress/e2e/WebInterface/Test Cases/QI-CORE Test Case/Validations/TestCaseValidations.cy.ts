@@ -1,14 +1,14 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header"
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../../Shared/Header'
 
 const now = Date.now()
 let measureName = 'TCValidations' + now
@@ -18,24 +18,22 @@ let testCaseDescription = 'DENOMFail' + now
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let testCaseSeries = 'SBTestSeries'
-let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
+let twoFiftyTwoCharacters =
+    'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
 let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'CMSTestSeries'
 
 describe('Test Case Validations', () => {
-
     beforeEach('Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Create Test Case: Description more than 250 characters', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -48,7 +46,6 @@ describe('Test Case Validations', () => {
     })
 
     it('Edit Test Case: Description more than 250 characters', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -63,11 +60,14 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.editTCSaveTooltip).should('have.attr', 'aria-label', 'description: Test Case Description cannot be more than 250 characters.')
+        cy.get(TestCasesPage.editTCSaveTooltip).should(
+            'have.attr',
+            'aria-label',
+            'description: Test Case Description cannot be more than 250 characters.'
+        )
     })
 
     it('Create Test Case: Title more than 250 characters', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -83,12 +83,12 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).type(twoFiftyTwoCharacters)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.createTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
-            'than 250 characters.')
+        cy.get(TestCasesPage.createTestCaseTitleInlineError).contains(
+            'Test Case Title cannot be more ' + 'than 250 characters.'
+        )
     })
 
     it('Edit Test Case: Title more than 250 characters', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -110,12 +110,12 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
-            'than 250 characters.')
+        cy.get(TestCasesPage.editTestCaseTitleInlineError).contains(
+            'Test Case Title cannot be more ' + 'than 250 characters.'
+        )
     })
 
     it('Create Test Case: Group has more than 250 characters', () => {
-    
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -132,12 +132,12 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).type(twoFiftyTwoCharacters)
         cy.get('[data-testid*="Add"]').last().click()
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.testCaseGroupInlineError).contains('Test Case Group cannot be more ' +
-            'than 250 characters.')
+        cy.get(TestCasesPage.testCaseGroupInlineError).contains(
+            'Test Case Group cannot be more ' + 'than 250 characters.'
+        )
     })
 
     it('Edit Test Case: Group more than 250 characters', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -157,22 +157,24 @@ describe('Test Case Validations', () => {
 })
 
 describe('Attempting to create a test case without a title', () => {
-
     beforeEach('Create measure and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(
+            false,
+            false,
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Procedure'
+        )
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Create Test Case without a title', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -188,7 +190,6 @@ describe('Attempting to create a test case without a title', () => {
     })
 
     it('Edit and update test case to have no title', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -326,31 +327,22 @@ describe('Attempting to create a test case without a title', () => {
 })
 
 describe('Duplicate Test Case Title and Group validations', () => {
-
     beforeEach('Create Measure, Test case and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Cleanup and Logout', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        
     })
 
     it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -381,11 +373,13 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'An error occurred while creating the test case: The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'An error occurred while creating the test case: The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.'
+        )
     })
 
     it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -418,12 +412,18 @@ describe('Duplicate Test Case Title and Group validations', () => {
         //Edit First Test case
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).clear().type('{selectall}{backspace}{selectall}{backspace}').type('SecondTestCase'.toString())
+        cy.get(TestCasesPage.testCaseTitle)
+            .clear()
+            .type('{selectall}{backspace}{selectall}{backspace}')
+            .type('SecondTestCase'.toString())
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).clear().type('SecondTestCaseGroup').type('{downArrow}{enter}')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get(TestCasesPage.errorToastMsg).should(
+            'contain.text',
+            'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.'
+        )
     })
 })

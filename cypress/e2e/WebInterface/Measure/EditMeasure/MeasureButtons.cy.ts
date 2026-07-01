@@ -1,19 +1,19 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage, EditMeasureActions } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Header } from "../../../../Shared/Header"
-import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage, CreateMeasureOptions } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage, EditMeasureActions } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Header } from '../../../../Shared/Header'
+import { QdmCql } from '../../../../Shared/QDMMeasuresCQL'
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let qdmMeasureCQL = QdmCql.simpleQDM_CQL
@@ -26,9 +26,7 @@ let harpUserALT = ''
 const measureData: CreateMeasureOptions = {}
 
 describe('Delete measure on the measure edit page', () => {
-
     beforeEach('Create Measure', () => {
-
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
         qiCoreCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 8 + randValue
@@ -42,15 +40,32 @@ describe('Delete measure on the measure edit page', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         //Create new QI Core measure
         measureQICore = 'QICoreMeasure' + Date.now() + randValue + 4 + randValue
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 4 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests, 1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '',
-            'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            1,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean'
+        )
 
         OktaLogin.Login()
 
@@ -72,7 +87,6 @@ describe('Delete measure on the measure edit page', () => {
     })
 
     it('Delete measure on the edit page for a measure', () => {
-
         //Qi Core
         MeasuresPage.actionCenter('edit', 1)
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
@@ -82,9 +96,14 @@ describe('Delete measure on the measure edit page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure successfully deleted')
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
-        cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
+        cy.url().should('be.oneOf', [
+            'https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10',
+            'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10',
+            'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10',
+            'https://madie.cms.gov/measures?tab=0&page=1&limit=10'
+        ])
 
         //QDM
         MeasuresPage.actionCenter('edit')
@@ -95,20 +114,23 @@ describe('Delete measure on the measure edit page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure successfully deleted')
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
-        cy.url().should('be.oneOf', ['https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
+        cy.url().should('be.oneOf', [
+            'https://dev.madie.internal.cms.gov/measures?tab=0&page=1&limit=10',
+            'https://test.madie.internal.cms.gov/measures?tab=0&page=1&limit=10',
+            'https://impl.madie.internal.cms.gov/measures?tab=0&page=1&limit=10',
+            'https://madie.cms.gov/measures?tab=0&page=1&limit=10'
+        ])
     })
 })
 
 describe('Version and Draft QDM Measure on the Edit Measure page', () => {
-
     measureQDM = 'QDMMeasure' + Date.now() + randValue + 9 + randValue
     let updatedMeasureName = 'Updated' + measureQDM
     qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 9 + randValue
 
     beforeEach('Create Measure', () => {
-
         measureData.ecqmTitle = measureQDM
         measureData.cqlLibraryName = qdmCQLLibrary
         measureData.measureScoring = 'Proportion'
@@ -118,27 +140,30 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Log Out and Clean up', () => {
-
         Utilities.deleteVersionedMeasure(measureQDM, qdmCQLLibrary)
     })
 
     it('Version and Draft QDM Measure on the edit page for a measure', () => {
-
         //Version Measure
         MeasuresPage.actionCenter('edit')
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
@@ -151,13 +176,18 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
-        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(EditMeasurePage.editPageVersionDraftMsg).should(
+            'contain.text',
+            'New version of measure is Successfully created'
+        )
         cy.log('Version Created Successfully')
 
         //Draft Measure
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDraftActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureDraftActionBtn).click()
-        cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]').clear().type(updatedMeasureName)
+        cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]')
+            .clear()
+            .type(updatedMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New draft created successfully.')
 
@@ -166,34 +196,36 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
 })
 
 describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
-
     measureQICore = 'QiCore' + Date.now() + randValue + 5 + randValue
     qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 5 + randValue
     let updatedMeasureName = 'Updated' + measureQDM
 
     beforeEach('Create Measure', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '',
-            'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean'
+        )
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Log Out and Clean up', () => {
-
         Utilities.deleteVersionedMeasure(measureQICore, qiCoreCQLLibrary)
     })
 
     it('Version and Draft Qi Core measure on the edit page for a measure', () => {
-
         //Version Measure
         MeasuresPage.actionCenter('edit')
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
@@ -206,13 +238,18 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
-        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(EditMeasurePage.editPageVersionDraftMsg).should(
+            'contain.text',
+            'New version of measure is Successfully created'
+        )
         cy.log('Version Created Successfully')
 
         //Draft Measure
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDraftActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureDraftActionBtn).click()
-        cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]').clear().type(updatedMeasureName)
+        cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]')
+            .clear()
+            .type(updatedMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New draft created successfully.')
 
@@ -221,11 +258,9 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
 })
 
 describe('Export measure on the Edit Measure page', () => {
-
     deleteDownloadsFolderBeforeEach()
 
     before(() => {
-
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
@@ -241,18 +276,34 @@ describe('Export measure on the Edit Measure page', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         measureQICore = 'QICoreExportMeasure' + date
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests, 1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '',
-            'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            1,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean'
+        )
     })
 
     after(() => {
-
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
     })
@@ -263,7 +314,7 @@ describe('Export measure on the Edit Measure page', () => {
 
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -286,7 +337,7 @@ describe('Export measure on the Edit Measure page', () => {
 
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter("edit", 1)
+        MeasuresPage.actionCenter('edit', 1)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -305,9 +356,7 @@ describe('Export measure on the Edit Measure page', () => {
 })
 
 describe('Share measure from the Edit Measure page', () => {
-
     before(() => {
-
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
@@ -331,7 +380,6 @@ describe('Share measure from the Edit Measure page', () => {
     })
 
     after(() => {
-
         OktaLogin.UILogout()
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
@@ -363,20 +411,33 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', measureQDM)
 
         //Delete button disabled for shared owner
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
-        })
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[type="checkbox"]')
+                    .scrollIntoView()
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[type="checkbox"]')
+                    .check()
+            })
         cy.get('[data-testid="delete-action-btn"]').should('be.disabled')
 
         //Edit Measure details
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.measureNameTextBox).clear().type('Updated' + measureQDM)
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type('Updated' + qdmCQLLibrary)
+        cy.get(EditMeasurePage.measureNameTextBox)
+            .clear()
+            .type('Updated' + measureQDM)
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox)
+            .clear()
+            .type('Updated' + qdmCQLLibrary)
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
-        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should(
+            'contain.text',
+            'Measurement Information Updated Successfully'
+        )
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -405,15 +466,17 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
     })
 
     it('Verify Measure owner can share Qi Core Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
-
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter("edit", 1)
+        MeasuresPage.actionCenter('edit', 1)
 
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
 
@@ -437,10 +500,17 @@ describe('Share measure from the Edit Measure page', () => {
         //Edit Measure details
         MeasuresPage.actionCenter('edit', 1)
 
-        cy.get(EditMeasurePage.measureNameTextBox).clear().type('Updated' + measureQICore)
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type('Updated' + qiCoreCQLLibrary)
+        cy.get(EditMeasurePage.measureNameTextBox)
+            .clear()
+            .type('Updated' + measureQICore)
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox)
+            .clear()
+            .type('Updated' + qiCoreCQLLibrary)
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
-        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should(
+            'contain.text',
+            'Measurement Information Updated Successfully'
+        )
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -480,9 +550,7 @@ describe('Share measure from the Edit Measure page', () => {
 })
 
 describe('Dirty Check Validations', () => {
-
     before('Create Measure', () => {
-
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 7 + randValue
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 7 + randValue
@@ -496,25 +564,40 @@ describe('Dirty Check Validations', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         //Create new QI Core measure
         measureQICore = 'QICoreMeasure' + Date.now() + randValue + 6 + randValue
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 6 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests, 1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '',
-            'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            1,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean'
+        )
     })
 
     after('Log Out', () => {
-
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
     })
 
     it('Dirty check pops up when QDM Measure has unsaved changes and user try to Version', () => {
-
         OktaLogin.Login()
 
         //Edit Measure
@@ -532,7 +615,6 @@ describe('Dirty Check Validations', () => {
     })
 
     it('Dirty check pops up when Qi Core Measure has unsaved changes and user try to Version', () => {
-
         OktaLogin.Login()
 
         //Edit Measure
@@ -551,9 +633,7 @@ describe('Dirty Check Validations', () => {
 })
 
 describe('View measure Human Readable on the Edit Measure page', () => {
-
     before(() => {
-
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
@@ -567,27 +647,42 @@ describe('View measure Human Readable on the Edit Measure page', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
 
         measureQICore = 'QICoreExportMeasure' + date
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests, 1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '',
-            'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            1,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'boolean'
+        )
     })
 
     after(() => {
-
         Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
     })
 
     it('View Human Readable for QDM 5.6 measure', () => {
-
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
 
@@ -598,10 +693,9 @@ describe('View measure Human Readable on the Edit Measure page', () => {
     })
 
     it('View Human Readable for QiCore 4.1.1 measure', () => {
-
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter("edit", 1)
+        MeasuresPage.actionCenter('edit', 1)
 
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
 
