@@ -1,29 +1,29 @@
-import { Utilities } from "./Utilities"
-import { TestCasesPage } from "./TestCasesPage"
-import { SupportedModels } from "./CreateMeasurePage"
-import { EditMeasurePage } from "./EditMeasurePage"
-import { step } from "../utils/step"
+import { Utilities } from './Utilities'
+import { TestCasesPage } from './TestCasesPage'
+import { SupportedModels } from './CreateMeasurePage'
+import { EditMeasurePage } from './EditMeasurePage'
+import { step } from '../utils/step'
+import { FixtureOwner, TestData } from './TestData'
 
 export type MeasureActionOptions = {
-    exportForPublish?: boolean,
-    versionType?: string,
-    updateModelVersion?: boolean,
+    exportForPublish?: boolean
+    versionType?: string
+    updateModelVersion?: boolean
     altUser?: boolean
     expectCqlEditorTab?: boolean
 }
 
 export type MeasureRow = {
-    name?: string,
-    version?: string,
-    status?: string,
-    model?: SupportedModels,
-    shared?: boolean,
-    cmsId?: string,
+    name?: string
+    version?: string
+    status?: string
+    model?: SupportedModels
+    shared?: boolean
+    cmsId?: string
     updated?: string
 }
 
 export class MeasuresPage {
-
     public static readonly measureListTitles = '[data-testid="measure-list-tbl"]'
     public static readonly ownedMeasures = '[data-testid="owned-measures-tab"]'
     public static readonly sharedMeasures = '[data-testid="shared-measures-tab"]'
@@ -85,126 +85,134 @@ export class MeasuresPage {
     //CQL to ELM version field
     public static readonly measureCQLToElmVersionTxtBox = '[data-testid="translator-version-text-field"]'
 
-    public static checkFirstRow(expectedData: MeasureRow) {
-        cy.wait(1100)
+    private static fixtureOwner(options?: MeasureActionOptions): FixtureOwner {
+        return options?.altUser ? 'selectedAltUser' : 'selectedUser'
+    }
 
-        cy.get('.measures-list tr').first().then(firstRow => {
+    private static measureActionSelector(measureId: string): string {
+        return `[data-testid=measure-action-${measureId}]`
+    }
 
-            if (expectedData.name) {
-                cy.wrap(firstRow.children().eq(1)).should('have.text', expectedData.name)
-            }
-            if (expectedData.version) {
-                cy.wrap(firstRow.children().eq(2)).should('have.text', expectedData.version)
-            }
-            if (expectedData.status) {
-                cy.wrap(firstRow.children().eq(3)).should('have.text', expectedData.status)
-            }
-            if (expectedData.model) {
-                cy.wrap(firstRow.children().eq(4)).should('have.text', expectedData.model)
-            }
-            if (expectedData.shared) {
-                cy.wrap(firstRow.children().eq(5)).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
-            }
-            if (expectedData.cmsId) {
-                cy.wrap(firstRow.children().eq(6)).should('have.text', expectedData.cmsId)
-            }
-            if (expectedData.updated) {
-                cy.wrap(firstRow.children().eq(8)).should('have.text', expectedData.updated)
-            }
+    private static measureRowSelectSelector(measureId: string): string {
+        return `[data-testid="measure-name-${measureId}_select"]`
+    }
+
+    private static selectMeasureRow(measureNumber = 0, options?: MeasureActionOptions): void {
+        TestData.readMeasureId(measureNumber, this.fixtureOwner(options)).then((measureId) => {
+            const rowSelector = this.measureRowSelectSelector(measureId)
+            cy.log('Measure ID: ' + measureId)
+            Utilities.waitForElementVisible(`${rowSelector} > [class="px-1"] > [type="checkbox"]`, 60000)
+            Utilities.waitForElementVisible(`${rowSelector} > [class="px-1"] > [class=" cursor-pointer"]`, 60000)
+            cy.get(rowSelector).find('[type="checkbox"]').scrollIntoView().check()
         })
     }
 
+    private static clickEnabledAction(actionSelector: string): void {
+        cy.get(actionSelector).scrollIntoView().should('be.enabled').click()
+    }
+
+    public static checkFirstRow(expectedData: MeasureRow) {
+        cy.wait(1100)
+
+        cy.get('.measures-list tr')
+            .first()
+            .then((firstRow) => {
+                if (expectedData.name) {
+                    cy.wrap(firstRow.children().eq(1)).should('have.text', expectedData.name)
+                }
+                if (expectedData.version) {
+                    cy.wrap(firstRow.children().eq(2)).should('have.text', expectedData.version)
+                }
+                if (expectedData.status) {
+                    cy.wrap(firstRow.children().eq(3)).should('have.text', expectedData.status)
+                }
+                if (expectedData.model) {
+                    cy.wrap(firstRow.children().eq(4)).should('have.text', expectedData.model)
+                }
+                if (expectedData.shared) {
+                    cy.wrap(firstRow.children().eq(5)).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
+                }
+                if (expectedData.cmsId) {
+                    cy.wrap(firstRow.children().eq(6)).should('have.text', expectedData.cmsId)
+                }
+                if (expectedData.updated) {
+                    cy.wrap(firstRow.children().eq(8)).should('have.text', expectedData.updated)
+                }
+            })
+    }
+
     public static validateMeasureName(expectedValue: string): void {
-        let currentUser = Cypress.env('selectedUser')
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-
-            let element = cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
-            element.parent().should('contain', expectedValue)
-
+        TestData.readMeasureId().then((measureId) => {
+            cy.get(this.measureActionSelector(measureId)).parent().parent().should('contain', expectedValue)
         })
     }
 
     public static validateVersionNumber(versionNumber: string, measureNumber?: number): void {
-        let filePath = ''
-        let currentUser = Cypress.env('selectedUser')
-        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
-            measureNumber = 0
-            filePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        }
-
-        if (measureNumber > 0) {
-            filePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
-        }
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 60000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
-            cy.get('[data-testid="measure-name-' + fileContents + '_version"]').should('contain', versionNumber)
+        TestData.readMeasureId(measureNumber ?? 0).then((measureId) => {
+            Utilities.waitForElementVisible(this.measureActionSelector(measureId), 60000)
+            cy.get(this.measureActionSelector(measureId)).parent()
+            cy.get(`[data-testid="measure-name-${measureId}_version"]`).should('contain', versionNumber)
         })
     }
 
     public static actionCenter(action: string, measureNumber?: number, options?: MeasureActionOptions): void {
+        const selectedMeasureNumber = measureNumber ?? 0
+        const fixtureOwner = this.fixtureOwner(options)
+        const normalizedAction = action.valueOf().toString().toLowerCase()
+        cy.log('Current User: ' + TestData.selectedUser(fixtureOwner))
 
-        let currentUser = ''
-        let filePath = ''
-        if (options && options.altUser) {
-            currentUser = Cypress.env('selectedAltUser')
-        } else {
-            currentUser = Cypress.env('selectedUser')
+        if (normalizedAction === 'edit') {
+            step('Select Edit from Action Center')
+            const expectCqlEditor = options?.expectCqlEditorTab ?? true
+
+            TestData.readMeasureId(selectedMeasureNumber, fixtureOwner).then((measureId) => {
+                const rowSelector = this.measureRowSelectSelector(measureId)
+                const actionSelector = this.measureActionSelector(measureId)
+
+                cy.get('body', { timeout: 60000 })
+                    .should(($body) => {
+                        const editTabExists = $body.find(EditMeasurePage.cqlEditorTab).length
+                        const measureRowExists = $body.find(rowSelector).length
+                        expect(editTabExists + measureRowExists, 'edit tab or measure list row').to.be.greaterThan(0)
+                    })
+                    .then(($body) => {
+                        if ($body.find(EditMeasurePage.cqlEditorTab).length) {
+                            if (expectCqlEditor) {
+                                Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
+                            }
+                            return
+                        }
+
+                        this.selectMeasureRow(selectedMeasureNumber, options)
+                        Utilities.waitForElementVisible(actionSelector, 60000)
+                        cy.get(actionSelector)
+                            .should('be.visible')
+                            .should('be.enabled')
+                            .scrollIntoView()
+                            .click({ force: true })
+
+                        if (expectCqlEditor) {
+                            Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
+                        }
+                    })
+            })
+
+            return
         }
-        cy.log('Current User: ' + currentUser)
 
-        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
-            measureNumber = 0
-            filePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        }
+        this.selectMeasureRow(selectedMeasureNumber, options)
 
-        if (measureNumber > 0) {
-            filePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
-        }
-
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.log('File contents is ' + fileContents)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 60000)
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 60000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
-        })
-
-        switch ((action.valueOf()).toString().toLowerCase()) {
-            case 'edit': {
-                step('Select Edit from Action Center')
-
-                const expectCqlEditor = options?.expectCqlEditorTab ?? true
-
-                cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']',
-                    60000
-                        )
-
-                cy.get('[data-testid=measure-action-' + fileContents + ']')
-                    .should('be.visible')
-                    .should('be.enabled')
-                    .scrollIntoView()
-                    .click({ force: true })
-
-        if (expectCqlEditor) {
-            Utilities.waitForElementVisible(
-                EditMeasurePage.cqlEditorTab,
-                60000
-            )
-        }
-    })
-
-    break
-}
-
+        switch (normalizedAction) {
             case 'view': {
                 step('Select View from Action Center')
-                cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 60000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView().click({ force: true })
+                TestData.readMeasureId(selectedMeasureNumber, fixtureOwner).then((measureId) => {
+                    const actionSelector = this.measureActionSelector(measureId)
+                    Utilities.waitForElementVisible(actionSelector, 60000)
+                    cy.get(actionSelector)
+                        .should('be.visible')
+                        .should('be.enabled')
+                        .scrollIntoView()
+                        .click({ force: true })
                 })
                 break
             }
@@ -236,45 +244,44 @@ export class MeasuresPage {
 
             case 'version': {
                 step('Select Version from Action Center')
-                cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 60000)
+                TestData.readMeasureId(selectedMeasureNumber, fixtureOwner).then((measureId) => {
+                    Utilities.waitForElementVisible(this.measureRowSelectSelector(measureId), 60000)
                 })
-                cy.get('[data-testid="version-action-btn"]').scrollIntoView()
-                 cy.get('[data-testid="version-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="version-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="version-action-btn"]')
                 Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 60000)
 
                 break
             }
-            case 'draft': { 
+            case 'draft': {
                 step('Select Create Draft from Action Center')
-                cy.get('[data-testid="draft-action-btn"]').scrollIntoView()
-                cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="draft-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="draft-action-btn"]')
 
                 break
             }
             case 'delete': {
                 step('Select Delete from Action Center')
-                cy.get('[data-testid="delete-action-btn"]').scrollIntoView()
-                cy.get('[data-testid="delete-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="delete-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="delete-action-btn"]')
 
                 break
             }
             case 'associatemeasure': {
-                step('Select Associate Measure from Action Center') 
+                step('Select Associate Measure from Action Center')
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureId2').should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 60000)
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]', 60000)
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [class=" cursor-pointer"]', 60000)
-                    cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-                    cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+                TestData.readMeasureId(2, fixtureOwner).then((measureId) => {
+                    const rowSelector = this.measureRowSelectSelector(measureId)
+                    Utilities.waitForElementVisible(rowSelector, 60000)
+                    Utilities.waitForElementVisible(`${rowSelector} > [class="px-1"] > [type="checkbox"]`, 60000)
+                    Utilities.waitForElementVisible(
+                        `${rowSelector} > [class="px-1"] > [class=" cursor-pointer"]`,
+                        60000
+                    )
+                    cy.get(rowSelector)
+                        .find('[class="px-1"]')
+                        .find('[class=" cursor-pointer"]')
+                        .scrollIntoView()
+                        .click()
                 })
-                cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
-                cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="associate-cms-id-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="associate-cms-id-action-btn"]')
 
                 Utilities.waitForElementVisible('[data-testid="associate-cms-id-button"]', 60000)
                 cy.get('[data-testid="associate-cms-id-button"]').should('be.visible')
@@ -284,59 +291,43 @@ export class MeasuresPage {
             }
             case 'share': {
                 step('Select Share from Action Center')
-                cy.get('[data-testid="share-action-btn"]').scrollIntoView()
-                cy.get('[data-testid="share-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="share-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="share-action-btn"]')
 
                 break
             }
 
             case 'transfer': {
                 step('Select Transfer from Action Center')
-                cy.get('[data-testid="transfer-action-btn"]').scrollIntoView()
-                cy.get('[data-testid="transfer-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="transfer-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="transfer-action-btn"]')
 
                 break
             }
             case 'viewhr': {
                 step('Select View Human Readable from Action Center')
-                cy.get('[data-testid="view-hr-action-btn"]').scrollIntoView()
-                cy.get('[data-testid="view-hr-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="view-hr-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="view-hr-action-btn"]')
 
                 break
             }
             case 'viewhistory': {
                 step('Select View History from Action Center')
-                cy.get('[data-testid="history-action-btn"]').scrollIntoView()
-                cy.get('[data-testid="history-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="history-action-btn"]').click()
+                this.clickEnabledAction('[data-testid="history-action-btn"]')
 
                 break
             }
-            default: { }
+            default: {
+            }
         }
     }
 
     // in sequences where we have back-to-back actions in the action center, this function is needed to re-check after the 1st action
     // as of 5/20/26 we seem to be carrying the visual of the 1st check forward, but Madie does not actually register the check as real
     public static selectMeasure(measureNumber?: number): void {
-        const currentUser = Cypress.env('selectedUser')
-
-        if (!measureNumber) {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').then(measureId => {
-
-                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
-            })
-        }
-        else {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber).then(measureId => {
-
-                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-                cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
-            })
-        }
+        TestData.readMeasureId(measureNumber ?? 0).then((measureId) => {
+            cy.get(this.measureRowSelectSelector(measureId))
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .scrollIntoView()
+                .click()
+        })
     }
 }

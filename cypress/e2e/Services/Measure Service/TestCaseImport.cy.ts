@@ -1,21 +1,22 @@
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { Utilities } from "../../../Shared/Utilities"
+import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
+import { TestCasesPage } from '../../../Shared/TestCasesPage'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
+import { TestCaseJson } from '../../../Shared/TestCaseJson'
+import { MeasureCQL } from '../../../Shared/MeasureCQL'
+import { Utilities } from '../../../Shared/Utilities'
 import { v4 as uuidv4 } from 'uuid'
-import { OktaLogin } from "../../../Shared/OktaLogin";
-import { MeasuresPage } from "../../../Shared/MeasuresPage";
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage";
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { TestData, TestCaseImportBody } from '../../../Shared/TestData'
 
 const measureName = 'ImportServiceTest' + Date.now()
 const cqlLibraryName = 'ImportServiceTestLib' + Date.now()
 const measureCQL = MeasureCQL.SBTEST_CQL
 let harpUser = ''
 let harpUserALT = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let newMeasureName = ''
 let newCQLLibraryName = ''
 
@@ -27,7 +28,8 @@ const secondTCTitle = 'ICF test case title'
 const secondTCDescription = 'DENOMPass1651609688032'
 const TCJson = TestCaseJson.TestCaseJson_Valid
 const TCJson_Invalid_PatientID = TestCaseJson.TestCaseJson_with_warnings
-const ImportTCJon = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
+const ImportTCJon =
+    '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
     ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +
     ' "resource": { "id":"1", "resourceType": "Encounter", "meta": {' +
     ' "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter",' +
@@ -37,7 +39,8 @@ const ImportTCJon = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "vers
     ' "status": "finished","class": { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],"period": { "start": "2021-01-01T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2d5722cf-6051-4f8c-9af7-8732cdd17b8d", "resourceType": "Patient","text": { "status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>\"}, "meta": { "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"}, "identifier":' +
     ' [ { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", ' +
     ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ] } ],"gender": "female","birthDate": "2000-10-11"} } ] }'
-const TCJson_Invalid = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
+const TCJson_Invalid =
+    '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
     ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +
     ' "resource": { "id":"1", "resourceType": "Encounter", "meta": {' +
     ' "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter",' +
@@ -48,10 +51,23 @@ const TCJson_Invalid = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "v
     ' [ { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", ' +
     ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ] } ],"gender": "female","birthDate": "2000-10-11"}  ] }'
 
+const importTestCases = (body: TestCaseImportBody[]): Cypress.Chainable<Cypress.Response<any>> => {
+    return TestData.requestTestCaseImports(body)
+}
+
+const importWithSavedPatient = (json: string): Cypress.Chainable<Cypress.Response<any>> => {
+    return TestData.readTestCasePatientId().then((patientId) => {
+        return importTestCases([
+            {
+                patientId,
+                json
+            }
+        ])
+    })
+}
+
 describe('Test Case Import', () => {
-
     beforeEach('Create Measure and measure group', () => {
-
         OktaLogin.setupUserSession(false)
 
         newMeasureName = measureName + randValue + 4
@@ -64,99 +80,50 @@ describe('Test Case Import', () => {
     })
 
     afterEach('Clean up measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Success Scenario: Import single test case and over ride existing test case', () => {
-
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/measures/' + id + '/test-cases/imports',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: [{
-                            "patientId": patientId,
-                            "json": ImportTCJon
-                        }]
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.outcomes[0].successful).to.eql(true)
-                    })
-                })
-            })
+        importWithSavedPatient(ImportTCJon).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.outcomes[0].successful).to.eql(true)
         })
     })
 
-    it('Measure\'s populations do not match the population in the file that is being imported', () => {
-
-        const currentUser = Cypress.env('selectedUser')
+    it("Measure's populations do not match the population in the file that is being imported", () => {
         OktaLogin.setupUserSession(false)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/test-cases/imports',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'PUT',
-                    body: [{
-                        "patientId": uuidv4(),
-                        "json": TCJson_Invalid_PatientID
-                    }]
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.outcomes[0].message).to.eql('the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
-                    expect(response.body.outcomes[0].successful).to.eql(true)
-                })
-            })
+        importTestCases([
+            {
+                patientId: uuidv4(),
+                json: TCJson_Invalid_PatientID
+            }
+        ]).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.outcomes[0].message).to.eql(
+                'the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.'
+            )
+            expect(response.body.outcomes[0].successful).to.eql(true)
         })
     })
 
     it('Unable to Import when Test Case Json is not valid', () => {
-
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/measures/' + id + '/test-cases/imports',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: [{
-                            "patientId": patientId,
-                            "json": TCJson_Invalid
-                        }]
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.outcomes[0].message).to.eql('Error while processing Test Case JSON.  Please make sure Test Case JSON is valid.')
-                        expect(response.body.outcomes[0].successful).to.eql(false)
-                    })
-                })
-            })
+        importWithSavedPatient(TCJson_Invalid).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.outcomes[0].message).to.eql(
+                'Error while processing Test Case JSON.  Please make sure Test Case JSON is valid.'
+            )
+            expect(response.body.outcomes[0].successful).to.eql(false)
         })
     })
 })
 
 describe('Test Case Import -- Non Measure owner validation', () => {
-
     beforeEach('Create Measure and measure group', () => {
-
         OktaLogin.setupUserSession(false)
 
         newMeasureName = measureName + randValue + 2
@@ -169,39 +136,22 @@ describe('Test Case Import -- Non Measure owner validation', () => {
     })
 
     it('Non Measure owner unable to Import Test cases', () => {
-
-        const currentUser = Cypress.env('selectedUser')
         harpUserALT = OktaLogin.setupUserSession(true)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/measures/' + id + '/test-cases/imports',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: [{
-                            "patientId": patientId,
-                            "json": ImportTCJon
-                        }]
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.outcomes[0].message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + id)
-                        expect(response.body.outcomes[0].successful).to.eql(false)
-                    })
-                })
+        TestData.readMeasureId().then((measureId) => {
+            importWithSavedPatient(ImportTCJon).then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body.outcomes[0].message).to.eql(
+                    'User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId
+                )
+                expect(response.body.outcomes[0].successful).to.eql(false)
             })
         })
     })
 })
 
 describe('Test Case import for versioned Measure', () => {
-
     beforeEach('Create Measure and measure group', () => {
-
         newMeasureName = measureName + randValue + 5
         newCQLLibraryName = cqlLibraryName + randValue + 5
 
@@ -218,55 +168,24 @@ describe('Test Case import for versioned Measure', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
-    it("Able to Import Test Cases for Versioned Measures", () => {
-
-        const currentUser = Cypress.env('selectedUser')
+    it('Able to Import Test Cases for Versioned Measures', () => {
         OktaLogin.setupUserSession(false)
 
-        //Version Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.request({
-                    url: '/api/measures/' + measureId + '/version?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql('1.0.000')
-                })
-            })
+        // Import behavior is validated after the measure is versioned.
+        TestData.versionMeasure().then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.version).to.eql('1.0.000')
         })
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/measures/' + id + '/test-cases/imports',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: [{
-                            "patientId": patientId,
-                            "json": ImportTCJon
-                        }]
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.outcomes[0].successful).to.eql(true)
-                    })
-                })
-            })
+        importWithSavedPatient(ImportTCJon).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.outcomes[0].successful).to.eql(true)
         })
     })
 })
 
 describe('Multiple Test Case Import', () => {
-
     beforeEach('Create Measure, measure group and Test Cases', () => {
-
         newMeasureName = measureName + randValue + 6
         newCQLLibraryName = cqlLibraryName + randValue + 6
 
@@ -278,41 +197,28 @@ describe('Multiple Test Case Import', () => {
     })
 
     afterEach('Clean up measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Multiple test case files are not supported', () => {
-
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCasePId').should('exist').then((patientId) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/measures/' + id + '/test-cases/imports',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: [
-                            {
-                                "patientId": patientId,
-                                "json": ImportTCJon
-                            },
-                            {
-                                "patientId": patientId,
-                                "json": ImportTCJon
-                            }
-                        ]
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.outcomes[0].message).to.eql('Multiple test case files are not supported. Please make sure only one JSON file is in the folder.')
-                        expect(response.body.outcomes[0].successful).to.eql(false)
-                    })
-                })
+        TestData.readTestCasePatientId().then((patientId) => {
+            importTestCases([
+                {
+                    patientId,
+                    json: ImportTCJon
+                },
+                {
+                    patientId,
+                    json: ImportTCJon
+                }
+            ]).then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body.outcomes[0].message).to.eql(
+                    'Multiple test case files are not supported. Please make sure only one JSON file is in the folder.'
+                )
+                expect(response.body.outcomes[0].successful).to.eql(false)
             })
         })
     })

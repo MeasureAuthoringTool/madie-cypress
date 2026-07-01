@@ -23,20 +23,15 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import { TestCasesPage } from "../Shared/TestCasesPage"
-import { Utilities } from "../Shared/Utilities"
+import { TestCasesPage } from '../Shared/TestCasesPage'
+import { Utilities } from '../Shared/Utilities'
 
-import { Environment } from "../Shared/Environment"
+import { Environment } from '../Shared/Environment'
 import '@cypress-audit/lighthouse/commands'
 import 'cypress-file-upload'
 import 'cypress-real-events'
 
-export { } // this file needs to be a module
-
-Cypress.on('uncaught:exception', (err, runnable) => {
-    return false;
-})
-
+export {} // this file needs to be a module
 
 declare global {
     namespace Cypress {
@@ -59,18 +54,21 @@ declare global {
              * Custom command to edit the test case JSON in the Ace Editor.
              * @param jsonContent - The JSON string to input.
              */
-            editTestCaseJSON(jsonContent: string): Chainable<void>;
+            editTestCaseJSON(jsonContent: string): Chainable<void>
 
             /**
              * Visit a URL with automatic retry on network-level errors
              * (ESOCKETTIMEDOUT, ECONNREFUSED, etc.).
              */
-            visitWithRetry(url: string, options?: Partial<Cypress.VisitOptions>, maxRetries?: number, delayMs?: number): Chainable<void>;
-
+            visitWithRetry(
+                url: string,
+                options?: Partial<Cypress.VisitOptions>,
+                maxRetries?: number,
+                delayMs?: number
+            ): Chainable<void>
         }
     }
 }
-
 
 const authnUrl = Environment.authentication().authnUrl
 const authUri = Environment.authentication().authUri
@@ -81,7 +79,6 @@ const tokenUrl = authUri + '/v1/token'
 const codeVerifier = Cypress.env('MADIE_CODEVERIFIER')
 require('cypress-delete-downloads-folder').addCustomCommand()
 
-
 // -------------------------------------------------------
 // cy.visitWithRetry — ensures the server is reachable
 // before calling cy.visit, to avoid ESOCKETTIMEDOUT.
@@ -90,40 +87,41 @@ require('cypress-delete-downloads-folder').addCustomCommand()
 // If the server is unreachable, it waits and re-probes
 // up to maxAttempts times before finally calling cy.visit.
 // -------------------------------------------------------
-Cypress.Commands.add('visitWithRetry', (
-    url: string,
-    options: Partial<Cypress.VisitOptions> = {},
-    maxAttempts = 5,
-    delayMs = 10000
-) => {
-    const baseUrl = Cypress.config('baseUrl') || '';
-    const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
+Cypress.Commands.add(
+    'visitWithRetry',
+    (url: string, options: Partial<Cypress.VisitOptions> = {}, maxAttempts = 5, delayMs = 10000) => {
+        const baseUrl = Cypress.config('baseUrl') || ''
+        const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`
 
-    function waitForServer(attempt: number): void {
-        cy.task('checkUrl', fullUrl, { log: false }).then((result: any) => {
-            if (result.reachable) {
-                cy.log(`visitWithRetry: server reachable on probe ${attempt}, loading page...`);
-                // Server confirmed reachable — call cy.visit with a generous timeout
-                cy.visit(url, { ...options, timeout: 120000 });
-            } else if (attempt < maxAttempts) {
-                cy.log(`visitWithRetry: probe ${attempt}/${maxAttempts} — server not reachable ("${result.error}"). Waiting ${delayMs / 1000}s...`);
-                cy.wait(delayMs);
-                // Re-register intercepts that need to capture the page load
-                cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
-                cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
-                waitForServer(attempt + 1);
-            } else {
-                // All probes failed — attempt cy.visit anyway so Cypress
-                // reports the real error instead of a generic task error
-                cy.log(`visitWithRetry: server still unreachable after ${maxAttempts} probes. Attempting cy.visit as last resort...`);
-                cy.visit(url, { ...options, timeout: 120000 });
-            }
-        });
+        function waitForServer(attempt: number): void {
+            cy.task('checkUrl', fullUrl, { log: false }).then((result: any) => {
+                if (result.reachable) {
+                    cy.log(`visitWithRetry: server reachable on probe ${attempt}, loading page...`)
+                    // Server confirmed reachable — call cy.visit with a generous timeout
+                    cy.visit(url, { ...options, timeout: 120000 })
+                } else if (attempt < maxAttempts) {
+                    cy.log(
+                        `visitWithRetry: probe ${attempt}/${maxAttempts} — server not reachable ("${result.error}"). Waiting ${delayMs / 1000}s...`
+                    )
+                    cy.wait(delayMs)
+                    // Re-register intercepts that need to capture the page load
+                    cy.intercept('/env-config/serviceConfig.json').as('serviceConfig')
+                    cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+                    waitForServer(attempt + 1)
+                } else {
+                    // All probes failed — attempt cy.visit anyway so Cypress
+                    // reports the real error instead of a generic task error
+                    cy.log(
+                        `visitWithRetry: server still unreachable after ${maxAttempts} probes. Attempting cy.visit as last resort...`
+                    )
+                    cy.visit(url, { ...options, timeout: 120000 })
+                }
+            })
+        }
+
+        waitForServer(1)
     }
-
-    waitForServer(1);
-});
-
+)
 
 // -------------------------------------------------------
 // Parameterized OAuth token cookie setter
@@ -134,11 +132,11 @@ function fetchAccessTokenAndSetCookie(
     password: string,
     opts?: { failOnStatusCode?: boolean; uppercaseUsername?: boolean }
 ): void {
-    const failOnStatus = opts?.failOnStatusCode ?? false;
-    const effectiveUsername = opts?.uppercaseUsername ? username.toUpperCase() : username;
+    const failOnStatus = opts?.failOnStatusCode ?? false
+    const effectiveUsername = opts?.uppercaseUsername ? username.toUpperCase() : username
 
-    cy.clearCookies();
-    cy.clearLocalStorage();
+    cy.clearCookies()
+    cy.clearLocalStorage()
 
     cy.request({
         url: authnUrl,
@@ -146,55 +144,60 @@ function fetchAccessTokenAndSetCookie(
         headers: {
             'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'application/json',
+            Accept: 'application/json'
         },
         body: {
             username: effectiveUsername,
             password: password,
             options: {
                 multiOptionalFactorEnroll: false,
-                warnBeforePasswordExpired: true,
-            },
+                warnBeforePasswordExpired: true
+            }
         },
-        failOnStatusCode: false,
+        failOnStatusCode: false
     }).then((authnResponse) => {
-        expect(authnResponse.status).to.eql(200);
-        const sessionToken = authnResponse.body.sessionToken;
+        expect(authnResponse.status).to.eql(200)
+        const sessionToken = authnResponse.body.sessionToken
 
         const url =
             authCodeUrl +
-            '?client_id=' + clientId +
-            '&code_challenge=' + 'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
+            '?client_id=' +
+            clientId +
+            '&code_challenge=' +
+            'LBY2kyC5ZfYC9RaG9HOgRjf9i7U-zgmwHLC280r4UfA' +
             '&code_challenge_method=S256' +
             '&response_type=code' +
             '&response_mode=okta_post_message' +
             '&display=page' +
-            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' + sessionToken +
-            '&redirect_uri=' + redirectUri +
-            '&sessionToken=' + sessionToken +
+            '&nonce=uxiJab6ycJdNkEZkwbtqnSC1MRuIFCXQATQZSWiBjWdSuuBdbIDCN9EafOYiPaHs' +
+            sessionToken +
+            '&redirect_uri=' +
+            redirectUri +
+            '&sessionToken=' +
+            sessionToken +
             '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
-            '&scope=openid%20email%20profile';
+            '&scope=openid%20email%20profile'
 
         cy.request({
             url: url,
             method: 'GET',
             headers: {
                 'Accept-Encoding': 'gzip, deflate, br',
-                'Accept': '*/*',
+                Accept: '*/*'
             },
-            failOnStatusCode: failOnStatus,
+            failOnStatusCode: failOnStatus
         }).then((authzResponse) => {
-            expect(authzResponse.status).to.eql(200);
+            expect(authzResponse.status).to.eql(200)
 
-            const resp = authzResponse.body;
-            const codeIdx = resp.indexOf('data.code');
-            const codeEndIdx = resp.indexOf(';', codeIdx);
-            const codeLine = resp.substring(codeIdx, codeEndIdx);
-            const [, c] = codeLine.split('=');
-            const escapedCode = c.trim().replace(/'/g, '');
+            const resp = authzResponse.body
+            const codeIdx = resp.indexOf('data.code')
+            const codeEndIdx = resp.indexOf(';', codeIdx)
+            const codeLine = resp.substring(codeIdx, codeEndIdx)
+            const [, c] = codeLine.split('=')
+            const escapedCode = c.trim().replace(/'/g, '')
             const authCode = escapedCode.replace(/\\x([0-9A-Fa-f]{2})/g, function () {
-                return String.fromCharCode(parseInt(arguments[1], 16));
-            });
+                return String.fromCharCode(parseInt(arguments[1], 16))
+            })
 
             cy.request({
                 url: tokenUrl,
@@ -202,86 +205,66 @@ function fetchAccessTokenAndSetCookie(
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept': '*/*',
+                    Accept: '*/*'
                 },
                 body: {
                     grant_type: 'authorization_code',
                     client_id: clientId,
                     redirect_uri: redirectUri,
                     code: authCode,
-                    code_verifier: codeVerifier,
+                    code_verifier: codeVerifier
                 },
-                failOnStatusCode: failOnStatus,
+                failOnStatusCode: failOnStatus
             }).then((tokenResponse) => {
-                expect(tokenResponse.status).to.eql(200);
-                const access_token = tokenResponse.body.access_token;
+                expect(tokenResponse.status).to.eql(200)
+                const access_token = tokenResponse.body.access_token
                 // setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token);
-            });
-        });
-    });
+                cy.setCookie('accessToken', access_token)
+            })
+        })
+    })
 }
 
 // --- Thin wrappers that preserve the original public API ---
 
 export function setAccessTokenCookie() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().harpUser,
-        Environment.credentials().password,
-        { failOnStatusCode: false },
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser, Environment.credentials().password, {
+        failOnStatusCode: false
+    })
 }
 
 export function setAccessTokenCookie2() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().harpUser2,
-        Environment.credentials().password2,
-        { failOnStatusCode: false },
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser2, Environment.credentials().password2, {
+        failOnStatusCode: false
+    })
 }
 
 export function setAccessTokenCookie3() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().harpUser3,
-        Environment.credentials().password3,
-        { failOnStatusCode: false },
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser3, Environment.credentials().password3, {
+        failOnStatusCode: false
+    })
 }
 
 export function setAccessTokenCookieCAMELCASE() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().harpUser,
-        Environment.credentials().password,
-        { uppercaseUsername: true },
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser, Environment.credentials().password, {
+        uppercaseUsername: true
+    })
 }
 
 export function setAccessTokenCookieALT() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().altHarpUser,
-        Environment.credentials().passwordALT,
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser, Environment.credentials().passwordALT)
 }
 
 export function setAccessTokenCookieALT2() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().altHarpUser2,
-        Environment.credentials().passwordALT2,
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser2, Environment.credentials().passwordALT2)
 }
 
 export function setAccessTokenCookieALT3() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().altHarpUser3,
-        Environment.credentials().passwordALT3,
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser3, Environment.credentials().passwordALT3)
 }
 
 export function setAccessTokenCookieAdmin() {
-    fetchAccessTokenAndSetCookie(
-        Environment.credentials().adminUser,
-        Environment.credentials().adminPassword,
-    );
+    fetchAccessTokenAndSetCookie(Environment.credentials().adminUser, Environment.credentials().adminPassword)
 }
 
 export function UMLSAPIKeyLogin() {
@@ -340,36 +323,34 @@ Cypress.Commands.add('editTestCaseJSON', (jsonContent: string) => {
     cy.get(TestCasesPage.aceEditor).should('exist')
     cy.get(TestCasesPage.aceEditor).should('be.visible')
     cy.get(TestCasesPage.aceEditorJsonInput)
-      .should('exist')
-    .click({ force: true })
-    .clear({ force: true })
-      .type(jsonContent, { parseSpecialCharSequences: false, force: true })
+        .should('exist')
+        .click({ force: true })
+        .clear({ force: true })
+        .type(jsonContent, { parseSpecialCharSequences: false, force: true })
 })
 
-const compareColor = (color: string, property: keyof CSSStyleDeclaration) => (
-    targetEle: JQuery
-) => {
-    const tempEle = document.createElement('div');
-    tempEle.style.color = color;
-    tempEle.style.display = 'none'; //make sure it doesn't render
-    document.body.appendChild(tempEle); //append so that `getComputedStyle` actually works
+const compareColor = (color: string, property: keyof CSSStyleDeclaration) => (targetEle: JQuery) => {
+    const tempEle = document.createElement('div')
+    tempEle.style.color = color
+    tempEle.style.display = 'none' //make sure it doesn't render
+    document.body.appendChild(tempEle) //append so that `getComputedStyle` actually works
 
-    const tempColor = getComputedStyle(tempEle).color;
-    const targetColor = getComputedStyle(targetEle[0])[property];
+    const tempColor = getComputedStyle(tempEle).color
+    const targetColor = getComputedStyle(targetEle[0])[property]
 
-    document.body.removeChild(tempEle); //remove
+    document.body.removeChild(tempEle) //remove
 
-    expect(tempColor).to.equal(targetColor);
-};
+    expect(tempColor).to.equal(targetColor)
+}
 
 Cypress.Commands.overwrite('should', (originalFn: Function, subject: any, expectation: any, ...args: any[]) => {
     const customMatchers = {
         'have.backgroundColor': compareColor(args[0], 'backgroundColor'),
-        'have.color': compareColor(args[0], 'color'),
-    };
+        'have.color': compareColor(args[0], 'color')
+    }
     //See if the expected is a string and if it's a member of Jest's expect
     if (typeof expectation === 'string' && customMatchers[expectation]) {
-        return originalFn(subject, customMatchers[expectation]);
+        return originalFn(subject, customMatchers[expectation])
     }
 
     return originalFn(subject, expectation, ...args)
@@ -391,16 +372,18 @@ Cypress.Commands.add('dragAnySashToRight', (steps: number = 6, rightPadding: num
     const SASH = '[data-testid="sash"]'
 
     // ensure geometry is in a 1:1 pixel space
-    cy.document().then(doc => { doc.body.style.zoom = '1' })
+    cy.document().then((doc) => {
+        doc.body.style.zoom = '1'
+    })
 
     cy.get(SASH, { timeout: 10000 }).should('have.length.greaterThan', 0)
 
-    cy.get(SASH).then($all => {
+    cy.get(SASH).then(($all) => {
         const $sash = findLeftmostSash($all)
         const el = $sash[0] as HTMLElement
 
         const rect = el.getBoundingClientRect()
-        const container = (el.closest('[class*="sashContainer"]') as HTMLElement) || el.parentElement as HTMLElement
+        const container = (el.closest('[class*="sashContainer"]') as HTMLElement) || (el.parentElement as HTMLElement)
         const crect = container.getBoundingClientRect()
 
         const targetLeft = crect.right - rightPadding
@@ -423,25 +406,30 @@ Cypress.Commands.add('dragAnySashToRight', (steps: number = 6, rightPadding: num
 Cypress.Commands.add('dragSashToRight', (index: number = 0, steps: number = 6, rightPadding: number = 12) => {
     const SASH = '[data-testid="sash"]'
 
-    cy.document().then(doc => { doc.body.style.zoom = '1' })
-
-    cy.get(SASH).eq(index).should('be.visible').then($sash => {
-        const el = $sash[0] as HTMLElement
-        const rect = el.getBoundingClientRect()
-        const container = (el.closest('[class*="sashContainer"]') as HTMLElement) || el.parentElement as HTMLElement
-        const crect = container.getBoundingClientRect()
-
-        const targetLeft = crect.right - rightPadding
-        const dx = Math.max(1, Math.round(targetLeft - (rect.left + rect.width / 2)))
-        const step = Math.ceil(dx / Math.max(1, steps))
-
-        cy.wrap($sash).realMouseDown({ position: 'center' })
-
-        for (let i = 1; i <= steps; i++) {
-            cy.wrap($sash).realMouseMove(step * i, 0, { position: 'center' })
-        }
-
-        cy.wrap($sash).realMouseUp()
+    cy.document().then((doc) => {
+        doc.body.style.zoom = '1'
     })
-})
 
+    cy.get(SASH)
+        .eq(index)
+        .should('be.visible')
+        .then(($sash) => {
+            const el = $sash[0] as HTMLElement
+            const rect = el.getBoundingClientRect()
+            const container =
+                (el.closest('[class*="sashContainer"]') as HTMLElement) || (el.parentElement as HTMLElement)
+            const crect = container.getBoundingClientRect()
+
+            const targetLeft = crect.right - rightPadding
+            const dx = Math.max(1, Math.round(targetLeft - (rect.left + rect.width / 2)))
+            const step = Math.ceil(dx / Math.max(1, steps))
+
+            cy.wrap($sash).realMouseDown({ position: 'center' })
+
+            for (let i = 1; i <= steps; i++) {
+                cy.wrap($sash).realMouseMove(step * i, 0, { position: 'center' })
+            }
+
+            cy.wrap($sash).realMouseUp()
+        })
+})

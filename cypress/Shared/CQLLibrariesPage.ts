@@ -1,15 +1,15 @@
-import { Header } from "./Header"
-import { Utilities } from "./Utilities"
-import { CQLLibraryPage } from "./CQLLibraryPage"
-
+import { Header } from './Header'
+import { Utilities } from './Utilities'
+import { CQLLibraryPage } from './CQLLibraryPage'
+import { FixtureOwner, TestData } from './TestData'
 
 export class CQLLibrariesPage {
-
     public static readonly librariesList = '[data-testid="library-list-tbl"]'
 
     //Version and Draft CQL Library
     public static readonly versionLibraryRadioButton = '[name="type"]'
-    public static readonly createVersionContinueButton = '[data-testid="create-version-continue-button"] > :nth-child(1)'
+    public static readonly createVersionContinueButton =
+        '[data-testid="create-version-continue-button"] > :nth-child(1)'
     public static readonly VersionDraftMsgs = '.MuiAlert-message'
     public static readonly updateDraftedLibraryTextBox = '[data-testid="cql-library-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
@@ -45,125 +45,108 @@ export class CQLLibrariesPage {
     public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
     //Library List Columns
-    public static readonly hdrLibrary = '[data-testid="header-cqlLibraryName"]' 
-    public static readonly hdrVersion = '[data-testid="header-version"]' 
-    public static readonly hdrStatus = '[data-testid="header-draft"]' 
-    public static readonly hdrModel = '[data-testid="header-model"]' 
-    public static readonly hdrShared = '[data-testid="header-librarySet.acls"]' 
+    public static readonly hdrLibrary = '[data-testid="header-cqlLibraryName"]'
+    public static readonly hdrVersion = '[data-testid="header-version"]'
+    public static readonly hdrStatus = '[data-testid="header-draft"]'
+    public static readonly hdrModel = '[data-testid="header-model"]'
+    public static readonly hdrShared = '[data-testid="header-librarySet.acls"]'
     public static readonly hdrUpdated = '[data-testid="header-lastModifiedAt"]'
 
-    public static clickEditforCreatedLibrary(libraryNumber?: number, altUser?:boolean): void {
-        let currentUser = ''
-        if (altUser) {
-            currentUser = Cypress.env('selectedAltUser')
-        }
-        else {
-            currentUser = Cypress.env('selectedUser')
-        }
+    private static fixtureOwner(altUser?: boolean): FixtureOwner {
+        return altUser ? 'selectedAltUser' : 'selectedUser'
+    }
 
-        let filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
+    private static libraryActionSelector(libraryId: string): string {
+        return `[data-testid="cql-library-action-${libraryId}"]`
+    }
 
-        if (libraryNumber) {
-            filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
-        }
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
+    private static libraryContentSelector(libraryId: string): string {
+        return `[data-testid="cqlLibrary-button-${libraryId}-content"]`
+    }
+
+    private static goToLibrariesList(): void {
+        cy.get(Header.cqlLibraryTab).should('exist').should('be.visible').click()
         Utilities.waitForElementVisible(this.librariesList, 35000)
-        cy.readFile(filePath).should('exist').then((fileContents) => {
+    }
 
-            cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
+    private static openLibraryAction(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            const actionSelector = this.libraryActionSelector(libraryId)
+            cy.intercept('GET', `/api/cql-libraries/${libraryId}`).as('cqlLibrary')
 
-            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('exist')
-            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="cql-library-action-' + fileContents + '"]', 4500)
-            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').wait(2000).click()
+            cy.get(actionSelector).should('exist').should('be.visible')
+            Utilities.waitForElementEnabled(actionSelector, 4500)
+            cy.get(actionSelector).click()
 
             cy.wait('@cqlLibrary', { timeout: 10000 }).then(({ response }) => {
                 expect(response?.statusCode).to.eq(200)
             })
         })
+    }
+
+    public static clickEditforCreatedLibrary(libraryNumber?: number, altUser?: boolean): void {
+        this.goToLibrariesList()
+        this.openLibraryAction(libraryNumber ?? 0, this.fixtureOwner(altUser))
         cy.get('[data-testid="CQL Library Details"]').click()
     }
 
     public static clickViewforCreatedLibrary(libraryNumber?: number, altUserAction?: boolean): void {
-        const currentUser = Cypress.env('selectedUser')
-        let filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
-
-        if (libraryNumber) {
-            filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId' + libraryNumber
-        }
         if (altUserAction) {
-            //Navigate to CQL Library Page
-            cy.get(Header.cqlLibraryTab).should('exist')
-            cy.get(Header.cqlLibraryTab).should('be.visible')
-            cy.get(Header.cqlLibraryTab).click()
+            cy.get(Header.cqlLibraryTab).should('exist').should('be.visible').click()
             Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 35000)
             cy.get(CQLLibraryPage.allLibrariesTab).wait(2000).click()
         } else {
-            //Navigate to CQL Library Page
-            cy.get(Header.cqlLibraryTab).should('exist')
-            cy.get(Header.cqlLibraryTab).should('be.visible')
-            cy.get(Header.cqlLibraryTab).click()
+            cy.get(Header.cqlLibraryTab).should('exist').should('be.visible').click()
         }
         Utilities.waitForElementVisible(this.librariesList, 35000)
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-
-            cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
-
-            cy.get('[data-testid=cql-library-action-' + fileContents + ']').should('exist')
-            cy.get('[data-testid=cql-library-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=cql-library-action-' + fileContents + ']', 3500)
-            cy.get('[data-testid=cql-library-action-' + fileContents + ']').click()
-
-            cy.wait('@cqlLibrary').then(({ response }) => {
-                expect(response?.statusCode).to.eq(200)
-            })
-        })
+        this.openLibraryAction(libraryNumber ?? 0)
     }
 
     public static validateCQLLibraryName(expectedValue: string): void {
-        const currentUser = Cypress.env('selectedUser')
-        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', expectedValue)
+        TestData.readCqlLibraryId().then((libraryId) => {
+            cy.get(this.libraryContentSelector(libraryId)).should('contain', expectedValue)
         })
     }
 
     public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
-        const currentUser = Cypress.env('selectedUser')
-        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
-
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]')
+        TestData.readCqlLibraryId().then((libraryId) => {
+            cy.get(this.libraryContentSelector(libraryId))
                 .should('contain.text', expectedValue)
                 .parent()
                 .invoke('data', 'testid')
-                .then(testId => {
-                    const value: string = (testId.split('_')[0]).slice(-1) // extract row index value
+                .then((testId) => {
+                    const value: string = testId.split('_')[0].slice(-1) // extract row index value
                     cy.get('[data-testid="measure-name-' + value + '_version"]').should('contain.text', versionNumber)
                 })
         })
     }
 
     public static cqlLibraryActionCenter(action: string, libraryNumber?: number): void {
-
-        if ((libraryNumber === undefined) || (libraryNumber === null)) {
-
+        if (libraryNumber === undefined || libraryNumber === null) {
             Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 60000)
-            cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+            cy.get('[data-testid="measure-name-0_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .scrollIntoView()
+            cy.get('[data-testid="measure-name-0_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .click()
         }
 
         if (libraryNumber && libraryNumber > 0) {
-
-            
             Utilities.waitForElementVisible('[data-testid="measure-name-' + libraryNumber + '_select"]', 60000)
-            cy.get('[data-testid="measure-name-' + libraryNumber + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+            cy.get('[data-testid="measure-name-' + libraryNumber + '_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .scrollIntoView()
+            cy.get('[data-testid="measure-name-0_select"]')
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
+                .click()
         }
 
-        switch ((action.valueOf()).toString().toLowerCase()) {
-
+        switch (action.valueOf().toString().toLowerCase()) {
             case 'delete': {
                 cy.get(this.actionCenterDeleteBtn).should('be.visible')
                 cy.get(this.actionCenterDeleteBtn).should('be.enabled')
@@ -206,7 +189,8 @@ export class CQLLibrariesPage {
 
                 break
             }
-            default: { }
+            default: {
+            }
         }
     }
 }

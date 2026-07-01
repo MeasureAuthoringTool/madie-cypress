@@ -1,11 +1,12 @@
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
-import { Utilities } from "../../../Shared/Utilities"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { MeasureCQL } from '../../../Shared/MeasureCQL'
+import { CreateMeasurePage, CreateMeasureOptions } from '../../../Shared/CreateMeasurePage'
+import { Utilities } from '../../../Shared/Utilities'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
+import { TestData } from '../../../Shared/TestData'
 
 const timestamp = Date.now()
 const qicoreMeasureName = 'QICoreTranslatorVersion' + timestamp
@@ -20,9 +21,7 @@ const expectedQdmVersion = '4.8.0'
 const measureData: CreateMeasureOptions = {}
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
-
     beforeEach('Create QI-Core Measure and Set Access Token', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreCqlLibraryName, qicoreMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         OktaLogin.Login()
@@ -39,51 +38,26 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
     })
 
     after('Delete Versioned Measure', () => {
-
         Utilities.deleteVersionedMeasure(qicoreCqlLibraryName, qicoreCqlLibraryName)
     })
 
     it('Get Translator version for QI-Core Measure', () => {
-        const currentUser = Cypress.env('selectedUser')
-        //Get Translator Version for Draft Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
+        TestData.requestTranslatorVersion('fhir').then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body).to.eql(expectedQiCoreVersion)
+        })
 
-                    cy.request({
-                        url: '/api/fhir/translator-version?draft=true',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'GET'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body).to.eql(expectedQiCoreVersion)
-                    })
-
-                    //Version QI Core Measure
-                    cy.request({
-                        url: '/api/measures/' + id + '/version?versionType=major',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.include('1.0.000')
-                        // versioned measures read translator version from ELM
-                        expect(response.body.elmJson).to.include('"translatorVersion\":\"' + expectedQiCoreVersion +'\"')
-                    })
-                })
-            })
+        TestData.versionMeasure().then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.version).to.include('1.0.000')
+            // versioned measures read translator version from ELM
+            expect(response.body.elmJson).to.include(`"translatorVersion":"${expectedQiCoreVersion}"`)
         })
     })
 })
 
 describe('Measure Service: Translator Version for QDM Measure', () => {
-
     beforeEach('Create QDM Measure and Set Access Token', () => {
-
         measureData.ecqmTitle = qdmMeasureName
         measureData.cqlLibraryName = qdmCqlLibraryName
         measureData.measureScoring = 'Cohort'
@@ -103,43 +77,20 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
     })
 
     after('Delete Versioned Measure', () => {
-
         Utilities.deleteVersionedMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
     it('Get Translator version for QDM Measure', () => {
-        const currentUser = Cypress.env('selectedUser')
-        //Get Translator Version for Draft Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
+        TestData.requestTranslatorVersion('qdm').then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body).to.eql(expectedQdmVersion)
+        })
 
-                    cy.request({
-                        url: '/api/qdm/translator-version?draft=true',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'GET'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body).to.eql(expectedQdmVersion)
-                    })
-
-                    //Version QDM Measure
-                    cy.request({
-                        url: '/api/measures/' + id + '/version?versionType=major',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.include('1.0.000')
-                        // versioned measures read translator version from ELM
-                        expect(response.body.elmJson).to.include('translatorVersion":"' + expectedQdmVersion + '"')
-                    })
-                })
-            })
+        TestData.versionMeasure().then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.version).to.include('1.0.000')
+            // versioned measures read translator version from ELM
+            expect(response.body.elmJson).to.include(`translatorVersion":"${expectedQdmVersion}"`)
         })
     })
 })
