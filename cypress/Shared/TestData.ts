@@ -6,19 +6,42 @@ export type PopulationDefinition = {
     id?: string
     name: string
     definition: string
+    associationType?: string | null
     description?: string | null
+}
+
+export type MeasureObservationDefinition = {
+    id?: string
+    definition: string
+    criteriaReference: string | null
+    aggregateMethod: string
+    description?: string | null
+}
+
+export type StratificationDefinition = {
+    id?: string
+    description?: string
+    cqlDefinition: string
+    association?: string
+    associations?: string[]
 }
 
 export type MeasureGroupBody = {
     id?: string
     scoring: string
     populations: PopulationDefinition[]
+    measureObservations?: MeasureObservationDefinition[]
+    stratifications?: StratificationDefinition[]
     measureGroupTypes?: string[]
     populationBasis?: string
+    groupDescription?: string
+    rateAggregation?: string
     scoringUnit?: {
         label: string
     }
     compositeScoring?: string
+    improvementNotation?: string
+    improvementNotationDescription?: string
 }
 
 export type VersionedMeasureResponse = {
@@ -57,6 +80,18 @@ export type MeasureDraftBody = {
     measurementPeriodStart: string
     measurementPeriodEnd: string
     versionId?: string
+}
+
+export type MeasureBody = {
+    measureName: string
+    cqlLibraryName: string
+    model: string
+    versionId?: string
+    measureSetId?: string
+    ecqmTitle?: string
+    measurementPeriodStart?: string
+    measurementPeriodEnd?: string
+    [key: string]: any
 }
 
 export class TestData {
@@ -125,6 +160,14 @@ export class TestData {
         return this.readFixture('versionId', owner)
     }
 
+    public static readMeasureGroupId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
+        return this.readFixture('groupId', owner)
+    }
+
+    public static readStratificationId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
+        return this.readFixture('stratificationId', owner)
+    }
+
     public static withAccessToken(callback: (accessToken: string) => Cypress.Chainable | void): Cypress.Chainable {
         return cy.getCookie('accessToken').then((cookie) => {
             expect(cookie?.value, 'accessToken cookie').to.be.a('string').and.not.be.empty
@@ -164,23 +207,76 @@ export class TestData {
         }
     }
 
-    public static requestMeasureGroup(
+    public static measureBody(body: Partial<MeasureBody>): MeasureBody {
+        return {
+            versionId: uuidv4(),
+            measureSetId: uuidv4(),
+            ...body
+        } as MeasureBody
+    }
+
+    public static requestMeasure<T = any>(
+        body: Partial<MeasureBody>,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: '/api/measure',
+            method: 'POST',
+            body: this.measureBody(body)
+        })
+    }
+
+    public static requestMeasureGroup<T = MeasureGroupBody>(
         method: 'POST' | 'PUT',
         body: MeasureGroupBody,
-        measureNumber = 0
-    ): Cypress.Chainable<Cypress.Response<MeasureGroupBody>> {
+        measureNumber = 0,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
         return this.withAccessToken((accessToken) => {
             return this.readMeasureId(measureNumber).then((measureId) => {
                 return cy.request({
+                    ...options,
                     url: `/api/measures/${measureId}/groups`,
                     method,
                     headers: {
+                        ...options.headers,
                         authorization: `Bearer ${accessToken}`
                     },
                     body: this.measureGroupBody(measureId, body)
                 })
             })
-        }) as Cypress.Chainable<Cypress.Response<MeasureGroupBody>>
+        }) as Cypress.Chainable<Cypress.Response<T>>
+    }
+
+    public static requestMeasureGroupStratification<T = StratificationDefinition>(
+        method: 'POST' | 'PUT' | 'DELETE',
+        body?: StratificationDefinition | ((stratificationId: string) => StratificationDefinition),
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId().then((measureId) => {
+            return this.readMeasureGroupId().then((measureGroupId) => {
+                const requestStratification = (stratificationId?: string) => {
+                    const requestBody = typeof body === 'function' ? body(stratificationId ?? '') : body
+                    const stratificationPath = method === 'DELETE' && stratificationId ? `/${stratificationId}` : ''
+
+                    return this.requestWithAccessToken<T>({
+                        ...options,
+                        url: `/api/measures/${measureId}/groups/${measureGroupId}/stratification${stratificationPath}`,
+                        method,
+                        ...(requestBody ? { body: requestBody } : {})
+                    })
+                }
+
+                if (method === 'PUT' || method === 'DELETE') {
+                    return this.readStratificationId().then((stratificationId) =>
+                        requestStratification(stratificationId)
+                    )
+                }
+
+                return requestStratification()
+            })
+        }) as Cypress.Chainable<Cypress.Response<T>>
     }
 
     public static requestTranslatorVersion(
