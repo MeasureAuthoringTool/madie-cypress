@@ -549,8 +549,7 @@ export class TestCaseJson {
         '"source": "#nEcAkGd8PRwPP5fA" }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep ' +
         '9th 2021 for Asthma<a name=\\"mm\\"/></div>" }, "status": "in-progress", "class": { "system": "http://terminology.hl7.org/' +
         'CodeSystem/v3-ActCode", "code": "IMP", "display": "inpatient encounter" }, "type": [ { "text": "OutPatient" } ], "subject": ' +
-        '{ "reference": "Patient/1" }, "participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe" ' +
-        '} } ], "period": { "start": "2022-05-13T03:34:10.054+00:00" } } }, { "fullUrl": "http://local/Patient", "resource": { "id": "2", ' +
+        '{ "reference": "Patient/2" }, "period": { "start": "2022-05-13T03:34:10.054+00:00" } } }, { "fullUrl": "http://local/Patient", "resource": { "id": "2", ' +
         '"resourceType": "Patient", "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Builder Bobby' +
         '</div>" }, "meta": { "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" }, "identifier": [ { ' +
         '"system": "http://clinfhir.com/fhir/NamingSystem/identifier", "value": "20181011LizzyHealth" } ], "name": [ { "use": "official", ' +

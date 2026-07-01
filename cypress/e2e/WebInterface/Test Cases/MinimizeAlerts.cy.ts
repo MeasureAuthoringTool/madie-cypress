@@ -21,10 +21,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 25000)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
@@ -106,12 +103,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the test cases
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
         
         OktaLogin.SessionAltLogin()
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
