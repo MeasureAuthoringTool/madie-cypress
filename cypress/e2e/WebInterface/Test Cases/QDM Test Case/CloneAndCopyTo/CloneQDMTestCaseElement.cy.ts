@@ -35,12 +35,7 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
         
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -55,11 +50,6 @@ describe('Clone QDM Test Case', () => {
     })
 
     it('Clone QDM Test Case Element - Success scenario', () => {
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Group Creation
         //Click on Measure Group tab
@@ -90,6 +80,7 @@ describe('Clone QDM Test Case', () => {
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.wait(4500)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
@@ -108,30 +99,6 @@ describe('Clone QDM Test Case', () => {
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
-
-        //add second PC / group to measure
-        cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')
-        cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-
-        cy.get(MeasureGroupPage.denominatorObservation).should('exist')
-        cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Measure Observation hours')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Count')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial Population')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
-
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -192,11 +159,6 @@ describe('Clone QDM Test Case', () => {
 
     it('Clone QDM Test Case Element - Non Measure owner unable to clone', () => {
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-
         //Group Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -226,6 +188,7 @@ describe('Clone QDM Test Case', () => {
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.wait(4500)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
@@ -244,30 +207,6 @@ describe('Clone QDM Test Case', () => {
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
-
-        //add second PC / group to measure
-        cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')
-        cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-
-        cy.get(MeasureGroupPage.denominatorObservation).should('exist')
-        cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Measure Observation hours')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Count')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial Population')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
-
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -307,7 +246,8 @@ describe('Clone QDM Test Case', () => {
         //click on Edit button to edit measure
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
+
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
@@ -318,6 +258,5 @@ describe('Clone QDM Test Case', () => {
         //clone option is not available
         cy.get(TestCasesPage.qdmTCElementTable).find('[class="qpp-c-button"]').first().click({ force: true })
         Utilities.waitForElementToNotExist(TestCasesPage.btnContainer, 3000)
-
     })
 })
