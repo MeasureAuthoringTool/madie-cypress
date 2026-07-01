@@ -22,7 +22,6 @@ const measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-
 describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or Collection', () => {
 
     deleteDownloadsFolderBeforeEach()
@@ -35,7 +34,6 @@ describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or C
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -83,13 +81,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -97,7 +89,6 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
@@ -211,7 +202,6 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
     })
 
