@@ -83,6 +83,7 @@ export type MeasureDraftBody = {
 }
 
 export type MeasureBody = {
+    id?: string
     measureName: string
     cqlLibraryName: string
     model: string
@@ -92,6 +93,11 @@ export type MeasureBody = {
     measurementPeriodStart?: string
     measurementPeriodEnd?: string
     [key: string]: any
+}
+
+export type CqlTranslationResponse = {
+    json: string
+    xml: string
 }
 
 export class TestData {
@@ -224,6 +230,100 @@ export class TestData {
             url: '/api/measure',
             method: 'POST',
             body: this.measureBody(body)
+        })
+    }
+
+    public static readMeasure<T = MeasureBody>(
+        measureNumber = 0,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(measureNumber).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}`,
+                method: 'GET'
+            })
+        })
+    }
+
+    public static updateMeasure<T = MeasureBody>(
+        body: MeasureBody,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/measures/${body.id}`,
+            method: 'PUT',
+            body
+        })
+    }
+
+    public static translateFhirCql(cql: string): Cypress.Chainable<Cypress.Response<CqlTranslationResponse>> {
+        return this.requestWithAccessToken<CqlTranslationResponse>({
+            url:
+                '/api/fhir/cql/translator/cql?errorSeverity=Info&annotations=true&locators=true&' +
+                'disable-list-demotion=true&disable-list-promotion=true&validate-units=true&checkContext=true',
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'text/plain',
+                Accept: 'application/json, text/plain, */*'
+            },
+            body: cql
+        })
+    }
+
+    public static translateQdmCql(cql: string): Cypress.Chainable<Cypress.Response<CqlTranslationResponse>> {
+        return this.requestWithAccessToken<CqlTranslationResponse>({
+            url:
+                '/api/qdm/cql/translator/cql?errorSeverity=Info&annotations=true&locators=true&' +
+                'disable-list-demotion=true&disable-list-promotion=true&validate-units=true',
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'text/plain',
+                Accept: 'application/json, text/plain, */*'
+            },
+            body: cql
+        })
+    }
+
+    private static normalizedMeasureCql(cql: string, measure: MeasureBody): string {
+        const version = measure.version ?? '0.0.000'
+
+        return cql.replace(
+            /^library\s+\S+\s+version\s+'[^']+'/m,
+            `library ${measure.cqlLibraryName} version '${version}'`
+        )
+    }
+
+    private static translateMeasureCql(
+        cql: string,
+        measure: MeasureBody
+    ): Cypress.Chainable<Cypress.Response<CqlTranslationResponse>> {
+        if (measure.model === 'QDM v5.6') {
+            return this.translateQdmCql(cql)
+        }
+
+        return this.translateFhirCql(cql)
+    }
+
+    public static saveMeasureCql(cql: string, measureNumber = 0): Cypress.Chainable<Cypress.Response<MeasureBody>> {
+        return this.readMeasure<MeasureBody>(measureNumber).then((measureResponse) => {
+            expect(measureResponse.status).to.eql(200)
+            const normalizedCql = this.normalizedMeasureCql(cql, measureResponse.body)
+
+            return this.translateMeasureCql(normalizedCql, measureResponse.body).then((translationResponse) => {
+                expect(translationResponse.status).to.eql(200)
+                expect(translationResponse.body.json, 'translated ELM JSON').to.be.a('string').and.not.be.empty
+                expect(translationResponse.body.xml, 'translated ELM XML').to.be.a('string').and.not.be.empty
+
+                return this.updateMeasure<MeasureBody>({
+                    ...measureResponse.body,
+                    cql: normalizedCql,
+                    cqlErrors: false,
+                    elmJson: translationResponse.body.json,
+                    elmXml: translationResponse.body.xml
+                })
+            })
         })
     }
 

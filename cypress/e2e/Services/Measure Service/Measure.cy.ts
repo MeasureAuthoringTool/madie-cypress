@@ -5,9 +5,6 @@ import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { v4 as uuidv4 } from 'uuid'
 import { OktaLogin } from '../../../Shared/OktaLogin'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 import { TestData } from '../../../Shared/TestData'
 
 let measureName = ''
@@ -832,15 +829,10 @@ describe('Delete QI-Core Measure with admin access', () => {
 
         defaultUser = CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, versionMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(`${versionMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     it('Delete versioned QI-Core Measure with admin access', () => {
@@ -997,12 +989,10 @@ describe('Delete QDM Measure with admin access', () => {
         defaultUser = CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
+        TestData.saveMeasureCql(`${QDMMeasureCQL}\n`).then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+        })
     })
 
     it('Delete versioned QDM Measure with admin access', () => {

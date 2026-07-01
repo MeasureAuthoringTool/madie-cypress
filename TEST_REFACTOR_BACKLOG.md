@@ -88,6 +88,8 @@ Last updated: 2026-07-01
 - Kept `MeasureGroupTestData` as the stable facade so existing specs do not need broad import churn.
 - Added `TestData.measureBody` and `TestData.requestMeasure` for common `POST /api/measure` setup.
 - Migrated the first `Measure.cy.ts` create, GET, and measure-name validation scenarios away from repeated token/request/body plumbing.
+- Added `TestData.readMeasure`, `updateMeasure`, model-aware CQL translation, and `saveMeasureCql`.
+- Replaced QI-Core and QDM admin-delete setup in `Measure.cy.ts` with API-only CQL save; the service spec no longer opens the UI editor just to prepare versionable measures.
 
 ## Current Smell Baseline
 
@@ -164,13 +166,71 @@ Trial result:
 
 Measure Service follow-up:
 
-- `Measure.cy.ts` is nominally a service/API spec, but the admin-delete sections use UI setup:
-    - API creates the measure with `cql` and `elmJson`.
-    - API creates the group.
-    - UI logs in, opens the measure, enters the CQL editor, appends a newline, clicks Save, and waits for the "CQL updated successfully" alert.
-- That UI save path is likely being used to force a "valid/saved CQL" state before versioning/admin-delete checks.
-- This is a culture-of-quality smell: API tests should not depend on UI editing just to prepare API state.
-- Next investigation should spy on the CQL editor save network calls and replace the UI setup with an API helper if possible.
+- `Measure.cy.ts` admin-delete setup no longer uses UI editing to force a "valid/saved CQL" state.
+- The replacement helper now performs the required API sequence:
+    - read the current measure
+    - normalize the CQL library statement to the measure library name/version
+    - translate FHIR or QDM CQL through the matching translator endpoint
+    - `PUT /api/measures/{measureId}` with the full measure body, refreshed `cql`, `elmJson`, `elmXml`, and `cqlErrors: false`
+- This changed a service/API spec back toward its proper boundary and removed several minutes of UI setup cost.
+
+API-only saved-CQL sweep:
+
+- The same UI-as-setup smell still exists outside `Measure.cy.ts`. Current service/admin files that still touch the CQL editor save path include:
+    - `cypress/e2e/Services/Measure Service/ViewHumanReadable.cy.ts`
+    - `cypress/e2e/Services/Measure Service/MeasureBundle.cy.ts`
+    - `cypress/e2e/Services/Measure Service/MeasureVersion.cy.ts`
+    - `cypress/e2e/Services/Measure Service/DraftMeasure.cy.ts`
+    - `cypress/e2e/Services/Measure Service/MeasureExport.cy.ts`
+    - `cypress/e2e/Services/Measure Service/QI Core Test-Cases.cy.ts`
+    - `cypress/e2e/Services/Measure Service/TestCaseImport.cy.ts`
+    - `cypress/e2e/Services/Measure Service/MeasureTranslatorVersion.cy.ts`
+    - `cypress/e2e/Services/QDM Measure Service/QDMMeasureVersion.cy.ts`
+    - `cypress/e2e/Services/QDM Measure Service/QDM Test-Cases.cy.ts`
+    - `cypress/e2e/Services/QDM Measure Service/QDM MeasureGroup.cy.ts`
+    - `cypress/e2e/Services/Admin/CorrectExpectedValues.cy.ts`
+    - `cypress/e2e/Services/Admin/UpdateQDMCodeSystem.cy.ts`
+- These are not all equal. Some specs are pure service/API specs that only open the UI to make `elmJson`/`elmXml` valid before calling service endpoints. Those should move to `TestData.saveMeasureCql`.
+- Specs that are intentionally validating editor behavior, alternate-user edit permissions, or page navigation should keep the UI path or get an owner-aware API helper after a probe.
+
+Replanned order:
+
+1. `ViewHumanReadable.cy.ts`
+    - Best next target. It has repeated QI-Core and QDM setup that creates a measure/group, opens the CQL editor, appends a newline, saves, then calls `TestData.requestHumanReadable`.
+    - This is the same valid/saved-CQL precondition proven in `Measure.cy.ts`; the endpoint under test is `/human-readable`, not the editor.
+    - Expected move: replace five editor-save setup blocks with `TestData.saveMeasureCql(...)`, remove unused page-object imports, then run the focused spec.
+2. `MeasureBundle.cy.ts`
+    - Highest payoff after `ViewHumanReadable`, with many bundle scenarios still using UI save before `GET /bundle`.
+    - Do this incrementally because the file mixes valid bundle, invalid bundle, alternate-owner read, non-boolean population basis, supplemental data, and hand-built measure bodies.
+    - Expected move: first convert only the straightforward owner-created QI-Core scenarios; leave alternate-user and custom POST-body scenarios until helper coverage is proven.
+3. `MeasureVersion.cy.ts` and `QDMMeasureVersion.cy.ts`
+    - Strong candidates because versioning generally needs persisted valid ELM, which the helper now supplies for both QI-Core and QDM.
+    - Convert the simple owner versioning setup first. Leave "without CQL", invalid CQL, delete/version permission cases alone until their expected failure state is explicit.
+4. `DraftMeasure.cy.ts`
+    - Good candidate but more stateful. It chains version, draft, minor/patch version, and draft-status behavior, so move one describe at a time.
+5. `MeasureExport.cy.ts`
+    - Good candidate after bundle/version because export setup uses the same valid saved CQL plus measure group pattern.
+6. Permission-sensitive test-case/admin specs
+    - `QI Core Test-Cases.cy.ts`, `QDM Test-Cases.cy.ts`, `CorrectExpectedValues.cy.ts`, and `UpdateQDMCodeSystem.cy.ts` should wait for either an owner-aware `saveMeasureCql` option or a short spy/probe. These specs often rely on alternate-user setup, admin roles, or explicit authorization boundaries.
+
+Helper updates likely needed before the broader sweep:
+
+- Add an optional user scope to `TestData.saveMeasureCql`, `readMeasure`, and `updateMeasure` so specs can save CQL as the owner/alt user without UI login churn.
+- Add a tiny assertion helper for "measure has persisted ELM" so converted specs consistently verify the service precondition:
+    - `response.status === 200`
+    - `response.body.elmJson` is a non-empty string
+    - `response.body.elmXml` is a non-empty string when the endpoint depends on XML
+- Consider a measure setup helper that composes create-measure, create-group, save-CQL for common service specs. Keep this out of page objects; it belongs in `TestData` or a domain-specific service-test helper.
+
+Guardrails:
+
+- Do not convert CQL editor UI specs. UI editor coverage should remain UI coverage.
+- Do not convert negative tests that intentionally depend on invalid, missing, or unsaved CQL.
+- After each file migration, run:
+    - `npm run compile`
+    - `npm run quality:no-focused-tests`
+    - the focused Cypress spec
+- Compare any failures against the regression notes below before assuming the refactor caused them.
 
 ## Priority 3: Replace Fixed Waits
 
@@ -260,6 +320,7 @@ Static checks completed after the helper cleanup:
 - `git diff --check` passed.
 - `MeasureGroupTestData` facade split check: `npm run compile` passed, `git diff --check` passed, and the focused Measure Group browser spec passed after the binding fix.
 - `Measure.cy.ts` first service-helper migration check: `npm run compile` passed, `git diff --check` passed, `npm run quality:no-focused-tests` passed, and `npm run quality:audit` passed.
+- `Measure.cy.ts` API-only CQL save check: `npm run compile` passed, `git diff --check` passed, API-only proof probe passed in 11s, and the full focused spec passed after replacing QI-Core and QDM UI editor setup.
 
 Cypress local runner notes:
 
@@ -271,6 +332,7 @@ Targeted regression run before stopping:
 
 - `cypress/e2e/Services/Measure Service/MeasureGroup.cy.ts`: 21 passing, 0 failing after the latest helper split.
 - `cypress/e2e/Services/Measure Service/Measure.cy.ts`: 36 passing, 0 failing after the first `TestData.requestMeasure` migration. Runtime was 17m 2s, mostly from UI-backed admin-delete setup that does not belong in a service/API spec.
+- `cypress/e2e/Services/Measure Service/Measure.cy.ts`: 36 passing, 0 failing after replacing QI-Core and QDM UI editor setup with `TestData.saveMeasureCql`. Runtime dropped to 1m 43s.
 - `cypress/e2e/WebInterface/Measure/QDM CQL Editor/QDMCodeSearch.cy.ts`: 3 passing, 4 failing.
 - `cypress/e2e/WebInterface/Test Cases/QDM Test Case/QDM Test Case Validations/QDMCQMExecutionFailureErrorValidations.cy.ts`: 3 passing, 1 failing.
 - `cypress/e2e/WebInterface/Test Cases/QDM Test Case/Execution/QDMCVMeasure_with_multiple_Groups_with_MO.cy.ts`: previously failed 0 passing, 2 failing before `MeasuresPage.actionCenter` cleanup. A follow-up rerun was stopped by request after the first scenario failed and the second scenario had started.
@@ -307,26 +369,55 @@ Known API state already provided by create helpers:
 
 Unknown state added by UI CQL save:
 
-- Whether the save updates the measure through `PUT /api/measures/{measureId}`.
-- Whether it calls translator validation before update, such as `/api/fhir/cql/translator/cql*`.
-- Whether it calls terminology/VSAC validation before update.
+- The probe confirmed the save updates the measure through `PUT /api/measures/{measureId}`.
+- The probe confirmed it calls translator validation before update: `PUT /api/fhir/cql/translator/cql*`.
+- The QI-Core probe did not capture a VSAC validation call for the simple CQL used in `Measure.cy.ts`.
 - Whether it normalizes the library statement or generated ELM before persisting.
 - Whether versioning/admin delete only needs persisted `cql`/`elmJson`, or also needs derived fields from the CQL-save pipeline.
 
-Spy plan:
+Spy result:
 
-- Add a temporary focused Cypress probe around one QI-Core admin-delete setup.
-- Intercept broad editor-save candidates before clicking Save:
-    - `PUT /api/measures/**`
-    - `POST /api/measures/**`
-    - `PUT /api/fhir/cql/translator/cql*`
-    - `POST /api/fhir/cql/translator/cql*`
-    - `PUT /api/vsac/validations/**`
-    - `POST /api/vsac/validations/**`
-- Capture method, URL, status, and request body shape only; do not keep sensitive headers.
-- Use the captured calls to build a service helper, probably named something like `TestData.saveMeasureCql` or `TestData.prepareVersionableMeasure`.
-- Replace the UI setup in `Measure.cy.ts` only after proving the API helper can version and admin-delete both QI-Core and QDM measures.
-- After replacement, rerun `Measure.cy.ts` and compare runtime. Target should be minutes faster and still 36 passing.
+- Temporary probe spec: `cypress/e2e/Services/Measure Service/MeasureCqlSaveProbe.cy.ts`.
+- Run result: 1 passing, 0 failing, 3m 27s.
+- Captured QI-Core CQL-save sequence:
+    - `DELETE /api/measures/{measureId}/measure-lock` returned 200.
+    - `PUT /api/measures/{measureId}/measure-lock` returned 200.
+    - `PUT /api/fhir/cql/translator/cql?...checkContext=true` returned 200 with `json` and `xml`.
+    - `PUT /api/fhir/cql/translator/cql?...checkContext=true` returned 200 again for the measure-specific library name.
+    - `PUT /api/measures/{measureId}` returned 200 with a full measure response.
+    - A final `PUT /api/fhir/cql/translator/cql?...checkContext=true` returned 200 after the measure update.
+- The measure update request body was a full measure object and included:
+    - `cql`
+    - `elmJson`
+    - `elmXml`
+    - `groups`
+    - `measureMetaData`
+    - `measureSet`
+    - `versionId`
+    - `measurementPeriodStart`
+    - `measurementPeriodEnd`
+    - many other persisted measure fields
+- This means the replacement should not be a tiny `PATCH`; it should read the current measure, translate the desired CQL, then `PUT` the full measure body back with refreshed `cql`, `elmJson`, and `elmXml`.
+
+Implemented replacement-helper shape:
+
+- Added `TestData.translateFhirCql(cql)` for the FHIR translator call.
+- Added `TestData.translateQdmCql(cql)` for the QDM translator call.
+- Added `TestData.readMeasure(measureNumber = 0)` for `GET /api/measures/{measureId}`.
+- Added `TestData.updateMeasure(measureBody)` for `PUT /api/measures/{measureId}`.
+- Added `TestData.saveMeasureCql(cql, measureNumber = 0)` that:
+    - reads the current measure
+    - normalizes the library statement to the measure library name/version
+    - translates the CQL with the FHIR or QDM endpoint based on `measure.model`
+    - sends full measure `PUT` with updated `cql`, `elmJson`, `elmXml`, and `cqlErrors: false`
+    - verifies status 200 and generated ELM fields before updating
+- The helper works without explicit measure-lock calls. The UI save path performed lock `DELETE`/`PUT`, but the service-level API update did not need that lock churn.
+
+Validation:
+
+- Temporary API-only proof probe passed: QI-Core create/group/save/version/admin-delete completed without UI in 11s.
+- Full `Measure.cy.ts` passed: 36 passing, 0 failing, 1m 43s.
+- Temporary probe specs were deleted after capture; the backlog keeps the diagnostic findings.
 
 Runtime state note:
 
