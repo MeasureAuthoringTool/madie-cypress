@@ -4,11 +4,9 @@ import { CreateMeasureOptions, CreateMeasurePage } from "../../../Shared/CreateM
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { TestCase } from "../../../Shared/TestCasesPage"
 import { QdmCql } from "../../../Shared/QDMMeasuresCQL"
+import { TestData } from "../../../Shared/TestData"
 const dayjs = require('dayjs')
 
 // no chance of re-usability for this
@@ -421,15 +419,9 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
             'Denominator Exceptions', 'Numerator', null, 'Denominator', 'true')
         TestCasesPage.CreateQDMTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(`${measureData.measureCql ?? ''}\n`).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
 
         OktaLogin.setupAdminSession()
 

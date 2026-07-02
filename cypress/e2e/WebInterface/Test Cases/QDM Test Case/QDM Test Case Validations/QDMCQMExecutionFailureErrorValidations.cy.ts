@@ -114,7 +114,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
         cy.get(TestCasesPage.testCaseSyntaxError).should(
             'contain.text',
-            'No Population Criteria is associated with this measure. Please review the Population Criteria tab.',
+            'No Population Criteria is associated with this measure. Please review the Population Criteria tab.'
         )
 
         //confirm that the Run Test button is disabled
@@ -155,7 +155,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
         cy.get(TestCasesPage.testCaseSyntaxError).should(
             'contain.text',
-            'An error exists with the measure CQL, please review the CQL Editor tab.',
+            'An error exists with the measure CQL, please review the CQL Editor tab.'
         )
 
         //confirm that the Run Test button is disabled
@@ -183,10 +183,10 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
     })
 
     //f
-    it.only("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
+    it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true }) 
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -198,7 +198,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
         cy.get(TestCasesPage.testCaseSyntaxError).should(
             'contain.text',
-            'An error occurred, please try again. If the error persists, please contact the help desk. (004): Failed to fetch VSAC value set expansions',
+            'An error occurred, please try again. If the error persists, please contact the help desk. (004): Failed to fetch VSAC value set expansions'
         )
 
         //confirm that the Run Test button is disabled

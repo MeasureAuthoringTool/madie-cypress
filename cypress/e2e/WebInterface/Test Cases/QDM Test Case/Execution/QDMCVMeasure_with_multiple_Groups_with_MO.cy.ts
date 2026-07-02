@@ -1,15 +1,15 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { QDMElements } from "../../../../../Shared/QDMElements"
-import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
-import { Header } from "../../../../../Shared/Header";
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { QDMElements } from '../../../../../Shared/QDMElements'
+import { umlsLoginForm } from '../../../../../Shared/umlsLoginForm'
+import { Header } from '../../../../../Shared/Header'
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -22,9 +22,7 @@ let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
 const measureData: CreateMeasureOptions = {}
 
 describe('Measure Creation: Patient Based: CV measure with multiple groups with MOs', () => {
-
     before('Create Measure', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Continuous Variable'
@@ -37,13 +35,8 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -59,21 +52,14 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
     })
 
     after('Logout and Clean up', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Test Case execution with patient based groups with MOs', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Group Creation
         //Click on Measure Group tab
@@ -99,8 +85,10 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully'
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
@@ -119,8 +107,10 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 60000)
 
         //add second PC / group to measure
@@ -142,8 +132,10 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -151,7 +143,13 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -200,9 +198,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
 })
 
 describe('Measure Creation: Non-patient based: CV measure with multiple groups with MOs', () => {
-
     before('Create Measure', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Continuous Variable'
@@ -215,13 +211,8 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -237,21 +228,14 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
     })
 
     after('Logout and Clean up', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Test Case execution with non-patient based groups with MOs', () => {
-
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Group Creation
         //Click on Measure Group tab
@@ -277,8 +261,10 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully'
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
@@ -297,8 +283,10 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 60000)
 
         //add second PC / group to measure
@@ -320,8 +308,10 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -329,7 +319,13 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -376,6 +372,5 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
         cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
-
     })
 })

@@ -2,13 +2,11 @@ import { Utilities } from "../../../Shared/Utilities"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasureActionOptions, MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { TestData } from "../../../Shared/TestData"
 
 let harpUserALT = ''
 let harpUser = ''
@@ -29,7 +27,6 @@ let TCDescription = 'DENOMFail1651609688032'
 let TCJson = TestCaseJson.QDMTestCaseJson
 
 const measureData: CreateMeasureOptions = {}
-const editOptions: MeasureActionOptions = {}
 
 describe('Test Case population values based on Measure Group population definitions', () => {
 
@@ -53,12 +50,9 @@ describe('Test Case population values based on Measure Group population definiti
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
 
         //create group
         cy.getCookie('accessToken').then((accessToken) => {
@@ -475,14 +469,9 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, true)
 
-        editOptions.altUser = true
-
-        OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit', undefined, editOptions)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`, { owner: 'selectedAltUser' }).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
     })
 
     it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
@@ -541,12 +530,9 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
@@ -629,4 +615,3 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         })
     })
 })
-
