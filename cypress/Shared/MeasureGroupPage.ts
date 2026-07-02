@@ -260,7 +260,7 @@ export class MeasureGroupPage {
     public static readonly qdmBCCriteriaReqAlertMsg = '[data-testid="error-alerts"]'
 
     //Risk Adjustment variables
-    public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
+    public static readonly riskAdjustmentDefinitionSelect = '[data-testid="ArrowDropDownIcon"]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'

@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -16,19 +16,13 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
     beforeEach('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL })
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '',
             'num', '', 'ipp', 'boolean')
 
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 14500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Log out', () => {
@@ -40,13 +34,15 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 10000)
+
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.riskAdjustmentDefinitionSelect, 10000)
 
         //select a definition and enter a description for denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
             .type('Initial Population Description')
@@ -57,6 +53,8 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.wait(3500)
+
         //click into CQL Editor and remove Denom definition
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
@@ -72,6 +70,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 10000)
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate to the test case list page and make sure alert concerning SA appears
