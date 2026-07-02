@@ -30,9 +30,9 @@ Intentional exceptions:
 
 Current uncommitted batch:
 
-- `TestData.expectSavedMeasureCql` helper.
-- Converted saved-CQL response checks across service/admin specs.
-- This backlog cleanup.
+- `CreateMeasurePage.ts` now writes measure fixtures through `TestData.writeFixture` instead of hand-built fixture paths.
+- Fixture-path smell count dropped by 49 in the latest infrastructure slice.
+- This backlog cleanup now keeps only decisions, current state, validation guidance, and done signals.
 
 ## Quality Baseline
 
@@ -40,7 +40,7 @@ Latest `npm run quality:no-focused-tests` signal:
 
 - 256 specs, about 69k spec lines.
 - 11 skipped tests.
-- 558 manual fixture-path plumbing hits.
+- 509 manual fixture-path plumbing hits.
 - 311 manual access-token plumbing hits.
 - 95 fixed waits.
 - 195 forced interactions.
@@ -67,8 +67,8 @@ After each meaningful slice:
 ## Next Moves
 
 1. **Checkpoint current helper consolidation.**
-    - Impact: locks in a suite-wide convention for persisted saved-CQL setup assertions.
-    - Proof: `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`, `ViewHumanReadable.cy.ts`, `MeasureTranslatorVersion.cy.ts`, and `QDM MeasureGroup.cy.ts` have passed.
+    - Done in `e481e666`.
+    - Impact: locked in a suite-wide convention for persisted saved-CQL setup assertions.
 
 2. **Move setup mechanics behind `TestData`.**
     - Impact hypothesis: reduce fixture/token plumbing inherited from `CreateMeasurePage.ts` and shrink repeated service setup across bundle, export, version, draft, and test-case specs.
@@ -77,8 +77,9 @@ After each meaningful slice:
 
 3. **Refactor `CreateMeasurePage.ts` internals.**
     - Impact hypothesis: this is infrastructure debt; improving it reduces smell counts across many specs without broad call-site churn.
-    - First slice: replace direct fixture writes with `TestData.writeFixture`.
-    - Second slice: replace direct token/request plumbing with `TestData.requestWithAccessToken` where safe.
+    - First slice done: direct measure/version/measureSet fixture writes now use `TestData.writeFixture`.
+    - Proof: `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`, and focused `MeasureTranslatorVersion.cy.ts` passed.
+    - Next slice: replace direct token/request plumbing with `TestData.requestWithAccessToken` where safe.
 
 4. **Probe `EditMeasure.cy.ts` before editing.**
     - Impact hypothesis: it is a high-payoff giant spec, but it likely mixes several behavior families.
