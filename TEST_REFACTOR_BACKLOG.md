@@ -88,7 +88,10 @@ After each meaningful slice:
 
 4. **Probe `EditMeasure.cy.ts` before editing.**
     - Impact hypothesis: it is a high-payoff giant spec, but it likely mixes several behavior families.
-    - First slice: classify describe blocks and pick one repeated request/auth pattern to extract.
+    - Probe result: four behavior groups are present: base edit behavior, non-owner RA behavior, edit validations, and measurement-period validations.
+    - Probe result: 27 repeated `accessToken` + `measureId` fixture + `cy.request` clusters remain in this one spec.
+    - First slice: add a focused helper for "request current measure" / "update current measure" style calls, then migrate one behavior group at a time.
+    - Validation target: focused `EditMeasure.cy.ts` after each migrated behavior group because the file is large and stateful.
 
 5. **Then address UI reliability debt.**
     - Fixed waits: list sorting, CQL editor, export, and terminology-heavy specs.
