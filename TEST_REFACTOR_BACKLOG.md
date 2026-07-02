@@ -28,10 +28,12 @@ Intentional exceptions:
 - `QDMMeasureVersion.cy.ts` keeps the invalid-CQL UI save path because that scenario validates CQL error persistence.
 - `DeleteCMSID.cy.ts` uses edit mode for CMS ID generation; it is not leftover saved-CQL setup.
 
-Current uncommitted batch:
+Latest infrastructure batch:
 
 - `CreateMeasurePage.ts` now writes measure fixtures through `TestData.writeFixture` instead of hand-built fixture paths.
+- `CreateMeasurePage.ts` now sends measure create/clone requests through `TestData.requestWithAccessToken`.
 - Fixture-path smell count dropped by 49 in the latest infrastructure slice.
+- Access-token smell count dropped by 7 in the latest infrastructure slice.
 - This backlog cleanup now keeps only decisions, current state, validation guidance, and done signals.
 
 ## Quality Baseline
@@ -41,7 +43,7 @@ Latest `npm run quality:no-focused-tests` signal:
 - 256 specs, about 69k spec lines.
 - 11 skipped tests.
 - 509 manual fixture-path plumbing hits.
-- 311 manual access-token plumbing hits.
+- 304 manual access-token plumbing hits.
 - 95 fixed waits.
 - 195 forced interactions.
 - 1 global uncaught exception suppression.
@@ -78,8 +80,11 @@ After each meaningful slice:
 3. **Refactor `CreateMeasurePage.ts` internals.**
     - Impact hypothesis: this is infrastructure debt; improving it reduces smell counts across many specs without broad call-site churn.
     - First slice done: direct measure/version/measureSet fixture writes now use `TestData.writeFixture`.
-    - Proof: `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`, and focused `MeasureTranslatorVersion.cy.ts` passed.
-    - Next slice: replace direct token/request plumbing with `TestData.requestWithAccessToken` where safe.
+    - Second slice done: direct access-token request plumbing now uses `TestData.requestWithAccessToken`.
+    - Proof: `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`, `MeasureTranslatorVersion.cy.ts`, `QDM Test-Cases.cy.ts`, `ViewHumanReadable.cy.ts`, and `MeasureBundle.cy.ts` passed.
+    - Note: `ViewHumanReadable.cy.ts` and `MeasureBundle.cy.ts` initially failed during parallel execution because the user pool was exhausted before test setup; both passed when rerun sequentially.
+    - Note: `CloneMeasureAPI` was migrated but has no current call sites under `cypress/`.
+    - Next slice: extract common create-measure response handling or introduce a typed create-measure response.
 
 4. **Probe `EditMeasure.cy.ts` before editing.**
     - Impact hypothesis: it is a high-payoff giant spec, but it likely mixes several behavior families.

@@ -228,13 +228,9 @@ export class CreateMeasurePage {
         cy.log('Current user is: ' + user)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -304,7 +300,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -319,7 +315,6 @@ export class CreateMeasurePage {
 
                 this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
                 cy.log(currentUser + ' MeasureSetId is ' + response?.body.measureSetId)
-            })
         })
         return user
     }
@@ -352,13 +347,9 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -427,7 +418,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -442,7 +433,6 @@ export class CreateMeasurePage {
 
                 this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
                 cy.log('MeasureSetId is ' + response?.body.measureSetId)
-            })
         })
         return user
     }
@@ -475,13 +465,9 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -549,7 +535,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -564,7 +550,6 @@ export class CreateMeasurePage {
 
                 this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
                 cy.log('MeasureSetId is ' + response?.body.measureSetId)
-            })
         })
         return user
     }
@@ -600,12 +585,8 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -647,7 +628,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -666,7 +647,6 @@ export class CreateMeasurePage {
                 else {
                     this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
                 }
-            })
         })
         cy.log(user)
         return user
@@ -702,13 +682,9 @@ export class CreateMeasurePage {
         cy.log('Current user is: ' + user)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': CreateMeasureOptions.ecqmTitle,
@@ -749,7 +725,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -768,7 +744,6 @@ export class CreateMeasurePage {
                     this.fixtureOwner(CreateMeasureOptions.altUser)
                 )
 
-            })
         })
         cy.log(user)
         return user
@@ -861,12 +836,8 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -893,7 +864,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -906,7 +877,6 @@ export class CreateMeasurePage {
                 }
 
                 this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
-            })
         })
         cy.log(user)
         return user
@@ -925,16 +895,11 @@ export class CreateMeasurePage {
             measureNumber = overrideOptions.measureNumber
         }
 
-        cy.getCookie('accessToken').then((accessToken) => {
-
-            // query existing measure for all data
-            cy.request({
+        // query existing measure for all data
+        TestData.requestWithAccessToken<Partial<Measure>>({
                 url: '/api/measures/' + existingId,
-                method: 'GET',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                }
-            }).then((response) => {
+                method: 'GET'
+        }).then((response) => {
                 const clonedMeasure = response?.body as Partial<Measure>
 
                 // clear out data required to be fresh
@@ -953,11 +918,8 @@ export class CreateMeasurePage {
                     clonedMeasure.ecqmTitle = overrideOptions.ecqmTitle
                 }
 
-                cy.request({
+                TestData.requestWithAccessToken<any>({
                     url: '/api/measure?addDefaultCQL=false',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
                     method: 'POST',
                     body: clonedMeasure
                 }).then((response) => {
@@ -966,7 +928,6 @@ export class CreateMeasurePage {
 
                     this.writeMeasureFixtures(response?.body, measureNumber)
                 })
-            })
         })
     }
 }
