@@ -341,7 +341,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
         //Click on Expand button to view Versioned Library
         cy.get('[data-testid="measure-name-0_expandArrow"]').click()
-        cy.get('[data-testid="table-body"]').should('contain', CQLLibraryName)
+        cy.get('.expanded-row').should('contain', CQLLibraryName)
     })
 })
 
