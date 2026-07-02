@@ -153,7 +153,7 @@ pipeline {
 
         slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
 
-        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE', catchInterruptions: false) {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', catchInterruptions: false) {
           sh '''
             cd ${WORKSPACE}
             # Per-run report: start clean

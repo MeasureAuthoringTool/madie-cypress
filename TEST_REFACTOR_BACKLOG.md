@@ -50,24 +50,33 @@ Latest service-spec batch:
 - `QI Core Test-Cases.cy.ts` now uses `TestData.requestMeasureTestCase` and `TestData.requestMeasureTestCaseList` for test-case service endpoints, negative authorization flows, validation cases, JSON validation, and duplicate title/group checks.
 - Repeated QI-Core measure-group setup in `QI Core Test-Cases.cy.ts` now uses a local group body builder plus `TestData.requestMeasureGroup`, removing direct token, env-user, and fixture-path plumbing from the spec.
 - `QI Core Test-Cases.cy.ts` dropped from about 1,351 lines before the service-test cleanup to 748 lines after the full-file pass.
+- Focused `QI Core Test-Cases.cy.ts` passed after the full-file pass: 20 passing, 0 failing, 1 minute 24 seconds.
+- `Measure.cy.ts` first refactor slice moved create-measure validation groups through `TestData.requestMeasure`, removed a hidden global `model` mutation, and added a working non-parallel single-spec script shape.
+- Focused `Measure.cy.ts` passed after this slice: 36 passing, 0 failing, 1 minute 36 seconds.
+- `Measure.cy.ts` update/delete slice added reusable measure-by-id and admin-delete request helpers, removed another layer of token/fixture plumbing, and kept the negative authorization checks explicit.
+- Focused `Measure.cy.ts` after the update/delete slice: 35 passing, 1 failing, 1 minute 54 seconds. The migrated update/delete and admin-delete behaviors passed; the lone failure was `Validation Error: CQL library Name contains special characters`, which returned a service `500` instead of the expected `400`. The prior focused run at `14:14:55` had 36 passing, including this same validation, so this is tracked as a likely underlying service/environment response rather than a refactor regression.
+- `Measure.cy.ts` admin-delete cleanup migrated versioning, admin delete, owner-read verification, and non-owner delete-action checks through `TestData`; direct cookie/fixture auth plumbing in the file is now zero.
+- Focused `Measure.cy.ts` after the completed admin-delete cleanup: 35 passing, 1 failing, 1 minute 40 seconds. All refactored update/delete and admin-delete checks passed; the repeated failure remains the special-character CQL library validation returning service `500` instead of expected `400`.
+- `MeasureBundle.cy.ts` first slice added `TestData.requestMeasureBundle`, reused `TestData.requestMeasure` for direct create setup, and started moving group setup through `TestData.requestMeasureGroup`.
+- `MeasureBundle.cy.ts` cleanup completed the remaining raw bundle/group/update request migration; focused run passed: 12 passing, 0 failing, 1 minute 14 seconds.
 
 ## Quality Baseline
 
 Latest `npm run quality:no-focused-tests` signal:
 
-- 256 specs, about 67.8k spec lines.
+- 256 specs, about 67.0k spec lines.
 - 11 skipped tests.
-- 412 manual fixture-path plumbing hits.
-- 248 manual access-token plumbing hits.
+- 369 manual fixture-path plumbing hits.
+- 197 manual access-token plumbing hits.
 - 95 fixed waits.
 - 195 forced interactions.
 - 1 global uncaught exception suppression.
 
 Largest current risk areas:
 
-- `CreateMeasurePage.ts`: shared setup infrastructure with heavy fixture/token mechanics.
-- `Measure.cy.ts`, `MeasureBundle.cy.ts`, `DraftMeasure.cy.ts`: high-volume service specs still carrying plumbing noise.
-- `DraftMeasure.cy.ts`, `MeasureExport.cy.ts`, and CQL library service specs still show token plumbing and are good follow-on candidates.
+- `CreateMeasurePage.ts`, `MeasureGroupPage.ts`, and `TestCasesPage.ts`: shared setup/page-object infrastructure still carries fixture path and interaction mechanics.
+- `DraftMeasure.cy.ts`, `MeasureExport.cy.ts`, QDM service specs, and CQL library service specs still show token/fixture plumbing and are good follow-on candidates.
+- `Measure.cy.ts` and `MeasureBundle.cy.ts` are now proof points rather than top plumbing risks.
 - UI reliability debt: fixed waits, forced interactions, skipped tests, and global exception suppression.
 
 ## Replan Rules
@@ -81,52 +90,122 @@ After each meaningful slice:
 - Commit once a boundary is proven so the next experiment starts clean.
 - Deprioritize changes that only make code prettier without improving speed, isolation, reuse, or diagnosability.
 
-## Next Moves
+## Action Plan
 
-1. **Checkpoint current helper consolidation.**
-    - Done in `e481e666`.
-    - Impact: locked in a suite-wide convention for persisted saved-CQL setup assertions.
+### Completed Foundation
 
-2. **Move setup mechanics behind `TestData`.**
-    - Impact hypothesis: reduce fixture/token plumbing inherited from `CreateMeasurePage.ts` and shrink repeated service setup across bundle, export, version, draft, and test-case specs.
-    - First shape: create measure, optionally create group, optionally save CQL, and expose useful IDs/responses.
-    - Guardrail: preserve current public helper signatures at first.
+- Saved-CQL API setup is established through `TestData.saveMeasureCql`.
+- Current-measure updates are established through `TestData.updateCurrentMeasure`.
+- Test-case service requests are established through `TestData.requestMeasureTestCase` and `TestData.requestMeasureTestCaseList`.
+- Measure-group API setup is usable through `TestData.requestMeasureGroup`.
+- `EditMeasure.cy.ts`, `QI Core Test-Cases.cy.ts`, and the first `Measure.cy.ts` slice are proof points that service specs can be made smaller, faster, and easier to diagnose without changing coverage intent.
 
-3. **Refactor `CreateMeasurePage.ts` internals.**
-    - Impact hypothesis: this is infrastructure debt; improving it reduces smell counts across many specs without broad call-site churn.
-    - First slice done: direct measure/version/measureSet fixture writes now use `TestData.writeFixture`.
-    - Second slice done: direct access-token request plumbing now uses `TestData.requestWithAccessToken`.
-    - Proof: `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`, `MeasureTranslatorVersion.cy.ts`, `QDM Test-Cases.cy.ts`, `ViewHumanReadable.cy.ts`, and `MeasureBundle.cy.ts` passed.
-    - Note: `ViewHumanReadable.cy.ts` and `MeasureBundle.cy.ts` initially failed during parallel execution because the user pool was exhausted before test setup; both passed when rerun sequentially.
-    - Note: `CloneMeasureAPI` was migrated but has no current call sites under `cypress/`.
-    - Next slice: extract common create-measure response handling or introduce a typed create-measure response.
+### Priority 1: Probe And Refactor `Measure.cy.ts`
 
-4. **Probe `EditMeasure.cy.ts` before editing.**
-    - Impact hypothesis: it is a high-payoff giant spec, but it likely mixes several behavior families.
-    - Probe result: four behavior groups are present: base edit behavior, non-owner RA behavior, edit validations, and measurement-period validations.
-    - First slice done: added `TestData.readCurrentMeasureContext` and `TestData.updateCurrentMeasure`.
-    - Second slice done: added a local updated-measure body builder, then migrated the simple metadata cases and metadata risk-adjustment updates.
-    - Third slice done: finished the remaining base edit update scenarios: endorser fields, scoring precision, intended venue, and purpose.
-    - Fourth slice done: migrated the non-owner RA scenario through `TestData.updateCurrentMeasure` with `failOnStatusCode: false`.
-    - Fifth slice done: migrated edit and measurement-period validation groups while keeping each expected message explicit.
-    - Proof: `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`, and focused `EditMeasure.cy.ts` passed.
-    - Current state: service-plumbing refactor is complete for this spec.
+Impact hypothesis:
 
-5. **Move the same service-test pattern to the next high-volume specs.**
-    - Next candidates by audit signal: `QI Core Test-Cases.cy.ts`, `Measure.cy.ts`, `MeasureBundle.cy.ts`, `DraftMeasure.cy.ts`, and `MeasureExport.cy.ts`.
-    - First `QI Core Test-Cases.cy.ts` slice done: added `TestData.requestMeasureTestCase`, then migrated the non-owner edit permission scenario.
-    - Second `QI Core Test-Cases.cy.ts` slice done: migrated create, edit, get-all, and get-specific endpoint cases onto `TestData.requestMeasureTestCase`.
-    - Third `QI Core Test-Cases.cy.ts` slice done: migrated endpoint validation, JSON validation, duplicate title/group validation, bad-token setup, and bulk list authorization paths.
-    - Fourth `QI Core Test-Cases.cy.ts` slice done: collapsed repeated measure-group/test-case population setup behind local builders and `TestData.requestMeasureGroup`.
-    - Static proof after the full-file pass: `npm run compile`, `npm run quality:no-focused-tests`, and `git diff --check` passed.
-    - Focused `QI Core Test-Cases.cy.ts` still needs to be rerun after the full-file pass; earlier focused run passed 20/20 before the last population setup cleanup.
-    - Next target: move the pattern into `Measure.cy.ts` or `MeasureBundle.cy.ts`, whichever gives the larger shared helper surface after a quick probe.
+- `Measure.cy.ts` is now 798 lines after the validation, update/delete, and admin-delete cleanup slices.
+- Direct access-token reads dropped from 34 to 0 and direct fixture path hits dropped from 21 to 0.
+- It has now proven reusable `TestData` helpers for create, read, update-by-id, version, test-case, saved-CQL, admin-delete, and delete-action flows.
 
-6. **Then address UI reliability debt.**
-    - Fixed waits: list sorting, CQL editor, export, and terminology-heavy specs.
-    - Forced interactions: `TestCasesPage.ts`, import validations, measure highlighting, RTE fields, and editor validation specs.
-    - Global exception suppression: replace blanket suppression with targeted known-error handling.
-    - Skipped tests: add owner/ticket or remove obsolete skips.
+First moves:
+
+- Done: migrated create-measure validation groups, measurement period validations, eCQM title validations, duplicate CQL-library-name validation, and bad-token setup.
+- Done: removed hidden shared-state coupling where the invalid-model test mutated the global `model` value and caused downstream update/delete failures.
+- Done: migrated update/delete status checks through `TestData.readMeasure`, `TestData.requestMeasureById`, `TestData.readCurrentMeasureContext`, and `TestData.requestMeasureTestCase`.
+- Done: added `TestData.requestAdminMeasureDelete` as the next shared helper for admin-delete cleanup.
+- Done: migrated remaining admin-delete manual version/delete/read calls through `TestData.versionMeasure`, `TestData.requestAdminMeasureDelete`, `TestData.readMeasure`, and `TestData.requestMeasureDeleteAction`.
+- Next: leave `Measure.cy.ts` unless the focused run exposes a refactor-specific regression; move the next high-impact service cleanup to `MeasureBundle.cy.ts`.
+- Guardrail: keep the special-character CQL library validation failure visible as an API `500` investigation; do not weaken the expected `400` assertion just to make the pipeline green.
+
+Validation:
+
+- `npm run compile`
+- `npm run quality:no-focused-tests`
+- `git diff --check`
+- Focused `Measure.cy.ts`
+
+### Priority 2: Refactor `MeasureBundle.cy.ts`
+
+Impact hypothesis:
+
+- `MeasureBundle.cy.ts` dropped from 1,103 to 888 lines after the completed bundle-helper slice.
+- It no longer has direct `cy.request`, direct access-token reads, or direct fixture-path reads in the spec.
+- Bundle tests are likely close to export/version setup patterns, so the helper work here should pay forward into `MeasureExport.cy.ts` and draft/version specs.
+
+First moves:
+
+- Done: add `TestData.requestMeasureBundle` and migrate repeated bundle GET assertions.
+- Done: replace direct create-measure POST setup in bundle edge cases with `TestData.requestMeasure`.
+- Done: replace remaining manual group POST setup with `TestData.requestMeasureGroup`.
+- Done: migrate metadata update through `TestData.readCurrentMeasureContext`, `TestData.readMeasureGroupId`, and `TestData.updateMeasure`.
+- Next: carry the same service-boundary helpers into `MeasureExport.cy.ts` or `DraftMeasure.cy.ts`.
+
+Validation:
+
+- `npm run compile`
+- `npm run quality:no-focused-tests`
+- `git diff --check`
+- Focused `MeasureBundle.cy.ts`
+
+### Priority 3: Service Setup Helper Hardening
+
+Impact hypothesis:
+
+- The remaining service specs keep rebuilding the same world: measure, group, CQL, version, draft, export IDs.
+- A small setup facade in `TestData` can reduce repeated setup while keeping public page-object signatures stable.
+
+Candidate helper shapes:
+
+- `TestData.createMeasureContext`
+- `TestData.createMeasureGroupContext`
+- `TestData.requestCurrentMeasure`
+- `TestData.requestMeasureExport`
+- typed response aliases for create/update/version flows
+
+Guardrails:
+
+- Do not create a broad framework before `Measure.cy.ts` and `MeasureBundle.cy.ts` prove the shape.
+- Keep negative authorization tests explicit.
+- Keep UI page objects out of service setup internals.
+
+### Priority 4: QDM Test Case Parity
+
+Impact hypothesis:
+
+- `QDM Test-Cases.cy.ts` still appears in both fixture-path and token plumbing counts.
+- The QI-Core test-case helper work should transfer cleanly, but QDM-specific body shape and measure setup need a probe first.
+
+First moves:
+
+- Compare QDM test-case endpoint bodies against the new QI-Core helper.
+- Reuse `requestMeasureTestCase` where endpoint shape matches.
+- Add QDM-specific helper only if the body/setup shape genuinely differs.
+
+### Priority 5: UI Reliability Debt
+
+Impact hypothesis:
+
+- Fixed waits and forced interactions now dominate the next quality risk once service plumbing is under control.
+- These failures are more likely to be flaky and user-visible than the remaining service setup noise.
+
+First targets:
+
+- Fixed waits: list sorting, CQL editor, export, and terminology-heavy specs.
+- Forced interactions: `TestCasesPage.ts`, import validations, measure highlighting, RTE fields, and editor validation specs.
+- Global exception suppression: replace blanket suppression with targeted known-error handling.
+- Skipped tests: add owner/ticket or remove obsolete skips.
+
+## Immediate Next Slice
+
+Move the next bigger impact to `MeasureExport.cy.ts` or `DraftMeasure.cy.ts`, using the now-proven bundle/version/current-measure helpers.
+
+Definition of done for the next slice:
+
+- `MeasureBundle.cy.ts` focused run remains green after helper migration.
+- Next target probe identifies repeated setup/request shapes before any broad helper is added.
+- Static checks pass.
+- Backlog is updated with the helper decision and measured audit impact.
 
 ## Validation Set
 

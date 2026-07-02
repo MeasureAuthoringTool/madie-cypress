@@ -40,6 +40,12 @@ export type MeasureGroupBody = {
     rateAggregation?: string
     scoringUnit?: {
         label: string
+        value?: {
+            code: string
+            name: string
+            guidance?: string
+            system: string
+        }
     }
     compositeScoring?: string
     improvementNotation?: string
@@ -50,6 +56,10 @@ export type VersionedMeasureResponse = {
     version?: string
     measureName?: string
     elmJson?: string
+    message?: string
+}
+
+export type MeasureDeleteActionResponse = {
     message?: string
 }
 
@@ -287,6 +297,64 @@ export class TestData {
                 ...options,
                 url: `/api/measures/${measureId}`,
                 method: 'GET'
+            })
+        })
+    }
+
+    public static requestMeasureBundle<T = any>(
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(0, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/bundle`,
+                method: 'GET'
+            })
+        })
+    }
+
+    public static requestMeasureById<T = MeasureBody>(
+        method: 'GET' | 'PUT' | 'DELETE',
+        measureId: string,
+        options: Partial<Cypress.RequestOptions> = {},
+        body?: Partial<MeasureBody>
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/measures/${measureId}`,
+            method,
+            ...(body ? { body } : {})
+        })
+    }
+
+    public static requestAdminMeasureDelete<T = unknown>(
+        harpId: string,
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(0, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/admin/measures/${measureId}`,
+                method: 'DELETE',
+                headers: {
+                    ...options.headers,
+                    harpId
+                }
+            })
+        })
+    }
+
+    public static requestMeasureDeleteAction<T = MeasureDeleteActionResponse>(
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(0, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/delete`,
+                method: 'DELETE'
             })
         })
     }

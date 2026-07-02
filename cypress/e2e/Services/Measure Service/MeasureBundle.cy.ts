@@ -72,7 +72,6 @@ const PopNumex = 'numeratorExclusion'
 describe('Proportion Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
     beforeEach('Create Measure and set access token', () => {
-        let currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -82,16 +81,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
             TestData.expectSavedMeasureCql(response)
         })
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + retrievedMeasureID + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
+        TestData.requestMeasureGroup('POST', {
                         "scoring": 'Proportion',
                         "populationBasis": 'boolean',
                         "rateAggregation": "<p>test rA</p>",
@@ -146,14 +136,11 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                         "measureGroupTypes": [
                             "Outcome"
                         ]
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
-                })
-            })
+        }, 0, { failOnStatusCode: false }).then((response) => {
+            console.log(response)
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            TestData.writeFixture('groupId', response.body.id)
         })
         OktaLogin.setupUserSession(false)
     })
@@ -164,16 +151,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
+        TestData.requestMeasureBundle().then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(200)
                     expect(response.body.resourceType).to.eql('Bundle')
@@ -214,27 +192,14 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[0].resource.group[0].extension[3].valueCodeableConcept.coding[0].display).to.eql('Outcome')
                     expect(response.body.entry[0].resource.group[0].extension[3].valueCodeableConcept.coding[0].system).to.eql('http://terminology.hl7.org/CodeSystem/measure-type')
                     expect(response.body.entry[1].resource.resourceType).to.eql('Library')
-                })
-            })
         })
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm Measure meta data is present', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/versionId').should('exist').then((versionId) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/groupId').should('exist').then((groupId) => {
-
-                        //Add Meta data to the Measure
-                        cy.request({
-                            url: '/api/measures/' + id,
-                            headers: {
-                                authorization: 'Bearer ' + accessToken?.value
-                            },
-                            method: 'PUT',
-                            body: {
-                                "id": id,
+        TestData.readCurrentMeasureContext().then(({ measureId, versionId }) => {
+            TestData.readMeasureGroupId().then((groupId) => {
+                TestData.updateMeasure({
+                                "id": measureId,
                                 "measureName": updatedMeasureName,
                                 "cqlLibraryName": updatedCQLLibraryName,
                                 "model": 'QI-Core v4.1.1',
@@ -304,65 +269,44 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                                 "rateAggregation": null,
                                 "improvementNotation": null,
                                 "improvementNotationDescription": null,
-                            }
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            cy.log('Measure updated successfully')
-                        })
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    cy.log('Measure updated successfully')
+                })
 
-                        cy.request({
-                            url: '/api/measures/' + id + '/bundle',
-                            method: 'GET',
-                            headers: {
-                                authorization: 'Bearer ' + accessToken?.value
-                            }
-                        }).then((response) => {
-                            console.log(response)
-                            expect(response.status).to.eql(200)
-                            expect(response.body.resourceType).to.eql('Bundle')
-                            expect(response.body.entry).to.be.a('array')
-                            expect(response.body.entry[0].resource.resourceType).to.eql('Measure')
-                            expect(response.body.entry[0].resource.meta.profile[0]).to.eql('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure')
-                            expect(response.body.entry[0].resource.meta.profile[1]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm')
-                            expect(response.body.entry[0].resource.meta.profile[2]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm')
-                            expect(response.body.entry[0].resource.meta.profile[3]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm')
-                            expect(response.body.entry[0].resource.meta.profile[4]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm')
-                            expect(response.body.entry[0].resource.meta.profile[5]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm')
-                            expect(response.body.entry[0].resource.meta.profile[6]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cohort-measure-cqfm')
-                            expect(response.body.entry[0].resource.description).to.eql('Measure Description')
-                            expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance')
-                            expect(response.body.entry[0].resource.author[0].name).to.eql('ACO Health Solutions')
-                            expect(response.body.entry[0].resource.clinicalRecommendationStatement).to.eql('Measure Clinical Recommendation')
-                        })
-                    })
+                TestData.requestMeasureBundle().then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(200)
+                    expect(response.body.resourceType).to.eql('Bundle')
+                    expect(response.body.entry).to.be.a('array')
+                    expect(response.body.entry[0].resource.resourceType).to.eql('Measure')
+                    expect(response.body.entry[0].resource.meta.profile[0]).to.eql('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure')
+                    expect(response.body.entry[0].resource.meta.profile[1]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm')
+                    expect(response.body.entry[0].resource.meta.profile[2]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm')
+                    expect(response.body.entry[0].resource.meta.profile[3]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm')
+                    expect(response.body.entry[0].resource.meta.profile[4]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm')
+                    expect(response.body.entry[0].resource.meta.profile[5]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm')
+                    expect(response.body.entry[0].resource.meta.profile[6]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cohort-measure-cqfm')
+                    expect(response.body.entry[0].resource.description).to.eql('Measure Description')
+                    expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance')
+                    expect(response.body.entry[0].resource.author[0].name).to.eql('ACO Health Solutions')
+                    expect(response.body.entry[0].resource.clinicalRecommendationStatement).to.eql('Measure Clinical Recommendation')
                 })
             })
         })
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm Library.identifier, Library.publisher, and Library.title are present', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(200)
-                    expect(response.body.resourceType).to.eql('Bundle')
-                    expect(response.body.entry).to.be.a('array')
-                    expect(response.body.entry[1].resource.resourceType).to.eql('Library')
-                    expect(response.body.entry[1].resource.identifier[0].use).to.eql('official')
-                    expect(response.body.entry[1].resource.identifier[0].system).to.eql('https://madie.cms.gov/login')
-                    expect(response.body.entry[1].resource.title).to.eql(newCqlLibraryName)
-                    expect(response.body.entry[2].resource.publisher).to.eql('National Committee for Quality Assurance')
-                })
-            })
+        TestData.requestMeasureBundle().then((response) => {
+            console.log(response)
+            expect(response.status).to.eql(200)
+            expect(response.body.resourceType).to.eql('Bundle')
+            expect(response.body.entry).to.be.a('array')
+            expect(response.body.entry[1].resource.resourceType).to.eql('Library')
+            expect(response.body.entry[1].resource.identifier[0].use).to.eql('official')
+            expect(response.body.entry[1].resource.identifier[0].system).to.eql('https://madie.cms.gov/login')
+            expect(response.body.entry[1].resource.title).to.eql(newCqlLibraryName)
+            expect(response.body.entry[2].resource.publisher).to.eql('National Committee for Quality Assurance')
         })
     })
 })
@@ -388,17 +332,8 @@ describe('Measure Observation Validation', () => {
     })
 
     it('Backend user cannot create or add a Measure Observation if one is not defined in the CQL', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + retrievedMeasureID + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
+        TestData.readMeasureId().then((retrievedMeasureID) => {
+            TestData.requestMeasureGroup<{ message: string }>('POST', {
                         "scoring": 'Continuous Variable',
                         "populationBasis": 'Boolean',
                         "rateAggregation": "<p>test rA</p>",
@@ -443,20 +378,18 @@ describe('Measure Observation Validation', () => {
                         "measureGroupTypes": [
                             "Outcome"
                         ]
-                    }
-                }).then((response) => {
+            }, 0, { failOnStatusCode: false }).then((response) => {
                     expect(response.status).to.eql(409)
                     expect(response.body.message).to.be.eq('Measure CQL does not have observation definition')
-                })
             })
         })
     })
+
 })
 
 describe('CV Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
     before('Create Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -466,16 +399,8 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
             TestData.expectSavedMeasureCql(response)
         })
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
-                cy.request({
-
-                    url: '/api/measures/' + retrievedMeasureID + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
+        TestData.readMeasureId().then((retrievedMeasureID) => {
+            TestData.requestMeasureGroup('POST', {
                         "scoring": 'Continuous Variable',
                         "populationBasis": 'Boolean',
                         "populations": [
@@ -515,12 +440,10 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                         "measureGroupTypes": [
                             "Outcome"
                         ]
-                    }
-                }).then((response) => {
+            }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
-                })
+                    TestData.writeFixture('groupId', response.body.id)
             })
         })
     })
@@ -536,16 +459,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
+        TestData.requestMeasureBundle().then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(200)
                     expect(response.body.resourceType).to.eql('Bundle')
@@ -568,8 +482,6 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                     expect(response.body.entry[0].resource.group[0].population[3].code.coding[0].code).to.eql('measure-observation')
                     expect(response.body.entry[0].resource.group[0].population[3].criteria.expression).to.eql('isFinishedEncounter')
                     expect(response.body.entry[0].resource.group[0].population[3].extension[0].valueCode).to.eql('count')
-                })
-            })
         })
     })
 })
@@ -583,30 +495,18 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
 
         OktaLogin.setupUserSession(false)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measure',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + accessToken?.value
-                },
-                body: {
-                    "measureName": newMeasureName,
-                    "cqlLibraryName": newCqlLibraryName,
-                    'cql': measureCQL,
-                    "model": 'QI-Core v4.1.1',
-                    "ecqmTitle": 'eCQMTitle',
-                    "measurementPeriodStart": '2020-01-01T05:00:00.000+00:00',
-                    "measurementPeriodEnd": '2023-01-01T05:00:00.000+00:00',
-                    'versionId': uuidv4(),
-                    'measureSetId': uuidv4()
-                }
-            }).then((response) => {
-                let currentUser = Cypress.env('selectedUser')
-                expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
-            })
+        TestData.requestMeasure({
+            measureName: newMeasureName,
+            cqlLibraryName: newCqlLibraryName,
+            cql: measureCQL,
+            model: 'QI-Core v4.1.1',
+            ecqmTitle: 'eCQMTitle',
+            measurementPeriodStart: '2020-01-01T05:00:00.000+00:00',
+            measurementPeriodEnd: '2023-01-01T05:00:00.000+00:00'
+        }).then((response) => {
+            expect(response.status).to.eql(201)
+            TestData.writeFixture('measureId', response.body.id)
+            TestData.writeFixture('versionId', response.body.versionId)
         })
     })
 
@@ -616,20 +516,8 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
     })
 
     it('Measure Bundle end point returns 409 when there is no elmJson for the measure', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(409)
-                })
-            })
+        TestData.requestMeasureBundle({ failOnStatusCode: false }).then((response) => {
+            expect(response.status).to.eql(409)
         })
     })
 })
@@ -637,7 +525,6 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
 describe('Measure Bundle end point returns nothing with Measure CQL missing FHIRHelpers include line', () => {
 
     before('Create Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -646,15 +533,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
             TestData.expectSavedMeasureCql(response)
         })
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
-                cy.request({
-                    url: '/api/measures/' + retrievedMeasureID + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
+        TestData.requestMeasureGroup('POST', {
                         "scoring": 'Proportion',
                         "populationBasis": 'Boolean',
                         "populations": [
@@ -701,13 +580,10 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
                         "measureGroupTypes": [
                             "Outcome"
                         ]
-                    }
-                }).then((response) => {
+        }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
-                })
-            })
+                    TestData.writeFixture('groupId', response.body.id)
         })
     })
 
@@ -716,16 +592,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
+        TestData.requestMeasureBundle().then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.resourceType).to.eql('Bundle')
                     expect(response.body.entry).to.be.a('array')
@@ -751,8 +618,6 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
                     expect(response.body.entry[0].resource.group[0].population[5].code.coding[0].code).to.eql('numerator-exclusion')
                     expect(response.body.entry[0].resource.group[0].population[5].criteria.expression).to.eql(PopNumex)
                     expect(response.body.entry[1].resource.resourceType).to.eql('Library')
-                })
-            })
         })
     })
 })
@@ -764,7 +629,6 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
     let measureCQL = MeasureCQL.CQL_Multiple_Populations
 
     before('Create Measure', () => {
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(true)
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, undefined, true)
          MeasureGroupPage.CreateProportionMeasureGroupAPI(0, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
@@ -782,20 +646,9 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
     })
 
     it('Get Measure bundle resource will return details of measure, regardless if the request is comfing from the owner / creator of the measure', () => {
-        const currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
+        TestData.requestMeasureBundle().then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(200)
-                })
-            })
         })
     })
 })
@@ -820,20 +673,8 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
     })
 
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
+        TestData.requestMeasureBundle({ failOnStatusCode: false }).then((response) => {
                     expect(response.status).to.eql(409)
-                })
-            })
         })
     })
 })
@@ -858,16 +699,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
     })
 
     it('Get Measure bundle data from madie-fhir-service and verify that non-boolean value returns as "Encounter"', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
+        TestData.requestMeasureBundle().then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(200)
                     expect(response.body.resourceType).to.eql('Bundle')
@@ -881,8 +713,6 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
-                })
-            })
         })
     })
 })
@@ -896,64 +726,51 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
 
         OktaLogin.setupUserSession(false)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                failOnStatusCode: false,
-                url: '/api/measure',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
-                method: 'POST',
-                body: {
-                    'measureName': newMeasureName,
-                    'cqlLibraryName': newCqlLibraryName,
-                    'model': 'QI-Core v4.1.1',
-                    "ecqmTitle": 'eCQMTitle',
-                    'cql': measureCQL,
-                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
-                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
-                    'versionId': uuidv4(),
-                    'measureSetId': uuidv4(),
-                    'measureMetaData': {
-                        "description": "SemanticBits",
-                        "experimental": false,
-                        "steward": {
-                            "name": "SemanticBits",
-                            "id": "64120f265de35122e68dac40",
-                            "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
-                            "url": "https://semanticbits.com/"
+        TestData.requestMeasure({
+            measureName: newMeasureName,
+            cqlLibraryName: newCqlLibraryName,
+            model: 'QI-Core v4.1.1',
+            ecqmTitle: 'eCQMTitle',
+            cql: measureCQL,
+            measurementPeriodStart: mpStartDate + "T00:00:00.000Z",
+            measurementPeriodEnd: mpEndDate + "T00:00:00.000Z",
+            measureMetaData: {
+                "description": "SemanticBits",
+                "experimental": false,
+                "steward": {
+                    "name": "SemanticBits",
+                    "id": "64120f265de35122e68dac40",
+                    "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                    "url": "https://semanticbits.com/"
 
-                        }, "developers": [
-                            {
-                                "id": "64120f265de35122e68dabf7",
-                                "name": "Academy of Nutrition and Dietetics",
-                                "oid": "2.16.840.1.113883.3.6308",
-                                "url": "www.eatrightpro.org"
-                            }
-                        ]
-                    },
-                    "supplementalData": [
-                        {
-                            "definition": "SDE Race",
-                            "description": "SDE Race description"
-                        }
-                    ],
-                    "riskAdjustments": [
+                }, "developers": [
+                    {
+                        "id": "64120f265de35122e68dabf7",
+                        "name": "Academy of Nutrition and Dietetics",
+                        "oid": "2.16.840.1.113883.3.6308",
+                        "url": "www.eatrightpro.org"
+                    }
+                ]
+            },
+            supplementalData: [
+                {
+                    "definition": "SDE Race",
+                    "description": "SDE Race description"
+                }
+            ],
+            riskAdjustments: [
                         {
                             "definition": "Risk Adjustments example",
                             "description": "Risk Adjustments example description"
                         }
-                    ]
-                }
-            }).then((response) => {
-                let currentUser = Cypress.env('selectedUser')
-                console.log(response)
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
-            })
+            ]
+        }, { failOnStatusCode: false }).then((response) => {
+            console.log(response)
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            TestData.writeFixture('measureId', response.body.id)
+            TestData.writeFixture('versionId', response.body.versionId)
+            TestData.writeFixture('measureSetId', response.body.measureSetId)
         })
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'num', '', '', 'num', '', 'numeratorExclusion')
@@ -968,21 +785,10 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
     })
 
     it('Get Measure bundle data and verify that the Supplemental data elements and Risk Adjustment variables are added', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
+        TestData.requestMeasureBundle().then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.entry[0].resource.supplementalData[0].criteria.expression).to.eql('SDE Race')
                     expect(response.body.entry[0].resource.supplementalData[1].criteria.expression).to.eql('Risk Adjustments example')
-                })
-            })
         })
     })
 })
@@ -1003,18 +809,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
     })
 
     it('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-
-                cy.request({
-                    url: '/api/measures/' + id + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "id": id,
+        TestData.requestMeasureGroup('POST', {
                         "scoring": "Ratio",
                         "populationBasis": "Boolean",
                         "populations": [
@@ -1074,29 +869,20 @@ describe('Measure bundle end point returns Measure Population Description', () =
                         "measureGroupTypes": [
                             "Outcome"
                         ]
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
-                })
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.entry[0].resource.group[0].population[0].description).to.eql('Initial Population 1 Description')
-                    expect(response.body.entry[0].resource.group[0].population[1].description).to.eql('Initial Population 2 Description')
-                    expect(response.body.entry[0].resource.group[0].population[2].description).to.eql('Denominator Description')
-                    expect(response.body.entry[0].resource.group[0].population[3].description).to.eql('Denominator Exclusion Description')
-                    expect(response.body.entry[0].resource.group[0].population[4].description).to.eql('Numerator Description')
-                    expect(response.body.entry[0].resource.group[0].population[5].description).to.eql('Numerator Exclusion Description')
-                    expect(response.body.entry[0].resource.group[0].population[6].description).to.eql('Denominator Observation Description')
-                    expect(response.body.entry[0].resource.group[0].population[7].description).to.eql('Numerator Observation Description')
-                })
-            })
+        }).then((response) => {
+            expect(response.status).to.eql(201)
+            TestData.writeFixture('groupId', response.body.id)
+        })
+        TestData.requestMeasureBundle().then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.entry[0].resource.group[0].population[0].description).to.eql('Initial Population 1 Description')
+            expect(response.body.entry[0].resource.group[0].population[1].description).to.eql('Initial Population 2 Description')
+            expect(response.body.entry[0].resource.group[0].population[2].description).to.eql('Denominator Description')
+            expect(response.body.entry[0].resource.group[0].population[3].description).to.eql('Denominator Exclusion Description')
+            expect(response.body.entry[0].resource.group[0].population[4].description).to.eql('Numerator Description')
+            expect(response.body.entry[0].resource.group[0].population[5].description).to.eql('Numerator Exclusion Description')
+            expect(response.body.entry[0].resource.group[0].population[6].description).to.eql('Denominator Observation Description')
+            expect(response.body.entry[0].resource.group[0].population[7].description).to.eql('Numerator Observation Description')
         })
     })
 })
