@@ -99,11 +99,84 @@ Run `npm run quality:audit` for the live numbers.
 Current baseline after the latest refactor pass:
 
 - 11 skipped tests.
-- 560 manual fixture-path plumbing hits.
+- 558 manual fixture-path plumbing hits.
 - 311 manual access-token plumbing hits.
 - 95 fixed waits.
 - 195 forced interactions.
 - 1 global uncaught exception suppression.
+
+## Architecture Direction
+
+The refactor is no longer just cleanup. The larger goal is to establish clear testing architecture boundaries so service tests are fast, direct, and trustworthy, while UI tests remain focused on UI behavior.
+
+North star:
+
+- Service/API specs should prepare state through APIs and assert service behavior through APIs.
+- UI specs should use the browser only when the behavior under test is navigation, rendering, editor behavior, permissions, or user interaction.
+- Shared helpers should express domain intent, not Cypress mechanics. Specs should read like business behavior, not token, fixture, and request plumbing.
+- Negative-state setup must be explicit. Valid saved CQL, invalid saved CQL, missing CQL, alternate owner, admin user, versioned measure, and draft measure are different states and should have different helper paths.
+- Every migration should leave a proof trail: static checks, focused spec result, and notes about intentional exceptions.
+
+What we know now:
+
+- `TestData.saveMeasureCql` is proven for QI-Core, QDM, owner, and alternate-owner valid-CQL setup.
+- Replacing UI editor-save setup with API setup dramatically reduces runtime and removes noise from service specs. `Measure.cy.ts` dropped from about 17 minutes to under 2 minutes after the UI CQL-save setup was removed.
+- `ViewHumanReadable.cy.ts` proved that we can go beyond CQL save and replace UI version/draft setup with API version/draft calls when the endpoint under test is service-level HTML output.
+- Admin specs can use API saved-CQL setup safely when the CQL editor is only preparing state before admin behavior begins.
+- Not every UI reference is bad. `QDMMeasureVersion.cy.ts` intentionally needs an invalid-CQL save path, and `DeleteCMSID.cy.ts` uses edit mode for CMS ID generation rather than CQL persistence.
+
+Immediate operating rules:
+
+- Do not convert CQL editor UI coverage into API setup.
+- Do not use the valid-CQL helper for invalid, missing, or unsaved CQL scenarios.
+- Before moving another large area, finish or checkpoint the current validated batch.
+- When a UI workflow remains in a service/admin spec, classify it as one of:
+    - service setup that should become API setup
+    - product behavior that belongs in a UI spec
+    - intentional negative-state setup that needs a separate API helper
+    - unknown, requiring a probe before refactor
+
+## Next Architecture Moves
+
+Current branch state:
+
+- Committed service/API saved-CQL sweep exists at `6cc95061`.
+- Uncommitted validated cleanup exists in:
+    - `cypress/e2e/Services/Measure Service/ViewHumanReadable.cy.ts`
+    - `cypress/e2e/Services/Admin/CorrectExpectedValues.cy.ts`
+    - `cypress/e2e/Services/Admin/UpdateQDMCodeSystem.cy.ts`
+    - this backlog file
+- Latest validations:
+    - `npm run compile` passed.
+    - `npm run quality:no-focused-tests` passed.
+    - `git diff --check` passed.
+    - `ViewHumanReadable.cy.ts`: 6 passing, 0 failing.
+    - `CorrectExpectedValues.cy.ts`: 1 passing, 0 failing.
+    - `UpdateQDMCodeSystem.cy.ts`: 1 passing, 0 failing.
+    - `QDMMeasureVersion.cy.ts`: 5 passing, 0 failing.
+    - `DeleteCMSID.cy.ts`: 2 passing, 0 failing.
+
+Recommended order from here:
+
+1. Checkpoint the current validated batch.
+    - Commit the three spec changes and backlog update together.
+    - Reason: this locks in the API-only setup boundary before we move into broader helper architecture.
+2. Add a small persisted-ELM assertion helper.
+    - Target shape: `TestData.expectSavedMeasureCql(response, { elmXml?: boolean })` or similar.
+    - Reason: many converted specs repeat `status === 200` and non-empty `elmJson`; XML expectations should be opt-in where endpoint behavior depends on XML.
+3. Build a domain setup helper only where repetition has stabilized.
+    - Candidate shape: create measure, create group, save CQL, return useful IDs/body.
+    - Keep it out of page objects. It belongs in `TestData` or a service-test domain helper.
+    - Do not overgeneralize yet; support the most repeated service setup first.
+4. Resume Priority 1 plumbing cleanup with `CreateMeasurePage.ts`.
+    - This is the best next architecture-level target because many specs inherit its fixture writes, token handling, and create-measure patterns.
+    - Move mechanics into `TestData` without changing public helper behavior all at once.
+5. Then attack `EditMeasure.cy.ts` as a design problem, not a line-count problem.
+    - It has heavy repeated token/fixture/request plumbing.
+    - First pass should identify behavior groups and helper seams before editing.
+6. Keep the remaining UI exceptions documented.
+    - `QDMMeasureVersion.cy.ts`: invalid-CQL setup remains UI-backed until an explicit invalid-CQL API helper exists.
+    - `DeleteCMSID.cy.ts`: CMS ID edit workflow is separate from saved-CQL setup and should be handled only if we decide to API-create CMS ID state.
 
 ## Priority 1: Finish TestData Migration
 
@@ -201,8 +274,10 @@ Replanned order:
     - This is the same valid/saved-CQL precondition proven in `Measure.cy.ts`; the endpoint under test is `/human-readable`, not the editor.
     - Expected move: replace five editor-save setup blocks with `TestData.saveMeasureCql(...)`, remove unused page-object imports, then run the focused spec.
     - In progress: replaced the four pure draft/versioned QI-Core/QDM human-readable setup blocks with `TestData.saveMeasureCql(...)`.
-    - Left the comparison setup alone for now because it still drives UI version and draft actions after the CQL save; convert that only after replacing the version/draft UI workflow with API helpers.
+    - Replaced the remaining comparison setup CQL editor save and UI version/draft workflow with API version/draft calls.
     - Validation passed: focused `ViewHumanReadable.cy.ts` run completed 6 passing, 0 failing in 1m 41s.
+    - Validation passed after replacing the comparison setup save: focused `ViewHumanReadable.cy.ts` run completed 6 passing, 0 failing in 1m 29s.
+    - Validation passed after replacing the comparison version/draft UI workflow: focused `ViewHumanReadable.cy.ts` run completed 6 passing, 0 failing in 46s.
 2. `MeasureBundle.cy.ts`
     - Highest payoff after `ViewHumanReadable`, with many bundle scenarios still using UI save before `GET /bundle`.
     - Do this incrementally because the file mixes valid bundle, invalid bundle, alternate-owner read, non-boolean population basis, supplemental data, and hand-built measure bodies.
@@ -254,36 +329,26 @@ Guardrails:
     - the focused Cypress spec
 - Compare any failures against the regression notes below before assuming the refactor caused them.
 
-Current rescope:
+Saved-CQL sweep status:
 
-- Continue the larger refactor, but keep the scope narrow: remove UI CQL-save setup from service/admin API specs where the UI only prepares persisted CQL/ELM state.
-- Do not return to giant-spec splitting yet. The current highest-leverage quality move is finishing the API-only setup boundary and using the proven `TestData.saveMeasureCql` helper consistently.
-- Commit or checkpoint the current validated batch before taking on another broad helper extraction. The current batch already touches shared helper behavior plus seven service specs.
-
-Remaining UI-save setup after the scoped-helper pass:
-
-- Strong next candidates:
-    - `MeasureExport.cy.ts`: QI-Core and QDM export setup both create a measure/group, save CQL through UI, then call export APIs. This is the next best target.
-    - `MeasureTranslatorVersion.cy.ts`: QI-Core and QDM setup both save CQL through UI before translator-version/versioning assertions. High-confidence conversion.
-    - `TestCaseImport.cy.ts`: one versioned-measure import setup still saves valid QI-Core CQL through UI before version/import assertions.
-    - `QDM MeasureGroup.cy.ts`: two QDM measure-group validation setups save CQL through UI before API group validation calls.
-- Medium-risk candidates:
-    - `DraftMeasure.cy.ts`: two valid QI-Core draft setup blocks can likely use `saveMeasureCql`, but the file chains version/draft/draft-status transitions and should be converted one describe at a time.
-    - `ViewHumanReadable.cy.ts` comparison setup: still uses UI version/draft workflows after CQL save. Convert only after version/draft UI actions are replaced by API helpers.
-- Leave for later/probe:
-    - `QDMMeasureVersion.cy.ts` invalid-CQL setup: intentionally persists CQL errors through the UI path; do not convert with the valid-CQL helper.
-    - `CorrectExpectedValues.cy.ts` and `UpdateQDMCodeSystem.cy.ts`: admin flows mix setup, versioned state, test case expected values/code-system mutation, and admin auth. They can probably use `saveMeasureCql`, but should be handled after export/translator/import/group targets or with a small probe.
-    - `DeleteCMSID.cy.ts`: the matched `actionCenter('edit')` is for CMS ID generation, not CQL save. It is not part of the CQL-save sweep.
-    - `EditMeasure.cy.ts`: the matched `AltLogin` is not enough evidence of CQL-save setup. Treat separately if/when we resume broader service cleanup.
-
-Recommended next order:
-
-1. Convert `MeasureExport.cy.ts`; run focused export spec. Done: 7 passing, 0 failing in 33s.
-2. Convert `MeasureTranslatorVersion.cy.ts`; run focused translator-version spec. Done: first run hit a transient QI-Core measure-create timeout before the save helper ran; rerun passed 2 passing, 0 failing in 16s.
-3. Convert `TestCaseImport.cy.ts`; rerun focused import spec. Done: 6 passing, 0 failing in 45s.
-4. Convert `QDM MeasureGroup.cy.ts`; run focused QDM measure-group spec. Done: 2 passing, 0 failing in 11s.
-5. Convert `DraftMeasure.cy.ts` one describe at a time; run focused draft spec after each slice if runtime stays reasonable. Done: 5 passing, 0 failing in 1m.
-6. Reassess admin flows after the pure service targets are done.
+- `ViewHumanReadable.cy.ts`
+    - No remaining UI setup. The comparison workflow now uses API CQL save, API versioning, and API draft creation before calling the HTML diff endpoint.
+- `QDMMeasureVersion.cy.ts`
+    - Remaining save is the invalid-CQL scenario. It intentionally persists CQL errors through the UI path, so do not convert it with the valid-CQL helper.
+- `CorrectExpectedValues.cy.ts`
+    - Admin flow mixes measure setup, versioned state, test case expected values, admin auth, and reset behavior.
+    - Probe finding: the UI CQL save happens immediately after QI-Core 6 measure/group/test-case setup and before any expected-value, version, draft, or admin reset behavior.
+    - Converted only that CQL editor block to `TestData.saveMeasureCql(measureCQL)`, leaving expected-value mutation, versioning, draft creation, admin API reset, and cleanup untouched.
+    - Static validation passed: `npm run compile` and `git diff --check`.
+    - Validation passed: focused `CorrectExpectedValues.cy.ts` run completed 1 passing, 0 failing in 43s.
+- `UpdateQDMCodeSystem.cy.ts`
+    - Admin flow mixes QDM measure/test-case setup, saved CQL, admin auth, and code-system mutation.
+    - Probe finding: the UI CQL save happens immediately after QDM measure/group/test-case setup and before switching to admin auth for code-system correction.
+    - Converted only that CQL editor block to `TestData.saveMeasureCql(measureData.measureCql ?? '')`, leaving admin auth, correction request, verification request, and cleanup untouched.
+    - Static validation passed: `npm run compile` and `git diff --check`.
+    - Validation passed: focused `UpdateQDMCodeSystem.cy.ts` run completed 1 passing, 0 failing in 11s.
+- `DeleteCMSID.cy.ts`
+    - `actionCenter('edit')` is for CMS ID generation, not CQL save. It is not part of this sweep.
 
 ## Priority 3: Replace Fixed Waits
 
@@ -387,6 +452,7 @@ Targeted regression run before stopping:
 - `cypress/e2e/Services/Measure Service/Measure.cy.ts`: 36 passing, 0 failing after the first `TestData.requestMeasure` migration. Runtime was 17m 2s, mostly from UI-backed admin-delete setup that does not belong in a service/API spec.
 - `cypress/e2e/Services/Measure Service/Measure.cy.ts`: 36 passing, 0 failing after replacing QI-Core and QDM UI editor setup with `TestData.saveMeasureCql`. Runtime dropped to 1m 43s.
 - `cypress/e2e/Services/Measure Service/ViewHumanReadable.cy.ts`: 6 passing, 0 failing after replacing the four pure human-readable CQL editor setup blocks with `TestData.saveMeasureCql`. Runtime was 1m 41s.
+- `cypress/e2e/Services/Measure Service/ViewHumanReadable.cy.ts`: 6 passing, 0 failing after replacing the comparison workflow's remaining UI version/draft setup with API calls. Runtime was 46s.
 - `cypress/e2e/Services/Measure Service/MeasureBundle.cy.ts`: 12 passing, 0 failing after replacing five owner-created bundle CQL editor setup blocks with `TestData.saveMeasureCql`. Runtime was 1m 28s.
 - `cypress/e2e/Services/Measure Service/MeasureBundle.cy.ts`: 12 passing, 0 failing after replacing the remaining alt-owner bundle CQL editor setup with scoped `TestData.saveMeasureCql`. Runtime was 1m 20s.
 - `cypress/e2e/Services/Measure Service/MeasureVersion.cy.ts`: 7 passing, 0 failing after replacing four valid-CQL versioning setup blocks with `TestData.saveMeasureCql`. Runtime was 43s.
