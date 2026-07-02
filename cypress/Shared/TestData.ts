@@ -63,6 +63,21 @@ export type TestCaseImportBody = {
     json: string
 }
 
+export type TestCaseBody = {
+    id?: string
+    name: string
+    series: string
+    title: string
+    description?: string
+    json?: string
+    [key: string]: any
+}
+
+export type TestCaseRequestContext = {
+    measureId: string
+    testCaseId?: string
+}
+
 export type TestCaseImportResponse = {
     outcomes: Array<{
         successful: boolean
@@ -95,6 +110,11 @@ export type MeasureBody = {
     measurementPeriodStart?: string
     measurementPeriodEnd?: string
     [key: string]: any
+}
+
+export type CurrentMeasureContext = {
+    measureId: string
+    versionId: string
 }
 
 export type CqlTranslationResponse = {
@@ -175,6 +195,15 @@ export class TestData {
 
     public static readVersionId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
         return this.readFixture('versionId', owner)
+    }
+
+    public static readCurrentMeasureContext(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<CurrentMeasureContext> {
+        return this.readMeasureId(0, owner).then((measureId) => {
+            return this.readVersionId(owner).then((versionId) => ({
+                measureId,
+                versionId
+            }))
+        })
     }
 
     public static readMeasureGroupId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
@@ -271,6 +300,21 @@ export class TestData {
             url: `/api/measures/${body.id}`,
             method: 'PUT',
             body
+        })
+    }
+
+    public static updateCurrentMeasure<T = MeasureBody>(
+        body: (context: CurrentMeasureContext) => Partial<MeasureBody>,
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readCurrentMeasureContext(owner).then((context) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${context.measureId}`,
+                method: 'PUT',
+                body: body(context)
+            })
         })
     }
 
@@ -485,6 +529,56 @@ export class TestData {
                 ...options,
                 url: `/api/measures/${measureId}/measure-lock`,
                 method
+            })
+        })
+    }
+
+    public static requestMeasureTestCase<T = TestCaseBody>(
+        method: 'POST' | 'GET' | 'PUT' | 'DELETE',
+        body?: TestCaseBody | ((context: TestCaseRequestContext) => TestCaseBody),
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser',
+        testCaseNumber: number | null = 0
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(0, owner).then((measureId) => {
+            const requestTestCase = (testCaseId?: string) => {
+                const requestBody =
+                    typeof body === 'function' ? body({ measureId, testCaseId }) : body
+                const testCasePath = method === 'POST' || !testCaseId ? '' : `/${testCaseId}`
+
+                return this.requestWithAccessToken<T>({
+                    ...options,
+                    url: `/api/measures/${measureId}/test-cases${testCasePath}`,
+                    method,
+                    ...(requestBody ? { body: requestBody } : {})
+                })
+            }
+
+            if (method === 'POST') {
+                return requestTestCase()
+            }
+
+            if (method === 'GET' && testCaseNumber === null) {
+                return requestTestCase()
+            }
+
+            return this.readTestCaseId(testCaseNumber, owner).then((testCaseId) =>
+                requestTestCase(testCaseId)
+            )
+        }) as Cypress.Chainable<Cypress.Response<T>>
+    }
+
+    public static requestMeasureTestCaseList<T = TestCaseBody[]>(
+        body: TestCaseBody[],
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(0, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/test-cases/list`,
+                method: 'POST',
+                body
             })
         })
     }

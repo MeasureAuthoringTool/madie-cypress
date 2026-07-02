@@ -1,6 +1,6 @@
 # MADiE Cypress Refactor Backlog
 
-Last updated: 2026-07-01
+Last updated: 2026-07-02
 
 ## Executive Direction
 
@@ -36,14 +36,29 @@ Latest infrastructure batch:
 - Access-token smell count dropped by 7 in the latest infrastructure slice.
 - This backlog cleanup now keeps only decisions, current state, validation guidance, and done signals.
 
+Latest service-spec batch:
+
+- `TestData.readCurrentMeasureContext` centralizes the current measure/version fixture lookup.
+- `TestData.updateCurrentMeasure` centralizes current-measure `PUT` requests and bearer-token handling.
+- `TestData.requestMeasureTestCase` now centralizes current-measure test-case requests while still allowing owner-scoped fixture reads and current-session authorization.
+- `EditMeasure.cy.ts` now has a local updated-measure body builder for repeated metadata update payloads.
+- The base edit behavior group now uses the helper instead of repeating token, measure-id, version-id, request, and payload plumbing.
+- The non-owner RA scenario now uses the same helper with `failOnStatusCode: false`, proving the helper supports expected negative service responses.
+- Edit and measurement-period validation groups now express only the invalid input and expected response while `TestData` owns request setup.
+- `EditMeasure.cy.ts` no longer appears in the audit's top manual fixture-path or access-token plumbing lists.
+- `EditMeasure.cy.ts` passed focused sanity after completing the validation groups: 25 passing, 0 failing.
+- `QI Core Test-Cases.cy.ts` now uses `TestData.requestMeasureTestCase` and `TestData.requestMeasureTestCaseList` for test-case service endpoints, negative authorization flows, validation cases, JSON validation, and duplicate title/group checks.
+- Repeated QI-Core measure-group setup in `QI Core Test-Cases.cy.ts` now uses a local group body builder plus `TestData.requestMeasureGroup`, removing direct token, env-user, and fixture-path plumbing from the spec.
+- `QI Core Test-Cases.cy.ts` dropped from about 1,351 lines before the service-test cleanup to 748 lines after the full-file pass.
+
 ## Quality Baseline
 
 Latest `npm run quality:no-focused-tests` signal:
 
-- 256 specs, about 69k spec lines.
+- 256 specs, about 67.8k spec lines.
 - 11 skipped tests.
-- 509 manual fixture-path plumbing hits.
-- 304 manual access-token plumbing hits.
+- 412 manual fixture-path plumbing hits.
+- 248 manual access-token plumbing hits.
 - 95 fixed waits.
 - 195 forced interactions.
 - 1 global uncaught exception suppression.
@@ -51,8 +66,8 @@ Latest `npm run quality:no-focused-tests` signal:
 Largest current risk areas:
 
 - `CreateMeasurePage.ts`: shared setup infrastructure with heavy fixture/token mechanics.
-- `EditMeasure.cy.ts`: large service spec with repeated request/auth plumbing.
-- `QI Core Test-Cases.cy.ts`, `Measure.cy.ts`, `MeasureBundle.cy.ts`: high-volume service specs still carrying plumbing noise.
+- `Measure.cy.ts`, `MeasureBundle.cy.ts`, `DraftMeasure.cy.ts`: high-volume service specs still carrying plumbing noise.
+- `DraftMeasure.cy.ts`, `MeasureExport.cy.ts`, and CQL library service specs still show token plumbing and are good follow-on candidates.
 - UI reliability debt: fixed waits, forced interactions, skipped tests, and global exception suppression.
 
 ## Replan Rules
@@ -89,11 +104,25 @@ After each meaningful slice:
 4. **Probe `EditMeasure.cy.ts` before editing.**
     - Impact hypothesis: it is a high-payoff giant spec, but it likely mixes several behavior families.
     - Probe result: four behavior groups are present: base edit behavior, non-owner RA behavior, edit validations, and measurement-period validations.
-    - Probe result: 27 repeated `accessToken` + `measureId` fixture + `cy.request` clusters remain in this one spec.
-    - First slice: add a focused helper for "request current measure" / "update current measure" style calls, then migrate one behavior group at a time.
-    - Validation target: focused `EditMeasure.cy.ts` after each migrated behavior group because the file is large and stateful.
+    - First slice done: added `TestData.readCurrentMeasureContext` and `TestData.updateCurrentMeasure`.
+    - Second slice done: added a local updated-measure body builder, then migrated the simple metadata cases and metadata risk-adjustment updates.
+    - Third slice done: finished the remaining base edit update scenarios: endorser fields, scoring precision, intended venue, and purpose.
+    - Fourth slice done: migrated the non-owner RA scenario through `TestData.updateCurrentMeasure` with `failOnStatusCode: false`.
+    - Fifth slice done: migrated edit and measurement-period validation groups while keeping each expected message explicit.
+    - Proof: `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`, and focused `EditMeasure.cy.ts` passed.
+    - Current state: service-plumbing refactor is complete for this spec.
 
-5. **Then address UI reliability debt.**
+5. **Move the same service-test pattern to the next high-volume specs.**
+    - Next candidates by audit signal: `QI Core Test-Cases.cy.ts`, `Measure.cy.ts`, `MeasureBundle.cy.ts`, `DraftMeasure.cy.ts`, and `MeasureExport.cy.ts`.
+    - First `QI Core Test-Cases.cy.ts` slice done: added `TestData.requestMeasureTestCase`, then migrated the non-owner edit permission scenario.
+    - Second `QI Core Test-Cases.cy.ts` slice done: migrated create, edit, get-all, and get-specific endpoint cases onto `TestData.requestMeasureTestCase`.
+    - Third `QI Core Test-Cases.cy.ts` slice done: migrated endpoint validation, JSON validation, duplicate title/group validation, bad-token setup, and bulk list authorization paths.
+    - Fourth `QI Core Test-Cases.cy.ts` slice done: collapsed repeated measure-group/test-case population setup behind local builders and `TestData.requestMeasureGroup`.
+    - Static proof after the full-file pass: `npm run compile`, `npm run quality:no-focused-tests`, and `git diff --check` passed.
+    - Focused `QI Core Test-Cases.cy.ts` still needs to be rerun after the full-file pass; earlier focused run passed 20/20 before the last population setup cleanup.
+    - Next target: move the pattern into `Measure.cy.ts` or `MeasureBundle.cy.ts`, whichever gives the larger shared helper surface after a quick probe.
+
+6. **Then address UI reliability debt.**
     - Fixed waits: list sorting, CQL editor, export, and terminology-heavy specs.
     - Forced interactions: `TestCasesPage.ts`, import validations, measure highlighting, RTE fields, and editor validation specs.
     - Global exception suppression: replace blanket suppression with targeted known-error handling.
