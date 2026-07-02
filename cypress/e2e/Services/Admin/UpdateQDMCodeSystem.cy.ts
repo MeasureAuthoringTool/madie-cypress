@@ -420,8 +420,7 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
         TestData.saveMeasureCql(`${measureData.measureCql ?? ''}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         OktaLogin.setupAdminSession()

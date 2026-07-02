@@ -70,8 +70,7 @@ describe('Measure Versioning', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -181,8 +180,7 @@ describe('Version Measure with invalid test case Json', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -216,8 +214,7 @@ describe('Edit validations for versioned Measure', () => {
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
         TestData.saveMeasureCql(`${measureCQL_ProportionMeasure}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -372,8 +369,7 @@ describe('Delete validations for versioned Measure', () => {
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
         TestData.saveMeasureCql(`${measureCQL_ProportionMeasure}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 

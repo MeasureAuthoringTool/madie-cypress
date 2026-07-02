@@ -39,8 +39,7 @@ describe('Version and Draft CQL Library', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         TestData.saveMeasureCql(`${cohortMeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
@@ -100,8 +99,7 @@ describe('Draftable API end point tests', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         TestData.saveMeasureCql(`${cohortMeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })

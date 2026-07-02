@@ -21,8 +21,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreCqlLibraryName, qicoreMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         TestData.saveMeasureCql(`${qicoreMeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -56,8 +55,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
         TestData.saveMeasureCql(`${qdmMeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 

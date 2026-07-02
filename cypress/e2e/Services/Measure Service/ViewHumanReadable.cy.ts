@@ -24,8 +24,7 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -52,8 +51,7 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -91,8 +89,7 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestData.saveMeasureCql(`${qdmMeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -126,8 +123,7 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestData.saveMeasureCql(`${qdmMeasureCQLVm}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -165,8 +161,7 @@ describe('Measure Human Readable comparison', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
             savedElmJson = response.body.elmJson
         })
 

@@ -40,8 +40,7 @@ describe('Admin API - Reset test case expected values', () => {
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI('title', 'series', 'desc', testCase)
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         // set expected value "true" on test case

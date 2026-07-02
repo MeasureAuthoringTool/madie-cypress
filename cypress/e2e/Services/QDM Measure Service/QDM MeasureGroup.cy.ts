@@ -31,8 +31,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -101,8 +100,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 

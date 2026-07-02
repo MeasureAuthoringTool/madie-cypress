@@ -51,8 +51,7 @@ describe('Test Case population values based on Measure Group population definiti
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         //create group
@@ -471,8 +470,7 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, true)
 
         TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`, { owner: 'selectedAltUser' }).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -533,8 +531,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
         TestData.saveMeasureCql(`${booleanPatientBasisQDM_CQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         cy.getCookie('accessToken').then((accessToken) => {

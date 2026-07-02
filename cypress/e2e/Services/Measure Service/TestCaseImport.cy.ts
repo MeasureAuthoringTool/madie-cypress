@@ -158,8 +158,7 @@ describe('Test Case import for versioned Measure', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 

@@ -79,8 +79,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -464,8 +463,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
 
         TestData.saveMeasureCql(`${CVmeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -645,8 +643,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 1, measureCQL)
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -851,8 +848,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, newmeasureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         TestData.saveMeasureCql(`${newmeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -962,8 +958,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'num', '', '', 'num', '', 'numeratorExclusion')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 

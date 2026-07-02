@@ -92,8 +92,7 @@ describe('Measure Versioning', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -126,8 +125,7 @@ describe('Measure Versioning', () => {
         let currentUser = Cypress.env('selectedUser')
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -280,5 +278,4 @@ describe('Version Measure with invalid CQL', () => {
         })
     })
 })
-
 

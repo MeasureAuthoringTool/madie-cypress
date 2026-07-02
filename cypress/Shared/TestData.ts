@@ -107,6 +107,10 @@ export type MeasureCqlSaveOptions = {
     owner?: TestUserScope
 }
 
+export type SavedMeasureCqlExpectation = {
+    elmXml?: boolean
+}
+
 export class TestData {
     public static selectedUser(owner: FixtureOwner = 'selectedUser'): string {
         const user = Cypress.env(owner)
@@ -328,6 +332,18 @@ export class TestData {
                 : measureNumberOrOptions
 
         return this.saveMeasureCqlFor(cql, options)
+    }
+
+    public static expectSavedMeasureCql(
+        response: Cypress.Response<MeasureBody>,
+        { elmXml = false }: SavedMeasureCqlExpectation = {}
+    ): void {
+        expect(response.status).to.eql(200)
+        expect(response.body.elmJson, 'saved measure ELM JSON').to.be.a('string').and.not.be.empty
+
+        if (elmXml) {
+            expect(response.body.elmXml, 'saved measure ELM XML').to.be.a('string').and.not.be.empty
+        }
     }
 
     private static saveMeasureCqlFor(

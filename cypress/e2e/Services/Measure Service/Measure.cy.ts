@@ -830,8 +830,7 @@ describe('Delete QI-Core Measure with admin access', () => {
         defaultUser = CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, versionMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         TestData.saveMeasureCql(`${versionMeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
@@ -990,8 +989,7 @@ describe('Delete QDM Measure with admin access', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
 
         TestData.saveMeasureCql(`${QDMMeasureCQL}\n`).then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.elmJson).to.be.a('string').and.not.be.empty
+            TestData.expectSavedMeasureCql(response)
         })
     })
 
