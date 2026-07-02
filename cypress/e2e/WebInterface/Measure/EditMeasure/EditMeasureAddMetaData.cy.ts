@@ -50,6 +50,7 @@ describe('Edit Measure: Add Meta Data', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save Endorsement Organization
+        cy.wait(2500)
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
         cy.get(EditMeasurePage.endorsingOrganizationOption).click()
         cy.get(EditMeasurePage.endorsementNumber).should('be.enabled')
