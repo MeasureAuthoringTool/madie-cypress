@@ -9,6 +9,7 @@ const summaryFile =
   process.env.FAILED_TEST_SUMMARY ||
   (process.env.BUILD_NUMBER ? `failure-summary-${process.env.BUILD_NUMBER}.json` : '')
 const configFile = process.argv[3] || process.env.CYPRESS_RERUN_CONFIG || 'test'
+const rerunMetadataFile = process.argv[4] || process.env.RERUN_METADATA_FILE || ''
 const browser = process.env.CYPRESS_RERUN_BROWSER || 'chrome'
 const headed = process.env.CYPRESS_RERUN_HEADED !== 'false'
 
@@ -54,6 +55,37 @@ const targetSpecs = Array.from(targetTitlesBySpec.keys())
 const fallbackSpecs = Array.from(fullSpecFallbacks)
 const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx'
 
+function ensureParentDir(filePath) {
+  fs.mkdirSync(path.dirname(path.resolve(filePath)), { recursive: true })
+}
+
+function writeRerunMetadata() {
+  if (!rerunMetadataFile) {
+    return
+  }
+
+  const targetedTestsBySpec = Object.fromEntries(
+    Array.from(targetTitlesBySpec.entries()).map(([spec, titles]) => [spec, Array.from(titles)])
+  )
+  const targetedTestCount = Object.values(targetedTestsBySpec).reduce((count, titles) => count + titles.length, 0)
+  const metadata = {
+    generatedAt: new Date().toISOString(),
+    summaryFile: path.resolve(summaryFile),
+    configFile,
+    sourceFailureCount: failures.length,
+    targetableFailureCount: targetedTestCount,
+    targetedSpecCount: targetSpecs.length,
+    targetedTestCount,
+    fallbackSpecCount: fallbackSpecs.length,
+    targetedTestsBySpec,
+    fallbackSpecs
+  }
+
+  ensureParentDir(rerunMetadataFile)
+  fs.writeFileSync(path.resolve(rerunMetadataFile), JSON.stringify(metadata, null, 2) + '\n')
+  console.log(`Wrote rerun metadata -> ${path.resolve(rerunMetadataFile)}`)
+}
+
 function runCypress(specs, extraEnv = {}) {
   if (!specs.length) {
     return 0
@@ -93,6 +125,8 @@ function runCypress(specs, extraEnv = {}) {
 }
 
 let status = 0
+
+writeRerunMetadata()
 
 if (targetSpecs.length) {
   const failedTestsBySpec = Object.fromEntries(

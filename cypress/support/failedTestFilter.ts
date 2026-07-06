@@ -101,21 +101,21 @@ if (failedTestTitles.size) {
   const wrapIt = (itFn: any) => {
     const wrapped = function (title: string, fn?: Mocha.Func) {
       const shouldRun = failedTestTitles.has(fullTitle(title))
-      const test = itFn(title, shouldRun ? fn : undefined)
       if (!shouldRun) {
-        test.pending = true
+        // Do not register filtered-out rerun tests at all. Marking them pending
+        // makes the rerun report look incomplete even though the rerun did finish.
+        return undefined
       }
-      return test
+      return itFn(title, fn)
     }
 
     wrapped.only = itFn.only
       ? function (title: string, fn?: Mocha.Func) {
           const shouldRun = failedTestTitles.has(fullTitle(title))
-          const test = itFn.only(title, shouldRun ? fn : undefined)
           if (!shouldRun) {
-            test.pending = true
+            return undefined
           }
-          return test
+          return itFn.only(title, fn)
         }
       : undefined
     wrapped.skip = itFn.skip ? itFn.skip.bind(itFn) : undefined
