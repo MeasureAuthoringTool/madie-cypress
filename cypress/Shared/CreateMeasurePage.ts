@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
 import { Measure } from "@madie/madie-models"
 import { OktaLogin } from "./OktaLogin"
+import { FixtureOwner, TestData } from "./TestData"
 import { step } from "../utils/step"
 const now = require('dayjs')
 
@@ -64,6 +65,22 @@ export class CreateMeasurePage {
     public static readonly compositeMeasureCheckbox = '[data-testid="composite"]'
     public static readonly compositeScoringSelect ='#composite-scoring'
 
+    private static fixtureOwner(altUser?: boolean): FixtureOwner {
+        return altUser ? 'selectedAltUser' : 'selectedUser'
+    }
+
+    private static writeMeasureFixtures(
+        responseBody: any,
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        const suffix = measureNumber > 0 ? measureNumber : ''
+
+        TestData.writeFixture(`measureId${suffix}`, responseBody.id, owner)
+        TestData.writeFixture(`versionId${suffix}`, responseBody.versionId, owner)
+        TestData.writeFixture(`measureSetId${suffix}`, responseBody.measureSetId, owner)
+    }
+
     public static clickCreateMeasureButton(): void {
 
         let alias = 'measure' + (Date.now() + 1).toString()
@@ -76,11 +93,8 @@ export class CreateMeasurePage {
 
         //saving measureID to file to use later
         cy.wait(waitAlias).then(({ response }) => {
-            const currentUser = Cypress.env('selectedUser')
             expect(response?.statusCode).to.eq(201)
-            cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-            cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
-            cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
+            this.writeMeasureFixtures(response?.body)
         })
     }
 
@@ -98,9 +112,8 @@ export class CreateMeasurePage {
 
             //saving measureID to file to use later
             cy.wait(waitAlias).then(({ response }) => {
-                const currentUser = Cypress.env('selectedUser')
                 expect(response?.statusCode).to.eq(201)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
+                TestData.writeFixture('measureId', response?.body.id)
             })
         })
     }
@@ -215,13 +228,9 @@ export class CreateMeasurePage {
         cy.log('Current user is: ' + user)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -291,7 +300,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -304,19 +313,8 @@ export class CreateMeasurePage {
                     currentUser = Cypress.env('selectedUser')
                 }
 
-                if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response?.body.versionId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response?.body.measureSetId)
-                    cy.log(currentUser + ' MeasureSetId is ' + response?.body.measureSetId)
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
-                    cy.log(currentUser + ' MeasureSetId is ' + response?.body.measureSetId)
-                }
-            })
+                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
+                cy.log(currentUser + ' MeasureSetId is ' + response?.body.measureSetId)
         })
         return user
     }
@@ -349,13 +347,9 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -424,7 +418,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -437,20 +431,8 @@ export class CreateMeasurePage {
                     currentUser = Cypress.env('selectedUser')
                 }
 
-                if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response?.body.versionId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response?.body.measureSetId)
-                    cy.log('MeasureSetId is ' + response?.body.measureSetId)
-
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
-                    cy.log('MeasureSetId is ' + response?.body.measureSetId)
-                }
-            })
+                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
+                cy.log('MeasureSetId is ' + response?.body.measureSetId)
         })
         return user
     }
@@ -483,13 +465,9 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -557,7 +535,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -570,20 +548,8 @@ export class CreateMeasurePage {
                     currentUser = Cypress.env('selectedUser')
                 }
 
-                if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response?.body.versionId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response?.body.measureSetId)
-                    cy.log('MeasureSetId is ' + response?.body.measureSetId)
-
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
-                    cy.log('MeasureSetId is ' + response?.body.measureSetId)
-                }
-            })
+                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
+                cy.log('MeasureSetId is ' + response?.body.measureSetId)
         })
         return user
     }
@@ -619,12 +585,8 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -666,7 +628,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -679,22 +641,12 @@ export class CreateMeasurePage {
                     currentUser = Cypress.env('selectedUser')
                 }
 
-                if (((twoMeasures === false) || (twoMeasures === undefined) || (twoMeasures === null)) && (measureNumber > 0)) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response?.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response?.body.versionId)
+                if ((twoMeasures === true) && (measureNumber === 0)) {
+                    this.writeMeasureFixtures(response?.body, 2, this.fixtureOwner(altUser))
                 }
-                else if (((twoMeasures === false) || (twoMeasures === undefined) || (twoMeasures === null)) && (measureNumber === 0)) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
+                else {
+                    this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
                 }
-                else if ((twoMeasures === true) && (measureNumber === 0)) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId2', response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId2', response?.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId2', response?.body.versionId)
-                }
-            })
         })
         cy.log(user)
         return user
@@ -730,13 +682,9 @@ export class CreateMeasurePage {
         cy.log('Current user is: ' + user)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 failOnStatusCode: false,
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': CreateMeasureOptions.ecqmTitle,
@@ -777,7 +725,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -790,19 +738,12 @@ export class CreateMeasurePage {
                     currentUser = Cypress.env('selectedUser')
                 }
 
-                if (CreateMeasureOptions.measureNumber! > 0) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + CreateMeasureOptions.measureNumber, response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + CreateMeasureOptions.measureNumber, response?.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + CreateMeasureOptions.measureNumber, response?.body.versionId)
+                this.writeMeasureFixtures(
+                    response?.body,
+                    CreateMeasureOptions.measureNumber,
+                    this.fixtureOwner(CreateMeasureOptions.altUser)
+                )
 
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
-                }
-
-            })
         })
         cy.log(user)
         return user
@@ -895,12 +836,8 @@ export class CreateMeasurePage {
         user = OktaLogin.setupUserSession(altUser)
 
         //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
+        TestData.requestWithAccessToken<any>({
                 url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                },
                 method: 'POST',
                 body: {
                     'measureName': measureName,
@@ -927,7 +864,7 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-            }).then((response) => {
+        }).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
@@ -939,17 +876,7 @@ export class CreateMeasurePage {
                     currentUser = Cypress.env('selectedUser')
                 }
 
-                if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response?.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response?.body.versionId)
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
-                }
-            })
+                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
         })
         cy.log(user)
         return user
@@ -968,16 +895,11 @@ export class CreateMeasurePage {
             measureNumber = overrideOptions.measureNumber
         }
 
-        cy.getCookie('accessToken').then((accessToken) => {
-
-            // query existing measure for all data
-            cy.request({
+        // query existing measure for all data
+        TestData.requestWithAccessToken<Partial<Measure>>({
                 url: '/api/measures/' + existingId,
-                method: 'GET',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value
-                }
-            }).then((response) => {
+                method: 'GET'
+        }).then((response) => {
                 const clonedMeasure = response?.body as Partial<Measure>
 
                 // clear out data required to be fresh
@@ -996,30 +918,16 @@ export class CreateMeasurePage {
                     clonedMeasure.ecqmTitle = overrideOptions.ecqmTitle
                 }
 
-                cy.request({
+                TestData.requestWithAccessToken<any>({
                     url: '/api/measure?addDefaultCQL=false',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
                     method: 'POST',
                     body: clonedMeasure
                 }).then((response) => {
-                    let currentUser = Cypress.env('selectedUser')
                     expect(response?.status).to.eql(201)
                     expect(response?.body.id).to.be.exist
 
-                    if (measureNumber > 0) {
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureId' + measureNumber, response?.body.id)
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId' + measureNumber, response?.body.measureSetId)
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/versionId' + measureNumber, response?.body.versionId)
-                    }
-                    else {
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response?.body.id)
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response?.body.measureSetId)
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response?.body.versionId)
-                    }
+                    this.writeMeasureFixtures(response?.body, measureNumber)
                 })
-            })
         })
     }
 }

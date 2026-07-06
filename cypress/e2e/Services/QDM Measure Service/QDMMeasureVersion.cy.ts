@@ -5,6 +5,7 @@ import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { TestData } from "../../../Shared/TestData"
 
 let measureName = 'QDMVersionService' + Date.now()
 let cqlLibraryName = 'QDMVersionServiceLib' + Date.now()
@@ -90,13 +91,9 @@ describe('Measure Versioning', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
     })
 
     after('Clean up', () => {
@@ -127,13 +124,9 @@ describe('Measure Versioning', () => {
         
         let currentUser = Cypress.env('selectedUser')
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
@@ -285,6 +278,4 @@ describe('Version Measure with invalid CQL', () => {
         })
     })
 })
-
-
 

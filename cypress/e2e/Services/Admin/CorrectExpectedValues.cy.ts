@@ -7,9 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { QiCore6Cql } from "../../../Shared/FHIRMeasuresCQL"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { TestData } from "../../../Shared/TestData"
 import { Measure, TestCase, GroupPopulation, PopulationType } from '@madie/madie-models'
 const dayjs = require('dayjs')
 
@@ -41,15 +39,9 @@ describe('Admin API - Reset test case expected values', () => {
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI('title', 'series', 'desc', testCase)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
 
         // set expected value "true" on test case
         let updatedTestCase: TestCase

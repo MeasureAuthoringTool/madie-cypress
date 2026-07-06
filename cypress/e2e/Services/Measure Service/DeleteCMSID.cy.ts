@@ -1,8 +1,9 @@
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { Utilities } from '../../../Shared/Utilities'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { TestData } from '../../../Shared/TestData'
 
 let measureName = 'DeleteCMSID' + Date.now()
 let CqlLibraryName = 'DeleteCMSIDLib' + Date.now()
@@ -10,9 +11,7 @@ let harpUser = ''
 let harpUserALT = ''
 
 describe('Delete CMS ID for QI-Core Measure', () => {
-
     before('Login', () => {
-        let currentUser = Cypress.env('selectedUser')
         harpUserALT = OktaLogin.getUser(true)
         harpUser = OktaLogin.setupUserSession(false)
 
@@ -38,66 +37,60 @@ describe('Delete CMS ID for QI-Core Measure', () => {
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
 
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
-        cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
-            cmsId = val.toString().valueOf()
-            cy.writeFile('cypress/fixtures/' + currentUser + '/cmsId', cmsId)
-        })
+        cy.get(EditMeasurePage.cmsIdInput)
+            .invoke('val')
+            .then((val) => {
+                cmsId = val.toString().valueOf()
+                TestData.writeFixture('cmsId', cmsId)
+            })
         cy.log('CMS ID Generated successfully')
 
         OktaLogin.UILogout()
     })
 
     after('Log out and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
-    it('Verify that the CMS ID deleted successfully for QDM Measure', () => {
+    // Keep the non-owner authorization check before the successful delete because
+    // the admin path removes the shared CMS ID created in the suite setup.
+    it('Verify Error Message when Non Measure Owner tries to delete CMS ID', () => {
+        OktaLogin.setupUserSession(false)
 
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupAdminSession()
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId').should('exist').then((measureSetId) => {
-                        cy.request({
-                            url: '/api/admin/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
-                            method: 'DELETE',
-                            headers: {
-                                authorization: 'Bearer ' + accessToken.value,
-                                'harpId': harpUser
-                            }
-                        }).then((response) => {
-                            console.log(response)
-                            expect(response.status).to.eql(200)
-                            expect(response.body).to.eql('CMS id of ' + cmsId + ' was deleted successfully from measure set with measure set id of ' + measureSetId)
-                        })
-                    })
+        TestData.readMeasureId().then((measureId) => {
+            TestData.readFixture('cmsId').then((cmsId) => {
+                TestData.requestWithAccessToken({
+                    url: `/api/admin/measures/${measureId}/delete-cms-id?cmsId=${cmsId}`,
+                    method: 'DELETE',
+                    failOnStatusCode: false,
+                    headers: {
+                        harpId: harpUserALT
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                    expect(response.body).to.eql('Forbidden: Invalid user role')
                 })
             })
         })
     })
 
-    it('Verify Error Message when Non Measure Owner tries to delete CMS ID', () => {
+    it('Verify that the CMS ID deleted successfully for QDM Measure', () => {
+        OktaLogin.setupAdminSession()
 
-        const currentUser = Cypress.env('selectedUser')
-        OktaLogin.setupUserSession(false)
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/cmsId').should('exist').then((cmsId) => {
-                    cy.request({
-                        url: '/api/admin/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
+        TestData.readMeasureId().then((measureId) => {
+            TestData.readFixture('cmsId').then((cmsId) => {
+                TestData.readMeasureSetId().then((measureSetId) => {
+                    TestData.requestWithAccessToken({
+                        url: `/api/admin/measures/${measureId}/delete-cms-id?cmsId=${cmsId}`,
                         method: 'DELETE',
-                        failOnStatusCode: false,
                         headers: {
-                            authorization: 'Bearer ' + accessToken.value,
-                            'harpId': harpUserALT
+                            harpId: harpUser
                         }
                     }).then((response) => {
-                        expect(response.status).to.eql(403)
-                        expect(response.body).to.eql('Forbidden: Invalid user role')
+                        expect(response.status).to.eql(200)
+                        expect(response.body).to.eql(
+                            `CMS id of ${cmsId} was deleted successfully from measure set with measure set id of ${measureSetId}`
+                        )
                     })
                 })
             })
