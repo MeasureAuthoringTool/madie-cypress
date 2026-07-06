@@ -379,8 +379,15 @@ pipeline {
             ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json \
             ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.json \
             ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.md
+          node scripts/render-trend-summary.js \
+            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.json \
+            slack > ${WORKSPACE}/failure-trend-slack-${BUILD_NUMBER}.txt
+          node scripts/render-trend-summary.js \
+            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.json \
+            console > ${WORKSPACE}/failure-trend-console-${BUILD_NUMBER}.txt
+          cat ${WORKSPACE}/failure-trend-console-${BUILD_NUMBER}.txt
         '''
-        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.txt, failure-details-rerun1-${env.BUILD_NUMBER}.txt, failure-details-rerun2-${env.BUILD_NUMBER}.txt, failure-trend-${env.BUILD_NUMBER}.json, failure-trend-${env.BUILD_NUMBER}.md", onlyIfSuccessful: false
+        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.txt, failure-details-rerun1-${env.BUILD_NUMBER}.txt, failure-details-rerun2-${env.BUILD_NUMBER}.txt, failure-trend-${env.BUILD_NUMBER}.json, failure-trend-${env.BUILD_NUMBER}.md, failure-trend-slack-${env.BUILD_NUMBER}.txt, failure-trend-console-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
   }
@@ -392,6 +399,8 @@ pipeline {
           String ws = env.WORKSPACE
           String bn = env.BUILD_NUMBER
           String trendPath = "${ws}/failure-trend-${bn}.json"
+          String slackSummaryPath = "${ws}/failure-trend-slack-${bn}.txt"
+          String consoleSummaryPath = "${ws}/failure-trend-console-${bn}.txt"
 
           def readList = { String p -> fileExists(p) ? readFile(p).readLines().findAll { it?.trim() } : [] }
           List<String> l0 = readList("${ws}/failures-${bn}.txt")
@@ -419,21 +428,15 @@ pipeline {
           String urlTrend       = "${env.BUILD_URL}artifact/failure-trend-${bn}.md"
           String normalizedSummary = ''
 
+          if (fileExists(slackSummaryPath)) {
+            normalizedSummary = readFile(slackSummaryPath).trim()
+          }
+
+          if (fileExists(consoleSummaryPath)) {
+            echo readFile(consoleSummaryPath).trim()
+          }
+
           if (fileExists(trendPath)) {
-            normalizedSummary = sh(
-              returnStdout: true,
-              script: "node scripts/render-trend-summary.js '${trendPath}' slack"
-            ).trim()
-
-            String consoleSummary = sh(
-              returnStdout: true,
-              script: "node scripts/render-trend-summary.js '${trendPath}' console"
-            ).trim()
-
-            if (normalizedSummary) {
-              echo consoleSummary
-            }
-
             String trendText = readFile(trendPath)
             if (trendText.contains('"outcome": "Passed on initial run"')) {
               outcome = '✅ Passed on initial run.'
@@ -483,7 +486,7 @@ ${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
           echo "Post summary/Slack failed: ${e}"
         }
       }
-      archiveArtifacts artifacts: "mochawesome-*.tar.gz, failures-*.txt, failure-details-*.txt, failure-summary-*.json, failure-trend-*.json, failure-trend-*.md, cypress/results/*.json, runner-results/*.json", allowEmptyArchive: true, onlyIfSuccessful: false
+      archiveArtifacts artifacts: "mochawesome-*.tar.gz, failures-*.txt, failure-details-*.txt, failure-summary-*.json, failure-trend-*.json, failure-trend-*.md, failure-trend-*.txt, cypress/results/*.json, runner-results/*.json", allowEmptyArchive: true, onlyIfSuccessful: false
       cleanWs()
     }
   }
