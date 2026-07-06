@@ -267,6 +267,7 @@ pipeline {
             *)
               set +e
               FAILED_TEST_SUMMARY=${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json \
+                RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-1-${BUILD_NUMBER}.json \
                 CYPRESS_RERUN_CONFIG=test \
                 timeout 4h npm run ${RERUN_SCRIPT}
               RERUN_STATUS=$?
@@ -279,6 +280,7 @@ pipeline {
           fi
 
           # Extract failures and human-readable failure details from rerun #1
+          RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-1-${BUILD_NUMBER}.json \
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt \
             ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt \
@@ -325,6 +327,7 @@ pipeline {
             *)
               set +e
               FAILED_TEST_SUMMARY=${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json \
+                RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-2-${BUILD_NUMBER}.json \
                 CYPRESS_RERUN_CONFIG=test \
                 timeout 4h npm run ${RERUN_SCRIPT}
               RERUN_STATUS=$?
@@ -337,6 +340,7 @@ pipeline {
           fi
 
           # Extract failures and human-readable failure details from rerun #2
+          RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-2-${BUILD_NUMBER}.json \
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt \
             ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt \
@@ -385,8 +389,10 @@ pipeline {
     always {
       script {
         try {
+          def jsonSlurper = new groovy.json.JsonSlurperClassic()
           String ws = env.WORKSPACE
           String bn = env.BUILD_NUMBER
+          String trendPath = "${ws}/failure-trend-${bn}.json"
 
           def readList = { String p -> fileExists(p) ? readFile(p).readLines().findAll { it?.trim() } : [] }
           List<String> l0 = readList("${ws}/failures-${bn}.txt")
@@ -412,6 +418,55 @@ pipeline {
           String urlDetailsR1   = "${env.BUILD_URL}artifact/failure-details-rerun1-${bn}.txt"
           String urlDetailsR2   = "${env.BUILD_URL}artifact/failure-details-rerun2-${bn}.txt"
           String urlTrend       = "${env.BUILD_URL}artifact/failure-trend-${bn}.md"
+          String normalizedSummary = ''
+
+          if (fileExists(trendPath)) {
+            def trend = jsonSlurper.parseText(readFile(trendPath))
+            def initialRun = trend.runs?.initial ?: [:]
+            def rerun1Run = trend.runs?.rerun1 ?: [:]
+            def rerun2Run = trend.runs?.rerun2 ?: [:]
+            def initialExecution = initialRun.execution ?: [:]
+            def rerun1Execution = rerun1Run.execution ?: [:]
+            def rerun2Execution = rerun2Run.execution ?: [:]
+            def rerun1Targeting = rerun1Run.targeting ?: [:]
+            def rerun2Targeting = rerun2Run.targeting ?: [:]
+
+            outcome = trend.outcome ? "✅ ${trend.outcome}." : outcome
+            passed = !(trend.outcome ?: '').toString().startsWith('Failures remained')
+
+            normalizedSummary = """\
+Normalized summary:
+• Initial run: ${initialExecution.executedSpecCount ?: 0} specs, ${initialExecution.testsRegistered ?: 0} registered, ${initialExecution.testsPassing ?: 0} passed, ${initialExecution.testsFailing ?: 0} failed, ${initialExecution.testsSkipped ?: 0} skipped
+• Rerun #1: ${rerun1Targeting.targetedSpecCount ?: 0} targeted specs, ${rerun1Targeting.targetedTestCount ?: 0} targeted failed tests, ${rerun1Execution.testsRegistered ?: 0} registered in opened specs, ${rerun1Execution.filteredOut ?: 0} filtered out, ${rerun1Run.failedSpecCount ?: 0} failed specs remaining
+• Rerun #2: ${rerun2Targeting.targetedSpecCount ?: 0} targeted specs, ${rerun2Targeting.targetedTestCount ?: 0} targeted failed tests, ${rerun2Execution.testsRegistered ?: 0} registered in opened specs, ${rerun2Execution.filteredOut ?: 0} filtered out, ${rerun2Run.failedSpecCount ?: 0} failed specs remaining
+""".stripIndent().trim()
+
+            echo """
+=== Normalized Failure Summary ===
+Outcome: ${trend.outcome ?: outcome}
+
+Initial run:
+  specs executed: ${initialExecution.executedSpecCount ?: 0}
+  tests registered: ${initialExecution.testsRegistered ?: 0}
+  passed: ${initialExecution.testsPassing ?: 0}
+  failed: ${initialExecution.testsFailing ?: 0}
+  skipped: ${initialExecution.testsSkipped ?: 0}
+
+Rerun #1:
+  targeted specs: ${rerun1Targeting.targetedSpecCount ?: 0}
+  targeted failed tests: ${rerun1Targeting.targetedTestCount ?: 0}
+  tests registered in opened specs: ${rerun1Execution.testsRegistered ?: 0}
+  filtered out: ${rerun1Execution.filteredOut ?: 0}
+  remaining failed specs: ${rerun1Run.failedSpecCount ?: 0}
+
+Rerun #2:
+  targeted specs: ${rerun2Targeting.targetedSpecCount ?: 0}
+  targeted failed tests: ${rerun2Targeting.targetedTestCount ?: 0}
+  tests registered in opened specs: ${rerun2Execution.testsRegistered ?: 0}
+  filtered out: ${rerun2Execution.filteredOut ?: 0}
+  remaining failed specs: ${rerun2Run.failedSpecCount ?: 0}
+""".stripIndent()
+          }
 
           String msg = """\
 ${passed ? "All test cases passed" : "Failures remain after 2nd rerun"}
@@ -421,6 +476,8 @@ Counts:
 • Initial failures: ${c0}
 • After rerun #1:  ${c1}
 • After rerun #2:  ${c2}
+
+${normalizedSummary ? normalizedSummary + "\n" : ""}
 
 Reports:
 • initial: ${urlInit}

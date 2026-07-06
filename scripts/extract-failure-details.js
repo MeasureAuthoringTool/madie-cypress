@@ -22,6 +22,7 @@ const hasSummaryOutput = Boolean(
 )
 const summaryJsonFile = hasSummaryOutput ? maybeSummaryJsonFile : null
 const runLabel = (hasSummaryOutput ? process.argv[5] : process.argv[4]) || 'Cypress failures'
+const rerunTargetingFile = process.env.RERUN_TARGETING_FILE || ''
 
 if (!specOutputFile || !detailsOutputFile) {
   console.error('Usage: node scripts/extract-failure-details.js spec-output-file details-output-file [summary-json-file] [run-label]')
@@ -40,6 +41,19 @@ const resolvedSummaryJsonFile = summaryJsonFile ? resolveOutputPath(summaryJsonF
 const failedSpecs = new Set()
 const failures = []
 const seenFailures = new Set()
+const runMetrics = {
+  executedSpecs: new Set(),
+  testsRegistered: 0,
+  testsPassing: 0,
+  testsFailing: 0,
+  testsPending: 0,
+  testsSkipped: 0,
+  screenshots: 0,
+  durationMs: 0,
+  usedMochawesome: false,
+  usedRunnerResultsFallback: false
+}
+const rerunTargeting = readRerunTargeting(rerunTargetingFile)
 
 function isInsideDir(filePath, dirPath) {
   const relativePath = path.relative(dirPath, filePath)
@@ -222,9 +236,75 @@ function buildSummary(specs) {
     generatedAt: new Date().toISOString(),
     failedSpecCount: specs.length,
     failedTestCount: enrichedFailures.length,
+    execution: {
+      executedSpecCount: runMetrics.executedSpecs.size,
+      testsRegistered: runMetrics.testsRegistered,
+      testsPassing: runMetrics.testsPassing,
+      testsFailing: runMetrics.testsFailing,
+      testsPending: runMetrics.testsPending,
+      testsSkipped: runMetrics.testsSkipped,
+      filteredOut: 0,
+      screenshots: runMetrics.screenshots,
+      durationMs: runMetrics.durationMs,
+      source: runMetrics.usedMochawesome
+        ? 'mochawesome'
+        : runMetrics.usedRunnerResultsFallback
+          ? 'runner-results fallback'
+          : 'no report data'
+    },
+    targeting: rerunTargeting,
     failureTypes,
     topErrorSignatures: topCounts(errorSignatures),
     failures: enrichedFailures
+  }
+}
+
+function emptyRerunTargeting() {
+  return {
+    sourceFailureCount: 0,
+    targetableFailureCount: 0,
+    targetedSpecCount: 0,
+    targetedTestCount: 0,
+    fallbackSpecCount: 0,
+    targetedTestsBySpec: {},
+    fallbackSpecs: []
+  }
+}
+
+function readRerunTargeting(filePath) {
+  if (!filePath) {
+    return emptyRerunTargeting()
+  }
+
+  const resolvedPath = path.resolve(filePath)
+  if (!fs.existsSync(resolvedPath)) {
+    return emptyRerunTargeting()
+  }
+
+  try {
+    const targeting = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'))
+    const targetedTestsBySpec = targeting.targetedTestsBySpec && typeof targeting.targetedTestsBySpec === 'object'
+      ? targeting.targetedTestsBySpec
+      : {}
+    const fallbackSpecs = Array.isArray(targeting.fallbackSpecs) ? targeting.fallbackSpecs : []
+    const targetedSpecCount = Number(targeting.targetedSpecCount) || Object.keys(targetedTestsBySpec).length
+    const targetedTestCount = Number(targeting.targetedTestCount) || Object.values(targetedTestsBySpec).reduce(
+      (count, titles) => count + (Array.isArray(titles) ? titles.length : 0),
+      0
+    )
+
+    return {
+      sourceFailureCount: Number(targeting.sourceFailureCount) || 0,
+      targetableFailureCount: Number(targeting.targetableFailureCount) || targetedTestCount,
+      targetedSpecCount,
+      targetedTestCount,
+      fallbackSpecCount: Number(targeting.fallbackSpecCount) || fallbackSpecs.length,
+      targetedTestsBySpec,
+      fallbackSpecs
+    }
+  } catch (err) {
+    console.warn(`WARNING: Could not parse rerun targeting file ${resolvedPath}: ${err.message}`)
+    return emptyRerunTargeting()
   }
 }
 
@@ -289,9 +369,22 @@ function extractFromMochawesome() {
       continue
     }
 
+    runMetrics.usedMochawesome = true
+    runMetrics.testsRegistered += Number(report.stats && report.stats.tests) || 0
+    runMetrics.testsPassing += Number(report.stats && report.stats.passes) || 0
+    runMetrics.testsFailing += Number(report.stats && report.stats.failures) || 0
+    runMetrics.testsPending += Number(report.stats && report.stats.pending) || 0
+    runMetrics.testsSkipped += Number(report.stats && report.stats.skipped) || 0
+    runMetrics.screenshots += Number(report.stats && report.stats.screenshots) || 0
+    runMetrics.durationMs += Number(report.stats && report.stats.duration) || 0
+
     for (const result of report.results || []) {
       const specFile = result.fullFile || result.file
       const failuresBeforeResult = failures.length
+
+      if (specFile) {
+        runMetrics.executedSpecs.add(specFile)
+      }
 
       for (const hook of result.beforeHooks || []) {
         if (isFailed(hook)) {
@@ -338,6 +431,7 @@ function extractFallbackFromRunnerResults() {
   }
 
   const jsonFiles = fs.readdirSync(runnerResultsDir).filter(file => file.endsWith('.json'))
+  runMetrics.usedRunnerResultsFallback = jsonFiles.length > 0
 
   for (const jsonFile of jsonFiles) {
     let report
@@ -349,6 +443,7 @@ function extractFallbackFromRunnerResults() {
     }
 
     if (report.failures > 0 && report.file) {
+      runMetrics.executedSpecs.add(report.file)
       addFailure(report.file, 'Failure details unavailable from runner-results JSON. See Mochawesome report or Cypress console output.', '')
     }
   }

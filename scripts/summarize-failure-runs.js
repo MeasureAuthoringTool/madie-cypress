@@ -61,6 +61,8 @@ function readSummary(filePath, fallbackLabel) {
     runLabel: summary.runLabel || fallbackLabel,
     failedSpecCount: summary.failedSpecCount || 0,
     failedTestCount: summary.failedTestCount || 0,
+    execution: normalizeExecution(summary.execution),
+    targeting: normalizeTargeting(summary.targeting),
     failureTypes: summary.failureTypes || {},
     topErrorSignatures: summary.topErrorSignatures || [],
     failures: Array.isArray(summary.failures) ? summary.failures : []
@@ -72,9 +74,47 @@ function emptySummary(runLabel) {
     runLabel,
     failedSpecCount: 0,
     failedTestCount: 0,
+    execution: normalizeExecution(null),
+    targeting: normalizeTargeting(null),
     failureTypes: {},
     topErrorSignatures: [],
     failures: []
+  }
+}
+
+function normalizeExecution(execution) {
+  return {
+    executedSpecCount: Number(execution && execution.executedSpecCount) || 0,
+    testsRegistered: Number(execution && execution.testsRegistered) || 0,
+    testsPassing: Number(execution && execution.testsPassing) || 0,
+    testsFailing: Number(execution && execution.testsFailing) || 0,
+    testsPending: Number(execution && execution.testsPending) || 0,
+    testsSkipped: Number(execution && execution.testsSkipped) || 0,
+    filteredOut: Number(execution && execution.filteredOut) || 0,
+    screenshots: Number(execution && execution.screenshots) || 0,
+    durationMs: Number(execution && execution.durationMs) || 0,
+    source: (execution && execution.source) || 'no report data'
+  }
+}
+
+function normalizeTargeting(targeting) {
+  const targetedTestsBySpec = targeting && targeting.targetedTestsBySpec && typeof targeting.targetedTestsBySpec === 'object'
+    ? targeting.targetedTestsBySpec
+    : {}
+  const fallbackSpecs = targeting && Array.isArray(targeting.fallbackSpecs) ? targeting.fallbackSpecs : []
+  const targetedSpecCount = Number(targeting && targeting.targetedSpecCount) || Object.keys(targetedTestsBySpec).length
+  const targetedTestCount = Number(targeting && targeting.targetedTestCount) || Object.values(targetedTestsBySpec).reduce(
+    (count, titles) => count + (Array.isArray(titles) ? titles.length : 0),
+    0
+  )
+  return {
+    sourceFailureCount: Number(targeting && targeting.sourceFailureCount) || 0,
+    targetableFailureCount: Number(targeting && targeting.targetableFailureCount) || targetedTestCount,
+    targetedSpecCount,
+    targetedTestCount,
+    fallbackSpecCount: Number(targeting && targeting.fallbackSpecCount) || fallbackSpecs.length,
+    targetedTestsBySpec,
+    fallbackSpecs
   }
 }
 
@@ -130,9 +170,11 @@ function buildTrend(initialSummary, rerun1Summary, rerun2Summary) {
   const persistentFailures = classifiedFailures.filter(failure => failure.status === 'Persistent failure')
   const flakyFailures = classifiedFailures.filter(failure => failure.status.startsWith('Flaky'))
   const newRerunFailures = classifiedFailures.filter(failure => failure.status === 'New rerun failure')
+  const runPhases = buildRunPhases(initialSummary, rerun1Summary, rerun2Summary)
 
   return {
     generatedAt: new Date().toISOString(),
+    outcome: classifyOverallOutcome(initialSummary, rerun1Summary, rerun2Summary),
     counts: {
       initialFailedSpecs: initialSummary.failedSpecCount,
       initialFailedTests: initialSummary.failedTestCount,
@@ -144,11 +186,55 @@ function buildTrend(initialSummary, rerun1Summary, rerun2Summary) {
       persistentFailures: persistentFailures.length,
       newRerunFailures: newRerunFailures.length
     },
+    runs: runPhases,
     statusCounts,
     topPersistentErrorTypes: topCounts(countBy(persistentFailures, failure => failure.errorType)),
     topFlakyErrorTypes: topCounts(countBy(flakyFailures, failure => failure.errorType)),
     classifiedFailures
   }
+}
+
+function buildRunPhases(initialSummary, rerun1Summary, rerun2Summary) {
+  const initial = {
+    name: 'Initial run',
+    execution: initialSummary.execution,
+    failedSpecCount: initialSummary.failedSpecCount,
+    failedTestCount: initialSummary.failedTestCount
+  }
+
+  const rerun1 = buildRerunPhase('Rerun #1', rerun1Summary)
+  const rerun2 = buildRerunPhase('Rerun #2', rerun2Summary)
+
+  return { initial, rerun1, rerun2 }
+}
+
+function buildRerunPhase(name, summary) {
+  const execution = { ...summary.execution }
+  execution.filteredOut = Math.max(execution.testsRegistered - execution.testsPassing - execution.testsFailing, 0)
+
+  return {
+    name,
+    execution,
+    targeting: summary.targeting,
+    failedSpecCount: summary.failedSpecCount,
+    failedTestCount: summary.failedTestCount
+  }
+}
+
+function classifyOverallOutcome(initialSummary, rerun1Summary, rerun2Summary) {
+  if (initialSummary.failedSpecCount === 0) {
+    return 'Passed on initial run'
+  }
+
+  if (rerun1Summary.failedSpecCount === 0) {
+    return 'Passed after rerun #1'
+  }
+
+  if (rerun2Summary.failedSpecCount === 0) {
+    return 'Passed after rerun #2'
+  }
+
+  return 'Failures remained after rerun #2'
 }
 
 function classifyRunStatus(failedInitial, failedRerun1, failedRerun2) {
@@ -175,7 +261,16 @@ function renderTrendMarkdown(trend) {
   const lines = [
     '# Failure Trend Summary',
     '',
-    '## Counts',
+    `Outcome: ${trend.outcome}`,
+    '',
+    '## Run Metrics',
+    ...renderInitialRunSection(trend.runs.initial),
+    '',
+    ...renderRerunSection(trend.runs.rerun1),
+    '',
+    ...renderRerunSection(trend.runs.rerun2),
+    '',
+    '## Failure Counts',
     `- Initial failed specs: ${trend.counts.initialFailedSpecs}`,
     `- Initial failed tests/hooks: ${trend.counts.initialFailedTests}`,
     `- Rerun #1 failed specs: ${trend.counts.rerun1FailedSpecs}`,
@@ -210,6 +305,41 @@ function renderTrendMarkdown(trend) {
   appendFailures(lines, trend.classifiedFailures.filter(failure => failure.status === 'New rerun failure'))
 
   return `${lines.join('\n')}\n`
+}
+
+function renderInitialRunSection(run) {
+  return [
+    '### Initial run',
+    `- Executed specs: ${run.execution.executedSpecCount}`,
+    `- Tests registered: ${run.execution.testsRegistered}`,
+    `- Tests passed: ${run.execution.testsPassing}`,
+    `- Tests failed: ${run.execution.testsFailing}`,
+    `- Tests skipped: ${run.execution.testsSkipped}`,
+    `- Tests pending: ${run.execution.testsPending}`,
+    `- Failure detail rows: ${run.failedTestCount}`,
+    `- Failed specs remaining: ${run.failedSpecCount}`,
+    `- Metrics source: ${run.execution.source}`
+  ]
+}
+
+function renderRerunSection(run) {
+  return [
+    `### ${run.name}`,
+    `- Source failures considered: ${run.targeting.sourceFailureCount}`,
+    `- Targetable failures: ${run.targeting.targetableFailureCount}`,
+    `- Targeted specs opened: ${run.targeting.targetedSpecCount}`,
+    `- Targeted failed tests: ${run.targeting.targetedTestCount}`,
+    `- Full-spec fallback count: ${run.targeting.fallbackSpecCount}`,
+    `- Tests registered in opened specs: ${run.execution.testsRegistered}`,
+    `- Tests executed and passed: ${run.execution.testsPassing}`,
+    `- Tests executed and failed: ${run.execution.testsFailing}`,
+    `- Tests filtered out of rerun: ${run.execution.filteredOut}`,
+    `- Tests skipped: ${run.execution.testsSkipped}`,
+    `- Tests pending: ${run.execution.testsPending}`,
+    `- Failed specs remaining: ${run.failedSpecCount}`,
+    `- Failure detail rows remaining: ${run.failedTestCount}`,
+    `- Metrics source: ${run.execution.source}`
+  ]
 }
 
 function appendFailures(lines, failures) {
