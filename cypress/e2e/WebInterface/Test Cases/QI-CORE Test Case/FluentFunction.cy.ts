@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -9,8 +9,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 
 const now = Date.now()
-let measureName = 'TestMeasure' + now
-let CqlLibraryName = 'TestLibrary' + now
+let measureName = 'FluentFunction' + now
+let CqlLibraryName = 'FluentFunctionLib' + now
 const testCase: TestCase = {
     title: 'Title for Auto Test',
     description: 'DENOMFail' + now,
@@ -21,7 +21,7 @@ describe('Fluent Function Capability', () => {
 
     before('Create Measure and Test case', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4)
 
         cy.readFile('cypress/fixtures/FluentFunctionJSON.txt').should('exist').then((fileContents) => {
             TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.description, testCase.group, fileContents)
@@ -41,17 +41,12 @@ describe('Fluent Function Capability', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
+            cy.wait(3500)
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Navigate to Measures Page
-        cy.get(Header.measures).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -69,7 +64,6 @@ describe('Fluent Function Capability', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

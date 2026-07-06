@@ -18,10 +18,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 25000)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
@@ -90,8 +87,8 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.wait(2500)
 
         // verify label gone & error box re-appears
-        cy.get('[data-testid="error-alerts"]').should('be.visible')
-            .and('have.text', 'Please complete the CQL Editor process before continuing')
+        cy.get('[data-testid="generic-error-text-header"]').should('be.visible')
+            .and('have.text', 'Following issues were found within the CQL')
         cy.get('[data-testid="minimized-alert"]').should('not.exist')
 
         cy.wait(2500)
@@ -105,14 +102,8 @@ describe('Minimize Alerts - Non-owner can also minimize to review the measure', 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
         
-
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('edit')
