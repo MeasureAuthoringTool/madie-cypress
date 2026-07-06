@@ -1,6 +1,30 @@
-# MADiE Cypress Refactor Backlog
+# MADiE Cypress Quality Architecture Backlog
 
-Last updated: 2026-07-02
+Last updated: 2026-07-06
+
+## Stewardship Guidelines
+
+This document is a repo-owned quality architecture artifact, not a scratchpad.
+It exists to help the team make visible, repeatable decisions about test architecture,
+pipeline confidence, refactor sequencing, and reliability risk.
+
+Keep it curated:
+
+- Track priorities, decisions, validation rules, and done signals.
+- Keep run-by-run noise out unless a result changes the plan or exposes a durable risk.
+- Link work back to quality outcomes: speed, isolation, reuse, diagnosability, reliability, or pipeline signal.
+- Prefer small, proven helper moves over broad framework rewrites.
+- Reprioritize after meaningful slices; do not let stale plans become invisible policy.
+- Preserve intentional exceptions with a reason, so future cleanup does not erase useful coverage.
+- Keep negative-state tests explicit, even when request setup moves behind helpers.
+- Treat this backlog as shared SDET architecture guidance during PR review and planning.
+
+Suggested maintenance rhythm:
+
+- Update after each committed refactor slice.
+- Refresh quality-audit counts when they materially change.
+- Move completed proof points into Current State and remove low-value historical detail.
+- Open a follow-up ticket or issue when a risk needs product or pipeline ownership outside this repo.
 
 ## Executive Direction
 
@@ -196,15 +220,92 @@ First targets:
 - Global exception suppression: replace blanket suppression with targeted known-error handling.
 - Skipped tests: add owner/ticket or remove obsolete skips.
 
+## Reprioritized Next Work
+
+### Priority 1: `MeasureExport.cy.ts`
+
+Why this is next:
+
+- It is the cleanest continuation from `MeasureBundle.cy.ts`: export GETs are repeated current-measure service requests.
+- It still carries direct token, fixture, and raw request plumbing across export success and negative export cases.
+- It should pay forward into QI-Core export UI smoke coverage and future package/export helpers without touching UI behavior.
+
+First scoped moves:
+
+- Add `TestData.requestMeasureExport` for `GET /api/measures/{measureId}/exports`.
+- Move repeated export GET assertions through the helper, preserving `failOnStatusCode: false` for negative cases.
+- Reuse `TestData.requestMeasureGroup` for export setup groups.
+- Replace direct create-measure POST setup with `TestData.requestMeasure` where the spec bypasses `CreateMeasurePage`.
+
+Definition of done:
+
+- `MeasureExport.cy.ts` has no direct access-token reads or fixture-path reads for export/group setup.
+- Static checks pass.
+- Focused `MeasureExport.cy.ts` passes or produces a diagnosed non-refactor failure.
+
+### Priority 2: `DraftMeasure.cy.ts`
+
+Why this follows export:
+
+- It has more raw plumbing than export, but the behavior is stateful: version, draft, minor/patch version, and draft-status transitions all mutate the same measure family.
+- `TestData.versionMeasure`, `TestData.requestMeasureDraft`, and `TestData.requestDraftStatus` already exist, so the work is mostly replacing raw chains while preserving sequence.
+
+First scoped moves:
+
+- Replace direct draft-status POSTs with `TestData.requestDraftStatus`.
+- Replace direct major/minor/patch version calls with `TestData.versionMeasure`.
+- Replace repeated draft creation bodies with the existing `draftBody` helper plus `TestData.requestMeasureDraft`.
+- Keep a focused eye on fixture mutation after draft creation because some tests intentionally replace the current `measureId`.
+
+Definition of done:
+
+- Draft status/version/draft requests no longer hand-roll token headers or fixture paths.
+- Existing draft family sequencing remains explicit.
+- Focused `DraftMeasure.cy.ts` passes or produces a diagnosed non-refactor failure.
+
+### Priority 3: QDM Test-Case Parity
+
+Why it is third:
+
+- `QDM Test-Cases.cy.ts` is still a top fixture/token offender and should benefit from the QI-Core test-case helper work.
+- It is more likely to need QDM-specific setup/body adjustments, so it should follow one more QI-Core service cleanup.
+
+First scoped moves:
+
+- Compare QDM test-case bodies against `TestData.requestMeasureTestCase`.
+- Reuse the current helper where endpoint shape matches.
+- Add only narrow QDM-specific helper coverage if the API shape differs.
+
+### Priority 4: Shared Helper Hardening
+
+Why it waits:
+
+- `Measure.cy.ts` and `MeasureBundle.cy.ts` proved the direction, but `MeasureExport.cy.ts` and `DraftMeasure.cy.ts` should prove the export/draft surfaces before adding a broader setup facade.
+
+Candidate helper shapes:
+
+- `TestData.createMeasureContext`
+- `TestData.createMeasureGroupContext`
+- `TestData.requestCurrentMeasure`
+- typed response aliases for export, draft, and draft-status flows
+
+### Priority 5: UI Reliability Debt
+
+Why it stays visible:
+
+- Fixed waits, forced interactions, skipped tests, and global exception suppression are still the biggest flake/diagnostic risks after service plumbing.
+- Start UI reliability once one more service tranche lands, or earlier if pipeline failures point at these categories.
+
 ## Immediate Next Slice
 
-Move the next bigger impact to `MeasureExport.cy.ts` or `DraftMeasure.cy.ts`, using the now-proven bundle/version/current-measure helpers.
+Start `MeasureExport.cy.ts` with a narrow export request helper and setup cleanup.
 
 Definition of done for the next slice:
 
-- `MeasureBundle.cy.ts` focused run remains green after helper migration.
-- Next target probe identifies repeated setup/request shapes before any broad helper is added.
+- `TestData.requestMeasureExport` exists and is used by repeated export GET cases.
+- Export setup group creation uses `TestData.requestMeasureGroup` where endpoint shape matches.
 - Static checks pass.
+- Focused `MeasureExport.cy.ts` passes or produces a diagnosed non-refactor failure.
 - Backlog is updated with the helper decision and measured audit impact.
 
 ## Validation Set
