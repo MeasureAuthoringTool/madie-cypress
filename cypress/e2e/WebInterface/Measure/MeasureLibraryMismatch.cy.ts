@@ -1,9 +1,9 @@
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 const measureName = 'MismatchMeasure' + now
@@ -18,15 +18,12 @@ let measurePath = ''
 */
 
 describe('Mismatch between measure model and library model -- error state', () => {
-
     before(() => {
         const currentUser = Cypress.env('selectedUser')
         measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
     })
 
     afterEach('Logout and Clean up Measure', () => {
-
-        
         Utilities.deleteMeasure()
     })
 
@@ -45,15 +42,17 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        const expectedError = 'Library model and version does not match the Measure model and version for name: CQMCommon, version: 2.2.000'
+        const expectedError =
+            'Library model and version does not match the Measure model and version for name: CQMCommon, version: 2.2.000'
         cy.scrollTo('top')
-        cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('contain', measureId + '/edit/cql-editor')
-        })
+        cy.readFile(measurePath)
+            .should('exist')
+            .then((measureId) => {
+                cy.url().should('contain', measureId + '/edit/cql-editor')
+            })
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
     })
-
 
     it('QiCore 4.1.1 measure, add QDM 5.6 library', () => {
         const cqlFile = 'cypress/fixtures/MismatchCql/Qicore4MeasureQdmLib.txt'
@@ -70,11 +69,14 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        const expectedError = 'Library model and version does not match the Measure model and version for name: MATGlobalCommonFunction, version: 1.1.000'
+        const expectedError =
+            'Library model and version does not match the Measure model and version for name: MATGlobalCommonFunction, version: 1.1.000'
         cy.scrollTo('top')
-        cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('contain', measureId + '/edit/cql-editor')
-        })
+        cy.readFile(measurePath)
+            .should('exist')
+            .then((measureId) => {
+                cy.url().should('contain', measureId + '/edit/cql-editor')
+            })
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
     })
@@ -94,13 +96,15 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        const expectedError = 'Library model and version does not match the Measure model and version for name: SupplementalDataElements, version: 4.0.000'
+        const expectedError =
+            'Library model and version does not match the Measure model and version for name: SupplementalDataElements, version: 4.0.000'
         cy.scrollTo('top')
-        cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('contain', measureId + '/edit/cql-editor')
-        })
+        cy.readFile(measurePath)
+            .should('exist')
+            .then((measureId) => {
+                cy.url().should('contain', measureId + '/edit/cql-editor')
+            })
         cy.get(CQLEditorPage.errorMsg).should('contain.text', expectedError)
-
     })
 
     it('QiCore 6.0.0 measure, add QiCore 4.1.1  library', () => {
@@ -118,21 +122,21 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        const expectedError = 'Library model and version does not match the Measure model and version for name: CQMCommon, version: 2.2.000'
+        const expectedError =
+            'Library model and version does not match the Measure model and version for name: CQMCommon, version: 2.2.000'
         cy.scrollTo('top')
-        cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('contain', measureId + '/edit/cql-editor')
-        })
+        cy.readFile(measurePath)
+            .should('exist')
+            .then((measureId) => {
+                cy.url().should('contain', measureId + '/edit/cql-editor')
+            })
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
     })
 })
 
 describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
-
     afterEach('Logout and Clean up Measure', () => {
-
-        
         Utilities.deleteMeasure()
     })
 

@@ -1,17 +1,18 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
 
 let randValue = null
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
-let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+let measureCQL =
+    "library TestLibrary1685544523170534 version '0.0.000'\n" +
+    "using QDM version '5.6'\n" +
+    "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -36,9 +37,10 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'define fluent function "test"():\n' +
     '\t true'
 
-let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+let measureCQL_withError =
+    "library QDMLibrary1724174199255 version '0.0.000'\n" +
+    "using QDM version '5.6'\n" +
+    "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -60,9 +62,10 @@ let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\
     'define "n":\n' +
     '\ttruetest'
 
-const cqlMissingDefinitionName = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+const cqlMissingDefinitionName =
+    "library TestLibrary1685544523170534 version '0.0.000'\n" +
+    "using QDM version '5.6'\n" +
+    "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -87,9 +90,10 @@ const cqlMissingDefinitionName = 'library TestLibrary1685544523170534 version \'
     'define fluent function "test"():\n' +
     '\t true'
 
-const cqlDefinitionNameAsKeyword = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+const cqlDefinitionNameAsKeyword =
+    "library TestLibrary1685544523170534 version '0.0.000'\n" +
+    "using QDM version '5.6'\n" +
+    "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -115,32 +119,21 @@ const cqlDefinitionNameAsKeyword = 'library TestLibrary1685544523170534 version 
     '\t true'
 
 describe('QDM CQL Definitions', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        CQLEditorPage.expandCQLBuilderPanel()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Search for QDM CQL Definitions Expression Editor Name Options', () => {
-
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
@@ -156,7 +149,6 @@ describe('QDM CQL Definitions', () => {
     })
 
     it('Search for QDM CQL Definitions Expression Editor Fluent Function Options', () => {
-
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
@@ -170,7 +162,6 @@ describe('QDM CQL Definitions', () => {
     })
 
     it('Insert QDM CQL Definitions through Expression Editor and Apply to CQL editor', () => {
-
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
@@ -243,14 +234,15 @@ describe('QDM CQL Definitions', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'define "Test":')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'Common."Measurement Period"')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'Common."Inpatient Encounter"')
-        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'Common."EmergencyDepartmentArrivalTime"()')
+        cy.get(EditMeasurePage.cqlEditorTextBox)
+            .eq(0)
+            .should('contain.text', 'Common."EmergencyDepartmentArrivalTime"()')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"test"()')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'after end')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'AgeInDays()')
     })
 
     it('Verify Included QDM CQL Definitions under Saved Definitions tab', () => {
-
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
 
@@ -258,7 +250,10 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
         cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'SDE Ethnicity')
-        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'PatientCharacteristicEthnicity')
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should(
+            'contain.text',
+            'PatientCharacteristicEthnicity'
+        )
 
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'SDE Payer')
         cy.get('[data-testid="definitions-row-2"] > :nth-child(1)').should('contain.text', 'SDE Race')
@@ -270,7 +265,6 @@ describe('QDM CQL Definitions', () => {
     })
 
     it('Edit Saved QDM CQL Definitions', () => {
-
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
@@ -289,7 +283,6 @@ describe('QDM CQL Definitions', () => {
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
-
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Make changes to CQL editor
@@ -305,7 +298,6 @@ describe('QDM CQL Definitions', () => {
     })
 
     it('Delete saved QDM CQL Definitions', () => {
-
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
@@ -328,7 +320,6 @@ describe('QDM CQL Definitions', () => {
     })
 
     it('QDM CQL Definition Comments were displayed under Saved Definitions tab', () => {
-
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
@@ -337,7 +328,6 @@ describe('QDM CQL Definitions', () => {
     })
 
     it('View and Edit QDM CQL Definition Comments from Saved Definitions tab', () => {
-
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
@@ -366,15 +356,12 @@ describe('QDM CQL Definitions', () => {
 })
 
 describe('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
-
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('QDM CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
-        randValue = (Math.floor((Math.random() * 1000) + 1))
+        randValue = Math.floor(Math.random() * 1000 + 1)
         CqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
@@ -382,13 +369,11 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
 
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         cy.get('[data-testid="groups-tab"]').click()
-        cy.get('[data-testid="base-configuration-types-input"]').click()
+        cy.get('[data-testid="base-configuration-types-input"]')
+            .click()
             .type('{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{enter}')
         cy.get('[id="scoring-select"]').click()
         cy.get('[data-testid="scoring-option-COHORT"]').click()
@@ -396,7 +381,10 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('[data-testid="measure-Base Configuration-save"]').click()
         cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(2000).click()
         cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(6).should('have.attr', 'data-value', 'n').click()
+        cy.get('[data-testid="select-option-measure-group-population"]')
+            .eq(6)
+            .should('have.attr', 'data-value', 'n')
+            .click()
         cy.get('[data-testid="group-form-submit-btn"]').wait(4000).click().wait(4000)
         OktaLogin.UILogout()
 
@@ -410,7 +398,10 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get(EditMeasurePage.cqlEditorTab).click().wait(3000)
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.definitionsTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+        cy.get('[data-testid="cql-builder-errors"]').should(
+            'contain.text',
+            'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.'
+        )
         /*                 cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
                 cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
                 cy.get(CQLEditorPage.definitionOption).click()
@@ -421,28 +412,27 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
     })
 
     it('Verify error message appears on Definitions tab when there is an error in the Measure CQL', () => {
-
-        randValue = (Math.floor((Math.random() * 1000) + 1))
+        randValue = Math.floor(Math.random() * 1000 + 1)
         CqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
-
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         cy.get('[data-testid="groups-tab"]').click()
-        cy.get('[data-testid="base-configuration-types-input"]').click()
+        cy.get('[data-testid="base-configuration-types-input"]')
+            .click()
             .type('{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{enter}')
         cy.get('[id="scoring-select"]').click()
         cy.get('[data-testid="scoring-option-COHORT"]').click()
         cy.get('[data-testid="measure-Base Configuration-save"]').click()
         cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(1000).click()
         cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(6).should('have.attr', 'data-value', 'n').click()
+        cy.get('[data-testid="select-option-measure-group-population"]')
+            .eq(6)
+            .should('have.attr', 'data-value', 'n')
+            .click()
         cy.get('[data-testid="group-form-submit-btn"]').click().wait(1000)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -463,7 +453,10 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.definitionsTab).click()
         Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 30000)
-        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+        cy.get('[data-testid="cql-builder-errors"]').should(
+            'contain.text',
+            'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.'
+        )
         //Verify Expression editor name dropdown is disabled when there are CQL errors
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (0)').click()
@@ -471,54 +464,53 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
     })
 
     it('QDM CQL Definitions throws specific error when Definition has no name', () => {
-        randValue = (Math.floor((Math.random() * 1000) + 2))
+        randValue = Math.floor(Math.random() * 1000 + 2)
         CqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         cy.get('[data-testid="groups-tab"]').click()
-        cy.get('[data-testid="base-configuration-types-input"]').click()
+        cy.get('[data-testid="base-configuration-types-input"]')
+            .click()
             .type('{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{enter}')
         cy.get('[id="scoring-select"]').click()
         cy.get('[data-testid="scoring-option-COHORT"]').click()
         cy.get('[data-testid="measure-Base Configuration-save"]').click()
         cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(1000).click()
         cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]').eq(5).should('have.attr', 'data-value', 'n').click()
+        cy.get('[data-testid="select-option-measure-group-population"]')
+            .eq(5)
+            .should('have.attr', 'data-value', 'n')
+            .click()
         cy.get('[data-testid="group-form-submit-btn"]').click().wait(1000)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.expandCQLBuilderPanel()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
+        Utilities.validateErrors(
+            CQLEditorPage.errorInCQLEditorWindow,
+            CQLEditorPage.errorContainer,
+            'Parse: 7:8 | Definition is missing a name.'
+        )
     })
 })
 
 describe('QDM CQL Definitions - Measure ownership Validations', () => {
-
     beforeEach('Create Measure and Login', () => {
-
-        randValue = (Math.floor((Math.random() * 1000) + 4))
+        randValue = Math.floor(Math.random() * 1000 + 4)
         CqlLibraryName = CqlLibraryName + randValue
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionAltLogin()
     })
 
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
-
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         MeasuresPage.actionCenter('view')

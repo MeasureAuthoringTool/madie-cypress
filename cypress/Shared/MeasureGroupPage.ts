@@ -1,11 +1,11 @@
-import { MeasuresPage } from "./MeasuresPage"
-import { EditMeasurePage } from "./EditMeasurePage"
-import { CQLEditorPage } from "./CQLEditorPage"
-import { Utilities } from "./Utilities"
-import { TestCasesPage } from "./TestCasesPage"
+import { MeasuresPage } from './MeasuresPage'
+import { EditMeasurePage } from './EditMeasurePage'
+import { CQLEditorPage } from './CQLEditorPage'
+import { Utilities } from './Utilities'
+import { TestCasesPage } from './TestCasesPage'
 import { UUIDTypes, v4 as uuidv4 } from 'uuid'
-import { Stratification } from "@madie/madie-models"
-import { OktaLogin } from "./OktaLogin";
+import { Stratification } from '@madie/madie-models'
+import { OktaLogin } from './OktaLogin'
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -28,31 +28,30 @@ export enum MeasureScoring {
 }
 // valid for proportion, cohort, ratio
 export type MeasureGroups = {
-    initialPopulation: string,
-    denominator?: string,
-    numerator?: string,
-    denomExclusion?: string,
-    numExclusion?: string,
-    denomException?: string,
-    denomObservation?: string,
+    initialPopulation: string
+    denominator?: string
+    numerator?: string
+    denomExclusion?: string
+    numExclusion?: string
+    denomException?: string
+    denomObservation?: string
     numObservation?: string
 }
 export type CVGroups = {
-    initialPopulation: string,
-    measurePopulation: string,
-    measurePopExclusion?: string,
+    initialPopulation: string
+    measurePopulation: string
+    measurePopExclusion?: string
     observation?: MeasureObservations
 }
 export type MeasureObservations = {
-    aggregateMethod: string,
-    criteriaReference?: UUIDTypes,
-    definition: string,
-    id?: UUIDTypes,
+    aggregateMethod: string
+    criteriaReference?: UUIDTypes
+    definition: string
+    id?: UUIDTypes
     description?: string
 }
 
 export class MeasureGroupPage {
-
     public static readonly popBasisField = '[id="populationBasis"]'
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
@@ -67,14 +66,16 @@ export class MeasureGroupPage {
 
     //QDM Supplemental Data Elements and Risk Adjustment variables
     public static readonly QDMSupplementalDataElementsTab = '[id="sideNavMeasurePopulationsSupplementalData"]'
-    public static readonly QDMSupplementalDataDescriptionTextBox = '[data-testid="supplemental-data-description-rich-text-editor"]'
+    public static readonly QDMSupplementalDataDescriptionTextBox =
+        '[data-testid="supplemental-data-description-rich-text-editor"]'
     public static readonly readOnlyQDMSDEDescription = 'supplementalDataDescription'
     public static readonly QDMSupplementalDataDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly readOnlyQDMSDEDefinition = '#supplemental-data'
     public static readonly QDMSupplementalDataElementsListBox = '[id="supplemental-data-listbox"]'
     public static readonly QDMSaveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
     public static readonly QDMSupplementalDataDefinitionTextBox = '[id="supplemental-data"]'
-    public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid="risk-adjustment-description-rich-text-editor"]'
+    public static readonly QDMRiskAdjustmentDescriptionTextBox =
+        '[data-testid="risk-adjustment-description-rich-text-editor"]'
     public static readonly readOnlyQDMRiskAdjDescription = '#riskAdjustmentDescription'
     public static readonly QDMRiskAdjustmentDefinitionTextBox = '[id="risk-adjustment"]'
 
@@ -135,10 +136,12 @@ export class MeasureGroupPage {
     // The outer `improvement-notation-description-rich-text-editor` is now just a wrapper
     // that includes a non-typeable toolbar; the actual contenteditable lives at the
     // `improvementNotationDescription-rich-text-editor-content` testid.
-    public static readonly improvementNotationDescText = '[data-testid="improvementNotationDescription-rich-text-editor-content"]'
+    public static readonly improvementNotationDescText =
+        '[data-testid="improvementNotationDescription-rich-text-editor-content"]'
     public static readonly readOnlyImpNotationDescription = '#improvementNotationDescription'
     // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
-    public static readonly improvementNotationDescQiCore = '[data-testid="improvementNotationDescription-rich-text-editor-content"]'
+    public static readonly improvementNotationDescQiCore =
+        '[data-testid="improvementNotationDescription-rich-text-editor-content"]'
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
 
@@ -148,7 +151,7 @@ export class MeasureGroupPage {
     public static readonly measureGroupTypeDropdownBtn = '[class="MuiBackdrop-root MuiBackdrop-invisible css-esi9ax"]'
 
     //Scoring drop-down box
-    public static readonly measureScoringSelect = '[id="scoring-select"]'//'#scoring-select'
+    public static readonly measureScoringSelect = '[id="scoring-select"]' //'#scoring-select'
     public static readonly measureScoringCohort = '[data-testid="group-scoring-option-COHORT"]'
     public static readonly measureScoringProportion = '[data-testid="group-scoring-option-PROPORTION"]'
     public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
@@ -164,13 +167,17 @@ export class MeasureGroupPage {
     public static readonly numeratorSelect = '[id="population-select-numerator-select"]'
     public static readonly numeratorExclusionSelect = '[id="population-select-numerator-exclusion-select"]'
     public static readonly measurePopulationSelect = '[id="population-select-measure-population-select"]'
-    public static readonly measurePopulationExclusionSelect = '[id="population-select-measure-population-exclusion-select"]'
+    public static readonly measurePopulationExclusionSelect =
+        '[id="population-select-measure-population-exclusion-select"]'
     public static readonly measureObservationPopSelect = '[id="measure-observation-cv-obs"]'
     public static readonly measurePopulationOption = '[data-testid="select-option-measure-group-population"]'
     public static readonly populationMismatchErrorMsg = '[data-testid="Stratification-select-1-helper-text"]'
-    public static readonly initialPopulationMismatchErrorMsg = '[data-testid="population-select-initial-population-select-helper-text"]'
-    public static readonly measurePopulationMismatchErrorMsg = '[data-testid="population-select-measure-population-select-helper-text"]'
-    public static readonly measurePopulationExclusionMismatchErrorMsg = '[data-testid="population-select-measure-population-exclusion-select-helper-text"]'
+    public static readonly initialPopulationMismatchErrorMsg =
+        '[data-testid="population-select-initial-population-select-helper-text"]'
+    public static readonly measurePopulationMismatchErrorMsg =
+        '[data-testid="population-select-measure-population-select-helper-text"]'
+    public static readonly measurePopulationExclusionMismatchErrorMsg =
+        '[data-testid="population-select-measure-population-exclusion-select-helper-text"]'
 
     //UCUM scoring unit
     public static readonly ucumScoringUnitSelect = '[data-testid="scoring-unit-text-input"]'
@@ -184,7 +191,8 @@ export class MeasureGroupPage {
     public static readonly measureObservationSelect = '.MuiList-root'
     public static readonly aggregateFunctionCount = '[data-value="Count"]'
     public static readonly aggregateFunctionMaximum = '[data-value="Maximum"]'
-    public static readonly aggregateFunctionDropdownList = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
+    public static readonly aggregateFunctionDropdownList =
+        '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
     public static readonly addNumeratorObservationLink = '[data-testid="add-measure-observation-numerator"]'
     public static readonly numeratorObservation = '[id="measure-observation-numerator"]'
     public static readonly numeratorAggregateFunction = '[id="measure-observation-aggregate-numerator"]'
@@ -202,11 +210,14 @@ export class MeasureGroupPage {
 
     //update measure group
     public static readonly updateMeasureGroupConfirmationMsg = '.MuiDialogContent-root > div'
-    public static readonly popUpConfirmationModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
+    public static readonly popUpConfirmationModal =
+        '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
     public static readonly scoreUpdateConfirmModal = '[data-testid="update-measure-group-scoring-dialog"]'
     public static readonly scoreUpdateMGConfirmMsg = '.MuiDialogContent-root'
-    public static readonly updateMeasureGroupConfirmationBtn = '[data-testid="update-measure-group-scoring-modal-agree-btn"]'
-    public static readonly updatePopulationBasisConfirmationBtn = '[data-testid="update-measure-group-pop-basis-modal-agree-btn"]'
+    public static readonly updateMeasureGroupConfirmationBtn =
+        '[data-testid="update-measure-group-scoring-modal-agree-btn"]'
+    public static readonly updatePopulationBasisConfirmationBtn =
+        '[data-testid="update-measure-group-pop-basis-modal-agree-btn"]'
 
     //additional measure groups (assuming they exist)
     public static readonly measureGroupOne = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
@@ -249,8 +260,10 @@ export class MeasureGroupPage {
     public static readonly qdmBCSaveButtonSuccessMsg = '[data-testid="edit-base-configuration-success-text"]'
     public static readonly qdmTypeHelperText = '[data-testid="base-configuration-types-helper-text"]'
     public static readonly qdmScoringHelperText = '[data-testid="scoring-select-helper-text"]'
-    public static readonly updatePatientBasisCancelBtn = '[data-testid=update-measure-group-patient-basis-modal-cancel-btn]'
-    public static readonly updatePatientBasisContinueBtn = '[data-testid=update-measure-group-patient-basis-modal-agree-btn]'
+    public static readonly updatePatientBasisCancelBtn =
+        '[data-testid=update-measure-group-patient-basis-modal-cancel-btn]'
+    public static readonly updatePatientBasisContinueBtn =
+        '[data-testid=update-measure-group-patient-basis-modal-agree-btn]'
 
     //QDM BC Scoring Change propmt
     public static readonly qdmChangeScoringCancel = '[data-testid="update-measure-group-scoring-modal-cancel-btn"]'
@@ -264,14 +277,16 @@ export class MeasureGroupPage {
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
-    public static readonly riskAdjustmentDescriptionTextBox = '[data-testid="riskAdjustmentDescription-rich-text-editor-content"]'
+    public static readonly riskAdjustmentDescriptionTextBox =
+        '[data-testid="riskAdjustmentDescription-rich-text-editor-content"]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
     public static readonly supplementalDataDefinitionSelect = '#supplemental-data'
     public static readonly supplementalDataDefinitionDropdown = '#supplemental-data-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="supplementalDataDescription-rich-text-editor-content"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox =
+        '[data-testid="supplementalDataDescription-rich-text-editor-content"]'
     public static readonly saveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
     public static readonly discardChangesBtn = '[data-testid=cancel-button]'
@@ -279,19 +294,21 @@ export class MeasureGroupPage {
     public static readonly supplementalDataDefinitionTextBox = '#supplementalDataElements'
     public static readonly ippIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(1)'
     public static readonly ippIncludeInReportTypeDropdownList = '[class="MuiAutocomplete-listbox css-tkoe5p"]'
-    public static readonly denomIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(2)'
+    public static readonly denomIncludeInReportTypeField =
+        '[data-testid="includeInReportType-container"] > :nth-child(2)'
 
     public static createMeasureGroupforProportionMeasure(): void {
-
         //Click on Edit Measure
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -303,13 +320,17 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == "Text") {
+            if ($ele.text() == 'Text') {
                 cy.wrap($ele).should('exist')
                 cy.wrap($ele).focus()
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).find('input').type('Process').type('{downArrow}').type('{enter}')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect)
+            .find('input')
+            .type('Process')
+            .type('{downArrow}')
+            .type('{enter}')
         // this clears the previous step's dropdown
         cy.get(this.QDMPopCriteria1Desc).click()
 
@@ -329,21 +350,25 @@ export class MeasureGroupPage {
 
         //validation successful save message
         cy.get(this.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(this.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(this.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
     }
 
     public static createMeasureGroupforRatioMeasure(): void {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.wait(3000)
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.wait(3000)
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -371,21 +396,25 @@ export class MeasureGroupPage {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
     }
 
     public static createMeasureGroupforContinuousVariableMeasure(): void {
-
         //Click on Edit Measure
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.wait(3000)
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.wait(3000)
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -416,10 +445,23 @@ export class MeasureGroupPage {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
     }
 
-    public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
+    public static CreateProportionMeasureGroupAPI(
+        measureNumber?: number,
+        altUser?: boolean,
+        PopIniPopP?: string,
+        DenomExcl?: string,
+        DenomExcep?: string,
+        PopNumP?: string,
+        NumerExcl?: string,
+        PopDenomP?: string,
+        popBasis?: string
+    ): string {
         let currentUser = ''
 
         if (altUser === undefined || altUser === null) {
@@ -428,8 +470,7 @@ export class MeasureGroupPage {
 
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        }
-        else if (altUser === false) {
+        } else if (altUser === false) {
             currentUser = Cypress.env('selectedUser')
         }
 
@@ -438,102 +479,115 @@ export class MeasureGroupPage {
         let measureGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId'
         let measureScoring = 'Proportion'
 
-        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Surgical Absence of Cervix' }
-        if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
-        if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
+        if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
+            popBasis = 'boolean'
+        }
+        if (PopIniPopP == undefined || PopIniPopP === null) {
+            PopIniPopP = 'Surgical Absence of Cervix'
+        }
+        if (PopNumP == undefined || PopNumP === null) {
+            PopNumP = 'Surgical Absence of Cervix'
+        }
+        if (PopDenomP == undefined || PopDenomP === null) {
+            PopDenomP = 'Surgical Absence of Cervix'
+        }
 
         user = OktaLogin.setupUserSession(altUser)
         cy.log('Current user is: ' + user)
 
-        if ((measureNumber === undefined) || (measureNumber === null) || (measureNumber === 0)) {
+        if (measureNumber === undefined || measureNumber === null || measureNumber === 0) {
             measureNumber = 0
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        }
-        else if ((measureNumber > 0)) {
+        } else if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "id": fileContents,
-                        "scoring": measureScoring,
-                        "populationBasis": popBasis,
-                        "rateAggregation": "<p>test rA</p>",
-                        "groupDescription": "<p>test gD</p>",
-                        "populations": [
-                            {
-                                "description": "<p>test IP P</p>",
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": PopIniPopP
-                            },
-                            {
-                                "description": "<p>test d P</p>",
-                                "id": uuidv4(),
-                                "name": "denominator",
-                                "definition": PopDenomP
-                            },
-                            {
-                                "description": "<p>test dE P</p>",
-                                "id": uuidv4(),
-                                "name": "denominatorExclusion",
-                                "definition": DenomExcl
-                            },
-                            {
-                                "description": "<p>test dEx P</p>",
-                                "id": uuidv4(),
-                                "name": "denominatorException",
-                                "definition": DenomExcep
-                            },
-                            {
-                                "description": "<p>test n P</p>",
-                                "id": uuidv4(),
-                                "name": "numerator",
-                                "definition": PopNumP
-                            },
-                            {
-                                "description": "<p>test nE P</p>",
-                                "id": uuidv4(),
-                                "name": "numeratorExclusion",
-                                "definition": NumerExcl
-                            }
-                        ],
-                        "scoringUnit": {
-                            "label": "ml milliLiters",
-                            "value": {
-                                "code": "ml",
-                                "name": "milliLiters",
-                                "guidance": "",
-                                "system": "https://clinicaltables.nlm.nih.gov/"
-                            }
+            cy.readFile(measurePath)
+                .should('exist')
+                .then((fileContents) => {
+                    cy.request({
+                        url: '/api/measures/' + fileContents + '/groups',
+                        method: 'POST',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken?.value
                         },
-                        "measureGroupTypes": [
-                            "Outcome"
-                        ],
-                        "stratifications": [
-                        ],
-                        "improvementNotation": "Increased score indicates improvement"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile(measureGroupPath, response.body.id)
+                        body: {
+                            id: fileContents,
+                            scoring: measureScoring,
+                            populationBasis: popBasis,
+                            rateAggregation: '<p>test rA</p>',
+                            groupDescription: '<p>test gD</p>',
+                            populations: [
+                                {
+                                    description: '<p>test IP P</p>',
+                                    id: uuidv4(),
+                                    name: 'initialPopulation',
+                                    definition: PopIniPopP
+                                },
+                                {
+                                    description: '<p>test d P</p>',
+                                    id: uuidv4(),
+                                    name: 'denominator',
+                                    definition: PopDenomP
+                                },
+                                {
+                                    description: '<p>test dE P</p>',
+                                    id: uuidv4(),
+                                    name: 'denominatorExclusion',
+                                    definition: DenomExcl
+                                },
+                                {
+                                    description: '<p>test dEx P</p>',
+                                    id: uuidv4(),
+                                    name: 'denominatorException',
+                                    definition: DenomExcep
+                                },
+                                {
+                                    description: '<p>test n P</p>',
+                                    id: uuidv4(),
+                                    name: 'numerator',
+                                    definition: PopNumP
+                                },
+                                {
+                                    description: '<p>test nE P</p>',
+                                    id: uuidv4(),
+                                    name: 'numeratorExclusion',
+                                    definition: NumerExcl
+                                }
+                            ],
+                            scoringUnit: {
+                                label: 'ml milliLiters',
+                                value: {
+                                    code: 'ml',
+                                    name: 'milliLiters',
+                                    guidance: '',
+                                    system: 'https://clinicaltables.nlm.nih.gov/'
+                                }
+                            },
+                            measureGroupTypes: ['Outcome'],
+                            stratifications: [],
+                            improvementNotation: 'Increased score indicates improvement'
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        cy.writeFile(measureGroupPath, response.body.id)
+                    })
                 })
-            })
         })
         return user
     }
 
-    public static CreateRatioMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?: string, PopDenomP?: string, popBasis?: string): string {
+    public static CreateRatioMeasureGroupAPI(
+        twoMeasureGroups?: boolean,
+        altUser?: boolean,
+        PopIniPopP?: string,
+        PopNumP?: string,
+        PopDenomP?: string,
+        popBasis?: string
+    ): string {
         let currentUser = Cypress.env('selectedUser')
         const currentAltUser = Cypress.env('selectedAltUser')
 
@@ -541,10 +595,18 @@ export class MeasureGroupPage {
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Ratio'
-        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Surgical Absence of Cervix' }
-        if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
-        if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
+        if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
+            popBasis = 'boolean'
+        }
+        if (PopIniPopP == undefined || PopIniPopP === null) {
+            PopIniPopP = 'Surgical Absence of Cervix'
+        }
+        if (PopNumP == undefined || PopNumP === null) {
+            PopNumP = 'Surgical Absence of Cervix'
+        }
+        if (PopDenomP == undefined || PopDenomP === null) {
+            PopDenomP = 'Surgical Absence of Cervix'
+        }
 
         if (altUser === undefined || altUser === null) {
             altUser = false
@@ -554,87 +616,88 @@ export class MeasureGroupPage {
 
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        }
-        else {
+        } else {
             currentUser = Cypress.env('selectedUser')
         }
         if (twoMeasureGroups === true) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
             //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-        }
-        else {
+        } else {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         }
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "id": fileContents,
-                        "scoring": measureScoring,
-                        "populationBasis": popBasis,
-                        "populations": [
-                            {
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": PopIniPopP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominator",
-                                "definition": PopDenomP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominatorExclusion",
-                                "definition": PopDenomP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numerator",
-                                "definition": PopNumP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numeratorExclusion",
-                                "definition": PopNumP
-                            }
-                        ],
-                        "measureGroupTypes": [
-                            "Outcome"
-                        ],
-                        "stratifications": [
-                        ],
-                        "improvementNotation": "Increased score indicates improvement"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile(measureGroupPath, response.body.id)
+            cy.readFile(measurePath)
+                .should('exist')
+                .then((fileContents) => {
+                    cy.request({
+                        url: '/api/measures/' + fileContents + '/groups',
+                        method: 'POST',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken?.value
+                        },
+                        body: {
+                            id: fileContents,
+                            scoring: measureScoring,
+                            populationBasis: popBasis,
+                            populations: [
+                                {
+                                    id: uuidv4(),
+                                    name: 'initialPopulation',
+                                    definition: PopIniPopP
+                                },
+                                {
+                                    id: uuidv4(),
+                                    name: 'denominator',
+                                    definition: PopDenomP
+                                },
+                                {
+                                    id: uuidv4(),
+                                    name: 'denominatorExclusion',
+                                    definition: PopDenomP
+                                },
+                                {
+                                    id: uuidv4(),
+                                    name: 'numerator',
+                                    definition: PopNumP
+                                },
+                                {
+                                    id: uuidv4(),
+                                    name: 'numeratorExclusion',
+                                    definition: PopNumP
+                                }
+                            ],
+                            measureGroupTypes: ['Outcome'],
+                            stratifications: [],
+                            improvementNotation: 'Increased score indicates improvement'
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        cy.writeFile(measureGroupPath, response.body.id)
+                    })
                 })
-            })
         })
         return user
     }
 
-    public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
-
+    public static CreateCohortMeasureGroupAPI(
+        twoMeasureGroups?: boolean,
+        altUser?: boolean,
+        PopIniPopP?: string,
+        popBasis?: string,
+        measureNumber?: number
+    ): string {
         let currentUser = ''
-        if ((altUser === undefined) || (altUser === null)) {
+        if (altUser === undefined || altUser === null) {
             altUser = false
         }
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        }
-        else {
+        } else {
             currentUser = Cypress.env('selectedUser')
         }
 
@@ -642,7 +705,7 @@ export class MeasureGroupPage {
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Cohort'
-        if ((measureNumber === undefined) || (measureNumber === null)) {
+        if (measureNumber === undefined || measureNumber === null) {
             measureNumber = 0
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
         }
@@ -651,75 +714,83 @@ export class MeasureGroupPage {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
-        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
+        if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
+            popBasis = 'boolean'
+        }
+        if (PopIniPopP == undefined || PopIniPopP === null) {
+            PopIniPopP = 'Initial PopulationOne'
+        }
 
         user = OktaLogin.setupUserSession(altUser)
 
         if (twoMeasureGroups === true) {
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
-        }
-        else {
+        } else {
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         }
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "id": fileContents,
-                        "scoring": measureScoring,
-                        "populationBasis": popBasis,
-                        "rateAggregation": "<p>test ra</p>",
-                        "groupDescription": "<p>test gd</p>",
-                        "populations": [
-                            {
-                                "description": "<p>test pd</p>",
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": PopIniPopP
-                            }
-                        ],
-                        "measureGroupTypes": [
-                            "Outcome"
-                        ],
-                        "stratifications": [
-                            {
-                                "id": uuidv4(),
-                                "description": "<p>test strat 1</p>",
-                                "cqlDefinition": PopIniPopP,
-                                "associations": ["initialPopulation"]
-                            },
-                            {
-                                "id": uuidv4(),
-                                "description": "<p>test strat 2</p>",
-                                "cqlDefinition": PopIniPopP,
-                                "associations": ["denominator"]
-                            }
-                        ],
-                        "improvementNotation": "Increased score indicates improvement",
-                        "improvementNotationDescription": "<p>test iND</p>"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile(measureGroupPath, response.body.id)
+            cy.readFile(measurePath)
+                .should('exist')
+                .then((fileContents) => {
+                    cy.request({
+                        url: '/api/measures/' + fileContents + '/groups',
+                        method: 'POST',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken?.value
+                        },
+                        body: {
+                            id: fileContents,
+                            scoring: measureScoring,
+                            populationBasis: popBasis,
+                            rateAggregation: '<p>test ra</p>',
+                            groupDescription: '<p>test gd</p>',
+                            populations: [
+                                {
+                                    description: '<p>test pd</p>',
+                                    id: uuidv4(),
+                                    name: 'initialPopulation',
+                                    definition: PopIniPopP
+                                }
+                            ],
+                            measureGroupTypes: ['Outcome'],
+                            stratifications: [
+                                {
+                                    id: uuidv4(),
+                                    description: '<p>test strat 1</p>',
+                                    cqlDefinition: PopIniPopP,
+                                    associations: ['initialPopulation']
+                                },
+                                {
+                                    id: uuidv4(),
+                                    description: '<p>test strat 2</p>',
+                                    cqlDefinition: PopIniPopP,
+                                    associations: ['denominator']
+                                }
+                            ],
+                            improvementNotation: 'Increased score indicates improvement',
+                            improvementNotationDescription: '<p>test iND</p>'
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        cy.writeFile(measureGroupPath, response.body.id)
+                    })
                 })
-            })
         })
         return user
     }
 
-    public static CreateCohortMeasureGroupWithoutTypeAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string): string {
+    public static CreateCohortMeasureGroupWithoutTypeAPI(
+        twoMeasureGroups?: boolean,
+        altUser?: boolean,
+        PopIniPopP?: string,
+        popBasis?: string
+    ): string {
         let currentUser = Cypress.env('selectedUser')
 
-        if ((altUser === undefined) || (altUser === null)) {
+        if (altUser === undefined || altUser === null) {
             altUser = false
         }
 
@@ -727,59 +798,61 @@ export class MeasureGroupPage {
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Cohort'
-        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
+        if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
+            popBasis = 'boolean'
+        }
+        if (PopIniPopP == undefined || PopIniPopP === null) {
+            PopIniPopP = 'Initial PopulationOne'
+        }
 
         user = OktaLogin.setupUserSession(altUser)
 
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        }
-        else {
+        } else {
             currentUser = Cypress.env('selectedUser')
         }
         if (twoMeasureGroups === true) {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
             //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-        }
-        else {
+        } else {
             measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
             measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         }
 
         //Add Measure Group to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "id": fileContents,
-                        "scoring": measureScoring,
-                        "populationBasis": popBasis,
-                        "populations": [
-                            {
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": PopIniPopP
-                            }
-                        ],
-                        "measureGroupTypes": [
-                        ],
-                        "stratifications": [
-                        ],
-                        "improvementNotation": "Increased score indicates improvement"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile(measureGroupPath, response.body.id)
+            cy.readFile(measurePath)
+                .should('exist')
+                .then((fileContents) => {
+                    cy.request({
+                        url: '/api/measures/' + fileContents + '/groups',
+                        method: 'POST',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken?.value
+                        },
+                        body: {
+                            id: fileContents,
+                            scoring: measureScoring,
+                            populationBasis: popBasis,
+                            populations: [
+                                {
+                                    id: uuidv4(),
+                                    name: 'initialPopulation',
+                                    definition: PopIniPopP
+                                }
+                            ],
+                            measureGroupTypes: [],
+                            stratifications: [],
+                            improvementNotation: 'Increased score indicates improvement'
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        cy.writeFile(measureGroupPath, response.body.id)
+                    })
                 })
-            })
         })
         return user
     }
@@ -794,7 +867,6 @@ export class MeasureGroupPage {
         numeratorObservation?: MeasureObservations,
         cvPopulations?: CVGroups
     ): string {
-
         let currentUser = ''
 
         if (altUser === undefined || altUser === null) {
@@ -803,8 +875,7 @@ export class MeasureGroupPage {
 
         if (altUser) {
             currentUser = Cypress.env('selectedAltUser')
-        }
-        else {
+        } else {
             currentUser = Cypress.env('selectedUser')
         }
         let user = ''
@@ -825,50 +896,50 @@ export class MeasureGroupPage {
         }
         let popsArray = [
             {
-                "id": uuidv4(),
-                "name": "initialPopulation",
-                "definition": populations.initialPopulation,
-                "description": "<p>initial pop</p>"
+                id: uuidv4(),
+                name: 'initialPopulation',
+                definition: populations.initialPopulation,
+                description: '<p>initial pop</p>'
             }
         ]
         if (populations.denominator) {
             popsArray.push({
-                "id": denomUuid,
-                "name": "denominator",
-                "definition": populations.denominator,
-                "description": "<p>denom</p>"
+                id: denomUuid,
+                name: 'denominator',
+                definition: populations.denominator,
+                description: '<p>denom</p>'
             })
         }
         if (populations.numerator) {
             popsArray.push({
-                "id": numUuid,
-                "name": "numerator",
-                "definition": populations.numerator,
-                "description": "<p>num</p>"
+                id: numUuid,
+                name: 'numerator',
+                definition: populations.numerator,
+                description: '<p>num</p>'
             })
         }
         if (populations.denomExclusion) {
             popsArray.push({
-                "id": uuidv4(),
-                "name": "denominatorExclusion",
-                "definition": populations.denomExclusion,
-                "description": "<p>denom exc</p>"
+                id: uuidv4(),
+                name: 'denominatorExclusion',
+                definition: populations.denomExclusion,
+                description: '<p>denom exc</p>'
             })
         }
         if (populations.numExclusion) {
             popsArray.push({
-                "id": uuidv4(),
-                "name": "numeratorExclusion",
-                "definition": populations.numExclusion,
-                "description": "<p>num exc</p>"
+                id: uuidv4(),
+                name: 'numeratorExclusion',
+                definition: populations.numExclusion,
+                description: '<p>num exc</p>'
             })
         }
         if (populations.denomException) {
             popsArray.push({
-                "id": uuidv4(),
-                "name": "denominatorException",
-                "definition": populations.denomException,
-                "description": "<p>denom exception</p>"
+                id: uuidv4(),
+                name: 'denominatorException',
+                definition: populations.denomException,
+                description: '<p>denom exception</p>'
             })
         }
         // need this bc CV populations structure is different
@@ -876,22 +947,22 @@ export class MeasureGroupPage {
             const measureUuid = uuidv4()
             popsArray = [
                 {
-                    "id": uuidv4(),
-                    "name": "initialPopulation",
-                    "definition": cvPopulations.initialPopulation,
-                    "description": "<p>initial pop</p>"
+                    id: uuidv4(),
+                    name: 'initialPopulation',
+                    definition: cvPopulations.initialPopulation,
+                    description: '<p>initial pop</p>'
                 },
                 {
-                    "id": measureUuid,
-                    "name": "measurePopulation",
-                    "definition": cvPopulations.measurePopulation,
-                    "description": "<p>measure pop</p>"
+                    id: measureUuid,
+                    name: 'measurePopulation',
+                    definition: cvPopulations.measurePopulation,
+                    description: '<p>measure pop</p>'
                 },
                 {
-                    "id": uuidv4(),
-                    "name": "measurePopulationExclusion",
-                    "definition": cvPopulations.measurePopExclusion ? cvPopulations.measurePopExclusion : '',
-                    "description": "<p>measure exclusion</p>"
+                    id: uuidv4(),
+                    name: 'measurePopulationExclusion',
+                    definition: cvPopulations.measurePopExclusion ? cvPopulations.measurePopExclusion : '',
+                    description: '<p>measure exclusion</p>'
                 }
             ]
             if (cvPopulations.observation) {
@@ -904,39 +975,36 @@ export class MeasureGroupPage {
         user = OktaLogin.setupUserSession(altUser)
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "id": fileContents,
-                        "scoring": scoring,
-                        "populationBasis": populationBasis,
-                        "populations": popsArray
-                        ,
-                        "measureGroupTypes": [
-                            measureType
-                        ],
-                        "stratifications": [
-                        ],
-                        "improvementNotation": "Increased score indicates improvement",
-                        "measureObservations": observations
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile(measureGroupPath, response.body.id)
+            cy.readFile(measurePath)
+                .should('exist')
+                .then((fileContents) => {
+                    cy.request({
+                        url: '/api/measures/' + fileContents + '/groups',
+                        method: 'POST',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken?.value
+                        },
+                        body: {
+                            id: fileContents,
+                            scoring: scoring,
+                            populationBasis: populationBasis,
+                            populations: popsArray,
+                            measureGroupTypes: [measureType],
+                            stratifications: [],
+                            improvementNotation: 'Increased score indicates improvement',
+                            measureObservations: observations
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        cy.writeFile(measureGroupPath, response.body.id)
+                    })
                 })
-            })
         })
         return user
     }
 
     public static setMeasureGroupType(type?: MeasureType): void {
-
         if (!type) {
             type = MeasureType.process
         }
@@ -947,7 +1015,7 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == "Text") {
+            if ($ele.text() == 'Text') {
                 cy.wrap($ele).should('exist')
                 cy.wrap($ele).focus()
                 cy.wrap($ele).click()
@@ -960,7 +1028,6 @@ export class MeasureGroupPage {
     }
 
     public static includeSdeData(): void {
-
         //Add Supplemental Data Elements
         cy.get(this.leftPanelSupplementalDataTab).click()
         cy.get(this.supplementalDataDefinitionSelect).click()
@@ -972,7 +1039,10 @@ export class MeasureGroupPage {
         //Save Supplemental data
         cy.get(this.saveSupplementalDataElements).click({ force: true })
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 50000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
     }
 
@@ -982,34 +1052,36 @@ export class MeasureGroupPage {
         const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath).should('exist').then((fileContents) => {
-                // get starting data for the group
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    // add stratifications to existing group
-                    let groupWithAddedStrats = response.body[0]
-                    groupWithAddedStrats.stratifications = stratificationData
-
-                    // send update with strats added
+            cy.readFile(measurePath)
+                .should('exist')
+                .then((fileContents) => {
+                    // get starting data for the group
                     cy.request({
                         url: '/api/measures/' + fileContents + '/groups',
-                        method: 'POST',
+                        method: 'GET',
                         headers: {
                             authorization: 'Bearer ' + accessToken?.value
-                        },
-                        body: groupWithAddedStrats
+                        }
                     }).then((response) => {
-                        cy.log('success start add')
-                        expect(response.status).to.eql(201)
+                        expect(response.status).to.eql(200)
+                        // add stratifications to existing group
+                        let groupWithAddedStrats = response.body[0]
+                        groupWithAddedStrats.stratifications = stratificationData
+
+                        // send update with strats added
+                        cy.request({
+                            url: '/api/measures/' + fileContents + '/groups',
+                            method: 'POST',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken?.value
+                            },
+                            body: groupWithAddedStrats
+                        }).then((response) => {
+                            cy.log('success start add')
+                            expect(response.status).to.eql(201)
+                        })
                     })
                 })
-            })
         })
     }
 }

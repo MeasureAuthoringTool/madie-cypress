@@ -1,21 +1,22 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header";
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../Shared/Header'
 
 let measureName = 'QDMGroupStratification' + Date.now()
 let CqlLibraryName = 'QDMGroupStratificationLib' + Date.now()
-let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n\n' +
-    'using QDM version \'5.6\'\n\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
-    'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
-    'include HospiceQDM version \'1.0.000\' called Hospice\n' +
-    'include PalliativeCareQDM version \'4.0.000\' called PalliativeCare\n' +
-    'include AdvancedIllnessandFrailtyQDM version \'9.0.000\' called AIFrailLTCF\n\n' +
+let measureCQL =
+    "library BreastCancerScreening version '12.0.000'\n\n" +
+    "using QDM version '5.6'\n\n" +
+    "include MATGlobalCommonFunctionsQDM version '1.0.000' called Global\n" +
+    "include AdultOutpatientEncountersQDM version '1.0.000' called AdultOutpatientEncounters\n" +
+    "include HospiceQDM version '1.0.000' called Hospice\n" +
+    "include PalliativeCareQDM version '4.0.000' called PalliativeCare\n" +
+    "include AdvancedIllnessandFrailtyQDM version '9.0.000' called AIFrailLTCF\n\n" +
     'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\'\n' +
     'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\'\n\n' +
     'valueset "Bilateral Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1005\'\n' +
@@ -106,11 +107,16 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 
 describe('Validating Stratification tabs', () => {
-
     beforeEach('Create Measure', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2023-01-01', '2024-01-01')
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            measureName,
+            CqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            '2023-01-01',
+            '2024-01-01'
+        )
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -118,12 +124,10 @@ describe('Validating Stratification tabs', () => {
     })
 
     afterEach('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Stratification tab includes new fields and those fields have expected values', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -133,7 +137,10 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should(
+            'contain.text',
+            'Please complete the Base Configuration tab before continuing'
+        )
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -153,14 +160,17 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration Updated Successfully'
+        )
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         //Click on Stratification tab
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
@@ -170,7 +180,7 @@ describe('Validating Stratification tabs', () => {
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if (body.find(MeasureGroupPage.stratOne).length == 0 || body.find(MeasureGroupPage.stratTwo).length == 0) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
@@ -187,12 +197,16 @@ describe('Validating Stratification tabs', () => {
         //stratification 1 -- default value
         cy.get(MeasureGroupPage.stratOne).should('contain.text', 'Select Definition')
         cy.get(MeasureGroupPage.stratOne).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['Select Definition', 'Bilateral Mastectomy Diagnosis', 'Bilateral Mastectomy Procedure', 'Denominator Exclusions'])
+            expect($ele.text()).to.be.oneOf([
+                'Select Definition',
+                'Bilateral Mastectomy Diagnosis',
+                'Bilateral Mastectomy Procedure',
+                'Denominator Exclusions'
+            ])
         })
     })
 
     it('Add multiple stratifications and stratification description to the measure group', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -202,7 +216,10 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should(
+            'contain.text',
+            'Please complete the Base Configuration tab before continuing'
+        )
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -222,14 +239,17 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration Updated Successfully'
+        )
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         //Click on Stratification tab
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
@@ -239,7 +259,7 @@ describe('Validating Stratification tabs', () => {
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if (body.find(MeasureGroupPage.stratOne).length == 0 || body.find(MeasureGroupPage.stratTwo).length == 0) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
@@ -272,7 +292,10 @@ describe('Validating Stratification tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //Navigate back to stratification tab and assert the values
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
@@ -280,7 +303,7 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
+            if (body.find(MeasureGroupPage.stratAssociationOne).length != 0) {
                 Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
@@ -302,7 +325,6 @@ describe('Validating Stratification tabs', () => {
     })
 
     it('Stratification tab is not present / available when the Ratio scoring value is selected', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -312,7 +334,10 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should(
+            'contain.text',
+            'Please complete the Base Configuration tab before continuing'
+        )
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -332,21 +357,23 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration Updated Successfully'
+        )
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         //assert that Stratification is no longer available
         cy.get(MeasureGroupPage.stratificationTab).should('not.exist')
     })
 
     it('Verify error message when the Stratification return type does not match with population basis', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -356,7 +383,10 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should(
+            'contain.text',
+            'Please complete the Base Configuration tab before continuing'
+        )
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -376,14 +406,17 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration Updated Successfully'
+        )
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         //Click on Stratification tab
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
@@ -393,7 +426,7 @@ describe('Validating Stratification tabs', () => {
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if (body.find(MeasureGroupPage.stratOne).length == 0 || body.find(MeasureGroupPage.stratTwo).length == 0) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
@@ -403,11 +436,17 @@ describe('Validating Stratification tabs', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Bilateral Mastectomy Diagnosis')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
+        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should(
+            'contain.text',
+            'For Patient-based Measures, selected definitions must return a Boolean.'
+        )
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Bilateral Mastectomy Procedure')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
+        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should(
+            'contain.text',
+            'For Patient-based Measures, selected definitions must return a Boolean.'
+        )
 
         //Verify save button is disabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
