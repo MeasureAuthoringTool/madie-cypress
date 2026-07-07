@@ -1,17 +1,17 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Header } from "../../../../Shared/Header"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { CreateMeasurePage, CreateMeasureOptions } from '../../../../Shared/CreateMeasurePage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Header } from '../../../../Shared/Header'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let updatedMeasuresPageName = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
@@ -22,11 +22,8 @@ let testCaseJson = TestCaseJson.QDMTestCaseJson
 
 const measureData: CreateMeasureOptions = {}
 
-
 describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
-
     beforeEach('Create Measure, add Cohort group and Login', () => {
-
         newMeasureName = 'QDMDraft' + Date.now() + randValue
         newCqlLibraryName = 'QDMDraftLib' + Date.now() + randValue
 
@@ -49,7 +46,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 
     it('Add Draft to the versioned measure', () => {
-
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
@@ -60,7 +56,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should(
+            'contain.text',
+            'New version of measure is Successfully created'
+        )
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -68,13 +67,15 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should(
+            'contain.text',
+            'New draft created successfully.'
+        )
 
         cy.log('Draft Created Successfully')
     })
 
     it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
-
         let currentUser = Cypress.env('selectedUser')
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
@@ -86,7 +87,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should(
+            'contain.text',
+            'New version of measure is Successfully created'
+        )
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -95,34 +99,39 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
 
         //intercept draft id once measure is drafted
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
-        })
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
+            })
         cy.get(MeasuresPage.createDraftContinueBtn).wait(2000).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile('cypress/fixtures/' + currentUser + '/measureDraftId', request?.response?.body.id)
         })
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureDraftId').should('exist').then((fileDraftContents) => {
-            cy.reload(true)
-            cy.scrollTo('top')
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileDraftContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileDraftContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').scrollIntoView()
-            cy.get('[data-testid=measure-action-' + fileDraftContents + ']').click()
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should(
+            'contain.text',
+            'New draft created successfully.'
+        )
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureDraftId')
+            .should('exist')
+            .then((fileDraftContents) => {
+                cy.reload(true)
+                cy.scrollTo('top')
+                Utilities.waitForElementVisible('[data-testid=measure-action-' + fileDraftContents + ']', 30000)
+                cy.get('[data-testid=measure-action-' + fileDraftContents + ']').should('be.visible')
+                Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileDraftContents + ']', 30000)
+                cy.get('[data-testid=measure-action-' + fileDraftContents + ']').should('be.enabled')
+                cy.get('[data-testid=measure-action-' + fileDraftContents + ']').scrollIntoView()
+                cy.get('[data-testid=measure-action-' + fileDraftContents + ']').click()
 
-            //Verify version button is not visible
-            cy.get('[data-testid=draft-measure-' + fileDraftContents + ']').should('not.exist')
-        })
+                //Verify version button is not visible
+                cy.get('[data-testid=draft-measure-' + fileDraftContents + ']').should('not.exist')
+            })
     })
 })
 
 describe('Draft and Version Validations -- CQL and Group are correct', () => {
-
     beforeEach('Create Measure, Group, Test case and Login', () => {
-
         newMeasureName = 'QDMDraft2' + Date.now() + randValue
         newCqlLibraryName = 'QDMDraft2Lib' + Date.now() + randValue
 
@@ -145,13 +154,15 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-
         //Delete Drafted Measure
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + updatedMeasuresPageName + '?')
+        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should(
+            'contain.text',
+            'Are you sure you want to delete ' + updatedMeasuresPageName + '?'
+        )
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
     })
@@ -171,10 +182,15 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         Utilities.waitForElementVisible('[data-testid="toast-success"]', 18500)
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should(
+            'contain.text',
+            'New version of measure is Successfully created'
+        )
 
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
+        cy.log('Drafting the versioned measure')
+        cy.reload(true)
 
         MeasuresPage.selectMeasure()
         MeasuresPage.actionCenter('draft')
@@ -189,7 +205,10 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should(
+            'contain.text',
+            'New draft created successfully.'
+        )
         cy.log('Draft Created Successfully')
 
         //verify CQL after draft
