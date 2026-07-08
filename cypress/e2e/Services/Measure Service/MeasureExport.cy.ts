@@ -1,5 +1,4 @@
 import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
-import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
@@ -52,13 +51,72 @@ const PopDenom = 'denom'
 const PopDenex = 'ipp'
 const PopDenexcep = 'denom'
 const PopNumex = 'numeratorExclusion'
+const steward = {
+    name: "SemanticBits",
+    id: "64120f265de35122e68dac40",
+    oid: "02c84f54-919b-4464-bf51-a1438f2710e2",
+    url: "https://semanticbits.com/"
+}
+const developers = [
+    {
+        id: "64120f265de35122e68dabf7",
+        name: "Academy of Nutrition and Dietetics",
+        oid: "2.16.840.1.113883.3.6308",
+        url: "www.eatrightpro.org"
+    }
+]
+const qiCoreExportGroup = {
+    scoring: 'Proportion',
+    populationBasis: 'Boolean',
+    populations: [
+        TestData.population('initialPopulation', PopIniPop),
+        TestData.population('denominator', PopDenom),
+        TestData.population('denominatorExclusion', PopDenex),
+        TestData.population('denominatorException', PopDenexcep),
+        TestData.population('numerator', PopNum),
+        TestData.population('numeratorExclusion', PopNumex)
+    ],
+    scoringUnit: {
+        label: "ml milliLiters",
+        value: {
+            code: "ml",
+            name: "milliLiters",
+            guidance: "",
+            system: "https://clinicaltables.nlm.nih.gov/"
+        }
+    },
+    measureGroupTypes: ["Outcome"],
+    improvementNotation: "Increased score indicates improvement"
+}
 
 const measureData: CreateMeasureOptions = {}
+
+const writeCurrentMeasureFixtures = (responseBody: {
+    id: string
+    versionId: string
+    measureSetId: string
+}): void => {
+    TestData.writeFixture('measureId', responseBody.id)
+    TestData.writeFixture('versionId', responseBody.versionId)
+    TestData.writeFixture('measureSetId', responseBody.measureSetId)
+}
+
+const requestCurrentMeasureExport = (options: Partial<Cypress.RequestOptions> = {}) => {
+    return TestData.requestMeasureExport<any>(options)
+}
+
+const expectExportFailure = (expectedMessage: (measureId: string) => string): void => {
+    TestData.readMeasureId().then((measureId) => {
+        requestCurrentMeasureExport({ failOnStatusCode: false }).then((response) => {
+            expect(response.status).to.eql(409)
+            expect(response.body.message).to.eql(expectedMessage(measureId))
+        })
+    })
+}
 
 describe('QI-Core Measure Export', () => {
 
     beforeEach('Create Measure and set access token', () => {
-        const currentUser = Cypress.env('selectedUser')
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
@@ -67,70 +125,10 @@ describe('QI-Core Measure Export', () => {
             TestData.expectSavedMeasureCql(response)
         })
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((retrievedMeasureID) => {
-                cy.request({
-                    url: '/api/measures/' + retrievedMeasureID + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "scoring": 'Proportion',
-                        "populationBasis": 'Boolean',
-                        "populations": [
-                            {
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": PopIniPop
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominator",
-                                "definition": PopDenom
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominatorExclusion",
-                                "definition": PopDenex
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominatorException",
-                                "definition": PopDenexcep
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numerator",
-                                "definition": PopNum
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numeratorExclusion",
-                                "definition": PopNumex
-                            }
-                        ],
-                        "scoringUnit": {
-                            "label": "ml milliLiters",
-                            "value": {
-                                "code": "ml",
-                                "name": "milliLiters",
-                                "guidance": "",
-                                "system": "https://clinicaltables.nlm.nih.gov/"
-                            }
-                        },
-                        "measureGroupTypes": [
-                            "Outcome"
-                        ],
-                        "improvementNotation": "Increased score indicates improvement"
-                    }
-                }).then((response) => {
-                    const currentUser = Cypress.env('selectedUser')
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/groupId', response.body.id)
-                })
-            })
+        TestData.requestMeasureGroup('POST', qiCoreExportGroup).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            TestData.writeFixture('groupId', response.body.id)
         })
 
         OktaLogin.setupUserSession(false)
@@ -143,21 +141,9 @@ describe('QI-Core Measure Export', () => {
     })
 
     it('Confirm the export end point returns a contentType of "application/zip" for QI-Core Measure', () => {
-        const currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/exports',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(201)
-                    expect(response.body).is.not.null
-                })
-            })
+        requestCurrentMeasureExport().then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body).is.not.null
         })
     })
 })
@@ -178,23 +164,12 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
-        const currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/exports',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no population criteria on the measure.')
-                })
-            })
-        })
+        expectExportFailure(
+            (measureId) =>
+                'Response could not be completed for Measure with ID ' +
+                measureId +
+                ', since there is no population criteria on the measure.'
+        )
     })
 })
 
@@ -214,23 +189,12 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
-        const currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/exports',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no population criteria on the measure.')
-                })
-            })
-        })
+        expectExportFailure(
+            (measureId) =>
+                'Response could not be completed for Measure with ID ' +
+                measureId +
+                ', since there is no population criteria on the measure.'
+        )
     })
 })
 
@@ -250,23 +214,12 @@ describe('Error Message on Measure Export when the Measure does not have Populat
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
-        const currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/exports',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no population criteria on the measure.')
-                })
-            })
-        })
+        expectExportFailure(
+            (measureId) =>
+                'Response could not be completed for Measure with ID ' +
+                measureId +
+                ', since there is no population criteria on the measure.'
+        )
     })
 })
 
@@ -279,34 +232,20 @@ describe('Error Message on Measure Export when the Measure does not have Steward
 
         OktaLogin.setupUserSession(false)
 
-        //Create Measure with out Steward and Developer
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measure',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + accessToken?.value
-                },
-                body: {
-                    "measureName": newMeasureName,
-                    "cqlLibraryName": newCqlLibraryName,
-                    "model": 'QI-Core v4.1.1',
-                    "versionId": uuidv4(),
-                    "measureSetId": uuidv4(),
-                    "ecqmTitle": 'eCQMTitle',
-                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
-                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
-                    'measureMetaData': {
-                        "experimental": false,
-                        "description": "SemanticBits"
-                    }
-                }
-            }).then((response) => {
-                const currentUser = Cypress.env('selectedUser')
-                expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
-            })
+        TestData.requestMeasure({
+            measureName: newMeasureName,
+            cqlLibraryName: newCqlLibraryName,
+            model: 'QI-Core v4.1.1',
+            ecqmTitle: 'eCQMTitle',
+            measurementPeriodStart: mpStartDate + "T00:00:00.000Z",
+            measurementPeriodEnd: mpEndDate + "T00:00:00.000Z",
+            measureMetaData: {
+                experimental: false,
+                description: "SemanticBits"
+            }
+        }).then((response) => {
+            expect(response.status).to.eql(201)
+            writeCurrentMeasureFixtures(response.body)
         })
     })
 
@@ -316,23 +255,12 @@ describe('Error Message on Measure Export when the Measure does not have Steward
     })
 
     it('Verify error message on Measure Export when the Measure does not have Steward and Developer', () => {
-        const currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/exports',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there are no associated developers in metadata.')
-                })
-            })
-        })
+        expectExportFailure(
+            (measureId) =>
+                'Response could not be completed for Measure with ID ' +
+                measureId +
+                ', since there are no associated developers in metadata.'
+        )
     })
 })
 
@@ -345,46 +273,21 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
         OktaLogin.setupUserSession(false)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measure',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + accessToken?.value
-                },
-                body: {
-                    "measureName": newMeasureName,
-                    "cqlLibraryName": newCqlLibraryName,
-                    "model": 'QI-Core v4.1.1',
-                    "versionId": uuidv4(),
-                    "measureSetId": uuidv4(),
-                    "ecqmTitle": 'eCQMTitle',
-                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
-                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
-                    'measureMetaData': {
-                        "experimental": false,
-                        "steward": {
-                            "name": "SemanticBits",
-                            "id": "64120f265de35122e68dac40",
-                            "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
-                            "url": "https://semanticbits.com/"
-
-                        }, "developers": [
-                            {
-                                "id": "64120f265de35122e68dabf7",
-                                "name": "Academy of Nutrition and Dietetics",
-                                "oid": "2.16.840.1.113883.3.6308",
-                                "url": "www.eatrightpro.org"
-                            }
-                        ]
-                    }
-                }
-            }).then((response) => {
-                const currentUser = Cypress.env('selectedUser')
-                expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
-            })
+        TestData.requestMeasure({
+            measureName: newMeasureName,
+            cqlLibraryName: newCqlLibraryName,
+            model: 'QI-Core v4.1.1',
+            ecqmTitle: 'eCQMTitle',
+            measurementPeriodStart: mpStartDate + "T00:00:00.000Z",
+            measurementPeriodEnd: mpEndDate + "T00:00:00.000Z",
+            measureMetaData: {
+                experimental: false,
+                steward,
+                developers
+            }
+        }).then((response) => {
+            expect(response.status).to.eql(201)
+            writeCurrentMeasureFixtures(response.body)
         })
     })
 
@@ -394,23 +297,12 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/exports',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no description in metadata.')
-                })
-            })
-        })
+        expectExportFailure(
+            (measureId) =>
+                'Response could not be completed for Measure with ID ' +
+                measureId +
+                ', since there is no description in metadata.'
+        )
     })
 })
 
@@ -442,21 +334,9 @@ describe('QDM Measure Export', () => {
     })
 
     it('Successful QDM Measure Export', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/exports',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(201)
-                    expect(response.body).is.not.null
-                })
-            })
+        requestCurrentMeasureExport().then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body).is.not.null
         })
     })
 })

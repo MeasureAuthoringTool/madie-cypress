@@ -132,6 +132,38 @@ export type CqlTranslationResponse = {
     xml: string
 }
 
+export type CqlLibraryBody = {
+    id?: string
+    cqlLibraryName: string
+    model: string
+    createdBy?: string
+    description?: string
+    publisher?: string
+    librarySetId?: string
+    version?: string
+    cql?: string
+    cqlErrors?: boolean
+    [key: string]: any
+}
+
+export type CqlLibrarySearchBody = {
+    searchField: string
+    optionalSearchProperties: string[]
+}
+
+export type CqlLibrarySearchResponse<T = CqlLibraryBody> = {
+    content: T[]
+    totalPages?: number
+    totalElements?: number
+}
+
+export type CqlLibraryDraftBody = {
+    id?: string
+    cqlLibraryName: string
+    model: string
+    [key: string]: any
+}
+
 export type MeasureCqlSaveOptions = {
     measureNumber?: number
     owner?: TestUserScope
@@ -275,6 +307,14 @@ export class TestData {
         } as MeasureBody
     }
 
+    public static cqlLibraryBody(body: Partial<CqlLibraryBody>): CqlLibraryBody {
+        return {
+            librarySetId: uuidv4(),
+            cql: '',
+            ...body
+        } as CqlLibraryBody
+    }
+
     public static requestMeasure<T = any>(
         body: Partial<MeasureBody>,
         options: Partial<Cypress.RequestOptions> = {}
@@ -284,6 +324,145 @@ export class TestData {
             url: '/api/measure',
             method: 'POST',
             body: this.measureBody(body)
+        })
+    }
+
+    public static requestCqlLibrary<T = CqlLibraryBody>(
+        body: Partial<CqlLibraryBody>,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: '/api/cql-libraries',
+            method: 'POST',
+            body: this.cqlLibraryBody(body)
+        })
+    }
+
+    public static readCqlLibrary<T = CqlLibraryBody>(
+        libraryNumber = 0,
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/cql-libraries/${libraryId}`,
+                method: 'GET'
+            })
+        })
+    }
+
+    public static requestCqlLibraryById<T = CqlLibraryBody>(
+        method: 'GET' | 'PUT' | 'DELETE',
+        libraryId: string,
+        options: Partial<Cypress.RequestOptions> = {},
+        body?: Partial<CqlLibraryBody>
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/cql-libraries/${libraryId}`,
+            method,
+            ...(body ? { body } : {})
+        })
+    }
+
+    public static updateCqlLibrary<T = CqlLibraryBody>(
+        body: CqlLibraryBody,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/cql-libraries/${body.id}`,
+            method: 'PUT',
+            body
+        })
+    }
+
+    public static updateCurrentCqlLibrary<T = CqlLibraryBody>(
+        body: (libraryId: string) => Partial<CqlLibraryBody>,
+        options: Partial<Cypress.RequestOptions> = {},
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/cql-libraries/${libraryId}`,
+                method: 'PUT',
+                body: body(libraryId)
+            })
+        })
+    }
+
+    public static searchCqlLibraries<T = CqlLibrarySearchResponse>(
+        body: Partial<CqlLibrarySearchBody> = {},
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: '/api/cql-libraries/searches',
+            method: 'PUT',
+            body: {
+                searchField: '',
+                optionalSearchProperties: [''],
+                ...body
+            }
+        })
+    }
+
+    public static versionCqlLibrary<T extends CqlLibraryBody = CqlLibraryBody>(
+        expectedVersionNumber?: string,
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser',
+        options: Partial<Cypress.RequestOptions> = {},
+        fixtureOwner: FixtureOwner = owner
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        this.setupUserScope(owner)
+
+        return this.readCqlLibraryId(libraryNumber, fixtureOwner).then((libraryId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/cql-libraries/version/${libraryId}?isMajor=true`,
+                method: 'PUT'
+            }).then((response) => {
+                if (expectedVersionNumber !== undefined) {
+                    expect(response.body.version).to.eql(expectedVersionNumber)
+                }
+
+                return response
+            })
+        })
+    }
+
+    public static draftCqlLibrary<T = CqlLibraryBody>(
+        body: (libraryId: string) => CqlLibraryDraftBody,
+        options: Partial<Cypress.RequestOptions> = {},
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser',
+        fixtureOwner: FixtureOwner = owner
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        this.setupUserScope(owner)
+
+        return this.readCqlLibraryId(libraryNumber, fixtureOwner).then((libraryId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/cql-libraries/draft/${libraryId}`,
+                method: 'POST',
+                body: body(libraryId)
+            })
+        })
+    }
+
+    public static requestVersionedCqlLibrary<T = CqlLibraryBody>(
+        libraryName: string,
+        version: string,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/cql-libraries/versioned?name=${libraryName}&version=${version}`,
+            method: 'GET'
         })
     }
 
@@ -309,6 +488,20 @@ export class TestData {
             return this.requestWithAccessToken<T>({
                 ...options,
                 url: `/api/measures/${measureId}/bundle`,
+                method: 'GET'
+            })
+        })
+    }
+
+    public static requestMeasureExport<T = unknown>(
+        options: Partial<Cypress.RequestOptions> = {},
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(measureNumber, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/exports`,
                 method: 'GET'
             })
         })
@@ -506,6 +699,23 @@ export class TestData {
         }) as Cypress.Chainable<Cypress.Response<T>>
     }
 
+    public static requestMeasureGroupById<T = MeasureGroupBody>(
+        method: 'DELETE',
+        groupId: string,
+        body: Cypress.RequestBody,
+        measureNumber = 0,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(measureNumber).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/groups/${groupId}`,
+                method,
+                body
+            })
+        }) as Cypress.Chainable<Cypress.Response<T>>
+    }
+
     public static requestMeasureGroupStratification<T = StratificationDefinition>(
         method: 'POST' | 'PUT' | 'DELETE',
         body?: StratificationDefinition | ((stratificationId: string) => StratificationDefinition),
@@ -547,7 +757,7 @@ export class TestData {
     }
 
     public static versionMeasure(
-        versionType: 'major' | 'minor' = 'major',
+        versionType: 'major' | 'minor' | 'patch' = 'major',
         measureNumber = 0,
         options: Partial<Cypress.RequestOptions> = {}
     ): Cypress.Chainable<Cypress.Response<VersionedMeasureResponse>> {

@@ -102,45 +102,24 @@ describe('Measure Versioning', () => {
     })
 
     it('Unsuccessful Measure Versioning when measure does not have population criteria', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure does not have at least one Population Criteria.')
-                })
+        TestData.readMeasureId().then((measureId) => {
+            TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure does not have at least one Population Criteria.')
             })
         })
     })
 
     it('Successful Measure Versioning', () => {
         
-        let currentUser = Cypress.env('selectedUser')
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
             TestData.expectSavedMeasureCql(response)
         })
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.request({
-                    url: '/api/measures/' + measureId + '/version?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql('1.0.000')
-                })
-            })
+        TestData.versionMeasure().then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.version).to.eql('1.0.000')
         })
     })
 })
@@ -163,23 +142,13 @@ describe('Measure Version : Non Measure owner validation', () => {
 
     it('Non Measure owner unable to version Measure', () => {
 
-        const currentUser = Cypress.env('selectedUser')
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.setupUserSession(true)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(403)
-                    expect(response.body.message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
-                })
+        TestData.readMeasureId().then((measureId) => {
+            TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
+                expect(response.status).to.eql(403)
+                expect(response.body.message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
             })
         })
     })
@@ -210,20 +179,10 @@ describe('Version Measure without CQL', () => {
     })
 
     it('User can not version Measure if there is no CQL', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has no CQL.')
-                })
+        TestData.readMeasureId().then((measureId) => {
+            TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has no CQL.')
             })
         })
     })
@@ -260,22 +219,11 @@ describe('Version Measure with invalid CQL', () => {
     })
 
     it('User can not version Measure if the CQL has errors', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has CQL errors.')
-                })
+        TestData.readMeasureId().then((measureId) => {
+            TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has CQL errors.')
             })
         })
     })
 })
-

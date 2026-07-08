@@ -286,6 +286,7 @@ describe('Measure: CQL Editor', () => {
 
         //Validate the lack of error(s) in CQL Editor
         cy.get(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
+        CQLEditorPage.collapseEditor()
 
         //Navigate away from the page
         cy.get(EditMeasurePage.measureDetailsTab).click()
