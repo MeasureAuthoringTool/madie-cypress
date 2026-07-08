@@ -681,10 +681,11 @@ export class TestData {
         method: 'POST' | 'PUT',
         body: MeasureGroupBody,
         measureNumber = 0,
-        options: Partial<Cypress.RequestOptions> = {}
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
     ): Cypress.Chainable<Cypress.Response<T>> {
         return this.withAccessToken((accessToken) => {
-            return this.readMeasureId(measureNumber).then((measureId) => {
+            return this.readMeasureId(measureNumber, owner).then((measureId) => {
                 return cy.request({
                     ...options,
                     url: `/api/measures/${measureId}/groups`,

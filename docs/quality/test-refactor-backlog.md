@@ -4,6 +4,33 @@ Last updated: 2026-07-08
 
 Stable rules live in `docs/quality/cypress-automation-guidelines.md`. Keep this backlog limited to current state, next actions, measured audit signal, and validation.
 
+# AI Backlog Workflow
+
+This backlog is the execution plan for repository improvements.
+
+After every completed refactor:
+
+1. Determine whether the completed item can be marked Done.
+2. Determine whether priorities have changed.
+3. Determine whether new work has been discovered.
+4. Recommend updates before moving to the next backlog item.
+
+Do not skip unfinished work unless a higher-priority issue is found.
+
+## AI Execution Rules
+
+Always work on only one backlog item at a time.
+
+A backlog item is complete when:
+
+- The targeted duplication has been removed.
+- Existing helpers have been reused where appropriate.
+- Behavior is unchanged.
+- Validation passes.
+- Documentation has been evaluated for updates.
+
+Do not begin the next backlog item until the current one is complete.
+
 ## Current Direction
 
 - Keep service setup and request mechanics behind `TestData` and domain helpers.
@@ -11,31 +38,54 @@ Stable rules live in `docs/quality/cypress-automation-guidelines.md`. Keep this 
 - Prioritize changes that reduce repeated fixture paths, token plumbing, fixed waits, forced interactions, skipped tests, or broad exception handling.
 - Update this file only when priorities, decisions, audit counts, or done signals materially change.
 
+## Starting Point
+
+Current active item:
+
+- P2 shared helper hardening, next target `cypress/Shared/TestCasesPage.ts`
+
+Why this is the best next step:
+
+- P1 CQL library service cleanup is already proven.
+- `Utilities.deleteLibrary` and the service-style API setup in `MeasureGroupPage.ts` are already moved behind `TestData`.
+- `TestCasesPage.ts` is still the largest remaining shared helper concentration for fixture-path plumbing and forced interactions.
+
+Work boundary for the next slice:
+
+- Stay inside `TestCasesPage.ts` unless a small supporting `TestData` change is required.
+- Prefer moving service-style setup and path conventions behind existing helpers before touching UI interaction patterns.
+- Keep negative assertions explicit and avoid combining helper hardening with wait/force cleanups unless the same code path requires it.
+
 ## Current State
 
 Recently proven service/helper slices:
 
 - Measure service: `Measure.cy.ts`, `MeasureBundle.cy.ts`, `MeasureExport.cy.ts`, `DraftMeasure.cy.ts`, `MeasureVersion.cy.ts`, `QI Core Test-Cases.cy.ts`.
 - QDM service: `QDM Test-Cases.cy.ts`, `QDM Measure.cy.ts`, `QDMMeasureVersion.cy.ts`.
-- CQL library service: `CreateCQL-Library.cy.ts`, `EditCQL-Library.cy.ts`, `VersionAndDraftCQL-Library.cy.ts`.
+- CQL library service: `CreateCQL-Library.cy.ts`, `EditCQL-Library.cy.ts`, `VersionAndDraftCQL-Library.cy.ts`, `CQLLibraryDelete.cy.ts`.
 - Shared create/fixture path: `CreateMeasurePage.ts` now routes fixture writes and measure create/clone requests through `TestData` helpers.
+- Shared cleanup/request helpers: `Utilities.deleteLibrary` and the API create/update setup in `MeasureGroupPage.ts` now route fixture reads and authenticated requests through `TestData`.
+
+Recently diagnosed non-refactor failures:
+
+- `CQLLibraryDelete.cy.ts` still fails on current `master` because transfer cases return inactive-user `400` responses and admin delete-all cases return `403 insufficient_scope`. Treat that as environment or account-state drift, not as the next refactor target.
 
 ## Latest Audit Signal
 
-Command: `npm run quality:audit`
+Command: `npm run quality:no-focused-tests`
 
-- Inventory: 256 specs / 65737 spec lines; 29 shared files / 18839 shared lines; 3 support files / 637 support lines; 8 scripts / 1296 script lines.
+- Inventory: 256 specs / 65636 spec lines; 29 shared files / 18665 shared lines; 3 support files / 637 support lines; 8 scripts / 1296 script lines.
 - Skipped tests: 11.
-- Manual fixture path plumbing: 270.
-- Manual access token plumbing: 117.
+- Manual fixture path plumbing: 238.
+- Manual access token plumbing: 97.
 - Fixed waits: 101.
 - Forced interactions: 195.
 - Global uncaught exception suppression: 1.
 
 Largest risk concentrations:
 
-- `CQLLibraryDelete.cy.ts`: top remaining CQL library token-plumbing target.
-- `TestCasesPage.ts`, `MeasureGroupPage.ts`, `CreateMeasurePage.ts`, `Utilities.ts`: shared helper and page-object infrastructure debt.
+- `TestCasesPage.ts`: top remaining shared helper target for fixture-path plumbing, service-style setup, and forced interactions.
+- `CreateMeasurePage.ts`, `Utilities.ts`, and remaining service-style helpers inside shared page objects: shared helper and page-object infrastructure debt after `TestCasesPage.ts`.
 - `CorrectExpectedValues.cy.ts`, `DeleteTest-Case.cy.ts`, and selected admin/measure/test-case service specs: remaining service-tail cleanup.
 - `MeasureListNewColumnsSort.cy.ts`, `CQLLibraryListPageColumnSort.cy.ts`, export specs, highlighting specs, and editor flows: UI reliability debt from waits and forced interactions.
 - `cypress/support/e2e.ts`: global `uncaught:exception` suppression.
@@ -44,17 +94,21 @@ Largest risk concentrations:
 
 ### P1: CQL Library Service Cleanup
 
-Next target: `cypress/e2e/Services/CQL Library Service/CQLLibraryDelete.cy.ts`
+Status: Done
 
-Done when repeated token/header/request setup moves behind shared helpers, negative states stay explicit, and focused library validation passes or exposes a diagnosed non-refactor failure.
+Completed signal:
+
+- Repeated token/header/request setup moved behind shared helpers.
+- Negative states stayed explicit.
+- Focused validation exposed preexisting non-refactor failures instead of helper regressions.
 
 ### P2: Shared Helper and Infrastructure Hardening
 
-Start with:
+Current target order:
 
-- `Utilities.deleteLibrary`
-- `MeasureGroupPage.ts`
 - `TestCasesPage.ts`
+- `CreateMeasurePage.ts`
+- remaining `Utilities.ts` and shared page-object service helpers
 
 Done when shared helpers own path conventions and common request setup, and page objects no longer spread service setup mechanics.
 
@@ -81,7 +135,7 @@ Candidates:
 
 After each meaningful slice:
 
-- Run the audit and compare the current diff.
+- Run the quality scan and compare the current diff.
 - Prefer changes that remove a class of duplication across multiple specs.
 - Record only durable decisions or changed counts.
 - Validate with static checks and at least one focused spec for the changed helper path.

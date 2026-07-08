@@ -113,6 +113,35 @@ Recommended Updates
 
 Only recommend updates for durable patterns.
 
+## Backlog Maintenance
+
+At the end of every completed task, evaluate whether the refactor backlog should be updated.
+
+Only recommend backlog updates when one of the following is true:
+
+- A backlog item is complete.
+- A higher-priority issue was discovered.
+- A lower-priority item is no longer needed.
+- Audit counts have materially changed.
+- A new refactor target was discovered.
+- Validation proved a previous assumption incorrect.
+
+Do not modify the backlog for partial progress.
+
+Return one of the following:
+
+Backlog Updates
+
+None
+
+or
+
+Recommended Backlog Updates
+
+- Section
+- Reason
+- Proposed text
+
 ## Pull Requests
 
 When asked to create a PR or summarize changes, follow:
