@@ -27,12 +27,108 @@ let TCDescription = 'DENOMFail1651609688032'
 let TCJson = TestCaseJson.QDMTestCaseJson
 
 const measureData: CreateMeasureOptions = {}
+const qdmPopulationValues = [
+    {
+        name: 'initialPopulation',
+        expected: false,
+        actual: false
+    },
+    {
+        name: 'denominator',
+        expected: false,
+        actual: false
+    },
+    {
+        name: 'denominatorExclusion',
+        expected: false,
+        actual: false
+    },
+    {
+        name: 'denominatorException',
+        expected: false,
+        actual: false
+    },
+    {
+        name: 'numerator',
+        expected: false,
+        actual: false
+    },
+    {
+        name: 'numeratorExclusion',
+        expected: false,
+        actual: false
+    }
+]
+
+const qdmGroupBody = () => ({
+    scoring: measureScoring,
+    populationBasis: 'true',
+    populations: [
+        TestData.population('initialPopulation', 'Initial Population', {
+            associationType: null,
+            description: ''
+        })
+    ],
+    measureObservations: null,
+    groupDescription: '',
+    improvementNotation: '',
+    rateAggregation: '',
+    measureGroupTypes: null,
+    scoringUnit: '',
+    stratifications: []
+})
+
+const qdmTestCaseBody = (
+    overrides: Record<string, unknown> = {},
+    withGroupPopulations = false
+): Cypress.Chainable<any> => {
+    if (!withGroupPopulations) {
+        return cy.wrap({
+            name: TCName,
+            title: TCTitle,
+            series: TCSeries,
+            description: TCDescription,
+            json: TCJson,
+            ...overrides
+        })
+    }
+
+    return TestData.readMeasureGroupId().then((groupId) => ({
+        name: TCName,
+        title: TCTitle,
+        series: TCSeries,
+        description: TCDescription,
+        json: TCJson,
+        hapiOperationOutcome: {
+            code: 201,
+            message: null,
+            outcomeResponse: null
+        },
+        groupPopulations: [
+            {
+                groupId,
+                scoring: measureScoring,
+                populationValues: qdmPopulationValues
+            }
+        ],
+        ...overrides
+    }))
+}
+
+const qdmTestCaseListBody = (count = 3): Record<string, unknown>[] => {
+    return Array.from({ length: count }, (_, index) => ({
+        name: TCName + String(index + 1),
+        title: TCTitle + String(index + 1),
+        series: TCSeries,
+        description: TCDescription,
+        json: TCJson
+    }))
+}
 
 describe('Test Case population values based on Measure Group population definitions', () => {
 
     beforeEach('Create Measure and measure group', () => {
 
-        const currentUser = Cypress.env('selectedUser')
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
         TCName = 'TCName' + randTCNameValue
 
@@ -54,114 +150,21 @@ describe('Test Case population values based on Measure Group population definiti
             TestData.expectSavedMeasureCql(response)
         })
 
-        //create group
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "scoring": "Cohort",
-                        "populationBasis": "true",
-                        "populations": [
-                            {
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": "Initial Population",
-                                "associationType": null,
-                                "description": ""
-                            }
-                        ],
-                        "measureObservations": null,
-                        "groupDescription": "",
-                        "improvementNotation": "",
-                        "rateAggregation": "",
-                        "measureGroupTypes": null,
-                        "scoringUnit": "",
-                        "stratifications": [],
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
-                })
-            })
+        TestData.requestMeasureGroup<any>('POST', qdmGroupBody() as any).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            TestData.writeFixture('groupId', response.body.id)
         })
 
-        //create test case
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/groupId').should('exist').then((groupIdFc) => {
-                    cy.request({
-                        url: '/api/measures/' + id + '/test-cases',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'POST',
-                        body: {
-                            "name": TCName,
-                            "title": TCTitle,
-                            "series": TCSeries,
-                            "description": TCDescription,
-                            "json": TCJson,
-                            "hapiOperationOutcome": {
-                                "code": 201,
-                                "message": null,
-                                "outcomeResponse": null
-                            },
-                            "groupPopulations": [{
-                                "groupId": groupIdFc,
-                                "scoring": measureScoring,
-                                "populationValues": [
-                                    {
-                                        "name": "initialPopulation",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "name": "denominator",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "name": "denominatorExclusion",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "name": "denominatorException",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "name": "numerator",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "name": "numeratorExclusion",
-                                        "expected": false,
-                                        "actual": false
-                                    }
-
-                                ]
-                            }]
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        expect(response.body.series).to.eql(TCSeries)
-                        expect(response.body.title).to.eql(TCTitle)
-                        expect(response.body.description).to.eql(TCDescription)
-                        expect(response.body.json).to.be.exist
-
-                        let currentUser = Cypress.env('selectedUser')
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
-                    })
-                })
+        qdmTestCaseBody({}, true).then((body) => {
+            TestData.requestMeasureTestCase<any>('POST', body as any).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.series).to.eql(TCSeries)
+                expect(response.body.title).to.eql(TCTitle)
+                expect(response.body.description).to.eql(TCDescription)
+                expect(response.body.json).to.be.exist
+                TestData.writeFixture('testCaseId', response.body.id)
             })
         })
     })
@@ -172,32 +175,20 @@ describe('Test Case population values based on Measure Group population definiti
     })
 
     it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
-
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
-                    cy.request({
-                        url: '/api/measures/' + id + '/test-cases/' + testCaseId,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'GET',
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.id).to.eql(testCaseId)
-                        expect(response.body.series).to.eql(TCSeries)
-                        expect(response.body.json).to.be.exist
-                        expect(response.body.json).to.eql(TCJson)
-                        expect(response.body.title).to.eql(TCTitle)
-                        expect(response.body.groupPopulations[0].populationValues[0].name).to.eq('initialPopulation')
-                        expect(response.body['groupPopulations'][0].populationValues[1].name).to.eq('denominator')
-                        expect(response.body['groupPopulations'][0].populationValues[2].name).to.eq('denominatorExclusion')
-                        expect(response.body['groupPopulations'][0].populationValues[3].name).to.eq('denominatorException')
-                        expect(response.body['groupPopulations'][0].populationValues[4].name).to.eq('numerator')
-                        expect(response.body['groupPopulations'][0].populationValues[5].name).to.eq('numeratorExclusion')
-                    })
-                })
+        TestData.readTestCaseId().then((testCaseId) => {
+            TestData.requestMeasureTestCase<any>('GET').then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body.id).to.eql(testCaseId)
+                expect(response.body.series).to.eql(TCSeries)
+                expect(response.body.json).to.be.exist
+                expect(response.body.json).to.eql(TCJson)
+                expect(response.body.title).to.eql(TCTitle)
+                expect(response.body.groupPopulations[0].populationValues[0].name).to.eq('initialPopulation')
+                expect(response.body['groupPopulations'][0].populationValues[1].name).to.eq('denominator')
+                expect(response.body['groupPopulations'][0].populationValues[2].name).to.eq('denominatorExclusion')
+                expect(response.body['groupPopulations'][0].populationValues[3].name).to.eq('denominatorException')
+                expect(response.body['groupPopulations'][0].populationValues[4].name).to.eq('numerator')
+                expect(response.body['groupPopulations'][0].populationValues[5].name).to.eq('numeratorExclusion')
             })
         })
     })
@@ -233,73 +224,51 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
     })
 
     it('Create Test Case', () => {
-        let currentUser = Cypress.env('selectedUser')
         let randValue = (Math.floor((Math.random() * 2000) + 3))
         let title = 'test case title  - _'
         let series = 'test case series  - _'
         let description = 'DENOME pass Test HB - _'
-        //Add Test Case to the Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'POST',
-                    body: {
-                        "name": TCName + randValue + 4,
-                        "title": title,
-                        "series": series,
-                        "description": description,
-                        "json": TCJson,
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    expect(response.body.series).to.eql(series)
-                    expect(response.body.title).to.eql(title)
-                    expect(response.body.description).to.eql(description)
-                    expect(response.body.json).to.be.exist
-                    expect(response.body.json).to.eql(TCJson)
 
-                    let currentUser = Cypress.env('selectedUser')
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
-                })
+        qdmTestCaseBody({
+            name: TCName + randValue + 4,
+            title,
+            series,
+            description
+        }).then((body) => {
+            TestData.requestMeasureTestCase<any>('POST', body as any).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.series).to.eql(series)
+                expect(response.body.title).to.eql(title)
+                expect(response.body.description).to.eql(description)
+                expect(response.body.json).to.be.exist
+                expect(response.body.json).to.eql(TCJson)
+                TestData.writeFixture('testCaseId', response.body.id)
             })
         })
     })
 
     it('Edit Test Case', () => {
-        let currentUser = Cypress.env('selectedUser')
-        //Edit created Test Case
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testcaseid) => {
-                    cy.request({
-                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': testcaseid,
-                            'name': "IPPPass",
-                            'series': "WhenBP120",
-                            'title': TCTitle,
-                            'description': "IPP Pass Test BP <120",
-                            'json': newTCJson
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.id).to.eql(testcaseid)
-                        expect(response.body.json).to.be.exist
-                        expect(response.body.json).to.eql(newTCJson)
-                        expect(response.body.series).to.eql("WhenBP120")
-                        expect(response.body.title).to.eql(TCTitle)
-                        expect(response.body.json).to.be.exist
-                        cy.writeFile('cypress/fixtures/' + currentUser + '/testCaseId', response.body.id)
-                    })
+        qdmTestCaseBody({
+            name: "IPPPass",
+            series: "WhenBP120",
+            title: TCTitle,
+            description: "IPP Pass Test BP <120",
+            json: newTCJson
+        }).then((body) => {
+            TestData.readTestCaseId().then((testCaseId) => {
+                TestData.requestMeasureTestCase<any>(
+                    'PUT',
+                    { ...body, id: testCaseId } as any
+                ).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.eql(testCaseId)
+                    expect(response.body.json).to.be.exist
+                    expect(response.body.json).to.eql(newTCJson)
+                    expect(response.body.series).to.eql("WhenBP120")
+                    expect(response.body.title).to.eql(TCTitle)
+                    expect(response.body.json).to.be.exist
+                    TestData.writeFixture('testCaseId', response.body.id)
                 })
             })
         })
@@ -335,26 +304,36 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 
     it('Create Test Case: Description more than 250 characters', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'POST',
-                    body: {
-                        'name': "DENOMFail",
-                        'series': "WhenBP120",
-                        'title': "test case title",
-                        'description': "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
-                            "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
-                            "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr",
-                        'json': TCJson
-                    }
-                }).then((response) => {
+        qdmTestCaseBody({
+            name: "DENOMFail",
+            series: "WhenBP120",
+            title: "test case title",
+            description: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
+                "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
+                "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr"
+        }).then((body) => {
+            TestData.requestMeasureTestCase<any>('POST', body as any, { failOnStatusCode: false }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.validationErrors.description).to.eql('Test Case Description can not be more than 250 characters.')
+            })
+        })
+    })
+
+    it('Edit Test Case: Description more than 250 characters', () => {
+        qdmTestCaseBody({
+            name: "IPPPass",
+            series: "WhenBP<120",
+            title: "test case title edited",
+            description: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
+                "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
+                "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr"
+        }).then((body) => {
+            TestData.readTestCaseId().then((testCaseId) => {
+                TestData.requestMeasureTestCase<any>(
+                    'PUT',
+                    { ...body, id: testCaseId } as any,
+                    { failOnStatusCode: false }
+                ).then((response) => {
                     expect(response.status).to.eql(400)
                     expect(response.body.validationErrors.description).to.eql('Test Case Description can not be more than 250 characters.')
                 })
@@ -362,89 +341,34 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
         })
     })
 
-    it('Edit Test Case: Description more than 250 characters', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testCaseId) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': testCaseId,
-                            'name': "IPPPass",
-                            'series': "WhenBP<120",
-                            'title': "test case title edited",
-                            'description': "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
-                                "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
-                                "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr",
-                            'json': TCJson
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(400)
-                        expect(response.body.validationErrors.description).to.eql('Test Case Description can not be more than 250 characters.')
-                    })
-                })
-            })
-        })
-    })
-
     it('Create Test Case: Title more than 250 characters', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'POST',
-                    body: {
-                        'name': "DENOMFail",
-                        'series': "WhenBP120",
-                        'title': "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
-                            "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
-                            "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr",
-                        'description': "description",
-                        'json': TCJson
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.title).to.eql('Test Case Title can not be more than 250 characters.')
-                })
+        qdmTestCaseBody({
+            name: "DENOMFail",
+            series: "WhenBP120",
+            title: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
+                "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
+                "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr",
+            description: "description"
+        }).then((body) => {
+            TestData.requestMeasureTestCase<any>('POST', body as any, { failOnStatusCode: false }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.validationErrors.title).to.eql('Test Case Title can not be more than 250 characters.')
             })
         })
     })
 
     it('Create Test Case: Series more than 250 characters', () => {
-        let currentUser = Cypress.env('selectedUser')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'POST',
-                    body: {
-                        'name': "DENOMFail",
-                        'series': "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
-                            "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
-                            "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr",
-                        'title': "Title",
-                        'description': "description",
-                        'json': TCJson
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.series).to.eql('Test Case Series can not be more than 250 characters.')
-                })
+        qdmTestCaseBody({
+            name: "DENOMFail",
+            series: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
+                "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
+                "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr",
+            title: "Title",
+            description: "description"
+        }).then((body) => {
+            TestData.requestMeasureTestCase<any>('POST', body as any, { failOnStatusCode: false }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.validationErrors.series).to.eql('Test Case Series can not be more than 250 characters.')
             })
         })
     })
@@ -476,28 +400,22 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
 
     it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
 
-        const currentUser = Cypress.env('selectedAltUser')
         OktaLogin.setupUserSession(false)
-        //Edit created Test Case
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId').should('exist').then((testcaseid) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': testcaseid,
-                            'name': "IPPPass",
-                            'series': "WhenBP120",
-                            'title': TCTitle,
-                            'description': "IPP Pass Test BP <120",
-                            'json': newTCJson
-                        }
-                    }).then((response) => {
+        qdmTestCaseBody({
+            name: "IPPPass",
+            series: "WhenBP120",
+            title: TCTitle,
+            description: "IPP Pass Test BP <120",
+            json: newTCJson
+        }).then((body) => {
+            TestData.readMeasureId(0, 'selectedAltUser').then((measureId) => {
+                TestData.readTestCaseId(0, 'selectedAltUser').then((testCaseId) => {
+                    TestData.requestMeasureTestCase<any>(
+                        'PUT',
+                        { ...body, id: testCaseId } as any,
+                        { failOnStatusCode: false },
+                        'selectedAltUser'
+                    ).then((response) => {
                         expect(response.status).to.eql(403)
                         expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
                     })
@@ -510,7 +428,6 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
     beforeEach('Create Measure and measure group', () => {
 
-        const currentUser = Cypress.env('selectedUser')
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
         TCName = 'TCName' + randTCNameValue
 
@@ -534,84 +451,19 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
             TestData.expectSavedMeasureCql(response)
         })
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    body: {
-                        "scoring": measureScoring,
-                        "populationBasis": "true",
-                        "populations": [
-                            {
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": "Initial Population",
-                                "associationType": null,
-                                "description": ""
-                            }
-                        ],
-                        "measureObservations": null,
-                        "groupDescription": "",
-                        "improvementNotation": "",
-                        "rateAggregation": "",
-                        "measureGroupTypes": null,
-                        "scoringUnit": "",
-                        "stratifications": [],
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
-                })
-            })
+        TestData.requestMeasureGroup<any>('POST', qdmGroupBody() as any).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            TestData.writeFixture('groupId', response.body.id)
         })
     })
 
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
 
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(true)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/test-cases/list',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value
-                    },
-                    method: 'POST',
-                    body: [
-                        {
-                        "name": TCName + '1',
-                        "title": TCTitle + '1',
-                        "series": TCSeries,
-                        "description": TCDescription,
-                        "json": TCJson,
-                        },
-                        {
-                        "name": TCName + '2',
-                        "title": TCTitle + '2',
-                        "series": TCSeries,
-                        "description": TCDescription,
-                        "json": TCJson,
-                        },
-                        {
-                        "name": TCName + '3',
-                        "title": TCTitle + '3',
-                        "series": TCSeries,
-                        "description": TCDescription,
-                        "json": TCJson,
-                        }
-                    ]
-                }).then((response) => {
-                    expect(response.status).to.eql(403)
-                })
-            })
+        TestData.requestMeasureTestCaseList<any>(qdmTestCaseListBody() as any, { failOnStatusCode: false }).then((response) => {
+            expect(response.status).to.eql(403)
         })
     })
 })

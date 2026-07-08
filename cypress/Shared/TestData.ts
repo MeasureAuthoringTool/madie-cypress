@@ -314,6 +314,20 @@ export class TestData {
         })
     }
 
+    public static requestMeasureExport<T = unknown>(
+        options: Partial<Cypress.RequestOptions> = {},
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(measureNumber, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/exports`,
+                method: 'GET'
+            })
+        })
+    }
+
     public static requestMeasureById<T = MeasureBody>(
         method: 'GET' | 'PUT' | 'DELETE',
         measureId: string,
@@ -506,6 +520,23 @@ export class TestData {
         }) as Cypress.Chainable<Cypress.Response<T>>
     }
 
+    public static requestMeasureGroupById<T = MeasureGroupBody>(
+        method: 'DELETE',
+        groupId: string,
+        body: Cypress.RequestBody,
+        measureNumber = 0,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readMeasureId(measureNumber).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/groups/${groupId}`,
+                method,
+                body
+            })
+        }) as Cypress.Chainable<Cypress.Response<T>>
+    }
+
     public static requestMeasureGroupStratification<T = StratificationDefinition>(
         method: 'POST' | 'PUT' | 'DELETE',
         body?: StratificationDefinition | ((stratificationId: string) => StratificationDefinition),
@@ -547,7 +578,7 @@ export class TestData {
     }
 
     public static versionMeasure(
-        versionType: 'major' | 'minor' = 'major',
+        versionType: 'major' | 'minor' | 'patch' = 'major',
         measureNumber = 0,
         options: Partial<Cypress.RequestOptions> = {}
     ): Cypress.Chainable<Cypress.Response<VersionedMeasureResponse>> {

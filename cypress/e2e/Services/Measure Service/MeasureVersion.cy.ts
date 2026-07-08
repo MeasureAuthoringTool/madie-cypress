@@ -24,6 +24,10 @@ let newMeasureName = ''
 let newCQLLibraryName = ''
 let harpUser = ''
 let harpUserALT = ''
+const versionedMeasureError = (measureId: string) =>
+    'Response could not be completed for measure with ID ' +
+    measureId +
+    ', since the measure is not in a draft status'
 
 const measureCQL =
     'library ' +
@@ -57,6 +61,75 @@ const measureCQL_WithParsingAndVSACErrors =
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "HPV Test": \'\'\n' +
     'define "ipp": true)'
+
+const writeCurrentMeasureFixtures = (responseBody: {
+    id: string
+    versionId: string
+    measureSetId: string
+}): void => {
+    TestData.writeFixture('measureId', responseBody.id)
+    TestData.writeFixture('versionId', responseBody.versionId)
+    TestData.writeFixture('measureSetId', responseBody.measureSetId)
+}
+
+const versionedMeasureUpdateBody = (measureId: string, versionId: string) => ({
+    id: measureId,
+    measureName: 'UpdatedTestMeasure' + randValue,
+    cqlLibraryName: 'UpdatedCqlLibrary' + randValue,
+    model: 'QI-Core v4.1.1',
+    measureScoring: 'Ratio',
+    versionId,
+    measureSetId: uuidv4(),
+    version: '1.0.000',
+    ecqmTitle: 'ecqmTitle',
+    measurementPeriodStart: mpStartDate + 'T00:00:00.000Z',
+    measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z'
+})
+
+const versionedMeasureGroupUpdateBody = (measureId: string) => ({
+    id: measureId,
+    scoring: 'Ratio',
+    populations: [
+        TestData.population('initialPopulation', 'num'),
+        TestData.population('numerator', 'denom'),
+        TestData.population('numeratorExclusion', 'ipp'),
+        TestData.population('denominator', 'num')
+    ],
+    measureGroupTypes: ['Outcome'],
+    populationBasis: 'Boolean'
+})
+
+const versionedMeasureGroupDeleteBody = (measureId: string, groupId: string) => ({
+    id: measureId,
+    groups: [
+        {
+            id: groupId,
+            scoring: 'Cohort',
+            populations: [
+                {
+                    id: uuidv4(),
+                    name: 'initialPopulation',
+                    definition: 'ipp',
+                    associationType: null,
+                    description: null
+                }
+            ],
+            measureGroupTypes: ['Outcome'],
+            scoringUnit: '',
+            stratifications: [],
+            populationBasis: 'boolean'
+        }
+    ]
+})
+
+const versionedTestCaseUpdateBody = (testCaseId: string) => ({
+    id: testCaseId,
+    name: 'IPPPass',
+    series: 'WhenBPLessThan120',
+    title: 'test case title edited',
+    description: 'IPP Pass Test BP Less Than 120',
+    json: '{ \n  Encounter: "Office Visit union" \n  Id: "Identifier" \n  value: "Visit out of hours (procedure)" \n}'
+})
 
 describe('Measure Versioning', () => {
     beforeEach('Create Measure and Set Access Token', () => {
@@ -128,29 +201,22 @@ describe('Version Measure with invalid CQL', () => {
 
         OktaLogin.setupUserSession(false)
 
-        TestData.requestWithAccessToken<any>({
-            failOnStatusCode: false,
-            url: '/api/measure',
-            method: 'POST',
-            body: {
-                measureName: newMeasureName,
-                cqlLibraryName: newCQLLibraryName,
-                model: 'QI-Core v4.1.1',
-                ecqmTitle: 'eCQMTitle',
-                cql: measureCQL_WithParsingAndVSACErrors,
-                measurementPeriodStart: mpStartDate + 'T00:00:00.000Z',
-                measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z',
-                versionId: uuidv4(),
-                measureSetId: uuidv4()
-            }
+        TestData.requestMeasure<any>({
+            measureName: newMeasureName,
+            cqlLibraryName: newCQLLibraryName,
+            model: 'QI-Core v4.1.1',
+            ecqmTitle: 'eCQMTitle',
+            cql: measureCQL_WithParsingAndVSACErrors,
+            measurementPeriodStart: mpStartDate + 'T00:00:00.000Z',
+            measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z'
+        }, {
+            failOnStatusCode: false
         }).then((response) => {
             expect(response.status).to.eql(201)
             expect(response.body.id).to.be.exist
             expect(response.body.errors[0]).to.include('ERRORS_ELM_JSON')
 
-            TestData.writeFixture('measureId', response.body.id)
-            TestData.writeFixture('versionId', response.body.versionId)
-            TestData.writeFixture('measureSetId', response.body.measureSetId)
+            writeCurrentMeasureFixtures(response.body)
         })
     })
 
@@ -223,126 +289,43 @@ describe('Edit validations for versioned Measure', () => {
     })
 
     it('Verify error messages when user try to edit Measure details, Measure Groups or Test cases for versioned Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
         cy.log('Version the Measure')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                .should('exist')
-                .then((measureId) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/versionId')
-                        .should('exist')
-                        .then((vId) => {
-                            cy.request({
-                                url: '/api/measures/' + measureId + '/version?versionType=major',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken.value
-                                },
-                                method: 'PUT'
-                            }).then((response) => {
-                                expect(response.status).to.eql(200)
-                                expect(response.body.version).to.eql('1.0.000')
-                            })
+        TestData.versionMeasure().then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.version).to.eql('1.0.000')
+        })
 
-                            cy.log('Verify error message on editing Measure details')
-                            cy.request({
-                                failOnStatusCode: false,
-                                url: '/api/measures/' + measureId,
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken.value
-                                },
-                                method: 'PUT',
-                                body: {
-                                    id: measureId,
-                                    measureName: 'UpdatedTestMeasure' + randValue,
-                                    cqlLibraryName: 'UpdatedCqlLibrary' + randValue,
-                                    model: 'QI-Core v4.1.1',
-                                    measureScoring: 'Ratio',
-                                    versionId: vId,
-                                    measureSetId: uuidv4(),
-                                    version: '1.0.000',
-                                    ecqmTitle: 'ecqmTitle',
-                                    measurementPeriodStart: mpStartDate + 'T00:00:00.000Z',
-                                    measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z'
-                                }
-                            }).then((response) => {
-                                expect(response.status).to.eql(409)
-                                expect(response.body.message).to.include(
-                                    'Response could not be completed for measure with ID ' +
-                                        measureId +
-                                        ', since the measure is not in a draft status'
-                                )
-                            })
+        cy.log('Verify error message on editing Measure details')
+        TestData.readMeasureId().then((measureId) => {
+            TestData.updateCurrentMeasure(
+                ({ versionId }) => versionedMeasureUpdateBody(measureId, versionId),
+                { failOnStatusCode: false }
+            ).then((response) => {
+                expect(response.status).to.eql(409)
+                expect(response.body.message).to.include(versionedMeasureError(measureId))
+            })
+        })
 
-                            cy.log('Verify error message on editing Measure group')
-                            cy.request({
-                                failOnStatusCode: false,
-                                url: '/api/measures/' + measureId + '/groups',
-                                method: 'PUT',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken.value
-                                },
-                                body: {
-                                    id: measureId,
-                                    scoring: 'Ratio',
-                                    populations: [
-                                        {
-                                            id: uuidv4(),
-                                            name: 'initialPopulation',
-                                            definition: 'num'
-                                        },
-                                        {
-                                            id: uuidv4(),
-                                            name: 'numerator',
-                                            definition: 'denom'
-                                        },
-                                        {
-                                            id: uuidv4(),
-                                            name: 'numeratorExclusion',
-                                            definition: 'ipp'
-                                        },
-                                        {
-                                            id: uuidv4(),
-                                            name: 'denominator',
-                                            definition: 'num'
-                                        }
-                                    ],
-                                    measureGroupTypes: ['Outcome'],
-                                    populationBasis: 'Boolean'
-                                }
-                            }).then((response) => {
-                                expect(response.status).to.eql(409)
-                                expect(response.body.message).to.include(
-                                    'Response could not be completed for measure with ID ' +
-                                        measureId +
-                                        ', since the measure is not in a draft status'
-                                )
-                            })
+        cy.log('Verify error message on editing Measure group')
+        TestData.readMeasureId().then((measureId) => {
+            TestData.requestMeasureGroup<any>('PUT', versionedMeasureGroupUpdateBody(measureId), 0, {
+                failOnStatusCode: false
+            }).then((response) => {
+                expect(response.status).to.eql(409)
+                expect(response.body.message).to.include(versionedMeasureError(measureId))
+            })
+        })
 
-                            cy.log('Verify error message on editing Test case')
-                            cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId')
-                                .should('exist')
-                                .then((testcaseid) => {
-                                    cy.request({
-                                        failOnStatusCode: false,
-                                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
-                                        headers: {
-                                            authorization: 'Bearer ' + accessToken.value
-                                        },
-                                        method: 'PUT',
-                                        body: {
-                                            id: testcaseid,
-                                            name: 'IPPPass',
-                                            series: 'WhenBPLessThan120',
-                                            title: 'test case title edited',
-                                            description: 'IPP Pass Test BP Less Than 120',
-                                            json: '{ \n  Encounter: "Office Visit union" \n  Id: "Identifier" \n  value: "Visit out of hours (procedure)" \n}'
-                                        }
-                                    }).then((response) => {
-                                        expect(response.status).to.eql(200)
-                                    })
-                                })
-                        })
-                })
+        cy.log('Verify error message on editing Test case')
+        TestData.readMeasureId().then((measureId) => {
+            TestData.requestMeasureTestCase(
+                'PUT',
+                ({ testCaseId }) => versionedTestCaseUpdateBody(testCaseId ?? ''),
+                { failOnStatusCode: false }
+            ).then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body.id).to.exist
+            })
         })
     })
 })
@@ -378,121 +361,43 @@ describe('Delete validations for versioned Measure', () => {
     })
 
     it('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
-        let currentUser = Cypress.env('selectedUser')
         cy.log('Version the Measure')
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                .should('exist')
-                .then((measureId) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/versionId')
-                        .should('exist')
-                        .then((vId) => {
-                            cy.request({
-                                url: '/api/measures/' + measureId + '/version?versionType=major',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken.value
-                                },
-                                method: 'PUT'
-                            }).then((response) => {
-                                expect(response.status).to.eql(200)
-                                expect(response.body.version).to.include('1.0.000')
-                            })
+        TestData.versionMeasure().then((response) => {
+            expect(response.status).to.eql(200)
+            expect(response.body.version).to.include('1.0.000')
+        })
 
-                            cy.log('Verify error message on delete Measure')
-                            cy.request({
-                                failOnStatusCode: false,
-                                url: '/api/measures/' + measureId,
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken.value
-                                },
-                                method: 'PUT',
-                                body: {
-                                    id: measureId,
-                                    measureName: 'UpdatedTestMeasure' + randValue,
-                                    cqlLibraryName: 'UpdatedCqlLibrary' + randValue,
-                                    model: 'QI-Core v4.1.1',
-                                    measureScoring: 'Ratio',
-                                    versionId: vId,
-                                    measureSetId: uuidv4(),
-                                    version: '1.0.000',
-                                    ecqmTitle: 'ecqmTitle',
-                                    measurementPeriodStart: mpStartDate + 'T00:00:00.000Z',
-                                    measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z'
-                                }
-                            }).then((response) => {
-                                expect(response.status).to.eql(409)
-                                expect(response.body.message).to.include(
-                                    'Response could not be completed for measure with ID ' +
-                                        measureId +
-                                        ', since the measure is not in a draft status'
-                                )
-                            })
+        cy.log('Verify error message on delete Measure')
+        TestData.readMeasureId().then((measureId) => {
+            TestData.updateCurrentMeasure(
+                ({ versionId }) => versionedMeasureUpdateBody(measureId, versionId),
+                { failOnStatusCode: false }
+            ).then((response) => {
+                expect(response.status).to.eql(409)
+                expect(response.body.message).to.include(versionedMeasureError(measureId))
+            })
+        })
 
-                            cy.log('Verify error message on delete Measure group')
-                            cy.readFile('cypress/fixtures/' + currentUser + '/measureGroupId')
-                                .should('exist')
-                                .then((groupId) => {
-                                    cy.request({
-                                        failOnStatusCode: false,
-                                        url: '/api/measures/' + measureId + '/groups/' + groupId,
-                                        method: 'DELETE',
-                                        headers: {
-                                            authorization: 'Bearer ' + accessToken.value
-                                        },
-                                        body: {
-                                            id: measureId,
-                                            groups: [
-                                                {
-                                                    id: groupId,
-                                                    scoring: 'Cohort',
-                                                    populations: [
-                                                        {
-                                                            id: uuidv4,
-                                                            name: 'initialPopulation',
-                                                            definition: 'ipp',
-                                                            associationType: null,
-                                                            description: null
-                                                        }
-                                                    ],
-                                                    measureGroupTypes: ['Outcome'],
-                                                    scoringUnit: '',
-                                                    stratifications: [],
-                                                    populationBasis: 'boolean'
-                                                }
-                                            ]
-                                        }
-                                    }).then((response) => {
-                                        expect(response.status).to.eql(409)
-                                        expect(response.body.message).to.include(
-                                            'Response could not be completed for measure with ID ' +
-                                                measureId +
-                                                ', since the measure is not in a draft status'
-                                        )
-                                    })
-                                })
-
-                            cy.log('Verify error message on delete Test case')
-                            cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId')
-                                .should('exist')
-                                .then((testcaseid) => {
-                                    cy.request({
-                                        failOnStatusCode: false,
-                                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
-                                        headers: {
-                                            authorization: 'Bearer ' + accessToken.value
-                                        },
-                                        method: 'DELETE',
-                                        body: {
-                                            id: testcaseid,
-                                            title: testCaseTitle
-                                        }
-                                    }).then((response) => {
-                                        expect(response.status).to.eql(405)
-                                        expect(response.body.error).to.include('Method Not Allowed')
-                                    })
-                                })
-                        })
+        cy.log('Verify error message on delete Measure group')
+        TestData.readMeasureId().then((measureId) => {
+            TestData.readFixture('measureGroupId').then((groupId) => {
+                TestData.requestMeasureGroupById<any>(
+                    'DELETE',
+                    groupId,
+                    versionedMeasureGroupDeleteBody(measureId, groupId),
+                    0,
+                    { failOnStatusCode: false }
+                ).then((response) => {
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.include(versionedMeasureError(measureId))
                 })
+            })
+        })
+
+        cy.log('Verify error message on delete Test case')
+        TestData.requestMeasureTestCase('DELETE', undefined, { failOnStatusCode: false }).then((response) => {
+            expect(response.status).to.eql(405)
+            expect(response.body.error).to.include('Method Not Allowed')
         })
     })
 })
