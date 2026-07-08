@@ -72,7 +72,7 @@ Recently diagnosed non-refactor failures:
 
 ## Latest Audit Signal
 
-Command: `npm run quality:no-focused-tests`
+Command: `npm run quality:audit`
 
 - Inventory: 256 specs / 65636 spec lines; 29 shared files / 18665 shared lines; 3 support files / 637 support lines; 8 scripts / 1296 script lines.
 - Skipped tests: 11.
@@ -135,7 +135,7 @@ Candidates:
 
 After each meaningful slice:
 
-- Run the quality scan and compare the current diff.
+- Run `npm run quality:audit` and compare the current diff.
 - Prefer changes that remove a class of duplication across multiple specs.
 - Record only durable decisions or changed counts.
 - Validate with static checks and at least one focused spec for the changed helper path.
