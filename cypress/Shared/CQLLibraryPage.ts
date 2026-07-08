@@ -7,6 +7,7 @@ import { CQLEditorPage } from './CQLEditorPage'
 import { SupportedModels } from './CreateMeasurePage'
 import { MeasureRow } from './MeasuresPage'
 import { OktaLogin } from './OktaLogin'
+import { FixtureOwner, TestData } from './TestData'
 
 export enum EditLibraryActions {
     delete,
@@ -28,6 +29,10 @@ export type CreateLibraryOptions = {
 }
 
 export class CQLLibraryPage {
+    private static fixtureOwner(altUser?: boolean): FixtureOwner {
+        return altUser ? 'selectedAltUser' : 'selectedUser'
+    }
+
     public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
     public static readonly sharedLibrariesTab = '[data-testid="shared-libraries-tab"]'
     public static readonly allLibrariesTab = '[data-testid="all-libraries-tab"]'
@@ -136,18 +141,14 @@ export class CQLLibraryPage {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
-        const currentUser = Cypress.env('selectedUser')
-        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', CQLLibraryName)
-                // ToDo?: add a check here for model
-            })
+        TestData.readCqlLibraryId().then((libraryId) => {
+            cy.get(`[data-testid="cqlLibrary-button-${libraryId}-content"]`).should('contain', CQLLibraryName)
+            // ToDo?: add a check here for model
+        })
         cy.log('CQL Library Created Successfully')
     }
 
     public static clickCreateLibraryButton(): void {
-        const currentUser = Cypress.env('selectedUser')
         let alias = 'library' + (Date.now().valueOf() + 1).toString()
         const libraryAlias: `@${string}` = `@${alias}`
         //setup for grabbing the measure create call
@@ -157,7 +158,7 @@ export class CQLLibraryPage {
         //saving measureID to file to use later
         cy.wait(libraryAlias).then(({ response }) => {
             expect(response?.statusCode).to.eq(201)
-            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response?.body.id)
+            TestData.writeFixture('cqlLibraryId', response?.body.id)
         })
     }
 
@@ -168,49 +169,24 @@ export class CQLLibraryPage {
         altUser?: boolean,
         cql?: string,
     ): string {
-        let user = ''
-        if (cql === undefined || cql === null) {
-            cql = ''
-        }
+        const owner = this.fixtureOwner(altUser)
+        const user = TestData.setupUserScope(owner)
+        const fixtureName = twoLibraries === true ? 'cqlLibraryId2' : 'cqlLibraryId'
 
-        if (altUser === undefined || altUser === null) {
-            altUser = false
-        }
-
-        user = OktaLogin.setupUserSession(altUser)
-
-        //Create New CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value,
-                },
-                method: 'POST',
-                body: {
-                    cqlLibraryName: CqlLibraryName,
-                    model: 'QI-Core v4.1.1',
-                    createdBy: user,
-                    librarySetId: uuidv4(),
-                    description: 'description',
-                    publisher: CQLLibraryPublisher,
-                    cql: cql,
-                },
-            }).then((response) => {
-                let currentUser = Cypress.env('selectedUser')
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (altUser) {
-                    currentUser = Cypress.env('selectedAltUser')
-                }
-                if (twoLibraries === true) {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId2', response.body.id)
-                } else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
-                }
-            })
+        TestData.requestCqlLibrary({
+            cqlLibraryName: CqlLibraryName,
+            model: 'QI-Core v4.1.1',
+            createdBy: user,
+            description: 'description',
+            publisher: CQLLibraryPublisher,
+            cql: cql ?? ''
+        }).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
+            TestData.writeFixture(fixtureName, response.body.id, owner)
         })
+
         return user
     }
 
@@ -223,24 +199,8 @@ export class CQLLibraryPage {
     }
 
     public static versionLibraryAPI(expectedVersionNumber: string) {
-        const currentUser = Cypress.env('selectedUser')
-        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(filePath)
-                .should('exist')
-                .then((cqlLibraryId) => {
-                    cy.request({
-                        url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                        method: 'PUT',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value,
-                        },
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.eql(expectedVersionNumber)
-                    })
-                })
+        TestData.versionCqlLibrary(expectedVersionNumber).then((response) => {
+            expect(response.status).to.eql(200)
         })
     }
 
@@ -312,70 +272,25 @@ export class CQLLibraryPage {
     }
 
     public static createLibraryAPI(libraryName: string, model: SupportedModels, options?: CreateLibraryOptions) {
-        let user: string,
-            description: string,
-            publisher: string,
-            cql: string,
-            cqlErrors = false,
-            altUser = false
+        const owner = this.fixtureOwner(options?.altUser)
+        const user = TestData.setupUserScope(owner)
+        const fixtureName = options?.libraryNumber ? `cqlLibraryId${options.libraryNumber}` : 'cqlLibraryId'
 
-        const currentUser = Cypress.env('selectedUser')
-
-        if (options && options.altUser) {
-            altUser = true
-        }
-        user = OktaLogin.setupUserSession(altUser)
-
-        if (options && options.description) {
-            description = options.description
-        } else {
-            description = 'testing library functionality'
-        }
-        if (options && options.publisher) {
-            publisher = options.publisher
-        } else {
-            publisher = 'ICF'
-        }
-        if (options && options.cql) {
-            cql = options.cql
-        } else {
-            cql = ''
-        }
-        if (options && options.cqlErrors) {
-            cqlErrors = true
-        }
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries',
-                headers: {
-                    authorization: 'Bearer ' + accessToken?.value,
-                },
-                method: 'POST',
-                body: {
-                    cqlLibraryName: libraryName,
-                    model: model,
-                    createdBy: user,
-                    librarySetId: uuidv4(),
-                    description: description,
-                    publisher: publisher,
-                    cql: cql,
-                    cqlErrors: cqlErrors,
-                },
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                expect(response.body.cqlLibraryName).to.eql(libraryName)
-                if (options && options.libraryNumber) {
-                    cy.writeFile(
-                        'cypress/fixtures/' + currentUser + '/cqlLibraryId' + options.libraryNumber,
-                        response.body.id,
-                    )
-                } else {
-                    cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', response.body.id)
-                }
-            })
+        TestData.requestCqlLibrary({
+            cqlLibraryName: libraryName,
+            model,
+            createdBy: user,
+            description: options?.description ?? 'testing library functionality',
+            publisher: options?.publisher ?? 'ICF',
+            cql: options?.cql ?? '',
+            cqlErrors: options?.cqlErrors ?? false
+        }).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            expect(response.body.cqlLibraryName).to.eql(libraryName)
+            TestData.writeFixture(fixtureName, response.body.id, owner)
         })
+
         return user
     }
 
