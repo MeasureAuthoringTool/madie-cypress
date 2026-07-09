@@ -6,6 +6,7 @@ import { TestCasesPage } from './TestCasesPage'
 import { UUIDTypes, v4 as uuidv4 } from 'uuid'
 import { Stratification } from '@madie/madie-models'
 import { OktaLogin } from './OktaLogin'
+import { FixtureOwner, MeasureGroupBody, TestData } from './TestData'
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -297,6 +298,27 @@ export class MeasureGroupPage {
     public static readonly denomIncludeInReportTypeField =
         '[data-testid="includeInReportType-container"] > :nth-child(2)'
 
+    private static fixtureOwner(altUser = false): FixtureOwner {
+        return altUser ? 'selectedAltUser' : 'selectedUser'
+    }
+
+    private static createMeasureGroupApi(
+        body: MeasureGroupBody,
+        fixtureName: string,
+        owner: FixtureOwner = 'selectedUser',
+        measureNumber = 0
+    ): string {
+        const user = TestData.setupUserScope(owner)
+
+        TestData.requestMeasureGroup('POST', body, measureNumber, {}, owner).then((response) => {
+            expect(response.status).to.eql(201)
+            expect(response.body.id).to.be.exist
+            TestData.writeFixture(fixtureName, response.body.id, owner)
+        })
+
+        return user
+    }
+
     public static createMeasureGroupforProportionMeasure(): void {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -462,21 +484,10 @@ export class MeasureGroupPage {
         PopDenomP?: string,
         popBasis?: string
     ): string {
-        let currentUser = ''
-
         if (altUser === undefined || altUser === null) {
             altUser = false
         }
-
-        if (altUser) {
-            currentUser = Cypress.env('selectedAltUser')
-        } else if (altUser === false) {
-            currentUser = Cypress.env('selectedUser')
-        }
-
-        let user = ''
-        let measurePath = ''
-        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId'
+        const owner = this.fixtureOwner(altUser)
         let measureScoring = 'Proportion'
 
         if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
@@ -492,92 +503,71 @@ export class MeasureGroupPage {
             PopDenomP = 'Surgical Absence of Cervix'
         }
 
-        user = OktaLogin.setupUserSession(altUser)
-        cy.log('Current user is: ' + user)
-
         if (measureNumber === undefined || measureNumber === null || measureNumber === 0) {
             measureNumber = 0
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        } else if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
-        //Add Measure Group to the Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath)
-                .should('exist')
-                .then((fileContents) => {
-                    cy.request({
-                        url: '/api/measures/' + fileContents + '/groups',
-                        method: 'POST',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        body: {
-                            id: fileContents,
-                            scoring: measureScoring,
-                            populationBasis: popBasis,
-                            rateAggregation: '<p>test rA</p>',
-                            groupDescription: '<p>test gD</p>',
-                            populations: [
-                                {
-                                    description: '<p>test IP P</p>',
-                                    id: uuidv4(),
-                                    name: 'initialPopulation',
-                                    definition: PopIniPopP
-                                },
-                                {
-                                    description: '<p>test d P</p>',
-                                    id: uuidv4(),
-                                    name: 'denominator',
-                                    definition: PopDenomP
-                                },
-                                {
-                                    description: '<p>test dE P</p>',
-                                    id: uuidv4(),
-                                    name: 'denominatorExclusion',
-                                    definition: DenomExcl
-                                },
-                                {
-                                    description: '<p>test dEx P</p>',
-                                    id: uuidv4(),
-                                    name: 'denominatorException',
-                                    definition: DenomExcep
-                                },
-                                {
-                                    description: '<p>test n P</p>',
-                                    id: uuidv4(),
-                                    name: 'numerator',
-                                    definition: PopNumP
-                                },
-                                {
-                                    description: '<p>test nE P</p>',
-                                    id: uuidv4(),
-                                    name: 'numeratorExclusion',
-                                    definition: NumerExcl
-                                }
-                            ],
-                            scoringUnit: {
-                                label: 'ml milliLiters',
-                                value: {
-                                    code: 'ml',
-                                    name: 'milliLiters',
-                                    guidance: '',
-                                    system: 'https://clinicaltables.nlm.nih.gov/'
-                                }
-                            },
-                            measureGroupTypes: ['Outcome'],
-                            stratifications: [],
-                            improvementNotation: 'Increased score indicates improvement'
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        cy.writeFile(measureGroupPath, response.body.id)
-                    })
-                })
-        })
-        return user
+        return this.createMeasureGroupApi(
+            {
+                scoring: measureScoring,
+                populationBasis: popBasis,
+                rateAggregation: '<p>test rA</p>',
+                groupDescription: '<p>test gD</p>',
+                populations: [
+                    {
+                        description: '<p>test IP P</p>',
+                        id: uuidv4(),
+                        name: 'initialPopulation',
+                        definition: PopIniPopP
+                    },
+                    {
+                        description: '<p>test d P</p>',
+                        id: uuidv4(),
+                        name: 'denominator',
+                        definition: PopDenomP
+                    },
+                    {
+                        description: '<p>test dE P</p>',
+                        id: uuidv4(),
+                        name: 'denominatorExclusion',
+                        definition: DenomExcl
+                    },
+                    {
+                        description: '<p>test dEx P</p>',
+                        id: uuidv4(),
+                        name: 'denominatorException',
+                        definition: DenomExcep
+                    },
+                    {
+                        description: '<p>test n P</p>',
+                        id: uuidv4(),
+                        name: 'numerator',
+                        definition: PopNumP
+                    },
+                    {
+                        description: '<p>test nE P</p>',
+                        id: uuidv4(),
+                        name: 'numeratorExclusion',
+                        definition: NumerExcl
+                    }
+                ],
+                scoringUnit: {
+                    label: 'ml milliLiters',
+                    value: {
+                        code: 'ml',
+                        name: 'milliLiters',
+                        guidance: '',
+                        system: 'https://clinicaltables.nlm.nih.gov/'
+                    }
+                },
+                measureGroupTypes: ['Outcome'],
+                stratifications: [],
+                improvementNotation: 'Increased score indicates improvement'
+            },
+            'measureGroupId',
+            owner,
+            measureNumber
+        )
     }
 
     public static CreateRatioMeasureGroupAPI(
@@ -588,12 +578,7 @@ export class MeasureGroupPage {
         PopDenomP?: string,
         popBasis?: string
     ): string {
-        let currentUser = Cypress.env('selectedUser')
-        const currentAltUser = Cypress.env('selectedAltUser')
-
-        let user = ''
-        let measurePath = ''
-        let measureGroupPath = ''
+        const owner = this.fixtureOwner(altUser ?? false)
         let measureScoring = 'Ratio'
         if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
             popBasis = 'boolean'
@@ -612,76 +597,45 @@ export class MeasureGroupPage {
             altUser = false
         }
 
-        user = OktaLogin.setupUserSession(altUser)
-
-        if (altUser) {
-            currentUser = Cypress.env('selectedAltUser')
-        } else {
-            currentUser = Cypress.env('selectedUser')
-        }
-        if (twoMeasureGroups === true) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
-            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
-            //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-        } else {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-        }
-
-        //Add Measure Group to the Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath)
-                .should('exist')
-                .then((fileContents) => {
-                    cy.request({
-                        url: '/api/measures/' + fileContents + '/groups',
-                        method: 'POST',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        body: {
-                            id: fileContents,
-                            scoring: measureScoring,
-                            populationBasis: popBasis,
-                            populations: [
-                                {
-                                    id: uuidv4(),
-                                    name: 'initialPopulation',
-                                    definition: PopIniPopP
-                                },
-                                {
-                                    id: uuidv4(),
-                                    name: 'denominator',
-                                    definition: PopDenomP
-                                },
-                                {
-                                    id: uuidv4(),
-                                    name: 'denominatorExclusion',
-                                    definition: PopDenomP
-                                },
-                                {
-                                    id: uuidv4(),
-                                    name: 'numerator',
-                                    definition: PopNumP
-                                },
-                                {
-                                    id: uuidv4(),
-                                    name: 'numeratorExclusion',
-                                    definition: PopNumP
-                                }
-                            ],
-                            measureGroupTypes: ['Outcome'],
-                            stratifications: [],
-                            improvementNotation: 'Increased score indicates improvement'
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        cy.writeFile(measureGroupPath, response.body.id)
-                    })
-                })
-        })
-        return user
+        return this.createMeasureGroupApi(
+            {
+                scoring: measureScoring,
+                populationBasis: popBasis,
+                populations: [
+                    {
+                        id: uuidv4(),
+                        name: 'initialPopulation',
+                        definition: PopIniPopP
+                    },
+                    {
+                        id: uuidv4(),
+                        name: 'denominator',
+                        definition: PopDenomP
+                    },
+                    {
+                        id: uuidv4(),
+                        name: 'denominatorExclusion',
+                        definition: PopDenomP
+                    },
+                    {
+                        id: uuidv4(),
+                        name: 'numerator',
+                        definition: PopNumP
+                    },
+                    {
+                        id: uuidv4(),
+                        name: 'numeratorExclusion',
+                        definition: PopNumP
+                    }
+                ],
+                measureGroupTypes: ['Outcome'],
+                stratifications: [],
+                improvementNotation: 'Increased score indicates improvement'
+            },
+            twoMeasureGroups === true ? 'groupId2' : 'groupId',
+            owner,
+            twoMeasureGroups === true ? 2 : 0
+        )
     }
 
     public static CreateCohortMeasureGroupAPI(
@@ -691,27 +645,13 @@ export class MeasureGroupPage {
         popBasis?: string,
         measureNumber?: number
     ): string {
-        let currentUser = ''
         if (altUser === undefined || altUser === null) {
             altUser = false
         }
-        if (altUser) {
-            currentUser = Cypress.env('selectedAltUser')
-        } else {
-            currentUser = Cypress.env('selectedUser')
-        }
-
-        let user = ''
-        let measurePath = ''
-        let measureGroupPath = ''
+        const owner = this.fixtureOwner(altUser)
         let measureScoring = 'Cohort'
         if (measureNumber === undefined || measureNumber === null) {
             measureNumber = 0
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        }
-
-        if (measureNumber > 0) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId' + measureNumber
         }
 
         if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
@@ -721,65 +661,42 @@ export class MeasureGroupPage {
             PopIniPopP = 'Initial PopulationOne'
         }
 
-        user = OktaLogin.setupUserSession(altUser)
-
-        if (twoMeasureGroups === true) {
-            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
-        } else {
-            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-        }
-
-        //Add Measure Group to the Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath)
-                .should('exist')
-                .then((fileContents) => {
-                    cy.request({
-                        url: '/api/measures/' + fileContents + '/groups',
-                        method: 'POST',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        body: {
-                            id: fileContents,
-                            scoring: measureScoring,
-                            populationBasis: popBasis,
-                            rateAggregation: '<p>test ra</p>',
-                            groupDescription: '<p>test gd</p>',
-                            populations: [
-                                {
-                                    description: '<p>test pd</p>',
-                                    id: uuidv4(),
-                                    name: 'initialPopulation',
-                                    definition: PopIniPopP
-                                }
-                            ],
-                            measureGroupTypes: ['Outcome'],
-                            stratifications: [
-                                {
-                                    id: uuidv4(),
-                                    description: '<p>test strat 1</p>',
-                                    cqlDefinition: PopIniPopP,
-                                    associations: ['initialPopulation']
-                                },
-                                {
-                                    id: uuidv4(),
-                                    description: '<p>test strat 2</p>',
-                                    cqlDefinition: PopIniPopP,
-                                    associations: ['denominator']
-                                }
-                            ],
-                            improvementNotation: 'Increased score indicates improvement',
-                            improvementNotationDescription: '<p>test iND</p>'
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        cy.writeFile(measureGroupPath, response.body.id)
-                    })
-                })
-        })
-        return user
+        return this.createMeasureGroupApi(
+            {
+                scoring: measureScoring,
+                populationBasis: popBasis,
+                rateAggregation: '<p>test ra</p>',
+                groupDescription: '<p>test gd</p>',
+                populations: [
+                    {
+                        description: '<p>test pd</p>',
+                        id: uuidv4(),
+                        name: 'initialPopulation',
+                        definition: PopIniPopP
+                    }
+                ],
+                measureGroupTypes: ['Outcome'],
+                stratifications: [
+                    {
+                        id: uuidv4(),
+                        description: '<p>test strat 1</p>',
+                        cqlDefinition: PopIniPopP,
+                        associations: ['initialPopulation']
+                    },
+                    {
+                        id: uuidv4(),
+                        description: '<p>test strat 2</p>',
+                        cqlDefinition: PopIniPopP,
+                        associations: ['denominator']
+                    }
+                ],
+                improvementNotation: 'Increased score indicates improvement',
+                improvementNotationDescription: '<p>test iND</p>'
+            },
+            twoMeasureGroups === true ? 'groupId2' : 'groupId',
+            owner,
+            measureNumber
+        )
     }
 
     public static CreateCohortMeasureGroupWithoutTypeAPI(
@@ -788,15 +705,10 @@ export class MeasureGroupPage {
         PopIniPopP?: string,
         popBasis?: string
     ): string {
-        let currentUser = Cypress.env('selectedUser')
-
         if (altUser === undefined || altUser === null) {
             altUser = false
         }
-
-        let user = ''
-        let measurePath = ''
-        let measureGroupPath = ''
+        const owner = this.fixtureOwner(altUser)
         let measureScoring = 'Cohort'
         if (popBasis == undefined || popBasis === null || popBasis == 'Boolean') {
             popBasis = 'boolean'
@@ -805,56 +717,25 @@ export class MeasureGroupPage {
             PopIniPopP = 'Initial PopulationOne'
         }
 
-        user = OktaLogin.setupUserSession(altUser)
-
-        if (altUser) {
-            currentUser = Cypress.env('selectedAltUser')
-        } else {
-            currentUser = Cypress.env('selectedUser')
-        }
-        if (twoMeasureGroups === true) {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId2'
-            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
-            //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-        } else {
-            measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-            measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-        }
-
-        //Add Measure Group to the Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath)
-                .should('exist')
-                .then((fileContents) => {
-                    cy.request({
-                        url: '/api/measures/' + fileContents + '/groups',
-                        method: 'POST',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        body: {
-                            id: fileContents,
-                            scoring: measureScoring,
-                            populationBasis: popBasis,
-                            populations: [
-                                {
-                                    id: uuidv4(),
-                                    name: 'initialPopulation',
-                                    definition: PopIniPopP
-                                }
-                            ],
-                            measureGroupTypes: [],
-                            stratifications: [],
-                            improvementNotation: 'Increased score indicates improvement'
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        cy.writeFile(measureGroupPath, response.body.id)
-                    })
-                })
-        })
-        return user
+        return this.createMeasureGroupApi(
+            {
+                scoring: measureScoring,
+                populationBasis: popBasis,
+                populations: [
+                    {
+                        id: uuidv4(),
+                        name: 'initialPopulation',
+                        definition: PopIniPopP
+                    }
+                ],
+                measureGroupTypes: [],
+                stratifications: [],
+                improvementNotation: 'Increased score indicates improvement'
+            },
+            twoMeasureGroups === true ? 'groupId2' : 'groupId',
+            owner,
+            twoMeasureGroups === true ? 2 : 0
+        )
     }
 
     public static CreateMeasureGroupAPI(
@@ -867,21 +748,11 @@ export class MeasureGroupPage {
         numeratorObservation?: MeasureObservations,
         cvPopulations?: CVGroups
     ): string {
-        let currentUser = ''
-
         if (altUser === undefined || altUser === null) {
             altUser = false
         }
-
-        if (altUser) {
-            currentUser = Cypress.env('selectedAltUser')
-        } else {
-            currentUser = Cypress.env('selectedUser')
-        }
-        let user = ''
+        const owner = this.fixtureOwner(altUser)
         let observations = []
-        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
         const numUuid = uuidv4()
         const denomUuid = uuidv4()
         if (denominatorObservation) {
@@ -972,36 +843,19 @@ export class MeasureGroupPage {
             }
         }
 
-        user = OktaLogin.setupUserSession(altUser)
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath)
-                .should('exist')
-                .then((fileContents) => {
-                    cy.request({
-                        url: '/api/measures/' + fileContents + '/groups',
-                        method: 'POST',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        body: {
-                            id: fileContents,
-                            scoring: scoring,
-                            populationBasis: populationBasis,
-                            populations: popsArray,
-                            measureGroupTypes: [measureType],
-                            stratifications: [],
-                            improvementNotation: 'Increased score indicates improvement',
-                            measureObservations: observations
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        cy.writeFile(measureGroupPath, response.body.id)
-                    })
-                })
-        })
-        return user
+        return this.createMeasureGroupApi(
+            {
+                scoring: scoring,
+                populationBasis: populationBasis,
+                populations: popsArray,
+                measureGroupTypes: [measureType],
+                stratifications: [],
+                improvementNotation: 'Increased score indicates improvement',
+                measureObservations: observations
+            },
+            'groupId',
+            owner
+        )
     }
 
     public static setMeasureGroupType(type?: MeasureType): void {
@@ -1047,41 +901,25 @@ export class MeasureGroupPage {
     }
 
     public static addStratificationDataAPI(stratificationData: Array<Stratification>) {
-        const currentUser = Cypress.env('selectedUser')
+        TestData.readMeasureId().then((measureId) => {
+            TestData.requestWithAccessToken<Array<MeasureGroupBody>>({
+                url: `/api/measures/${measureId}/groups`,
+                method: 'GET'
+            }).then((response) => {
+                expect(response.status).to.eql(200)
 
-        const measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
+                const groupWithAddedStrats = response.body[0]
+                groupWithAddedStrats.stratifications = stratificationData as typeof groupWithAddedStrats.stratifications
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(measurePath)
-                .should('exist')
-                .then((fileContents) => {
-                    // get starting data for the group
-                    cy.request({
-                        url: '/api/measures/' + fileContents + '/groups',
-                        method: 'GET',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        // add stratifications to existing group
-                        let groupWithAddedStrats = response.body[0]
-                        groupWithAddedStrats.stratifications = stratificationData
-
-                        // send update with strats added
-                        cy.request({
-                            url: '/api/measures/' + fileContents + '/groups',
-                            method: 'POST',
-                            headers: {
-                                authorization: 'Bearer ' + accessToken?.value
-                            },
-                            body: groupWithAddedStrats
-                        }).then((response) => {
-                            cy.log('success start add')
-                            expect(response.status).to.eql(201)
-                        })
-                    })
+                TestData.requestWithAccessToken({
+                    url: `/api/measures/${measureId}/groups`,
+                    method: 'POST',
+                    body: groupWithAddedStrats
+                }).then((updateResponse) => {
+                    cy.log('success start add')
+                    expect(updateResponse.status).to.eql(201)
                 })
+            })
         })
     }
 }

@@ -460,34 +460,21 @@ export class Utilities {
         }
         const libraryPath = TestData.cqlLibraryIdPath(libraryNumber ?? 0, owner)
 
-        OktaLogin.setupUserSession(altUser)
+        TestData.setupUserScope(owner)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            if (!accessToken?.value) {
-                cy.log('⚠️ deleteLibrary: No access token available — skipping cleanup')
+        cy.task('readFileSafe', libraryPath, { log: false }).then((id: string | null) => {
+            if (!id) {
+                cy.log(`⚠️ deleteLibrary: Fixture file ${libraryPath} is empty or missing — skipping cleanup`)
                 return
             }
-            cy.task('readFileSafe', libraryPath, { log: false }).then((id: string | null) => {
-                if (!id) {
-                    cy.log(`⚠️ deleteLibrary: Fixture file ${libraryPath} is empty or missing — skipping cleanup`)
-                    return
+            TestData.requestCqlLibraryById('DELETE', id, { failOnStatusCode: false }).then((response) => {
+                if (response.status === 200) {
+                    cy.log('Library deleted successfully')
+                } else {
+                    cy.log(
+                        `⚠️ Library cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                    )
                 }
-                cy.request({
-                    url: '/api/cql-libraries/' + id,
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: 'Bearer ' + accessToken?.value
-                    },
-                    failOnStatusCode: false
-                }).then((response) => {
-                    if (response.status === 200) {
-                        cy.log('Library deleted successfully')
-                    } else {
-                        cy.log(
-                            `⚠️ Library cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
-                        )
-                    }
-                })
             })
         })
     }
