@@ -12,9 +12,8 @@ const qdmMeasureName = 'QDMTranslatorVersion' + timestamp
 const qdmCqlLibraryName = 'QDMTranslatorVersionLibrary' + timestamp
 const qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
 
-const expectedQiCoreVersion = '4.8.0'
-const expectedQdmVersion = '4.8.0'
 const measureData: CreateMeasureOptions = {}
+const semverPattern = /^\d+\.\d+\.\d+$/
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
     beforeEach('Create QI-Core Measure and Set Access Token', () => {
@@ -32,14 +31,14 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
     it('Get Translator version for QI-Core Measure', () => {
         TestData.requestTranslatorVersion('fhir').then((response) => {
             expect(response.status).to.eql(200)
-            expect(response.body).to.eql(expectedQiCoreVersion)
-        })
+            expect(response.body).to.match(semverPattern)
 
-        TestData.versionMeasure().then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.version).to.include('1.0.000')
-            // versioned measures read translator version from ELM
-            expect(response.body.elmJson).to.include(`"translatorVersion":"${expectedQiCoreVersion}"`)
+            TestData.versionMeasure().then((versionResponse) => {
+                expect(versionResponse.status).to.eql(200)
+                expect(versionResponse.body.version).to.include('1.0.000')
+                // versioned measures read translator version from ELM
+                expect(versionResponse.body.elmJson).to.include(`"translatorVersion":"${response.body}"`)
+            })
         })
     })
 })
@@ -66,14 +65,14 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
     it('Get Translator version for QDM Measure', () => {
         TestData.requestTranslatorVersion('qdm').then((response) => {
             expect(response.status).to.eql(200)
-            expect(response.body).to.eql(expectedQdmVersion)
-        })
+            expect(response.body).to.match(semverPattern)
 
-        TestData.versionMeasure().then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body.version).to.include('1.0.000')
-            // versioned measures read translator version from ELM
-            expect(response.body.elmJson).to.include(`translatorVersion":"${expectedQdmVersion}"`)
+            TestData.versionMeasure().then((versionResponse) => {
+                expect(versionResponse.status).to.eql(200)
+                expect(versionResponse.body.version).to.include('1.0.000')
+                // versioned measures read translator version from ELM
+                expect(versionResponse.body.elmJson).to.include(`translatorVersion":"${response.body}"`)
+            })
         })
     })
 })

@@ -1,15 +1,12 @@
-import { Utilities } from "../../../Shared/Utilities"
-import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { TestData } from "../../../Shared/TestData"
+import { Utilities } from '../../../Shared/Utilities'
+import { CreateMeasurePage, CreateMeasureOptions, SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
+import { TestData } from '../../../Shared/TestData'
 
 let measureName = 'QDMVersionService' + Date.now()
 let cqlLibraryName = 'QDMVersionServiceLib' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let harpUser = ''
 let harpUserALT = ''
 let newMeasureName = ''
@@ -17,8 +14,11 @@ let newCQLLibraryName = ''
 
 const measureData: CreateMeasureOptions = {}
 
-let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n\n' +
+let measureCQL =
+    'library ' +
+    cqlLibraryName +
+    " version '0.0.000'\n" +
+    "using QDM version '5.6'\n\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -40,9 +40,10 @@ let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'define "n":\n' +
     '\ttrue'
 
-let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n\n' +
+let measureCQL_WithParsingAndVSACErrors =
+    "library APICQLLibrary35455 version '0.0.000'\n" +
+    "using QDM version '5.6'\n\n" +
+    "include MATGlobalCommonFunctionsQDM version '1.0.000' called Global\n\n" +
     'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n\n' +
     'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2289\'\n' +
     'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\'\n' +
@@ -74,12 +75,10 @@ let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'
     '\t  "Initial Population"'
 
 describe('Measure Versioning', () => {
-
     newMeasureName = measureName + 1 + randValue
     newCQLLibraryName = cqlLibraryName + 1 + randValue
 
     before('Create Measure', () => {
-
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
 
@@ -97,7 +96,6 @@ describe('Measure Versioning', () => {
     })
 
     after('Clean up', () => {
-
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
     })
 
@@ -105,13 +103,18 @@ describe('Measure Versioning', () => {
         TestData.readMeasureId().then((measureId) => {
             TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure does not have at least one Population Criteria.')
+                expect(response.body.message).to.eql(
+                    'User ' +
+                        harpUser +
+                        ' cannot version Measure with ID ' +
+                        measureId +
+                        '. Measure does not have at least one Population Criteria.'
+                )
             })
         })
     })
 
     it('Successful Measure Versioning', () => {
-        
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
             TestData.expectSavedMeasureCql(response)
@@ -125,9 +128,7 @@ describe('Measure Versioning', () => {
 })
 
 describe('Measure Version : Non Measure owner validation', () => {
-
     before('Create Measure', () => {
-
         newMeasureName = measureName + 5 + randValue
         newCQLLibraryName = cqlLibraryName + 5 + randValue
 
@@ -141,23 +142,22 @@ describe('Measure Version : Non Measure owner validation', () => {
     })
 
     it('Non Measure owner unable to version Measure', () => {
-
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.setupUserSession(true)
 
         TestData.readMeasureId().then((measureId) => {
             TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
                 expect(response.status).to.eql(403)
-                expect(response.body.message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
+                expect(response.body.message).to.eql(
+                    'User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId
+                )
             })
         })
     })
 })
 
 describe('Version Measure without CQL', () => {
-
     beforeEach('Create Measure and Set Access Token', () => {
-
         newMeasureName = measureName + 2 + randValue
         newCQLLibraryName = cqlLibraryName + 2 + randValue
 
@@ -165,16 +165,29 @@ describe('Version Measure without CQL', () => {
         measureData.cqlLibraryName = newCQLLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
-        measureData.measureCql = undefined
+        measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
+        TestData.readMeasure<any>().then((response) => {
+            expect(response.status).to.eql(200)
+
+            TestData.updateMeasure({
+                ...response.body,
+                cql: '',
+                elmJson: '',
+                elmXml: '',
+                cqlErrors: false
+            }).then((updateResponse) => {
+                expect(updateResponse.status).to.eql(200)
+            })
+        })
 
         harpUser = OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -182,16 +195,16 @@ describe('Version Measure without CQL', () => {
         TestData.readMeasureId().then((measureId) => {
             TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has no CQL.')
+                expect(response.body.message).to.eql(
+                    'User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has no CQL.'
+                )
             })
         })
     })
 })
 
 describe('Version Measure with invalid CQL', () => {
-
     beforeEach('Create Measure and Set Access Token', () => {
-
         newMeasureName = measureName + 3 + randValue
         newCQLLibraryName = cqlLibraryName + 3 + randValue
 
@@ -202,19 +215,24 @@ describe('Version Measure with invalid CQL', () => {
         measureData.cqlLibraryName = newCQLLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
-        measureData.measureCql = measureCQL_WithParsingAndVSACErrors
+        measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
+        TestData.readMeasure<any>().then((response) => {
+            expect(response.status).to.eql(200)
+
+            TestData.updateMeasure({
+                ...response.body,
+                cql: measureCQL_WithParsingAndVSACErrors,
+                cqlErrors: true
+            }).then((updateResponse) => {
+                expect(updateResponse.status).to.eql(200)
+            })
+        })
     })
 
     afterEach('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -222,7 +240,9 @@ describe('Version Measure with invalid CQL', () => {
         TestData.readMeasureId().then((measureId) => {
             TestData.versionMeasure('major', 0, { failOnStatusCode: false }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has CQL errors.')
+                expect(response.body.message).to.eql(
+                    'User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has CQL errors.'
+                )
             })
         })
     })
