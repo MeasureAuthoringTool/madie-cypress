@@ -1,4 +1,5 @@
-import { MadieObject, Utilities } from "./Utilities"
+import { TestData } from './TestData'
+import { MadieObject, Utilities } from './Utilities'
 
 // no prefix = QiCore
 export enum Profile {
@@ -51,7 +52,6 @@ export enum Profile {
 }
 
 export class TestCaseBuilder {
-
     public static readonly availableTab = '[data-testid="available-tab"]'
     public static readonly addedTab = '[data-testid="added-tab"]'
     public static readonly jsonTab = '[data-testid="json-tab"]'
@@ -65,17 +65,13 @@ export class TestCaseBuilder {
 
     public static readonly horizontalSlider = "[data-testid='builder-slider']"
 
-
-
     public static addEditNewResource(addition: Profile, resourceNumber?: number) {
-        const currentUser = Cypress.env('selectedUser')
-
-        let bundleIndex = 0,
-        resourceIdPath = 'cypress/fixtures/' + currentUser + '/builderResourceId',
-        resourceId = ''
+        let bundleIndex = 0
+        let resourceFixtureName = 'builderResourceId'
+        let resourceId = ''
         if (resourceNumber) {
             bundleIndex = resourceNumber
-            resourceIdPath = 'cypress/fixtures/' + currentUser + '/builderResourceId' + resourceNumber
+            resourceFixtureName = `builderResourceId${resourceNumber}`
         }
 
         cy.get('[data-testid="add-element-' + addition + '"]').click().wait(500)
@@ -86,7 +82,7 @@ export class TestCaseBuilder {
 
             resourceId = store.bundle.entry[bundleIndex].resource.id
 
-            cy.writeFile(resourceIdPath, resourceId)
+            TestData.writeFixture(resourceFixtureName, resourceId)
 
             cy.get('[data-testid="action-center-button-' + resourceId + '"]').click().wait(250)
             cy.get('[data-testid="action-center-' + resourceId + '_Edit"]').click()
@@ -94,14 +90,12 @@ export class TestCaseBuilder {
     }
 
     public static applyAndWait() {
-
         cy.get(TestCaseBuilder.applyButton).click()
         cy.wait(1000)
         Utilities.waitForElementDisabled(TestCaseBuilder.applyButton, 8500)
     }
 
     public static selectLeftMenu(menuOption: string) {
-        
         cy.get('[data-testid="' + menuOption + '"]').click()
     }
 }

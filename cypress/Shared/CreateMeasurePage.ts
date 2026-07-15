@@ -99,8 +99,7 @@ export class CreateMeasurePage {
     }
 
     public static clickCreateDraftButton(): void {
-        const currentUser = Cypress.env('selectedUser')
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureID) => {
+        TestData.readMeasureId().then((measureID) => {
 
             let alias = 'draft' + (Date.now() + 1).toString()
             const waitAlias: `@${string}` = `@${alias}`

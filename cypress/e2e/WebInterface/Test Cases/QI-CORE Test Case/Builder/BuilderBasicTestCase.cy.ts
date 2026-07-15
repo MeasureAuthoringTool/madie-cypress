@@ -1,15 +1,21 @@
-import { CreateMeasurePage, SupportedModels } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { QiCore6Cql } from "../../../../../Shared/FHIRMeasuresCQL"
-import { PopulationType, Stratification } from "@madie/madie-models"
+import { CreateMeasurePage, SupportedModels } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import {
+    MeasureGroupPage,
+    MeasureGroups,
+    MeasureScoring,
+    MeasureType,
+    PopulationBasis
+} from '../../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { QiCore6Cql } from '../../../../../Shared/FHIRMeasuresCQL'
+import { PopulationType, Stratification } from '@madie/madie-models'
 import { v4 as uuidv4 } from 'uuid'
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Profile, TestCaseBuilder } from "../../../../../Shared/TestCaseBuilder"
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { Profile, TestCaseBuilder } from '../../../../../Shared/TestCaseBuilder'
 
 const timestamp = Date.now()
 let measureName = 'BuilderBasicTC' + timestamp
@@ -26,60 +32,56 @@ const populations: MeasureGroups = {
     initialPopulation: 'Initial Population',
     numerator: 'Numerator',
     denominator: 'Denominator',
-    denomExclusion: 'Denominator Exclusions',
+    denomExclusion: 'Denominator Exclusions'
 }
 
 const strats: Array<Stratification> = [
     {
-        id:  uuidv4(),
-        description: "Stratification 1: Patients age 42-51 by the end of the measurement period",
-        cqlDefinition: "Stratification 1",
+        id: uuidv4(),
+        description: 'Stratification 1: Patients age 42-51 by the end of the measurement period',
+        cqlDefinition: 'Stratification 1',
         associations: [
-        PopulationType.INITIAL_POPULATION,
-        PopulationType.DENOMINATOR,
-        PopulationType.DENOMINATOR_EXCLUSION,
-        PopulationType.NUMERATOR
+            PopulationType.INITIAL_POPULATION,
+            PopulationType.DENOMINATOR,
+            PopulationType.DENOMINATOR_EXCLUSION,
+            PopulationType.NUMERATOR
         ]
     },
     {
-        id:  uuidv4(),
-        description: "Stratification 2: Patients age 52-74 by the end of the measurement period",
-        cqlDefinition: "Stratification 2",
+        id: uuidv4(),
+        description: 'Stratification 2: Patients age 52-74 by the end of the measurement period',
+        cqlDefinition: 'Stratification 2',
         associations: [
-        PopulationType.INITIAL_POPULATION,
-        PopulationType.DENOMINATOR,
-        PopulationType.DENOMINATOR_EXCLUSION,
-        PopulationType.NUMERATOR
+            PopulationType.INITIAL_POPULATION,
+            PopulationType.DENOMINATOR,
+            PopulationType.DENOMINATOR_EXCLUSION,
+            PopulationType.NUMERATOR
         ]
     }
 ]
 
 describe('Test Case Builder Basics', () => {
-
     beforeEach('Create measure and login', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: cql })
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Proportion, populations)
+        MeasureGroupPage.CreateMeasureGroupAPI(
+            MeasureType.process,
+            PopulationBasis.boolean,
+            MeasureScoring.Proportion,
+            populations
+        )
         MeasureGroupPage.addStratificationDataAPI(strats)
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Create a QiCore6 test case using the UI Builder', () => {
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -94,7 +96,7 @@ describe('Test Case Builder Basics', () => {
         TestCaseBuilder.addEditNewResource(Profile.Patient)
 
         Utilities.dropdownSelect('[data-testid="code-selector-Patient.gender"]', 'female')
-       
+
         TestCaseBuilder.applyAndWait()
 
         TestCaseBuilder.selectLeftMenu(' *Identifier')
@@ -119,7 +121,10 @@ describe('Test Case Builder Basics', () => {
 
         TestCaseBuilder.selectLeftMenu('Extension (Race)')
         Utilities.waitForElementVisible('[data-testid="uri-field-Patient.extension[0].url"]', 8500)
-        Utilities.dropdownSelect('[data-testid="value-set-Patient.extension[0].extension[0].valueCoding"]', 'OmbRaceCategories')
+        Utilities.dropdownSelect(
+            '[data-testid="value-set-Patient.extension[0].extension[0].valueCoding"]',
+            'OmbRaceCategories'
+        )
         Utilities.dropdownSelect('[data-testid="code-system-selector"]', 'urn:oid:2.16.840.1.113883.6.238')
         Utilities.dropdownSelect('[data-testid="code-selector"]', '2028-9')
         cy.get('[data-testid="string-field-input-Patient.extension[0].extension[2].valueString"]').type('Asian')
@@ -127,7 +132,10 @@ describe('Test Case Builder Basics', () => {
 
         TestCaseBuilder.selectLeftMenu('Extension (Ethnicity)')
         Utilities.waitForElementVisible('[data-testid="uri-field-Patient.extension[1].url"]', 8500)
-        Utilities.dropdownSelect('[data-testid="value-set-Patient.extension[1].extension[0].valueCoding"]', 'OmbEthnicityCategories')
+        Utilities.dropdownSelect(
+            '[data-testid="value-set-Patient.extension[1].extension[0].valueCoding"]',
+            'OmbEthnicityCategories'
+        )
         Utilities.dropdownSelect('[data-testid="code-system-selector"]', 'urn:oid:2.16.840.1.113883.6.238')
         Utilities.dropdownSelect('[data-testid="code-selector"]', '2135-2')
         cy.get('[data-testid="string-field-input-Patient.extension[1].extension[2].valueString"]').type('Hispanic')
@@ -140,7 +148,10 @@ describe('Test Case Builder Basics', () => {
         TestCaseBuilder.addEditNewResource(Profile.Encounter, 1)
 
         Utilities.dropdownSelect('[data-testid="value-set-Encounter.class"]', 'ActEncounterCode')
-        Utilities.dropdownSelect('[data-testid="code-system-selector"]', 'http://terminology.hl7.org/CodeSystem/v3-ActCode')
+        Utilities.dropdownSelect(
+            '[data-testid="code-system-selector"]',
+            'http://terminology.hl7.org/CodeSystem/v3-ActCode'
+        )
         Utilities.dropdownSelect('[data-testid="code-selector"]', 'AMB')
         TestCaseBuilder.applyAndWait()
 
@@ -149,7 +160,10 @@ describe('Test Case Builder Basics', () => {
         TestCaseBuilder.applyAndWait()
 
         TestCaseBuilder.selectLeftMenu(' *Subject')
-        Utilities.dropdownSelect('[data-testid="reference-type-select-0"]', 'http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient')
+        Utilities.dropdownSelect(
+            '[data-testid="reference-type-select-0"]',
+            'http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient'
+        )
         cy.get('[data-testid="reference-select-0"]').click()
         cy.get('[data-value*="Patient/"]').click()
         TestCaseBuilder.applyAndWait()
