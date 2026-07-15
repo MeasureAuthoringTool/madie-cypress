@@ -25,6 +25,9 @@ if (!fs.existsSync(summaryFile)) {
 
 const summary = JSON.parse(fs.readFileSync(summaryFile, 'utf8'))
 const failures = Array.isArray(summary.failures) ? summary.failures : []
+const missingSpecs = Array.isArray(summary.execution && summary.execution.missingSpecs)
+  ? summary.execution.missingSpecs
+  : []
 const targetTitlesBySpec = new Map()
 const fullSpecFallbacks = new Set()
 
@@ -49,6 +52,13 @@ for (const failure of failures) {
 
 for (const spec of fullSpecFallbacks) {
   targetTitlesBySpec.delete(spec)
+}
+
+for (const spec of missingSpecs) {
+  if (spec) {
+    fullSpecFallbacks.add(spec)
+    targetTitlesBySpec.delete(spec)
+  }
 }
 
 const targetSpecs = Array.from(targetTitlesBySpec.keys())
@@ -76,6 +86,8 @@ function writeRerunMetadata() {
     targetableFailureCount: targetedTestCount,
     targetedSpecCount: targetSpecs.length,
     targetedTestCount,
+    missingSpecCount: missingSpecs.length,
+    missingSpecs,
     fallbackSpecCount: fallbackSpecs.length,
     targetedTestsBySpec,
     fallbackSpecs

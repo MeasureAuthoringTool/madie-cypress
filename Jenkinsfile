@@ -153,7 +153,7 @@ pipeline {
 
         slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
 
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', catchInterruptions: false) {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', catchInterruptions: true) {
           sh '''
             cd ${WORKSPACE}
             # Per-run report: start clean
@@ -167,6 +167,7 @@ pipeline {
               echo "Manual spec list contains $(wc -l < ${WORKSPACE}/test-files.txt) spec(s):"
               cat ${WORKSPACE}/test-files.txt
             fi
+            node scripts/resolve-spec-list.js "$TEST_SCRIPT" ${WORKSPACE}/planned-specs-${BUILD_NUMBER}.txt
             set +e
             timeout 8h npm run "$TEST_SCRIPT"
             TEST_STATUS=$?
@@ -181,6 +182,7 @@ pipeline {
         // Initial failures list and human-readable failure details
         sh '''
           cd ${WORKSPACE}
+          PLANNED_SPECS_FILE=${WORKSPACE}/planned-specs-${BUILD_NUMBER}.txt \
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-${BUILD_NUMBER}.txt \
             ${WORKSPACE}/failure-details-${BUILD_NUMBER}.txt \
@@ -280,6 +282,7 @@ pipeline {
           fi
 
           # Extract failures and human-readable failure details from rerun #1
+          PLANNED_SPECS_FILE=${WORKSPACE}/failures-${BUILD_NUMBER}.txt \
           RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-1-${BUILD_NUMBER}.json \
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt \
@@ -340,6 +343,7 @@ pipeline {
           fi
 
           # Extract failures and human-readable failure details from rerun #2
+          PLANNED_SPECS_FILE=${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt \
           RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-2-${BUILD_NUMBER}.json \
           node scripts/extract-failure-details.js \
             ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt \

@@ -84,7 +84,10 @@ function emptySummary(runLabel) {
 
 function normalizeExecution(execution) {
   return {
+    plannedSpecCount: Number(execution && execution.plannedSpecCount) || 0,
     executedSpecCount: Number(execution && execution.executedSpecCount) || 0,
+    missingSpecCount: Number(execution && execution.missingSpecCount) || 0,
+    missingSpecs: Array.isArray(execution && execution.missingSpecs) ? execution.missingSpecs : [],
     testsRegistered: Number(execution && execution.testsRegistered) || 0,
     testsPassing: Number(execution && execution.testsPassing) || 0,
     testsFailing: Number(execution && execution.testsFailing) || 0,
@@ -102,6 +105,7 @@ function normalizeTargeting(targeting) {
     ? targeting.targetedTestsBySpec
     : {}
   const fallbackSpecs = targeting && Array.isArray(targeting.fallbackSpecs) ? targeting.fallbackSpecs : []
+  const missingSpecs = targeting && Array.isArray(targeting.missingSpecs) ? targeting.missingSpecs : []
   const targetedSpecCount = Number(targeting && targeting.targetedSpecCount) || Object.keys(targetedTestsBySpec).length
   const targetedTestCount = Number(targeting && targeting.targetedTestCount) || Object.values(targetedTestsBySpec).reduce(
     (count, titles) => count + (Array.isArray(titles) ? titles.length : 0),
@@ -112,6 +116,8 @@ function normalizeTargeting(targeting) {
     targetableFailureCount: Number(targeting && targeting.targetableFailureCount) || targetedTestCount,
     targetedSpecCount,
     targetedTestCount,
+    missingSpecCount: Number(targeting && targeting.missingSpecCount) || missingSpecs.length,
+    missingSpecs,
     fallbackSpecCount: Number(targeting && targeting.fallbackSpecCount) || fallbackSpecs.length,
     targetedTestsBySpec,
     fallbackSpecs
