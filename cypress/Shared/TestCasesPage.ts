@@ -979,6 +979,9 @@ export class TestCasesPage {
             cy.log('No callstack request detected, continuing...')
           }
         })
+
+        cy.url({ timeout: 60000 }).should('include', `/test-cases/${tcId}`)
+        cy.get(this.detailsTab, { timeout: 60000 }).should('be.visible')
       })
   }
 
@@ -1132,6 +1135,14 @@ export class TestCasesPage {
   // input the visible "Case #" value to have that test case's checkbox toggled from its current status
   public static checkTestCase(testCaseNumber: number): void {
     cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+      .parent('tr')
+      .find('input[type="checkbox"]')
+      .click()
+      .wait(200)
+  }
+
+  public static checkTestCaseByTitle(testCaseTitle: string): void {
+    cy.contains('td[data-testid*="_title"]', testCaseTitle)
       .parent('tr')
       .find('input[type="checkbox"]')
       .click()

@@ -1,14 +1,14 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { Header } from "../../../../../Shared/Header"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { Header } from '../../../../../Shared/Header'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = Date.now()
@@ -29,34 +29,34 @@ const testCase2: TestCase = {
 }
 
 describe('MADIE Zip Test Case Import', () => {
-
     deleteDownloadsFolderBeforeAll()
     deleteDownloadsFolderBeforeEach()
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
-        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, false, true)
+        TestCasesPage.CreateTestCaseAPI(
+            testCase2.title,
+            testCase2.group,
+            testCase2.description,
+            testCase2.json,
+            false,
+            true
+        )
 
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('MADIE Zip Test Case Import', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -70,14 +70,16 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Navigate to Test Case page
@@ -92,14 +94,16 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //export test case
@@ -128,11 +132,17 @@ describe('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(
+            'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip',
+            { action: 'drag-drop', force: true }
+        )
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should(
+            'contain.text',
+            'eCQMTitle4QICore-v0.0.000-FHIR-TestCases.zip'
+        )
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -144,20 +154,16 @@ describe('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', '(2) Test cases imported successfully')
 
-        //Verify created test case Titles exist on Test Cases Page 
+        //Verify created test case Titles exist on Test Cases Page
         cy.contains(testCase2.title).should('be.visible')
         cy.contains(testCase1.title).should('be.visible')
     })
 
     it('Copy Warning message while importing Test cases', () => {
-
         //Click on Edit Button
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -171,14 +177,16 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Navigate to Test Case page
@@ -193,14 +201,16 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
 
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
@@ -214,11 +224,17 @@ describe('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/CMS108FHIR-v0.2.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/CMS108FHIR-v0.2.000-FHIR4-TestCases.zip', {
+            action: 'drag-drop',
+            force: true
+        })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS108FHIR-v0.2.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should(
+            'contain.text',
+            'CMS108FHIR-v0.2.000-FHIR4-TestCases.zip'
+        )
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -241,24 +257,27 @@ describe('MADIE Zip Test Case Import', () => {
 })
 
 describe('MADIE Zip Test Case Import: error message should appear when the .madie file is missing', () => {
-
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
-        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, false, true)
+        TestCasesPage.CreateTestCaseAPI(
+            testCase2.title,
+            testCase2.group,
+            testCase2.description,
+            testCase2.json,
+            false,
+            true
+        )
 
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('MADIE Zip Test Case Import: error message appears when .madie file is missing from the .zip file', () => {
-
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
@@ -281,11 +300,15 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         Utilities.waitForElementVisible(TestCasesPage.tcImportButton, 3750)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.tcFileDrop).find(TestCasesPage.filAttachDropBox).attachFile('TestCase7345TsteCQM-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.tcImportError).should('contain.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
+        cy.get(TestCasesPage.tcFileDrop)
+            .find(TestCasesPage.filAttachDropBox)
+            .attachFile('TestCase7345TsteCQM-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.tcImportError).should(
+            'contain.text',
+            'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.'
+        )
 
         //close the test case import modal
         cy.get(TestCasesPage.importTestCaseCancelBtnOnModal).click()
     })
 })
-

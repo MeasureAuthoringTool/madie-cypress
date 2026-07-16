@@ -15,12 +15,16 @@ import {
 import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
-const now = Date.now()
-const measure = {
-    name: 'TestCaseButtons' + now,
-    cqlLibraryName: 'TestCaseButtonsLib' + now,
-    cql: MeasureCQL.ICFCleanTest_CQL
+const buildMeasure = () => {
+    const timestamp = Date.now()
+
+    return {
+        name: 'TestCaseButtons' + timestamp,
+        cqlLibraryName: 'TestCaseButtonsLib' + timestamp,
+        cql: MeasureCQL.ICFCleanTest_CQL
+    }
 }
 const testCase1: TestCase = {
     title: 'Title for Auto Test',
@@ -31,7 +35,7 @@ const testCase2: TestCase = {
     title: 'Second Test Case',
     description: 'wonderful',
     group: 'ICFTestSeries',
-    json: TestCaseJson.TestCaseJson_Valid_w_All_Encounter
+    json: TestCaseJson.TestCaseJson_Valid
 }
 const populations: MeasureGroups = {
     initialPopulation: 'Surgical Absence of Cervix',
@@ -40,7 +44,10 @@ const populations: MeasureGroups = {
 }
 
 describe('Test case list page - Action Center icons for measure owner', () => {
+    let measure = buildMeasure()
+
     beforeEach('Create measure and login', () => {
+        measure = buildMeasure()
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, {
             measureCql: measure.cql
         })
@@ -50,11 +57,11 @@ describe('Test case list page - Action Center icons for measure owner', () => {
             MeasureScoring.Proportion,
             populations
         )
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group)
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description)
         TestCasesPage.CreateTestCaseAPI(
             testCase2.title,
-            testCase2.description,
             testCase2.group,
+            testCase2.description,
             testCase2.json,
             false,
             true
@@ -68,7 +75,6 @@ describe('Test case list page - Action Center icons for measure owner', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
     })
 
@@ -82,9 +88,9 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
     it('Clone icon is present and enables correctly', () => {
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
-        TestCasesPage.checkTestCase(2)
+        TestCasesPage.checkTestCaseByTitle(testCase2.title)
         cy.get(TestCasesPage.actionCenterClone).should('be.enabled')
-        TestCasesPage.checkTestCase(1)
+        TestCasesPage.checkTestCaseByTitle(testCase1.title)
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
 
         cy.get('tr > :nth-child(1) > input').check()
@@ -137,7 +143,10 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 })
 
 describe('Test case list page - Action Center icons for versioned measure', () => {
+    let measure = buildMeasure()
+
     beforeEach('Create measure and login', () => {
+        measure = buildMeasure()
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, {
             measureCql: measure.cql
         })
@@ -147,25 +156,25 @@ describe('Test case list page - Action Center icons for versioned measure', () =
             MeasureScoring.Proportion,
             populations
         )
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group, testCase2.json)
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json)
         TestCasesPage.CreateTestCaseAPI(
             testCase2.title,
-            testCase2.description,
             testCase2.group,
+            testCase2.description,
             testCase2.json,
             false,
             true
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        TestData.versionMeasure().its('status').should('eq', 200)
+        cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
-        EditMeasurePage.actionCenter(EditMeasureActions.version)
         cy.get(EditMeasurePage.testCasesTab).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measure.name, measure.cqlLibraryName)
     })
 
@@ -209,7 +218,10 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 })
 
 describe('Test case list page - Action Center icons for non-owner', () => {
+    let measure = buildMeasure()
+
     beforeEach('Create measure and login', () => {
+        measure = buildMeasure()
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, {
             measureCql: measure.cql
         })
@@ -219,11 +231,11 @@ describe('Test case list page - Action Center icons for non-owner', () => {
             MeasureScoring.Proportion,
             populations
         )
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group)
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description)
         TestCasesPage.CreateTestCaseAPI(
             testCase2.title,
-            testCase2.description,
             testCase2.group,
+            testCase2.description,
             testCase2.json,
             false,
             true
@@ -242,7 +254,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.UILogout()
+        OktaLogin.Login()
         Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
     })
 
