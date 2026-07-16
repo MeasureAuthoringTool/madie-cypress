@@ -1,38 +1,37 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { Utilities } from '../../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 const measureName = 'CQLPageObject' + now
 const CqlLibraryName = 'CQLPageObjectLib' + now
-const validMeasureCQL = 'library TestLibrary1736348266658 version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+const validMeasureCQL =
+    "library TestLibrary1736348266658 version '0.0.000'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n\n" +
     'context Patient'
-const measureCQL = 'library SimpleFhirLibrary version \'0.0.004\'\n' + 
-    'using QICore version \'4.1.1\'\n' + 
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers'
+const measureCQL =
+    "library SimpleFhirLibrary version '0.0.004'\n" +
+    "using QICore version '4.1.1'\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers"
 const testCaseTitle = 'test case title'
 const testCaseSeries = 'SBTestSeries'
 const testCaseDescription = 'DENOMFail' + Date.now()
 const tcJson = TestCaseJson.TestCaseJson_Valid
 
 describe('Test Case Page CQL page object', () => {
-
     beforeEach('Create Measure, TestCase and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, validMeasureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, tcJson)
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -54,6 +53,7 @@ describe('Test Case Page CQL page object', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.collapseEditor()
 
         //navigate to the test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -68,16 +68,13 @@ describe('Test Case Page CQL page object', () => {
 })
 
 describe('Test Case Page CQL page object', () => {
-
     beforeEach('Create Measure, TestCase and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, tcJson)
         OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -94,6 +91,9 @@ describe('Test Case Page CQL page object', () => {
         //add section / line to validate message letting user know of error with CQL
         cy.get(TestCasesPage.cqlHasErrorsMsg).should('exist')
         cy.get(TestCasesPage.cqlHasErrorsMsg).should('be.visible')
-        cy.get(TestCasesPage.cqlHasErrorsMsg).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab')
+        cy.get(TestCasesPage.cqlHasErrorsMsg).should(
+            'contain.text',
+            'An error exists with the measure CQL, please review the CQL Editor tab'
+        )
     })
 })

@@ -69,34 +69,21 @@ export class Utilities {
             altUser = false
         }
 
-        OktaLogin.setupUserSession(altUser)
+        TestData.setupUserScope(owner)
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            if (!accessToken?.value) {
-                cy.log('⚠️ deleteMeasure: No access token available — skipping cleanup')
+        cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
+            if (!id) {
+                cy.log(`⚠️ deleteMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`)
                 return
             }
-            cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
-                if (!id) {
-                    cy.log(`⚠️ deleteMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`)
-                    return
+            TestData.requestMeasureDeleteActionById(id, { failOnStatusCode: false }).then((response) => {
+                if (response.status === 200) {
+                    cy.log('Measure deleted (hard delete) via API successfully')
+                } else {
+                    cy.log(
+                        `⚠️ Measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                    )
                 }
-                cy.request({
-                    url: `/api/measures/${id}/delete`,
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: `Bearer ${accessToken?.value}`
-                    },
-                    failOnStatusCode: false
-                }).then((response) => {
-                    if (response.status === 200) {
-                        cy.log('Measure deleted (hard delete) via API successfully')
-                    } else {
-                        cy.log(
-                            `⚠️ Measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
-                        )
-                    }
-                })
             })
         })
     }
@@ -128,36 +115,26 @@ export class Utilities {
         OktaLogin.setupAdminSession()
 
         const measurePath = TestData.measureIdPath(deleteSecondMeasure ? 2 : measureNumber)
-        cy.getCookie('accessToken').then((accessToken) => {
-            if (!accessToken?.value) {
-                cy.log('⚠️ deleteVersionedMeasure: No access token available — skipping cleanup')
+        cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
+            if (!id) {
+                cy.log(
+                    `⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`
+                )
                 return
             }
-            cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
-                if (!id) {
-                    cy.log(
-                        `⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`
-                    )
-                    return
+            TestData.requestAdminMeasureDeleteById(id, user, {
+                failOnStatusCode: false,
+                headers: {
+                    'api-key': adminApiKey
                 }
-                cy.request({
-                    url: '/api/admin/measures/' + id,
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: 'Bearer ' + accessToken?.value,
-                        'api-key': adminApiKey,
-                        harpId: user
-                    },
-                    failOnStatusCode: false
-                }).then((response) => {
-                    if (response.status === 200) {
-                        cy.log('Versioned measure deleted successfully via admin API')
-                    } else {
-                        cy.log(
-                            `⚠️ Versioned measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
-                        )
-                    }
-                })
+            }).then((response) => {
+                if (response.status === 200) {
+                    cy.log('Versioned measure deleted successfully via admin API')
+                } else {
+                    cy.log(
+                        `⚠️ Versioned measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                    )
+                }
             })
         })
     }
@@ -390,19 +367,19 @@ export class Utilities {
 
     // ToDo: add similar function to easily transfer ownership of measures or libraries
     public static setSharePermissions(objectType: MadieObject, action: PermissionActions, user: string) {
-        let path: string
+        let readId: () => Cypress.Chainable<string>
         let urlPath: string
 
         // doing this for backwards compatibility now - this should be refactored in the future
         if (objectType === MadieObject.Library) {
-            path = TestData.cqlLibraryIdPath()
+            readId = () => TestData.readCqlLibraryId()
             if (action === PermissionActions.GRANT) {
                 urlPath = 'cql-libraries/share'
             } else {
                 urlPath = 'cql-libraries/unshare'
             }
         } else {
-            path = TestData.measureIdPath()
+            readId = () => TestData.readMeasureId()
             if (action === PermissionActions.GRANT) {
                 urlPath = 'measures/shared'
             } else {
@@ -410,35 +387,27 @@ export class Utilities {
             }
         }
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(path)
-                .should('exist')
-                .then((mId) => {
-                    const users = new Array()
-                    users.push(user)
-
-                    cy.request({
-                        failOnStatusCode: false,
-                        url: '/api/' + urlPath,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value,
-                            'api-key': adminApiKey
-                        },
-                        method: 'PUT',
-                        body: { [mId]: users }
-                        // Note: these brackets don't make this an array.
-                        // This syntax is needed for keys of an object to force it to honor the value
-                    }).then((response) => {
-                        console.log(response)
-                        expect(response.status).to.eql(200)
-                        if (action === PermissionActions.GRANT) {
-                            expect(response.body[mId][0].roles).to.include('SHARED_WITH')
-                            expect(response.body[mId][0].userId).to.eq(user)
-                        } else {
-                            expect(response.body[mId]).to.eql([])
-                        }
-                    })
-                })
+        readId().then((madieId) => {
+            TestData.requestWithAccessToken({
+                failOnStatusCode: false,
+                url: '/api/' + urlPath,
+                headers: {
+                    'api-key': adminApiKey
+                },
+                method: 'PUT',
+                body: { [madieId]: [user] }
+                // Note: these brackets don't make this an array.
+                // This syntax is needed for keys of an object to force it to honor the value
+            }).then((response) => {
+                console.log(response)
+                expect(response.status).to.eql(200)
+                if (action === PermissionActions.GRANT) {
+                    expect(response.body[madieId][0].roles).to.include('SHARED_WITH')
+                    expect(response.body[madieId][0].userId).to.eq(user)
+                } else {
+                    expect(response.body[madieId]).to.eql([])
+                }
+            })
         })
     }
 
@@ -480,8 +449,6 @@ export class Utilities {
     }
 
     public static lockControl(type: MadieObject, lockObject: boolean, altUser?: boolean) {
-        const currentUser = Cypress.env('selectedUser')
-
         let action = 'PUT'
         if (!lockObject) {
             action = 'DELETE'
@@ -494,66 +461,36 @@ export class Utilities {
 
         switch (type) {
             case MadieObject.Measure:
-                cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                        .should('exist')
-                        .then((id) => {
-                            cy.request({
-                                url: '/api/measures/' + id + '/measure-lock',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken?.value
-                                },
-                                method: action
-                            }).then((response) => {
-                                expect(response.status).to.eql(200)
-                            })
-                        })
+                TestData.requestMeasureLock(action as 'PUT' | 'DELETE').then((response) => {
+                    expect(response.status).to.eql(200)
                 })
                 break
 
             case MadieObject.TestCase:
-                cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                        .should('exist')
-                        .then((measureId) => {
-                            cy.readFile('cypress/fixtures/' + currentUser + '/testCaseId')
-                                .should('exist')
-                                .then((tcId) => {
-                                    let lockUrl = '/api/measures/' + measureId + '/test-cases/' + tcId + '/lock'
-                                    action = 'POST'
-                                    if (!lockObject) {
-                                        lockUrl = '/api/test-cases/' + tcId + '/unlock'
-                                    }
+                TestData.readMeasureId().then((measureId) => {
+                    TestData.readTestCaseId().then((tcId) => {
+                        const lockUrl = lockObject
+                            ? `/api/measures/${measureId}/test-cases/${tcId}/lock`
+                            : `/api/test-cases/${tcId}/unlock`
 
-                                    cy.request({
-                                        url: lockUrl,
-                                        headers: {
-                                            authorization: 'Bearer ' + accessToken?.value
-                                        },
-                                        method: action
-                                    }).then((response) => {
-                                        expect(response.status).to.eql(200)
-                                    })
-                                })
+                        TestData.requestWithAccessToken({
+                            url: lockUrl,
+                            method: 'POST'
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
                         })
+                    })
                 })
                 break
 
             case MadieObject.Library:
-                cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId')
-                        .should('exist')
-                        .then((id) => {
-                            cy.request({
-                                url: '/api/cql-libraries/' + id + '/lock',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken?.value
-                                },
-                                method: action
-                            }).then((response) => {
-                                expect(response.status).to.eql(200)
-                            })
-                        })
+                TestData.readCqlLibraryId().then((id) => {
+                    TestData.requestWithAccessToken({
+                        url: '/api/cql-libraries/' + id + '/lock',
+                        method: action as 'PUT' | 'DELETE'
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
                 })
                 break
 
@@ -567,7 +504,6 @@ export class Utilities {
             altUser = false
         }
 
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(altUser)
 
         harpUser = OktaLogin.getUser(false)
@@ -575,83 +511,69 @@ export class Utilities {
 
         switch (type) {
             case MadieObject.Measure:
-                cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                        .should('exist')
-                        .then((measureId) => {
-                            cy.request({
-                                url: '/api/measures/unlock',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken?.value
-                                },
-                                method: 'DELETE'
-                            }).then((response) => {
-                                expect(response.status).to.eql(200)
-                                if (altUser) {
-                                    expect(response.body[0]).to.include(
-                                        'Delete measure locks for harpId: ' + harpUserALT
-                                    )
-                                    expect(response.body[1]).to.be.oneOf([
-                                        'Deleted measure lock: ' + measureId,
-                                        'No measure locks found for harpId: ' + harpUserALT
-                                    ])
-                                    expect(response.body[2]).to.be.oneOf([
-                                        'Delete test case locks for harpId: ' + harpUserALT,
-                                        'Delete library locks for harpId: ' + harpUserALT
-                                    ])
-                                    expect(response.body[3]).to.include(
-                                        'No test case locks found for harpId: ' + harpUserALT
-                                    )
-                                } else {
-                                    expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUser)
-                                    expect(response.body[1]).to.be.oneOf([
-                                        'Deleted measure lock: ' + measureId,
-                                        'No measure locks found for harpId: ' + harpUser
-                                    ])
-                                    expect(response.body[2]).to.be.oneOf([
-                                        'Delete test case locks for harpId: ' + harpUser,
-                                        'Delete library locks for harpId: ' + harpUser
-                                    ])
-                                    expect(response.body[3]).to.include(
-                                        'No test case locks found for harpId: ' + harpUser
-                                    )
-                                }
-                            })
-                        })
+                TestData.readMeasureId().then((measureId) => {
+                    TestData.requestWithAccessToken({
+                        url: '/api/measures/unlock',
+                        method: 'DELETE'
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        if (altUser) {
+                            expect(response.body[0]).to.include(
+                                'Delete measure locks for harpId: ' + harpUserALT
+                            )
+                            expect(response.body[1]).to.be.oneOf([
+                                'Deleted measure lock: ' + measureId,
+                                'No measure locks found for harpId: ' + harpUserALT
+                            ])
+                            expect(response.body[2]).to.be.oneOf([
+                                'Delete test case locks for harpId: ' + harpUserALT,
+                                'Delete library locks for harpId: ' + harpUserALT
+                            ])
+                            expect(response.body[3]).to.include(
+                                'No test case locks found for harpId: ' + harpUserALT
+                            )
+                        } else {
+                            expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUser)
+                            expect(response.body[1]).to.be.oneOf([
+                                'Deleted measure lock: ' + measureId,
+                                'No measure locks found for harpId: ' + harpUser
+                            ])
+                            expect(response.body[2]).to.be.oneOf([
+                                'Delete test case locks for harpId: ' + harpUser,
+                                'Delete library locks for harpId: ' + harpUser
+                            ])
+                            expect(response.body[3]).to.include(
+                                'No test case locks found for harpId: ' + harpUser
+                            )
+                        }
+                    })
                 })
                 break
 
             case MadieObject.Library:
-                cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId')
-                        .should('exist')
-                        .then((id) => {
-                            cy.request({
-                                url: '/api/cql-libraries/unlock',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken?.value
-                                },
-                                method: 'DELETE'
-                            }).then((response) => {
-                                expect(response.status).to.eql(200)
-                                if (altUser) {
-                                    expect(response.body[0]).to.include(
-                                        'Delete library locks for harpId: ' + harpUserALT
-                                    )
-                                    expect(response.body[1]).to.be.oneOf([
-                                        'Deleted library lock for Id: ' + id,
-                                        'No library locks found for harpId: ' + harpUserALT
-                                    ])
-                                } else {
-                                    // if not altUser, then check for the library lock deletion message
-                                    expect(response.body[0]).to.include('Delete library locks for harpId: ' + harpUser)
-                                    expect(response.body[1]).to.be.oneOf([
-                                        'Deleted library lock for Id: ' + id,
-                                        'No library locks found for harpId: ' + harpUser
-                                    ])
-                                }
-                            })
-                        })
+                TestData.readCqlLibraryId().then((id) => {
+                    TestData.requestWithAccessToken({
+                        url: '/api/cql-libraries/unlock',
+                        method: 'DELETE'
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        if (altUser) {
+                            expect(response.body[0]).to.include(
+                                'Delete library locks for harpId: ' + harpUserALT
+                            )
+                            expect(response.body[1]).to.be.oneOf([
+                                'Deleted library lock for Id: ' + id,
+                                'No library locks found for harpId: ' + harpUserALT
+                            ])
+                        } else {
+                            // if not altUser, then check for the library lock deletion message
+                            expect(response.body[0]).to.include('Delete library locks for harpId: ' + harpUser)
+                            expect(response.body[1]).to.be.oneOf([
+                                'Deleted library lock for Id: ' + id,
+                                'No library locks found for harpId: ' + harpUser
+                            ])
+                        }
+                    })
                 })
                 break
 

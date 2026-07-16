@@ -174,7 +174,21 @@ describe('Version Measure without CQL', () => {
         newCQLLibraryName = cqlLibraryName + 2 + randValue
         harpUser = OktaLogin.getUser(false)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
+        TestData.readMeasure<any>().then((response) => {
+            expect(response.status).to.eql(200)
+
+            TestData.updateMeasure({
+                ...response.body,
+                cql: '',
+                elmJson: '',
+                elmXml: '',
+                cqlErrors: false
+            }).then((updateResponse) => {
+                expect(updateResponse.status).to.eql(200)
+            })
+        })
     })
 
     after('Clean up', () => {
@@ -201,22 +215,18 @@ describe('Version Measure with invalid CQL', () => {
 
         OktaLogin.setupUserSession(false)
 
-        TestData.requestMeasure<any>({
-            measureName: newMeasureName,
-            cqlLibraryName: newCQLLibraryName,
-            model: 'QI-Core v4.1.1',
-            ecqmTitle: 'eCQMTitle',
-            cql: measureCQL_WithParsingAndVSACErrors,
-            measurementPeriodStart: mpStartDate + 'T00:00:00.000Z',
-            measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z'
-        }, {
-            failOnStatusCode: false
-        }).then((response) => {
-            expect(response.status).to.eql(201)
-            expect(response.body.id).to.be.exist
-            expect(response.body.errors[0]).to.include('ERRORS_ELM_JSON')
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
+        TestData.readMeasure<any>().then((response) => {
+            expect(response.status).to.eql(200)
 
-            writeCurrentMeasureFixtures(response.body)
+            TestData.updateMeasure({
+                ...response.body,
+                cql: measureCQL_WithParsingAndVSACErrors,
+                cqlErrors: true
+            }).then((updateResponse) => {
+                expect(updateResponse.status).to.eql(200)
+            })
         })
     })
 

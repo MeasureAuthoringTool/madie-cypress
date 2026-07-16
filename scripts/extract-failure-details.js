@@ -23,6 +23,7 @@ const hasSummaryOutput = Boolean(
 const summaryJsonFile = hasSummaryOutput ? maybeSummaryJsonFile : null
 const runLabel = (hasSummaryOutput ? process.argv[5] : process.argv[4]) || 'Cypress failures'
 const rerunTargetingFile = process.env.RERUN_TARGETING_FILE || ''
+const plannedSpecsFile = process.env.PLANNED_SPECS_FILE || ''
 
 if (!specOutputFile || !detailsOutputFile) {
   console.error('Usage: node scripts/extract-failure-details.js spec-output-file details-output-file [summary-json-file] [run-label]')
@@ -43,6 +44,8 @@ const failures = []
 const seenFailures = new Set()
 const runMetrics = {
   executedSpecs: new Set(),
+  plannedSpecs: new Set(),
+  missingSpecs: new Set(),
   testsRegistered: 0,
   testsPassing: 0,
   testsFailing: 0,
@@ -237,7 +240,10 @@ function buildSummary(specs) {
     failedSpecCount: specs.length,
     failedTestCount: enrichedFailures.length,
     execution: {
+      plannedSpecCount: runMetrics.plannedSpecs.size,
       executedSpecCount: runMetrics.executedSpecs.size,
+      missingSpecCount: runMetrics.missingSpecs.size,
+      missingSpecs: Array.from(runMetrics.missingSpecs).sort(),
       testsRegistered: runMetrics.testsRegistered,
       testsPassing: runMetrics.testsPassing,
       testsFailing: runMetrics.testsFailing,
@@ -265,6 +271,8 @@ function emptyRerunTargeting() {
     targetableFailureCount: 0,
     targetedSpecCount: 0,
     targetedTestCount: 0,
+    missingSpecCount: 0,
+    missingSpecs: [],
     fallbackSpecCount: 0,
     targetedTestsBySpec: {},
     fallbackSpecs: []
@@ -287,6 +295,7 @@ function readRerunTargeting(filePath) {
       ? targeting.targetedTestsBySpec
       : {}
     const fallbackSpecs = Array.isArray(targeting.fallbackSpecs) ? targeting.fallbackSpecs : []
+    const missingSpecs = Array.isArray(targeting.missingSpecs) ? targeting.missingSpecs : []
     const targetedSpecCount = Number(targeting.targetedSpecCount) || Object.keys(targetedTestsBySpec).length
     const targetedTestCount = Number(targeting.targetedTestCount) || Object.values(targetedTestsBySpec).reduce(
       (count, titles) => count + (Array.isArray(titles) ? titles.length : 0),
@@ -298,6 +307,8 @@ function readRerunTargeting(filePath) {
       targetableFailureCount: Number(targeting.targetableFailureCount) || targetedTestCount,
       targetedSpecCount,
       targetedTestCount,
+      missingSpecCount: Number(targeting.missingSpecCount) || missingSpecs.length,
+      missingSpecs,
       fallbackSpecCount: Number(targeting.fallbackSpecCount) || fallbackSpecs.length,
       targetedTestsBySpec,
       fallbackSpecs
@@ -449,10 +460,48 @@ function extractFallbackFromRunnerResults() {
   }
 }
 
+function readPlannedSpecs(filePath) {
+  if (!filePath) {
+    return
+  }
+
+  const resolvedPath = path.resolve(filePath)
+  if (!fs.existsSync(resolvedPath)) {
+    return
+  }
+
+  const specs = fs.readFileSync(resolvedPath, 'utf8')
+    .split(/\r?\n/)
+    .map(spec => spec.trim())
+    .filter(Boolean)
+
+  for (const spec of specs) {
+    runMetrics.plannedSpecs.add(spec)
+  }
+}
+
+function addMissingSpecFailures() {
+  if (!runMetrics.plannedSpecs.size) {
+    return
+  }
+
+  for (const spec of runMetrics.plannedSpecs) {
+    if (runMetrics.executedSpecs.has(spec)) {
+      continue
+    }
+
+    runMetrics.missingSpecs.add(spec)
+    failedSpecs.add(spec)
+    addFailure(spec, 'Hook: Spec did not execute in this run.', 'No Mochawesome or runner-results output was produced for this spec.')
+  }
+}
+
 const hadMochawesome = extractFromMochawesome()
 if (!hadMochawesome) {
   extractFallbackFromRunnerResults()
 }
+readPlannedSpecs(plannedSpecsFile)
+addMissingSpecFailures()
 
 writeOutputs()
 

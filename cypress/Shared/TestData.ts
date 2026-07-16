@@ -527,15 +527,23 @@ export class TestData {
         owner: FixtureOwner = 'selectedUser'
     ): Cypress.Chainable<Cypress.Response<T>> {
         return this.readMeasureId(0, owner).then((measureId) => {
-            return this.requestWithAccessToken<T>({
-                ...options,
-                url: `/api/admin/measures/${measureId}`,
-                method: 'DELETE',
-                headers: {
-                    ...options.headers,
-                    harpId
-                }
-            })
+            return this.requestAdminMeasureDeleteById<T>(measureId, harpId, options)
+        })
+    }
+
+    public static requestAdminMeasureDeleteById<T = unknown>(
+        measureId: string,
+        harpId: string,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/admin/measures/${measureId}`,
+            method: 'DELETE',
+            headers: {
+                ...options.headers,
+                harpId
+            }
         })
     }
 
@@ -544,11 +552,18 @@ export class TestData {
         owner: FixtureOwner = 'selectedUser'
     ): Cypress.Chainable<Cypress.Response<T>> {
         return this.readMeasureId(0, owner).then((measureId) => {
-            return this.requestWithAccessToken<T>({
-                ...options,
-                url: `/api/measures/${measureId}/delete`,
-                method: 'DELETE'
-            })
+            return this.requestMeasureDeleteActionById<T>(measureId, options)
+        })
+    }
+
+    public static requestMeasureDeleteActionById<T = MeasureDeleteActionResponse>(
+        measureId: string,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/measures/${measureId}/delete`,
+            method: 'DELETE'
         })
     }
 

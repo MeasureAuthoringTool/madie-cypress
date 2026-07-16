@@ -38,9 +38,9 @@ function value(number) {
 
 const slackSummary = [
   'Normalized summary:',
-  `• Initial run: ${value(initialExecution.executedSpecCount)} specs, ${value(initialExecution.testsRegistered)} registered, ${value(initialExecution.testsPassing)} passed, ${value(initialExecution.testsFailing)} failed, ${value(initialExecution.testsSkipped)} skipped`,
-  `• Rerun #1: ${value(rerun1Targeting.targetedSpecCount)} targeted specs, ${value(rerun1Targeting.targetedTestCount)} targeted failed tests, ${value(rerun1Execution.testsRegistered)} registered in opened specs, ${value(rerun1Execution.filteredOut)} filtered out, ${value(rerun1Run.failedSpecCount)} failed specs remaining`,
-  `• Rerun #2: ${value(rerun2Targeting.targetedSpecCount)} targeted specs, ${value(rerun2Targeting.targetedTestCount)} targeted failed tests, ${value(rerun2Execution.testsRegistered)} registered in opened specs, ${value(rerun2Execution.filteredOut)} filtered out, ${value(rerun2Run.failedSpecCount)} failed specs remaining`
+  `• Initial run: ${value(initialExecution.executedSpecCount)} executed / ${value(initialExecution.plannedSpecCount)} planned specs, ${value(initialExecution.missingSpecCount)} missing specs, ${value(initialExecution.testsRegistered)} registered, ${value(initialExecution.testsPassing)} passed, ${value(initialExecution.testsFailing)} failed, ${value(initialExecution.testsSkipped)} skipped`,
+  `• Rerun #1: ${value(rerun1Targeting.targetedSpecCount)} targeted specs, ${value(rerun1Targeting.targetedTestCount)} targeted failed tests, ${value(rerun1Targeting.missingSpecCount)} missing-spec retries, ${value(rerun1Execution.testsRegistered)} registered in opened specs, ${value(rerun1Execution.filteredOut)} filtered out, ${value(rerun1Run.failedSpecCount)} failed specs remaining`,
+  `• Rerun #2: ${value(rerun2Targeting.targetedSpecCount)} targeted specs, ${value(rerun2Targeting.targetedTestCount)} targeted failed tests, ${value(rerun2Targeting.missingSpecCount)} missing-spec retries, ${value(rerun2Execution.testsRegistered)} registered in opened specs, ${value(rerun2Execution.filteredOut)} filtered out, ${value(rerun2Run.failedSpecCount)} failed specs remaining`
 ].join('\n')
 
 const consoleSummary = [
@@ -48,7 +48,9 @@ const consoleSummary = [
   `Outcome: ${trend.outcome || 'Unknown'}`,
   '',
   'Initial run:',
+  `  specs planned: ${value(initialExecution.plannedSpecCount)}`,
   `  specs executed: ${value(initialExecution.executedSpecCount)}`,
+  `  specs missing: ${value(initialExecution.missingSpecCount)}`,
   `  tests registered: ${value(initialExecution.testsRegistered)}`,
   `  passed: ${value(initialExecution.testsPassing)}`,
   `  failed: ${value(initialExecution.testsFailing)}`,
@@ -57,6 +59,7 @@ const consoleSummary = [
   'Rerun #1:',
   `  targeted specs: ${value(rerun1Targeting.targetedSpecCount)}`,
   `  targeted failed tests: ${value(rerun1Targeting.targetedTestCount)}`,
+  `  missing-spec retries: ${value(rerun1Targeting.missingSpecCount)}`,
   `  tests registered in opened specs: ${value(rerun1Execution.testsRegistered)}`,
   `  filtered out: ${value(rerun1Execution.filteredOut)}`,
   `  remaining failed specs: ${value(rerun1Run.failedSpecCount)}`,
@@ -64,6 +67,7 @@ const consoleSummary = [
   'Rerun #2:',
   `  targeted specs: ${value(rerun2Targeting.targetedSpecCount)}`,
   `  targeted failed tests: ${value(rerun2Targeting.targetedTestCount)}`,
+  `  missing-spec retries: ${value(rerun2Targeting.missingSpecCount)}`,
   `  tests registered in opened specs: ${value(rerun2Execution.testsRegistered)}`,
   `  filtered out: ${value(rerun2Execution.filteredOut)}`,
   `  remaining failed specs: ${value(rerun2Run.failedSpecCount)}`

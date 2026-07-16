@@ -471,6 +471,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         OktaLogin.Login()
 
         //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get('[data-testid="groups-tab"]').click()

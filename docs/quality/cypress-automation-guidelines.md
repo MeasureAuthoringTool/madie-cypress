@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-07-08
+Last updated: 2026-07-15
 
 This guide captures stable test-architecture rules used in this repo. Keep tactical plans and changing counts in `docs/quality/test-refactor-backlog.md`.
 
@@ -44,6 +44,7 @@ These helper paths are already established and should be reused before adding ne
 - Use `{ force: true }` only when validating intentionally hidden or native controls; otherwise fix readiness or selector strategy.
 - Avoid global exception suppression. If an exception must be tolerated, make the handling targeted and explain the scope.
 - Prefer stable `data-testid` selectors when available.
+- When a spec creates uniquely named rows in a list, select those rows by generated name or stored ID instead of fixture-position helpers or table order. Row-order selection becomes flaky when cleanup is partial or older test data is still visible.
 
 ## Refactor Rules
 

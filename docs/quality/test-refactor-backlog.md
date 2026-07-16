@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Architecture Backlog
 
-Last updated: 2026-07-08
+Last updated: 2026-07-14
 
 Stable rules live in `docs/quality/cypress-automation-guidelines.md`. Keep this backlog limited to current state, next actions, measured audit signal, and validation.
 
@@ -42,19 +42,21 @@ Do not begin the next backlog item until the current one is complete.
 
 Current active item:
 
-- P2 shared helper hardening, next target `cypress/Shared/TestCasesPage.ts`
+- P2 shared helper hardening, next target `cypress/Shared/TestCaseBuilder.ts`
 
 Why this is the best next step:
 
 - P1 CQL library service cleanup is already proven.
-- `Utilities.deleteLibrary` and the service-style API setup in `MeasureGroupPage.ts` are already moved behind `TestData`.
-- `TestCasesPage.ts` is still the largest remaining shared helper concentration for fixture-path plumbing and forced interactions.
+- `TestCasesPage.ts` fixture-path plumbing and create-test-case API setup now route through `TestData`.
+- `CreateMeasurePage.ts` no longer has direct fixture-path plumbing in shared helper code.
+- `Utilities.ts` delete, admin-cleanup, sharing, and lock helper request setup now route through `TestData`.
+- `TestCaseBuilder.ts` is now the clearest remaining shared-helper owner of user-scoped fixture-path plumbing.
 
 Work boundary for the next slice:
 
-- Stay inside `TestCasesPage.ts` unless a small supporting `TestData` change is required.
+- Stay inside `TestCaseBuilder.ts` unless a small supporting `TestData` change is required.
 - Prefer moving service-style setup and path conventions behind existing helpers before touching UI interaction patterns.
-- Keep negative assertions explicit and avoid combining helper hardening with wait/force cleanups unless the same code path requires it.
+- Do not combine this with broader builder wait/force cleanup.
 
 ## Current State
 
@@ -63,29 +65,34 @@ Recently proven service/helper slices:
 - Measure service: `Measure.cy.ts`, `MeasureBundle.cy.ts`, `MeasureExport.cy.ts`, `DraftMeasure.cy.ts`, `MeasureVersion.cy.ts`, `QI Core Test-Cases.cy.ts`.
 - QDM service: `QDM Test-Cases.cy.ts`, `QDM Measure.cy.ts`, `QDMMeasureVersion.cy.ts`.
 - CQL library service: `CreateCQL-Library.cy.ts`, `EditCQL-Library.cy.ts`, `VersionAndDraftCQL-Library.cy.ts`, `CQLLibraryDelete.cy.ts`.
-- Shared create/fixture path: `CreateMeasurePage.ts` now routes fixture writes and measure create/clone requests through `TestData` helpers.
+- Shared create/fixture path: `CreateMeasurePage.ts` now routes fixture writes, measure create/clone requests, and draft measure ID reads through `TestData` helpers.
 - Shared cleanup/request helpers: `Utilities.deleteLibrary` and the API create/update setup in `MeasureGroupPage.ts` now route fixture reads and authenticated requests through `TestData`.
+- Shared test-case helper cleanup: `TestCasesPage.ts` now routes element/test-case fixture writes, measure/test-case fixture reads, and create-test-case API requests through `TestData`.
+- Shared auth/lock helper cleanup: `Utilities.ts` now routes share-permission requests plus measure/library/test-case lock and unlock-cleanup requests through `TestData` reads and authenticated request helpers.
+- Shared measure cleanup completion: `Utilities.deleteMeasure` and `Utilities.deleteVersionedMeasure` now delegate authenticated delete flows to `TestData` by-ID helpers while preserving graceful missing-fixture cleanup behavior.
 
 Recently diagnosed non-refactor failures:
 
 - `CQLLibraryDelete.cy.ts` still fails on current `master` because transfer cases return inactive-user `400` responses and admin delete-all cases return `403 insufficient_scope`. Treat that as environment or account-state drift, not as the next refactor target.
+- `CQLLibraryTransfer.cy.ts` currently mixes two separate issues on `dev`: transfer and sharing flows can fail with `400 The provided HARP ID is not associated with an active MADiE user.` for the configured alt user, and the owned-library action-center flow remains slow and intermittently fails on action visibility or missing success toast after long UI login/user-switch cycles. Treat the inactive-user path as environment or account-state drift first; do not attempt session-login conversion in this file until that is resolved.
 
 ## Latest Audit Signal
 
 Command: `npm run quality:audit`
 
-- Inventory: 256 specs / 65636 spec lines; 29 shared files / 18665 shared lines; 3 support files / 637 support lines; 8 scripts / 1296 script lines.
+- Inventory: 256 specs / 65636 spec lines; 29 shared files / 18518 shared lines; 3 support files / 637 support lines; 8 scripts / 1296 script lines.
 - Skipped tests: 11.
-- Manual fixture path plumbing: 238.
-- Manual access token plumbing: 97.
+- Manual fixture path plumbing: 208.
+- Manual access token plumbing: 87.
 - Fixed waits: 101.
 - Forced interactions: 195.
 - Global uncaught exception suppression: 1.
 
 Largest risk concentrations:
 
-- `TestCasesPage.ts`: top remaining shared helper target for fixture-path plumbing, service-style setup, and forced interactions.
-- `CreateMeasurePage.ts`, `Utilities.ts`, and remaining service-style helpers inside shared page objects: shared helper and page-object infrastructure debt after `TestCasesPage.ts`.
+- `TestCaseBuilder.ts`: remaining shared-helper fixture-path plumbing still writes builder resource IDs through hand-built user-scoped paths.
+- `TestCasesPage.ts`: remaining UI reliability debt from forced interactions; fixture-path and create-test-case API setup cleanup is complete.
+- `AdminLibraryTransfer.cy.ts` and related transfer coverage: UI transfer specs still mix API-eligible setup with browser-only assertions, duplicate transfer/history checks, and combine distinct validation concerns in the same test flow.
 - `CorrectExpectedValues.cy.ts`, `DeleteTest-Case.cy.ts`, and selected admin/measure/test-case service specs: remaining service-tail cleanup.
 - `MeasureListNewColumnsSort.cy.ts`, `CQLLibraryListPageColumnSort.cy.ts`, export specs, highlighting specs, and editor flows: UI reliability debt from waits and forced interactions.
 - `cypress/support/e2e.ts`: global `uncaught:exception` suppression.
@@ -106,9 +113,8 @@ Completed signal:
 
 Current target order:
 
-- `TestCasesPage.ts`
-- `CreateMeasurePage.ts`
-- remaining `Utilities.ts` and shared page-object service helpers
+- `TestCaseBuilder.ts`
+- remaining shared page-object service helpers
 
 Done when shared helpers own path conventions and common request setup, and page objects no longer spread service setup mechanics.
 
@@ -118,6 +124,7 @@ Start with:
 
 - fixed waits in list sorting, export, and terminology-heavy specs
 - forced interactions in `TestCasesPage.ts`, import validations, highlighting specs, and editor flows
+- transfer specs that should move setup and ownership/share mechanics behind APIs before UI assertions, starting with `cypress/e2e/WebInterface/CQL Library/CQL Library Transfer/AdminLibraryTransfer.cy.ts`
 - global exception suppression in `cypress/support/e2e.ts`
 - skipped tests needing owner/ticket/remove decisions
 
@@ -129,6 +136,7 @@ Candidates:
 
 - `DeleteTest-Case.cy.ts`
 - `CorrectExpectedValues.cy.ts`
+- `AdminLibraryTransfer.cy.ts` after transfer-spec overlap is audited against `AdminMeasureTransfer.cy.ts` and `CQLLibraryTransfer.cy.ts`
 - remaining admin/measure/test-case specs surfaced near the top of the audit after each batch
 
 ## Replan Rules

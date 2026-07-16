@@ -37,11 +37,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 30000)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
         cy.get(Header.mainMadiePageButton).click()
     })
 
@@ -146,10 +142,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+
         cy.get(Header.mainMadiePageButton).click()
     })
 
@@ -218,11 +212,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTextBox, 30000)
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
     })

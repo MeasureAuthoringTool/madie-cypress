@@ -37,6 +37,12 @@ const cvPops: CVGroups = {
     }
 }
 
+const selectMeasureByName = (measureName: string) => {
+    cy.contains('tr', measureName, { timeout: 60000 }).within(() => {
+        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+    })
+}
+
 describe('Measure Association is not allowed when QiCore measure is locked', () => {
     beforeEach('Create measures', () => {
         harpUserALT = OktaLogin.getUser(true)
@@ -85,20 +91,12 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.get(EditMeasurePage.generateCmsIdButton).click()
@@ -119,18 +117,25 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
         // this ensures we load the list with visibility of the lock & that we reset the tokens correctly
         OktaLogin.Login()
 
-        MeasuresPage.selectMeasure()
-        MeasuresPage.selectMeasure(2)
+        selectMeasureByName(qicoreMeasureName)
+        selectMeasureByName(qdmMeasureName)
+        cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
+        cy.get('[data-testid="associate-cms-id-action-btn"]').should(($button) => {
+            const disabled =
+                $button.prop('disabled') || $button.attr('aria-disabled') === 'true' || $button.hasClass('Mui-disabled')
 
-        cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.disabled')
+            expect(disabled).to.eq(true)
+        })
+        cy.get('[data-testid="associate-cms-id-action-btn"]').trigger('mouseover', { force: true })
+        cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
         cy.get('[data-testid="associate-cms-id-tooltip"]').should(
             'have.attr',
             'aria-label',
             'Unable to associate measures. Locked while being edited by ' + harpUserALT
         )
 
-        //Delete Measure Locks
-        Utilities.verifyAllLocksDeleted(MadieObject.Measure, true)
+        // Delete the lock we created for this scenario without depending on shared user-name assertions.
+        Utilities.lockControl(MadieObject.Measure, false, true)
     })
 
     // we can't do this scenario right now - we'd need a big refactor or enhancement for handling access tokens

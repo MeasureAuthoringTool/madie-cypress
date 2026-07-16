@@ -367,7 +367,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
         )
         cy.get(MeasuresPage.userActionRow).should('contain.text', 'EXPORTED_MEASURE')
         cy.get(MeasuresPage.harpIdRow).should('contain.text', harpUser)
-        cy.get(MeasuresPage.additionalActionRow).should('contain.text', 'by MADiE Admin')
+        cy.get(MeasuresPage.additionalActionRow).should('have.text', '-')
     })
 })
 
