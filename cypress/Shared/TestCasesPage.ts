@@ -696,6 +696,7 @@ export class TestCasesPage {
     //Navigate to Test Cases page and add Test Case details
     cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     cy.get(EditMeasurePage.testCasesTab).click()
+    Utilities.waitForElementVisible(this.newTestCaseButton, 60000)
     cy.get(this.newTestCaseButton).should('be.visible')
     cy.get(this.newTestCaseButton).should('be.enabled')
     cy.get(this.newTestCaseButton).click()
@@ -826,6 +827,52 @@ export class TestCasesPage {
     this.grabValidateTestCaseTitleAndSeries(updatedTestCaseTitle, updatedTestCaseSeries)
 
     cy.log('Test Case updated successfully')
+  }
+
+  public static executeBooleanPassingTestCaseAndOpenHighlighting(
+    options: {
+      populationIndex?: number
+      waitForRunButtonEnabledMs?: number
+      waitForRunCompletionMs?: number
+    } = {},
+  ): void {
+    const { populationIndex = 0, waitForRunButtonEnabledMs, waitForRunCompletionMs } = options
+
+    Utilities.waitForElementVisible(this.tctExpectedActualSubTab, 35000)
+    cy.get(this.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
+
+    Utilities.waitForElementVisible(this.testCaseIPPExpected, 35000)
+    cy.get(this.testCaseIPPExpected).eq(populationIndex).scrollIntoView().check({ force: true })
+
+    this.runTestCaseAndOpenHighlighting({
+      waitForRunButtonEnabledMs,
+      waitForRunCompletionMs,
+    })
+  }
+
+  public static runTestCaseAndOpenHighlighting(
+    options: {
+      waitForRunButtonEnabledMs?: number
+      waitForRunCompletionMs?: number
+    } = {},
+  ): void {
+    const { waitForRunButtonEnabledMs, waitForRunCompletionMs } = options
+
+    if (waitForRunButtonEnabledMs) {
+      Utilities.waitForElementEnabled(this.runTestButton, waitForRunButtonEnabledMs)
+    }
+
+    cy.get(this.runTestButton).should('be.visible')
+    cy.get(this.runTestButton).should('be.enabled')
+    cy.get(this.runTestButton).click()
+
+    if (waitForRunCompletionMs) {
+      Utilities.waitForElementEnabled(this.runTestButton, waitForRunCompletionMs)
+    }
+
+    cy.get(this.tcHighlightingTab).should('exist')
+    cy.get(this.tcHighlightingTab).should('be.visible')
+    cy.get(this.tcHighlightingTab).click()
   }
 
   // -----------------------------
