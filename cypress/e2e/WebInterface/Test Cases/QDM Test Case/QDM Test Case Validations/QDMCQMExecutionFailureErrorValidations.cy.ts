@@ -23,6 +23,45 @@ const QDMTCJson = TestCaseJson.QDMTestCaseJson
 
 const measureData: CreateMeasureOptions = {}
 
+function generateQDMCQLWithErrors(libraryName: string): string {
+    return (
+        'library ' +
+        libraryName +
+        " version '0.0.000'\n" +
+        "using QDM version '5.6'\n\n" +
+        "include MATGlobalCommonFunctionsQDM version '1.0.000' called Global\n\n" +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n\n' +
+        'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2289\'\n' +
+        'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\'\n' +
+        'valueset "Body temperature": \'urn:oid:2.16.840.1.113762.1.4.1045.152\'\n' +
+        'valueset "Body weight": \'urn:oid:2.16.840.1.113762.1.4.1045.159\'\n' +
+        'valueset "Creatinine lab test": \'urn:oid:2.16.840.1.113883.3.666.5.2363\'\n' +
+        'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Glucose lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.134\'\n' +
+        'valueset "Heart Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.149\'\n' +
+        'valueset "Hematocrit lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\'\n' +
+        'valueset "Medicare Advantage payer": \'urn:oid:2.16.840.1.113762.1.4.1104.12\'\n' +
+        'valueset "Medicare FFS payer": \'urn:oid:2.16.840.1.113762.1.4.1104.10\'\n' +
+        'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Oxygen Saturation by Pulse Oximetry": \'urn:oid:2.16.840.1.113762.1.4.1045.151\'\n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\'\n' +
+        'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\'\n' +
+        'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\'\n' +
+        'valueset "White blood cells count lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\'\n\n' +
+        'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n\n' +
+        'context Patient\n\n' +
+        'define "Initial Population":\'\'\n' +
+        "\t  'Inpatient Encounters'\n"
+    )
+}
+
 describe('QDM CQM-Execution failure error validations: CQL Errors and missing group', () => {
     beforeEach('Create Measure, and Test Case', () => {
         measureData.ecqmTitle = measureName
@@ -47,22 +86,10 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //navigate to the CQL Editor tab, for the measure
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //type in an additional value to the already existing value in the editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}Additional erroneous line')
-
-        //saving new CQL value
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(generateQDMCQLWithErrors(CqlLibraryName))
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20000)
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 21000)
+        CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Navigate to Test Case page
@@ -71,12 +98,11 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
         //edit created test case
         TestCasesPage.clickEditforCreatedTestCase()
-
         //add section / line to validate message letting user know of error with CQL
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
         cy.get(TestCasesPage.testCaseSyntaxError).should(
             'contain.text',
-            'An error occurred, please try again. If the error persists, please contact the help desk. (004)'
+            'An error exists with the measure CQL, please review the CQL Editor tab.'
         )
 
         //confirm that the Run Test button is disabled
@@ -91,18 +117,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         MeasuresPage.actionCenter('edit')
 
         //navigate to the CQL Editor tab, for the measure
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -198,7 +213,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
         cy.get(TestCasesPage.testCaseSyntaxError).should(
             'contain.text',
-            'An error occurred, please try again. If the error persists, please contact the help desk. (004): Failed to fetch VSAC value set expansions'
+            'An error exists with the measure CQL, please review the CQL Editor tab.'
         )
 
         //confirm that the Run Test button is disabled

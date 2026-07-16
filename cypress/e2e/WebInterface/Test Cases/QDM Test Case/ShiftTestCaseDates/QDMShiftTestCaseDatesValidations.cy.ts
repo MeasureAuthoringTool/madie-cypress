@@ -1,16 +1,16 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { QDMElements } from "../../../../../Shared/QDMElements"
-import { Header } from "../../../../../Shared/Header"
-import { LandingPage } from "../../../../../Shared/LandingPage"
-import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { QDMElements } from '../../../../../Shared/QDMElements'
+import { Header } from '../../../../../Shared/Header'
+import { LandingPage } from '../../../../../Shared/LandingPage'
+import { umlsLoginForm } from '../../../../../Shared/umlsLoginForm'
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const now = Date.now()
@@ -20,9 +20,7 @@ let CqlLibraryName = 'QDMShiftDatesLib' + now
 const measureData: CreateMeasureOptions = {}
 
 describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
-
     beforeEach('Create Measure, test cases and Login', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Proportion'
@@ -32,21 +30,28 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            'Denominator Exceptions',
+            'Numerator',
+            '',
+            'Denominator'
+        )
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC2', 'QDMManifestTCGroup2', 'QDMManifestTC2', '', true, false)
         OktaLogin.Login()
+
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 3500)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
         // add SDE to test case coverage
+        cy.wait(2000)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
+        cy.wait(2000)
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
@@ -56,7 +61,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -76,7 +84,13 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2000 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
         cy.get(TestCasesPage.MedicationElementTab).click()
@@ -146,7 +160,13 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.clickEditforCreatedTestCase(true)
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('02/29/1980 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '02/29/1980 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
         cy.get(TestCasesPage.MedicationElementTab).click()
@@ -223,12 +243,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
     })
 
     afterEach('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Shift all Test Case dates using the tab in left menu', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -262,7 +280,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 3500)
 
         //confirm success message
-        cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should(
+            'contain.text',
+            'All Test Case dates successfully shifted.'
+        )
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -321,7 +342,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 3500)
 
         //confirm success message
-        cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should(
+            'contain.text',
+            'All Test Case dates successfully shifted.'
+        )
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -402,7 +426,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should(
+            'contain.text',
+            'All Test Case dates successfully shifted.'
+        )
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -443,7 +470,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should(
+            'contain.text',
+            'All Test Case dates successfully shifted.'
+        )
 
         //navigate to the edit page for the 2nd test case
         TestCasesPage.clickEditforCreatedTestCase(true)
@@ -478,7 +508,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should(
+            'contain.text',
+            'All Test Case dates successfully shifted.'
+        )
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -517,7 +550,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should(
+            'contain.text',
+            'All Test Case dates successfully shifted.'
+        )
 
         //navigate to the edit page for the first test case
         TestCasesPage.clickEditforCreatedTestCase(true)

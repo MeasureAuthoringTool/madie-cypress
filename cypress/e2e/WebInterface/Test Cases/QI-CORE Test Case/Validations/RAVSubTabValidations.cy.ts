@@ -1,13 +1,13 @@
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../../Shared/Utilities"
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../../Shared/Utilities'
 
 const now = Date.now()
 const measureName = 'RAVSubTab' + now
@@ -21,31 +21,24 @@ const qiCoreMeasureCQL = MeasureCQL.QiCoreCQLSDE.replace('QiCoreCQLLibrary173998
 const testCaseLizzyHealth = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 
 describe('QiCore Test Cases : RAV Sub tab validations', () => {
-
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, qiCoreMeasureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patients Age 20 or Older at Start of Measurement Period')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(
+            false,
+            false,
+            'Patients Age 20 or Older at Start of Measurement Period'
+        )
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCaseLizzyHealth)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Log out and Clean up', () => {
-
-        
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('RAV sub tab is visible on Edit Test case Highlighting page when RAV is included', () => {
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -62,7 +55,10 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
 
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Risk Adjustments have been Saved Successfully'
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -72,7 +68,7 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
         Utilities.waitForElementVisible(TestCasesPage.qdmRAVSideNavLink, 30000)
         cy.get(TestCasesPage.qdmRAVSideNavLink).click()
 
-        // go through discard cycle 
+        // go through discard cycle
         // patientBasis works for all 2 choice radios
         cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
         cy.get(TestCasesPage.discardRavChangesOption).click()
@@ -100,12 +96,18 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
         //Click on RAV Sub tab
         cy.get(TestCasesPage.qdmRAVSubTab).click()
         Utilities.waitForElementVisible('[data-testid="rav-highlighting"]', 35000)
-        cy.get('[data-testid="rav-highlighting"]').first().should('contain.text', 'define "SDE Ethnicity":\n  SDE."SDE Ethnicity"\nResultsFALSE (null)')
-        cy.get('[data-testid="rav-highlighting"]').eq(3).should('contain.text', 'define "SDE Sex":\n  SDE."SDE Sex"\nResultsCODE: http:\/\/hl7.org/fhir/administrative-gender F, Female ')
+        cy.get('[data-testid="rav-highlighting"]')
+            .first()
+            .should('contain.text', 'define "SDE Ethnicity":\n  SDE."SDE Ethnicity"\nResultsFALSE (null)')
+        cy.get('[data-testid="rav-highlighting"]')
+            .eq(3)
+            .should(
+                'contain.text',
+                'define "SDE Sex":\n  SDE."SDE Sex"\nResultsCODE: http:\/\/hl7.org/fhir/administrative-gender F, Female '
+            )
     })
 
     it('RAV sub tab is not visible on Edit Test case Highlighting page when RAV is not included', () => {
-
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -121,7 +123,10 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
 
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Risk Adjustments have been Saved Successfully'
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -131,7 +136,7 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
         Utilities.waitForElementVisible(TestCasesPage.qdmRAVSideNavLink, 30000)
         cy.get(TestCasesPage.qdmRAVSideNavLink).click()
 
-        // go through discard cycle 
+        // go through discard cycle
         // patientBasis works for all 2 choice radios
         cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
 
@@ -154,11 +159,9 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
         cy.get(TestCasesPage.tcHighlightingTab).click()
         //Click on RAV Sub tab
         cy.get(TestCasesPage.qdmRAVSubTab).should('not.exist')
-
     })
 
     it('Test Case Coverage Percentage updated based on the RAV selection', () => {
-
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -174,7 +177,10 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
 
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Risk Adjustments have been Saved Successfully'
+        )
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -206,7 +212,6 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '0%')

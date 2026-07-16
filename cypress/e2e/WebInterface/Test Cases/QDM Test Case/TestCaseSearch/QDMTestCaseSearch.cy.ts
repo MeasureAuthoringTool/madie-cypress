@@ -91,6 +91,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
 
         //navigate back to main measure list page
         cy.get(Header.mainMadiePageButton).click()
+        cy.reload()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')

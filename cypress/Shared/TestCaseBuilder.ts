@@ -84,8 +84,29 @@ export class TestCaseBuilder {
 
             TestData.writeFixture(resourceFixtureName, resourceId)
 
-            cy.get('[data-testid="action-center-button-' + resourceId + '"]').click().wait(250)
-            cy.get('[data-testid="action-center-' + resourceId + '_Edit"]').click()
+            const actionCenterButton = '[data-testid="action-center-button-' + resourceId + '"]'
+            const editAction = '[data-testid="action-center-' + resourceId + '_Edit"]'
+
+            cy.get('body').then(($body) => {
+                if ($body.find(actionCenterButton).length) {
+                    cy.get(actionCenterButton).click().wait(250)
+                }
+
+                if ($body.find(editAction).length) {
+                    cy.get(editAction).click()
+                    return
+                }
+
+                cy.contains('td', resourceId)
+                    .closest('tr')
+                    .within(() => {
+                        cy.get('td')
+                            .last()
+                            .find('button,[role="button"]')
+                            .first()
+                            .click()
+                    })
+            })
         })
     }
 

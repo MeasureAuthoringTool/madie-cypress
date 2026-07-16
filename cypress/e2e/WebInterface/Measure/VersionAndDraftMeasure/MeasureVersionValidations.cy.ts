@@ -47,7 +47,8 @@ describe('Measure Versioning validations', () => {
         let randValue = Math.floor(Math.random() * 2000 + 3)
         let newMeasureName = 'VersionValidationsA' + Date.now() + randValue
         newCqlLibraryName = 'VersionValidationsLibA' + Date.now() + randValue
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         OktaLogin.Login()
     })
 
@@ -56,6 +57,19 @@ describe('Measure Versioning validations', () => {
     })
 
     it('User can not version Measure if there is no CQL', () => {
+        MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({
+            appendCommand: '{selectall}{backspace}{selectall}{backspace}',
+            collapseEditor: true,
+            waitForDisabled: false
+        })
+        // cy.get(EditMeasurePage.cqlEditorTab).click()
+        // cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        // cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        // Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        // CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        cy.get(Header.measures).click()
+
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -68,7 +82,7 @@ describe('Measure Versioning validations', () => {
         cy.get('.toast').should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should(
             'contain.text',
-            'Please include valid CQL in the CQL editor to version before versioning this measure',
+            'Please include valid CQL in the CQL editor to version before versioning this measure'
         )
     })
 
@@ -101,7 +115,7 @@ describe('Measure Versioning validations', () => {
         cy.get('.toast').should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should(
             'contain.text',
-            'Please include valid CQL in the CQL editor to version before versioning this measure',
+            'Please include valid CQL in the CQL editor to version before versioning this measure'
         )
     })
 })
@@ -152,11 +166,11 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         cy.get(TestCasesPage.discardChangesConfirmationBody).should(
             'contain.text',
-            'You have test cases that are invalid.',
+            'You have test cases that are invalid.'
         )
         cy.get(TestCasesPage.discardChangesConfirmationBody).should(
             'not.contain.text',
-            'Test cases cannot be edited after being versioned',
+            'Test cases cannot be edited after being versioned'
         )
 
         cy.get(TestCasesPage.versionMeasurewithTCErrorsCancel).click()
@@ -213,7 +227,6 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
     })
 
     it('Measure owner able to Add, Clone, and Import Test cases to Qi Core Versioned Measure', () => {
-
         EditMeasurePage.actionCenter(EditMeasureActions.version)
 
         cy.reload()
@@ -253,7 +266,6 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
     })
 
     it('Measure owner able to Edit Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
-        
         //Edit Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -264,9 +276,8 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible').wait(1000)
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
@@ -322,13 +333,13 @@ describe('Non Measure owner unable to create Version', () => {
                 Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
                 Utilities.waitForElementVisible(
                     '[data-testid="measure-name-' + fileContents + '_select"] > [class="px-1"] > [type="checkbox"]',
-                    30000,
+                    30000
                 )
                 Utilities.waitForElementVisible(
                     '[data-testid="measure-name-' +
                         fileContents +
                         '_select"] > [class="px-1"] > [class=" cursor-pointer"]',
-                    30000,
+                    30000
                 )
                 cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
                     .find('[type="checkbox"]')

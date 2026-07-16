@@ -1,13 +1,18 @@
-import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { Header } from "../../../../Shared/Header"
+import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import {
+    CVGroups,
+    MeasureGroupPage,
+    MeasureScoring,
+    MeasureType,
+    PopulationBasis
+} from '../../../../Shared/MeasureGroupPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import * as path from 'path'
-import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage";
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
+import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
@@ -15,11 +20,10 @@ const qiCoreCommonLib = 'resources/library-QICoreCommon-2.1.000.json'
 
 // ToDo: these need new CQLs & upgrades to 6.0.0
 describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
-
     const measureName = 'Stu5ProportionExport' + Date.now()
     const cqlLibraryName = 'Stu5PropExportLib' + Date.now()
     const measureCql = MeasureCQL.stndBasicQICoreCQL.replace('TestLibrary1709929148231865', measureName)
-    const  measureOptions: CreateMeasureOptions = {
+    const measureOptions: CreateMeasureOptions = {
         ecqmTitle: 'STU5ProportionExport',
         measureCql: measureCql
     }
@@ -27,40 +31,41 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Qualifying Encounters',
+            '',
+            '',
+            'Qualifying Encounters',
+            '',
+            'Qualifying Encounters',
+            'Encounter'
+        )
         OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-    
+        MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
         cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
-            .then(results => {
-                cy.log('unzipFile Task finished')
-                cy.wait(1000)
-            })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
+            cy.log('unzipFile Task finished')
+            cy.wait(1000)
+        })
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec & included libraries', () => {
-
         // read export json
-        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then(measureJson => {
-
+        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
             const expectedMeasureProfiles = [
                 'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
                 'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',
@@ -73,21 +78,24 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
             expect(measureJson.entry[0].resource.resourceType).to.eq('Measure')
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)
-            expect(measureJson.entry[0].resource.contained[0].extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition')
-            expect(measureJson.entry[0].resource.extension[0].url).to.eq('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements')
+            expect(measureJson.entry[0].resource.contained[0].extension[0].url).to.eq(
+                'http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition'
+            )
+            expect(measureJson.entry[0].resource.extension[0].url).to.eq(
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements'
+            )
         })
 
         // read QICoreCommon
-        cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then(libJson => {
-
-            const expectedLibraryProfile = [ 
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary",
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-computablelibrary",
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-publishablelibrary",
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-executablelibrary",
-                "http://hl7.org/fhir/uv/cql/StructureDefinition/cql-library",
-                "http://hl7.org/fhir/uv/cql/StructureDefinition/elm-json-library",
-                "http://hl7.org/fhir/uv/cql/StructureDefinition/elm-xml-library"
+        cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then((libJson) => {
+            const expectedLibraryProfile = [
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary',
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-computablelibrary',
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-publishablelibrary',
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-executablelibrary',
+                'http://hl7.org/fhir/uv/cql/StructureDefinition/cql-library',
+                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-json-library',
+                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-xml-library'
             ]
 
             expect(libJson.resourceType).to.eq('Library')
@@ -96,19 +104,24 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
         })
 
         // read measure-
-        cy.readFile(path.join(downloadsFolder, 'resources/measure-' + cqlLibraryName + '-Draft based on 0.0.000.json')).then(measureJson => {
-            expect(measureJson.contained[0].extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition')
-            expect(measureJson.extension[0].url).to.eq('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements')
+        cy.readFile(
+            path.join(downloadsFolder, 'resources/measure-' + cqlLibraryName + '-Draft based on 0.0.000.json')
+        ).then((measureJson) => {
+            expect(measureJson.contained[0].extension[0].url).to.eq(
+                'http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition'
+            )
+            expect(measureJson.extension[0].url).to.eq(
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements'
+            )
         })
     })
 })
 
 describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
-
     const measureName = 'Stu5CohortExport' + Date.now()
     const cqlLibraryName = 'Stu5CohortExportLib' + Date.now()
     const measureCql = MeasureCQL.stndBasicQICoreCQL.replace('TestLibrary1709929148231865', measureName)
-    const  measureOptions: CreateMeasureOptions = {
+    const measureOptions: CreateMeasureOptions = {
         ecqmTitle: 'STU5CohortExport',
         measureCql: measureCql
     }
@@ -116,42 +129,33 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-        
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
         cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
-            .then(results => {
-                cy.log('unzipFile Task finished')
-                cy.wait(1000)
-            })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
+            cy.log('unzipFile Task finished')
+            cy.wait(1000)
+        })
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec & included libraries', () => {
-
         // read export json
-        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then(measureJson => {
-
+        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
             const expectedMeasureProfiles = [
                 'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
                 'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',
@@ -167,16 +171,15 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
         })
 
         // read QICoreCommon
-        cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then(libJson => {
-
-            const expectedLibraryProfile = [ 
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary",
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-computablelibrary",
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-publishablelibrary",
-                "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-executablelibrary",
-                "http://hl7.org/fhir/uv/cql/StructureDefinition/cql-library",
-                "http://hl7.org/fhir/uv/cql/StructureDefinition/elm-json-library",
-                "http://hl7.org/fhir/uv/cql/StructureDefinition/elm-xml-library"
+        cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then((libJson) => {
+            const expectedLibraryProfile = [
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary',
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-computablelibrary',
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-publishablelibrary',
+                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-executablelibrary',
+                'http://hl7.org/fhir/uv/cql/StructureDefinition/cql-library',
+                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-json-library',
+                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-xml-library'
             ]
 
             expect(libJson.resourceType).to.eq('Library')
@@ -187,53 +190,65 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
 })
 
 describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations', () => {
-
     const measureName = 'Stu5CVExport' + Date.now()
     const cqlLibraryName = 'Stu5CVExportLib' + Date.now()
-    const  measureOptions: CreateMeasureOptions = {
-        ecqmTitle: 'STU5CVExport'
+    const measureCql =
+        MeasureCQL.zipfileExportQICore.replace('TestLibrary1678378360032', measureName) +
+        '\n\ndefine function "booleanFunction"():\ntrue'
+    const measureOptions: CreateMeasureOptions = {
+        ecqmTitle: 'STU5CVExport',
+        measureCql: measureCql
+    }
+    const cvPops: CVGroups = {
+        initialPopulation: 'ipp',
+        measurePopulation: 'denom',
+        observation: {
+            aggregateMethod: 'Count',
+            definition: 'booleanFunction'
+        }
     }
     const fileName = 'STU5CVExport-v0.0.000-FHIR'
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        MeasureGroupPage.CreateMeasureGroupAPI(
+            MeasureType.process,
+            PopulationBasis.boolean,
+            MeasureScoring.ContinousVariable,
+            {
+                initialPopulation: '',
+                numerator: '',
+                denominator: ''
+            },
+            false,
+            undefined,
+            undefined,
+            cvPops
+        )
         OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
-        // this function hardcodes a specific CQL
-        MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
-        
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
         cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
-            .then(results => {
-                cy.log('unzipFile Task finished')
-                cy.wait(1000)
-            })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
+            cy.log('unzipFile Task finished')
+            cy.wait(1000)
+        })
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec', () => {
-
         // read export json
-        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then(measureJson => {
-
+        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
             const expectedMeasureProfiles = [
                 'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
                 'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',
@@ -253,11 +268,10 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
 })
 
 describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
-
     const measureName = 'Stu5RatioExport' + Date.now()
     const cqlLibraryName = 'Stu5RatioExportLib' + Date.now()
     const measureCql = MeasureCQL.stndBasicQICoreCQL.replace('TestLibrary1709929148231865', measureName)
-    const  measureOptions: CreateMeasureOptions = {
+    const measureOptions: CreateMeasureOptions = {
         ecqmTitle: 'STU5RatioExport',
         measureCql: measureCql
     }
@@ -265,40 +279,38 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Qualifying Encounters','Qualifying Encounters','Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(
+            false,
+            false,
+            'Qualifying Encounters',
+            'Qualifying Encounters',
+            'Qualifying Encounters',
+            'Encounter'
+        )
         OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
-       
+        MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
         cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder })
-            .then(results => {
-                cy.log('unzipFile Task finished')
-                cy.wait(1000)
-            })
+        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
+            cy.log('unzipFile Task finished')
+            cy.wait(1000)
+        })
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Export contains all correct Meta profile for its spec', () => {
-
         // read export json
-        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then(measureJson => {
-
+        cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
             const expectedMeasureProfiles = [
                 'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
                 'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',

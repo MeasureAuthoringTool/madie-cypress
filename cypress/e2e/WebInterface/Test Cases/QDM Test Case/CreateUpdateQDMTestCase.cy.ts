@@ -1,17 +1,16 @@
-
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { QdmCql } from '../../../../Shared/QDMMeasuresCQL'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let newMeasureName = ''
 let newCQLLibraryName = ''
 let measureScoring = 'Cohort'
@@ -24,13 +23,14 @@ let updatedTestCaseTitle = testCaseTitle + ' ' + 'UpdatedTestCaseTitle'
 let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'ICFTestSeries'
 let measureCQLWithElements = QdmCql.QDMTestCaseCQLFullElementSection
-const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n\n' +
-    'using QDM version \'5.6\'\n\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
-    'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
-    'include HospiceQDM version \'1.0.000\' called Hospice\n' +
-    'include PalliativeCareQDM version \'4.0.000\' called PalliativeCare\n' +
-    'include AdvancedIllnessandFrailtyQDM version \'1.0.000\' called AIFrailLTCF\n\n' +
+const measureCQLPatient =
+    "library ICFQDMTEST000001 version '0.0.000'\n\n" +
+    "using QDM version '5.6'\n\n" +
+    "include MATGlobalCommonFunctionsQDM version '1.0.000' called Global\n" +
+    "include AdultOutpatientEncountersQDM version '1.0.000' called AdultOutpatientEncounters\n" +
+    "include HospiceQDM version '1.0.000' called Hospice\n" +
+    "include PalliativeCareQDM version '4.0.000' called PalliativeCare\n" +
+    "include AdvancedIllnessandFrailtyQDM version '1.0.000' called AIFrailLTCF\n\n" +
     'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\'\n' +
     'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\'\n\n' +
     'valueset "Bilateral Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1005\'\n' +
@@ -125,12 +125,10 @@ const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n\n' +
 const measureData: CreateMeasureOptions = {}
 
 describe('Create and Update QDM Test Case', () => {
-
     newMeasureName = measureName + randValue
     newCQLLibraryName = CqlLibraryName + randValue
 
     beforeEach('Create measure and login', () => {
-
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCQLLibraryName
         measureData.measureScoring = measureScoring
@@ -143,19 +141,13 @@ describe('Create and Update QDM Test Case', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Create and Update Test Case for QDM Measure', () => {
-
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -176,7 +168,13 @@ describe('Create and Update QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         //Navigate to Details tab and Edit
         cy.get(TestCasesPage.detailsTab).click()
@@ -194,7 +192,7 @@ describe('Create and Update QDM Test Case', () => {
 
         //Navigate back to Edit test case page and assert fields
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.QDMDob/*'#birth-date'*/).should('contain.value', '01/01/2020')
+        cy.get(TestCasesPage.QDMDob /*'#birth-date'*/).should('contain.value', '01/01/2020')
         cy.get(TestCasesPage.QDMLivingStatus).should('contain.text', 'Living')
         cy.get(TestCasesPage.QDMRace).should('contain.text', 'White')
         cy.get(TestCasesPage.QDMGender).should('contain.text', 'Male')
@@ -216,7 +214,6 @@ describe('Create and Update QDM Test Case', () => {
     })
 
     it('Add Test Case Expected values for Boolean Measure', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
@@ -244,12 +241,10 @@ describe('Create and Update QDM Test Case', () => {
 })
 
 describe('Non Boolean Test case Expected Values', () => {
-
     newMeasureName = measureName + randValue + 1
     newCQLLibraryName = CqlLibraryName + randValue + 1
 
     beforeEach('Create measure and login', () => {
-
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCQLLibraryName
         measureData.measureScoring = measureScoring
@@ -262,12 +257,10 @@ describe('Non Boolean Test case Expected Values', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Add Test Case Expected values for Non Boolean Measure', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
@@ -295,23 +288,19 @@ describe('Non Boolean Test case Expected Values', () => {
 })
 
 describe('Create and update QDM Test case validations', () => {
-
     newMeasureName = measureName + randValue + 5
     newCQLLibraryName = CqlLibraryName + randValue + 5
 
     beforeEach('Create measure and login', () => {
-
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        
         Utilities.deleteMeasure()
     })
 
     it('Create Test case Validation: Test case Title has special characters', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
@@ -343,11 +332,13 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/'
+        )
     })
 
     it('Create Test case Validation: Test Case Group has special characters', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
@@ -379,11 +370,13 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/'
+        )
     })
 
     it('Edit Test case Validation: Test case Title has special characters', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
@@ -402,11 +395,13 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/'
+        )
     })
 
     it('Edit Test case Validation: Test case Group has special characters', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
@@ -425,6 +420,9 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/'
+        )
     })
 })

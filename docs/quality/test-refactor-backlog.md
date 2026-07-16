@@ -92,6 +92,7 @@ Largest risk concentrations:
 
 - `TestCaseBuilder.ts`: remaining shared-helper fixture-path plumbing still writes builder resource IDs through hand-built user-scoped paths.
 - `TestCasesPage.ts`: remaining UI reliability debt from forced interactions; fixture-path and create-test-case API setup cleanup is complete.
+- `AdminLibraryTransfer.cy.ts` and related transfer coverage: UI transfer specs still mix API-eligible setup with browser-only assertions, duplicate transfer/history checks, and combine distinct validation concerns in the same test flow.
 - `CorrectExpectedValues.cy.ts`, `DeleteTest-Case.cy.ts`, and selected admin/measure/test-case service specs: remaining service-tail cleanup.
 - `MeasureListNewColumnsSort.cy.ts`, `CQLLibraryListPageColumnSort.cy.ts`, export specs, highlighting specs, and editor flows: UI reliability debt from waits and forced interactions.
 - `cypress/support/e2e.ts`: global `uncaught:exception` suppression.
@@ -123,6 +124,7 @@ Start with:
 
 - fixed waits in list sorting, export, and terminology-heavy specs
 - forced interactions in `TestCasesPage.ts`, import validations, highlighting specs, and editor flows
+- transfer specs that should move setup and ownership/share mechanics behind APIs before UI assertions, starting with `cypress/e2e/WebInterface/CQL Library/CQL Library Transfer/AdminLibraryTransfer.cy.ts`
 - global exception suppression in `cypress/support/e2e.ts`
 - skipped tests needing owner/ticket/remove decisions
 
@@ -134,6 +136,7 @@ Candidates:
 
 - `DeleteTest-Case.cy.ts`
 - `CorrectExpectedValues.cy.ts`
+- `AdminLibraryTransfer.cy.ts` after transfer-spec overlap is audited against `AdminMeasureTransfer.cy.ts` and `CQLLibraryTransfer.cy.ts`
 - remaining admin/measure/test-case specs surfaced near the top of the audit after each batch
 
 ## Replan Rules
