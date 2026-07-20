@@ -388,17 +388,12 @@ export class Utilities {
         }
 
         readId().then((madieId) => {
-            TestData.requestWithAccessToken({
-                failOnStatusCode: false,
-                url: '/api/' + urlPath,
-                headers: {
-                    'api-key': adminApiKey
-                },
-                method: 'PUT',
-                body: { [madieId]: [user] }
-                // Note: these brackets don't make this an array.
-                // This syntax is needed for keys of an object to force it to honor the value
-            }).then((response) => {
+            TestData.requestSharePermissions(
+                objectType === MadieObject.Library ? 'library' : 'measure',
+                action,
+                madieId,
+                user
+            ).then((response) => {
                 console.log(response)
                 expect(response.status).to.eql(200)
                 if (action === PermissionActions.GRANT) {
@@ -449,15 +444,13 @@ export class Utilities {
     }
 
     public static lockControl(type: MadieObject, lockObject: boolean, altUser?: boolean) {
-        let action = 'PUT'
-        if (!lockObject) {
-            action = 'DELETE'
-        }
-
         if (altUser === undefined || altUser === null) {
             altUser = false
         }
-        OktaLogin.setupUserSession(altUser)
+        const owner: FixtureOwner = altUser ? 'selectedAltUser' : 'selectedUser'
+        const action = lockObject ? 'PUT' : 'DELETE'
+
+        TestData.setupUserScope(owner)
 
         switch (type) {
             case MadieObject.Measure:
@@ -467,30 +460,14 @@ export class Utilities {
                 break
 
             case MadieObject.TestCase:
-                TestData.readMeasureId().then((measureId) => {
-                    TestData.readTestCaseId().then((tcId) => {
-                        const lockUrl = lockObject
-                            ? `/api/measures/${measureId}/test-cases/${tcId}/lock`
-                            : `/api/test-cases/${tcId}/unlock`
-
-                        TestData.requestWithAccessToken({
-                            url: lockUrl,
-                            method: 'POST'
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                        })
-                    })
+                TestData.requestTestCaseLock(lockObject, {}, owner).then((response) => {
+                    expect(response.status).to.eql(200)
                 })
                 break
 
             case MadieObject.Library:
-                TestData.readCqlLibraryId().then((id) => {
-                    TestData.requestWithAccessToken({
-                        url: '/api/cql-libraries/' + id + '/lock',
-                        method: action as 'PUT' | 'DELETE'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
+                TestData.requestCqlLibraryLock(action as 'PUT' | 'DELETE', 0, {}, owner).then((response) => {
+                    expect(response.status).to.eql(200)
                 })
                 break
 
@@ -504,7 +481,7 @@ export class Utilities {
             altUser = false
         }
 
-        OktaLogin.setupUserSession(altUser)
+        TestData.setupUserScope(altUser ? 'selectedAltUser' : 'selectedUser')
 
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
@@ -512,10 +489,7 @@ export class Utilities {
         switch (type) {
             case MadieObject.Measure:
                 TestData.readMeasureId().then((measureId) => {
-                    TestData.requestWithAccessToken({
-                        url: '/api/measures/unlock',
-                        method: 'DELETE'
-                    }).then((response) => {
+                    TestData.requestUnlockAll('measures').then((response) => {
                         expect(response.status).to.eql(200)
                         if (altUser) {
                             expect(response.body[0]).to.include(
@@ -552,10 +526,7 @@ export class Utilities {
 
             case MadieObject.Library:
                 TestData.readCqlLibraryId().then((id) => {
-                    TestData.requestWithAccessToken({
-                        url: '/api/cql-libraries/unlock',
-                        method: 'DELETE'
-                    }).then((response) => {
+                    TestData.requestUnlockAll('cql-libraries').then((response) => {
                         expect(response.status).to.eql(200)
                         if (altUser) {
                             expect(response.body[0]).to.include(

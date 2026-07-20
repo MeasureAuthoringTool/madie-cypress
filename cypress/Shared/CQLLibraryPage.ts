@@ -158,7 +158,7 @@ export class CQLLibraryPage {
         //saving measureID to file to use later
         cy.wait(libraryAlias).then(({ response }) => {
             expect(response?.statusCode).to.eq(201)
-            TestData.writeFixture('cqlLibraryId', response?.body.id)
+            TestData.writeCqlLibraryId(response?.body.id)
         })
     }
 
@@ -171,7 +171,6 @@ export class CQLLibraryPage {
     ): string {
         const owner = this.fixtureOwner(altUser)
         const user = TestData.setupUserScope(owner)
-        const fixtureName = twoLibraries === true ? 'cqlLibraryId2' : 'cqlLibraryId'
 
         TestData.requestCqlLibrary({
             cqlLibraryName: CqlLibraryName,
@@ -184,7 +183,7 @@ export class CQLLibraryPage {
             expect(response.status).to.eql(201)
             expect(response.body.id).to.be.exist
             expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-            TestData.writeFixture(fixtureName, response.body.id, owner)
+            TestData.writeCqlLibraryId(response.body.id, twoLibraries === true ? 2 : 0, owner)
         })
 
         return user
@@ -205,8 +204,7 @@ export class CQLLibraryPage {
     }
 
     public static actionCenter(action: EditLibraryActions): void {
-        cy.get(this.actionCenterButton).click()
-        cy.wait(250)
+        cy.get(this.actionCenterButton).should('be.visible').click()
 
         switch (action) {
             case EditLibraryActions.delete: {
@@ -274,7 +272,6 @@ export class CQLLibraryPage {
     public static createLibraryAPI(libraryName: string, model: SupportedModels, options?: CreateLibraryOptions) {
         const owner = this.fixtureOwner(options?.altUser)
         const user = TestData.setupUserScope(owner)
-        const fixtureName = options?.libraryNumber ? `cqlLibraryId${options.libraryNumber}` : 'cqlLibraryId'
 
         TestData.requestCqlLibrary({
             cqlLibraryName: libraryName,
@@ -288,16 +285,20 @@ export class CQLLibraryPage {
             expect(response.status).to.eql(201)
             expect(response.body.id).to.be.exist
             expect(response.body.cqlLibraryName).to.eql(libraryName)
-            TestData.writeFixture(fixtureName, response.body.id, owner)
+            TestData.writeCqlLibraryId(response.body.id, options?.libraryNumber ?? 0, owner)
         })
 
         return user
     }
 
     public static checkFirstRow(expectedData: MeasureRow) {
-        cy.wait(1100)
-
-        cy.get('.table-body tr')
+        cy.get(this.cqlLibSearchResultsTable, { timeout: 30000 }).should('be.visible')
+        cy.get(CQLLibrariesPage.libraryListRows, { timeout: 30000 })
+            .first()
+            .find('td')
+            .eq(1)
+            .should('be.visible')
+        cy.get(CQLLibrariesPage.libraryListRows)
             .first()
             .then((firstRow) => {
                 if (expectedData.name) {

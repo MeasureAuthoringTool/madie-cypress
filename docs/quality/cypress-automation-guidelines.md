@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-07-15
+Last updated: 2026-07-20
 
 This guide captures stable test-architecture rules used in this repo. Keep tactical plans and changing counts in `docs/quality/test-refactor-backlog.md`.
 
@@ -45,6 +45,7 @@ These helper paths are already established and should be reused before adding ne
 - Avoid global exception suppression. If an exception must be tolerated, make the handling targeted and explain the scope.
 - Prefer stable `data-testid` selectors when available.
 - When a spec creates uniquely named rows in a list, select those rows by generated name or stored ID instead of fixture-position helpers or table order. Row-order selection becomes flaky when cleanup is partial or older test data is still visible.
+- In Expected/Actual test-case flows, prefer `TestCasesPage.openExpectedActualTab(...)` plus `checkExpectedActualCheckbox(...)` or `uncheckExpectedActualCheckbox(...)` over direct tab clicks and raw boolean checkbox actions. On Monday, July 20, 2026, focused Cypress validation showed the split-panel sash can leave expected-value checkboxes clipped or reported as covered even when the selector is correct. Avoid pre-asserting `be.visible` on those clipped boolean inputs; rely on the shared helper to normalize the panel first.
 
 ## Refactor Rules
 

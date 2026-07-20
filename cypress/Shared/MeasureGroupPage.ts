@@ -53,6 +53,8 @@ export type MeasureObservations = {
 }
 
 export class MeasureGroupPage {
+    private static readonly testCaseExecutionCqlFixture = 'cypress/fixtures/CQLForTestCaseExecution.txt'
+
     public static readonly popBasisField = '[id="populationBasis"]'
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
@@ -304,16 +306,22 @@ export class MeasureGroupPage {
 
     private static createMeasureGroupApi(
         body: MeasureGroupBody,
-        fixtureName: string,
         owner: FixtureOwner = 'selectedUser',
-        measureNumber = 0
+        groupNumber = 0,
+        measureNumber = 0,
+        fixtureName?: string
     ): string {
         const user = TestData.setupUserScope(owner)
 
         TestData.requestMeasureGroup('POST', body, measureNumber, {}, owner).then((response) => {
             expect(response.status).to.eql(201)
             expect(response.body.id).to.be.exist
-            TestData.writeFixture(fixtureName, response.body.id, owner)
+            if (fixtureName) {
+                TestData.writeFixture(fixtureName, response.body.id, owner)
+                return
+            }
+
+            TestData.writeMeasureGroupId(response.body.id, groupNumber, owner)
         })
 
         return user
@@ -323,36 +331,8 @@ export class MeasureGroupPage {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == 'Text') {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect)
-            .find('input')
-            .type('Process')
-            .type('{downArrow}')
-            .type('{enter}')
+        MeasureGroupPage.loadTestCaseExecutionCql()
+        MeasureGroupPage.setMeasureGroupType()
         // this clears the previous step's dropdown
         cy.get(this.QDMPopCriteria1Desc).click()
 
@@ -382,23 +362,8 @@ export class MeasureGroupPage {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.wait(3000)
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.loadTestCaseExecutionCql()
+        MeasureGroupPage.setMeasureGroupType()
 
         cy.get(MeasureGroupPage.popBasisField).focus()
 
@@ -428,23 +393,8 @@ export class MeasureGroupPage {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.wait(3000)
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.loadTestCaseExecutionCql()
+        MeasureGroupPage.setMeasureGroupType()
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
@@ -564,9 +514,10 @@ export class MeasureGroupPage {
                 stratifications: [],
                 improvementNotation: 'Increased score indicates improvement'
             },
-            'measureGroupId',
             owner,
-            measureNumber
+            0,
+            measureNumber,
+            'measureGroupId'
         )
     }
 
@@ -632,8 +583,8 @@ export class MeasureGroupPage {
                 stratifications: [],
                 improvementNotation: 'Increased score indicates improvement'
             },
-            twoMeasureGroups === true ? 'groupId2' : 'groupId',
             owner,
+            twoMeasureGroups === true ? 2 : 0,
             twoMeasureGroups === true ? 2 : 0
         )
     }
@@ -693,8 +644,8 @@ export class MeasureGroupPage {
                 improvementNotation: 'Increased score indicates improvement',
                 improvementNotationDescription: '<p>test iND</p>'
             },
-            twoMeasureGroups === true ? 'groupId2' : 'groupId',
             owner,
+            twoMeasureGroups === true ? 2 : 0,
             measureNumber
         )
     }
@@ -732,8 +683,8 @@ export class MeasureGroupPage {
                 stratifications: [],
                 improvementNotation: 'Increased score indicates improvement'
             },
-            twoMeasureGroups === true ? 'groupId2' : 'groupId',
             owner,
+            twoMeasureGroups === true ? 2 : 0,
             twoMeasureGroups === true ? 2 : 0
         )
     }
@@ -853,7 +804,6 @@ export class MeasureGroupPage {
                 improvementNotation: 'Increased score indicates improvement',
                 measureObservations: observations
             },
-            'groupId',
             owner
         )
     }
@@ -863,7 +813,7 @@ export class MeasureGroupPage {
             type = MeasureType.process
         }
 
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).wait(1000).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('exist')
@@ -877,8 +827,33 @@ export class MeasureGroupPage {
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).find('input').type(type).type('{downArrow}').type('{enter}')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeSelect)
+            .find('input')
+            .should('be.visible')
+            .type(type)
+            .type('{downArrow}')
+            .type('{enter}')
+        cy.get(MeasureGroupPage.popBasisField).should('be.visible').click()
+    }
+
+    private static loadTestCaseExecutionCql(): void {
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
+        cy.readFile(MeasureGroupPage.testCaseExecutionCqlFixture)
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get('body').then(($body) => {
+            if ($body.find(EditMeasurePage.cqlEditorExpandCollapseBtn).length > 0) {
+                CQLEditorPage.collapseEditor()
+            }
+        })
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
     }
 
     public static includeSdeData(): void {
@@ -901,24 +876,15 @@ export class MeasureGroupPage {
     }
 
     public static addStratificationDataAPI(stratificationData: Array<Stratification>) {
-        TestData.readMeasureId().then((measureId) => {
-            TestData.requestWithAccessToken<Array<MeasureGroupBody>>({
-                url: `/api/measures/${measureId}/groups`,
-                method: 'GET'
-            }).then((response) => {
-                expect(response.status).to.eql(200)
+        TestData.requestMeasureGroup<Array<MeasureGroupBody>>('GET').then((response) => {
+            expect(response.status).to.eql(200)
 
-                const groupWithAddedStrats = response.body[0]
-                groupWithAddedStrats.stratifications = stratificationData as typeof groupWithAddedStrats.stratifications
+            const groupWithAddedStrats = response.body[0]
+            groupWithAddedStrats.stratifications = stratificationData as typeof groupWithAddedStrats.stratifications
 
-                TestData.requestWithAccessToken({
-                    url: `/api/measures/${measureId}/groups`,
-                    method: 'POST',
-                    body: groupWithAddedStrats
-                }).then((updateResponse) => {
-                    cy.log('success start add')
-                    expect(updateResponse.status).to.eql(201)
-                })
+            TestData.requestMeasureGroup('POST', groupWithAddedStrats).then((updateResponse) => {
+                cy.log('success start add')
+                expect(updateResponse.status).to.eql(201)
             })
         })
     }

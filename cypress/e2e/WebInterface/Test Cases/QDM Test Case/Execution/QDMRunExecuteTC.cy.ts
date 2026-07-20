@@ -17,7 +17,6 @@ let testCaseSeries = 'SBTestSeries'
 const validTestCaseJson = TestCaseJson.QDMTestCaseJson
 const measureCQL = MeasureCQL.QDMCQL4MAT5645
 const measureData: CreateMeasureOptions = {}
-
 describe('Run / Execute Test case and verify passing percentage and coverage', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
@@ -318,6 +317,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
@@ -329,66 +329,54 @@ describe('Run / Execute QDM Test Case button validations', () => {
     })
 
     it('Run Test Case button is disabled  -- CQL Errors', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/QDMMeasureCQL.txt').should('exist').then((fileContents) => {
-            cy.wait(3000)
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
+        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible').click()
+        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{home}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type('adjfajsdsdjf{}')
 
-        //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.cqlHasErrorsMsg).should('have.text', 'An error exists with the measure CQL, please review the CQL Editor tab')
+        Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
+        cy.get(TestCasesPage.testCaseSyntaxError).should(
+            'contain.text',
+            'An error exists with the measure CQL, please review the CQL Editor tab.'
+        )
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/QDMMeasureCQL.txt').should('exist').then((fileContents) => {
-            cy.wait(3000)
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        Utilities.waitForElementVisible(TestCasesPage.runQDMTestCaseBtn, 37700)
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.disabled')
+        Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
+        cy.get(TestCasesPage.testCaseSyntaxError).should(
+            'contain.text',
+            'No Population Criteria is associated with this measure. Please review the Population Criteria tab.'
+        )
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
@@ -396,26 +384,13 @@ describe('Run / Execute QDM Test Case button validations', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/QDMMeasureCQL.txt').should('exist').then((fileContents) => {
-            cy.wait(3000)
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Patient16To23')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -498,6 +473,11 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 60000)
         cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get('body').then(($body) => {
+            if ($body.find(Utilities.discardChangesConfirmationModal).length > 0) {
+                Utilities.clickOnDiscardChanges()
+            }
+        })
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 60000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
@@ -572,4 +552,3 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
     })
 })
-

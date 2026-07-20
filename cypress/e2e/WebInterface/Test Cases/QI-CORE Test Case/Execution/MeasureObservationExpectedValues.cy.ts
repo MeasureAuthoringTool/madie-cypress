@@ -36,10 +36,8 @@ describe('Measure Observation Expected values', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Validate measure observation expected values
@@ -73,7 +71,7 @@ describe('Measure Observation Expected values', () => {
         )
 
         //Assert saved observation values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.measureObservationRow).should('contain.value', '1.3')
     })
 
@@ -112,12 +110,10 @@ describe('Measure Observation Expected values', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).click()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Validate measure observation expected values
@@ -149,7 +145,7 @@ describe('Measure Observation Expected values', () => {
         //Assert saved observation values
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.denominatorObservationExpectedRow).should('contain.value', '1.3')
         cy.get(TestCasesPage.numeratorObservationRow).should('contain.value', '5')
     })
@@ -163,10 +159,8 @@ describe('Measure Observation Expected values', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Enter value in to Measure observation Expected values
@@ -246,9 +240,7 @@ describe('Measure observation expected result', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         //Enter values in to Measure population(MP) & Measure population exclusion(MPE) fields and verify MP-MPE = number of observation rows
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('5')
@@ -333,9 +325,7 @@ describe('Measure observation expected result', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         //Enter values in to Denominator & Denominator exclusion(DE) fields and verify Denominator-DE = number of Denominator observation rows
         cy.get(TestCasesPage.testCaseDENOMExpected).type('4')

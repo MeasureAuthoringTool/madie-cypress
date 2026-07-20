@@ -217,10 +217,7 @@ describe('JSON Resource ID tests', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.wait(2000)
+        TestCasesPage.waitForJsonEditorReady()
         cy.editTestCaseJSON(emptyResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -303,10 +300,7 @@ describe('JSON Resource ID tests', () => {
             TestCasesPage.clickEditforCreatedTestCase()
 
             //Add json to the test case
-            Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
-            cy.get(TestCasesPage.aceEditor).should('exist')
-            cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.wait(2000)
+            TestCasesPage.waitForJsonEditorReady()
             cy.editTestCaseJSON(missingResourceIDTCJsonButHasFullUrlExt)
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -387,10 +381,7 @@ describe('JSON Resource ID tests', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.wait(2000)
+        TestCasesPage.waitForJsonEditorReady()
         cy.editTestCaseJSON(missingResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -462,13 +453,8 @@ describe('JSON Resource ID tests', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
-        cy.get(TestCasesPage.aceEditor).click()
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 3500)
-        cy.get(TestCasesPage.aceEditor).wait(1500).type(dupResourceIDTCJson, { parseSpecialCharSequences: false })
+        TestCasesPage.waitForJsonEditorReady()
+        cy.editTestCaseJSON(dupResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -520,10 +506,7 @@ describe('JSON Resource ID tests', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.wait(2000)
+        TestCasesPage.waitForJsonEditorReady()
         cy.editTestCaseJSON(missingMetaProfile)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')

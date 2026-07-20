@@ -242,6 +242,29 @@ export class CQLEditorPage {
         }
     }
 
+    public static minimizeAlerts(hiddenAlertSelector: string): void {
+        cy.get(CQLEditorPage.minimizeButton).click()
+        cy.get(hiddenAlertSelector).should('not.exist')
+        cy.get(CQLEditorPage.minimizedAlertsTab).should('be.visible')
+    }
+
+    public static reopenMinimizedAlerts(options: {
+        visibleAlertSelector?: string
+        hiddenAlertSelector?: string
+    } = {}): void {
+        cy.get(CQLEditorPage.minimizedAlertsTab).click()
+
+        if (options.visibleAlertSelector) {
+            cy.get(options.visibleAlertSelector).should('be.visible')
+        }
+
+        if (options.hiddenAlertSelector) {
+            cy.get(options.hiddenAlertSelector).should('not.exist')
+        }
+
+        cy.get(CQLEditorPage.minimizedAlertsTab).should('not.exist')
+    }
+
     public static applyDefinition(): void {
 
         cy.get('[data-testid="definition-apply-btn"]').click()
@@ -253,8 +276,11 @@ export class CQLEditorPage {
     public static replaceCqlDocument(filePath: string) {
 
         Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
-        cy.wait(2000)
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorTextBox)
+            .should('be.visible')
+            .click()
+            .focused()
+            .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
 
         Utilities.typeFileContents(filePath, EditMeasurePage.cqlEditorTextBox)
     }
@@ -268,6 +294,7 @@ export class CQLEditorPage {
         const maxRetries = 5
 
         const attemptExpand = (attempt: number): void => {
+            cy.document().its('readyState').should('eq', 'complete')
             cy.get('body').then(($body) => {
                 // The collapse button is only rendered when the panel is truly open
                 const panelOpen = $body.find(CQLEditorPage.collapseCQLBuilder).length > 0
@@ -281,16 +308,14 @@ export class CQLEditorPage {
                 if ($body.find(CQLEditorPage.expandCQLBuilder).length > 0) {
                     cy.log(`Expanding CQL Builder panel (attempt ${attempt + 1}/${maxRetries})`)
                     cy.get(CQLEditorPage.expandCQLBuilder).first().scrollIntoView().click({ force: true })
-                    // Wait for any navigation / page reload to settle
-                    cy.wait(4000)
-                    // Recurse if we haven't exceeded retries
+                    cy.document().its('readyState').should('eq', 'complete')
+
                     if (attempt + 1 < maxRetries) {
                         attemptExpand(attempt + 1)
                     }
                 } else {
-                    // Neither expand nor collapse button found — page may still be loading
-                    cy.log(`Neither expand nor collapse button found (attempt ${attempt + 1}/${maxRetries}), waiting...`)
-                    cy.wait(3000)
+                    cy.log(`Neither expand nor collapse button found (attempt ${attempt + 1}/${maxRetries}), retrying...`)
+
                     if (attempt + 1 < maxRetries) {
                         attemptExpand(attempt + 1)
                     }

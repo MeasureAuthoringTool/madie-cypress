@@ -318,12 +318,8 @@ Cypress.Commands.add('UMLSAPIKeyLogin', () => {
 })
 
 Cypress.Commands.add('editTestCaseJSON', (jsonContent: string) => {
-    Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-    Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-    cy.get(TestCasesPage.aceEditor).should('exist')
-    cy.get(TestCasesPage.aceEditor).should('be.visible')
+    TestCasesPage.waitForJsonEditorReady()
     cy.get(TestCasesPage.aceEditorJsonInput)
-        .should('exist')
         .click({ force: true })
         .clear({ force: true })
         .type(jsonContent, { parseSpecialCharSequences: false, force: true })

@@ -50,13 +50,11 @@ describe('CQL Library List Page Sort by Columns', () => {
 
         // sort by Library ASC
         cy.get(CQLLibrariesPage.hdrLibrary).click()
-        cy.wait('@sort')
-        cy.wait(1100)
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort')
             cy.get('.table-body tr').first().find('td').eq(1).invoke('text').then(ascName => {
             // sort by Library DESC
             cy.get(CQLLibrariesPage.hdrLibrary).click()
-            cy.wait('@sort2')
-            cy.wait(1100)
+            CQLLibrariesPage.waitForLibraryListRefresh('@sort2')
             cy.get('.table-body tr').first().find('td').eq(1).invoke('text').then(descName => {
                 // ASC first name should come before DESC first name alphabetically
                 expect(ascName.toLowerCase().localeCompare(descName.toLowerCase())).to.be.lessThan(0)
@@ -65,13 +63,11 @@ describe('CQL Library List Page Sort by Columns', () => {
 
         // sort by Version ASC
         cy.get(CQLLibrariesPage.hdrVersion).click()
-        cy.wait('@sort3')
-        cy.wait(1100)
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort3')
         cy.get('.table-body tr').first().find('td').eq(2).invoke('text').then(ascVersion => {
             // sort by Version DESC
             cy.get(CQLLibrariesPage.hdrVersion).click()
-            cy.wait('@sort4')
-            cy.wait(1100)
+            CQLLibrariesPage.waitForLibraryListRefresh('@sort4')
             cy.get('.table-body tr').first().find('td').eq(2).invoke('text').then(descVersion => {
                 // ASC and DESC should produce different first versions
                 expect(ascVersion).to.not.equal(descVersion)
@@ -80,29 +76,39 @@ describe('CQL Library List Page Sort by Columns', () => {
 
         // sort by Status ASC
         cy.get(CQLLibrariesPage.hdrStatus).click()
-        cy.wait('@sort5')
-        cy.wait(1100)
-        cy.get('.table-body tr').first().find('td').eq(3).invoke('text').then(ascStatus => {
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort5').then(({ response }) => {
+            const ascExpectedDraft = Boolean(response?.body?.content?.[0]?.draft)
+
+            cy.get('.table-body tr').first().find('td').eq(3).invoke('text').then(ascStatus => {
+                if (ascExpectedDraft) {
+                    expect(ascStatus.trim()).to.include('Draft')
+                } else {
+                    expect(ascStatus.trim()).to.eq('')
+                }
+
             // sort by Status DESC
-            cy.get(CQLLibrariesPage.hdrStatus).click()
-            cy.wait('@sort6')
-            cy.wait(1100)
-            cy.get('.table-body tr').first().find('td').eq(3).invoke('text').then(descStatus => {
-                // At least one of the two should show 'Draft'
-                const hasDraft = ascStatus === 'Draft' || descStatus === 'Draft'
-                expect(hasDraft).to.be.true
+                cy.get(CQLLibrariesPage.hdrStatus).click()
+                CQLLibrariesPage.waitForLibraryListRefresh('@sort6').then(({ response: descResponse }) => {
+                    const descExpectedDraft = Boolean(descResponse?.body?.content?.[0]?.draft)
+
+                    cy.get('.table-body tr').first().find('td').eq(3).invoke('text').then(descStatus => {
+                        if (descExpectedDraft) {
+                            expect(descStatus.trim()).to.include('Draft')
+                        } else {
+                            expect(descStatus.trim()).to.eq('')
+                        }
+                    })
+                })
             })
         })
 
         // sort by Model ASC
         cy.get(CQLLibrariesPage.hdrModel).click()
-        cy.wait('@sort7')
-        cy.wait(1100)
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort7')
         cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(ascModel => {
             // sort by Model DESC
             cy.get(CQLLibrariesPage.hdrModel).click()
-            cy.wait('@sort8')
-            cy.wait(1100)
+            CQLLibrariesPage.waitForLibraryListRefresh('@sort8')
             cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(descModel => {
                 // ASC and DESC should produce different first models
                 expect(ascModel).to.not.equal(descModel)
@@ -113,23 +119,19 @@ describe('CQL Library List Page Sort by Columns', () => {
 
         // sort by Shared ASC
         cy.get(CQLLibrariesPage.hdrShared).click()
-        cy.wait('@sort9')
-        cy.wait(1100)
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort9')
         // sort by Shared DESC - verify the shared icon appears on the first row
         cy.get(CQLLibrariesPage.hdrShared).click()
-        cy.wait('@sort10')
-        cy.wait(1100)
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort10')
         cy.get('.table-body tr').first().find('td').eq(5).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
 
         // sort by Updated ASC - oldest first
         cy.get(CQLLibrariesPage.hdrUpdated).click()
-        cy.wait('@sort11')
-        cy.wait(1100)
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort11')
         cy.get('.table-body tr').first().find('td').eq(7).invoke('text').then(ascDate => {
             // sort by Updated DESC - newest first
             cy.get(CQLLibrariesPage.hdrUpdated).click()
-            cy.wait('@sort12')
-            cy.wait(1100)
+            CQLLibrariesPage.waitForLibraryListRefresh('@sort12')
             cy.get('.table-body tr').first().find('td').eq(7).invoke('text').then(descDate => {
                 // Verify sorting changed the order
                 const ascParsed = dayjs(ascDate, 'M/D/YYYY')
@@ -162,8 +164,7 @@ describe('CQL Library List Page Sort by Columns', () => {
 
         // sort by model ASC
         cy.get(CQLLibrariesPage.hdrModel).click()
-        cy.wait('@sort')
-        cy.wait(1100)
+        CQLLibrariesPage.waitForLibraryListRefresh('@sort')
         cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(ascModel => {
 
             // verify page 1
@@ -181,8 +182,7 @@ describe('CQL Library List Page Sort by Columns', () => {
 
             // sort by model DESC to reset
             cy.get(CQLLibrariesPage.hdrModel).click()
-            cy.wait('@sort2')
-            cy.wait(1100)
+            CQLLibrariesPage.waitForLibraryListRefresh('@sort2')
             cy.get('.table-body tr').first().find('td').eq(4).invoke('text').then(descModel => {
                 // ASC and DESC should produce different first models
                 expect(ascModel).to.not.equal(descModel)
