@@ -288,17 +288,12 @@ describe('Measure Creation: Proportion Patient Based', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         //Add Expected values
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseDENEXExpected).click()
-        cy.get(TestCasesPage.testCaseDENEXExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENEXExpected)
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

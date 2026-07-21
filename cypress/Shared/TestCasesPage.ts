@@ -488,7 +488,7 @@ export class TestCasesPage {
         console.log('The element id value is ' + elementId[2])
         cy.log(elementId[2])
         elemid = elementId[2].toString().valueOf()
-        TestData.writeFixture('elementId', elemid)
+        TestData.writeElementId(elemid)
       })
   }
 
@@ -510,7 +510,7 @@ export class TestCasesPage {
         cy.log('The data-testid value is ' + attrData)
         cy.log('The element id value is ' + elemid)
 
-        TestData.writeFixture('elementId', elemid)
+        TestData.writeElementId(elemid)
       })
   }
 
@@ -529,7 +529,7 @@ export class TestCasesPage {
       .invoke('attr', 'data-testid')
       .then((idValue) => {
         testCaseId = idValue!.split('-')[5].toString().valueOf()
-        TestData.writeFixture('testCaseId', testCaseId)
+        TestData.writeTestCaseId(testCaseId)
       })
   }
 
@@ -548,7 +548,7 @@ export class TestCasesPage {
         //saving testCaseId to file to use later
         cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
           expect(response?.statusCode).to.eq(201)
-          TestData.writeFixture('testCaseId', response?.body.id)
+          TestData.writeTestCaseId(response?.body.id)
           cy.log(response?.body.message)
         })
       })
@@ -585,7 +585,7 @@ export class TestCasesPage {
   //indicates one of the available actions that can be done on an element(ie: Edit, Clone, Delete)
   //**NOTE**: Before this function can be called, the grabElementId(eleTableEntry) function must be called, first.
   public static qdmTestCaseElementAction(action: string): void {
-    TestData.readFixture('elementId')
+    TestData.readElementId()
       .then((fileContents) => {
         cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
         cy.scrollTo(0, 500)
@@ -643,7 +643,7 @@ export class TestCasesPage {
   }
 
   public static compositeTestCaseAddedAction(action: string): void {
-    TestData.readFixture('elementId')
+    TestData.readElementId()
       .then((fileContents) => {
         // Click tooltip first
         cy.get('[data-testid="action-center-tooltip-' + fileContents + '"]')
@@ -762,15 +762,19 @@ export class TestCasesPage {
       cy.get(TestCasesPage.jsonTab).click()
     }
 
+    this.waitForJsonEditorReady()
+    cy.get(TestCasesPage.aceEditorJsonInput)
+      .click({ force: true })
+      .clear({ force: true })
+      .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
+  }
+
+  public static waitForJsonEditorReady(): void {
     Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
     Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
     cy.get(TestCasesPage.aceEditor).should('exist')
     cy.get(TestCasesPage.aceEditor).should('be.visible')
-    cy.get(TestCasesPage.aceEditorJsonInput)
-      .should('exist')
-      .click({ force: true })
-      .clear({ force: true })
-      .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
+    cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
   }
 
   public static updateTestCase(
@@ -838,8 +842,7 @@ export class TestCasesPage {
   ): void {
     const { populationIndex = 0, waitForRunButtonEnabledMs, waitForRunCompletionMs } = options
 
-    Utilities.waitForElementVisible(this.tctExpectedActualSubTab, 35000)
-    cy.get(this.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
+    this.openExpectedActualTab({ checkboxSelector: this.testCaseIPPExpected })
 
     Utilities.waitForElementVisible(this.testCaseIPPExpected, 35000)
     cy.get(this.testCaseIPPExpected).eq(populationIndex).scrollIntoView().check({ force: true })
@@ -873,6 +876,108 @@ export class TestCasesPage {
     cy.get(this.tcHighlightingTab).should('exist')
     cy.get(this.tcHighlightingTab).should('be.visible')
     cy.get(this.tcHighlightingTab).click()
+  }
+
+  public static openExpectedActualTab(options: {
+    checkboxSelector?: string
+  } = {}): void {
+    const { checkboxSelector } = options
+
+    cy.get(this.tctExpectedActualSubTab, { timeout: 35000 }).should('exist').scrollIntoView().should('be.visible').click()
+
+    if (checkboxSelector) {
+      cy.get(checkboxSelector).should('exist')
+    }
+
+    this.normalizeExpectedActualPopulationPanel({
+      requirePanel: !checkboxSelector,
+    })
+  }
+
+  public static checkExpectedActualCheckbox(
+    checkboxSelector: string,
+    options: {
+      index?: number
+    } = {},
+  ): void {
+    const { index } = options
+
+    this.normalizeExpectedActualPopulationPanel()
+    const checkbox = cy.get(checkboxSelector)
+
+    if (typeof index === 'number') {
+      checkbox.eq(index).should('exist').check({ scrollBehavior: 'center' })
+      return
+    }
+
+    checkbox.should('exist').check({ scrollBehavior: 'center' })
+  }
+
+  public static clickExpectedActualCheckbox(
+    checkboxSelector: string,
+    options: {
+      index?: number
+    } = {},
+  ): void {
+    const { index } = options
+
+    this.normalizeExpectedActualPopulationPanel()
+    const checkbox = cy.get(checkboxSelector)
+
+    if (typeof index === 'number') {
+      checkbox.eq(index).should('exist').should('be.visible').click({ scrollBehavior: 'center' })
+      return
+    }
+
+    checkbox.should('exist').should('be.visible').click({ scrollBehavior: 'center' })
+  }
+
+  public static uncheckExpectedActualCheckbox(
+    checkboxSelector: string,
+    options: {
+      index?: number
+    } = {},
+  ): void {
+    const { index } = options
+
+    this.normalizeExpectedActualPopulationPanel()
+    const checkbox = cy.get(checkboxSelector)
+
+    if (typeof index === 'number') {
+      checkbox.eq(index).should('exist').uncheck({ scrollBehavior: 'center' })
+      return
+    }
+
+    checkbox.should('exist').uncheck({ scrollBehavior: 'center' })
+  }
+
+  private static normalizeExpectedActualPopulationPanel(options: {
+    requirePanel?: boolean
+  } = {}): void {
+    const { requirePanel = false } = options
+
+    if (requirePanel) {
+      Utilities.waitForElementVisible(this.testCasePopulationList, 35000)
+    }
+
+    cy.get('body').then(($body) => {
+      const panel = $body.find(this.testCasePopulationList)
+
+      if (!panel.length) {
+        return
+      }
+
+      cy.get(this.testCasePopulationList).should('be.visible').then(($panel) => {
+      const scrollContainers = [
+        $panel[0] as HTMLElement,
+        ...$panel.parents().toArray().map((element) => element as HTMLElement),
+      ].filter((element) => element.scrollWidth > element.clientWidth)
+
+      scrollContainers.forEach((element) => {
+        element.scrollLeft = 0
+      })
+      })
+    })
   }
 
   // -----------------------------
@@ -964,7 +1069,7 @@ export class TestCasesPage {
       .click()
       .should('have.attr', 'aria-selected', 'true')
 
-    TestData.readFixture(this.testCaseIdFixtureName(secondTestCase))
+    TestData.readTestCaseId(secondTestCase ? 2 : 0)
       .then((tcId) => {
         const buttonSelector = `[data-testid=view-edit-test-case-button-${tcId}]`
 
@@ -999,35 +1104,34 @@ export class TestCasesPage {
     const user = TestData.setupUserScope(owner)
     cy.log('Current user is: ' + user)
     const resolvedMeasureNumber = this.measureNumber(secondMeasure, measureNumber ?? 0)
-    const testCaseFixtureName = this.testCaseIdFixtureName(twoTestCases)
-    const testCasePatientFixtureName = this.testCasePatientIdFixtureName(twoTestCases)
 
     //Add Test Case to the Measure
-    TestData.readMeasureId(resolvedMeasureNumber, owner).then((id) => {
-      TestData.requestWithAccessToken<any>({
-        url: '/api/measures/' + id + '/test-cases',
-        method: 'POST',
-        body: {
-          name: 'TEST',
-          series: series,
-          title: title,
-          description: description,
-          json: jsonValue,
-          hapiOperationOutcome: {
-            code: 201,
-            message: null,
-            outcomeResponse: null,
-          },
+    TestData.requestMeasureTestCase<any>(
+      'POST',
+      {
+        name: 'TEST',
+        series: series,
+        title: title,
+        description: description,
+        json: jsonValue,
+        hapiOperationOutcome: {
+          code: 201,
+          message: null,
+          outcomeResponse: null,
         },
-      }).then((response) => {
-        expect(response.status).to.eql(201)
-        expect(response.body.id).to.be.exist
-        expect(response.body.series).to.eql(series)
-        expect(response.body.title).to.eql(title)
-        expect(response.body.description).to.eql(description)
-        TestData.writeFixture(testCaseFixtureName, response.body.id, owner)
-        TestData.writeFixture(testCasePatientFixtureName, response.body.patientId, owner)
-      })
+      } as any,
+      {},
+      owner,
+      null,
+      resolvedMeasureNumber
+    ).then((response) => {
+      expect(response.status).to.eql(201)
+      expect(response.body.id).to.be.exist
+      expect(response.body.series).to.eql(series)
+      expect(response.body.title).to.eql(title)
+      expect(response.body.description).to.eql(description)
+      TestData.writeTestCaseId(response.body.id, twoTestCases ? 2 : 0, owner)
+      TestData.writeTestCasePatientId(response.body.patientId, twoTestCases ? 2 : 0, owner)
     })
     return user
   }
@@ -1043,29 +1147,29 @@ export class TestCasesPage {
   ): string {
     const owner = this.fixtureOwner(altUser)
     const user = TestData.setupUserScope(owner)
-    const testCaseFixtureName = this.testCaseIdFixtureName(twoTestCases)
 
     //Add Test Case to the Measure
-    TestData.readMeasureId(measureNumber ?? 0, owner).then((id) => {
-      TestData.requestWithAccessToken<any>({
-        url: '/api/measures/' + id + '/test-cases',
-        method: 'POST',
-        body: {
-          name: 'TEST',
-          series: series,
-          title: title,
-          description: description,
-          json: jsonValue,
-        },
-      }).then((response) => {
-        expect(response.status).to.eql(201)
-        expect(response.body.id).to.be.exist
-        expect(response.body.series).to.eql(series)
-        //expect(response.body.json).to.eql(jsonValue)
-        expect(response.body.title).to.eql(title)
-        expect(response.body.description).to.eql(description)
-        TestData.writeFixture(testCaseFixtureName, response.body.id, owner)
-      })
+    TestData.requestMeasureTestCase<any>(
+      'POST',
+      {
+        name: 'TEST',
+        series: series,
+        title: title,
+        description: description,
+        json: jsonValue,
+      },
+      {},
+      owner,
+      null,
+      measureNumber ?? 0
+    ).then((response) => {
+      expect(response.status).to.eql(201)
+      expect(response.body.id).to.be.exist
+      expect(response.body.series).to.eql(series)
+      //expect(response.body.json).to.eql(jsonValue)
+      expect(response.body.title).to.eql(title)
+      expect(response.body.description).to.eql(description)
+      TestData.writeTestCaseId(response.body.id, twoTestCases ? 2 : 0, owner)
     })
     return user
   }

@@ -67,11 +67,9 @@ export class TestCaseBuilder {
 
     public static addEditNewResource(addition: Profile, resourceNumber?: number) {
         let bundleIndex = 0
-        let resourceFixtureName = 'builderResourceId'
         let resourceId = ''
         if (resourceNumber) {
             bundleIndex = resourceNumber
-            resourceFixtureName = `builderResourceId${resourceNumber}`
         }
 
         cy.get('[data-testid="add-element-' + addition + '"]').click().wait(500)
@@ -82,7 +80,7 @@ export class TestCaseBuilder {
 
             resourceId = store.bundle.entry[bundleIndex].resource.id
 
-            TestData.writeFixture(resourceFixtureName, resourceId)
+            TestData.writeBuilderResourceId(resourceId, resourceNumber)
 
             const actionCenterButton = '[data-testid="action-center-button-' + resourceId + '"]'
             const editAction = '[data-testid="action-center-' + resourceId + '_Edit"]'

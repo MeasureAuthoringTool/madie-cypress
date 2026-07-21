@@ -3,7 +3,6 @@ import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
 import { Measure } from "@madie/madie-models"
-import { OktaLogin } from "./OktaLogin"
 import { FixtureOwner, TestData } from "./TestData"
 import { step } from "../utils/step"
 const now = require('dayjs')
@@ -69,18 +68,6 @@ export class CreateMeasurePage {
         return altUser ? 'selectedAltUser' : 'selectedUser'
     }
 
-    private static writeMeasureFixtures(
-        responseBody: any,
-        measureNumber = 0,
-        owner: FixtureOwner = 'selectedUser'
-    ): void {
-        const suffix = measureNumber > 0 ? measureNumber : ''
-
-        TestData.writeFixture(`measureId${suffix}`, responseBody.id, owner)
-        TestData.writeFixture(`versionId${suffix}`, responseBody.versionId, owner)
-        TestData.writeFixture(`measureSetId${suffix}`, responseBody.measureSetId, owner)
-    }
-
     public static clickCreateMeasureButton(): void {
 
         let alias = 'measure' + (Date.now() + 1).toString()
@@ -94,7 +81,7 @@ export class CreateMeasurePage {
         //saving measureID to file to use later
         cy.wait(waitAlias).then(({ response }) => {
             expect(response?.statusCode).to.eq(201)
-            this.writeMeasureFixtures(response?.body)
+            TestData.writeMeasureContext(response?.body)
         })
     }
 
@@ -112,7 +99,11 @@ export class CreateMeasurePage {
             //saving measureID to file to use later
             cy.wait(waitAlias).then(({ response }) => {
                 expect(response?.statusCode).to.eq(201)
-                TestData.writeFixture('measureId', response?.body.id)
+                TestData.writeMeasureContext({
+                    id: response?.body.id,
+                    versionId: response?.body.versionId ?? '',
+                    measureSetId: response?.body.measureSetId ?? ''
+                })
             })
         })
     }
@@ -223,15 +214,11 @@ export class CreateMeasurePage {
             measureNumber = 0
         }
 
-        user = OktaLogin.setupUserSession(altUser)
+        user = TestData.setupUserScope(this.fixtureOwner(altUser))
         cy.log('Current user is: ' + user)
 
         //Create New Measure
-        TestData.requestWithAccessToken<any>({
-                failOnStatusCode: false,
-                url: '/api/measure?addDefaultCQL=false',
-                method: 'POST',
-                body: {
+        TestData.requestMeasureCreate<any>({
                     'measureName': measureName,
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core v4.1.1',
@@ -298,22 +285,15 @@ export class CreateMeasurePage {
                         "display": "MIPS",
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
-                }
-        }).then((response) => {
+                },
+                { failOnStatusCode: false }
+        ).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
 
-                let currentUser = ''
-                if (altUser) {
-                    currentUser = Cypress.env('selectedAltUser')
-                }
-                else {
-                    currentUser = Cypress.env('selectedUser')
-                }
-
-                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
-                cy.log(currentUser + ' MeasureSetId is ' + response?.body.measureSetId)
+                TestData.writeMeasureContext(response?.body, measureNumber, this.fixtureOwner(altUser))
+                cy.log('MeasureSetId is ' + response?.body.measureSetId)
         })
         return user
     }
@@ -343,14 +323,10 @@ export class CreateMeasurePage {
             measureNumber = 0
         }
 
-        user = OktaLogin.setupUserSession(altUser)
+        user = TestData.setupUserScope(this.fixtureOwner(altUser))
 
         //Create New Measure
-        TestData.requestWithAccessToken<any>({
-                failOnStatusCode: false,
-                url: '/api/measure?addDefaultCQL=false',
-                method: 'POST',
-                body: {
+        TestData.requestMeasureCreate<any>({
                     'measureName': measureName,
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core v4.1.1',
@@ -416,21 +392,14 @@ export class CreateMeasurePage {
                         "display": "MIPS",
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
-                }
-        }).then((response) => {
+                },
+                { failOnStatusCode: false }
+        ).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
 
-                let currentUser = ''
-                if (altUser) {
-                    currentUser = Cypress.env('selectedAltUser')
-                }
-                else {
-                    currentUser = Cypress.env('selectedUser')
-                }
-
-                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
+                TestData.writeMeasureContext(response?.body, measureNumber, this.fixtureOwner(altUser))
                 cy.log('MeasureSetId is ' + response?.body.measureSetId)
         })
         return user
@@ -461,14 +430,10 @@ export class CreateMeasurePage {
             measureNumber = 0
         }
 
-        user = OktaLogin.setupUserSession(altUser)
+        user = TestData.setupUserScope(this.fixtureOwner(altUser))
 
         //Create New Measure
-        TestData.requestWithAccessToken<any>({
-                failOnStatusCode: false,
-                url: '/api/measure?addDefaultCQL=false',
-                method: 'POST',
-                body: {
+        TestData.requestMeasureCreate<any>({
                     'measureName': measureName,
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core v4.1.1',
@@ -533,21 +498,14 @@ export class CreateMeasurePage {
                         "display": "MIPS",
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
-                }
-        }).then((response) => {
+                },
+                { failOnStatusCode: false }
+        ).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
 
-                let currentUser = ''
-                if (altUser) {
-                    currentUser = Cypress.env('selectedAltUser')
-                }
-                else {
-                    currentUser = Cypress.env('selectedUser')
-                }
-
-                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
+                TestData.writeMeasureContext(response?.body, measureNumber, this.fixtureOwner(altUser))
                 cy.log('MeasureSetId is ' + response?.body.measureSetId)
         })
         return user
@@ -581,13 +539,10 @@ export class CreateMeasurePage {
             altUser = true
         }
 
-        user = OktaLogin.setupUserSession(altUser)
+        user = TestData.setupUserScope(this.fixtureOwner(altUser))
 
         //Create New Measure
-        TestData.requestWithAccessToken<any>({
-                url: '/api/measure?addDefaultCQL=false',
-                method: 'POST',
-                body: {
+        TestData.requestMeasureCreate<any>({
                     'measureName': measureName,
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QDM v5.6',
@@ -627,24 +582,16 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-        }).then((response) => {
+        ).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
 
-                let currentUser = ''
-                if (altUser) {
-                    currentUser = Cypress.env('selectedAltUser')
-                }
-                else {
-                    currentUser = Cypress.env('selectedUser')
-                }
-
                 if ((twoMeasures === true) && (measureNumber === 0)) {
-                    this.writeMeasureFixtures(response?.body, 2, this.fixtureOwner(altUser))
+                    TestData.writeMeasureContext(response?.body, 2, this.fixtureOwner(altUser))
                 }
                 else {
-                    this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
+                    TestData.writeMeasureContext(response?.body, measureNumber, this.fixtureOwner(altUser))
                 }
         })
         cy.log(user)
@@ -677,15 +624,11 @@ export class CreateMeasurePage {
             CreateMeasureOptions.description = '<p>SemanticBits</p>'
         }
 
-        user = OktaLogin.setupUserSession(altUser)
+        user = TestData.setupUserScope(this.fixtureOwner(altUser))
         cy.log('Current user is: ' + user)
 
         //Create New Measure
-        TestData.requestWithAccessToken<any>({
-                failOnStatusCode: false,
-                url: '/api/measure?addDefaultCQL=false',
-                method: 'POST',
-                body: {
+        TestData.requestMeasureCreate<any>({
                     'measureName': CreateMeasureOptions.ecqmTitle,
                     'cqlLibraryName': CreateMeasureOptions.cqlLibraryName,
                     'model': 'QDM v5.6',
@@ -723,21 +666,14 @@ export class CreateMeasurePage {
                         "display": "MIPS",
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
-                }
-        }).then((response) => {
+                },
+                { failOnStatusCode: false }
+        ).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
 
-                let currentUser = ''
-                if (CreateMeasureOptions.altUser) {
-                    currentUser = Cypress.env('selectedAltUser')
-                }
-                else {
-                    currentUser = Cypress.env('selectedUser')
-                }
-
-                this.writeMeasureFixtures(
+                TestData.writeMeasureContext(
                     response?.body,
                     CreateMeasureOptions.measureNumber,
                     this.fixtureOwner(CreateMeasureOptions.altUser)
@@ -832,13 +768,10 @@ export class CreateMeasurePage {
             altUser = true
         }
 
-        user = OktaLogin.setupUserSession(altUser)
+        user = TestData.setupUserScope(this.fixtureOwner(altUser))
 
         //Create New Measure
-        TestData.requestWithAccessToken<any>({
-                url: '/api/measure?addDefaultCQL=false',
-                method: 'POST',
-                body: {
+        TestData.requestMeasureCreate<any>({
                     'measureName': measureName,
                     'cqlLibraryName': cqlLibraryName,
                     'model': model,
@@ -863,19 +796,12 @@ export class CreateMeasurePage {
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
                     }
                 }
-        }).then((response) => {
+        ).then((response) => {
 
                 expect(response?.status).to.eql(201)
                 expect(response?.body.id).to.be.exist
 
-                if (altUser) {
-                    currentUser = Cypress.env('selectedAltUser')
-                }
-                else {
-                    currentUser = Cypress.env('selectedUser')
-                }
-
-                this.writeMeasureFixtures(response?.body, measureNumber, this.fixtureOwner(altUser))
+                TestData.writeMeasureContext(response?.body, measureNumber, this.fixtureOwner(altUser))
         })
         cy.log(user)
         return user
@@ -887,7 +813,7 @@ export class CreateMeasurePage {
         if (overrideOptions && overrideOptions.altUser) {
             useAltUser = true
         }
-        OktaLogin.setupUserSession(useAltUser)
+        TestData.setupUserScope(this.fixtureOwner(useAltUser))
 
         // example of configuring options
         if (overrideOptions && overrideOptions.measureNumber) {
@@ -895,10 +821,7 @@ export class CreateMeasurePage {
         }
 
         // query existing measure for all data
-        TestData.requestWithAccessToken<Partial<Measure>>({
-                url: '/api/measures/' + existingId,
-                method: 'GET'
-        }).then((response) => {
+        TestData.requestMeasureById<Partial<Measure>>('GET', existingId).then((response) => {
                 const clonedMeasure = response?.body as Partial<Measure>
 
                 // clear out data required to be fresh
@@ -917,15 +840,11 @@ export class CreateMeasurePage {
                     clonedMeasure.ecqmTitle = overrideOptions.ecqmTitle
                 }
 
-                TestData.requestWithAccessToken<any>({
-                    url: '/api/measure?addDefaultCQL=false',
-                    method: 'POST',
-                    body: clonedMeasure
-                }).then((response) => {
+                TestData.requestMeasureCreate<any>(clonedMeasure as any).then((response) => {
                     expect(response?.status).to.eql(201)
                     expect(response?.body.id).to.be.exist
 
-                    this.writeMeasureFixtures(response?.body, measureNumber)
+                    TestData.writeMeasureContext(response?.body, measureNumber)
                 })
         })
     }

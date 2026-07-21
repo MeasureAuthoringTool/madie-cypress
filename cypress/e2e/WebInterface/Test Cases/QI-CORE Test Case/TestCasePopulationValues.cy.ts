@@ -1,16 +1,16 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../Shared/Header'
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 const now = Date.now()
 const measureName = 'TCPopValues' + now + randValue
 const CqlLibraryName = 'TCPopValuesLib' + now + randValue
@@ -22,31 +22,31 @@ const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const proportionMeasureCQL = MeasureCQL.CQL_Multiple_Populations
 
 describe('Test Case Expected Measure Group population values based on initial measure scoring', () => {
-
     beforeEach('Create measure and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify the Test Case Populations when Measure group is not added', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
+        cy.get(TestCasesPage.testCaseExecutionError).should(
+            'contain.text',
+            'No Population Criteria is associated with this measure. Please review the Population Criteria tab.'
+        )
     })
 
-    it('Validate Population Values check boxes are correct based on measure scoring value that is applied, ' +
-        'when the measure is initially created (default measure group)', () => {
-
+    it(
+        'Validate Population Values check boxes are correct based on measure scoring value that is applied, ' +
+            'when the measure is initially created (default measure group)',
+        () => {
             //Add Measure Group
             MeasureGroupPage.createMeasureGroupforProportionMeasure()
 
@@ -59,44 +59,38 @@ describe('Test Case Expected Measure Group population values based on initial me
             TestCasesPage.clickEditforCreatedTestCase()
 
             //click on Expected / Actual tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
             cy.get(TestCasesPage.testCasePopulationValuesTable).should('be.visible')
 
-            cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
+            TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
-            cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-            cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-            cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseNUMERExpected).check().should('be.checked')
+            TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-    })
+            TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        }
+    )
 
-    it('Validate notification that a reset of population values, on test cases, will occur once the completed ' +
-        'save / update of the scoring value is executed', () => {
-
+    it(
+        'Validate notification that a reset of population values, on test cases, will occur once the completed ' +
+            'save / update of the scoring value is executed',
+        () => {
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
             //navigate to CQL Editor page / tab
             cy.get(EditMeasurePage.cqlEditorTab).click()
             //read and write CQL from flat file
-            cy.readFile('cypress/fixtures/QICoreCleanCQL.txt').should('exist').then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+            cy.readFile('cypress/fixtures/QICoreCleanCQL.txt')
+                .should('exist')
+                .then((fileContents) => {
+                    cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+                })
             //save CQL on measure
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
             //Click on the measure group tab
 
             cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+            CQLEditorPage.collapseEditor()
 
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -108,7 +102,6 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(MeasureGroupPage.popBasis).type('Procedure')
             cy.get(MeasureGroupPage.popBasisOption).click()
 
-
             Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
             Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
@@ -119,12 +112,18 @@ describe('Test Case Expected Measure Group population values based on initial me
 
             cy.get(MeasureGroupPage.reportingTab).click()
             Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
-            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+            Utilities.dropdownSelect(
+                MeasureGroupPage.improvementNotationSelect,
+                'Increased score indicates improvement'
+            )
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+                'contain.text',
+                'Population details for this group saved successfully.'
+            )
 
             Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
@@ -134,30 +133,39 @@ describe('Test Case Expected Measure Group population values based on initial me
 
             //validation message after attempting to save
             cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('exist')
-            cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('contain.text', 'Change Scoring?Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.Are you sure you want to Save Changes?This action cannot be undone.No, Keep WorkingYes, Save changes')
+            cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should(
+                'contain.text',
+                'Change Scoring?Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.Are you sure you want to Save Changes?This action cannot be undone.No, Keep WorkingYes, Save changes'
+            )
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
             cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('not.exist')
-    })
+        }
+    )
 
-    it('Validate Population Values are reset on all test cases that exist under a measure group, after the score ' +
-        'unit value is saved / updated', () => {
-        let currentUser = Cypress.env('selectedUser')
+    it(
+        'Validate Population Values are reset on all test cases that exist under a measure group, after the score ' +
+            'unit value is saved / updated',
+        () => {
+            let currentUser = Cypress.env('selectedUser')
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
             //navigate to CQL Editor page / tab
             cy.get(EditMeasurePage.cqlEditorTab).click()
             //read and write CQL from flat file
-            cy.readFile('cypress/fixtures/QICoreCleanCQL.txt').should('exist').then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+            cy.readFile('cypress/fixtures/QICoreCleanCQL.txt')
+                .should('exist')
+                .then((fileContents) => {
+                    cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+                })
             //save CQL on measure
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
             cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+            CQLEditorPage.collapseEditor()
             //Click on the measure group tab
             cy.get(EditMeasurePage.measureGroupsTab).click()
             //log, in cypress, the measure score value
@@ -179,7 +187,10 @@ describe('Test Case Expected Measure Group population values based on initial me
 
             cy.get(MeasureGroupPage.reportingTab).click()
             Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
-            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+            Utilities.dropdownSelect(
+                MeasureGroupPage.improvementNotationSelect,
+                'Increased score indicates improvement'
+            )
 
             //save measure group
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -188,16 +199,17 @@ describe('Test Case Expected Measure Group population values based on initial me
             //validation message after attempting to save
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+                'contain.text',
+                'Population details for this group saved successfully.'
+            )
             //create test case
             TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
             cy.get(EditMeasurePage.testCasesTab).click()
             TestCasesPage.clickEditforCreatedTestCase()
 
             //click on Expected / Actual tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
             cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
@@ -223,7 +235,10 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
-            cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+            cy.get(TestCasesPage.successMsg).should(
+                'contain.text',
+                'Test case updated successfully with warnings in JSON'
+            )
 
             //navigate back to the measure group tab / page and...
             //change score unit value and save / update measure with new value
@@ -238,54 +253,61 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
             //validation message after attempting to save
             cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('exist')
-            cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('contain.text', 'Change Scoring?Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.Are you sure you want to Save Changes?This action cannot be undone.No, Keep WorkingYes, Save changes')
+            cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should(
+                'contain.text',
+                'Change Scoring?Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.Are you sure you want to Save Changes?This action cannot be undone.No, Keep WorkingYes, Save changes'
+            )
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population ' +
-                'details for this group updated successfully.')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+                'contain.text',
+                'Population ' + 'details for this group updated successfully.'
+            )
 
+            cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+                .should('exist')
+                .then((fileContents) => {
+                    cy.intercept('GET', '/api/measures/' + fileContents + '/test-cases').as('testCase')
 
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-                cy.intercept('GET', '/api/measures/' + fileContents + '/test-cases').as('testCase')
+                    //navigate back to the test case tab
+                    cy.get(EditMeasurePage.testCasesTab).click()
 
-                //navigate back to the test case tab
-                cy.get(EditMeasurePage.testCasesTab).click()
+                    cy.url({ timeout: 30000 }).should('include', '/edit/test-cases')
 
-                cy.url({ timeout: 30000 }).should('include', '/edit/test-cases')
-
-                cy.wait('@testCase').then(({ response }) => {
-                    expect(response?.statusCode).to.eq(200)
+                    cy.wait('@testCase').then(({ response }) => {
+                        expect(response?.statusCode).to.eq(200)
+                    })
                 })
-            })
             TestCasesPage.clickEditforCreatedTestCase()
 
             //click on Expected / Actual tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab()
 
             //confirm that check boxes that were checked are no longer checked
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
-    })
+        }
+    )
 
     it('Test Case Population value options are limited to those that are defined from Measure Group -- required populations', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
-        cy.readFile('cypress/fixtures/QICoreCleanCQL.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/QICoreCleanCQL.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.collapseEditor()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -326,7 +348,10 @@ describe('Test Case Expected Measure Group population values based on initial me
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //Navigate to Test Cases page and verify Populations
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -337,12 +362,13 @@ describe('Test Case Expected Measure Group population values based on initial me
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('be.visible')
-        cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 1 - Proportion | Procedure')
+        cy.get(TestCasesPage.testCasePopulationValuesTable).should(
+            'contain.text',
+            'Measure Group 1 - Proportion | Procedure'
+        )
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Population')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Expected')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Actual')
@@ -356,28 +382,29 @@ describe('Test Case Expected Measure Group population values based on initial me
 })
 
 describe('Test Case Population dependencies', () => {
-
     before('Create measure and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, proportionMeasureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial PopulationOne', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne', 'Boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial PopulationOne',
+            '',
+            '',
+            'Initial PopulationOne',
+            '',
+            'Initial PopulationOne',
+            'Boolean'
+        )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     after('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify Test Case population dependencies for Proportion Measures', () => {
-
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -394,8 +421,10 @@ describe('Test Case Population dependencies', () => {
 
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text',
-            'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //create test case
         //Navigate to Test Cases page and add Test Case details
@@ -407,15 +436,10 @@ describe('Test Case Population dependencies', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         cy.log('Select DENOM and verify IPP is checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).check()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -424,25 +448,25 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Uncheck IPP and verify DENOM is unchecked')
-        cy.get(TestCasesPage.testCaseIPPExpected).uncheck()
+        TestCasesPage.uncheckExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
 
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
 
         //Select DENOM again
-        cy.get(TestCasesPage.testCaseDENOMExpected).check()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Uncheck DENOM and verify IPP is not unchecked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).uncheck()
+        TestCasesPage.uncheckExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Select Numerator and verify if DENOM and IPP are checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).check()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
@@ -450,27 +474,27 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Uncheck DENOM and verify if Numerator is unchecked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).uncheck()
+        TestCasesPage.uncheckExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
 
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.be.checked')
 
         //Check Numerator again
-        cy.get(TestCasesPage.testCaseNUMERExpected).check()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.log('Uncheck Numerator and verify if Denom is not unchecked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).uncheck()
+        TestCasesPage.uncheckExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.be.checked')
 
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
 
         //Check Numerator again
-        cy.get(TestCasesPage.testCaseNUMERExpected).check()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.log('Uncheck IPP and verify if DENOM and Numerator are unchecked')
-        cy.get(TestCasesPage.testCaseIPPExpected).uncheck()
+        TestCasesPage.uncheckExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
 
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
@@ -478,7 +502,7 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.be.checked')
 
         cy.log('Select Numerator Exclusion and verify IPP, Numerator and Denominator are selected')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).check()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMEXExpected)
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.checked')
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
@@ -490,28 +514,19 @@ describe('Test Case Population dependencies', () => {
 })
 
 describe('Test Case Expected Measure Group population values based on initial measure scoring', () => {
-
     beforeEach('Create measure and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, undefined, undefined, undefined, 'Procedure')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group', () => {
-
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -554,12 +569,13 @@ describe('Test Case Expected Measure Group population values based on initial me
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('be.visible')
-        cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 1 - Proportion | Procedure')
+        cy.get(TestCasesPage.testCasePopulationValuesTable).should(
+            'contain.text',
+            'Measure Group 1 - Proportion | Procedure'
+        )
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Population')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Expected')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Actual')
@@ -569,6 +585,5 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Numerator Exclusion')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Exclusion')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Exception')
-
     })
 })

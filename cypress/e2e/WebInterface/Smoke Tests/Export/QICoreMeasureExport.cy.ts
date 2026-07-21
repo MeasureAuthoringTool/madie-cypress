@@ -23,6 +23,19 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 const measureCQLContent = MeasureCQL.stndBasicQICoreCQL
 const measureCQL = MeasureCQL.zipfileExportQICore
 
+const selectMajorVersionType = () => {
+    cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+    cy.get(MeasuresPage.measureVersionMajor).click()
+    Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
+}
+
+const visitExportHtml = (fileName: string) => {
+    Cypress.config('baseUrl', null)
+    cy.readFile(path.join(downloadsFolder, fileName), { timeout: 90000 }).should('exist')
+    cy.visit(`./cypress/downloads/${fileName}`)
+    cy.document().its('readyState').should('eq', 'complete')
+}
+
 describe('QI-Core Measure Export', () => {
     deleteDownloadsFolderBeforeAll()
 
@@ -99,8 +112,7 @@ describe('QI-Core Measure Export', () => {
 
         MeasuresPage.actionCenter('version')
 
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        selectMajorVersionType()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get('#draggable-dialog-title').click()
@@ -217,11 +229,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 90000 })
 
         //remove the baseUrl so that we can visit a local file
-        Cypress.config('baseUrl', null)
-        cy.wait(1000)
-        // Load the HTML file
-        cy.visit('./cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.html')
-        cy.wait(1000)
+        visitExportHtml('eCQMTitle4QICore-v0.0.000-FHIR.html')
 
         // Scrub the HTML and verify the data we are looking for
         cy.document().then((doc) => {
@@ -405,7 +413,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
     before('Create New Measure and Login', () => {
         Cypress.config('baseUrl', url)
-        cy.wait(1000)
 
         measureNameFC = 'HRExport2' + Date.now()
         CqlLibraryNameFC = 'HRExport2Lib' + Date.now()
@@ -457,9 +464,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
         //version measure
         MeasuresPage.actionCenter('version')
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
-        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
+        selectMajorVersionType()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get('#draggable-dialog-title').click()
@@ -489,11 +494,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 90000 })
 
         //remove the baseUrl so that we can visit a local file
-        Cypress.config('baseUrl', null)
-        cy.wait(1000)
-        // Load the HTML file
-        cy.visit('./cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.html')
-        cy.wait(1000)
+        visitExportHtml('eCQMTitle4QICore-v1.0.000-FHIR.html')
         // Scrub the HTML and verify the data we are looking for
         cy.document().then((doc) => {
             const bodyText = doc.body.innerText

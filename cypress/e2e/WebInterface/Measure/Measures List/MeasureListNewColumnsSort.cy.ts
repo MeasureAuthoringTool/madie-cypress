@@ -50,13 +50,11 @@ describe('Measure List Page Sort by Columns', () => {
 
         //sort by measure name ASC
         cy.contains('.header-button', 'Measure').click()
-        cy.wait('@sort')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort')
         cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(ascName => {
             // sort by measure name DESC
             cy.contains('.header-button', 'Measure').click()
-            cy.wait('@sort2')
-            cy.wait(1100)
+            MeasuresPage.waitForMeasureListRefresh('@sort2')
             cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(descName => {
                 // ASC first name should come before DESC first name alphabetically
                 expect(ascName.toLowerCase().localeCompare(descName.toLowerCase())).to.be.lessThan(0)
@@ -65,13 +63,11 @@ describe('Measure List Page Sort by Columns', () => {
 
         // sort by version ASC
         cy.contains('.header-button', 'Version').click()
-        cy.wait('@sort3')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort3')
         cy.get('.measures-list tr').first().find('td').eq(2).invoke('text').then(ascVersion => {
             // sort by version DESC
             cy.contains('.header-button', 'Version').click()
-            cy.wait('@sort4')
-            cy.wait(1100)
+            MeasuresPage.waitForMeasureListRefresh('@sort4')
             cy.get('.measures-list tr').first().find('td').eq(2).invoke('text').then(descVersion => {
                 // ASC first version should differ from DESC first version
                 expect(ascVersion).to.not.equal(descVersion)
@@ -80,29 +76,39 @@ describe('Measure List Page Sort by Columns', () => {
 
         // sort by status ASC
         cy.contains('.header-button', 'Status').click()
-        cy.wait('@sort13')
-        cy.wait(1100)
-        cy.get('.measures-list tr').first().find('td').eq(3).invoke('text').then(ascStatus => {
+        MeasuresPage.waitForMeasureListRefresh('@sort13').then(({ response }) => {
+            const ascExpectedDraft = Boolean(response?.body?.content?.[0]?.measureMetaData?.draft)
+
+            cy.get('.measures-list tr').first().find('td').eq(3).invoke('text').then(ascStatus => {
+                if (ascExpectedDraft) {
+                    expect(ascStatus.trim()).to.include('Draft')
+                } else {
+                    expect(ascStatus.trim()).to.eq('')
+                }
+
             // sort by status DESC
-            cy.contains('.header-button', 'Status').click()
-            cy.wait('@sort14')
-            cy.wait(1100)
-            cy.get('.measures-list tr').first().find('td').eq(3).invoke('text').then(descStatus => {
-                // At least one of the two should show 'Draft'
-                const hasDraft = ascStatus === 'Draft' || descStatus === 'Draft'
-                expect(hasDraft).to.be.true
+                cy.contains('.header-button', 'Status').click()
+                MeasuresPage.waitForMeasureListRefresh('@sort14').then(({ response: descResponse }) => {
+                    const descExpectedDraft = Boolean(descResponse?.body?.content?.[0]?.measureMetaData?.draft)
+
+                    cy.get('.measures-list tr').first().find('td').eq(3).invoke('text').then(descStatus => {
+                        if (descExpectedDraft) {
+                            expect(descStatus.trim()).to.include('Draft')
+                        } else {
+                            expect(descStatus.trim()).to.eq('')
+                        }
+                    })
+                })
             })
         })
 
         // sort by model ASC
         cy.contains('.header-button', 'Model').click()
-        cy.wait('@sort5')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort5')
         cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(ascModel => {
             // sort by model DESC
             cy.contains('.header-button', 'Model').click()
-            cy.wait('@sort6')
-            cy.wait(1100)
+            MeasuresPage.waitForMeasureListRefresh('@sort6')
             cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(descModel => {
                 // ASC and DESC should produce different first models
                 expect(ascModel).to.not.equal(descModel)
@@ -113,23 +119,19 @@ describe('Measure List Page Sort by Columns', () => {
 
         // sort by shared ASC
         cy.contains('.header-button', 'Shared').click()
-        cy.wait('@sort7')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort7')
         // sort by shared DESC - verify the shared icon appears on the first row
         cy.contains('.header-button', 'Shared').click()
-        cy.wait('@sort8')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort8')
         cy.get('.measures-list tr').first().find('td').eq(5).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
 
         // sort by cms id ASC - empty/null values first
         cy.contains('.header-button', 'CMS ID').click()
-        cy.wait('@sort9')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort9')
         cy.get('.measures-list tr').first().find('td').eq(6).invoke('text').then(ascCmsId => {
             // sort by cms id DESC - highest values first
             cy.contains('.header-button', 'CMS ID').click()
-            cy.wait('@sort10')
-            cy.wait(1100)
+            MeasuresPage.waitForMeasureListRefresh('@sort10')
             cy.get('.measures-list tr').first().find('td').eq(6).invoke('text').then(descCmsId => {
                 // ASC should start empty or with a lower ID, DESC should have a value
                 // At minimum, the two sort orders should produce different first rows
@@ -141,13 +143,11 @@ describe('Measure List Page Sort by Columns', () => {
 
         // sort by updated ASC - oldest first
         cy.contains('.header-button', 'Updated').click()
-        cy.wait('@sort11')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort11')
         cy.get('.measures-list tr').first().find('td').eq(8).invoke('text').then(ascDate => {
             // sort by updated DESC - newest first
             cy.contains('.header-button', 'Updated').click()
-            cy.wait('@sort12')
-            cy.wait(1100)
+            MeasuresPage.waitForMeasureListRefresh('@sort12')
             cy.get('.measures-list tr').first().find('td').eq(8).invoke('text').then(descDate => {
                 // The oldest date (ASC) should be before the newest date (DESC)
                 const ascParsed = dayjs(ascDate, 'M/D/YYYY')
@@ -172,8 +172,7 @@ describe('Measure List Page Sort by Columns', () => {
 
         // sort by model
         cy.contains('.header-button', 'Model').click()
-        cy.wait('@sort')
-        cy.wait(1100)
+        MeasuresPage.waitForMeasureListRefresh('@sort')
         cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(ascModel => {
 
             // verify page 1
@@ -191,8 +190,7 @@ describe('Measure List Page Sort by Columns', () => {
 
             // sort by model again to reset
             cy.contains('.header-button', 'Model').click()
-            cy.wait('@sort2')
-            cy.wait(1100)
+            MeasuresPage.waitForMeasureListRefresh('@sort2')
             cy.get('.measures-list tr').first().find('td').eq(4).invoke('text').then(descModel => {
                 // ASC and DESC should produce different first models
                 expect(ascModel).to.not.equal(descModel)
@@ -221,8 +219,7 @@ describe('Measure List Page Sort by Columns', () => {
 
             // sort 1 - by measure ASC
             cy.contains('.header-button', 'Measure').click()
-            cy.wait('@sort')
-            cy.wait(1100)
+            MeasuresPage.waitForMeasureListRefresh('@sort')
 
             cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(secondMeasureName => {
 
@@ -231,8 +228,7 @@ describe('Measure List Page Sort by Columns', () => {
 
                     // sort 2 - by measure DESC
                     cy.contains('.header-button', 'Measure').click()
-                    cy.wait('@sort2')
-                    cy.wait(1100)
+                    MeasuresPage.waitForMeasureListRefresh('@sort2')
                     cy.get('.measures-list tr').first().then(firstRow => {
 
                         // verify that name is different from both previous measures
@@ -242,8 +238,7 @@ describe('Measure List Page Sort by Columns', () => {
 
                     // sort 3 - click again to return to default sort
                     cy.contains('.header-button', 'Measure').click()
-                    cy.wait('@sort3')
-                    cy.wait(3300)
+                    MeasuresPage.waitForMeasureListRefresh('@sort3')
                     // verify return to default sort by "last updated"
                     MeasuresPage.checkFirstRow({ name: originalMeasureName, updated: today })
             })

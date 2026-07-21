@@ -1,12 +1,12 @@
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CreateMeasurePage, SupportedModels } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { CreateMeasurePage, SupportedModels } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 const measureName = 'MeasureForTCExpectedValues' + now
@@ -17,21 +17,17 @@ const testCaseSeries = 'SBTestSeries'
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
 describe('Validate Test Case Expected value updates on Measure Group change', () => {
-
     beforeEach('Create measure, measure group, test case and login', () => {
-
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify if the scoring type is changed, Test Case Expected values are cleared for that group', () => {
-
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
@@ -40,20 +36,19 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).check().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
-       
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
+
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -65,18 +60,20 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationMsg).contains('Are you sure you want to Save Changes?')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //Navigate to test Cases page and verify Test Case Expected values are cleared
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
     })
 
     it('Verify if the population basis is changed, Test Case Expected values are cleared for that group', () => {
-
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
@@ -85,18 +82,17 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).check().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
 
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -116,7 +112,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.Are you sure you want to Save Changes?This action cannot be undone.')
+        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should(
+            'contain.text',
+            'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.Are you sure you want to Save Changes?This action cannot be undone.'
+        )
         cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
 
         //validation message after attempting to save
@@ -128,14 +127,13 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.contain.value')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.contain.value')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.contain.value')
     })
 
     it('Verify if Measure group is deleted, that group no longer appears in the edit test case page', () => {
-
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
@@ -144,13 +142,11 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('be.visible')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 1 - Ratio | boolean')
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
@@ -162,35 +158,41 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.deleteGroupbtn).click()
         cy.get(MeasureGroupPage.yesDeleteModalbtn).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.yesDeleteModalbtn).click()
-        cy.get('[data-testid="save-measure-group-validation-message"]').should('contain.text', 'You must set all required Populations.')
+        cy.get('[data-testid="save-measure-group-validation-message"]').should(
+            'contain.text',
+            'You must set all required Populations.'
+        )
 
         //Navigate to Edit Test Case page and assert Measure group after deletion
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('not.exist')
-        cy.get(TestCasesPage.testCasePopulationList).should('contain.text', 'No data for current scoring. Please make sure at least one measure group has been created.')
+        cy.get(TestCasesPage.testCasePopulationList).should(
+            'contain.text',
+            'No data for current scoring. Please make sure at least one measure group has been created.'
+        )
     })
 
     it('Verify if group populations are added/deleted, test case expected values will be updated', () => {
-
         //Create Ratio Measure group
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.wait(3000)
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.wait(3000)
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -208,27 +210,28 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully'
+        )
 
         //Add Expected values for Test Case
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseDENEXExpected).check().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENEXExpected)
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')
-       
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
+
         //Navigate to Measure Group page and add Numerator Exclusion & delete Denominator Exclusion
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
@@ -236,23 +239,23 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get('.MuiList-root > [data-value=""]').click()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully'
+        )
 
         //Navigate to Test cases page and verify Numerator Exclusion check box exists & Denominator Exclusion check box is deleted
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseNUMEXExpected })
         cy.get(TestCasesPage.testCaseDENEXExpected).should('not.exist')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).click()
-        cy.get(TestCasesPage.testCaseNUMEXExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMEXExpected)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
     })
 
     it('Verify if Measure Observation is added/removed from Measure group, test case Expected values will be updated', () => {
-
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
@@ -274,7 +277,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //Close the Toast message
         cy.get(TestCasesPage.clearIconBtn).click()
@@ -283,12 +289,8 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         cy.get(TestCasesPage.denominatorObservationExpectedRow).should('exist')
 
         cy.get(TestCasesPage.detailsTab).click()
@@ -306,7 +308,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.denominatorAggregateFunction).should('not.exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //Close the Toast message
         cy.get(TestCasesPage.clearIconBtn).click()
@@ -315,19 +320,11 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).click()
-
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
         cy.get(TestCasesPage.denominatorObservationExpectedRow).should('not.exist')
     })
 
     it('Verify if Stratification is added to the Measure group, test case Expected values will be updated', () => {
-
         //Create CV Measure Group
         MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
 
@@ -335,7 +332,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('not.exist')
 
         //Add Stratification to the Measure Group
@@ -347,30 +344,35 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'ipp')
         //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //Verify Stratification Expected values after adding stratification
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get('[data-testid="strat-row-population-id-measurePopulation"] > :nth-child(2)').should('exist')
     })
 
     it('Verify if the correct Population check boxes are checked on test case expected values for Ratio measure with two IPs', () => {
-
         //Create Ratio Measure group with 2 IP's
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -396,28 +398,33 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //Add Expected values for Test Case
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
         Utilities.waitForElementVisible(TestCasesPage.testCaseDENOMExpected, 60000)
 
         //Check first IP Expected value and assert Denominator Expected value is checked
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 0 })
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
 
         //Check second IP Expected value and assert Denominator Expected value is checked
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 1 })
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.executionContextWarning).should('have.text', 'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.')       
+        cy.get(TestCasesPage.executionContextWarning).should(
+            'have.text',
+            'Test case updated successfully! Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+        )
     })
 })

@@ -97,7 +97,7 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
@@ -141,7 +141,7 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
             'Test case updated successfully with warnings in JSON',
         )
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.runTestButton).should('be.enabled')

@@ -272,7 +272,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected values for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.visible')

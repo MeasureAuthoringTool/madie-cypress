@@ -25,6 +25,7 @@ export type MeasureRow = {
 
 export class MeasuresPage {
     public static readonly measureListTitles = '[data-testid="measure-list-tbl"]'
+    public static readonly measureListRows = '.measures-list tr'
     public static readonly ownedMeasures = '[data-testid="owned-measures-tab"]'
     public static readonly sharedMeasures = '[data-testid="shared-measures-tab"]'
     public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
@@ -111,10 +112,26 @@ export class MeasuresPage {
         cy.get(actionSelector).scrollIntoView().should('be.enabled').click()
     }
 
-    public static checkFirstRow(expectedData: MeasureRow) {
-        cy.wait(1100)
+    public static waitForMeasureListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
+        return cy.wait(alias).then((interception) => {
+            expect(interception.response?.statusCode).to.eq(200)
+            return cy
+                .get(this.measureListTitles, { timeout: 30000 })
+                .should('be.visible')
+                .then(() => {
+                    return cy.get(this.measureListRows, { timeout: 30000 }).should(($rows) => {
+                        expect($rows.length, 'measure list rows').to.be.greaterThan(0)
+                    })
+                })
+                .then(() => {
+                    return cy.get(this.measureListRows).first().find('td').eq(1).should('be.visible')
+                })
+                .then(() => interception)
+        })
+    }
 
-        cy.get('.measures-list tr')
+    public static checkFirstRow(expectedData: MeasureRow) {
+        cy.get(this.measureListRows, { timeout: 30000 })
             .first()
             .then((firstRow) => {
                 if (expectedData.name) {

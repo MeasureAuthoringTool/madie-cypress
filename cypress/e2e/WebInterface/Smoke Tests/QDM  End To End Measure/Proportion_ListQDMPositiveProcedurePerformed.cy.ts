@@ -135,7 +135,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         QDMElements.addCode('SNOMEDCT', '111527005')
 
         //Add Expected value for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
@@ -199,7 +199,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         cy.get('[data-testid=add-code-concept-button]').click()
 
         //Add Expected value for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).type('2')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('2')

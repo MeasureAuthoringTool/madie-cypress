@@ -126,32 +126,28 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 0 })
+        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.checked')
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 1 })
+        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.checked')
 
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
 
         cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).click()
-        cy.get(TestCasesPage.testCaseNUMERExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.get(TestCasesPage.denominatorObservationExpectedRow).should('exist')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).should('be.enabled')
@@ -170,7 +166,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
             'Test case updated successfully ' + 'with warnings in JSON',
         )
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.runTestButton).should('be.enabled')

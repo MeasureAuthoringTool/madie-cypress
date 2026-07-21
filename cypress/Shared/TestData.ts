@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { OktaLogin } from './OktaLogin'
+import { Environment } from './Environment'
 
 export type FixtureOwner = 'selectedUser' | 'selectedAltUser'
 export type TestUserScope = FixtureOwner
@@ -94,6 +95,8 @@ export type TestCaseImportResponse = {
         message?: string
     }>
 }
+
+export type ShareableMadieObject = 'measure' | 'library'
 
 export type MeasureDraftBody = {
     measureSetId?: string
@@ -200,6 +203,14 @@ export class TestData {
         return cy.writeFile(this.fixturePath(name, owner), value)
     }
 
+    public static readElementId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
+        return this.readFixture('elementId', owner)
+    }
+
+    public static writeElementId(value: string, owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<null> {
+        return this.writeFixture('elementId', value, owner)
+    }
+
     public static measureIdPath(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): string {
         const suffix = measureNumber > 0 ? measureNumber : ''
         return this.fixturePath(`measureId${suffix}`, owner)
@@ -218,17 +229,61 @@ export class TestData {
         return cy.readFile(this.cqlLibraryIdPath(libraryNumber, owner)).should('exist')
     }
 
+    public static writeCqlLibraryId(
+        value: string,
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<null> {
+        return this.writeFixture(`cqlLibraryId${libraryNumber > 0 ? libraryNumber : ''}`, value, owner)
+    }
+
     public static testCaseIdPath(testCaseNumber = 0, owner: FixtureOwner = 'selectedUser'): string {
         const suffix = testCaseNumber > 0 ? testCaseNumber : ''
         return this.fixturePath(`testCaseId${suffix}`, owner)
+    }
+
+    public static builderResourceIdFixtureName(resourceNumber = 0): string {
+        const suffix = resourceNumber > 0 ? resourceNumber : ''
+        return `builderResourceId${suffix}`
     }
 
     public static readTestCaseId(testCaseNumber = 0, owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
         return cy.readFile(this.testCaseIdPath(testCaseNumber, owner)).should('exist')
     }
 
+    public static writeTestCaseId(
+        value: string,
+        testCaseNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<null> {
+        return this.writeFixture(`testCaseId${testCaseNumber > 0 ? testCaseNumber : ''}`, value, owner)
+    }
+
+    public static readBuilderResourceId(
+        resourceNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<string> {
+        return this.readFixture(this.builderResourceIdFixtureName(resourceNumber), owner)
+    }
+
+    public static writeBuilderResourceId(
+        value: string,
+        resourceNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<null> {
+        return this.writeFixture(this.builderResourceIdFixtureName(resourceNumber), value, owner)
+    }
+
     public static readTestCasePatientId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
         return this.readFixture('testCasePId', owner)
+    }
+
+    public static writeTestCasePatientId(
+        value: string,
+        testCaseNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<null> {
+        return this.writeFixture(`testCasePId${testCaseNumber > 0 ? testCaseNumber : ''}`, value, owner)
     }
 
     public static readMeasureSetId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
@@ -248,8 +303,21 @@ export class TestData {
         })
     }
 
+    public static measureGroupIdPath(groupNumber = 0, owner: FixtureOwner = 'selectedUser'): string {
+        const suffix = groupNumber > 0 ? groupNumber : ''
+        return this.fixturePath(`groupId${suffix}`, owner)
+    }
+
     public static readMeasureGroupId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
         return this.readFixture('groupId', owner)
+    }
+
+    public static writeMeasureGroupId(
+        value: string,
+        groupNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<null> {
+        return this.writeFixture(`groupId${groupNumber > 0 ? groupNumber : ''}`, value, owner)
     }
 
     public static readStratificationId(owner: FixtureOwner = 'selectedUser'): Cypress.Chainable<string> {
@@ -307,6 +375,18 @@ export class TestData {
         } as MeasureBody
     }
 
+    public static writeMeasureContext(
+        measure: Pick<MeasureBody, 'id' | 'versionId' | 'measureSetId'>,
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        const suffix = measureNumber > 0 ? measureNumber : ''
+
+        this.writeFixture(`measureId${suffix}`, measure.id ?? '', owner)
+        this.writeFixture(`versionId${suffix}`, measure.versionId ?? '', owner)
+        this.writeFixture(`measureSetId${suffix}`, measure.measureSetId ?? '', owner)
+    }
+
     public static cqlLibraryBody(body: Partial<CqlLibraryBody>): CqlLibraryBody {
         return {
             librarySetId: uuidv4(),
@@ -322,6 +402,18 @@ export class TestData {
         return this.requestWithAccessToken<T>({
             ...options,
             url: '/api/measure',
+            method: 'POST',
+            body: this.measureBody(body)
+        })
+    }
+
+    public static requestMeasureCreate<T = any>(
+        body: Partial<MeasureBody>,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: '/api/measure?addDefaultCQL=false',
             method: 'POST',
             body: this.measureBody(body)
         })
@@ -693,24 +785,18 @@ export class TestData {
     }
 
     public static requestMeasureGroup<T = MeasureGroupBody>(
-        method: 'POST' | 'PUT',
-        body: MeasureGroupBody,
+        method: 'GET' | 'POST' | 'PUT',
+        body?: MeasureGroupBody,
         measureNumber = 0,
         options: Partial<Cypress.RequestOptions> = {},
         owner: FixtureOwner = 'selectedUser'
     ): Cypress.Chainable<Cypress.Response<T>> {
-        return this.withAccessToken((accessToken) => {
-            return this.readMeasureId(measureNumber, owner).then((measureId) => {
-                return cy.request({
-                    ...options,
-                    url: `/api/measures/${measureId}/groups`,
-                    method,
-                    headers: {
-                        ...options.headers,
-                        authorization: `Bearer ${accessToken}`
-                    },
-                    body: this.measureGroupBody(measureId, body)
-                })
+        return this.readMeasureId(measureNumber, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/groups`,
+                method,
+                ...(body ? { body: this.measureGroupBody(measureId, body) } : {})
             })
         }) as Cypress.Chainable<Cypress.Response<T>>
     }
@@ -827,14 +913,88 @@ export class TestData {
         })
     }
 
+    public static requestTestCaseLock(
+        lockObject: boolean,
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser',
+        measureNumber = 0,
+        testCaseNumber = 0
+    ): Cypress.Chainable<Cypress.Response<any>> {
+        return this.readMeasureId(measureNumber, owner).then((measureId) => {
+            return this.readTestCaseId(testCaseNumber, owner).then((testCaseId) => {
+                const url = lockObject
+                    ? `/api/measures/${measureId}/test-cases/${testCaseId}/lock`
+                    : `/api/test-cases/${testCaseId}/unlock`
+
+                return this.requestWithAccessToken<any>({
+                    ...options,
+                    url,
+                    method: 'POST'
+                })
+            })
+        })
+    }
+
+    public static requestCqlLibraryLock(
+        method: 'PUT' | 'DELETE',
+        libraryNumber = 0,
+        options: Partial<Cypress.RequestOptions> = {},
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<any>> {
+        return this.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            return this.requestWithAccessToken<any>({
+                ...options,
+                url: `/api/cql-libraries/${libraryId}/lock`,
+                method
+            })
+        })
+    }
+
+    public static requestUnlockAll(
+        type: 'measures' | 'cql-libraries',
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<any>> {
+        return this.requestWithAccessToken<any>({
+            ...options,
+            url: `/api/${type}/unlock`,
+            method: 'DELETE'
+        })
+    }
+
+    public static requestSharePermissions(
+        objectType: ShareableMadieObject,
+        action: 'GRANT' | 'REVOKE',
+        madieId: string,
+        user: string,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<any>> {
+        const url =
+            objectType === 'library'
+                ? `/api/cql-libraries/${action === 'GRANT' ? 'share' : 'unshare'}`
+                : `/api/measures/${action === 'GRANT' ? 'shared' : 'unshared'}`
+
+        return this.requestWithAccessToken<any>({
+            failOnStatusCode: false,
+            ...options,
+            url,
+            method: 'PUT',
+            headers: {
+                'api-key': Environment.credentials().adminApiKey,
+                ...options.headers
+            },
+            body: { [madieId]: [user] }
+        })
+    }
+
     public static requestMeasureTestCase<T = TestCaseBody>(
         method: 'POST' | 'GET' | 'PUT' | 'DELETE',
         body?: TestCaseBody | ((context: TestCaseRequestContext) => TestCaseBody),
         options: Partial<Cypress.RequestOptions> = {},
         owner: FixtureOwner = 'selectedUser',
-        testCaseNumber: number | null = 0
+        testCaseNumber: number | null = 0,
+        measureNumber = 0
     ): Cypress.Chainable<Cypress.Response<T>> {
-        return this.readMeasureId(0, owner).then((measureId) => {
+        return this.readMeasureId(measureNumber, owner).then((measureId) => {
             const requestTestCase = (testCaseId?: string) => {
                 const requestBody =
                     typeof body === 'function' ? body({ measureId, testCaseId }) : body

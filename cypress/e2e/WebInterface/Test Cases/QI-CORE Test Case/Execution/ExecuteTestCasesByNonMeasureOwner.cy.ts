@@ -89,21 +89,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
             Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-            cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).click()
-
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseDENOMExpected).click()
-
-            cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-            cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseNUMERExpected).click()
+            TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -163,27 +152,18 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
             cy.editTestCaseJSON(validTestCaseJson)
 
+            Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
             cy.get('.toast').should('have.text', 'Test case updated successfully with warnings in JSON')
+            Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-            cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).click()
-
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseDENOMExpected).click()
-
-            cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-            cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseNUMERExpected).click()
+            TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -234,7 +214,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
                 'contain.text',
                 "No code provided, and a code should be provided from the value set 'US Core Encounter Type' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)",
             )
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab()
             cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
             cy.get(TestCasesPage.measureActualCheckbox).should('be.checked')
         },
@@ -257,21 +237,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on actual / expected sub-tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).click()
-
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

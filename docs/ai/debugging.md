@@ -36,6 +36,18 @@ For timeouts, check:
 6. Is there a permission or role issue?
 7. Is the element hidden behind a menu, tooltip, drawer, or modal?
 
+## Expected/Actual Panel Failures
+
+If a failure happens on the Test Case Expected/Actual panel and Cypress reports that an expected-value checkbox is covered, clipped, or not visible:
+
+1. Check whether the spec is using `TestCasesPage.openExpectedActualTab(...)`.
+2. Check whether boolean expected-value toggles use `checkExpectedActualCheckbox(...)` or `uncheckExpectedActualCheckbox(...)`.
+3. Treat split-panel sash overlap and clipped overflow as the first likely cause before changing selectors.
+4. Do not add `{ force: true }` for these checkbox flows unless the test is intentionally validating a hidden or native-only control.
+5. Do not keep `should('be.visible')` assertions on clipped expected-value checkboxes when the shared helper already proves readiness.
+
+Focused Cypress validation on Monday, July 20, 2026 showed this issue in `MeasureObservations.cy.ts`, `MeasureObservationExpectedValues.cy.ts`, and `RatioPatientSingleIPNoMOwithDRC.cy.ts`, and the stable fix was to use the shared Expected/Actual helper path rather than raw tab clicks plus checkbox actions.
+
 ## Selector Debugging
 
 Prefer this order:

@@ -5,6 +5,7 @@ import { FixtureOwner, TestData } from './TestData'
 
 export class CQLLibrariesPage {
     public static readonly librariesList = '[data-testid="library-list-tbl"]'
+    public static readonly libraryListRows = '.table-body tr'
 
     //Version and Draft CQL Library
     public static readonly versionLibraryRadioButton = '[name="type"]'
@@ -81,6 +82,24 @@ export class CQLLibrariesPage {
             cy.wait('@cqlLibrary', { timeout: 10000 }).then(({ response }) => {
                 expect(response?.statusCode).to.eq(200)
             })
+        })
+    }
+
+    public static waitForLibraryListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
+        return cy.wait(alias).then((interception) => {
+            expect(interception.response?.statusCode).to.eq(200)
+            return cy
+                .get(this.librariesList, { timeout: 30000 })
+                .should('be.visible')
+                .then(() => {
+                    return cy.get(this.libraryListRows, { timeout: 30000 }).should(($rows) => {
+                        expect($rows.length, 'library list rows').to.be.greaterThan(0)
+                    })
+                })
+                .then(() => {
+                    return cy.get(this.libraryListRows).first().find('td').eq(1).should('be.visible')
+                })
+                .then(() => interception)
         })
     }
 

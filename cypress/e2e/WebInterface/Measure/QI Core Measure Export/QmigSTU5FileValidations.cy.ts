@@ -18,6 +18,19 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const qiCoreCommonLib = 'resources/library-QICoreCommon-2.1.000.json'
 
+const exportMeasureArchive = (fileName: string) => {
+    EditMeasurePage.actionCenter(EditMeasureActions.export)
+    cy.verifyDownload(fileName + '.zip', { timeout: 15000 })
+    cy.log('Successfully verified zip file export')
+}
+
+const unzipMeasureArchive = (fileName: string) => {
+    cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then(() => {
+        cy.log('unzipFile Task finished')
+    })
+    cy.readFile(path.join(downloadsFolder, fileName + '.json'), null, { timeout: 90000 }).should('exist')
+}
+
 // ToDo: these need new CQLs & upgrades to 6.0.0
 describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
     const measureName = 'Stu5ProportionExport' + Date.now()
@@ -47,16 +60,8 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
-        EditMeasurePage.actionCenter(EditMeasureActions.export)
-
-        //verify zip file exists
-        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
-        cy.log('Successfully verified zip file export')
-
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-            cy.wait(1000)
-        })
+        exportMeasureArchive(fileName)
+        unzipMeasureArchive(fileName)
     })
 
     after('Clean up', () => {
@@ -137,16 +142,8 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
 
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
-        EditMeasurePage.actionCenter(EditMeasureActions.export)
-
-        //verify zip file exists
-        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
-        cy.log('Successfully verified zip file export')
-
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-            cy.wait(1000)
-        })
+        exportMeasureArchive(fileName)
+        unzipMeasureArchive(fileName)
     })
 
     after('Clean up', () => {
@@ -230,16 +227,8 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
-        EditMeasurePage.actionCenter(EditMeasureActions.export)
-
-        //verify zip file exists
-        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
-        cy.log('Successfully verified zip file export')
-
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-            cy.wait(1000)
-        })
+        exportMeasureArchive(fileName)
+        unzipMeasureArchive(fileName)
     })
 
     after('Clean up', () => {
@@ -292,16 +281,8 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
 
-        EditMeasurePage.actionCenter(EditMeasureActions.export)
-
-        //verify zip file exists
-        cy.verifyDownload(fileName + '.zip', { timeout: 5500 })
-        cy.log('Successfully verified zip file export')
-
-        cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-            cy.wait(1000)
-        })
+        exportMeasureArchive(fileName)
+        unzipMeasureArchive(fileName)
     })
 
     after('Clean up', () => {

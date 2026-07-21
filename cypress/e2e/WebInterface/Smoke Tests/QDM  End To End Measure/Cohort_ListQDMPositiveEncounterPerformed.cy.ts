@@ -215,7 +215,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         QDMElements.addCode('SOP', '1')
 
         //Add Expected value for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
@@ -296,7 +296,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         QDMElements.addCode('SOP', '1')
 
         //Add Expected value for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
