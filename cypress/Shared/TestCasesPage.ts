@@ -883,14 +883,15 @@ export class TestCasesPage {
   } = {}): void {
     const { checkboxSelector } = options
 
-    Utilities.waitForElementVisible(this.tctExpectedActualSubTab, 35000)
-    cy.get(this.tctExpectedActualSubTab).should('be.visible').click()
-
-    this.normalizeExpectedActualPopulationPanel()
+    cy.get(this.tctExpectedActualSubTab, { timeout: 35000 }).should('exist').scrollIntoView().should('be.visible').click()
 
     if (checkboxSelector) {
       cy.get(checkboxSelector).should('exist')
     }
+
+    this.normalizeExpectedActualPopulationPanel({
+      requirePanel: !checkboxSelector,
+    })
   }
 
   public static checkExpectedActualCheckbox(
@@ -912,6 +913,25 @@ export class TestCasesPage {
     checkbox.should('exist').check({ scrollBehavior: 'center' })
   }
 
+  public static clickExpectedActualCheckbox(
+    checkboxSelector: string,
+    options: {
+      index?: number
+    } = {},
+  ): void {
+    const { index } = options
+
+    this.normalizeExpectedActualPopulationPanel()
+    const checkbox = cy.get(checkboxSelector)
+
+    if (typeof index === 'number') {
+      checkbox.eq(index).should('exist').should('be.visible').click({ scrollBehavior: 'center' })
+      return
+    }
+
+    checkbox.should('exist').should('be.visible').click({ scrollBehavior: 'center' })
+  }
+
   public static uncheckExpectedActualCheckbox(
     checkboxSelector: string,
     options: {
@@ -931,11 +951,23 @@ export class TestCasesPage {
     checkbox.should('exist').uncheck({ scrollBehavior: 'center' })
   }
 
-  private static normalizeExpectedActualPopulationPanel(): void {
-    Utilities.waitForElementVisible(this.testCasePopulationList, 35000)
-    cy.get(this.testCasePopulationList).should('be.visible')
+  private static normalizeExpectedActualPopulationPanel(options: {
+    requirePanel?: boolean
+  } = {}): void {
+    const { requirePanel = false } = options
 
-    cy.get(this.testCasePopulationList).then(($panel) => {
+    if (requirePanel) {
+      Utilities.waitForElementVisible(this.testCasePopulationList, 35000)
+    }
+
+    cy.get('body').then(($body) => {
+      const panel = $body.find(this.testCasePopulationList)
+
+      if (!panel.length) {
+        return
+      }
+
+      cy.get(this.testCasePopulationList).should('be.visible').then(($panel) => {
       const scrollContainers = [
         $panel[0] as HTMLElement,
         ...$panel.parents().toArray().map((element) => element as HTMLElement),
@@ -943,6 +975,7 @@ export class TestCasesPage {
 
       scrollContainers.forEach((element) => {
         element.scrollLeft = 0
+      })
       })
     })
   }

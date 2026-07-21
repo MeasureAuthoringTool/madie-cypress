@@ -117,20 +117,16 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
         cy.get(TestCasesPage.measureObservationRow).type('1')
 
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).check().should('be.checked')
-        cy.get(TestCasesPage.measurePopulationStratificationExpectedValue).check().should('be.checked')
-        cy.get(TestCasesPage.initialPopulationStrata2ExpectedValue).check().should('be.checked')
-        cy.get(TestCasesPage.measurePopulationStrata2ExpectedValue).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.initialPopulationStratificationExpectedValue)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.measurePopulationStratificationExpectedValue)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.initialPopulationStrata2ExpectedValue)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.measurePopulationStrata2ExpectedValue)
 
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')

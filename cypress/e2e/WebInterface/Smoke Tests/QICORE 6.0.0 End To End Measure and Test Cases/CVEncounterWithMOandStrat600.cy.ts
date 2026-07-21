@@ -103,7 +103,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')

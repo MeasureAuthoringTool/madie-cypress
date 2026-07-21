@@ -132,7 +132,7 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')

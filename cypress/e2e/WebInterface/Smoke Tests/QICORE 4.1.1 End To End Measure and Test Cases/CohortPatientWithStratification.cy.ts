@@ -91,13 +91,10 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.enabled')
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.initialPopulationStratificationExpectedValue)
 
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')

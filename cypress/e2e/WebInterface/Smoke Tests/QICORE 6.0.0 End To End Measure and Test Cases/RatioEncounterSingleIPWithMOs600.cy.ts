@@ -78,7 +78,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
@@ -102,7 +102,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
             'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
         )
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
