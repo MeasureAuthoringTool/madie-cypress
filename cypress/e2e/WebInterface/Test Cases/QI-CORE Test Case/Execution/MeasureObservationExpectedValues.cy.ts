@@ -41,19 +41,19 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Validate measure observation expected values
-        cy.get(TestCasesPage.measureObservationRow).clear().type('@#')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '@#', { clearFirst: true })
         cy.get(TestCasesPage.measureObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
         )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.measureObservationRow).clear().type('ab12')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, 'ab12', { clearFirst: true })
         cy.get(TestCasesPage.measureObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
         )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.measureObservationRow).clear().type('-15')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '-15', { clearFirst: true })
         cy.get(TestCasesPage.measureObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
@@ -61,7 +61,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         //Save measure observation expected values
-        cy.get(TestCasesPage.measureObservationRow).clear().type('1.3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1.3', { clearFirst: true })
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         // cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
@@ -71,7 +71,7 @@ describe('Measure Observation Expected values', () => {
         )
 
         //Assert saved observation values
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
         cy.get(TestCasesPage.measureObservationRow).should('contain.value', '1.3')
     })
 
@@ -117,19 +117,19 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Validate measure observation expected values
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).type('@#')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '@#')
         cy.get(TestCasesPage.denominatorObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
         )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.numeratorObservationRow).type('ab12')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, 'ab12')
         cy.get(TestCasesPage.numeratorObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
         )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.numeratorObservationRow).type('-15')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '-15')
         cy.get(TestCasesPage.numeratorObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
@@ -137,15 +137,15 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         //Save measure observation expected values
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).clear().type('1.3')
-        cy.get(TestCasesPage.numeratorObservationRow).clear().type('5')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1.3', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '5', { clearFirst: true })
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 10000)
 
         //Assert saved observation values
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
         cy.get(TestCasesPage.denominatorObservationExpectedRow).should('contain.value', '1.3')
         cy.get(TestCasesPage.numeratorObservationRow).should('contain.value', '5')
     })
@@ -164,7 +164,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Enter value in to Measure observation Expected values
-        cy.get(TestCasesPage.measureObservationRow).type('1.3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1.3')
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -240,11 +240,11 @@ describe('Measure observation expected result', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
 
         //Enter values in to Measure population(MP) & Measure population exclusion(MPE) fields and verify MP-MPE = number of observation rows
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('5')
-        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '5')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLEXExpected, '1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 2')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 3')
@@ -325,18 +325,18 @@ describe('Measure observation expected result', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         //Enter values in to Denominator & Denominator exclusion(DE) fields and verify Denominator-DE = number of Denominator observation rows
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('4')
-        cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '4')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Observation 1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Observation 2')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Observation 3')
 
         //Enter values in to Numerator & Numerator exclusion(NE) fields and verify Denominator-NE = number of Numerator observation rows
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('4')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '4')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Numerator Observation 1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Numerator Observation 2')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Numerator Observation 3')

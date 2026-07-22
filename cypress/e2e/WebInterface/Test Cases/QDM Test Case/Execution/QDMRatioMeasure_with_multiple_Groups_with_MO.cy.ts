@@ -154,15 +154,12 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected value for Test case
-        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
-        cy.get(TestCasesPage.testCaseDENOMExpected).check()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('8')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('8')
-        cy.get(TestCasesPage.testCaseNUMERExpected).check()
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -313,18 +310,39 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected value for Test case
-        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).clear().type('1')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).clear().type('1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).eq(0).clear().type('1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).eq(1).clear().type('1')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('24')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('24')
-        cy.get(TestCasesPage.testCaseNUMERExpected).eq(0).clear().type('1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).eq(1).clear().type('1')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1', {
+            clearFirst: true,
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1', {
+            clearFirst: true,
+            index: 1
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1', {
+            clearFirst: true,
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1', {
+            clearFirst: true,
+            index: 1
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '24', {
+            clearFirst: true,
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '24', {
+            clearFirst: true,
+            index: 1
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', {
+            clearFirst: true,
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', {
+            clearFirst: true,
+            index: 1
+        })
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')

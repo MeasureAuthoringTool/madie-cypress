@@ -71,13 +71,8 @@ describe('Fluent Function Capability', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab()
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')

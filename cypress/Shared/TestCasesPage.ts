@@ -307,6 +307,12 @@ export class TestCasesPage {
     '[data-testid="Strata 1-measurePopulation-expected"]'
   public static readonly initialPopulationStrata2ExpectedValue = '[data-testid="Strata 2-initialPopulation-expected"]'
   public static readonly measurePopulationStrata2ExpectedValue = '[data-testid="Strata 2-measurePopulation-expected"]'
+  public static readonly qdmStrata1ExpectedValue = '[data-testid="test-population-Strata-1 -expected-0"]'
+  public static readonly qdmStrata2ExpectedValue = '[data-testid="test-population-Strata-2 -expected-0"]'
+  public static readonly qdmStratifiedInitialPopulationExpectedValue =
+    '[data-testid="strat-test-population-initialPopulation-expected-0"]'
+  public static readonly qdmStratifiedMeasurePopulationExpectedValue =
+    '[data-testid="strat-test-population-measurePopulation-expected-1"]'
 
   //measure versioning attempt with invalid test case
   public static readonly versionMeasureWithTCErrors =
@@ -456,6 +462,10 @@ export class TestCasesPage {
 
   private static measureNumber(secondMeasure?: boolean, measureNumber = 0): number {
     return secondMeasure ? 2 : measureNumber
+  }
+
+  public static qdmStratifiedMeasureObservationExpectedValue(index: number): string {
+    return `[data-testid="strat-test-population-measurePopulationObservation-expected-${index}"]`
   }
 
   //This function grabs the data-testid value off of the view button and extracts the id out of it.
@@ -888,6 +898,36 @@ export class TestCasesPage {
     }
 
     checkbox.should('exist').uncheck({ scrollBehavior: 'center' })
+  }
+
+  public static typeExpectedActualValue(
+    inputSelector: string,
+    value: string,
+    options: {
+      clearFirst?: boolean
+      index?: number
+    } = {},
+  ): void {
+    const { clearFirst = false, index } = options
+
+    this.normalizeExpectedActualPopulationPanel()
+    const typeValue = (input: Cypress.Chainable<JQuery<HTMLElement>>) => {
+      const readyInput = input.should('exist').scrollIntoView().should('be.enabled')
+
+      if (clearFirst) {
+        readyInput.clear().type(value)
+        return
+      }
+
+      readyInput.type(value)
+    }
+
+    if (typeof index === 'number') {
+      typeValue(cy.get(inputSelector).eq(index))
+      return
+    }
+
+    typeValue(cy.get(inputSelector))
   }
 
   private static normalizeExpectedActualPopulationPanel(options: {
