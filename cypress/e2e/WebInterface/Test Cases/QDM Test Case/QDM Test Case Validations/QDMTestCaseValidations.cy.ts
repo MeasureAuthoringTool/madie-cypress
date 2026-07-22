@@ -78,7 +78,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'readonly', 'readonly')
 
         //Navigate to Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.enabled')
     })
 })

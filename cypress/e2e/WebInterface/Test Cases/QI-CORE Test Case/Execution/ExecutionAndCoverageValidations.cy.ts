@@ -16,20 +16,22 @@ const CqlLibraryName = 'ExecCoverageValidationsLib' + now
 const testCase: TestCase = {
     title: 'test case title',
     description: 'DENOMFail' + now,
-    group: 'SBTestSeries',
+    group: 'SBTestSeries'
 }
 const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 const measureCQL = QiCore4Cql.reduced_CQL_Multiple_Populations
 
 describe('Run / Execute Test case and verify passing percentage and coverage', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, {
+            measureCql: measureCQL
+        })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({
             collapseEditor: true,
-            successTimeout: 20700,
+            successTimeout: 20700
         })
     })
 
@@ -38,17 +40,12 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute single passing Test Case', () => {
-
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, false)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -88,12 +85,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.createTestCase('PassingTestCase', testCase.description, testCase.group, validTestCaseJson, false)
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -131,8 +124,13 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute single failing Test Cases', () => {
-
-        TestCasesPage.createTestCase('FailingTestCase', testCase.description, testCase.group, validTestCaseJson, undefined)
+        TestCasesPage.createTestCase(
+            'FailingTestCase',
+            testCase.description,
+            testCase.group,
+            validTestCaseJson,
+            undefined
+        )
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

@@ -281,7 +281,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseDENOMExpected })
 
         //enter 3 for the expected denominator to generate 3 observation field
         cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
@@ -318,7 +318,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseDENOMExpected })
 
         //validate values that were saved in the E/A fields retain values
         cy.get(TestCasesPage.testCaseDENOMExpected).should('contain.value', 3)
@@ -374,7 +374,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseDENOMExpected })
 
         //enter 3 for the expected denominator to generate 3 observation field
         cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
@@ -418,7 +418,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseDENOMExpected })
 
         //observation fields cannot be edited
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.enabled')
@@ -494,7 +494,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
 
         //enter 1 for expected initial population
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
@@ -526,7 +526,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.runQDMTestCaseBtn })
 
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 

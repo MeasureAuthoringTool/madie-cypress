@@ -93,7 +93,7 @@ describe('Test Case Import: functionality tests', () => {
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
@@ -723,4 +723,3 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.get(TestCasesPage.importTestCaseAlertMessage).find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
     })
 })
-

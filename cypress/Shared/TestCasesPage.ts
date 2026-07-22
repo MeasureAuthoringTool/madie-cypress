@@ -541,10 +541,7 @@ export class TestCasesPage {
       .then((id) => {
         measureID = id
         cy.intercept('POST', '/api/measures/' + measureID + '/test-cases').as('testcase')
-        cy.get(this.createTestCaseSaveButton).should('exist')
-        Utilities.waitForElementVisible(this.createTestCaseSaveButton, 50000)
-        Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 50000)
-        cy.get(this.createTestCaseSaveButton).wait(3000).click()
+        this.clickVisibleEnabled(this.createTestCaseSaveButton, 50000)
         //saving testCaseId to file to use later
         cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
           expect(response?.statusCode).to.eq(201)
@@ -553,7 +550,8 @@ export class TestCasesPage {
         })
       })
 
-    cy.get(EditMeasurePage.testCasesTab).click()
+    cy.get(this.createTestCaseDialog, { timeout: 60000 }).should('not.exist')
+    cy.get(EditMeasurePage.testCasesTab).should('have.attr', 'aria-selected', 'true')
   }
 
   public static grabValidateTestCaseNumber(testCaseNumber: number): void {
@@ -566,19 +564,13 @@ export class TestCasesPage {
   }
 
   public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
-    cy.get('[data-testid="test-case-title-0_series"]').should('be.visible').wait(1000)
-    cy.get('[data-testid="test-case-title-0_series"]')
-      .invoke('text')
-      .then((seriesText) => {
-        expect(seriesText).to.include(testCaseSeries)
-      })
+    cy.get('[data-testid="test-case-title-0_series"]', { timeout: 30000 })
+      .should('be.visible')
+      .and('contain.text', testCaseSeries)
 
-    cy.get('[data-testid="test-case-title-0_title"]').should('be.visible').wait(1000)
-    cy.get('[data-testid="test-case-title-0_title"]')
-      .invoke('text')
-      .then((titleText) => {
-        expect(titleText).to.include(testCaseTitle)
-      })
+    cy.get('[data-testid="test-case-title-0_title"]', { timeout: 30000 })
+      .should('be.visible')
+      .and('contain.text', testCaseTitle)
   }
   //Similar to our other action functions for test cases and measures,
   //this function gives it's user the ability to pass a required text that
@@ -587,53 +579,21 @@ export class TestCasesPage {
   public static qdmTestCaseElementAction(action: string): void {
     TestData.readElementId()
       .then((fileContents) => {
-        cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-        cy.scrollTo(0, 500)
-        Utilities.waitForElementVisible('[data-testid="action-center-' + fileContents + '"]', 50000)
-        cy.get('[data-testid="action-center-' + fileContents + '"]').should('be.visible')
+        const actionCenterSelector = `[data-testid="action-center-${fileContents}"]`
         switch (action.valueOf().toString().toLowerCase()) {
           case 'edit': {
-            cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-            cy.scrollTo(0, 500)
-            cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-            Utilities.waitForElementVisible('[data-testid="action-center-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="action-center-' + fileContents + '"]').should('be.visible')
-            cy.get('[data-testid="action-center-' + fileContents + '"]').click()
-            cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
-            Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="edit-element-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="edit-element-' + fileContents + '"]')
-              .scrollIntoView()
-              .click({ force: true })
+            this.openQdmElementActionMenu(actionCenterSelector)
+            this.clickVisibleEnabled(`[data-testid="edit-element-${fileContents}"]`, 55000)
             break
           }
           case 'clone': {
-            cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-            cy.scrollTo(0, 500)
-            cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
-            Utilities.waitForElementVisible('[data-testid="clone-element-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView()
-            cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="clone-element-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="clone-element-' + fileContents + '"]')
-              .scrollIntoView()
-              .click({ force: true })
+            this.openQdmElementActionMenu(actionCenterSelector)
+            this.clickVisibleEnabled(`[data-testid="clone-element-${fileContents}"]`, 55000)
             break
           }
           case 'delete': {
-            cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
-            cy.scrollTo(0, 500)
-            cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
-            Utilities.waitForElementVisible('[data-testid="delete-element-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="delete-element-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="delete-element-' + fileContents + '"]')
-              .scrollIntoView()
-              .click({ force: true })
+            this.openQdmElementActionMenu(actionCenterSelector)
+            this.clickVisibleEnabled(`[data-testid="delete-element-${fileContents}"]`, 55000)
             break
           }
           default: {
@@ -646,29 +606,21 @@ export class TestCasesPage {
     TestData.readElementId()
       .then((fileContents) => {
         // Click tooltip first
-        cy.get('[data-testid="action-center-tooltip-' + fileContents + '"]')
-          .should('be.visible')
-          .click({ force: true })
+        this.clickVisibleEnabled(`[data-testid="action-center-tooltip-${fileContents}"]`, 30000)
 
         switch (action.toLowerCase()) {
           case 'edit':
-            cy.get('[data-testid="action-center-' + fileContents + '_Edit"]')
-              .should('be.visible')
-              .click({ force: true })
+            this.clickVisibleEnabled(`[data-testid="action-center-${fileContents}_Edit"]`, 30000)
             break
 
           case 'clone':
           case 'copy':
-            cy.get('[data-testid="action-center-' + fileContents + '_Clone"]')
-              .should('be.visible')
-              .click({ force: true })
+            this.clickVisibleEnabled(`[data-testid="action-center-${fileContents}_Clone"]`, 30000)
             break
 
           case 'delete':
           case 'remove':
-            cy.get('[data-testid="action-center-' + fileContents + '_Remove"]')
-              .should('be.visible')
-              .click({ force: true })
+            this.clickVisibleEnabled(`[data-testid="action-center-${fileContents}_Remove"]`, 30000)
             break
 
           default:
@@ -728,45 +680,30 @@ export class TestCasesPage {
       //edit test test case
       this.clickEditforCreatedTestCase()
 
-      if (handleElementsTab) {
-        cy.get(TestCasesPage.jsonTab).click()
-      }
+      this.editTestCaseJson(testCaseJson, handleElementsTab)
 
-      // modify testcase JSON
-      Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-      Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-      cy.get(TestCasesPage.aceEditor).should('exist')
-      cy.get(TestCasesPage.aceEditor).should('be.visible')
-      cy.get(TestCasesPage.aceEditorJsonInput)
-        .should('exist')
-        .click({ force: true })
-        .clear({ force: true })
-        .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
-
-      cy.wait(1500)
-
-      cy.get(this.detailsTab).click()
+      this.clickVisibleEnabled(this.detailsTab, 30000)
 
       //Save edited / updated to test case
-      cy.get(this.editTestCaseSaveButton).click()
+      this.clickVisibleEnabled(this.editTestCaseSaveButton, 30000)
       Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 9500)
       cy.log('JSON added to test case successfully')
 
-      cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-      cy.get(EditMeasurePage.testCasesTab).click()
+      this.clickVisibleEnabled(EditMeasurePage.testCasesTab, 30000)
     }
   }
 
   public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false): void {
     if (navigateToJsonTab) {
-      cy.get(TestCasesPage.jsonTab).click()
+      this.clickVisibleEnabled(TestCasesPage.jsonTab, 30000)
     }
 
     this.waitForJsonEditorReady()
     cy.get(TestCasesPage.aceEditorJsonInput)
-      .click({ force: true })
-      .clear({ force: true })
-      .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
+      .should('be.visible')
+      .focus()
+      .type('{selectAll}{backspace}')
+      .type(testCaseJson, { parseSpecialCharSequences: false })
   }
 
   public static waitForJsonEditorReady(): void {
@@ -880,17 +817,19 @@ export class TestCasesPage {
 
   public static openExpectedActualTab(options: {
     checkboxSelector?: string
+    readySelector?: string
   } = {}): void {
-    const { checkboxSelector } = options
+    const { checkboxSelector, readySelector } = options
+    const selector = checkboxSelector ?? readySelector
 
     cy.get(this.tctExpectedActualSubTab, { timeout: 35000 }).should('exist').scrollIntoView().should('be.visible').click()
 
-    if (checkboxSelector) {
-      cy.get(checkboxSelector).should('exist')
+    if (selector) {
+      cy.get(selector).should('exist')
     }
 
     this.normalizeExpectedActualPopulationPanel({
-      requirePanel: !checkboxSelector,
+      requirePanel: !selector,
     })
   }
 
@@ -968,16 +907,35 @@ export class TestCasesPage {
       }
 
       cy.get(this.testCasePopulationList).should('be.visible').then(($panel) => {
-      const scrollContainers = [
-        $panel[0] as HTMLElement,
-        ...$panel.parents().toArray().map((element) => element as HTMLElement),
-      ].filter((element) => element.scrollWidth > element.clientWidth)
+        const scrollContainers = [
+          $panel[0] as HTMLElement,
+          ...$panel.parents().toArray().map((element) => element as HTMLElement),
+        ].filter((element) => element.scrollWidth > element.clientWidth)
 
-      scrollContainers.forEach((element) => {
-        element.scrollLeft = 0
-      })
+        scrollContainers.forEach((element) => {
+          element.scrollLeft = 0
+        })
       })
     })
+  }
+
+  private static clickVisibleEnabled(selector: string, timeout = 20000): void {
+    cy.get(selector, { timeout })
+      .scrollIntoView()
+      .should('be.visible')
+      .should('be.enabled')
+      .click()
+  }
+
+  private static clickVisible(selector: string, timeout = 20000): void {
+    cy.get(selector, { timeout })
+      .scrollIntoView()
+      .should('be.visible')
+      .click()
+  }
+
+  private static openQdmElementActionMenu(actionCenterSelector: string): void {
+    this.clickVisibleEnabled(actionCenterSelector, 50000)
   }
 
   // -----------------------------
@@ -1073,11 +1031,9 @@ export class TestCasesPage {
       .then((tcId) => {
         const buttonSelector = `[data-testid=view-edit-test-case-button-${tcId}]`
 
-        cy.get(buttonSelector).scrollIntoView()
-        cy.get(buttonSelector).should('be.enabled')
-        cy.get(buttonSelector).click()
+        this.clickVisibleEnabled(buttonSelector, 30000)
 
-        cy.wait(1000).then(() => {
+        cy.then(() => {
           if (callstackIntercepted) {
             cy.wait('@callstacks', { timeout: 90000 })
           } else {
@@ -1193,37 +1149,34 @@ export class TestCasesPage {
     ethnicity?: string,
   ): void {
     if (livingStatus) {
-      Utilities.waitForElementVisible(TestCasesPage.QDMLivingStatus, 50000)
-      cy.get(TestCasesPage.QDMLivingStatus).click()
-      cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
+      this.clickVisible(TestCasesPage.QDMLivingStatus, 50000)
+      cy.contains(TestCasesPage.SelectionOptionChoice, livingStatus).click()
     }
 
     if (race) {
-      cy.get(TestCasesPage.QDMRace).click()
-      Utilities.waitForElementVisible('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]', 50000)
-      cy.get('[data-value="' + race + '__2.16.840.1.114222.4.11.836"]').click()
-      cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
+      const raceSelector = `[data-value="${race}__2.16.840.1.114222.4.11.836"]`
+
+      this.clickVisible(TestCasesPage.QDMRace, 50000)
+      this.clickVisible(raceSelector, 50000)
+      this.clickVisibleEnabled(TestCasesPage.editTestCaseSaveButton, 30000)
+      Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 30000)
     }
 
     if (gender) {
-      cy.get(TestCasesPage.QDMGender).click()
-      Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 30000)
-      cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
+      this.clickVisible(TestCasesPage.QDMGender, 30000)
+      cy.contains(TestCasesPage.SelectionOptionChoice, gender).click()
     }
 
     if (ethnicity) {
-      cy.get(TestCasesPage.QDMEthnicity).click()
-
       const ethnicityOne = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.837"]`
       const ethnicityTwo = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.877"]`
 
+      this.clickVisible(TestCasesPage.QDMEthnicity, 30000)
       cy.get('body', { timeout: 10000 }).then(($body: JQuery<HTMLElement>) => {
         if ($body.find(ethnicityOne).length > 0) {
-          Utilities.waitForElementVisible(ethnicityOne, 30000)
-          cy.get(ethnicityOne).click()
+          this.clickVisible(ethnicityOne, 30000)
         } else if ($body.find(ethnicityTwo).length > 0) {
-          Utilities.waitForElementVisible(ethnicityTwo, 30000)
-          cy.get(ethnicityTwo).click()
+          this.clickVisible(ethnicityTwo, 30000)
         } else {
           throw new Error('No matching ethnicity element found in the DOM.')
         }
@@ -1231,8 +1184,12 @@ export class TestCasesPage {
     }
 
     if (dob) {
-      cy.get(TestCasesPage.QDMDob).clear().click()
-      cy.get(TestCasesPage.QDMDob).wait(500).type(dob).click().wait(500)
+      cy.get(TestCasesPage.QDMDob)
+        .should('be.visible')
+        .should('be.enabled')
+        .clear()
+        .type(dob)
+        .should('have.value', dob)
     }
   }
 
@@ -1242,7 +1199,7 @@ export class TestCasesPage {
       .parent('tr')
       .find('input[type="checkbox"]')
       .click()
-      .wait(200)
+      .should('be.checked')
   }
 
   public static checkTestCaseByTitle(testCaseTitle: string): void {
@@ -1250,7 +1207,7 @@ export class TestCasesPage {
       .parent('tr')
       .find('input[type="checkbox"]')
       .click()
-      .wait(200)
+      .should('be.checked')
   }
 
   /*

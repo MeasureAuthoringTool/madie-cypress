@@ -80,7 +80,10 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 'Increased score indicates improvement'
             )
 
+            cy.intercept('POST', '/api/measures/**/groups').as('createMeasureGroup')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+            cy.wait('@createMeasureGroup').its('response.statusCode').should('be.oneOf', [200, 201])
+
             //validation successful save message
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
@@ -95,8 +98,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //click on Expected/Actual tab
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click().wait(500)
-
+            TestCasesPage.openExpectedActualTab()
             //Click on RunTest Button
             cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -112,7 +114,6 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTab).click()
 
             cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
-
             //remove the dayObs line(s) from CQL
             cy.get(EditMeasurePage.cqlEditorTextBox).type(
                 '{end}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{end}{backspace}' +
@@ -259,7 +260,9 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 'Increased score indicates improvement'
             )
 
+            cy.intercept('POST', '/api/measures/**/groups').as('createMeasureGroup')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+            cy.wait('@createMeasureGroup').its('response.statusCode').should('be.oneOf', [200, 201])
             //validation successful save message
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
@@ -274,7 +277,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //click on Expected/Actual tab
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
             cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab()
 
             //Click on RunTest Button
             cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')

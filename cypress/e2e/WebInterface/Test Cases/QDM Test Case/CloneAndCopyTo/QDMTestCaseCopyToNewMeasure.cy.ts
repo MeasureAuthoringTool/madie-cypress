@@ -130,7 +130,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.grabTestCaseId(8)
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.attr', 'value', '1')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('have.attr', 'value', '1')
@@ -218,7 +218,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.grabTestCaseId(8)
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
 
         /// these differ from previous test since it's a cohort measure now
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')

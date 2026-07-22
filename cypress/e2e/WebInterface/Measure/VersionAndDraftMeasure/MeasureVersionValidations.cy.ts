@@ -272,7 +272,7 @@ describe('Edit and Delete Test case for Qi Core Versioned Measure', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Edit Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible').wait(1000)
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')

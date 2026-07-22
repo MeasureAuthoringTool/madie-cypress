@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Architecture Backlog
 
-Last updated: 2026-07-21
+Last updated: 2026-07-22
 
 Stable rules live in `docs/quality/cypress-automation-guidelines.md`. Keep this backlog limited to current state, next actions, measured audit signal, and validation.
 
@@ -63,7 +63,10 @@ Why this is the best next step:
 - `MeasureGroupPage.ts` no longer contains fixed waits after replacing helper-level CQL seeding sleeps with editor-write readiness, save-success assertions, and a stable return to Population Criteria via the existing editor-collapse control plus group-tab retry.
 - Focused helper validation now shifts the best next value to `TestCasesPage.ts`, where remaining waits and heavy forced interactions overlap with the currently observed Expected/Actual sash-actionability failures.
 - Focused Cypress validation on Tuesday, July 21, 2026 now proves the shared Expected/Actual helper path in `MeasureObservations.cy.ts`, `MeasureObservationExpectedValues.cy.ts`, `RatioPatientSingleIPNoMOwithDRC.cy.ts`, `BooleanAndNonBooleanExpectedValues.cy.ts`, `TestCaseExpectedValues.cy.ts`, `TestCasePopulationValues.cy.ts`, `CohortEpisodeEncounter.cy.ts`, `CohortPatientBoolean.cy.ts`, `CohortEncounter600.cy.ts`, `RatioEpisodeSingleIPNoMO.cy.ts`, `CVEpisodeWithMO.cy.ts`, `CVPatientwithMO.cy.ts`, `CVEpisodeWithStratification.cy.ts`, `CVPatientWithStratification.cy.ts`, `CohortPatientWithStratification.cy.ts`, `CohortEpisodeWithStratification.cy.ts`, `ProportionEpisode.cy.ts`, `RatioEncounterSingleIPWithMOs600.cy.ts`, `CVEncounterWithMOandStrat600.cy.ts`, `RatioEpisodeTwoIPsWithMOs.cy.ts`, `Cohort_ListQDMPositiveEncounterPerformed.cy.ts`, `Proportion_ListQDMPositiveProcedurePerformed.cy.ts`, and `ProportionPatient.cy.ts`. Local Cypress validation on Tuesday, July 21, 2026 also confirmed `CV_ListQDMPositiveEncounterPerformed_WithMOAndStratification.cy.ts`, `Ratio_EncounterPerformed_multipleCriterias_WithMO.cy.ts`, `Ratio_ListQDMPositiveEncounterPerformed_WithMO.cy.ts`, and `ExecuteTestCasesByNonMeasureOwner.cy.ts` passing after the shared helper update. `TestCasesPage.openExpectedActualTab(...)` now also tolerates QDM Expected/Actual layouts that do not render the split-panel population container, while still normalizing the Qi-Core split-panel scroll position when that container exists. The remaining value in this slice now shifts to non-smoke execution, import, and validation specs that still bypass the shared Expected/Actual helper path, while the product-question ratio observation files remain blocked on SME confirmation.
-- An inventory sweep on Monday, July 20, 2026 found 55 Expected/Actual-touching WebInterface specs, with the highest migration risk concentrated in a smaller bucket of boolean-checkbox flows that still use direct tab clicks, raw checkbox actions, or clipped-checkbox visibility assertions. The current top targets are `RunAndExecuteTestCaseButtonValidations.cy.ts`, `MeasureObservationActualValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts`, `TestCaseExecutionWithCode.cy.ts`, and `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts`. Keep `RatioPatientTwoIPsWithMOs.cy.ts` and `RatioPatientTwoIPsWithMOsUsingSameFunction.cy.ts` sidelined until product or SME confirmation resolves the observation-row behavior.
+- An inventory sweep on Monday, July 20, 2026 found 55 Expected/Actual-touching WebInterface specs, with the highest migration risk concentrated in a smaller bucket of boolean-checkbox flows that still use direct tab clicks, raw checkbox actions, or clipped-checkbox visibility assertions. `RunAndExecuteTestCaseButtonValidations.cy.ts`, `MeasureObservationActualValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts`, `TestCaseExecutionWithCode.cy.ts`, and `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts` now use the shared Expected/Actual helper path. Local validation passed for `ExecutionAndCoverageValidations.cy.ts` and the full `RunAndExecuteTestCaseButtonValidations.cy.ts` file. Keep `RatioPatientTwoIPsWithMOs.cy.ts` and `RatioPatientTwoIPsWithMOsUsingSameFunction.cy.ts` sidelined until product or SME confirmation resolves the observation-row behavior.
+- `CreateUpdateQDMTestCase.cy.ts`, `QDMTestCaseDirtyCheck.cy.ts`, and `QDMTestCaseValidations.cy.ts` now use the shared Expected/Actual helper path for their QDM tab flows. Headed local validation passed for all three files.
+- `TestCasesPage.ts` now also routes create-test-case save, title or series verification, JSON editor save-return flow, QDM element action-menu clicks, demographics entry, and row-checkbox toggles through shared readiness assertions instead of helper-level sleeps or repeated forced clicks. Local validation on Wednesday, July 22, 2026 confirmed `Add Test Case Expected values for Boolean Measure` and `Add Test Case Expected values for Non Boolean Measure` as the relevant passing coverage for this slice.
+- The remaining Expected/Actual migration inventory is 18 files and 62 direct tab references. Start the next batch with `QDMCVMeasure_with_multiple_Groups_with_MO.cy.ts` and `QDMRatioMeasure_with_multiple_Groups_with_MO.cy.ts`; keep the product-sidelined ratio observation files out of that batch.
 
 Work boundary for the next slice:
 
@@ -81,6 +84,7 @@ Recently proven service/helper slices:
 - Shared create/fixture path: `CreateMeasurePage.ts` now routes user scope, fixture writes, measure create/clone requests, and draft measure ID reads through `TestData` helpers.
 - Shared cleanup/request helpers: `Utilities.deleteLibrary`, `Utilities` lock and unlock flows, and the `MeasureGroupPage.ts` API create, update, and stratification setup now route fixture reads and authenticated requests through `TestData`.
 - Shared test-case helper cleanup: `TestCasesPage.ts` now routes element/test-case fixture writes, measure/test-case fixture reads, and create-test-case API requests through `TestData`.
+- Shared test-case UI reliability proof: `TestCasesPage.ts` removed helper-level sleeps from create-test-case save, title or series verification, JSON edit-save return, QDM demographics entry, and row-checkbox toggles while consolidating repeated QDM element action-menu clicks behind shared readiness helpers.
 - Shared validation proof: `QDM Measure.cy.ts` and `QI Core Test-Cases.cy.ts` now pass against the recent shared-helper conversions in the current workspace once Cypress is run with the invalid `NODE_EXTRA_CA_CERTS` placeholder unset.
 - Shared sharing helper cleanup: `Utilities.setSharePermissions(...)` now delegates library and measure share or unshare request construction through `TestData`, and `CQLLibrarySharing.cy.ts` passes against that path in the current workspace.
 - UI sort reliability proof: `MeasureListNewColumnsSort.cy.ts` now passes after replacing its fixed post-sort waits with route-alias and render-readiness checks, including status assertions tied to the sorted API responses instead of environment-specific row assumptions.
@@ -111,23 +115,23 @@ Recently diagnosed non-refactor failures:
 
 ## Latest Audit Signal
 
-Command: `npm run quality:no-focused-tests` on 2026-07-21
+Command: `npm run quality:no-focused-tests` on 2026-07-22
 
-- Inventory: 256 specs / 65547 spec lines; 29 shared files / 18778 shared lines; 3 support files / 633 support lines; 9 scripts / 1511 script lines.
+- Inventory: 256 specs / 65494 spec lines; 29 shared files / 18728 shared lines; 3 support files / 629 support lines; 9 scripts / 1511 script lines.
 - Skipped tests: 11.
 - Manual fixture path plumbing: 191.
 - Manual access token plumbing: 87.
-- Fixed waits: 38.
-- Forced interactions: 193.
+- Fixed waits: 36.
+- Forced interactions: 168.
 - Global uncaught exception suppression: 1.
 
 Largest risk concentrations:
 
 - `MeasureGroupPage.ts` dropped out of the fixed-wait hotspot list after its three helper sleeps were replaced with editor-ready and save-success assertions that held in focused measure-observation coverage on Monday, July 20, 2026.
-- `OktaLogin.ts` and `TestCasesPage.ts` now carry the remaining shared-helper fixed waits.
+- `OktaLogin.ts` now carries the remaining shared-helper fixed waits after the latest `TestCasesPage.ts` readiness cleanup removed two more helper sleeps.
 - `QDMRunExecuteTC.cy.ts` dropped out of the fixed-wait hotspot list after its three execution waits were replaced with editor-ready and modal-aware assertions that held in focused Cypress validation on Friday, July 17, 2026.
 - `CQLLibraryPage.ts` dropped out of the fixed-wait hotspot list after its two helper sleeps were replaced with shared action-trigger and row-readiness assertions that held in focused Cypress validation on Friday, July 17, 2026.
-- `TestCasesPage.ts`: remaining UI reliability debt from forced interactions and the remaining non-smoke Expected/Actual execution, import, and validation specs that still bypass the shared helper path; fixture-path and create-test-case API setup cleanup is complete.
+- `TestCasesPage.ts`: remaining UI reliability debt now centers on its leftover forced interactions plus the remaining non-smoke Expected/Actual execution, import, and validation specs that still bypass the shared helper path; fixture-path, create-test-case API setup, and the shared create or edit readiness cleanup are complete.
 - `AdminLibraryTransfer.cy.ts` and related transfer coverage: UI transfer specs still mix API-eligible setup with browser-only assertions, duplicate transfer/history checks, and combine distinct validation concerns in the same test flow.
 - `CorrectExpectedValues.cy.ts`, `DeleteTest-Case.cy.ts`, and selected admin/measure/test-case service specs: remaining service-tail cleanup.
 - highlighting specs, remaining QDM export or execution specs, and shared page objects: UI reliability debt from waits and forced interactions.
@@ -151,7 +155,7 @@ Current target order:
 
 - shared page objects with remaining waits and high reuse: `OktaLogin.ts`, `TestCasesPage.ts`
 - `TestCasesPage.ts` Expected/Actual and editor flows now also carry the most actionable downstream forced-interaction debt, but the shared helper path is now proven across the smoke-folder rollout plus `ExecuteTestCasesByNonMeasureOwner.cy.ts`, including both Qi-Core split-panel and QDM non-panel Expected/Actual layouts
-- the next Expected/Actual adoption wave should focus on non-smoke execution, import, and validation specs such as `RunAndExecuteTestCaseButtonValidations.cy.ts`, `MeasureObservationActualValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts`, `TestCaseExecutionWithCode.cy.ts`, and the remaining QDM execution specs
+- the next Expected/Actual adoption wave should focus on the remaining non-smoke execution, import, and validation specs outside the completed `RunAndExecuteTestCaseButtonValidations.cy.ts`, `MeasureObservationActualValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts`, `TestCaseExecutionWithCode.cy.ts`, and `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts` batch
 - remaining export specs that still rely on repeated unzip or download setup
 - export and terminology-heavy UI specs surfaced near the top of the wait audit
 - forced interactions in `TestCasesPage.ts`, import validations, highlighting specs, and editor flows

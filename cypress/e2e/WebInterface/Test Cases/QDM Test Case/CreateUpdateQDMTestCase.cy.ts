@@ -230,8 +230,8 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.QDMDob).type('01/01/2000').click()
 
         //Navigate to Expected/Actual tab and add Expected values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -277,7 +277,7 @@ describe('Non Boolean Test case Expected Values', () => {
         cy.get(TestCasesPage.QDMDob).type('01/01/2000').click()
 
         //Navigate to Expected/Actual tab and add Expected values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).type('2')
 
         //save the Test Case

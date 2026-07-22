@@ -318,11 +318,7 @@ Cypress.Commands.add('UMLSAPIKeyLogin', () => {
 })
 
 Cypress.Commands.add('editTestCaseJSON', (jsonContent: string) => {
-    TestCasesPage.waitForJsonEditorReady()
-    cy.get(TestCasesPage.aceEditorJsonInput)
-        .click({ force: true })
-        .clear({ force: true })
-        .type(jsonContent, { parseSpecialCharSequences: false, force: true })
+    TestCasesPage.editTestCaseJson(jsonContent)
 })
 
 const compareColor = (color: string, property: keyof CSSStyleDeclaration) => (targetEle: JQuery) => {

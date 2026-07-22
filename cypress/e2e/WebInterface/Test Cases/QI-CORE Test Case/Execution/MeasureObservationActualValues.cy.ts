@@ -95,10 +95,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         //Click on RunTest Button
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
@@ -106,7 +103,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click({ force: true })
+        cy.get(TestCasesPage.runTestButton).click()
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
     })
 
@@ -168,10 +165,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         //Click on RunTest Button
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
@@ -180,7 +174,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click({ force: true })
+        cy.get(TestCasesPage.runTestButton).click()
         cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('have.value', '30')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('have.value', '30')
     })
@@ -232,18 +226,16 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
 
         //Click on RunTest Button
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click({ force: true })
+        cy.get(TestCasesPage.runTestButton).click()
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '1')
     })
 
@@ -299,21 +291,20 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         //Click on RunTest Button
-        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).check().should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.successMsg).should('be.visible')
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
