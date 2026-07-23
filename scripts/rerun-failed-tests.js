@@ -9,7 +9,11 @@ const summaryFile =
   process.env.FAILED_TEST_SUMMARY ||
   (process.env.BUILD_NUMBER ? `failure-summary-${process.env.BUILD_NUMBER}.json` : '')
 const configFile = process.argv[3] || process.env.CYPRESS_RERUN_CONFIG || 'test'
-const rerunMetadataFile = process.argv[4] || process.env.RERUN_METADATA_FILE || ''
+const rerunMetadataFile =
+  process.argv[4] ||
+  process.env.RERUN_METADATA_FILE ||
+  process.env.RERUN_TARGETING_FILE ||
+  ''
 const browser = process.env.CYPRESS_RERUN_BROWSER || 'chrome'
 const headed = process.env.CYPRESS_RERUN_HEADED !== 'false'
 
