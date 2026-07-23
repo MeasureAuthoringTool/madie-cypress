@@ -1,4 +1,5 @@
 const fs = require('fs-extra')
+const nativeFs = require('fs')
 const path = require('path')
 const unzipper = require('unzipper')
 const { removeDirectory } = require('cypress-delete-downloads-folder')
@@ -24,12 +25,12 @@ function unzipFile(zipFile, outputPath) {
 }
 
 function readLock(filePath) {
-    if (!fs.existsSync(filePath)) {
+    if (!nativeFs.existsSync(filePath)) {
         return {}
     }
 
     try {
-        return JSON.parse(fs.readFileSync(filePath, 'utf8'))
+        return JSON.parse(nativeFs.readFileSync(filePath, 'utf8'))
     } catch (err) {
         console.warn(`Unable to parse lock file ${filePath}; resetting it. ${err.message}`)
         return {}
@@ -37,7 +38,7 @@ function readLock(filePath) {
 }
 
 function writeLock(filePath, lock) {
-    fs.writeFileSync(filePath, JSON.stringify(lock))
+    nativeFs.writeFileSync(filePath, JSON.stringify(lock))
 }
 
 function sleepMs(ms) {
@@ -48,28 +49,23 @@ function withFileLock(filePath, action) {
     const mutexDir = `${filePath}.mutex`
     const startedAt = Date.now()
 
-    while (true) {
+    while (Date.now() - startedAt < lockAcquireTimeoutMs) {
         try {
-            fs.mkdirSync(mutexDir)
-            break
+            nativeFs.mkdirSync(mutexDir)
+            try {
+                return action()
+            } finally {
+                nativeFs.rmSync(mutexDir, { recursive: true, force: true })
+            }
         } catch (err) {
             if (err.code !== 'EEXIST') {
                 throw err
             }
-
-            if (Date.now() - startedAt >= lockAcquireTimeoutMs) {
-                throw new Error(`Timed out acquiring user lock for ${path.basename(filePath)} after ${lockAcquireTimeoutMs}ms`)
-            }
-
             sleepMs(lockRetryIntervalMs)
         }
     }
 
-    try {
-        return action()
-    } finally {
-        fs.removeSync(mutexDir)
-    }
+    throw new Error(`Timed out acquiring user lock for ${path.basename(filePath)} after ${lockAcquireTimeoutMs}ms`)
 }
 
 function claimFirstAvailableUser(filePath, users) {
