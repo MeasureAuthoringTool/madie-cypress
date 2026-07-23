@@ -46,7 +46,7 @@ When a backlog item is complete, pause and reprioritize before continuing so the
 Current active item:
 
 - P2 UI reliability debt, `TestCasesPage` Expected/Actual migration by repeated consumer pattern
-- Current bucket: raw boolean checkbox flows
+- Current bucket: remaining raw numeric value-entry consumers
 
 Why this is the best next step:
 
@@ -54,7 +54,8 @@ Why this is the best next step:
 - The remaining high-value UI work is concentrated in `TestCasesPage.ts`, where Expected/Actual flows still drive repeated raw interaction patterns, leftover forced-interaction debt, and mixed readiness handling.
 - The shared Expected/Actual path is now proven across a broad set of Qi-Core and QDM specs, including smoke, execution, validation, multi-group, and ratio-observation coverage.
 - `TestCasesPage.openExpectedActualTab(...)` now handles both Qi-Core split-panel layouts and QDM layouts without the split population panel, and reusable QDM stratified selectors plus `typeExpectedActualValue(...)` are in place.
-- The raw numeric Expected/Actual entry bucket is now proven across QDM, Qi-Core, and observation-heavy consumers, so the next highest-value bucket is raw boolean checkbox flows, followed by legacy `readySelector` openings that can use a concrete Expected/Actual control selector.
+- The shared Expected/Actual checkbox path is now effectively migrated: focused proof files were already helper-backed, and the remaining direct checkbox straggler in `MeasureVersionValidations.cy.ts` has been moved onto `checkExpectedActualCheckbox(...)`.
+- The next higher-value bucket is the remaining raw numeric value-entry consumers, followed by legacy `readySelector` openings that can use a concrete Expected/Actual control selector.
 - Keep product-question observation files sidelined until SME confirmation, and keep known environment-dependent failures such as the remaining `QDMRunExecuteTC.cy.ts` non-helper issues out of this slice.
 
 Work boundary for the next slice:
@@ -77,6 +78,7 @@ Recently proven service/helper slices:
 - Shared test-case UI reliability proof: `TestCasesPage.ts` removed helper-level sleeps from create-test-case save, title or series verification, JSON edit-save return, QDM demographics entry, and row-checkbox toggles while consolidating repeated QDM element action-menu clicks behind shared readiness helpers.
 - Shared Expected/Actual proof summary: `TestCasesPage.openExpectedActualTab(...)`, `checkExpectedActualCheckbox(...)`, `uncheckExpectedActualCheckbox(...)`, reusable QDM stratified selectors, and `typeExpectedActualValue(...)` are now proven across Qi-Core and QDM smoke, execution, multi-group, and ratio-observation flows, including `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts` passing 3/3 on Wednesday, July 22, 2026.
 - Raw numeric Expected/Actual entry proof: focused validation on Wednesday, July 22, 2026 passed `QDMTestCaseRelevantElementWarning.cy.ts`, `RatioEpisodeSingleIPNoMO.cy.ts`, and `MeasureObservationExpectedValues.cy.ts` after moving raw numeric entry onto `typeExpectedActualValue(...)` and tightening the shared helper to scroll clipped inputs into view before typing.
+- Raw boolean Expected/Actual checkbox proof: repository scan on Thursday, July 23, 2026 found the helper migration already covered the active proof set, with only one direct checkbox straggler left in `MeasureVersionValidations.cy.ts`; that straggler now uses `openExpectedActualTab({ checkboxSelector: ... })` plus `checkExpectedActualCheckbox(...)`, so the boolean checkbox bucket can be treated as complete.
 - Shared validation proof: `QDM Measure.cy.ts` and `QI Core Test-Cases.cy.ts` now pass against the recent shared-helper conversions in the current workspace once Cypress is run with the invalid `NODE_EXTRA_CA_CERTS` placeholder unset.
 - Shared sharing helper cleanup: `Utilities.setSharePermissions(...)` now delegates library and measure share or unshare request construction through `TestData`, and `CQLLibrarySharing.cy.ts` passes against that path in the current workspace.
 - UI sort reliability proof: `MeasureListNewColumnsSort.cy.ts` now passes after replacing its fixed post-sort waits with route-alias and render-readiness checks, including status assertions tied to the sorted API responses instead of environment-specific row assumptions.
@@ -146,7 +148,7 @@ Current target order:
 
 - shared page objects with remaining waits and high reuse: `OktaLogin.ts`, `TestCasesPage.ts`
 - `TestCasesPage.ts` Expected/Actual and editor flows now also carry the most actionable downstream forced-interaction debt, but the shared helper path is now proven across the smoke-folder rollout plus `ExecuteTestCasesByNonMeasureOwner.cy.ts`, including both Qi-Core split-panel and QDM non-panel Expected/Actual layouts
-- the next Expected/Actual adoption wave should continue one repeated interaction bucket at a time across the remaining non-smoke execution, import, and validation specs, instead of advancing by neighboring file. The raw numeric entry bucket is now complete; shift to raw boolean checkbox flows next, then `readySelector` cleanup outside the completed `RunAndExecuteTestCaseButtonValidations.cy.ts`, `MeasureObservationActualValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts`, `TestCaseExecutionWithCode.cy.ts`, `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts`, `QDMCVMeasure_with_multiple_Groups_with_MO.cy.ts`, and `QDMRatioMeasure_with_multiple_Groups_with_MO.cy.ts` proof batch
+- the next Expected/Actual adoption wave should continue one repeated interaction bucket at a time across the remaining non-smoke execution, import, and validation specs, instead of advancing by neighboring file. The boolean checkbox bucket is now complete; shift to the remaining raw numeric value-entry consumers next, then `readySelector` cleanup outside the completed `RunAndExecuteTestCaseButtonValidations.cy.ts`, `MeasureObservationActualValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts`, `TestCaseExecutionWithCode.cy.ts`, `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts`, `QDMCVMeasure_with_multiple_Groups_with_MO.cy.ts`, and `QDMRatioMeasure_with_multiple_Groups_with_MO.cy.ts` proof batch
 - remaining export specs that still rely on repeated unzip or download setup
 - export and terminology-heavy UI specs surfaced near the top of the wait audit
 - forced interactions in `TestCasesPage.ts`, import validations, highlighting specs, and editor flows
