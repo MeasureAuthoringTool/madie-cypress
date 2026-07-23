@@ -8,6 +8,8 @@ const primaryUsers = ['harpUser', 'harpUser2', 'harpUser3']
 const altUsers = ['altHarpUser', 'altHarpUser2', 'altHarpUser3']
 const lockFilePath = path.join(__dirname, 'userLock.json')
 const altLockFilePath = path.join(__dirname, 'altUserLock.json')
+const lockAcquireTimeoutMs = Number(process.env.CYPRESS_USER_LOCK_TIMEOUT_MS || 30000)
+const lockRetryIntervalMs = Number(process.env.CYPRESS_USER_LOCK_RETRY_MS || 100)
 
 function getConfigurationByFile(file) {
     const pathToConfigFile = path.resolve('./cypress/', 'config', `${file}.json`)
@@ -26,31 +28,76 @@ function readLock(filePath) {
         return {}
     }
 
-    return JSON.parse(fs.readFileSync(filePath))
+    try {
+        return JSON.parse(fs.readFileSync(filePath, 'utf8'))
+    } catch (err) {
+        console.warn(`Unable to parse lock file ${filePath}; resetting it. ${err.message}`)
+        return {}
+    }
 }
 
 function writeLock(filePath, lock) {
     fs.writeFileSync(filePath, JSON.stringify(lock))
 }
 
-function claimFirstAvailableUser(filePath, users) {
-    const lock = readLock(filePath)
-    const user = users.find((candidate) => !lock[candidate])
+function sleepMs(ms) {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms)
+}
 
+function withFileLock(filePath, action) {
+    const mutexDir = `${filePath}.mutex`
+    const startedAt = Date.now()
+
+    while (true) {
+        try {
+            fs.mkdirSync(mutexDir)
+            break
+        } catch (err) {
+            if (err.code !== 'EEXIST') {
+                throw err
+            }
+
+            if (Date.now() - startedAt >= lockAcquireTimeoutMs) {
+                throw new Error(`Timed out acquiring user lock for ${path.basename(filePath)} after ${lockAcquireTimeoutMs}ms`)
+            }
+
+            sleepMs(lockRetryIntervalMs)
+        }
+    }
+
+    try {
+        return action()
+    } finally {
+        fs.removeSync(mutexDir)
+    }
+}
+
+function claimFirstAvailableUser(filePath, users) {
+    return withFileLock(filePath, () => {
+        const lock = readLock(filePath)
+        const user = users.find((candidate) => !lock[candidate])
+
+        if (!user) {
+            return null
+        }
+
+        lock[user] = true
+        writeLock(filePath, lock)
+        return user
+    })
+}
+
+function releaseLockedUser(filePath, user) {
     if (!user) {
         return null
     }
 
-    lock[user] = true
-    writeLock(filePath, lock)
-    return user
-}
-
-function releaseLockedUser(filePath, user) {
-    const lock = readLock(filePath)
-    lock[user] = false
-    writeLock(filePath, lock)
-    return null
+    return withFileLock(filePath, () => {
+        const lock = readLock(filePath)
+        lock[user] = false
+        writeLock(filePath, lock)
+        return null
+    })
 }
 
 module.exports = (on, config) => {
