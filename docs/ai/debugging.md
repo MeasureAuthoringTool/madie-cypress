@@ -48,6 +48,15 @@ If a failure happens on the Test Case Expected/Actual panel and Cypress reports 
 
 Focused Cypress validation on Monday, July 20, 2026 showed this issue in `MeasureObservations.cy.ts`, `MeasureObservationExpectedValues.cy.ts`, and `RatioPatientSingleIPNoMOwithDRC.cy.ts`, and the stable fix was to use the shared Expected/Actual helper path rather than raw tab clicks plus checkbox actions.
 
+## Split-View And JSON Editor Failures
+
+When a Cypress interaction appears to shift a split-view layout:
+
+1. Reproduce it in headed Chrome and record a video before changing shared helpers.
+2. Compare one interaction change at a time; do not infer a visible regression from an internal `scrollLeft` value alone.
+3. Keep the JSON-editor tab activation inside `TestCasesPage.editTestCaseJson(...)`. Its native button activation is intentional because Cypress actionability scrolling changed the observed split-view layout during JSON-editor flows.
+4. Do not generalize a JSON-editor finding to the Expected/Actual panel. Expected/Actual has its own shared readiness and panel-normalization path and must be validated independently.
+
 ## Selector Debugging
 
 Prefer this order:

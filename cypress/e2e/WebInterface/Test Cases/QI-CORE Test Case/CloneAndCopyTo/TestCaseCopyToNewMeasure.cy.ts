@@ -90,7 +90,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.grabTestCaseId(2)
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '1')
     })
@@ -153,7 +153,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.grabTestCaseId(2)
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         /// these differ from previous test since it's a proportion measure now
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')

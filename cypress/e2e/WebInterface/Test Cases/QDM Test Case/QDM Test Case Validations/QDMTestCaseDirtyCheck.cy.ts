@@ -115,7 +115,7 @@ describe('Dirty Check Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Navigate to Expected/Actual tab and enter Expected values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).type('2')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('3')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('4')

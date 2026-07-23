@@ -633,7 +633,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Initial Population')
     })
@@ -717,7 +717,7 @@ describe('JSON Resource ID tests -- CV', () => {
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Initial Population')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Population')

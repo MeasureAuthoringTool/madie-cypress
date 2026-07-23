@@ -281,26 +281,26 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         //enter 3 for the expected denominator to generate 3 observation field
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '3')
         cy.get(TestCasesPage.denom0Observation).should('be.visible')
         cy.get(TestCasesPage.denom1Observation).should('be.visible')
         cy.get(TestCasesPage.denom2Observation).should('be.visible')
 
         //if one is entered in the denominator exclusion field then one of the denominator observation fields will be removed
-        cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
         cy.get(TestCasesPage.denom2Observation).should('not.exist')
 
         //enter 3 for the expected denominator to generate 3 observation field
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '3')
         cy.get(TestCasesPage.numer0Observation).should('be.visible')
         cy.get(TestCasesPage.numer1Observation).should('be.visible')
         cy.get(TestCasesPage.numer2Observation).should('be.visible')
 
         //if one is entered in the numerator exclusion field then one of the numerator observation fields will be removed
-        cy.get(TestCasesPage.testCaseNUMEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '1')
         cy.get(TestCasesPage.numer2Observation).should('not.exist')
 
         //save test case
@@ -318,7 +318,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         //validate values that were saved in the E/A fields retain values
         cy.get(TestCasesPage.testCaseDENOMExpected).should('contain.value', 3)
@@ -374,26 +374,26 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         //enter 3 for the expected denominator to generate 3 observation field
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '3')
         cy.get(TestCasesPage.denom0Observation).should('be.visible')
         cy.get(TestCasesPage.denom1Observation).should('be.visible')
         cy.get(TestCasesPage.denom2Observation).should('be.visible')
 
         //if one is entered in the denominator exclusion field then one of the denominator observation fields will be removed
-        cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
         cy.get(TestCasesPage.denom2Observation).should('not.exist')
 
         //enter 3 for the expected denominator to generate 3 observation field
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '3')
         cy.get(TestCasesPage.numer0Observation).should('be.visible')
         cy.get(TestCasesPage.numer1Observation).should('be.visible')
         cy.get(TestCasesPage.numer2Observation).should('be.visible')
 
         //if one is entered in the numerator exclusion field then one of the numerator observation fields will be removed
-        cy.get(TestCasesPage.testCaseNUMEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '1')
         cy.get(TestCasesPage.numer2Observation).should('not.exist')
 
         //save test case
@@ -418,7 +418,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         //observation fields cannot be edited
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.enabled')
@@ -494,24 +494,24 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         //enter 1 for expected initial population
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
 
         //enter 1 for the expected denominator to generate 1 observation field
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1')
         cy.get(TestCasesPage.denom0Observation).should('be.visible')
 
         //enter 1 for denominator observation field
-        cy.get(TestCasesPage.denom0Observation).clear().type('6')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denom0Observation, '6', { clearFirst: true })
 
         //enter 1 for the expected numerator to generate 1 observation field
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
         cy.get(TestCasesPage.numer0Observation).should('be.visible')
 
         //enter 6 for the numerator observation field
-        cy.get(TestCasesPage.numer0Observation).clear().type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numer0Observation, '1', { clearFirst: true })
 
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -526,7 +526,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.runQDMTestCaseBtn })
 
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 

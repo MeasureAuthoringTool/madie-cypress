@@ -115,12 +115,9 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         QDMElements.addCode('SNOMEDCT', '111527005')
 
         //Add Expected value for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

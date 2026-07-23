@@ -16,12 +16,12 @@ const CqlLibraryName = 'RETCBVLibrary' + now
 const testCase: TestCase = {
     title: 'test case title',
     description: 'DENOMFail' + now,
-    group: 'SBTestSeries',
+    group: 'SBTestSeries'
 }
 const failingTestCase: TestCase = {
     title: 'Test Case with errors',
     description: 'TCwE',
-    group: 'ICFTCwESeries',
+    group: 'ICFTCwESeries'
 }
 const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
@@ -87,7 +87,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
@@ -168,7 +168,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, invalidTestCaseJson, true)
@@ -229,7 +229,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group)
@@ -251,7 +251,7 @@ describe('Run / Execute Test Case button validations', () => {
 describe('Run / Execute Test case for multiple Population Criteria', () => {
     beforeEach('Create measure and login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
-            measureCql: measureCQL,
+            measureCql: measureCQL
         })
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
@@ -262,7 +262,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
             'Initial Population',
             '',
             'Initial Population',
-            'boolean',
+            'boolean'
         )
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, validTestCaseJson)
         OktaLogin.Login()
@@ -305,7 +305,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         TestCasesPage.createTestCase(
@@ -313,7 +313,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
             testCase.description + ' 2',
             testCase.group + '2',
             validTestCaseJson,
-            true,
+            true
         )
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -337,7 +337,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
                 Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
                 cy.get(TestCasesPage.tcNUMERHighlightingDetails).should(
                     'contain.text',
-                    '\ndefine "Initial Population":\n   true\nResultstrue Definition(s) Used',
+                    '\ndefine "Initial Population":\n   true\nResultstrue Definition(s) Used'
                 )
                 cy.get('[data-ref-id="260"]').should('have.color', '#20744c')
             })
@@ -365,7 +365,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 describe('Verify that "Run Test" works with warnings but does not with errors', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
-            measureCql: measureCQL,
+            measureCql: measureCQL
         })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne')
         OktaLogin.Login()
@@ -383,7 +383,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
             testCase.description,
             testCase.group,
             errorTestCaseJSON_no_ResourceID,
-            true,
+            true
         )
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -391,23 +391,17 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on actual / expected sub-tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        //check the check box for the expected IP
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).scrollIntoView()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click({ force: true })
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         //Verify Highlighting tab before clicking on Run Test button
-        cy.get(TestCasesPage.tcHighlightingTab).wait(1000).click()
+        cy.get(TestCasesPage.tcHighlightingTab).should('be.visible').click()
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', "To see the logic highlights, click 'Run Test'")
 
         //Click on Execute Test Case button on Edit Test Case page
@@ -415,18 +409,14 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.jsonTab).click()
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-        cy.get(TestCasesPage.aceEditor).type('{selectAll}{backspace}')
-        cy.editTestCaseJSON(warningTestCaseJson)
+        TestCasesPage.editTestCaseJson(warningTestCaseJson, true)
         cy.get(TestCasesPage.editTestCaseSaveButton).scrollIntoView()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(Toasts.otherSuccessToast, { timeout: 16500 }).should(
             'have.text',
-            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'
         )
 
         //Click on Execute Test Case button on Edit Test Case page
@@ -469,7 +459,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
             failingTestCase.description,
             failingTestCase.group,
             errorTestCaseJSON_no_ResourceID,
-            true,
+            true
         )
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -477,24 +467,18 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on actual / expected sub-tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        //check the check box for the expected IP
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click().should('be.checked')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click({ force: true })
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 7500)
 
         //Click on Execute Test Case button on Edit Test Case page
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
-        cy.get(EditMeasurePage.testCasesTab).wait(1000).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         //refresh test case list page
@@ -516,7 +500,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 describe('Verify "Run Test Cases" results based on missing/empty group populations are treated as zeroes', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
-            measureCql: measureCQLPFTests,
+            measureCql: measureCQLPFTests
         })
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
@@ -527,13 +511,13 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             'Initial Population',
             '',
             'Initial Population',
-            'boolean',
+            'boolean'
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({
             collapseEditor: true,
-            successTimeout: 20700,
+            successTimeout: 20700
         })
     })
 
@@ -573,7 +557,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group updated successfully.',
+            'Population details for this group updated successfully.'
         )
 
         TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
@@ -583,14 +567,9 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on actual / expected sub-tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         //check the check box for the expected IP
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
 
         //Verify Highlighting tab before clicking on Run Test button
@@ -627,7 +606,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.reportingTab).click()
             Utilities.dropdownSelect(
                 MeasureGroupPage.improvementNotationSelect,
-                'Increased score indicates improvement',
+                'Increased score indicates improvement'
             )
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -644,7 +623,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
                 'contain.text',
-                'Population details for this group updated successfully.',
+                'Population details for this group updated successfully.'
             )
 
             TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
@@ -654,21 +633,16 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             TestCasesPage.clickEditforCreatedTestCase()
 
-            //click on actual / expected sub-tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
             //check the check box for the expected IP
-            cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
 
             //Verify Highlighting tab before clicking on Run Test button
             cy.get(TestCasesPage.tcHighlightingTab).click()
             cy.get(TestCasesPage.runTestAlertMsg).should(
                 'contain.text',
-                "To see the logic highlights, click 'Run Test'",
+                "To see the logic highlights, click 'Run Test'"
             )
 
             //Click on Execute Test Case button on Edit Test Case page
@@ -711,7 +685,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.reportingTab).click()
             Utilities.dropdownSelect(
                 MeasureGroupPage.improvementNotationSelect,
-                'Increased score indicates improvement',
+                'Increased score indicates improvement'
             )
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -720,7 +694,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
             cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should(
                 'contain.text',
-                'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.',
+                'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.'
             )
             cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
 
@@ -728,7 +702,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
                 'contain.text',
-                'Population details for this group updated successfully.',
+                'Population details for this group updated successfully.'
             )
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -736,10 +710,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             TestCasesPage.clickEditforCreatedTestCase()
 
-            //click on actual / expected sub-tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab()
 
             //enter values for the expected population
             cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -755,7 +726,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.tcHighlightingTab).click()
             cy.get(TestCasesPage.runTestAlertMsg).should(
                 'contain.text',
-                "To see the logic highlights, click 'Run Test'",
+                "To see the logic highlights, click 'Run Test'"
             )
 
             //Click on Execute Test Case button on Edit Test Case page
@@ -791,7 +762,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
                 'contain.text',
-                'Population details for this group updated successfully.',
+                'Population details for this group updated successfully.'
             )
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -799,10 +770,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             TestCasesPage.clickEditforCreatedTestCase()
 
-            //click on actual / expected sub-tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab()
 
             //enter values for the expected populations
             cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -826,7 +794,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.tcHighlightingTab).click()
             cy.get(TestCasesPage.runTestAlertMsg).should(
                 'contain.text',
-                "To see the logic highlights, click 'Run Test'",
+                "To see the logic highlights, click 'Run Test'"
             )
 
             //Click on Execute Test Case button on Edit Test Case page
@@ -841,10 +809,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             TestCasesPage.clickEditforCreatedTestCase()
 
-            //click on actual / expected sub-tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+            TestCasesPage.openExpectedActualTab()
 
             //attempt to click on 'Run Test Case' to run the test case via the edit page
             cy.get(TestCasesPage.runTestButton).scrollIntoView()
@@ -856,6 +821,6 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-        },
+        }
     )
 })

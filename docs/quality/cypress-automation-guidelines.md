@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-07-20
+Last updated: 2026-07-22
 
 This guide captures stable test-architecture rules used in this repo. Keep tactical plans and changing counts in `docs/quality/test-refactor-backlog.md`.
 
@@ -16,6 +16,7 @@ This guide captures stable test-architecture rules used in this repo. Keep tacti
 - Service specs under `cypress/e2e/Services/` should set up and verify service behavior through APIs.
 - UI specs under `cypress/e2e/WebInterface/` should use the browser for UI behavior: navigation, rendering, editor behavior, permissions, and user interaction.
 - Page objects should not own service setup mechanics.
+- When a feature-flagged change alters an existing contract, keep the current coverage active and add the new coverage alongside it. Put persistence and payload assertions in service specs first, then add UI coverage only for the flagged browser behavior once that UI is exposed.
 - Split large specs by behavior only after shared setup and data helpers are stable.
 
 ## Shared Test Data Rules
@@ -40,12 +41,14 @@ These helper paths are already established and should be reused before adding ne
 
 - Do not commit focused tests. `npm run quality:no-focused-tests` is the guardrail.
 - Skipped tests need an owner, ticket, or removal decision.
+- For tests written ahead of a feature flag rollout, keep them present but not enabled until the flag is available in the target environment. Retire the legacy assertions only after the new path is enabled by default or the old path is removed.
 - Replace fixed numeric waits with route aliases, visible/enabled assertions, or purposeful polling helpers.
 - Use `{ force: true }` only when validating intentionally hidden or native controls; otherwise fix readiness or selector strategy.
 - Avoid global exception suppression. If an exception must be tolerated, make the handling targeted and explain the scope.
 - Prefer stable `data-testid` selectors when available.
 - When a spec creates uniquely named rows in a list, select those rows by generated name or stored ID instead of fixture-position helpers or table order. Row-order selection becomes flaky when cleanup is partial or older test data is still visible.
 - In Expected/Actual test-case flows, prefer `TestCasesPage.openExpectedActualTab(...)` plus `checkExpectedActualCheckbox(...)` or `uncheckExpectedActualCheckbox(...)` over direct tab clicks and raw boolean checkbox actions. On Monday, July 20, 2026, focused Cypress validation showed the split-panel sash can leave expected-value checkboxes clipped or reported as covered even when the selector is correct. Avoid pre-asserting `be.visible` on those clipped boolean inputs; rely on the shared helper to normalize the panel first.
+- When a reusable test-case editor control needs a `data-testid` selector, add it to `TestCasesPage` instead of leaving the literal selector in a spec. Inline `data-testid` strings are acceptable for one-off assertions, but reusable Expected/Actual, stratification, action-center, and editor controls should stay behind the page object so selector churn is localized.
 
 ## Refactor Rules
 

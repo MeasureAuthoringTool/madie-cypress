@@ -89,7 +89,7 @@ describe('Ratio based measure with measure observations', () => {
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
 
         // set expected values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCaseIPPExpected).type('3')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
@@ -137,7 +137,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.testCaseAction0Btn).click()
 
         // check expected values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '3')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('have.value', '1')
@@ -193,7 +193,7 @@ describe('Proportion based measure with no observations', () => {
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
 
         // set expected values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCaseIPPExpected).type('3')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
@@ -238,11 +238,10 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.testCaseAction0Btn).click()
 
         // check expected values
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '3')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('have.value', '2')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('have.value', '1')
     })
 })
-

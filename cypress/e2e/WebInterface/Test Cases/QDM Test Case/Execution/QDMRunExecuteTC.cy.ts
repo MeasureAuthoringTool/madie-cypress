@@ -1,13 +1,13 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 
 const measureName = 'QDMRunExecuteTC' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -18,9 +18,7 @@ const validTestCaseJson = TestCaseJson.QDMTestCaseJson
 const measureCQL = MeasureCQL.QDMCQL4MAT5645
 const measureData: CreateMeasureOptions = {}
 describe('Run / Execute Test case and verify passing percentage and coverage', () => {
-
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
         CqlLibraryName = 'QDMExecPercentages' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -49,16 +47,17 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Run / Execute single passing Test Case', () => {
-
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         OktaLogin.Login()
 
@@ -70,20 +69,24 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         TestCasesPage.clickEditforCreatedTestCase()
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/01/2002 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/01/2002 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
-
-        cy.get('[data-testid="test-population-Strata-1 -expected-0"]').check()
-        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).check()
-        cy.get('[data-testid="test-population-Strata-2 -expected-0"]').check()
-        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(1).check()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.qdmStrata1ExpectedValue)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, {
+            index: 0
+        })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.qdmStrata2ExpectedValue)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, {
+            index: 1
+        })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -111,7 +114,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute one passing and one failing Test Cases', () => {
-
         OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -136,7 +138,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TestDesc')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('SBTestSeries')
+        cy.get(TestCasesPage.createTestCaseGroupInput)
+            .type('SBTestSeries')
             .type('{downArrow}')
             .should('have.attr', 'aria-controls', 'test-case-series-listbox')
             .click()
@@ -149,7 +152,13 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -160,13 +169,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -196,7 +200,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('PTC')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries')
+        cy.get(TestCasesPage.createTestCaseGroupInput)
+            .type('ICFTCSeries')
             .type('{downArrow}')
             .should('have.attr', 'aria-controls', 'test-case-series-listbox')
             .click()
@@ -209,7 +214,13 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -238,7 +249,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute single failing Test Cases', () => {
-
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
@@ -264,7 +274,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('FTC')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries')
+        cy.get(TestCasesPage.createTestCaseGroupInput)
+            .type('ICFTCSeries')
             .type('{downArrow}')
             .should('have.attr', 'aria-controls', 'test-case-series-listbox')
             .click()
@@ -277,15 +288,16 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '01/01/2020 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -308,9 +320,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 })
 
 describe('Run / Execute QDM Test Case button validations', () => {
-
     beforeEach('Login and Create Measure', () => {
-
         CqlLibraryName = 'QDMExecButtons' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -324,7 +334,6 @@ describe('Run / Execute QDM Test Case button validations', () => {
     })
 
     afterEach('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -380,7 +389,6 @@ describe('Run / Execute QDM Test Case button validations', () => {
     })
 
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -399,7 +407,10 @@ describe('Run / Execute QDM Test Case button validations', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
@@ -408,9 +419,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
 })
 
 describe('Run / Execute Test case for multiple Population Criteria', () => {
-
     beforeEach('Create Measure, Measure group and login', () => {
-
         CqlLibraryName = 'QDMExecMultiplePC' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -427,12 +436,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Run and Execute Test case for multiple Population Criteria', () => {
-
         //Add second Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
@@ -447,7 +454,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //Navigate to Test Cases page and add Test Case details
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
@@ -458,8 +468,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 AM')
 
         //Add Expected/Actual value to first Population criteria
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 0 })
         //save dob value
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 60000)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -485,9 +495,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 })
 
 describe('Run / Execute Test Case by Non Measure Owner', () => {
-
     beforeEach('Create Measure, Measure group and Test case', () => {
-
         CqlLibraryName = 'QDMExecNonOwner' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -501,16 +509,14 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })       
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Non Measure owner should be able to Run/Execute Test case', () => {
-
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
@@ -544,8 +550,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 15000)
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()

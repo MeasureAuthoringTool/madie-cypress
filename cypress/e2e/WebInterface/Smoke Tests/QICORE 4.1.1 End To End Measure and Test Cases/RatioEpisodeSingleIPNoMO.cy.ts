@@ -110,10 +110,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -158,25 +155,10 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('2')
-
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
-
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('2')
-
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '1')
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

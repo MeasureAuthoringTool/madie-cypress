@@ -102,7 +102,7 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
         TestCasesPage.grabTestCaseId(1)
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.runTestButton).click()
 
         // validate pass - checkmark icon at top of table

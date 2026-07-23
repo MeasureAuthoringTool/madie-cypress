@@ -21,6 +21,7 @@ Rules:
 - Keep negative/error assertions explicit.
 - Preserve test intent.
 - Keep the change small.
+- When a refactor slice is complete, reassess the remaining scope before choosing the next target. Do not automatically continue to the next nearby file if a larger repeated pattern or higher-value bucket has emerged.
 
 Output:
 

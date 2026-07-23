@@ -316,14 +316,19 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
-        cy.get(TestCasesPage.measureObservationRow).clear().type('60')
-        cy.get('[data-testid="test-population-Strata-1 -expected-0"]').type('1')
-        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('1')
-        cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '60', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStrata1ExpectedValue, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, '1', { index: 0 })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedMeasurePopulationExpectedValue, '1', {
+            index: 0
+        })
         //Commented until MAT-6608 is fixed
-        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-3"]').eq(0).clear().type('60')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedMeasureObservationExpectedValue(3), '60', {
+            clearFirst: true,
+            index: 0
+        })
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -459,13 +464,20 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('2')
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('2')
-        cy.get(TestCasesPage.measureObservationRow).eq(1).clear().type('45')
-        cy.get('[data-testid="test-population-Strata-1 -expected-0"]').type('2')
-        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('2')
-        cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('2')
-        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-4"]').clear().type('45')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '45', {
+            clearFirst: true,
+            index: 1
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStrata1ExpectedValue, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, '2', { index: 0 })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedMeasurePopulationExpectedValue, '2', {
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedMeasureObservationExpectedValue(4), '45', {
+            clearFirst: true
+        })
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

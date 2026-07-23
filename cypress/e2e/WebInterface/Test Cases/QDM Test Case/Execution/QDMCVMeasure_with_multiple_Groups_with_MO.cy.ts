@@ -172,12 +172,9 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected value for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
         cy.get(TestCasesPage.measureObservationRow).eq(0).clear().type('8')
         cy.get(TestCasesPage.measureObservationRow).eq(1).clear().type('8')
 
@@ -348,16 +345,31 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected value for Test case
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).clear().type('1')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).clear().type('1')
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).eq(0).clear().type('1')
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).eq(1).clear().type('1')
-        cy.get(TestCasesPage.measureObservationRow).eq(0).clear().type('24')
-        cy.get(TestCasesPage.measureObservationRow).eq(1).clear().type('24')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1', {
+            clearFirst: true,
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1', {
+            clearFirst: true,
+            index: 1
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', {
+            clearFirst: true,
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', {
+            clearFirst: true,
+            index: 1
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '24', {
+            clearFirst: true,
+            index: 0
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '24', {
+            clearFirst: true,
+            index: 1
+        })
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
