@@ -94,6 +94,10 @@ export class MeasuresPage {
         return `[data-testid=measure-action-${measureId}]`
     }
 
+    public static getMeasureActionSelector(measureId: string): string {
+        return this.measureActionSelector(measureId)
+    }
+
     private static measureRowSelectSelector(measureId: string): string {
         return `[data-testid="measure-name-${measureId}_select"]`
     }
