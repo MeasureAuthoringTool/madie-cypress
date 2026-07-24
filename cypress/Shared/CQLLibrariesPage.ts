@@ -71,7 +71,17 @@ export class CQLLibrariesPage {
 
     private static goToLibrariesList(): void {
         cy.get(Header.cqlLibraryTab).should('exist').should('be.visible').click()
+        cy.location('pathname', { timeout: 35000 }).should(($pathname) => {
+            expect($pathname, 'pathname after clicking Libraries tab').to.not.include('/measures')
+        })
+        cy.get(CQLLibraryPage.ownedLibrariesTab, { timeout: 35000 }).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab, { timeout: 35000 }).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab, { timeout: 35000 }).should('be.visible')
         Utilities.waitForElementVisible(this.librariesList, 35000)
+    }
+
+    public static openLibrariesList(): void {
+        this.goToLibrariesList()
     }
 
     private static openLibraryAction(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
@@ -128,6 +138,19 @@ export class CQLLibrariesPage {
     public static validateCQLLibraryName(expectedValue: string): void {
         TestData.readCqlLibraryId().then((libraryId) => {
             cy.get(this.libraryContentSelector(libraryId)).should('contain', expectedValue)
+        })
+    }
+
+    public static selectCreatedLibraryRow(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        this.goToLibrariesList()
+
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            cy.get(this.libraryContentSelector(libraryId), { timeout: 30000 }).should('be.visible')
+            cy.get(this.libraryContentSelector(libraryId))
+                .closest('tr')
+                .find('[data-testid$="_select"]', { timeout: 30000 })
+                .scrollIntoView()
+                .click()
         })
     }
 

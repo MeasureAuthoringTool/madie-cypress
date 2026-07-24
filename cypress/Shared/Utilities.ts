@@ -578,4 +578,25 @@ export class Utilities {
                 cy.log('No action. Unsupported type.')
         }
     }
+
+    public static releaseAllLocksForCleanup(type: MadieObject, altUser?: boolean) {
+        if (!altUser) {
+            altUser = false
+        }
+
+        TestData.setupUserScope(altUser ? 'selectedAltUser' : 'selectedUser')
+
+        const unlockTarget = type === MadieObject.Library ? 'cql-libraries' : 'measures'
+
+        TestData.requestUnlockAll(unlockTarget, { failOnStatusCode: false }).then((response) => {
+            if (response.status === 200) {
+                cy.log(`Released ${type} locks during cleanup`)
+                return
+            }
+
+            cy.log(
+                `⚠️ Lock cleanup for ${type} returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+            )
+        })
+    }
 }

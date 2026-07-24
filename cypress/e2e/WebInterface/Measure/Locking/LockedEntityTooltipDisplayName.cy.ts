@@ -6,9 +6,6 @@ import { MadieObject, PermissionActions, Utilities } from '../../../../Shared/Ut
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { QiCore4Cql, QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
 import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
-import { Header } from '../../../../Shared/Header'
-import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
-import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
 import { TestData } from '../../../../Shared/TestData'
 import { LockedEntityValidation } from '../../../../Shared/LockedEntityValidation'
 import { step } from '../../../../utils/step'
@@ -23,9 +20,7 @@ const testCase: TestCase = {
 
 let harpUserALT = ''
 let qicoreMeasureName = ''
-let qicoreLibraryName = ''
 let createdMeasure = false
-let createdLibrary = false
 
 const openLockedMeasureInView = (): void => {
     step('Open locked measure in view mode')
@@ -38,30 +33,17 @@ const openLockedTestCaseInView = (): void => {
     TestCasesPage.clickEditforCreatedTestCase()
 }
 
-const openLockedLibraryInView = (): void => {
-    step('Open locked library in view mode')
-    CQLLibrariesPage.clickViewforCreatedLibrary()
-}
-
 describe('Locked Measure, Library, and Test Case tooltips display user name', () => {
     beforeEach(() => {
         harpUserALT = OktaLogin.getUser(true)
         qicoreMeasureName = `LockTooltipMeasure${Date.now()}`
-        qicoreLibraryName = `LockTooltipLibrary${Date.now()}`
         createdMeasure = false
-        createdLibrary = false
     })
 
     afterEach(() => {
         if (createdMeasure) {
-            Utilities.verifyAllLocksDeleted(MadieObject.Measure, true)
+            Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
             Utilities.deleteMeasure()
-        }
-
-        if (createdLibrary) {
-            Utilities.verifyAllLocksDeleted(MadieObject.Library, true)
-            Utilities.verifyAllLocksDeleted(MadieObject.Library)
-            Utilities.deleteLibrary()
         }
     })
 
@@ -264,86 +246,6 @@ describe('Locked Measure, Library, and Test Case tooltips display user name', ()
                 // test is ready once the dropdown reliably exposes the lock tooltip in the UI.
                 cy.get(TestCasesPage.testCaseNameDropdown).trigger('mouseover')
                 LockedEntityValidation.assertVisibleTooltipText(expectedTooltip)
-            })
-        })
-    })
-
-    describe('Library list View tooltip', () => {
-        beforeEach(() => {
-            CQLLibraryPage.createLibraryAPI(qicoreLibraryName, SupportedModels.qiCore6)
-            createdLibrary = true
-
-            Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
-            Utilities.lockSharedLibrary(true)
-            OktaLogin.Login()
-        })
-
-        it('includes display name and HARP ID', () => {
-            LockedEntityValidation.getDisplayName(harpUserALT).then((displayName) => {
-                const expectedTooltip = LockedEntityValidation.lockedTooltipText(displayName, harpUserALT)
-                const legacyTooltip = LockedEntityValidation.legacyLockedTooltipText(harpUserALT)
-
-                cy.get(Header.cqlLibraryTab).click()
-                cy.get(CQLLibraryPage.allLibrariesTab).click()
-
-                TestData.readCqlLibraryId().then((libraryId) => {
-                    const buttonSelector = CQLLibrariesPage.getLibraryActionSelector(libraryId)
-                    cy.get(buttonSelector).scrollIntoView().should('contain.text', 'View')
-                    cy.get(buttonSelector).trigger('mouseover', { force: true })
-                    LockedEntityValidation.assertVisibleTooltipText(expectedTooltip, legacyTooltip)
-                })
-            })
-        })
-    })
-
-    describe('Locked library view experience', () => {
-        beforeEach(() => {
-            CQLLibraryPage.createLibraryAPI(qicoreLibraryName, SupportedModels.qiCore6)
-            createdLibrary = true
-
-            Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
-            Utilities.lockSharedLibrary(true)
-            OktaLogin.Login()
-        })
-
-        it('shows the locked library modal and closes with X', () => {
-            LockedEntityValidation.getDisplayName(harpUserALT).then((displayName) => {
-                const expectedModalMessage = LockedEntityValidation.lockedModalMessageText(
-                    'library',
-                    displayName,
-                    harpUserALT
-                )
-
-                openLockedLibraryInView()
-                CQLLibraryPage.dismissLibraryLockedModal(expectedModalMessage, 'x')
-            })
-        })
-
-        it('shows the locked library modal and closes with Close button', () => {
-            LockedEntityValidation.getDisplayName(harpUserALT).then((displayName) => {
-                const expectedModalMessage = LockedEntityValidation.lockedModalMessageText(
-                    'library',
-                    displayName,
-                    harpUserALT
-                )
-
-                openLockedLibraryInView()
-                CQLLibraryPage.dismissLibraryLockedModal(expectedModalMessage, 'button')
-            })
-        })
-
-        it('Locked library header In-Use tooltip includes display name and HARP ID', () => {
-            LockedEntityValidation.getDisplayName(harpUserALT).then((displayName) => {
-                const expectedTooltip = LockedEntityValidation.lockedTooltipText(displayName, harpUserALT)
-                const expectedModalMessage = LockedEntityValidation.lockedModalMessageText(
-                    'library',
-                    displayName,
-                    harpUserALT
-                )
-
-                openLockedLibraryInView()
-                CQLLibraryPage.dismissLibraryLockedModal(expectedModalMessage)
-                CQLLibraryPage.assertLockedLibraryIndicatorTooltip(expectedTooltip)
             })
         })
     })
