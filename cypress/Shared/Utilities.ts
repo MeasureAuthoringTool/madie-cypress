@@ -584,8 +584,7 @@ export class Utilities {
             altUser = false
         }
 
-        const cleanupOwner: FixtureOwner = altUser ? ('selectedAlt' + 'User') as FixtureOwner : ('selected' + 'User') as FixtureOwner
-        TestData.setupUserScope(cleanupOwner)
+        OktaLogin.setupUserSession(altUser)
 
         const unlockTarget = type === MadieObject.Library ? 'cql-libraries' : 'measures'
 
