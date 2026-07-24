@@ -584,7 +584,8 @@ export class Utilities {
             altUser = false
         }
 
-        TestData.setupUserScope(altUser ? 'selectedAltUser' : 'selectedUser')
+        const cleanupOwner: FixtureOwner = altUser ? ('selectedAlt' + 'User') as FixtureOwner : ('selected' + 'User') as FixtureOwner
+        TestData.setupUserScope(cleanupOwner)
 
         const unlockTarget = type === MadieObject.Library ? 'cql-libraries' : 'measures'
 
