@@ -6,6 +6,7 @@ import { CQLEditorPage } from './CQLEditorPage'
 import { MeasuresPage } from './MeasuresPage'
 import { step } from '../utils/step'
 import { FixtureOwner, TestData } from './TestData'
+import { LockedEntityValidation } from './LockedEntityValidation'
 
 export type TestCase = {
   title: string
@@ -300,6 +301,8 @@ export class TestCasesPage {
   public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
   public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
   public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
+  public static readonly testCaseNameDropdownLockedIcon = `${TestCasesPage.testCaseNameDropdown} [data-testid="locked-icon"]`
+  public static readonly testCaseNameDropdownOptions = 'li[role="option"]'
   public static readonly testCaseListCheckBox = '.px-1 > input'
   public static readonly testCaseLockedModalMessage = '[data-testid="test case-locked-modal-message"]'
   public static readonly testCaseLockedModalMessageText = '[data-testid="test case-locked-modal-message"] p'
@@ -1141,6 +1144,45 @@ export class TestCasesPage {
         cy.url({ timeout: 60000 }).should('include', `/test-cases/${tcId}`)
         cy.get(this.detailsTab, { timeout: 60000 }).should('be.visible')
       })
+  }
+
+  public static assertSelectedLockedTestCaseDropdownTooltip(expectedTooltip: string): void {
+    step('Assert locked test case dropdown selected value tooltip')
+
+    cy.get(this.testCaseNameDropdownLockedIcon)
+      .should('be.visible')
+      .trigger('mouseover', { force: true })
+
+    cy.get(this.testCaseNameDropdownLockedIcon)
+      .invoke('attr', 'aria-label')
+      .then((ariaLabel) => {
+        expect((ariaLabel ?? '').trim()).to.contain(expectedTooltip)
+      })
+  }
+
+  public static assertLockedTestCaseDropdownOptionTooltip(optionText: string, expectedTooltip: string): void {
+    step('Assert locked test case dropdown option tooltip')
+
+    cy.get(this.testCaseNameDropdown).should('be.visible').click()
+    cy.contains(this.testCaseNameDropdownOptions, optionText, { timeout: 30000 })
+      .should('be.visible')
+      .as('lockedTestCaseOption')
+
+    cy.get('@lockedTestCaseOption').trigger('mouseover', { force: true })
+    cy.get('@lockedTestCaseOption')
+      .find('[data-testid="locked-icon"]')
+      .should('be.visible')
+      .trigger('mouseover', { force: true })
+      .invoke('attr', 'aria-label')
+      .then((ariaLabel) => {
+        expect((ariaLabel ?? '').trim()).to.contain(expectedTooltip)
+      })
+
+    cy.get('body').then(($body) => {
+      if ($body.find('.MuiTooltip-tooltip').length > 0) {
+        LockedEntityValidation.assertVisibleTooltipText(expectedTooltip)
+      }
+    })
   }
 
   public static CreateTestCaseAPI(
