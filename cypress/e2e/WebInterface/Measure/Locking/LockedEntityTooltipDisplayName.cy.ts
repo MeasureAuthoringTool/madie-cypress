@@ -17,6 +17,11 @@ const testCase: TestCase = {
     group: 'PASS',
     description: 'Used for locked test case tooltip coverage'
 }
+const secondTestCase: TestCase = {
+    title: 'Unlocked companion test case',
+    group: 'PASS',
+    description: 'Used for locked dropdown tooltip coverage'
+}
 
 let harpUserALT = ''
 let qicoreMeasureName = ''
@@ -31,6 +36,12 @@ const openLockedTestCaseInView = (): void => {
     step('Open locked test case in view mode')
     MeasuresPage.actionCenter('edit')
     TestCasesPage.clickEditforCreatedTestCase()
+}
+
+const openUnlockedSecondTestCaseInView = (): void => {
+    step('Open unlocked second test case in view mode')
+    MeasuresPage.actionCenter('edit')
+    TestCasesPage.clickEditforCreatedTestCase(true)
 }
 
 describe('Locked Measure, Library, and Test Case tooltips display user name', () => {
@@ -158,6 +169,14 @@ describe('Locked Measure, Library, and Test Case tooltips display user name', ()
                 'boolean'
             )
             TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description)
+            TestCasesPage.CreateTestCaseAPI(
+                secondTestCase.title,
+                secondTestCase.group,
+                secondTestCase.description,
+                undefined,
+                false,
+                true
+            )
 
             Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
             Utilities.lockSharedTestCase(true)
@@ -198,6 +217,14 @@ describe('Locked Measure, Library, and Test Case tooltips display user name', ()
                 'boolean'
             )
             TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description)
+            TestCasesPage.CreateTestCaseAPI(
+                secondTestCase.title,
+                secondTestCase.group,
+                secondTestCase.description,
+                undefined,
+                false,
+                true
+            )
 
             Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
             Utilities.lockSharedTestCase(true)
@@ -230,7 +257,7 @@ describe('Locked Measure, Library, and Test Case tooltips display user name', ()
             })
         })
 
-        it.skip('Locked test case dropdown tooltip includes display name and HARP ID', () => {
+        it('Locked test case dropdown selected value tooltip includes display name and HARP ID', () => {
             LockedEntityValidation.getDisplayName(harpUserALT).then((displayName) => {
                 const expectedTooltip = LockedEntityValidation.lockedTooltipText(displayName, harpUserALT)
                 const expectedModalMessage = LockedEntityValidation.lockedModalMessageText(
@@ -241,11 +268,16 @@ describe('Locked Measure, Library, and Test Case tooltips display user name', ()
 
                 openLockedTestCaseInView()
                 TestCasesPage.dismissTestCaseLockedModal(expectedModalMessage)
+                TestCasesPage.assertSelectedLockedTestCaseDropdownTooltip(expectedTooltip)
+            })
+        })
 
-                // The Jira notes this tooltip has a separate app bug. Keep the assertion here so the
-                // test is ready once the dropdown reliably exposes the lock tooltip in the UI.
-                cy.get(TestCasesPage.testCaseNameDropdown).trigger('mouseover')
-                LockedEntityValidation.assertVisibleTooltipText(expectedTooltip)
+        it('Locked test case dropdown option tooltip includes display name and HARP ID when another test case is selected', () => {
+            LockedEntityValidation.getDisplayName(harpUserALT).then((displayName) => {
+                const expectedTooltip = LockedEntityValidation.lockedTooltipText(displayName, harpUserALT)
+
+                openUnlockedSecondTestCaseInView()
+                TestCasesPage.assertLockedTestCaseDropdownOptionTooltip(testCase.title, expectedTooltip)
             })
         })
     })
