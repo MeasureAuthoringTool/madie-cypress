@@ -61,6 +61,10 @@ export class CQLLibrariesPage {
         return `[data-testid="cql-library-action-${libraryId}"]`
     }
 
+    public static getLibraryActionSelector(libraryId: string): string {
+        return this.libraryActionSelector(libraryId)
+    }
+
     private static libraryContentSelector(libraryId: string): string {
         return `[data-testid="cqlLibrary-button-${libraryId}-content"]`
     }

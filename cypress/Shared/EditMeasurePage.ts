@@ -1,6 +1,7 @@
 import { MeasureActionOptions, MeasuresPage } from './MeasuresPage'
 import { Utilities } from './Utilities'
 import { TestCasesPage } from './TestCasesPage'
+import { step } from '../utils/step'
 
 export enum EditMeasureActions {
     export = 'export',
@@ -12,6 +13,8 @@ export enum EditMeasureActions {
     transfer = 'transfer',
     viewHistory = 'viewHistory',
 }
+
+export type MeasureLockedModalCloseMethod = 'x' | 'button'
 
 export class EditMeasurePage {
     //dirty modal
@@ -39,6 +42,9 @@ export class EditMeasurePage {
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
     public static readonly humanReadableEcqmTitle = '.ecqm-title'
+    public static readonly measureLockedModalMessage = '[data-testid="measure-locked-modal-message"]'
+    public static readonly measureLockedModalCloseButton = '[data-testid="measure-locked-modal-close-button"]'
+    public static readonly measureLockedModalCloseIcon = '[data-testid="close-button"]'
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
@@ -237,6 +243,65 @@ export class EditMeasurePage {
         '[data-testid="measure-clinical-recommendation-statement-save"]'
     public static readonly measureClinicalRecommendationSuccessMessage =
         '[data-testid="measureClinical Recommendation StatementSuccess"]'
+
+    private static normalizeOverlayText(text: string): string {
+        return text
+            .replace(/\s+/g, ' ')
+            .replace(/\. (?=[A-Z])/g, '.')
+            .replace(/\.(?=[A-Z])/g, '.')
+            .replace(/by(?=[A-Z])/g, 'by ')
+            .trim()
+    }
+
+    public static getLockedIndicatorChipSelector(measureName: string): string {
+        return `[data-testid="measure-${measureName}-inuse-chip"]`
+    }
+
+    public static assertMeasureLockedModalMessage(expectedText: string): void {
+        cy.get(this.measureLockedModalMessage).should(($message) => {
+            const actualText = this.normalizeOverlayText($message.text())
+            const normalizedExpectedText = this.normalizeOverlayText(expectedText)
+            expect(actualText).to.contain(normalizedExpectedText)
+        })
+    }
+
+    public static closeMeasureLockedModalByX(): void {
+        step('Close locked measure modal with X')
+        cy.get(this.measureLockedModalCloseIcon).should('be.visible').click()
+        cy.get(this.measureLockedModalMessage).should('not.exist')
+    }
+
+    public static closeMeasureLockedModalByButton(): void {
+        step('Close locked measure modal with Close button')
+        cy.get(this.measureLockedModalCloseButton).should('be.visible').click()
+        cy.get(this.measureLockedModalMessage).should('not.exist')
+    }
+
+    public static dismissMeasureLockedModal(
+        expectedText: string,
+        closeMethod: MeasureLockedModalCloseMethod = 'button'
+    ): void {
+        step('Assert locked measure modal message')
+        this.assertMeasureLockedModalMessage(expectedText)
+
+        if (closeMethod === 'x') {
+            this.closeMeasureLockedModalByX()
+            return
+        }
+
+        this.closeMeasureLockedModalByButton()
+    }
+
+    public static assertLockedIndicatorTooltip(measureName: string, expectedTooltip: string): void {
+        const chipSelector = this.getLockedIndicatorChipSelector(measureName)
+
+        cy.get(chipSelector).should('be.visible').trigger('mouseover', { force: true })
+        cy.get('.MuiTooltip-tooltip').should(($tooltip) => {
+            const actualTooltip = this.normalizeOverlayText($tooltip.text())
+            const normalizedExpectedTooltip = this.normalizeOverlayText(expectedTooltip)
+            expect(actualTooltip).to.contain(normalizedExpectedTooltip)
+        })
+    }
 
     public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
         cy.get(this.editMeasureButtonActionBtn).click()

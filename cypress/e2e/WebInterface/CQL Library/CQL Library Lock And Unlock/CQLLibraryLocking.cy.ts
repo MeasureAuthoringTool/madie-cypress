@@ -3,18 +3,16 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MadieObject, Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { LockedEntityValidation } from "../../../../Shared/LockedEntityValidation"
 
-let CQLLibraryName = 'LibraryLocking' + Date.now()
 let newCQLLibraryName = ''
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserAlt = ''
 
 describe('CQL Library Locking Validations', () => {
 
     beforeEach('Create CQL Library', () => {
-
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
+        newCQLLibraryName = `LibraryLocking${Date.now()}${Math.floor((Math.random() * 1000) + 1)}`
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
     })
@@ -28,7 +26,7 @@ describe('CQL Library Locking Validations', () => {
 
         //Lock CQL Library with ALT User
         cy.setAccessTokenCookie()
-        Utilities.lockControl(MadieObject.Library, true, true)
+        Utilities.lockSharedLibrary(true)
 
         //Login as Regular user
         OktaLogin.SessionLogin()
@@ -50,7 +48,7 @@ describe('CQL Library Locking Validations', () => {
 
         //Lock CQL Library with ALT User
         cy.setAccessTokenCookie()
-        Utilities.lockControl(MadieObject.Library, true, true)
+        Utilities.lockSharedLibrary(true)
 
         //Login as Regular user
         OktaLogin.SessionLogin()
@@ -60,8 +58,15 @@ describe('CQL Library Locking Validations', () => {
         CQLLibrariesPage.clickViewforCreatedLibrary()
 
         //Assert text on the popup screen
-        cy.get('.MuiBox-root').should('contain.text', 'Library currently In-Use')
-        cy.get('.MuiTypography-root > div').should('contain.text', 'This library is currently being edited by HARP ID ' + harpUserAlt + '. You will be unable to make changes at this time.')
+        LockedEntityValidation.getDisplayName(harpUserAlt).then((displayName) => {
+            const expectedMessage = LockedEntityValidation.lockedModalMessageText('library', displayName, harpUserAlt)
+            const legacyMessage = LockedEntityValidation.legacyLockedModalMessageText('library', harpUserAlt)
+
+            cy.get('.MuiBox-root').should('contain.text', 'Library currently In-Use')
+            cy.get('.MuiTypography-root > div').should(($message) => {
+                LockedEntityValidation.assertTextContainsExpectedOption($message.text(), expectedMessage, legacyMessage)
+            })
+        })
 
         //Delete Library Locks
         Utilities.verifyAllLocksDeleted(MadieObject.Library, true)

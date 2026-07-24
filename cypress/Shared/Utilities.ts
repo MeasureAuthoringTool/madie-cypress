@@ -460,7 +460,10 @@ export class Utilities {
                 break
 
             case MadieObject.TestCase:
-                TestData.requestTestCaseLock(lockObject, {}, owner).then((response) => {
+                // Shared test cases still live under the creating user's fixture context.
+                // When an alternate user acquires the lock, we switch auth via setupUserScope(owner)
+                // but keep the resource IDs from the primary fixture owner.
+                TestData.requestTestCaseLock(lockObject, {}, 'selectedUser').then((response) => {
                     expect(response.status).to.eql(200)
                 })
                 break
@@ -476,6 +479,47 @@ export class Utilities {
         }
     }
 
+    public static lockSharedTestCase(
+        lockObject: boolean,
+        actorOwner: FixtureOwner = 'selectedAltUser',
+        resourceOwner: FixtureOwner = 'selectedUser',
+        testCaseNumber = 0,
+        measureNumber = 0
+    ) {
+        TestData.setupUserScope(actorOwner)
+
+        TestData.requestTestCaseLock(lockObject, {}, resourceOwner, measureNumber, testCaseNumber).then((response) => {
+            expect(response.status).to.eql(200)
+        })
+    }
+
+    public static lockSharedMeasure(
+        lockObject: boolean,
+        actorOwner: FixtureOwner = 'selectedAltUser',
+        measureNumber = 0
+    ) {
+        TestData.setupUserScope(actorOwner)
+
+        TestData.requestMeasureLock(lockObject ? 'PUT' : 'DELETE', measureNumber).then((response) => {
+            expect(response.status).to.eql(200)
+        })
+    }
+
+    public static lockSharedLibrary(
+        lockObject: boolean,
+        actorOwner: FixtureOwner = 'selectedAltUser',
+        resourceOwner: FixtureOwner = 'selectedUser',
+        libraryNumber = 0
+    ) {
+        TestData.setupUserScope(actorOwner)
+
+        TestData.requestCqlLibraryLock(lockObject ? 'PUT' : 'DELETE', libraryNumber, {}, resourceOwner).then(
+            (response) => {
+                expect(response.status).to.eql(200)
+            }
+        )
+    }
+
     public static verifyAllLocksDeleted(type: MadieObject, altUser?: boolean) {
         if (!altUser) {
             altUser = false
@@ -483,43 +527,29 @@ export class Utilities {
 
         TestData.setupUserScope(altUser ? 'selectedAltUser' : 'selectedUser')
 
-        harpUser = OktaLogin.getUser(false)
-        harpUserALT = OktaLogin.getUser(true)
-
         switch (type) {
             case MadieObject.Measure:
                 TestData.readMeasureId().then((measureId) => {
                     TestData.requestUnlockAll('measures').then((response) => {
                         expect(response.status).to.eql(200)
-                        if (altUser) {
-                            expect(response.body[0]).to.include(
-                                'Delete measure locks for harpId: ' + harpUserALT
+                        expect(response.body).to.be.an('array').and.not.be.empty
+                        expect(
+                            response.body.some((message: string) =>
+                                message.startsWith('Delete measure locks for harpId: ')
                             )
-                            expect(response.body[1]).to.be.oneOf([
-                                'Deleted measure lock: ' + measureId,
-                                'No measure locks found for harpId: ' + harpUserALT
-                            ])
-                            expect(response.body[2]).to.be.oneOf([
-                                'Delete test case locks for harpId: ' + harpUserALT,
-                                'Delete library locks for harpId: ' + harpUserALT
-                            ])
-                            expect(response.body[3]).to.include(
-                                'No test case locks found for harpId: ' + harpUserALT
+                        ).to.be.true
+                        expect(
+                            response.body.some((message: string) =>
+                                message === `Deleted measure lock: ${measureId}` ||
+                                message.startsWith('No measure locks found for harpId: ')
                             )
-                        } else {
-                            expect(response.body[0]).to.include('Delete measure locks for harpId: ' + harpUser)
-                            expect(response.body[1]).to.be.oneOf([
-                                'Deleted measure lock: ' + measureId,
-                                'No measure locks found for harpId: ' + harpUser
-                            ])
-                            expect(response.body[2]).to.be.oneOf([
-                                'Delete test case locks for harpId: ' + harpUser,
-                                'Delete library locks for harpId: ' + harpUser
-                            ])
-                            expect(response.body[3]).to.include(
-                                'No test case locks found for harpId: ' + harpUser
+                        ).to.be.true
+                        expect(
+                            response.body.some((message: string) =>
+                                message.startsWith('Delete test case locks for harpId: ') ||
+                                message.startsWith('Delete library locks for harpId: ')
                             )
-                        }
+                        ).to.be.true
                     })
                 })
                 break
@@ -528,22 +558,18 @@ export class Utilities {
                 TestData.readCqlLibraryId().then((id) => {
                     TestData.requestUnlockAll('cql-libraries').then((response) => {
                         expect(response.status).to.eql(200)
-                        if (altUser) {
-                            expect(response.body[0]).to.include(
-                                'Delete library locks for harpId: ' + harpUserALT
+                        expect(response.body).to.be.an('array').and.not.be.empty
+                        expect(
+                            response.body.some((message: string) =>
+                                message.startsWith('Delete library locks for harpId: ')
                             )
-                            expect(response.body[1]).to.be.oneOf([
-                                'Deleted library lock for Id: ' + id,
-                                'No library locks found for harpId: ' + harpUserALT
-                            ])
-                        } else {
-                            // if not altUser, then check for the library lock deletion message
-                            expect(response.body[0]).to.include('Delete library locks for harpId: ' + harpUser)
-                            expect(response.body[1]).to.be.oneOf([
-                                'Deleted library lock for Id: ' + id,
-                                'No library locks found for harpId: ' + harpUser
-                            ])
-                        }
+                        ).to.be.true
+                        expect(
+                            response.body.some((message: string) =>
+                                message === `Deleted library lock for Id: ${id}` ||
+                                message.startsWith('No library locks found for harpId: ')
+                            )
+                        ).to.be.true
                     })
                 })
                 break

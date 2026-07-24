@@ -112,7 +112,7 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
 
     it('When QiCore measure is locked & lock is visible, the action center button is disabled with message tooltip', () => {
         // sets lock on QiCore measure by altUser
-        Utilities.lockControl(MadieObject.Measure, true, true)
+        Utilities.lockSharedMeasure(true)
 
         // this ensures we load the list with visibility of the lock & that we reset the tokens correctly
         OktaLogin.Login()
@@ -135,13 +135,13 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
         )
 
         // Delete the lock we created for this scenario without depending on shared user-name assertions.
-        Utilities.lockControl(MadieObject.Measure, false, true)
+        Utilities.lockSharedMeasure(false)
     })
 
     // we can't do this scenario right now - we'd need a big refactor or enhancement for handling access tokens
     it.skip('When QiCore measure is locked & lock is NOT visible, the Associate Measure modal fails with error message', () => {
         // sets lock on QiCore measure by altUser
-        Utilities.lockControl(MadieObject.Measure, true, true)
+        Utilities.lockSharedMeasure(true)
 
         // need to reset tokens here for main user?
         // goal: set lock with alt & continue process with main, no refreshes

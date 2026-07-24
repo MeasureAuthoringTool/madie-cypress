@@ -23,6 +23,8 @@ export enum TestCaseAction {
   shiftDates,
 }
 
+export type TestCaseLockedModalCloseMethod = 'x' | 'button'
+
 export class TestCasesPage {
   //Composite Measure Test Case Page
   public static readonly compositeAvailableTab = '[data-testid="create-tab"]'
@@ -299,6 +301,10 @@ export class TestCasesPage {
   public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
   public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
   public static readonly testCaseListCheckBox = '.px-1 > input'
+  public static readonly testCaseLockedModalMessage = '[data-testid="test case-locked-modal-message"]'
+  public static readonly testCaseLockedModalMessageText = '[data-testid="test case-locked-modal-message"] p'
+  public static readonly testCaseLockedModalCloseButton = '[data-testid="test case-locked-modal-close-button"]'
+  public static readonly testCaseLockedModalCloseIcon = 'button[aria-label="Close"]'
 
   //Stratifications
   public static readonly initialPopulationStratificationExpectedValue =
@@ -452,6 +458,10 @@ export class TestCasesPage {
     return altUser ? 'selectedAltUser' : 'selectedUser'
   }
 
+  public static getViewEditTestCaseButtonSelector(testCaseId: string): string {
+    return `[data-testid="view-edit-test-case-button-${testCaseId}"]`
+  }
+
   private static testCaseIdFixtureName(twoTestCases?: boolean): string {
     return twoTestCases ? 'testCaseId2' : 'testCaseId'
   }
@@ -462,6 +472,53 @@ export class TestCasesPage {
 
   private static measureNumber(secondMeasure?: boolean, measureNumber = 0): number {
     return secondMeasure ? 2 : measureNumber
+  }
+
+  private static normalizeOverlayText(text: string): string {
+    return text
+      .replace(/\s+/g, ' ')
+      .replace(/\. (?=[A-Z])/g, '.')
+      .replace(/\.(?=[A-Z])/g, '.')
+      .replace(/by(?=[A-Z])/g, 'by ')
+      .trim()
+  }
+
+  public static assertTestCaseLockedModalMessage(expectedText: string): void {
+    cy.get(this.testCaseLockedModalMessage).should('be.visible')
+    cy.get(this.testCaseLockedModalMessageText).should(($message) => {
+      const messageNode = $message.get(0)
+      const rawText = messageNode?.innerText || messageNode?.textContent || $message.text()
+      const actualText = this.normalizeOverlayText(String(rawText))
+      const normalizedExpectedText = this.normalizeOverlayText(expectedText)
+      expect(actualText, `actual test case modal text: ${actualText}`).to.contain(normalizedExpectedText)
+    })
+  }
+
+  public static closeTestCaseLockedModalByX(): void {
+    step('Close locked test case modal with X')
+    cy.get(this.testCaseLockedModalCloseIcon).should('be.visible').click()
+    cy.get(this.testCaseLockedModalMessage).should('not.exist')
+  }
+
+  public static closeTestCaseLockedModalByButton(): void {
+    step('Close locked test case modal with Close button')
+    cy.get(this.testCaseLockedModalCloseButton).should('be.visible').click()
+    cy.get(this.testCaseLockedModalMessage).should('not.exist')
+  }
+
+  public static dismissTestCaseLockedModal(
+    expectedText: string,
+    closeMethod: TestCaseLockedModalCloseMethod = 'button'
+  ): void {
+    step('Assert locked test case modal message')
+    this.assertTestCaseLockedModalMessage(expectedText)
+
+    if (closeMethod === 'x') {
+      this.closeTestCaseLockedModalByX()
+      return
+    }
+
+    this.closeTestCaseLockedModalByButton()
   }
 
   public static qdmStratifiedMeasureObservationExpectedValue(index: number): string {
@@ -1069,7 +1126,7 @@ export class TestCasesPage {
 
     TestData.readTestCaseId(secondTestCase ? 2 : 0)
       .then((tcId) => {
-        const buttonSelector = `[data-testid=view-edit-test-case-button-${tcId}]`
+        const buttonSelector = this.getViewEditTestCaseButtonSelector(tcId)
 
         this.clickVisibleEnabled(buttonSelector, 30000)
 

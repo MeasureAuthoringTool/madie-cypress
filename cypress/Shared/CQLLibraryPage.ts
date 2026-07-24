@@ -8,6 +8,7 @@ import { SupportedModels } from './CreateMeasurePage'
 import { MeasureRow } from './MeasuresPage'
 import { OktaLogin } from './OktaLogin'
 import { FixtureOwner, TestData } from './TestData'
+import { step } from '../utils/step'
 
 export enum EditLibraryActions {
     delete,
@@ -17,6 +18,8 @@ export enum EditLibraryActions {
     transfer,
     viewHistory,
 }
+
+export type LibraryLockedModalCloseMethod = 'x' | 'button'
 
 export type CreateLibraryOptions = {
     model?: SupportedModels
@@ -84,6 +87,12 @@ export class CQLLibraryPage {
     public static readonly editSavedLibraryAlias = '[data-testid="library-alias-input"]'
     public static readonly libraryInfoPanel = '#page-header'
     public static readonly draftBubble = '[data-testid="draft-chip"]'
+    public static readonly libraryLockedModalMessage = '[data-testid="library-locked-popup-message"]'
+    public static readonly libraryLockedModalCloseButton = '[data-testid="library-locked-popup-close-button"]'
+    public static readonly libraryLockedModalCloseIcon = 'button[aria-label="Close"]'
+    public static readonly libraryLockedIndicator = '[data-testid^="lock-indicator-"]'
+    public static readonly libraryLockedIndicatorChip = '[data-testid$="-inuse-chip"]'
+    public static readonly libraryLockedIcon = '[data-testid="locked-icon"]'
 
     // Edit page action center
     public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
@@ -320,5 +329,66 @@ export class CQLLibraryPage {
                     cy.wrap(firstRow.children().eq(7)).should('have.text', expectedData.updated)
                 }
             })
+    }
+
+    private static normalizeOverlayText(text: string): string {
+        return text.replace(/\s+/g, ' ').trim()
+    }
+
+    public static assertLibraryLockedModalMessage(expectedText: string): void {
+        step('Assert locked library modal message')
+        cy.get(this.libraryLockedModalMessage).should('be.visible')
+        cy.get(this.libraryLockedModalMessage).should(($message) => {
+            const actualText = this.normalizeOverlayText($message.text())
+            expect(actualText).to.contain(expectedText)
+        })
+    }
+
+    public static closeLibraryLockedModalByX(): void {
+        step('Close locked library modal with X')
+        cy.get(this.libraryLockedModalCloseIcon).should('be.visible').click()
+        cy.get(this.libraryLockedModalMessage).should('not.exist')
+    }
+
+    public static closeLibraryLockedModalByButton(): void {
+        step('Close locked library modal with Close button')
+        cy.get(this.libraryLockedModalCloseButton).should('be.visible').click()
+        cy.get(this.libraryLockedModalMessage).should('not.exist')
+    }
+
+    public static dismissLibraryLockedModal(
+        expectedText: string,
+        closeMethod: LibraryLockedModalCloseMethod = 'button',
+    ): void {
+        this.assertLibraryLockedModalMessage(expectedText)
+
+        if (closeMethod === 'x') {
+            this.closeLibraryLockedModalByX()
+            return
+        }
+
+        this.closeLibraryLockedModalByButton()
+    }
+
+    public static assertLockedLibraryIndicatorTooltip(expectedTooltip: string): void {
+        step('Assert locked library header In-Use tooltip')
+        cy.get(this.libraryLockedIndicatorChip).should('be.visible').trigger('mouseover', { force: true })
+        cy.get('body').then(($body) => {
+            const tooltip = $body.find('.MuiTooltip-tooltip')
+
+            if (tooltip.length > 0) {
+                const actualTooltip = this.normalizeOverlayText(tooltip.text())
+                expect(actualTooltip).to.contain(expectedTooltip)
+                return
+            }
+
+            cy.get(this.libraryLockedIcon)
+                .should('be.visible')
+                .invoke('attr', 'aria-label')
+                .then((ariaLabel) => {
+                    const actualTooltip = this.normalizeOverlayText(ariaLabel ?? '')
+                    expect(actualTooltip).to.contain(expectedTooltip)
+                })
+        })
     }
 }

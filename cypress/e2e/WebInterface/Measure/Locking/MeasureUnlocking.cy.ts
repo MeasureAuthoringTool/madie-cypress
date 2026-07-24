@@ -67,7 +67,7 @@ describe('Measure Locking Validations', () => {
         //Lock Measure with ALT User
         const currentAltUser = Cypress.env('selectedAltUser')
         OktaLogin.setupUserSession(true)
-        Utilities.lockControl(MadieObject.Measure, true, true)
+        Utilities.lockSharedMeasure(true)
 
         //Login as Regular user
         OktaLogin.Login()
