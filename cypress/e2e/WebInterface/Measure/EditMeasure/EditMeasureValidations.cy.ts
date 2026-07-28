@@ -1,18 +1,21 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Math.floor(Math.random() * 1000 + 1)
 let measureName = ''
 let CqlLibraryName = ''
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const acceptedMeasureNameValues = ['(', ')', '<', '>', '%', '#', '&', '-', '/', "'", ':', ',', '%ZZ', '%3', '9%']
 
 describe('Edit Measure Validations', () => {
     before('Create Measure', () => {
         measureName = 'TestMeasure' + Date.now() + randValue
         CqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
     })
 
     beforeEach('Login', () => {
@@ -20,12 +23,10 @@ describe('Edit Measure Validations', () => {
     })
 
     after('Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify error messages when the edit measure name entered is invalid', () => {
-
         //Click on Edit Button, Verify error message when the Measure Name field is empty
         MeasuresPage.actionCenter('edit')
 
@@ -35,42 +36,80 @@ describe('Edit Measure Validations', () => {
 
         //Verify error message when the Edit Measure Name doesn't contain alphabets
         cy.get(EditMeasurePage.measureNameTextBox).type('66777')
-        cy.get(EditMeasurePage.measureNameFieldLevelError).should('contain.text', 'A Measure name must contain at least one letter.')
+        cy.get(EditMeasurePage.measureNameFieldLevelError).should(
+            'contain.text',
+            'A Measure name must contain at least one letter.'
+        )
 
         //Verify error message when the Measure Name has '_'
         cy.get(EditMeasurePage.measureNameTextBox).clear().type('Test_Measure')
-        cy.get(EditMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name must not contain \'_\' (underscores).')
+        cy.get(EditMeasurePage.measureNameFieldLevelError).should(
+            'contain.text',
+            "Measure Name must not contain '_' (underscores)."
+        )
 
         //Verify error message when the Measure Name has more than 500 characters
-        cy.get(EditMeasurePage.measureNameTextBox).clear().type('This test is for measure name validation.This test ' +
-            'is for measure name validation.This test is for measure name validation.This test is for measure name ' +
-            'validation.This test is for measure name validation.This test is for measure name validation.This test ' +
-            'is for measure name validation.This test is for measure name validation.This test is for measure name ' +
-            'validation.This test is for measure name validation.This test is for measure name validation.This test ' +
-            'is for measure name validation.This test is')
-        cy.get(EditMeasurePage.measureNameFieldLevelError).should('contain.text', 'A Measure name cannot be more than 500 characters.')
+        cy.get(EditMeasurePage.measureNameTextBox)
+            .clear()
+            .type(
+                'This test is for measure name validation.This test ' +
+                    'is for measure name validation.This test is for measure name validation.This test is for measure name ' +
+                    'validation.This test is for measure name validation.This test is for measure name validation.This test ' +
+                    'is for measure name validation.This test is for measure name validation.This test is for measure name ' +
+                    'validation.This test is for measure name validation.This test is for measure name validation.This test ' +
+                    'is for measure name validation.This test is'
+            )
+        cy.get(EditMeasurePage.measureNameFieldLevelError).should(
+            'contain.text',
+            'A Measure name cannot be more than 500 characters.'
+        )
+    })
+
+    acceptedMeasureNameValues.forEach((acceptedValue) => {
+        it(`Allows "${acceptedValue}" in the measure name`, () => {
+            const acceptedMeasureName = `Test ${acceptedValue} ${Date.now()}`
+
+            MeasuresPage.actionCenter('edit')
+            cy.intercept('PUT', '/api/measures/**').as('updateMeasureInformation')
+
+            cy.get(EditMeasurePage.measureNameTextBox).clear().type(acceptedMeasureName)
+            cy.get(EditMeasurePage.measureNameFieldLevelError).should('not.exist')
+            cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.enabled').click()
+            cy.wait('@updateMeasureInformation').then(({ response }) => {
+                expect(response?.statusCode, JSON.stringify(response?.body)).to.eq(200)
+            })
+
+            cy.reload()
+            cy.get(EditMeasurePage.measureNameTextBox).should('have.value', acceptedMeasureName)
+        })
     })
 
     it('Verify error message when the eCQM abbreviated title entered is invalid or empty', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //eCQM abbreviated title empty
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).clear().focus().blur()
-        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should('contain.text', 'eCQM Abbreviated Title is required')
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should(
+            'contain.text',
+            'eCQM Abbreviated Title is required'
+        )
 
         //Verify if create measure button is disabled
         cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.disabled')
 
         //eCQM abbreviated title more than 32 characters
-        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).clear().type('This test is for measure name validation.This test is')
-        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should('contain.text', 'eCQM Abbreviated Title cannot be more than 32 characters')
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox)
+            .clear()
+            .type('This test is for measure name validation.This test is')
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should(
+            'contain.text',
+            'eCQM Abbreviated Title cannot be more than 32 characters'
+        )
 
         cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.disabled')
     })
 
     it('Verify error message when the endorsement id is null or invalid', () => {
-
         MeasuresPage.actionCenter('edit')
 
         //Add invalid Endorser Number
@@ -88,10 +127,8 @@ describe('Edit Measure Validations', () => {
 })
 
 describe('Measurement Period Validations', () => {
-
     beforeEach('Create measure and login', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         measureName = 'TestMeasure' + Date.now() + randValue
         CqlLibraryName = 'MeasurementPeriodTestLibrary' + Date.now() + randValue
 
@@ -100,53 +137,68 @@ describe('Measurement Period Validations', () => {
     })
 
     afterEach('Clean up Measures', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
-
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpEnd).clear().type('01/01/1999')
         cy.get(EditMeasurePage.mpStart).clear().type('12/01/2022')
-        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period ' +
-            'end date should be greater than measurement period start date.')
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should(
+            'contain.text',
+            'Measurement period ' + 'end date should be greater than measurement period start date.'
+        )
     })
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
-
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).type('{selectall}{backspace}{backspace}{backspace}')
         cy.get(EditMeasurePage.mpStart).focus().blur()
-        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Measurement period start date is required')
+        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should(
+            'contain.text',
+            'Measurement period start date is required'
+        )
         cy.get(EditMeasurePage.mpEnd).type('{selectall}{backspace}{backspace}{backspace}')
         cy.get(EditMeasurePage.mpEnd).focus().blur()
-        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period end date is required')
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should(
+            'contain.text',
+            'Measurement period end date is required'
+        )
     })
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
-
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).clear().type('01/01/1800')
         cy.get(EditMeasurePage.mpEnd).click()
-        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Start date should be between the years 1900 and 2099.')
+        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should(
+            'contain.text',
+            'Start date should be between the years 1900 and 2099.'
+        )
         cy.get(EditMeasurePage.mpEnd).clear().type('01/01/1800')
         cy.get(EditMeasurePage.mpStart).click()
-        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'End date should be between the years 1900 and 2099.')
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should(
+            'contain.text',
+            'End date should be between the years 1900 and 2099.'
+        )
     })
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
-
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).clear().type('2020/01/02')
         cy.get(EditMeasurePage.mpEnd).click()
-        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
+        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should(
+            'contain.text',
+            'Invalid date format. (mm/dd/yyyy)'
+        )
         cy.get(EditMeasurePage.mpEnd).clear().type('2021/01/02')
         cy.get(EditMeasurePage.mpStart).click()
-        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should(
+            'contain.text',
+            'Invalid date format. (mm/dd/yyyy)'
+        )
     })
 })
