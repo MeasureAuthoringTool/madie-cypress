@@ -54,8 +54,12 @@ When a Cypress interaction appears to shift a split-view layout:
 
 1. Reproduce it in headed Chrome and record a video before changing shared helpers.
 2. Compare one interaction change at a time; do not infer a visible regression from an internal `scrollLeft` value alone.
-3. Keep the JSON-editor tab activation inside `TestCasesPage.editTestCaseJson(...)`. Its native button activation is intentional because Cypress actionability scrolling changed the observed split-view layout during JSON-editor flows.
-4. Do not generalize a JSON-editor finding to the Expected/Actual panel. Expected/Actual has its own shared readiness and panel-normalization path and must be validated independently.
+3. Keep JSON, Details, and test-case return tab activation behind the shared `TestCasesPage` native activation path. Do not replace it with Cypress `.click()` or `.scrollIntoView()`; Cypress actionability scrolling can move the split view.
+4. A clipped editor tab can be a valid native activation target. Assert that it exists and is not `aria-disabled`; do not require `be.visible` when overflow clipping is the known layout state.
+5. Check the element type before using `be.enabled`. jQuery enablement semantics apply to form controls, not anchor-backed MUI tabs; use `aria-disabled` for those anchors.
+6. Ace deliberately renders its keyboard-capture textarea with `opacity: 0`. Assert readiness on `[data-testid="test-case-json-editor"]`, then use `TestCasesPage.editTestCaseJson(...)` for the intentionally hidden input interaction.
+7. If a controlled React input clears and then restores its prior value, remove retry assertions between clear and type. Keep the two actions contiguous, re-query the input, and assert the final value.
+8. Do not generalize a JSON-editor finding to the Expected/Actual panel. Expected/Actual has its own shared readiness and panel-normalization path and must be validated independently.
 
 ## Selector Debugging
 

@@ -752,28 +752,27 @@ export class TestCasesPage {
 
       this.editTestCaseJson(testCaseJson, handleElementsTab)
 
-      this.clickVisibleEnabled(this.detailsTab, 30000)
+      this.activateTab(this.detailsTab, 30000)
 
       //Save edited / updated to test case
       this.clickVisibleEnabled(this.editTestCaseSaveButton, 30000)
       Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 9500)
       cy.log('JSON added to test case successfully')
 
-      this.clickVisibleEnabled(EditMeasurePage.testCasesTab, 30000)
+      this.activateTab(EditMeasurePage.testCasesTab, 30000)
     }
   }
 
   public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false): void {
     if (navigateToJsonTab) {
-      this.clickVisibleEnabled(TestCasesPage.jsonTab, 30000)
+      this.activateTab(TestCasesPage.jsonTab, 30000)
     }
 
     this.waitForJsonEditorReady()
     cy.get(TestCasesPage.aceEditorJsonInput)
-      .should('be.visible')
-      .focus()
-      .type('{selectAll}{backspace}')
-      .type(testCaseJson, { parseSpecialCharSequences: false })
+      .click({ force: true })
+      .clear({ force: true })
+      .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
   }
 
   public static waitForJsonEditorReady(): void {
@@ -791,7 +790,7 @@ export class TestCasesPage {
   ): void {
     cy.intercept('PUT', '/api/measures/**/test-cases/**').as('saveTestCase')
 
-    cy.get(this.detailsTab).click()
+    this.activateTab(this.detailsTab, 30000)
 
     // Title
     cy.get(this.testCaseTitle).should('exist').and('be.visible').and('be.enabled')
@@ -1027,6 +1026,14 @@ export class TestCasesPage {
       .click()
   }
 
+  private static activateTab(selector: string, timeout = 20000): void {
+    cy.get(selector, { timeout })
+      .should('not.have.attr', 'aria-disabled', 'true')
+      .then(($tab) => {
+        $tab[0].click()
+      })
+  }
+
   private static clickVisible(selector: string, timeout = 20000): void {
     cy.get(selector, { timeout })
       .scrollIntoView()
@@ -1042,17 +1049,14 @@ export class TestCasesPage {
   // PRIVATE STATIC HELPERS
   // -----------------------------
 
-  /** Robust clear → assert empty → type → assert value → blur */
+  /** Clear and type without pausing between controlled-input updates. */
   private static clearAndTypeStable(selector: string, value: string) {
     cy.get(selector, { timeout: 20000 })
       .should('be.visible')
       .should('be.enabled')
-      .focus()
-      .type('{selectAll}{del}')
-      .should('have.value', '')
+      .clear()
       .type(value)
-      .should('have.value', value)
-      .blur()
+    cy.get(selector).should('have.value', value).blur()
   }
 
   /** Commit to a MUI-like Autocomplete by clicking option (no Enter to avoid bubbling) */
@@ -1142,7 +1146,7 @@ export class TestCasesPage {
         })
 
         cy.url({ timeout: 60000 }).should('include', `/test-cases/${tcId}`)
-        cy.get(this.detailsTab, { timeout: 60000 }).should('be.visible')
+        cy.get(this.detailsTab, { timeout: 60000 }).should('exist')
       })
   }
 
