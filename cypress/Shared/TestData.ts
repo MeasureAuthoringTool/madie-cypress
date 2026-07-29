@@ -867,7 +867,8 @@ export class TestData {
             return this.requestWithAccessToken<VersionedMeasureResponse>({
                 ...options,
                 url: `/api/measures/${measureId}/version?versionType=${versionType}`,
-                method: 'PUT'
+                method: 'PUT',
+                body: {}
             })
         })
     }

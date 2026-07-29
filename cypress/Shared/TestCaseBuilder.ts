@@ -62,6 +62,9 @@ export class TestCaseBuilder {
 
     public static readonly applyButton = '[data-testid="element-editor-submit-button"]'
     public static readonly undoButton = '[data-testid="element-editor-undo-button"]'
+    public static readonly observationStatus = '[data-testid="code-selector-Observation.status"]'
+    public static readonly dropdownListbox = '[role="listbox"]'
+    public static readonly dropdownOption = '[role="option"]'
 
     public static readonly horizontalSlider = "[data-testid='builder-slider']"
 
@@ -74,37 +77,49 @@ export class TestCaseBuilder {
 
         cy.get('[data-testid="add-element-' + addition + '"]').click().wait(500)
 
-        cy.get(this.addedTab).click().wait(500)
-
         cy.window().its('store').then(store => {
 
             resourceId = store.bundle.entry[bundleIndex].resource.id
 
             TestData.writeBuilderResourceId(resourceId, resourceNumber)
 
-            const actionCenterButton = '[data-testid="action-center-button-' + resourceId + '"]'
-            const editAction = '[data-testid="action-center-' + resourceId + '_Edit"]'
+            this.editAddedResource(resourceId)
+        })
+    }
 
-            cy.get('body').then(($body) => {
-                if ($body.find(actionCenterButton).length) {
-                    cy.get(actionCenterButton).click().wait(250)
+    public static editAddedResource(resourceId: string) {
+        cy.get(this.addedTab)
+            .should('exist')
+            .should('not.have.attr', 'aria-disabled', 'true')
+            .then(($tab) => {
+                if ($tab.attr('aria-selected') !== 'true') {
+                    $tab[0].click()
                 }
-
-                if ($body.find(editAction).length) {
-                    cy.get(editAction).click()
-                    return
-                }
-
-                cy.contains('td', resourceId)
-                    .closest('tr')
-                    .within(() => {
-                        cy.get('td')
-                            .last()
-                            .find('button,[role="button"]')
-                            .first()
-                            .click()
-                    })
             })
+        cy.get(this.addedTab).should('have.attr', 'aria-selected', 'true')
+
+        const actionCenterButton = '[data-testid="action-center-button-' + resourceId + '"]'
+        const editAction = '[data-testid="action-center-' + resourceId + '_Edit"]'
+
+        cy.get('body').then(($body) => {
+            if ($body.find(actionCenterButton).length) {
+                cy.get(actionCenterButton).click()
+            }
+
+            if ($body.find(editAction).length) {
+                cy.get(editAction).click()
+                return
+            }
+
+            cy.contains('td', resourceId)
+                .closest('tr')
+                .within(() => {
+                    cy.get('td')
+                        .last()
+                        .find('button,[role="button"]')
+                        .first()
+                        .click()
+                })
         })
     }
 

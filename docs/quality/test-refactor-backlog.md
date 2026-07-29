@@ -69,6 +69,8 @@ Work boundary for the next slice:
 
 Recently proven service/helper slices:
 
+- CI worker reliability: `scripts/run-with-timeout.js` now bounds silent Cypress worker hangs with a configurable 20-minute inactivity timeout, captures the existing CI diagnostics before termination, and terminates the full worker process group so `cypress-parallel` can return control to Jenkins.
+
 - Measure service: `Measure.cy.ts`, `MeasureBundle.cy.ts`, `MeasureExport.cy.ts`, `DraftMeasure.cy.ts`, `MeasureVersion.cy.ts`, `QI Core Test-Cases.cy.ts`.
 - QDM service: `QDM Test-Cases.cy.ts`, `QDM Measure.cy.ts`, `QDMMeasureVersion.cy.ts`.
 - CQL library service: `CreateCQL-Library.cy.ts`, `EditCQL-Library.cy.ts`, `VersionAndDraftCQL-Library.cy.ts`, `CQLLibraryDelete.cy.ts`.

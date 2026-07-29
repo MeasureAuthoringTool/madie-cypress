@@ -9,7 +9,6 @@ import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { QDMElements } from '../../../../../Shared/QDMElements'
 import { umlsLoginForm } from '../../../../../Shared/umlsLoginForm'
-import { Header } from '../../../../../Shared/Header'
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -33,22 +32,17 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
-        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-
-        OktaLogin.Login()
-
         //adding supplemental data
-        MeasuresPage.actionCenter('edit')
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         MeasureGroupPage.includeSdeData()
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Logout and Clean up', () => {
@@ -56,11 +50,6 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
     })
 
     it('Test Case execution with patient based groups with MOs', () => {
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
         //Group Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -206,22 +195,17 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
-        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-
-        OktaLogin.Login()
-
         //adding supplemental data
-        MeasuresPage.actionCenter('edit')
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         MeasureGroupPage.includeSdeData()
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Logout and Clean up', () => {
@@ -229,11 +213,6 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
     })
 
     it('Test Case execution with non-patient based groups with MOs', () => {
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
         //Group Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
