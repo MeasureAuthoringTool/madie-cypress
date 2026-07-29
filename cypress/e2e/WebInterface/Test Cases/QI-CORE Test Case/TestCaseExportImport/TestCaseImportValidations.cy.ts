@@ -91,13 +91,8 @@ describe('Test Case Import: functionality tests', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //edit second test case so that it will fail
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        TestCasesPage.openExpectedActualTab()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -215,8 +210,9 @@ describe('Test Case Import validations for versioned Measures', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //navigate to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
+        // Reset the SPA at the measure-list boundary before versioning.
+        cy.visit('/measures')
+        cy.get(MeasuresPage.measureListTitles, { timeout: 60000 }).should('be.visible')
 
         //Click on Version Measure
         MeasuresPage.actionCenter('version')
@@ -238,10 +234,10 @@ describe('Test Case Import validations for versioned Measures', () => {
     it('Measure is in VERSIONED status: user is owner: import button is available', () => {
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', undefined, { expectCqlEditorTab: false })
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.paginationLimitSelect)
 
         Utilities.waitForElementVisible(TestCasesPage.paginationLimitSelect, 16500)
 
@@ -263,10 +259,10 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', undefined, { expectCqlEditorTab: false })
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.paginationLimitSelect)
 
         Utilities.waitForElementVisible(TestCasesPage.paginationLimitSelect, 16500)
 
@@ -304,14 +300,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     it('Importing: not a .zip file', () => {
 
-        //navigate to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.importTestCasesBtn)
 
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importTestCasesBtn).click()
@@ -329,14 +319,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     it('Importing: .zip\'s test case folder does not contain a json file', () => {
 
-        //navigate to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.importTestCasesBtn)
 
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importTestCasesBtn).click()
@@ -357,14 +341,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     it('Importing: .zip\'s test case folder contains multiple json files', () => {
 
-        //navigate to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.importTestCasesBtn)
 
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importTestCasesBtn).click()
@@ -385,14 +363,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     it('Importing: .zip\'s test case folder contains malformed json file', () => {
 
-        //navigate to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.importTestCasesBtn)
 
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importTestCasesBtn).click()
@@ -464,9 +436,14 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 60000)
+        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 60000)
 
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        // Reset the edit shell before navigating away from Population Criteria.
+        cy.visit('/measures')
+        cy.get(MeasuresPage.measureListTitles, { timeout: 60000 }).should('be.visible')
+        MeasuresPage.actionCenter('edit', 2)
+        TestCasesPage.openTestCasesTab('input[type="checkbox"]')
 
         // export test cases - select all
         cy.get('input[type="checkbox"]').first().check() 

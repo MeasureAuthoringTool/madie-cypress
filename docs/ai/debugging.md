@@ -26,6 +26,11 @@ Find the cause before changing code.
 
 ## Timeout Debugging
 
+Parallel Cypress workers are terminated when they produce no output for 20 minutes. Use
+`CYPRESS_WORKER_INACTIVITY_TIMEOUT_SECONDS` to tune this threshold for a run, or set it to `0` to
+disable inactivity detection. The worker wrapper captures `scripts/ci-diagnostics.sh` output before
+terminating the process group so the console log retains the stuck process and latest-result state.
+
 For timeouts, check:
 
 1. Is the selector correct?
@@ -70,6 +75,22 @@ Prefer this order:
 3. stable text
 4. stable container + child selector
 5. class selectors only as a last resort
+
+## Repeated Login And SPA State Failures
+
+When a test works during slow manual execution but fails after repeated login, edit, or navigation commands:
+
+1. Check whether API setup can complete before the first UI login.
+2. Compare the flow with a nearby passing spec that uses one login and one continuous edit session.
+3. Inspect both the URL and the visibly selected tab. A route such as `/edit/cql-editor` does not prove the CQL editor rendered if stale SPA state still displays another tab.
+4. Treat repeated login, return-to-list, and edit cycles as a likely state-transition race before changing selectors or adding waits.
+5. Synchronize on durable UI state, such as the destination list or a save button returning to disabled, rather than adding a fixed delay.
+
+This pattern was confirmed in `QDMCVMeasure_with_multiple_Groups_with_MO.cy.ts`: the stable test-environment flow created the measure and test case through APIs, logged in once, added supplemental data, and continued in the same edit session.
+
+If native tab activation updates the URL but the previously selected tab remains rendered, the edit shell is already desynchronized. First verify the preceding save has settled. If the mismatch persists, reset at the measure-list boundary, wait for the list to render, reopen the correct fixture index, and then activate the destination tab. A same-route reload may rehydrate the stale tab state and is not sufficient evidence of recovery.
+
+For versioned measures, distinguish View mode from Edit mode when using measure action helpers. Do not wait for an edit-only CQL tab when the action opens a versioned measure for viewing; open the Test Cases tab and synchronize on its destination content instead.
 
 ## API/Data Debugging
 

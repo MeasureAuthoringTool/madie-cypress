@@ -866,13 +866,14 @@ export class MeasureGroupPage {
         cy.get(this.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
 
         //Save Supplemental data
-        cy.get(this.saveSupplementalDataElements).click({ force: true })
+        cy.get(this.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 50000)
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
             'Measure Supplemental Data have been Saved Successfully'
         )
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
+        Utilities.waitForElementDisabled(this.saveSupplementalDataElements, 60000)
     }
 
     public static addStratificationDataAPI(stratificationData: Array<Stratification>) {

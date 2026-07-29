@@ -33,7 +33,8 @@ export type CreateMeasureOptions = {
     mpStartDate?: string,
     mpEndDate?: string,
     blankMetadata?: boolean,
-    description?: string
+    description?: string,
+    composite?: boolean
 }
 
 export class CreateMeasurePage {
@@ -183,6 +184,25 @@ export class CreateMeasurePage {
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
 
         cy.log('Composite Measure created successfully')
+    }
+
+    public static CreateCompositeMeasureAPI(
+        measureName: string,
+        cqlLibraryName: string,
+        model: SupportedCompositeModels,
+        optionalParams?: CreateMeasureOptions,
+        measureNumber?: number
+    ): string {
+        return this.CreateMeasureAPI(
+            measureName,
+            cqlLibraryName,
+            model as unknown as SupportedModels,
+            {
+                ...optionalParams,
+                composite: true
+            },
+            measureNumber
+        )
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
@@ -693,6 +713,7 @@ export class CreateMeasurePage {
 
         let user,
             altUser = false,
+            composite = false,
             mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD'),
             mpEndDate = now().format('YYYY-MM-DD'),
             ecqmTitle = 'AutoTestTitle',
@@ -704,6 +725,9 @@ export class CreateMeasurePage {
 
         if (optionalParams && optionalParams.altUser) {
             altUser = optionalParams.altUser
+        }
+        if (optionalParams && optionalParams.composite) {
+            composite = optionalParams.composite
         }
         if (optionalParams && optionalParams.mpStartDate) {
             mpStartDate = optionalParams.mpStartDate
@@ -761,6 +785,13 @@ export class CreateMeasurePage {
                         "url": "www.eatrightpro.org"
                     }
                 ]
+            }
+        }
+
+        if (composite) {
+            measureMetadata = {
+                ...measureMetadata,
+                composite: true
             }
         }
 

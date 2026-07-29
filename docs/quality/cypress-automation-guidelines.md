@@ -56,6 +56,10 @@ These helper paths are already established and should be reused before adding ne
 - When a reusable test-case editor control needs a `data-testid` selector, add it to `TestCasesPage` instead of leaving the literal selector in a spec. Inline `data-testid` strings are acceptable for one-off assertions, but reusable Expected/Actual, stratification, action-center, and editor controls should stay behind the page object so selector churn is localized.
 - When a reusable measure, library, or test-case UI control needs a `data-testid` selector, add it to the relevant page object instead of leaving the literal selector in a spec. Inline `data-testid` strings are acceptable for one-off assertions, but reusable list-row action buttons, locked-state controls, and shared navigation targets should stay behind the page object so selector churn is localized.
 - During temporary UI debug instrumentation or high-value flow narration, prefer the shared `step(...)` helper over ad hoc `cy.log(...)` calls so runner output stays consistent across specs and shared helpers.
+- When a UI scenario needs API-created measure data or test cases, complete that API setup before the UI login when the existing helpers support it. Prefer one login and one continuous edit session over repeated login, edit, return-to-list, and edit cycles; repeated session and SPA navigation transitions can leave the route and rendered tab content out of sync.
+- After saving controlled UI state through a shared helper, wait for a meaningful settled condition before continuing. A success toast alone may not prove that React state is ready for navigation; when available, also verify the save control returns to its disabled state or wait for the save request and resulting UI readiness.
+- Use the shared native tab-activation helper for Expected/Actual and Test Cases transitions that can shift the split view. Pass a destination readiness selector when the next command depends on rendered tab content.
+- When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content. Synchronize on the intended destination tab instead.
 
 ## Refactor Rules
 

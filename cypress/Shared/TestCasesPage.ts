@@ -425,10 +425,12 @@ export class TestCasesPage {
   public static readonly actionCenterClone = '[data-testid="clone-action-btn"]'
   public static readonly actionCenterCopyToMeasure = '[data-testid="copy-action-btn"]'
   public static readonly actionCenterExport = 'form [data-testid="export-action-btn"]'
+  public static readonly actionCenterMakeJsonMatchUi = '[data-testid="make-json-match-ui-action-btn"]'
   public static readonly actionCenterShiftDates = '[data-testid="shift-test-case-dates-action-btn"]'
 
   // copy to modal
   public static readonly copyToSave = '[data-testid="copy-test-cases-continue-button"]'
+  public static readonly makeJsonMatchUiContinueButton = '[data-testid="make-json-match-ui-continue-button"]'
 
   // left nav expand (means we are already collapsed)/collapse (means we are expanded/normal)
   public static readonly leftNavCollapse = '[data-testid="test-case-sidebar-collapse-icon"]'
@@ -891,7 +893,7 @@ export class TestCasesPage {
     const { checkboxSelector, readySelector } = options
     const selector = checkboxSelector ?? readySelector
 
-    cy.get(this.tctExpectedActualSubTab, { timeout: 35000 }).should('exist').scrollIntoView().should('be.visible').click()
+    this.activateTab(this.tctExpectedActualSubTab, 35000)
 
     if (selector) {
       cy.get(selector).should('exist')
@@ -900,6 +902,14 @@ export class TestCasesPage {
     this.normalizeExpectedActualPopulationPanel({
       requirePanel: !selector,
     })
+  }
+
+  public static openTestCasesTab(readySelector?: string): void {
+    this.activateTab(EditMeasurePage.testCasesTab, 30000)
+
+    if (readySelector) {
+      cy.get(readySelector, { timeout: 35000 }).should('exist')
+    }
   }
 
   public static checkExpectedActualCheckbox(
@@ -1030,7 +1040,9 @@ export class TestCasesPage {
     cy.get(selector, { timeout })
       .should('not.have.attr', 'aria-disabled', 'true')
       .then(($tab) => {
-        $tab[0].click()
+        if ($tab.attr('aria-selected') !== 'true') {
+          $tab[0].click()
+        }
       })
   }
 
@@ -1125,11 +1137,7 @@ export class TestCasesPage {
       callstackIntercepted = true
     }).as('callstacks')
 
-    cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-    cy.get(EditMeasurePage.testCasesTab)
-      .invoke('removeAttr', 'target')
-      .click()
-      .should('have.attr', 'aria-selected', 'true')
+    this.activateTab(EditMeasurePage.testCasesTab, 30000)
 
     TestData.readTestCaseId(secondTestCase ? 2 : 0)
       .then((tcId) => {

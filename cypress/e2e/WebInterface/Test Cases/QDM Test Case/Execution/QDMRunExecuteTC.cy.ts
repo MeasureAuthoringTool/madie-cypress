@@ -46,11 +46,13 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('This is a description.')
 
         //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
+        cy.get(MeasureGroupPage.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
             'Measure Supplemental Data have been Saved Successfully'
         )
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
+        Utilities.waitForElementDisabled(MeasureGroupPage.saveSupplementalDataElements, 60000)
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -93,8 +95,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 60000)
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
@@ -228,15 +229,9 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         //Click on Execute Test Case button on Edit Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Fail')
 
@@ -306,15 +301,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
 
         //Click on Execute Test Case button on Edit Test Case page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
     })
 })
@@ -354,8 +342,9 @@ describe('Run / Execute QDM Test Case button validations', () => {
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.intercept('GET', /\/api\/measures\/[^/]+\/test-cases(?:\?.*)?$/).as('testCaseList')
+        TestCasesPage.openTestCasesTab()
+        cy.wait('@testCaseList').its('response.statusCode').should('eq', 200)
         TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
