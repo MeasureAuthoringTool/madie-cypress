@@ -8,6 +8,7 @@ import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCaseAction, TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'QDMMeasureVV' + Date.now()
 let cqlLibraryName = 'QDMMeasureVVLib' + Date.now()
@@ -67,11 +68,19 @@ describe('Measure Versioning validations', () => {
         measureData.cqlLibraryName = cqlLibraryName
         measureData.measureScoring = 'Cohort'
         measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestData.readMeasure().then((response) => {
+            TestData.updateMeasure({
+                ...response.body,
+                cql: '',
+                elmJson: '',
+                elmXml: ''
+            }).its('status').should('eq', 200)
+        })
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up', () => {
@@ -83,7 +92,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
@@ -103,12 +112,8 @@ describe('Measure Versioning validations', () => {
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-
         cy.get(EditMeasurePage.cqlEditorTextBox).type(generateQDMCQLWithErrors(cqlLibraryName))
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Measures Page
         cy.get(Header.measures).click()
@@ -116,7 +121,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
@@ -146,7 +151,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('3.0.000')
         cy.get('[id="current-version"]').eq(0).click()
         cy.get('[data-testid="confirm-version-helper-text"]').should(

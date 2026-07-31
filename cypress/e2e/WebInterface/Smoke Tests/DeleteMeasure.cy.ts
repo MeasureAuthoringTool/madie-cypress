@@ -24,10 +24,10 @@ describe('Delete Measure', () => {
 
         MeasuresPage.actionCenter('delete')
 
-        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureOne + '?')
+        EditMeasurePage.assertDeleteMeasureConfirmation(measureOne)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure successfully deleted')
+        Utilities.validateToastMessage('Measure successfully deleted')
 
         //Verify the deleted measure on My Measures page list
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureOne)

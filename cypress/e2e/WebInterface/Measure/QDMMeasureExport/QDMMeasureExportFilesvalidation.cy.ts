@@ -119,20 +119,15 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.version)
-
-        cy.get(Header.mainMadiePageButton).click()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-
-        MeasuresPage.validateVersionNumber(versionNumber)
+        cy.contains('Version ' + versionNumber).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
+        Utilities.waitForElementEnabled(EditMeasurePage.editMeasureButtonActionBtn, 30000)
         cy.log('Major Version Created Successfully')
 
-        MeasuresPage.actionCenter('export')
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.zip'), { timeout: 60000 }).should('exist')
