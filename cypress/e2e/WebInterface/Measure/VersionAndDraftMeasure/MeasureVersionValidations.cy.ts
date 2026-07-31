@@ -233,7 +233,7 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         //Clone Test case
-        TestCasesPage.checkTestCase(1)
+        TestCasesPage.checkTestCaseByTitle(testCaseTitle)
         cy.get(TestCasesPage.actionCenterClone).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
 

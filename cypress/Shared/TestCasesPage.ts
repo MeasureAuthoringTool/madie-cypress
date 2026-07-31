@@ -718,12 +718,8 @@ export class TestCasesPage {
         (testCaseJson ? ', and JSON: ' + testCaseJson : ''),
     )
     //Navigate to Test Cases page and add Test Case details
-    cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-    cy.get(EditMeasurePage.testCasesTab).click()
-    Utilities.waitForElementVisible(this.newTestCaseButton, 60000)
-    cy.get(this.newTestCaseButton).should('be.visible')
-    cy.get(this.newTestCaseButton).should('be.enabled')
-    cy.get(this.newTestCaseButton).click()
+    this.openTestCasesTab(this.newTestCaseButton)
+    this.clickVisibleEnabled(this.newTestCaseButton, 35000)
 
     cy.get(this.createTestCaseDialog).should('exist')
     cy.get(this.createTestCaseDialog).should('be.visible')
@@ -761,7 +757,7 @@ export class TestCasesPage {
       Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 9500)
       cy.log('JSON added to test case successfully')
 
-      this.activateTab(EditMeasurePage.testCasesTab, 30000)
+      this.returnToTestCasesList(this.newTestCaseButton)
     }
   }
 
@@ -905,11 +901,39 @@ export class TestCasesPage {
   }
 
   public static openTestCasesTab(readySelector?: string): void {
-    this.activateTab(EditMeasurePage.testCasesTab, 30000)
+    cy.get(EditMeasurePage.testCasesTab, { timeout: 30000 })
+      .should('not.have.attr', 'aria-disabled', 'true')
+      .then(($tab) => {
+        $tab[0].click()
+      })
 
     if (readySelector) {
       cy.get(readySelector, { timeout: 35000 }).should('exist')
     }
+  }
+
+  public static returnToTestCasesList(readySelector?: string): void {
+    cy.get(EditMeasurePage.testCasesTab, { timeout: 30000 })
+      .should('not.have.attr', 'aria-disabled', 'true')
+      .then(($tab) => {
+        $tab[0].click()
+      })
+
+    if (readySelector) {
+      cy.get(readySelector, { timeout: 35000 }).should('exist')
+    }
+  }
+
+  public static openDetailsTab(readySelector?: string): void {
+    this.activateTab(this.detailsTab, 30000)
+
+    if (readySelector) {
+      cy.get(readySelector, { timeout: 35000 }).should('be.visible')
+    }
+  }
+
+  public static replaceTestCaseDetailsInput(selector: string, value: string): void {
+    this.clearAndTypeStable(selector, value)
   }
 
   public static checkExpectedActualCheckbox(
@@ -981,14 +1005,14 @@ export class TestCasesPage {
 
     this.normalizeExpectedActualPopulationPanel()
     const typeValue = (input: Cypress.Chainable<JQuery<HTMLElement>>) => {
-      const readyInput = input.should('exist').scrollIntoView().should('be.enabled')
+      const readyInput = input.should('exist').should('be.enabled')
 
       if (clearFirst) {
-        readyInput.clear().type(value)
+        readyInput.clear({ scrollBehavior: false }).type(value, { scrollBehavior: false })
         return
       }
 
-      readyInput.type(value)
+      readyInput.type(value, { scrollBehavior: false })
     }
 
     if (typeof index === 'number') {
@@ -997,6 +1021,14 @@ export class TestCasesPage {
     }
 
     typeValue(cy.get(inputSelector))
+  }
+
+  public static toggleHighlightingResults(highlightingSectionSelector: string): void {
+    cy.get(highlightingSectionSelector)
+      .should('be.visible')
+      .contains('Results')
+      .first()
+      .click({ scrollBehavior: false })
   }
 
   private static normalizeExpectedActualPopulationPanel(options: {
@@ -1015,7 +1047,7 @@ export class TestCasesPage {
         return
       }
 
-      cy.get(this.testCasePopulationList).should('be.visible').then(($panel) => {
+      cy.get(this.testCasePopulationList).then(($panel) => {
         const scrollContainers = [
           $panel[0] as HTMLElement,
           ...$panel.parents().toArray().map((element) => element as HTMLElement),
@@ -1029,11 +1061,37 @@ export class TestCasesPage {
   }
 
   private static clickVisibleEnabled(selector: string, timeout = 20000): void {
-    cy.get(selector, { timeout })
+    cy.get(selector, { timeout: 30000 })
       .scrollIntoView()
       .should('be.visible')
       .should('be.enabled')
       .click()
+  }
+
+  private static activateTestCaseRowButton(
+    selector: string,
+    expectedPath: string,
+    attemptsRemaining = 3,
+  ): void {
+    cy.get(selector, { timeout: 30000 })
+      .scrollIntoView()
+      .should('be.visible')
+      .should('be.enabled')
+      .then(($button) => {
+        $button[0].click()
+      })
+
+    cy.location('pathname', { timeout: 30000 }).then((pathname) => {
+      if (pathname.includes(expectedPath)) {
+        return
+      }
+
+      if (attemptsRemaining <= 1) {
+        throw new Error(`Test case row action did not navigate to ${expectedPath}. Current path: ${pathname}`)
+      }
+
+      this.activateTestCaseRowButton(selector, expectedPath, attemptsRemaining - 1)
+    })
   }
 
   private static activateTab(selector: string, timeout = 20000): void {
@@ -1054,7 +1112,14 @@ export class TestCasesPage {
   }
 
   private static openQdmElementActionMenu(actionCenterSelector: string): void {
-    this.clickVisibleEnabled(actionCenterSelector, 50000)
+    cy.get(actionCenterSelector, { timeout: 50000 })
+      .scrollIntoView()
+      .should('be.visible')
+      .find('button')
+      .first()
+      .should('be.visible')
+      .and('be.enabled')
+      .click()
   }
 
   // -----------------------------
@@ -1137,13 +1202,12 @@ export class TestCasesPage {
       callstackIntercepted = true
     }).as('callstacks')
 
-    this.activateTab(EditMeasurePage.testCasesTab, 30000)
-
     TestData.readTestCaseId(secondTestCase ? 2 : 0)
       .then((tcId) => {
         const buttonSelector = this.getViewEditTestCaseButtonSelector(tcId)
 
-        this.clickVisibleEnabled(buttonSelector, 30000)
+        this.openTestCasesTab(buttonSelector)
+        this.activateTestCaseRowButton(buttonSelector, `/test-cases/${tcId}`)
 
         cy.then(() => {
           if (callstackIntercepted) {
@@ -1300,8 +1364,11 @@ export class TestCasesPage {
     ethnicity?: string,
   ): void {
     if (livingStatus) {
+      const livingStatusSelector = `[data-value="${livingStatus}"]`
+
       this.clickVisible(TestCasesPage.QDMLivingStatus, 50000)
-      cy.contains(TestCasesPage.SelectionOptionChoice, livingStatus).click()
+      this.clickVisible(livingStatusSelector, 30000)
+      cy.get(TestCasesPage.QDMLivingStatus).should('contain.text', livingStatus)
     }
 
     if (race) {
@@ -1309,13 +1376,20 @@ export class TestCasesPage {
 
       this.clickVisible(TestCasesPage.QDMRace, 50000)
       this.clickVisible(raceSelector, 50000)
-      this.clickVisibleEnabled(TestCasesPage.editTestCaseSaveButton, 30000)
-      Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 30000)
+      cy.get(TestCasesPage.editTestCaseSaveButton, { timeout: 30000 })
+        .should('be.visible')
+        .then(($saveButton) => {
+          if (!$saveButton.is(':disabled')) {
+            cy.wrap($saveButton).click()
+            Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 30000)
+          }
+        })
     }
 
     if (gender) {
       this.clickVisible(TestCasesPage.QDMGender, 30000)
-      cy.contains(TestCasesPage.SelectionOptionChoice, gender).click()
+      cy.contains('li[role="option"]', gender).click()
+      cy.get(TestCasesPage.QDMGender).should('contain.text', gender)
     }
 
     if (ethnicity) {
@@ -1346,19 +1420,39 @@ export class TestCasesPage {
 
   // input the visible "Case #" value to have that test case's checkbox toggled from its current status
   public static checkTestCase(testCaseNumber: number): void {
-    cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
-      .parent('tr')
-      .find('input[type="checkbox"]')
-      .click()
-      .should('be.checked')
+    this.checkTestCaseRow('td[data-testid*="caseNumber"]', testCaseNumber)
   }
 
   public static checkTestCaseByTitle(testCaseTitle: string): void {
-    cy.contains('td[data-testid*="_title"]', testCaseTitle)
+    this.checkTestCaseRow('td[data-testid*="_title"]', testCaseTitle)
+  }
+
+  private static checkTestCaseRow(cellSelector: string, cellValue: string | number, attempt = 1): void {
+    const maxAttempts = 3
+
+    cy.contains(cellSelector, cellValue)
+      .parent('tr')
+      .scrollIntoView()
+      .should('be.visible')
+      .find('input[type="checkbox"]')
+      .should('be.visible')
+      .check()
+
+    cy.contains(cellSelector, cellValue)
       .parent('tr')
       .find('input[type="checkbox"]')
-      .click()
-      .should('be.checked')
+      .then(($checkbox) => {
+        if ($checkbox.is(':checked')) {
+          return
+        }
+
+        if (attempt >= maxAttempts) {
+          expect($checkbox, `Test case row "${cellValue}" checkbox`).to.be.checked
+          return
+        }
+
+        this.checkTestCaseRow(cellSelector, cellValue, attempt + 1)
+      })
   }
 
   /*

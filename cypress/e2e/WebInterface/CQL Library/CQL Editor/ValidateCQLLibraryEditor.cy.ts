@@ -186,19 +186,13 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
     it('Verify error message when Code System name is missing from Code declaration', () => {
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/CQLWithoutCodeSystemName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        CQLEditorPage.replaceCqlDocument('cypress/fixtures/CQLWithoutCodeSystemName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 
-        //Validate error(s) in CQL Editor window
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
+        cy.get(CQLEditorPage.errorMsg).should('be.visible').and('contain.text',
             'Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
     })
 

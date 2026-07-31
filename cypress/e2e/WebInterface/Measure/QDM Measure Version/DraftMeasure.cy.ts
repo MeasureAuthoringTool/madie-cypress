@@ -37,7 +37,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
         cy.get(Header.mainMadiePageButton).click()
     })
 
@@ -153,10 +153,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should(
-            'contain.text',
-            'Are you sure you want to delete ' + updatedMeasuresPageName + '?'
-        )
+        EditMeasurePage.assertDeleteMeasureConfirmation(updatedMeasuresPageName)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
     })
@@ -209,10 +206,12 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(Header.mainMadiePageButton).click()
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
+        cy.intercept('PUT', '/api/measures/searches?*').as('searchDraftMeasure')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
+        MeasuresPage.waitForMeasureListRefresh('@searchDraftMeasure')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)

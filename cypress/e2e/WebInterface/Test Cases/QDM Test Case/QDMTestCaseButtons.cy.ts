@@ -10,6 +10,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 let randValue = Math.floor(Math.random() * 1000 + 1)
 const now = Date.now()
@@ -261,6 +262,17 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(measure.cql).then((response) => TestData.expectSavedMeasureCql(response))
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Numerator',
+            '',
+            'Denominator'
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json)
         TestCasesPage.CreateQDMTestCaseAPI(
             testCase2.title,
@@ -269,25 +281,6 @@ describe('Test case list page - Action Center icons for non-owner', () => {
             testCase2.json,
             true
         )
-
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
-        OktaLogin.UILogout()
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -313,6 +306,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
             'Test cases must be executed prior to exporting.'
         )
 
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30500)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30500)
 

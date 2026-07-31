@@ -6,6 +6,7 @@ type SaveCqlOptions = {
     appendNewLine?: boolean
     appendCommand?: string
     collapseEditor?: boolean
+    parseSpecialCharSequences?: boolean
     successTimeout?: number
     waitForDisabled?: boolean
 }
@@ -47,6 +48,7 @@ export class CQLEditorPage {
     //Code Search page
     public static readonly codesTab = '[data-testid="codes-tab"]'
     public static readonly savedCodesTab = '[data-testid="savedCodes-tab"]'
+    public static readonly savedCodesTable = '[data-testid="saved-codes-tbl"]'
     public static readonly codeSystemVersionDropdown = '[id="code-system-version-selector"]'
     public static readonly codeSystemVersionOption = '[data-value="version 1"]'
     public static readonly codeText = '[data-testid="code-text-input"]'
@@ -179,6 +181,16 @@ export class CQLEditorPage {
 
     }
 
+    public static openCqlEditor(timeout = 30000): void {
+        cy.get(EditMeasurePage.cqlEditorTab, { timeout })
+            .should('not.have.attr', 'aria-disabled', 'true')
+            .then(($tab) => {
+                $tab[0].click()
+            })
+
+        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, timeout)
+    }
+
     public static validateSuccessfulCQLUpdate(library?: boolean): void {
 
         if (!library || library == null) {
@@ -219,6 +231,7 @@ export class CQLEditorPage {
             appendNewLine = true,
             appendCommand = '{moveToEnd}{end}{enter}',
             collapseEditor = false,
+            parseSpecialCharSequences = true,
             successTimeout = 50000,
             waitForDisabled = false
         } = options
@@ -226,7 +239,7 @@ export class CQLEditorPage {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         if (appendNewLine) {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(appendCommand)
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(appendCommand, { parseSpecialCharSequences })
         }
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -273,16 +286,16 @@ export class CQLEditorPage {
 
     }
 
-    public static replaceCqlDocument(filePath: string) {
+    public static replaceCqlDocument(filePath: string, editorSelector = EditMeasurePage.cqlEditorTextBox) {
 
-        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
-        cy.get(EditMeasurePage.cqlEditorTextBox)
+        Utilities.waitForElementWriteEnabled(editorSelector, 8500)
+        cy.get(editorSelector)
             .should('be.visible')
             .click()
             .focused()
             .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
 
-        Utilities.typeFileContents(filePath, EditMeasurePage.cqlEditorTextBox)
+        Utilities.typeFileContents(filePath, editorSelector)
     }
 
     // Clicking expand can trigger a URL navigation that collapses the panel.

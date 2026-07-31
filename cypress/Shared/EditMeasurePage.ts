@@ -29,6 +29,24 @@ export class EditMeasurePage {
     public static readonly measureDetailsTab = '[data-testid=measure-details-tab]'
     public static readonly cqlEditorTab = '[data-testid=cql-editor-tab]'
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'
+
+    public static openPopulationCriteriaTab(readySelector?: string): void {
+        cy.get(this.measureGroupsTab, { timeout: 30000 })
+            .should('not.have.attr', 'aria-disabled', 'true')
+            .then(($tab) => {
+                $tab[0].click()
+            })
+
+        if (readySelector) {
+            cy.get(readySelector, { timeout: 50000 }).should('exist')
+        }
+    }
+
+    public static assertDeleteMeasureConfirmation(measureName: string): void {
+        cy.get(this.deleteMeasureConfirmationMsg)
+            .should('contain.text', measureName)
+            .and('contain.text', 'This Action cannot be undone.')
+    }
     public static readonly testCasesTab = '[data-testid="patients-tab"]'
     public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
     public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
@@ -163,8 +181,8 @@ export class EditMeasurePage {
     public static readonly cqlEditorExpandCollapseBtn = '[data-testid="expanded-button"]'
 
     //Delete Measure
-    public static readonly deleteMeasureConfirmationMsg = '.message'
-    public static readonly deleteMeasureConfirmationButton = '[data-testid=delete-measure-button-2]'
+    public static readonly deleteMeasureConfirmationMsg = '[role="dialog"] .MuiDialogContent-root'
+    public static readonly deleteMeasureConfirmationButton = '[data-testid="delete-dialog-continue-button"]'
     public static readonly successfulMeasureDeleteMsg = '[data-testid=edit-measure-information-success-text]'
 
     //Measure MetaData

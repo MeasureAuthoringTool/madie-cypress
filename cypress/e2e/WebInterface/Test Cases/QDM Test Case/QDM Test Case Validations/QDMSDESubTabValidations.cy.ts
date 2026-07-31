@@ -40,17 +40,11 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).should('be.visible')
 
         //Add Supplemental Data Elements
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -147,16 +141,11 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).should('be.visible')
 
         //Add Supplemental Data Elements
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -195,16 +184,11 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).should('be.visible')
 
         //Add Supplemental Data Elements
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -308,17 +292,11 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     it('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
         MeasuresPage.actionCenter('edit')
 
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).should('be.visible')
 
         //Add Supplemental Data Elements
         MeasureGroupPage.includeSdeData()
@@ -355,13 +333,8 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         // back to cql, edit for new valuesets & update definition
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.wait(3500)
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectAll}{backspace}')
-
-        Utilities.typeFileContents('cypress/fixtures/QDMSDEMeasureAfterChanges.txt', EditMeasurePage.cqlEditorTextBox)
+        CQLEditorPage.openCqlEditor()
+        CQLEditorPage.replaceCqlDocument('cypress/fixtures/QDMSDEMeasureAfterChanges.txt')
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')

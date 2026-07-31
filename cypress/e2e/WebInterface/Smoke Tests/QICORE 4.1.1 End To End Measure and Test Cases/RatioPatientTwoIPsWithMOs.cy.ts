@@ -75,10 +75,11 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
         CQLEditorPage.saveCql({
             collapseEditor: true,
             successTimeout: 20700,
+            waitForDisabled: true,
         })
 
         //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.measureGroupTypeSelect)
 
         Utilities.setMeasureGroupType()
 
@@ -113,7 +114,10 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg)
+            .should('be.visible')
+            .and('contain.text', 'Population details for this group saved successfully.')
+        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 30000)
     })
 
     after('Clean up', () => {

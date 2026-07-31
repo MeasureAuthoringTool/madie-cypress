@@ -1,187 +1,141 @@
-# MADiE Cypress Quality Architecture Backlog
+# MADiE Cypress Quality Backlog
 
-Last updated: 2026-07-24
+Last updated: 2026-07-31
 
-Stable rules live in `docs/quality/cypress-automation-guidelines.md`. Keep this backlog limited to current state, next actions, measured audit signal, and validation.
+Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
-# AI Backlog Workflow
+## How to Use This Backlog
 
-This backlog is the execution plan for repository improvements.
+- Work on one bounded item at a time.
+- Reuse existing helpers before adding abstractions.
+- A slice is complete only when behavior is preserved, focused validation passes, static checks pass, and documentation is evaluated.
+- After each completed slice, reassess priority instead of automatically taking the next nearby file.
+- Record durable decisions and material audit changes, not run-by-run narration.
 
-After every completed refactor:
+## Active Priority
 
-1. Determine whether the completed item can be marked Done.
-2. Determine whether priorities have changed.
-3. Determine whether new work has been discovered.
-4. Re-scan the remaining scope for a larger or higher-value repeated pattern before selecting any next target.
-5. Recommend updates before moving to the next backlog item.
+### P2 — UI Reliability Debt
 
-Do not skip unfinished work unless a higher-priority issue is found.
-Do not assume the next listed target is still correct after a completed slice; explicitly reprioritize against the current architecture, audit signal, and remaining duplication first.
+Goal: replace unstable navigation, waits, forced interactions, and UI-heavy setup without hiding product failures.
 
-## AI Execution Rules
+Current focus order:
 
-Always work on only one backlog item at a time.
+1. Triage the next independent weekly-regression failure supplied by the team.
+2. Complete remaining Test Case Details, JSON, Test Cases, and Expected/Actual migrations by repeated interaction pattern.
+3. Investigate the inconclusive `QDMRunExecuteTC.cy.ts` single-pass scenario separately from its already-proven helper paths.
+4. Verify CI collection for specs that produced no runner output before treating them as test failures.
+5. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
 
-A backlog item is complete when:
+Work boundaries:
 
-- The targeted duplication has been removed.
-- Existing helpers have been reused where appropriate.
-- Behavior is unchanged.
-- Validation passes.
-- Documentation has been evaluated for updates.
+- Keep UI tests focused on browser-visible behavior; move eligible setup to APIs before login.
+- Convert one repeated interaction bucket at a time.
+- Do not combine unrelated export, transfer, highlighting, and editor refactors.
+- Do not add retries or weaker assertions for known product defects.
 
-Do not begin the next backlog item until the current one is complete.
-When a backlog item is complete, pause and reprioritize before continuing so the next slice is selected from the highest current-value pattern, not by automatic list order.
+## Deferred or Blocked
 
-## Current Direction
+| Area | Status | Next action |
+| --- | --- | --- |
+| `RatioPatientTwoIPsWithMOs.cy.ts` | DEV product bug: measure observations are missing in Expected/Actual after the original Population Criteria readiness issue was fixed. | Retest after the DEV fix; preserve the observation assertions. |
+| `ExecuteInvalidTestCases.cy.ts` | Product remains `Invalid` instead of `Pass` after execution. | Product follow-up; do not accept `Invalid`. |
+| `ElementTable.cy.ts` | Deferred by team; React action transition can detach or close without opening the editor. | Resume only when explicitly prioritized; diagnose destination transition. |
+| `CQLLibraryDelete.cy.ts` | Environment/account drift: inactive-user `400` and admin `403 insufficient_scope`. | Repair account/scope state before refactoring. |
+| `CQLLibraryTransfer.cy.ts` | Inactive alt-user responses plus slow UI switching. | Resolve account state before session-flow changes. |
+| `Measure.cy.ts` special-character validation | Service returns `500` instead of expected `400`. | Product/service follow-up. |
+| `QDMRunExecuteTC.cy.ts` non-owner path | Previously reached VSAC `401`. | Recheck environment/session dependency independently. |
+| Locking follow-up | Okta auth failures prevented helper-path validation. | Rerun after authentication stabilizes. |
+| `BooleanAndNonBooleanExpectedValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts` | No runner output in a reported run. | Verify spec collection and runner artifacts first. |
 
-- Keep service setup and request mechanics behind `TestData` and domain helpers.
-- Keep UI specs focused on browser-visible behavior.
-- Prioritize changes that reduce repeated fixture paths, token plumbing, fixed waits, forced interactions, skipped tests, or broad exception handling.
-- Update this file only when priorities, decisions, audit counts, or done signals materially change.
+## Next Architecture Targets
 
-## Starting Point
+### UI reliability
 
-Current active item:
+- Remaining raw numeric Expected/Actual consumers and legacy openings without concrete readiness selectors.
+- Remaining forced interactions in `TestCasesPage.ts`, import validation, highlighting, and editor flows.
+- Remaining export specs with repeated unzip/download setup.
+- `OktaLogin.ts` fixed waits and shared authentication readiness.
+- Global `uncaught:exception` suppression in `cypress/support/e2e.ts`.
+- Skipped tests requiring an owner, ticket, or removal decision.
 
-- P2 UI reliability debt, `TestCasesPage` Expected/Actual migration by repeated consumer pattern
-- Current bucket: remaining raw numeric value-entry consumers
+### Service tail
 
-Why this is the best next step:
+- `DeleteTest-Case.cy.ts`.
+- `CorrectExpectedValues.cy.ts`.
+- Remaining admin, measure, and test-case specs surfaced by the next audit.
+- Transfer-spec overlap after account-state issues are resolved.
 
-- Shared helper and request-boundary cleanup is already proven across `TestData`, `CreateMeasurePage.ts`, `CQLEditorPage.ts`, `MeasureGroupPage.ts`, `CQLLibraryPage.ts`, and the earlier service and shared-page-object slices.
-- The remaining high-value UI work is concentrated in `TestCasesPage.ts`, where Expected/Actual flows still drive repeated raw interaction patterns, leftover forced-interaction debt, and mixed readiness handling.
-- The shared Expected/Actual path is now proven across a broad set of Qi-Core and QDM specs, including smoke, execution, validation, multi-group, and ratio-observation coverage.
-- `TestCasesPage.openExpectedActualTab(...)` now handles both Qi-Core split-panel layouts and QDM layouts without the split population panel, and reusable QDM stratified selectors plus `typeExpectedActualValue(...)` are in place.
-- The shared Expected/Actual checkbox path is now effectively migrated: focused proof files were already helper-backed, and the remaining direct checkbox straggler in `MeasureVersionValidations.cy.ts` has been moved onto `checkExpectedActualCheckbox(...)`.
-- The next higher-value bucket is the remaining raw numeric value-entry consumers, followed by legacy `readySelector` openings that can use a concrete Expected/Actual control selector.
-- Keep product-question observation files sidelined until SME confirmation, and keep known environment-dependent failures such as the remaining `QDMRunExecuteTC.cy.ts` non-helper issues out of this slice.
+## Recently Completed
 
-Work boundary for the next slice:
+### Shared infrastructure
 
-- Keep the active work inside the `TestCasesPage` Expected/Actual migration slice, but organize execution by repeated consumer pattern rather than by spec family.
-- Prefer helper-backed consumer conversion over new abstraction unless a missing shared mechanic is blocking an entire interaction bucket.
-- Do not combine this slice with broader export, highlighting, transfer, or unrelated page-object refactors.
-- Stop the slice only after one interaction bucket is fully migrated, validated, and recorded; do not partially advance multiple buckets in parallel.
+- Centralized user-scoped fixture, token, ID, cleanup, lock, share, measure-group, test-case, and CQL-library request mechanics through `TestData` and domain helpers.
+- Added bounded Cypress worker inactivity handling and CI diagnostics.
+- Removed helper-level fixed waits from `CQLEditorPage`, `CQLLibraryPage`, and `MeasureGroupPage` paths covered by focused tests.
 
-## Current State
+### Test-case reliability
 
-Recently proven service/helper slices:
+- Proven native, destination-aware navigation for Test Cases, Details, JSON, Expected/Actual, and Highlighting Results.
+- Proven shared checkbox and numeric-entry helpers across Qi-Core and QDM split-panel and non-panel layouts.
+- Stabilized QDM demographics, row checkbox selection, search, SDE navigation, clone/copy, execution, highlighting, validation, and action-center flows.
+- Stabilized Qi-Core population values, search, invalid-case navigation, non-owner execution, list coverage, and versioned clone/import flows.
 
-- CI worker reliability: `scripts/run-with-timeout.js` now bounds silent Cypress worker hangs with a configurable 20-minute inactivity timeout, captures the existing CI diagnostics before termination, and terminates the full worker process group so `cypress-parallel` can return control to Jenkins.
+### Measure lifecycle and export
 
-- Measure service: `Measure.cy.ts`, `MeasureBundle.cy.ts`, `MeasureExport.cy.ts`, `DraftMeasure.cy.ts`, `MeasureVersion.cy.ts`, `QI Core Test-Cases.cy.ts`.
-- QDM service: `QDM Test-Cases.cy.ts`, `QDM Measure.cy.ts`, `QDMMeasureVersion.cy.ts`.
-- CQL library service: `CreateCQL-Library.cy.ts`, `EditCQL-Library.cy.ts`, `VersionAndDraftCQL-Library.cy.ts`, `CQLLibraryDelete.cy.ts`.
-- Shared create/fixture path: `CreateMeasurePage.ts` now routes user scope, fixture writes, measure create/clone requests, and draft measure ID reads through `TestData` helpers.
-- Shared cleanup/request helpers: `Utilities.deleteLibrary`, `Utilities` lock and unlock flows, and the `MeasureGroupPage.ts` API create, update, and stratification setup now route fixture reads and authenticated requests through `TestData`.
-- Shared test-case helper cleanup: `TestCasesPage.ts` now routes element/test-case fixture writes, measure/test-case fixture reads, and create-test-case API requests through `TestData`.
-- Shared test-case UI reliability proof: `TestCasesPage.ts` removed helper-level sleeps from create-test-case save, title or series verification, JSON edit-save return, QDM demographics entry, and row-checkbox toggles while consolidating repeated QDM element action-menu clicks behind shared readiness helpers.
-- Shared Expected/Actual proof summary: `TestCasesPage.openExpectedActualTab(...)`, `checkExpectedActualCheckbox(...)`, `uncheckExpectedActualCheckbox(...)`, reusable QDM stratified selectors, and `typeExpectedActualValue(...)` are now proven across Qi-Core and QDM smoke, execution, multi-group, and ratio-observation flows, including `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts` passing 3/3 on Wednesday, July 22, 2026.
-- Raw numeric Expected/Actual entry proof: focused validation on Wednesday, July 22, 2026 passed `QDMTestCaseRelevantElementWarning.cy.ts`, `RatioEpisodeSingleIPNoMO.cy.ts`, and `MeasureObservationExpectedValues.cy.ts` after moving raw numeric entry onto `typeExpectedActualValue(...)` and tightening the shared helper to scroll clipped inputs into view before typing.
-- Raw boolean Expected/Actual checkbox proof: repository scan on Thursday, July 23, 2026 found the helper migration already covered the active proof set, with only one direct checkbox straggler left in `MeasureVersionValidations.cy.ts`; that straggler now uses `openExpectedActualTab({ checkboxSelector: ... })` plus `checkExpectedActualCheckbox(...)`, so the boolean checkbox bucket can be treated as complete.
-- Shared validation proof: `QDM Measure.cy.ts` and `QI Core Test-Cases.cy.ts` now pass against the recent shared-helper conversions in the current workspace once Cypress is run with the invalid `NODE_EXTRA_CA_CERTS` placeholder unset.
-- Shared sharing helper cleanup: `Utilities.setSharePermissions(...)` now delegates library and measure share or unshare request construction through `TestData`, and `CQLLibrarySharing.cy.ts` passes against that path in the current workspace.
-- UI sort reliability proof: `MeasureListNewColumnsSort.cy.ts` now passes after replacing its fixed post-sort waits with route-alias and render-readiness checks, including status assertions tied to the sorted API responses instead of environment-specific row assumptions.
-- UI sort reliability proof: `CQLLibraryListPageColumnSort.cy.ts` now passes after replacing its fixed post-sort waits with route-alias and render-readiness checks, including status assertions tied to the sorted API responses instead of environment-specific row assumptions.
-- UI export reliability proof: `QICoreMeasureExport.cy.ts` now passes after replacing fixed waits with version-dialog visibility checks plus unzipped-file existence and local HTML readiness assertions for the human-readable export flows.
-- UI QMIG export reliability proof: `QmigSTU5FileValidations.cy.ts` now passes after replacing repeated post-unzip sleeps with extracted-archive existence checks while preserving the existing archive-content assertions.
-- UI alert reliability proof: `MinimizeAlerts.cy.ts` now passes after replacing navigation and alert re-open sleeps with visible-state assertions and shared `CQLEditorPage` minimize or reopen helpers.
-- UI code-system reliability proof: `CQLCodeSystem.cy.ts` now passes after replacing repeated fixed waits with helper-backed editor-return assertions that let Cypress retry on the editor state instead of sleeping between tab switches.
-- UI shared-editor reliability proof: `CQLEditorPage.ts` no longer contains fixed waits after replacing replace-document sleeps with focused editor clearing and builder-expand sleeps with document-ready retries, and both `MeasureLibraryMismatch.cy.ts` and `QiCoreCQLFunctions.cy.ts` pass against that shared path.
-- UI terminology reliability proof: `TestCaseJSON_TerminologyTests.cy.ts` now passes after replacing repeated fixed waits before JSON editing with shared `TestCasesPage` JSON-editor readiness helpers used by both the spec and the custom command.
-- UI QDM execution reliability proof: `QDMRunExecuteTC.cy.ts` now passes focused coverage for its three former fixed-wait paths after seeding valid CQL in API setup, reusing `CQLEditorPage.saveCql(...)` for editor-ready saves, and handling the test-case dirty-state modal explicitly before returning to the execution list.
-- UI CQL library shared-page-object reliability proof: `CQLLibraryPage.ts` no longer contains fixed waits after replacing helper-level action-menu and first-row sleeps with trigger visibility plus row-readiness assertions, and `AddVersionToCQLLibrary.cy.ts` passes against both the list and edit-screen action-center flows.
-- UI measure-group shared-page-object reliability proof: `MeasureGroupPage.ts` no longer contains fixed waits after consolidating repeated CQL setup behind editor-write and save-success assertions plus the existing editor-collapse control before returning to Population Criteria. Focused `MeasureObservations.cy.ts` validation on Monday, July 20, 2026 passed 7 tests, including `Add Measure Observations for Ratio Measure` and `Add Measure Observations for Continuous Variable Measure`; the remaining 2 failures were downstream Expected/Actual checkbox actionability issues caused by the test-case sash overlay, not by the measure-group helper path.
-- Shared auth/lock helper cleanup: `Utilities.ts` now routes share-permission requests plus measure/library/test-case lock and unlock-cleanup requests through `TestData` reads and authenticated request helpers.
-- Shared lock-helper follow-up: on Friday, July 24, 2026, `LockedEntityTooltipDisplayName.cy.ts` passed focused library coverage after moving locked-entity tooltip and modal text assertions behind a shared helper, adding explicit `lockSharedMeasure(...)`, and aligning shared library locking with owner-aware fixture reads. The older `CQLLibraryLocking.cy.ts` flow now uses `lockSharedLibrary(true)`, which resolved the prior `altHarpUser/cqlLibraryId` fixture lookup failure; the remaining red path in that file is a per-test library-name uniqueness collision, not a shared-lock helper regression.
-- Shared measure cleanup completion: `Utilities.deleteMeasure` and `Utilities.deleteVersionedMeasure` now delegate authenticated delete flows to `TestData` by-ID helpers while preserving graceful missing-fixture cleanup behavior.
-- Shared builder fixture cleanup: `TestCaseBuilder.ts` now routes builder resource fixture naming through `TestData`, so shared helpers own that user-scoped fixture convention.
-- Shared CQL library fixture cleanup: `CQLLibraryPage.ts` now routes created-library fixture writes through `TestData` helpers instead of hard-coded `cqlLibraryId` fixture names.
-- Shared test-case fixture cleanup: `TestCasesPage.ts` now routes `elementId`, `testCaseId`, and `testCasePId` fixture reads and writes through dedicated `TestData` helpers instead of raw fixture keys.
-- Shared measure-group fixture cleanup: `MeasureGroupPage.ts` now routes standard `groupId` and `groupId2` fixture writes through `TestData` helpers instead of raw fixture names, while preserving the existing `measureGroupId` exception used by older consumers.
+- Stabilized draft/version setup, retry-safe unique names, missing-CQL validation, and delete confirmation/toast contracts.
+- Proven Qi-Core and QDM negative export paths without using success-only export helpers.
+- Proven versioned QDM export from the same measure edit session after settled CQL save and action-center rerender.
+- Proven Population Criteria native activation with destination readiness; the ratio observation product defect remains separate.
 
-Recently diagnosed non-refactor failures:
+### Libraries, sharing, and transfer
 
-- `CQLLibraryDelete.cy.ts` still fails on current `master` because transfer cases return inactive-user `400` responses and admin delete-all cases return `403 insufficient_scope`. Treat that as environment or account-state drift, not as the next refactor target.
-- `CQLLibraryTransfer.cy.ts` currently mixes two separate issues on `dev`: transfer and sharing flows can fail with `400 The provided HARP ID is not associated with an active MADiE user.` for the configured alt user, and the owned-library action-center flow remains slow and intermittently fails on action visibility or missing success toast after long UI login/user-switch cycles. Treat the inactive-user path as environment or account-state drift first; do not attempt session-login conversion in this file until that is resolved.
-- `Measure.cy.ts` still has a non-refactor service failure on July 16, 2026 in `Validation Error: CQL library Name contains special characters`, where the service returns `500` instead of the expected `400` while other measure-service validation paths stay green.
-- `QDMRunExecuteTC.cy.ts` focused validation on Wednesday, July 22, 2026 no longer points at Expected/Actual selector debt for its remaining failures. The current red paths are `Run Test Case button is disabled -- CQL Errors`, which now fails on a detached outlined button click from `cypress/support/commands.ts`, and `Non Measure owner should be able to Run/Execute Test case`, which showed VSAC `401` terminology errors after the alt-user flow and should be revisited as a likely environment or session-dependent dependency instead of Expected/Actual helper debt. Keep those as separate reliability issues from the completed Expected/Actual helper migration in this file.
-- Locking regression follow-up on Friday, July 24, 2026 is partially blocked by environment instability rather than by the shared helper changes. Focused `MeasureUnlocking.cy.ts` and `MeasureLockBlocksAssociation.cy.ts` runs both failed in global Okta auth setup to `https://test.idp.idm.cms.gov/api/v1/authn` before reaching the touched helper paths, so treat those runs as inconclusive until the `dev` auth timeout stabilizes. `CQLLibraryLocking.cy.ts` moved past the old shared-library fixture-owner failure after the helper update, which narrows the remaining follow-up in that file to unique test data generation rather than lock-helper correctness.
+- Stabilized library comparison, history display names, sharing/drafting, name-based admin transfer, saved-code permissions, and list searching.
+- General account display-name lookup now lives in `TestData`.
 
 ## Latest Audit Signal
 
-Command: `npm run quality:no-focused-tests` on 2026-07-22
+Command: `npm run quality:no-focused-tests` on 2026-07-31.
 
-- Inventory: 256 specs / 65494 spec lines; 29 shared files / 18728 shared lines; 3 support files / 629 support lines; 9 scripts / 1511 script lines.
-- Skipped tests: 11.
-- Manual fixture path plumbing: 191.
-- Manual access token plumbing: 87.
-- Fixed waits: 36.
-- Forced interactions: 168.
-- Global uncaught exception suppression: 1.
+| Metric | Count |
+| --- | ---: |
+| Specs | 259 |
+| Spec lines | 65,371 |
+| Shared files | 30 |
+| Shared lines | 19,379 |
+| Support files / lines | 3 / 629 |
+| Scripts / lines | 9 / 1,561 |
+| Skipped tests | 12 |
+| Manual fixture paths | 179 |
+| Manual access-token plumbing | 87 |
+| Fixed waits | 35 |
+| Forced interactions | 170 |
+| Global exception suppression | 1 |
 
-Largest risk concentrations:
+Largest current concentrations:
 
-- `MeasureGroupPage.ts` dropped out of the fixed-wait hotspot list after its three helper sleeps were replaced with editor-ready and save-success assertions that held in focused measure-observation coverage on Monday, July 20, 2026.
-- `OktaLogin.ts` now carries the remaining shared-helper fixed waits after the latest `TestCasesPage.ts` readiness cleanup removed two more helper sleeps.
-- `QDMRunExecuteTC.cy.ts` dropped out of the fixed-wait hotspot list after its three execution waits were replaced with editor-ready and modal-aware assertions that held in focused Cypress validation on Friday, July 17, 2026.
-- `CQLLibraryPage.ts` dropped out of the fixed-wait hotspot list after its two helper sleeps were replaced with shared action-trigger and row-readiness assertions that held in focused Cypress validation on Friday, July 17, 2026.
-- `TestCasesPage.ts`: remaining UI reliability debt now centers on its leftover forced interactions plus the remaining non-smoke Expected/Actual execution, import, and validation specs that still bypass the shared helper path; fixture-path, create-test-case API setup, and the shared create or edit readiness cleanup are complete. The remaining Expected/Actual debt is now primarily organizational: the repo already has the needed shared helper path, but migration progress slows when work is selected by file adjacency instead of by repeated interaction pattern.
-- `AdminLibraryTransfer.cy.ts` and related transfer coverage: UI transfer specs still mix API-eligible setup with browser-only assertions, duplicate transfer/history checks, and combine distinct validation concerns in the same test flow.
-- `CorrectExpectedValues.cy.ts`, `DeleteTest-Case.cy.ts`, and selected admin/measure/test-case service specs: remaining service-tail cleanup.
-- highlighting specs, remaining QDM export or execution specs, and shared page objects: UI reliability debt from waits and forced interactions.
-- `cypress/support/e2e.ts`: global `uncaught:exception` suppression.
+- `TestCasesPage.ts` and remaining consumers that bypass its navigation/editor helpers.
+- `OktaLogin.ts` fixed waits and shared startup latency.
+- Import, highlighting, and editor specs with forced interactions.
+- Service-tail fixture/token plumbing.
+- Global exception suppression in `cypress/support/e2e.ts`.
 
-## Priorities
+## Completed Priority
 
-### P1: Shared Helper and Infrastructure Hardening
+### P1 — Shared Helper and Infrastructure Hardening
 
-Status: Done
+Status: Done.
 
-Completed signal:
+Shared helpers now own the reusable fixture naming, authentication, request setup, and common domain mechanics previously duplicated across page objects and specs. Remaining work is consumer migration, UI reliability, and service-tail cleanup.
 
-- Shared helpers now own the reusable user-scoped fixture naming and common request setup that had been spread across `CreateMeasurePage.ts`, `TestCasesPage.ts`, `MeasureGroupPage.ts`, `Utilities.ts`, `CQLLibraryPage.ts`, and `TestCaseBuilder.ts`.
-- Focused validation passed for the recent helper conversions in `QDM Measure.cy.ts`, `QI Core Test-Cases.cy.ts`, and `CQLLibrarySharing.cy.ts`.
-- Remaining hotspots in the audit now center on UI reliability and service-tail specs rather than shared helper request mechanics.
-
-### P2: UI Reliability Debt
-
-Current target order:
-
-- shared page objects with remaining waits and high reuse: `OktaLogin.ts`, `TestCasesPage.ts`
-- `TestCasesPage.ts` Expected/Actual and editor flows now also carry the most actionable downstream forced-interaction debt, but the shared helper path is now proven across the smoke-folder rollout plus `ExecuteTestCasesByNonMeasureOwner.cy.ts`, including both Qi-Core split-panel and QDM non-panel Expected/Actual layouts
-- the next Expected/Actual adoption wave should continue one repeated interaction bucket at a time across the remaining non-smoke execution, import, and validation specs, instead of advancing by neighboring file. The boolean checkbox bucket is now complete; shift to the remaining raw numeric value-entry consumers next, then `readySelector` cleanup outside the completed `RunAndExecuteTestCaseButtonValidations.cy.ts`, `MeasureObservationActualValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts`, `TestCaseExecutionWithCode.cy.ts`, `QDMRatioMeasure_with_MOs_on_TC_AE_tab.cy.ts`, `QDMCVMeasure_with_multiple_Groups_with_MO.cy.ts`, and `QDMRatioMeasure_with_multiple_Groups_with_MO.cy.ts` proof batch
-- remaining export specs that still rely on repeated unzip or download setup
-- export and terminology-heavy UI specs surfaced near the top of the wait audit
-- forced interactions in `TestCasesPage.ts`, import validations, highlighting specs, and editor flows
-- transfer specs that should move setup and ownership/share mechanics behind APIs before UI assertions, starting with `cypress/e2e/WebInterface/CQL Library/CQL Library Transfer/AdminLibraryTransfer.cy.ts`
-- global exception suppression in `cypress/support/e2e.ts`
-- skipped tests needing owner/ticket/remove decisions
-
-Done when waits are replaced by route aliases, visible/enabled assertions, or polling helpers; forced interactions are justified or removed; exception handling is targeted.
-
-### P3: Remaining Service Tail Cleanup
-
-Candidates:
-
-- `DeleteTest-Case.cy.ts`
-- `CorrectExpectedValues.cy.ts`
-- `AdminLibraryTransfer.cy.ts` after transfer-spec overlap is audited against `AdminMeasureTransfer.cy.ts` and `CQLLibraryTransfer.cy.ts`
-- remaining admin/measure/test-case specs surfaced near the top of the audit after each batch
-
-## Replan Rules
+## Replan and Validation
 
 After each meaningful slice:
 
-- Run `npm run quality:audit` and compare the current diff.
-- Prefer changes that remove a class of duplication across multiple specs.
-- Record only durable decisions or changed counts.
-- Validate with static checks and at least one focused spec for the changed helper path.
-- Commit once a boundary is proven so the next experiment starts clean.
-
-## Validation Set
+1. Run the baseline checks.
+2. Run at least one focused spec for every changed shared path.
+3. Compare `npm run quality:audit` when counts may have materially changed.
+4. Update this backlog only for completed work, new blockers, changed priorities, or material count changes.
+5. Commit at a proven boundary.
 
 Baseline:
 
@@ -191,26 +145,12 @@ npm run quality:no-focused-tests
 git diff --check
 ```
 
-Focused service-boundary example:
-
-```bash
-env -u ELECTRON_RUN_AS_NODE npx cypress run --env configFile=dev --browser chrome --spec "cypress/e2e/Services/Measure Service/ViewHumanReadable.cy.ts"
-```
-
-Add touched-area specs:
-
-- Saved CQL: `MeasureTranslatorVersion.cy.ts`, `QDM MeasureGroup.cy.ts`.
-- Measure setup: `Measure.cy.ts`, `MeasureBundle.cy.ts`, `MeasureExport.cy.ts`, `QDM Measure.cy.ts`.
-- Draft/version: `DraftMeasure.cy.ts`, `MeasureVersion.cy.ts`, `QDMMeasureVersion.cy.ts`.
-- Test cases: `QI Core Test-Cases.cy.ts`, `QDM Test-Cases.cy.ts`, `TestCaseImport.cy.ts`, `DeleteTest-Case.cy.ts`.
-- CQL library: `CreateCQL-Library.cy.ts`, `EditCQL-Library.cy.ts`, `VersionAndDraftCQL-Library.cy.ts`, `CQLLibraryDelete.cy.ts`.
-- Shared UI/page-object changes: include a relevant WebInterface smoke or editor spec.
+Focused validation should use the environment and spec closest to the changed behavior. For TEST regression proof, include `--env configFile=test`.
 
 ## Done Signals
 
-- Spec intent is clearer than before.
-- Repeated fixture/token/request mechanics moved behind a named helper.
+- Test intent is clearer.
+- Repeated mechanics moved behind an existing or justified named helper.
 - Negative states remain explicit.
 - Static checks pass.
-- A focused spec covering the changed helper path passes.
-- This backlog contains only new decisions, changed counts, or current priorities.
+- Focused coverage passes or a product/environment blocker is documented with the original assertion preserved.

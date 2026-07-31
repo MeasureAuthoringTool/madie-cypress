@@ -21,6 +21,8 @@ const measureData: CreateMeasureOptions = {}
 
 describe('Quantity Attribute -- Adding multiple attributes', () => {
     beforeEach('Create measure and login', () => {
+        measureName = 'QDMTestMeasure' + Date.now()
+        CqlLibraryName = 'QDMTestLibrary' + Date.now()
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoring
@@ -32,19 +34,12 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
+        OktaLogin.UILogout()
     })
 
     it('Add Quantity attribute to the Test case and Edit from Elements table', () => {
@@ -59,8 +54,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         //Add Supplemental Data Elements
         MeasureGroupPage.includeSdeData()
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.qdmSDESidNavLink)
 
         //navigate to the SDE side tab section on the test cases tab
         Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
@@ -71,8 +65,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -146,7 +139,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
 
         //Navigate back to Edit test case page and Edit Elements
         TestCasesPage.clickEditforCreatedTestCase()

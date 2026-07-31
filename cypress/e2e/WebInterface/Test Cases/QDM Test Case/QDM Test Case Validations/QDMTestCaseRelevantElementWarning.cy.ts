@@ -59,14 +59,13 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
     it('Present Relevant Elements warning & SDE changed warning after major CQL changes that affect test cases', () => {
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({
+            appendNewLine: true,
+            collapseEditor: true,
+            waitForDisabled: true,
+        })
 
-        // //Click on Measure Group tab
+        // Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -74,8 +73,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         MeasureGroupPage.includeSdeData()
 
         //Add Elements to the Test case
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.returnToTestCasesList(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
@@ -124,7 +122,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         // change cql to randomly chosen valid QDM cql
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openCqlEditor()
         CQLEditorPage.replaceCqlDocument('cypress/fixtures/QDMSDEMeasureAfterChanges.txt')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -133,8 +131,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         // set up intercept - this API has the data needed for this specific check
         cy.intercept('/api/qdm/cql/relevant-elements').as('relevantElements')
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.returnToTestCasesList(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.wait('@relevantElements')

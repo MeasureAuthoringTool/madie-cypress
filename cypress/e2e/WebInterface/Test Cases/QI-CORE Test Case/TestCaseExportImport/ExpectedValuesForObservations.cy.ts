@@ -65,13 +65,11 @@ describe('Ratio based measure with measure observations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
 
         cy.contains('span', 'Outcome').should('have.class', 'MuiChip-label')
         cy.get('#populationBasis').should('have.value', 'Encounter')
@@ -90,11 +88,11 @@ describe('Ratio based measure with measure observations', () => {
 
         // set expected values
         TestCasesPage.openExpectedActualTab()
-        cy.get(TestCasesPage.testCaseIPPExpected).type('3')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).type('1')
-        cy.get(TestCasesPage.numeratorObservationRow).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1')
 
         // save - return to list
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -169,13 +167,11 @@ describe('Proportion based measure with no observations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
 
         cy.contains('span', 'Outcome').should('have.class', 'MuiChip-label')
         cy.get('#populationBasis').should('have.value', 'Encounter')
@@ -194,9 +190,9 @@ describe('Proportion based measure with no observations', () => {
 
         // set expected values
         TestCasesPage.openExpectedActualTab()
-        cy.get(TestCasesPage.testCaseIPPExpected).type('3')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
 
         // save - return to list
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

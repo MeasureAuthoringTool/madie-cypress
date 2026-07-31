@@ -285,18 +285,8 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure
-        cy.readFile(filePath)
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="draft-action-btn"]').should('be.visible')
-                cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="draft-action-btn"]').click()
-            })
+        MeasuresPage.selectMeasure()
+        MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         //intercept draft id once measure is drafted
         cy.readFile(filePath)

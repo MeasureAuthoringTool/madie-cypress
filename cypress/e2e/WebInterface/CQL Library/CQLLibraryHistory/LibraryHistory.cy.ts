@@ -5,6 +5,7 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { TestData } from "../../../../Shared/TestData"
 
 let CQLLibraryName = ''
 let harpUserALT = ''
@@ -68,7 +69,12 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'SHARED')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
 
-        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Shared with - ' + harpUserALT)
+        TestData.getAccountDisplayName(harpUserALT).then((displayName) => {
+            cy.get('[data-testid="library-history-0_additionalActionMessage"]').should(
+                'contain.text',
+                `Shared with - ${displayName} (${harpUserALT})`
+            )
+        })
 
         //Close History popup
         cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
@@ -90,7 +96,12 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
         cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'UNSHARED')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Unshared with - ' + harpUserALT)
+        TestData.getAccountDisplayName(harpUserALT).then((displayName) => {
+            cy.get('[data-testid="library-history-0_additionalActionMessage"]').should(
+                'contain.text',
+                `Unshared with - ${displayName} (${harpUserALT})`
+            )
+        })
     })
 })
 
@@ -193,6 +204,13 @@ describe('Library History - Transfer action', () => {
         CQLLibrariesPage.cqlLibraryActionCenter('viewHistory')
         cy.get('[data-testid="library-history-0_actionType"]').should('contain.text', 'OWNERSHIP_TRANSFER')
         cy.get('[data-testid="library-history-0_performedBy"]').should('contain.text', harpUser)
-        cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Transferred from ' + harpUser + ' to ' + harpUserALT)
+        TestData.getAccountDisplayName(harpUser).then((ownerDisplayName) => {
+            TestData.getAccountDisplayName(harpUserALT).then((newOwnerDisplayName) => {
+                cy.get('[data-testid="library-history-0_additionalActionMessage"]').should(
+                    'contain.text',
+                    `Transferred from ${ownerDisplayName} (${harpUser}) to ${newOwnerDisplayName} (${harpUserALT})`
+                )
+            })
+        })
     })
 })

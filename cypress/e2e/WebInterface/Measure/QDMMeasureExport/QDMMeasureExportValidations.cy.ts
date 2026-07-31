@@ -124,29 +124,19 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
-        let currentUser = Cypress.env('selectedUser')
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
+        cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForExport')
         cy.get(Header.measures).click()
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
-
-                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-            })
+        MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForExport')
+        MeasuresPage.selectMeasure()
+        cy.get('[data-testid="export-action-btn"]').should('be.visible').and('be.enabled').click()
+        cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {

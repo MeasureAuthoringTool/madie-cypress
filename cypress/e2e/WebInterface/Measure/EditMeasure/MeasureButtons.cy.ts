@@ -29,7 +29,7 @@ describe('Delete measure on the measure edit page', () => {
     beforeEach('Create Measure', () => {
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
-        qiCoreCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 8 + randValue
+        qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 8 + randValue
 
         measureData.ecqmTitle = measureQDM
         measureData.cqlLibraryName = qdmCQLLibrary
@@ -68,22 +68,6 @@ describe('Delete measure on the measure edit page', () => {
         )
 
         OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        cy.get(Header.mainMadiePageButton).click()
-
-        MeasuresPage.actionCenter('edit', 1)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        cy.get(Header.mainMadiePageButton).click()
     })
 
     it('Delete measure on the edit page for a measure', () => {
@@ -126,11 +110,12 @@ describe('Delete measure on the measure edit page', () => {
 })
 
 describe('Version and Draft QDM Measure on the Edit Measure page', () => {
-    measureQDM = 'QDMMeasure' + Date.now() + randValue + 9 + randValue
-    let updatedMeasureName = 'Updated' + measureQDM
-    qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 9 + randValue
+    let updatedMeasureName = ''
 
     beforeEach('Create Measure', () => {
+        measureQDM = 'QDMMeasure' + Date.now() + randValue + 9 + randValue
+        updatedMeasureName = 'Updated' + measureQDM
+        qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 9 + randValue
         measureData.ecqmTitle = measureQDM
         measureData.cqlLibraryName = qdmCQLLibrary
         measureData.measureScoring = 'Proportion'
@@ -196,11 +181,12 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
 })
 
 describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
-    measureQICore = 'QiCore' + Date.now() + randValue + 5 + randValue
-    qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 5 + randValue
-    let updatedMeasureName = 'Updated' + measureQDM
+    let updatedMeasureName = ''
 
     beforeEach('Create Measure', () => {
+        measureQICore = 'QiCore' + Date.now() + randValue + 5 + randValue
+        qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 5 + randValue
+        updatedMeasureName = 'Updated' + measureQICore
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,

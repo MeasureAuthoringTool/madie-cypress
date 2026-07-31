@@ -48,16 +48,14 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
 
-        //adding supplemental data
         MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         MeasureGroupPage.includeSdeData()
-        cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up', () => {
@@ -77,7 +75,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics(
-            '085/27/1981 12:00 AM',
+            '05/27/1981 12:00 AM',
             'Living',
             'White',
             'Male',

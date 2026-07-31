@@ -71,7 +71,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         measureData.measureCql = measureQDMCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
     })
 
     afterEach('Logout and Clean up', () => {
@@ -86,11 +86,13 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(generateQDMCQLWithErrors(CqlLibraryName))
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveCql({
+            appendCommand: generateQDMCQLWithErrors(CqlLibraryName),
+            collapseEditor: true,
+            parseSpecialCharSequences: false,
+            waitForDisabled: true
+        })
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').and('contain.text', 'Error')
 
         //Navigate to Test Case page
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 50000)
@@ -147,7 +149,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
 
         OktaLogin.Login()
     })
@@ -188,7 +190,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
 
         OktaLogin.Login()
     })

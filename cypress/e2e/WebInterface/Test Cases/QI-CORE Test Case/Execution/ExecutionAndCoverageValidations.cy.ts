@@ -100,10 +100,21 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         //create a test case that will fail:
 
         //Navigate to Test Cases page and add Test Case details
+        TestCasesPage.returnToTestCasesList(TestCasesPage.newTestCaseButton)
         TestCasesPage.createTestCase('FailingTestCase', testCase.description, testCase.group, validTestCaseJson, false)
 
+        TestCasesPage.clickEditforCreatedTestCase()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
+
+        TestCasesPage.uncheckExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
+
         //Click on Execute Test Case button on Edit Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.returnToTestCasesList(TestCasesPage.executeTestCaseButton)
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()

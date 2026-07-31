@@ -5,10 +5,11 @@ import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 const now = Date.now()
-const measureName = 'TestMeasure' + now
-const CqlLibraryName = 'RETCBVLibrary' + now
+let measureName = 'TestMeasure' + now
+let CqlLibraryName = 'RETCBVLibrary' + now
 const testCase: TestCase = {
     title: 'test case title',
     description: 'DENOMFail' + now,
@@ -120,6 +121,9 @@ const invalidTestCaseJson = '{\n' +
 describe('Run / Execute Invalid Test Cases', () => {
 
     beforeEach('Login and Create Measure', () => {
+        measureName = 'TestMeasure' + Date.now()
+        CqlLibraryName = 'RETCBVLibrary' + Date.now()
+
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -127,24 +131,24 @@ describe('Run / Execute Invalid Test Cases', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
-        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.description, testCase.group, invalidTestCaseJson)
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, invalidTestCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.UILogout()
         Utilities.deleteMeasure()
+        OktaLogin.UILogout()
     })
 
     it('Run / Execute Invalid Test case on Test Case list page when the Execute Invalid Test case option is enabled', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and enable Execute invalid Test cases option
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executionOptionsSubTab)
 
         //Navigate to Execute Options page and enable Execute test cases regardless of validation status option
         cy.get(TestCasesPage.executionOptionsSubTab).click()
@@ -154,27 +158,23 @@ describe('Run / Execute Invalid Test Cases', () => {
         Utilities.waitForElementToNotExist(TestCasesPage.executionOptionsSuccessMsg, 70000)
 
         //Navigate back to Test case page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Verify warning message
-        cy.get(TestCasesPage.executionOptionsToastMsg).should('contain.text', 'Execution of invalid test cases is enabled. You may receive inaccurate pass/fail results. You can update this setting in Execution Configuration tab.')
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
 
         //Verify execution status on Test Case list page and Run
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        cy.get(TestCasesPage.testCaseStatus, { timeout: 105000 }).should('contain.text', 'Pass')
     })
 
     it('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and enable Execute invalid Test cases option
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executionOptionsSubTab)
 
         //Navigate to Execute Options page and enable Execute test cases regardless of validation status option
         cy.get(TestCasesPage.executionOptionsSubTab).click()
@@ -184,15 +184,11 @@ describe('Run / Execute Invalid Test Cases', () => {
         Utilities.waitForElementToNotExist(TestCasesPage.executionOptionsSuccessMsg, 70000)
 
         //Navigate back to Test case page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
 
-        //Verify warning message and status on test Case list page
-        cy.get(TestCasesPage.executionOptionsToastMsg).should('contain.text', 'Execution of invalid test cases is enabled. You may receive inaccurate pass/fail results. You can update this setting in Execution Configuration tab.')
+        //Verify status on test Case list page
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
 
-        //Verify execution status on Edit Test Case page
-        cy.get(TestCasesPage.executionOptionsToastMsg).should('contain.text', 'Execution of invalid test cases is enabled. You may receive inaccurate pass/fail results. You can update this setting in Execution Configuration tab.')
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
 

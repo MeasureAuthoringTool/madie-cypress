@@ -141,6 +141,25 @@ export class CQLLibrariesPage {
         })
     }
 
+    public static searchForLibraryByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        Utilities.dropdownSelect(CQLLibraryPage.filterByDropdown, 'Library')
+        cy.get(CQLLibraryPage.LibFilterTextField)
+            .should('be.visible')
+            .clear()
+            .type(`${libraryName}{enter}`)
+
+        return cy.get(this.libraryListRows, { timeout: 30000 })
+            .contains('td', libraryName)
+            .closest('tr')
+            .should('be.visible')
+    }
+
+    public static selectLibraryByName(libraryName: string): void {
+        this.searchForLibraryByName(libraryName)
+            .find('input[type="checkbox"]')
+            .check()
+    }
+
     public static selectCreatedLibraryRow(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
         this.goToLibrariesList()
 

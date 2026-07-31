@@ -100,31 +100,22 @@ describe('Run / Execute Test Case button validations', () => {
     })
 
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
-        //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-
         CQLEditorPage.replaceCqlDocument('cypress/fixtures/CQLForTestCaseExecution.txt')
+        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
-
-        TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
-
+        TestCasesPage.createTestCase(
+            testCase.title,
+            testCase.description,
+            testCase.group,
+            validTestCaseJson,
+            true
+        )
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
-
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.get(TestCasesPage.runTestButton).scrollIntoView()
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.disabled')
+        cy.get(TestCasesPage.runTestButton).scrollIntoView().should('be.visible').and('be.disabled')
     })
 
     it('Run / Execute Test Case button is disabled -- Invalid TC Json', () => {
@@ -462,38 +453,26 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
             true
         )
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).scrollIntoView().should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 7500)
 
-        //Click on Execute Test Case button on Edit Test Case page
-        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
-        //refresh test case list page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //open edit page for test case
         TestCasesPage.clickEditforCreatedTestCase()
-
-        //navigate to the details tab for the test case
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        TestCasesPage.openDetailsTab()
 
         //the 'Run Test Case' button, to run the test case, is unavailable
-        cy.get(TestCasesPage.runTestButton).should('exist')
-        cy.get(TestCasesPage.runTestButton).should('not.be.enabled')
+        cy.get(TestCasesPage.runTestButton).should('exist').and('be.disabled')
     })
 })
 

@@ -29,6 +29,15 @@ const CqlLibraryName = 'ProportionPatient' + timestamp
 const newMeasureName = 'Updated' + measureName
 const versionNumber = '1.0.000'
 
+const saveCqlForTestCaseCoverage = (): void => {
+    CQLEditorPage.saveCql({
+        appendNewLine: true,
+        collapseEditor: true,
+        successTimeout: 50000,
+        waitForDisabled: true,
+    })
+}
+
 describe('QDM Test Case sorting by Test Case number', () => {
 
     beforeEach('Create Measure', () => {
@@ -50,16 +59,12 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         MeasuresPage.actionCenter('edit')
 
+        saveCqlForTestCaseCoverage()
+
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         MeasureGroupPage.includeSdeData()
-
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
     afterEach('Clean up', () => {
@@ -210,15 +215,11 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
+        saveCqlForTestCaseCoverage()
+
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         MeasureGroupPage.includeSdeData()
-
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
     afterEach('Delete Measure and Logout', () => {
@@ -304,15 +305,11 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
+        saveCqlForTestCaseCoverage()
+
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         MeasureGroupPage.includeSdeData()
-
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
     afterEach('Clean up', () => {

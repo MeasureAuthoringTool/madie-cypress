@@ -79,7 +79,9 @@ describe('Measure List Page Searching', () => {
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureName + '?')
+        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg)
+            .should('contain.text', 'Are you sure you want to delete')
+            .and('contain.text', measureName)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
 

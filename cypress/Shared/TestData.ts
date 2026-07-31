@@ -187,6 +187,12 @@ export class TestData {
         return user
     }
 
+    public static getAccountDisplayName(harpId: string): Cypress.Chainable<string> {
+        return cy.readFile('cypress/fixtures/accountRealNames.json').then((nameData) => {
+            return (nameData[harpId] as string) ?? harpId
+        })
+    }
+
     public static fixturePath(name: string, owner: FixtureOwner = 'selectedUser'): string {
         return `cypress/fixtures/${this.selectedUser(owner)}/${name}`
     }
