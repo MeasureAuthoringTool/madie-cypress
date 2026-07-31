@@ -1,80 +1,105 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-07-22
+Last updated: 2026-07-31
 
-This guide captures stable test-architecture rules used in this repo. Keep tactical plans and changing counts in `docs/quality/test-refactor-backlog.md`.
+This document contains stable automation rules. Current priorities, audit counts, proof status, and blockers belong in `docs/quality/test-refactor-backlog.md`.
 
-## Source of Truth
+## Decision Order
 
-- Do not add guidance here from memory. Add only rules proven by committed code, audit output, focused runs, or team decision.
-- Keep this file stable and short. Move run-by-run notes, temporary targets, and changing counts to the backlog.
-- Preserve intentional exceptions with the reason and owning scenario.
-- During PR review, link changes to quality outcomes: speed, isolation, reuse, diagnosability, reliability, or pipeline signal.
+When rules compete, use this order:
+
+1. Reliability
+2. Test isolation
+3. Helper reuse
+4. Readability
+5. Speed
+6. Minimal code change
+
+Add guidance only when it is supported by committed code, focused validation, audit output, or a team decision.
 
 ## Test Boundaries
 
 - Service specs under `cypress/e2e/Services/` should set up and verify service behavior through APIs.
-- UI specs under `cypress/e2e/WebInterface/` should use the browser for UI behavior: navigation, rendering, editor behavior, permissions, and user interaction.
-- Page objects should not own service setup mechanics.
-- When a feature-flagged change alters an existing contract, keep the current coverage active and add the new coverage alongside it. Put persistence and payload assertions in service specs first, then add UI coverage only for the flagged browser behavior once that UI is exposed.
+- UI specs under `cypress/e2e/WebInterface/` should reserve the browser for rendering, navigation, permissions, editor behavior, and user interaction.
+- Complete API-supported measure, group, library, and test-case setup before UI login. Prefer one login and one continuous UI session.
+- Page objects own UI interaction. `TestData` and domain request helpers own tokens, fixture paths, IDs, and service setup.
+- Keep negative authorization, validation, and error assertions explicit when setup moves to APIs.
+- For feature-flagged contracts, keep current coverage active and add new coverage alongside it. Put persistence and payload checks in service specs first.
 - Split large specs by behavior only after shared setup and data helpers are stable.
 
-## Shared Test Data Rules
+## Test Data and API Helpers
 
-- Use `TestData` as the service-test contract for domain actions, fixture paths, selected users, access tokens, IDs, and common requests.
-- Use `TestData.getAccountDisplayName(harpId)` when UI text includes both an account display name and HARP ID; do not place general account lookup behind feature-specific helpers such as locking or history pages.
-- Prefer `TestData.fixturePath`, `readFixture`, `writeFixture`, `readMeasureId`, `readCqlLibraryId`, `readTestCaseId`, and related ID helpers over hand-built `cypress/fixtures/...` paths.
-- Prefer `TestData.withAccessToken`, `requestWithAccessToken`, and domain request helpers over inline `cy.getCookie('accessToken')` request setup.
-- Keep negative authorization, validation, and error-state assertions explicit even when setup moves behind helpers.
-- Use owner-aware helpers for `selectedUser` and `selectedAltUser` so parallel user allocation stays centralized.
+- Use owner-aware `TestData` helpers for `selectedUser` and `selectedAltUser`.
+- Prefer `fixturePath`, `readFixture`, `writeFixture`, `readMeasureId`, `readCqlLibraryId`, `readTestCaseId`, and related helpers over hand-built fixture paths.
+- Prefer `withAccessToken`, `requestWithAccessToken`, and domain request helpers over inline cookie or token plumbing.
+- Use `TestData.getAccountDisplayName(harpId)` for UI text that includes a display name and HARP ID.
+- Generate unique names inside retryable hooks such as `beforeEach`; spec-load names can collide when Cypress retries setup.
 
-## Established Helper Paths
+Reuse these established paths before adding request code:
 
-These helper paths are already established and should be reused before adding new request plumbing:
+- Measures: `requestMeasure`, `readMeasure`, `requestMeasureById`, `updateMeasure`, `updateCurrentMeasure`.
+- CQL: `saveMeasureCql`, `expectSavedMeasureCql`, `translateFhirCql`, `translateQdmCql`.
+- Lifecycle: `requestMeasureBundle`, `requestMeasureExport`, `requestMeasureDraft`, `requestDraftStatus`, `versionMeasure`, `requestAdminMeasureDelete`, `requestMeasureDeleteAction`.
+- Groups and test cases: `requestMeasureGroup`, `requestMeasureGroupById`, `requestMeasureGroupStratification`, `requestMeasureTestCase`, `requestMeasureTestCaseList`, `requestTestCaseImports`.
+- CQL libraries: `requestCqlLibrary`, `readCqlLibrary`, `requestCqlLibraryById`, `updateCqlLibrary`, `updateCurrentCqlLibrary`, `searchCqlLibraries`, `versionCqlLibrary`, `draftCqlLibrary`, `requestVersionedCqlLibrary`.
 
-- Measure setup and reads: `requestMeasure`, `readMeasure`, `requestMeasureById`, `updateMeasure`, `updateCurrentMeasure`.
-- CQL save and translation: `saveMeasureCql`, `expectSavedMeasureCql`, `translateFhirCql`, `translateQdmCql`.
-- Measure lifecycle: `requestMeasureBundle`, `requestMeasureExport`, `requestMeasureDraft`, `requestDraftStatus`, `versionMeasure`, `requestAdminMeasureDelete`, `requestMeasureDeleteAction`.
-- Measure groups and test cases: `requestMeasureGroup`, `requestMeasureGroupById`, `requestMeasureGroupStratification`, `requestMeasureTestCase`, `requestMeasureTestCaseList`, `requestTestCaseImports`.
-- CQL library service work: `requestCqlLibrary`, `readCqlLibrary`, `requestCqlLibraryById`, `updateCqlLibrary`, `updateCurrentCqlLibrary`, `searchCqlLibraries`, `versionCqlLibrary`, `draftCqlLibrary`, `requestVersionedCqlLibrary`.
+## Selectors and Row Targeting
 
-## Reliability Rules
+- Prefer selectors in this order: `data-testid`, accessible role/name, stable text, stable container plus child, then CSS class.
+- Put reusable selectors in the relevant page object. Inline selectors are acceptable for one-off assertions.
+- Select created rows by stored ID, generated name, title, or case number tied to the scenario. Do not rely on row index or table order.
+- Account for pagination and submitted search state before assuming a created row is visible.
+- Do not assert `be.enabled` on non-form containers such as MUI SpeedDial roots or anchor-backed tabs. Target the actual button or use `aria-disabled`.
 
-- Do not commit focused tests. `npm run quality:no-focused-tests` is the guardrail.
-- Skipped tests need an owner, ticket, or removal decision.
-- For tests written ahead of a feature flag rollout, keep them present but not enabled until the flag is available in the target environment. Retire the legacy assertions only after the new path is enabled by default or the old path is removed.
-- Replace fixed numeric waits with route aliases, visible/enabled assertions, or purposeful polling helpers.
-- Use `{ force: true }` only when validating intentionally hidden or native controls; otherwise fix readiness or selector strategy.
-- Avoid global exception suppression. If an exception must be tolerated, make the handling targeted and explain the scope.
-- Prefer stable `data-testid` selectors when available.
-- When a spec creates uniquely named rows in a list, select those rows by generated name or stored ID instead of fixture-position helpers or table order. Row-order selection becomes flaky when cleanup is partial or older test data is still visible.
-- For shared-resource locking, prefer explicit helpers such as `lockSharedMeasure(...)`, `lockSharedTestCase(...)`, and `lockSharedLibrary(...)` over generic alt-user lock calls. Shared-lock scenarios often authenticate as one user while reading the resource ID from the primary fixture owner, and explicit helpers keep that ownership split correct.
-- For locked measure, library, and test-case UI assertions, prefer a shared locked-entity validation helper for display-name lookup, modal text, tooltip text, and environment-specific legacy fallback handling instead of duplicating string formatting in specs.
-- In Expected/Actual test-case flows, prefer `TestCasesPage.openExpectedActualTab(...)` plus `checkExpectedActualCheckbox(...)` or `uncheckExpectedActualCheckbox(...)` over direct tab clicks and raw boolean checkbox actions. On Monday, July 20, 2026, focused Cypress validation showed the split-panel sash can leave expected-value checkboxes clipped or reported as covered even when the selector is correct. Avoid pre-asserting `be.visible` on those clipped boolean inputs; rely on the shared helper to normalize the panel first.
-- In test-case split-view editor flows, use the shared native tab-activation path for JSON, Details, and return navigation. Cypress actionability scrolling can shift the layout, clipped tabs can still be valid activation targets, and anchor-backed tabs must not use `be.enabled`; assert that they exist and are not `aria-disabled` instead.
-- In Highlighting split-view flows, toggle a Results section through the shared Results-header helper instead of clicking its right-edge expand/collapse icon. The sash can clip that icon, and Cypress actionability scrolling can move it directly beneath the sash even though the section header remains usable.
-- Treat Ace's transparent textarea as an intentionally hidden keyboard input. Prove readiness on the visible editor container, then use the shared JSON editor helper rather than adding `be.visible` to the textarea or duplicating forced editor interactions in specs.
-- For controlled React text inputs that restore an old value between events, keep clear and type contiguous and assert the final value after re-querying the input. Do not insert an empty-value assertion between clear and type unless the empty state itself is the behavior under test.
-- When a reusable test-case editor control needs a `data-testid` selector, add it to `TestCasesPage` instead of leaving the literal selector in a spec. Inline `data-testid` strings are acceptable for one-off assertions, but reusable Expected/Actual, stratification, action-center, and editor controls should stay behind the page object so selector churn is localized.
-- When a reusable measure, library, or test-case UI control needs a `data-testid` selector, add it to the relevant page object instead of leaving the literal selector in a spec. Inline `data-testid` strings are acceptable for one-off assertions, but reusable list-row action buttons, locked-state controls, and shared navigation targets should stay behind the page object so selector churn is localized.
-- During temporary UI debug instrumentation or high-value flow narration, prefer the shared `step(...)` helper over ad hoc `cy.log(...)` calls so runner output stays consistent across specs and shared helpers.
-- When a UI scenario needs API-created measure data or test cases, complete that API setup before the UI login when the existing helpers support it. Prefer one login and one continuous edit session over repeated login, edit, return-to-list, and edit cycles; repeated session and SPA navigation transitions can leave the route and rendered tab content out of sync.
-- After saving controlled UI state through a shared helper, wait for a meaningful settled condition before continuing. A success toast alone may not prove that React state is ready for navigation; when available, also verify the save control returns to its disabled state or wait for the save request and resulting UI readiness.
-- Use the shared native tab-activation helper for Expected/Actual and Test Cases transitions that can shift the split view. Pass a destination readiness selector when the next command depends on rendered tab content.
-- Use `EditMeasurePage.openPopulationCriteriaTab(...)` with a destination readiness selector when CQL save or route updates precede Population Criteria setup; a raw tab click can leave the tab selected before its group controls render.
-- When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content. Synchronize on the intended destination tab instead.
+## Navigation and Readiness
 
-## Refactor Rules
+- A selected tab is not proof that its content rendered. Pass a destination readiness selector whenever the next command depends on tab content.
+- Use the shared native activation paths for Test Cases, Details, JSON, Expected/Actual, and return navigation. Cypress actionability scrolling can shift split views or leave stale content mounted.
+- Use `EditMeasurePage.openPopulationCriteriaTab(...)` after CQL saves or route updates, with a concrete Population Criteria control as readiness.
+- When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content.
+- After route-changing actions, verify the intended page content, not only the URL. MADiE can update the route before React remounts the destination.
+- After saves, wait for a settled condition such as a disabled Save button or completed request. A success toast alone may precede the final rerender.
 
-- Prefer small helper moves that remove repeated mechanics across multiple specs.
-- Do not broaden framework abstractions unless they remove real duplication or align with an established local pattern.
-- Keep setup helpers named around domain behavior, not implementation steps.
-- Avoid changes that only make code prettier without improving speed, isolation, reuse, diagnosability, or reliability.
-- When a helper changes a shared path, validate with static checks and at least one focused spec that exercises that path.
+## Test Case Split Views
 
-## Validation Commands
+- Use `openExpectedActualTab(...)`, `checkExpectedActualCheckbox(...)`, `uncheckExpectedActualCheckbox(...)`, and `typeExpectedActualValue(...)` instead of raw split-panel interactions.
+- Do not pre-assert visibility on clipped Expected/Actual inputs when the shared helper already normalizes the panel.
+- Toggle Highlighting Results through the shared Results-header helper; the split-view sash can cover the right-edge icon.
+- Treat Ace's transparent keyboard textarea as intentionally hidden. Prove readiness on the visible editor and use the shared JSON editor helper.
+- Keep clear and type contiguous for controlled React inputs that restore prior values between events; assert the final value after re-querying.
 
-Run these for most helper or service-boundary work:
+## CQL and Population Criteria
+
+- Reuse `CQLEditorPage.saveCql(...)` and wait for the Save button to become disabled when later setup depends on compiled CQL.
+- Create or update Population Criteria only after valid CQL has settled.
+- Use API group setup when the scenario does not validate the Population Criteria UI itself.
+- Preserve intentional invalid-CQL UI flows when the test verifies editor error persistence or visible validation behavior.
+
+## Assertions and Error Handling
+
+- Assert durable UI contracts: stable selectors, meaningful text fragments, request status, and destination state.
+- Use shared dialog and toast helpers when the same contract appears in multiple specs.
+- Keep product failures visible. Do not weaken assertions to accept an incorrect state.
+- Do not add broad `uncaught:exception` suppression. Any tolerated exception must be narrowly scoped and explained.
+- Skipped tests require an owner, ticket, or removal decision.
+
+## Waits and Interactions
+
+- Do not add fixed waits. Use route aliases, visible/enabled assertions, save settlement, or purposeful polling.
+- Use `{ force: true }` only for intentionally hidden/native controls with a documented reason.
+- Prefer `step(...)` over ad hoc `cy.log(...)` for reusable helpers or high-value flow narration.
+
+## Refactoring
+
+- Search for an existing helper before creating one.
+- Move repeated mechanics behind domain-named helpers; do not abstract one-off code.
+- Preserve behavior and explicit negative assertions.
+- Stop when duplication is reduced and the focused validation passes. Avoid style-only follow-up changes.
+- Validate every shared-path change with static checks and at least one focused consumer.
+
+## Validation
+
+Baseline:
 
 ```bash
 npm run compile
@@ -82,9 +107,9 @@ npm run quality:no-focused-tests
 git diff --check
 ```
 
-Add focused Cypress specs based on the touched area. Use the backlog for the current recommended validation set.
+Run focused Cypress coverage for each touched shared path. Use `--env configFile=test` for TEST regression proof.
 
 ## Intentional Exceptions
 
-- `QDMMeasureVersion.cy.ts` keeps the invalid-CQL UI save path because that scenario validates CQL error persistence.
+- `QDMMeasureVersion.cy.ts` keeps the invalid-CQL UI save path because it validates CQL error persistence.
 - `DeleteCMSID.cy.ts` uses edit mode for CMS ID generation; it is not leftover saved-CQL setup.
