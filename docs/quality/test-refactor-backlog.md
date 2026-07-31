@@ -33,6 +33,43 @@ Work boundaries:
 - Do not combine unrelated export, transfer, highlighting, and editor refactors.
 - Do not add retries or weaker assertions for known product defects.
 
+### P3 — Opt-In Full-Suite CI Lane Isolation
+
+Goal: provide an on-demand full-suite workflow that separates Service and WebInterface execution by workload without changing the existing nightly job.
+
+Scope:
+
+- Add a new, explicitly selected TEST workflow for manually requested full-suite runs.
+- Leave the existing nightly job, its schedule, and its selected script unchanged.
+- Do not repurpose `cy:parallel:test:all:tests` if the nightly job currently selects it; confirm the external Jenkins configuration before naming the new entry point.
+- Do not change targeted spec lists, smoke-only jobs, environment-specific runs, or direct Service/UI scripts.
+
+Proposed opt-in full-suite flow:
+
+1. Run static validation.
+2. Run all Service specs on one worker as a non-blocking initial lane.
+3. Capture and archive the initial Service result, then continue even when Service failures exist.
+4. Run WebInterface specs with the existing three-worker parallel allocation.
+5. Rerun failed Service specs serially and failed WebInterface specs through the parallel runner.
+6. Calculate the final build result only after both rerun lanes finish.
+7. Report persistent Service and WebInterface failures separately in artifacts and notifications.
+
+Isolation requirements:
+
+- Keep initial and rerun spec lists, summaries, Mochawesome output, and archives separate by lane.
+- Release or safely reclaim stale user locks between phases after the previous Cypress processes exit.
+- Prevent download and generated-asset cleanup in one worker from deleting another worker's files.
+- Preserve the current three-worker UI account limit unless additional primary and alternate accounts are provisioned.
+
+Done signals:
+
+- An initial Service failure does not prevent WebInterface execution.
+- Service specs never enter the WebInterface parallel worker pool.
+- Reruns target only the failed tests in their original lane.
+- The final status reflects persistent failures from either lane.
+- Manually initiated opt-in full-suite runs produce complete, lane-specific diagnostics.
+- The existing nightly job behaves exactly as it did before this work.
+
 ## Deferred or Blocked
 
 | Area | Status | Next action |
@@ -119,9 +156,9 @@ Largest current concentrations:
 - Service-tail fixture/token plumbing.
 - Global exception suppression in `cypress/support/e2e.ts`.
 
-## Completed Priority
+## Completed Foundation
 
-### P1 — Shared Helper and Infrastructure Hardening
+### Shared Helper and Infrastructure Hardening
 
 Status: Done.
 
