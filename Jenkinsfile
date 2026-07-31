@@ -10,7 +10,7 @@ pipeline {
     choice(
       choices: [
         'cy:parallel:test','cy:parallel:test:ui:smoketests','cy:parallel:dev:ui:smoketests',
-        'cy:parallel:test:all:tests','test:specific:files:parallel','dev:all:ui:tests','dev:all:tests',
+        'cy:parallel:test:all:tests','test:opt-in:split-full-suite','test:specific:files:parallel','dev:all:ui:tests','dev:all:tests',
         'dev:ui:smoketests','dev:ui:cqllibrary:cqlEditor','dev:ui:cqllibrary','dev:ui:measure:cqlEditor',
         'dev:measure:editMeasure:ui:tests','dev:ui:testCases:testCasePopulationValues',
         'dev:ui:cqllibrary:versionAndDraft','dev:all:services:tests','dev:services:measureService:tests',
@@ -33,7 +33,7 @@ pipeline {
     text(
       name: 'MANUAL_SPEC_LIST',
       defaultValue: '',
-      description: 'Optional newline-separated Cypress spec files. Use with test:specific:files:parallel to create test-files.txt at runtime.'
+      description: 'Optional newline-separated Cypress spec files. Use with test:specific:files:parallel or the opt-in split full-suite workflow.'
     )
     choice(name: 'BUILD_CONTAINER', description: 'Rebuild Cypress Container?', choices: ['no','yes'])
   }
@@ -133,6 +133,7 @@ pipeline {
     }
 
     stage('Run Tests') {
+      when { expression { params.TEST_SCRIPT != 'test:opt-in:split-full-suite' } }
       agent {
         docker {
           image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
@@ -215,7 +216,48 @@ pipeline {
       }
     }
 
+    stage('Run Opt-In Split Full Suite') {
+      when { expression { params.TEST_SCRIPT == 'test:opt-in:split-full-suite' } }
+      agent {
+        docker {
+          image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
+          args "-u 0 -v $HOME/.npm:/.npm"
+          reuseNode true
+        }
+      }
+      steps {
+        sh '''
+          cd ${WORKSPACE}
+          if [ ! -d node_modules ]; then
+            echo "Installing dependencies in ${WORKSPACE} ..."
+            npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+          else
+            echo "Using existing node_modules in ${WORKSPACE}"
+          fi
+        '''
+
+        slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
+
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', catchInterruptions: true) {
+          sh '''
+            cd ${WORKSPACE}
+            SPLIT_ARGS=""
+            if [ -n "${MANUAL_SPEC_LIST:-}" ]; then
+              echo "Writing MANUAL_SPEC_LIST for the opt-in split workflow"
+              printf '%s\n' "${MANUAL_SPEC_LIST}" \
+                | tr -d '\r' \
+                | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;/^$/d' \
+                > ${WORKSPACE}/split-suite-specs-${BUILD_NUMBER}.txt
+              SPLIT_ARGS="SPLIT_SUITE_SPEC_FILE=${WORKSPACE}/split-suite-specs-${BUILD_NUMBER}.txt"
+            fi
+            env ${SPLIT_ARGS} timeout 12h npm run test:opt-in:split-full-suite
+          '''
+        }
+      }
+    }
+
     stage('Re-run Failures Twice') {
+      when { expression { params.TEST_SCRIPT != 'test:opt-in:split-full-suite' } }
       agent {
         docker {
           image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
@@ -490,7 +532,7 @@ ${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
           echo "Post summary/Slack failed: ${e}"
         }
       }
-      archiveArtifacts artifacts: "mochawesome-*.tar.gz, failures-*.txt, failure-details-*.txt, failure-summary-*.json, failure-trend-*.json, failure-trend-*.md, failure-trend-*.txt, cypress/results/*.json, runner-results/*.json", allowEmptyArchive: true, onlyIfSuccessful: false
+      archiveArtifacts artifacts: "mochawesome-*.tar.gz, failures-*.txt, failure-details-*.txt, failure-summary-*.json, failure-trend-*.json, failure-trend-*.md, failure-trend-*.txt, planned-specs-*.txt, split-suite-specs-*.txt, cypress/results/*.json, lane-results/**/*.json, runner-results/*.json", allowEmptyArchive: true, onlyIfSuccessful: false
       cleanWs()
     }
   }

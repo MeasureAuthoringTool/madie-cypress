@@ -35,13 +35,13 @@ Work boundaries:
 
 ### P3 — Opt-In Full-Suite CI Lane Isolation
 
-Goal: provide an on-demand full-suite workflow that separates Service and WebInterface execution by workload without changing the existing nightly job.
+Goal: provide an on-demand full-suite workflow that separates Service and WebInterface execution by workload without changing existing Jenkins selections.
 
 Scope:
 
 - Add a new, explicitly selected TEST workflow for manually requested full-suite runs.
-- Leave the existing nightly job, its schedule, and its selected script unchanged.
-- Do not repurpose `cy:parallel:test:all:tests` if the nightly job currently selects it; confirm the external Jenkins configuration before naming the new entry point.
+- Leave all existing Jenkins selections and scripts unchanged.
+- Do not repurpose `cy:parallel:test:all:tests`; use a new entry point for the opt-in workflow.
 - Do not change targeted spec lists, smoke-only jobs, environment-specific runs, or direct Service/UI scripts.
 
 Proposed opt-in full-suite flow:
@@ -68,7 +68,7 @@ Done signals:
 - Reruns target only the failed tests in their original lane.
 - The final status reflects persistent failures from either lane.
 - Manually initiated opt-in full-suite runs produce complete, lane-specific diagnostics.
-- The existing nightly job behaves exactly as it did before this work.
+- Existing Jenkins selections behave exactly as they did before this work.
 
 ## Deferred or Blocked
 
@@ -140,7 +140,7 @@ Command: `npm run quality:no-focused-tests` on 2026-07-31.
 | Shared files | 30 |
 | Shared lines | 19,379 |
 | Support files / lines | 3 / 629 |
-| Scripts / lines | 9 / 1,561 |
+| Scripts / lines | 11 / 1,769 |
 | Skipped tests | 12 |
 | Manual fixture paths | 179 |
 | Manual access-token plumbing | 87 |

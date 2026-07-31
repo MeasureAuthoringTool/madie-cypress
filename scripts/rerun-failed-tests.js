@@ -16,6 +16,7 @@ const rerunMetadataFile =
   ''
 const browser = process.env.CYPRESS_RERUN_BROWSER || 'chrome'
 const headed = process.env.CYPRESS_RERUN_HEADED !== 'false'
+const parallelThreads = Number(process.env.CYPRESS_RERUN_THREADS || 1)
 
 if (!summaryFile) {
   console.error('Missing failure summary file. Set FAILED_TEST_SUMMARY or pass it as the first argument.')
@@ -140,6 +141,37 @@ function runCypress(specs, extraEnv = {}) {
   return result.status || 0
 }
 
+function runParallel(specs, targetedTestsBase64 = '') {
+  if (!specs.length) {
+    return 0
+  }
+
+  const listFile = path.resolve(
+    process.env.CYPRESS_RERUN_SPEC_LIST || `rerun-specs-${process.pid}-${Date.now()}.txt`
+  )
+  fs.writeFileSync(listFile, specs.join('\n') + '\n')
+
+  const runScript = targetedTestsBase64 ? 'cy:run:test:targeted' : 'cy:run:test:isolated'
+  const result = spawnSync(
+    process.execPath,
+    [path.resolve(__dirname, 'run-spec-list.js'), configFile, runScript, listFile],
+    {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        NO_COLOR: '1',
+        CYPRESS_PARALLEL_THREADS: String(parallelThreads),
+        FAILED_TESTS_BASE64: targetedTestsBase64
+      }
+    }
+  )
+
+  if (fs.existsSync(listFile)) {
+    fs.unlinkSync(listFile)
+  }
+  return result.status || 0
+}
+
 let status = 0
 
 writeRerunMetadata()
@@ -152,7 +184,9 @@ if (targetSpecs.length) {
   const encodedTests = Buffer.from(JSON.stringify(failedTestsBySpec), 'utf8').toString('base64')
 
   console.log(`Rerunning ${failedTestCount} failed test(s) across ${targetSpecs.length} spec file(s).`)
-  const targetedStatus = runCypress(targetSpecs, { failedTestsBase64: encodedTests })
+  const targetedStatus = parallelThreads > 1
+    ? runParallel(targetSpecs, encodedTests)
+    : runCypress(targetSpecs, { failedTestsBase64: encodedTests })
   status = status || targetedStatus
 } else {
   console.log('No targetable failed test titles found.')
@@ -160,7 +194,7 @@ if (targetSpecs.length) {
 
 if (fallbackSpecs.length) {
   console.log(`Rerunning ${fallbackSpecs.length} full spec file(s) because they had hook or unavailable failure details.`)
-  const fallbackStatus = runCypress(fallbackSpecs)
+  const fallbackStatus = parallelThreads > 1 ? runParallel(fallbackSpecs) : runCypress(fallbackSpecs)
   status = status || fallbackStatus
 }
 

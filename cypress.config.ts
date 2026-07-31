@@ -34,6 +34,14 @@ export default defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
+      if (config.env.isolateWorkerArtifacts) {
+        const worker = process.env.CYPRESS_THREAD || 'serial'
+        const artifactRoot = `cypress/worker-artifacts/${worker}`
+        config.downloadsFolder = `${artifactRoot}/downloads`
+        config.screenshotsFolder = `${artifactRoot}/screenshots`
+        config.videosFolder = `${artifactRoot}/videos`
+      }
+
       on("before:browser:launch", (browser = Cypress.browser, launchOptions) => {
         prepareAudit(launchOptions);
         if (browser.family === 'chromium' && browser.name !== 'electron') {
