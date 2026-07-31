@@ -163,8 +163,8 @@ export class EditMeasurePage {
     public static readonly cqlEditorExpandCollapseBtn = '[data-testid="expanded-button"]'
 
     //Delete Measure
-    public static readonly deleteMeasureConfirmationMsg = '.message'
-    public static readonly deleteMeasureConfirmationButton = '[data-testid=delete-measure-button-2]'
+    public static readonly deleteMeasureConfirmationMsg = '[role="dialog"] .MuiDialogContent-root'
+    public static readonly deleteMeasureConfirmationButton = '[data-testid="delete-dialog-continue-button"]'
     public static readonly successfulMeasureDeleteMsg = '[data-testid=edit-measure-information-success-text]'
 
     //Measure MetaData

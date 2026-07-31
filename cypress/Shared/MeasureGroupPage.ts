@@ -432,7 +432,8 @@ export class MeasureGroupPage {
         PopNumP?: string,
         NumerExcl?: string,
         PopDenomP?: string,
-        popBasis?: string
+        popBasis?: string,
+        groupNumber = 0
     ): string {
         if (altUser === undefined || altUser === null) {
             altUser = false
@@ -515,9 +516,9 @@ export class MeasureGroupPage {
                 improvementNotation: 'Increased score indicates improvement'
             },
             owner,
-            0,
+            groupNumber,
             measureNumber,
-            'measureGroupId'
+            `measureGroupId${groupNumber > 0 ? groupNumber : ''}`
         )
     }
 
@@ -859,11 +860,27 @@ export class MeasureGroupPage {
     public static includeSdeData(): void {
         //Add Supplemental Data Elements
         cy.get(this.leftPanelSupplementalDataTab).click()
-        cy.get(this.supplementalDataDefinitionSelect).click()
-        cy.get(this.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
-        cy.get(this.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
-        cy.get(this.supplementalDataDefinitionDropdown).contains('SDE Race').click()
-        cy.get(this.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+        const selectSde = (definition: string): void => {
+            cy.get('body').then(($body) => {
+                if (!$body.find(this.supplementalDataDefinitionDropdown).length) {
+                    cy.get(this.supplementalDataDefinitionSelect).should('be.visible').click()
+                }
+            })
+
+            cy.contains(
+                `${this.supplementalDataDefinitionDropdown} li[role="option"]`,
+                definition,
+                { timeout: 50000 },
+            )
+                .scrollIntoView()
+                .should('be.visible')
+                .click()
+        }
+
+        selectSde('SDE Ethnicity')
+        selectSde('SDE Payer')
+        selectSde('SDE Race')
+        selectSde('SDE Sex')
 
         //Save Supplemental data
         cy.get(this.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()

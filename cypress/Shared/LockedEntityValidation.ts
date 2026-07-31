@@ -1,3 +1,5 @@
+import { TestData } from './TestData'
+
 export type LockedEntityType = 'measure' | 'test case' | 'library'
 
 export class LockedEntityValidation {
@@ -22,9 +24,7 @@ export class LockedEntityValidation {
     }
 
     public static getDisplayName(harpId: string): Cypress.Chainable<string> {
-        return cy.readFile('cypress/fixtures/accountRealNames.json').then((nameData) => {
-            return (nameData[harpId] as string) ?? harpId
-        })
+        return TestData.getAccountDisplayName(harpId)
     }
 
     public static normalizeTooltipText(text: string): string {
