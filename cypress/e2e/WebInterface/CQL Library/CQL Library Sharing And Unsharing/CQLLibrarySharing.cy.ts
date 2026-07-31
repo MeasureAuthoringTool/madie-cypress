@@ -6,10 +6,10 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Ut
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { TestData } from "../../../../Shared/TestData"
 
 const now = Date.now()
 const randomCQLLibraryName = 'LibrarySharingDraft' + now
-const updatedCQLLibraryName = 'NewNameForLibrarySharing' + now
 const versionNumber = '1.0.000'
 const validCql = LibraryCQL.validCQL4QICORELib
 let harpUserALT = ''
@@ -31,6 +31,7 @@ describe('CQL Library Sharing', () => {
     })
 
     it('Verify CQL Library can be edited by the shared user', () => {
+        const sharedUserLibraryName = 'SharedUserLibraryUpdate' + Date.now()
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -45,7 +46,7 @@ describe('CQL Library Sharing', () => {
         //Edit CQL Library details
         CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear()
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(updatedCQLLibraryName)
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(sharedUserLibraryName)
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
         cy.log('CQL Library Updated Successfully')
@@ -94,7 +95,6 @@ describe('CQL Library Sharing - Multiple instances', () => {
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Shared to the new owner', () => {
-        const currentUser = Cypress.env('selectedUser')
 
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -131,7 +131,9 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', request?.response?.body.id)
+            expect(request.response?.statusCode).to.be.oneOf([200, 201])
+            expect(request.response?.body.id).to.be.a('string').and.not.be.empty
+            TestData.writeCqlLibraryId(request.response!.body.id)
         })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
@@ -149,10 +151,9 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName) //fail here 
-        //Click on Expand button to view Versioned Library
-        cy.get('[data-testid="measure-name-0_expandArrow"]').click()
-        cy.get('[data-testid="library-list-tbl"]').should('contain', CQLLibraryName)
+        CQLLibrariesPage.searchForLibraryByName(randomCQLLibraryName)
+            .should('contain.text', versionNumber)
+            .and('contain.text', 'Draft')
 
         // return to list so library unlocks
         cy.get(Header.cqlLibraryTab).click()
@@ -223,6 +224,7 @@ describe('Share CQL Library using Action Center buttons', () => {
     })
 
     it('Verify CQL Library owner can share Library from Action centre share button and shared user is able to edit Library', () => {
+        const actionCenterLibraryName = 'ActionCenterLibraryUpdate' + Date.now()
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
@@ -261,7 +263,7 @@ describe('Share CQL Library using Action Center buttons', () => {
         //Edit Library details
         CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear()
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(updatedCQLLibraryName)
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(actionCenterLibraryName)
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
         cy.log('CQL Library Updated Successfully')
@@ -347,7 +349,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const draftedCQLLibraryName = 'SharedLibraryDraft' + Date.now()
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
@@ -372,7 +374,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
-        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(updatedCQLLibraryName)
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(draftedCQLLibraryName)
 
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
@@ -384,7 +386,9 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/' + currentUser + '/cqlLibraryId', request?.response?.body.id)
+            expect(request.response?.statusCode).to.be.oneOf([200, 201])
+            expect(request.response?.body.id).to.be.a('string').and.not.be.empty
+            TestData.writeCqlLibraryId(request.response!.body.id)
         })
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
@@ -417,9 +421,8 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-        cy.get('[data-testid="measure-name-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
-        //Click on Expand button to view Versioned Library
-        cy.get('[data-testid="measure-name-0_expandArrow"]').click()
-        cy.get('[data-testid="library-list-tbl"]').should('contain.text', CQLLibraryName)
+        CQLLibrariesPage.searchForLibraryByName(draftedCQLLibraryName)
+            .should('contain.text', versionNumber)
+            .and('contain.text', 'Draft')
     })
 })

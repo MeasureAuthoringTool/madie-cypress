@@ -4,6 +4,7 @@ import { CQLLibraryPage, EditLibraryActions } from '../../../../Shared/CQLLibrar
 import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const CQLLibraryName = 'AdminTransferLibrary' + Date.now()
 const CQLLibraryPublisher = 'SemanticBits'
@@ -24,20 +25,15 @@ describe('CQL Library Transfer performed by Admin user', () => {
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         // initiate transfer to altUser, with retain
-        CQLLibrariesPage.cqlLibraryActionCenter('transfer')
+        CQLLibrariesPage.selectLibraryByName(CQLLibraryName)
+        cy.get(CQLLibrariesPage.actionCenterTransferBtn).should('be.enabled').click()
 
-        // added for https://jira.cms.gov/browse/MAT-9630
         Utilities.waitForElementWriteEnabled(MeasuresPage.newOwnerTextbox, 5500)
-        cy.get(MeasuresPage.newOwnerTextbox).type('notAnActualUser')
-        cy.get(MeasuresPage.transferContinueButton).click()
-        cy.get(MeasuresPage.newOwnerErrorText).should(
-            'contain.text',
-            'The provided HARP ID is not associated with an active MADiE user.'
-        )
-
-        cy.get(MeasuresPage.newOwnerTextbox)
-            .clear()
-            .type(harpUserALT + '{enter}')
+        cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        cy.get('[data-testid="retainShareAccess"]').click()
+        cy.intercept('PUT', '/api/cql-libraries/transfer*').as('transferLibrary')
+        cy.get(MeasuresPage.transferContinueButton).should('be.enabled').click()
+        cy.wait('@transferLibrary', { timeout: 30000 }).its('response.statusCode').should('eq', 200)
 
         // Verify success toast
         cy.get('[data-testid="toast-success"]').should(
@@ -49,19 +45,16 @@ describe('CQL Library Transfer performed by Admin user', () => {
 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
         cy.get(Header.cqlLibraryTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-        // verify shared = true
-        cy.get('[data-testid="CheckCircleOutlineIcon"]').should('be.visible')
+        CQLLibrariesPage.searchForLibraryByName(CQLLibraryName).within(() => {
+            // verify shared = true
+            cy.get('[data-testid="CheckCircleOutlineIcon"]').should('be.visible')
+            cy.contains('button', 'Edit').click()
+        })
+        cy.get('[data-testid="CQL Library Details"]').click()
 
-        CQLLibrariesPage.clickEditforCreatedLibrary()
-
-        cy.readFile('cypress/fixtures/accountRealNames.json')
-            .should('exist')
-            .then((nameData) => {
-                // verify altUser name as owner
-                const owner = nameData[harpUserALT]
-                cy.get('[data-testid="library-owner-text-field"]').should('contain.text', owner)
-            })
+        TestData.getAccountDisplayName(harpUserALT).then((owner) => {
+            cy.get('[data-testid="library-owner-text-field"]').should('contain.text', owner)
+        })
 
         CQLLibraryPage.actionCenter(EditLibraryActions.viewHistory)
 

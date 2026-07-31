@@ -91,6 +91,9 @@ describe('CompareLibraryVersions', () => {
         //Verify Popup Screen
         cy.contains('h2', 'Compare Library Versions').should('be.visible')
         cy.get('[data-testid="library-name"]').should('contain.text', '-- ' + CqlLibraryOne + ' ++ ' + updatedCqlLibraryName)
-        cy.get('[data-testid="compare-version-dialog-content"]').should('be.visible')
+        cy.contains('[role="dialog"]', 'Compare Library Versions').should('be.visible').within(() => {
+            cy.contains('CQL').should('be.visible')
+            cy.contains('Version 1.0.000').should('be.visible')
+        })
     })
 })
