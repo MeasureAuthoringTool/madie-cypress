@@ -1202,12 +1202,11 @@ export class TestCasesPage {
       callstackIntercepted = true
     }).as('callstacks')
 
-    this.activateTab(EditMeasurePage.testCasesTab, 30000)
-
     TestData.readTestCaseId(secondTestCase ? 2 : 0)
       .then((tcId) => {
         const buttonSelector = this.getViewEditTestCaseButtonSelector(tcId)
 
+        this.openTestCasesTab(buttonSelector)
         this.activateTestCaseRowButton(buttonSelector, `/test-cases/${tcId}`)
 
         cy.then(() => {

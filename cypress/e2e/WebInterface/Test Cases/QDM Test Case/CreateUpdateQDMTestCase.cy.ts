@@ -175,6 +175,8 @@ describe('Create and Update QDM Test Case', () => {
             'Male',
             'Not Hispanic or Latino'
         )
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 30000)
 
         //Navigate to Details tab and Edit
         cy.get(TestCasesPage.detailsTab).click()
