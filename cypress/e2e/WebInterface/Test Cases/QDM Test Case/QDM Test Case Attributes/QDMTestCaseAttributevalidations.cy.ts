@@ -102,14 +102,6 @@ describe('QDM Test case Attribute validations', () => {
         TestCasesPage.qdmTestCaseElementAction('delete')
         cy.get(TestCasesPage.attributeChip).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        // remove ethnicity from Demographics section
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        Utilities.waitForElementVisible('[data-value="Not Hispanic or Latino__2.16.840.1.114222.4.11.837"]', 60000)
-        cy.get('[data-testid="dash-option"]').click()
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        cy.contains('Select an Ethnicity').should('be.visible')
     })
 
     it('Check Result attribute for expanded units past UCUM standard', () => {

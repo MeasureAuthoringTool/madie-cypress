@@ -9,7 +9,7 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 
-const measureName = 'QDMRunExecuteTC' + Date.now()
+let measureName = 'QDMRunExecuteTC' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -17,8 +17,32 @@ let testCaseSeries = 'SBTestSeries'
 const validTestCaseJson = TestCaseJson.QDMTestCaseJson
 const measureCQL = MeasureCQL.QDMCQL4MAT5645
 const measureData: CreateMeasureOptions = {}
+
+const completeQDMExecutionSetup = () => {
+    OktaLogin.Login()
+    MeasuresPage.actionCenter('edit')
+    CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+
+    cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+    cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+    cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+    cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+    cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+    cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+    cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+    cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('This is a description.')
+    cy.get(MeasureGroupPage.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
+    cy.get(EditMeasurePage.successMessage).should(
+        'contain.text',
+        'Measure Supplemental Data have been Saved Successfully'
+    )
+    Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
+    Utilities.waitForElementDisabled(MeasureGroupPage.saveSupplementalDataElements, 60000)
+}
+
 describe('Run / Execute Test case and verify passing percentage and coverage', () => {
-    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+    beforeEach('Create measure and group', () => {
+        measureName = 'QDMRunExecuteTC' + Date.now()
         CqlLibraryName = 'QDMExecPercentages' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -29,30 +53,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
-        // add SDE to test case coverage
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('This is a description.')
-
-        //Save Supplemental data
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
-        cy.get(EditMeasurePage.successMessage).should(
-            'contain.text',
-            'Measure Supplemental Data have been Saved Successfully'
-        )
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
-        Utilities.waitForElementDisabled(MeasureGroupPage.saveSupplementalDataElements, 60000)
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -61,13 +61,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
     it('Run / Execute single passing Test Case', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
-        OktaLogin.Login()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        completeQDMExecutionSetup()
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
 
         TestCasesPage.clickEditforCreatedTestCase()
         //enter a value of the dob, Race and gender
@@ -115,42 +110,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute one passing and one failing Test Cases', () => {
-        OktaLogin.Login()
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.newTestCaseButton).click()
-
-        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
-        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
-
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type('FailingTestCase')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TestDesc')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput)
-            .type('SBTestSeries')
-            .type('{downArrow}')
-            .should('have.attr', 'aria-controls', 'test-case-series-listbox')
-            .click()
-            .type('{enter}')
-
-        TestCasesPage.clickCreateTestCaseButton()
-
-        //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries('FailingTestCase', 'SBTestSeries')
-
+        TestCasesPage.CreateQDMTestCaseAPI('FailingTestCase', 'SBTestSeries', 'TestDesc')
+        TestCasesPage.CreateQDMTestCaseAPI('Passing Test Case', 'ICFTCSeries', 'PTC', undefined, true)
+        completeQDMExecutionSetup()
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.enterPatientDemographics(
@@ -166,9 +129,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 15000)
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
@@ -179,41 +140,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
 
-        //create a test case that will pass:
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.newTestCaseButton).click()
-
-        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
-        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
-
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type('Passing Test Case')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('PTC')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput)
-            .type('ICFTCSeries')
-            .type('{downArrow}')
-            .should('have.attr', 'aria-controls', 'test-case-series-listbox')
-            .click()
-            .type('{enter}')
-
-        TestCasesPage.clickCreateTestCaseButton()
-
-        //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries('Passing Test Case', 'ICFTCSeries')
-
-        TestCasesPage.clickEditforCreatedTestCase()
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         TestCasesPage.enterPatientDemographics(
             '01/01/2020 12:00 AM',
@@ -244,43 +172,9 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 
     it('Run / Execute single failing Test Cases', () => {
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-
-        //create a test case that will fail:
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.newTestCaseButton).click()
-
-        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
-        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
-
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type('Failing Test Case')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('FTC')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput)
-            .type('ICFTCSeries')
-            .type('{downArrow}')
-            .should('have.attr', 'aria-controls', 'test-case-series-listbox')
-            .click()
-            .type('{enter}')
-
-        TestCasesPage.clickCreateTestCaseButton()
-
-        //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries('Failing Test Case', 'ICFTCSeries')
-
+        TestCasesPage.CreateQDMTestCaseAPI('Failing Test Case', 'ICFTCSeries', 'FTC')
+        completeQDMExecutionSetup()
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.enterPatientDemographics(
@@ -308,7 +202,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 })
 
 describe('Run / Execute QDM Test Case button validations', () => {
-    beforeEach('Login and Create Measure', () => {
+    beforeEach('Create Measure', () => {
+        measureName = 'QDMRunExecuteTC' + Date.now()
         CqlLibraryName = 'QDMExecButtons' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -318,7 +213,6 @@ describe('Run / Execute QDM Test Case button validations', () => {
         measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
@@ -326,9 +220,9 @@ describe('Run / Execute QDM Test Case button validations', () => {
     })
 
     it('Run Test Case button is disabled  -- CQL Errors', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible').click()
         Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
@@ -356,9 +250,9 @@ describe('Run / Execute QDM Test Case button validations', () => {
     })
 
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
 
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
@@ -378,37 +272,20 @@ describe('Run / Execute QDM Test Case button validations', () => {
     })
 
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
-        //Click on Edit Measure
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
-        //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Patient16To23')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
-            'contain.text',
-            'Population details for this group saved successfully.'
-        )
-
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'N/A')
     })
 })
 
 describe('Run / Execute Test case for multiple Population Criteria', () => {
     beforeEach('Create Measure, Measure group and login', () => {
+        measureName = 'QDMRunExecuteTC' + Date.now()
         CqlLibraryName = 'QDMExecMultiplePC' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -419,6 +296,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
@@ -429,28 +308,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     })
 
     it('Run and Execute Test case for multiple Population Criteria', () => {
-        //Add second Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Patient16To23')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
-            'contain.text',
-            'Population details for this group saved successfully.'
-        )
-
-        //Navigate to Test Cases page and add Test Case details
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add Demographics
@@ -485,6 +343,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
 describe('Run / Execute Test Case by Non Measure Owner', () => {
     beforeEach('Create Measure, Measure group and Test case', () => {
+        measureName = 'QDMRunExecuteTC' + Date.now()
         CqlLibraryName = 'QDMExecNonOwner' + Date.now()
 
         measureData.ecqmTitle = measureName
@@ -495,7 +354,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })

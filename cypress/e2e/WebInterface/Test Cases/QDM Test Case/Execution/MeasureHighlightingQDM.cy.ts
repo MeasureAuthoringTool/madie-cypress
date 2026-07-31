@@ -39,14 +39,13 @@ describe('QDM Test Case Highlighting', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'boolean'
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
-        //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -55,36 +54,7 @@ describe('QDM Test Case Highlighting', () => {
     })
 
     it('Highlighting happens & presents "Definitions used"', () => {
-        let currentUser = Cypress.env('selectedUser')
-        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
-
-        //intercept first group id once update to the measure group is saved
-        cy.readFile(measurePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
-        })
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request?.response?.body.id)
-        })
-
-        //validation successful update message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Navigate to test case detail / edit page
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the highlighting sub tab
@@ -116,14 +86,13 @@ describe('QDM Test Case Highlighting - Definitions, Functions, and Unused sectio
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'boolean'
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
-        //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -132,36 +101,7 @@ describe('QDM Test Case Highlighting - Definitions, Functions, and Unused sectio
     })
 
     it('Secondary tabs in Highlighting section populate after execution', () => {
-        let currentUser = Cypress.env('selectedUser')
-        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
-
-        //intercept first group id once update to the measure group is saved
-        cy.readFile(measurePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
-        })
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request?.response?.body.id)
-        })
-
-        //validation successful update message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Navigate to test case detail / edit page
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the highlighting sub tab
@@ -205,14 +145,13 @@ describe('QDM Test Case Highlighting accurately appears for a single PC measure'
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0, false, 'Initial Population', 'Denominator Exclusion', '', 'Numerator', '', 'Denominator', 'boolean'
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
-        //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -221,38 +160,7 @@ describe('QDM Test Case Highlighting accurately appears for a single PC measure'
     })
 
     it('Hightlighting happens & presents "Results" data', () => {
-        let currentUser = Cypress.env('selectedUser')
-        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusion")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
-
-        //intercept group id once update to the measure group is saved
-        cy.readFile(measurePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
-        })
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request?.response?.body.id)
-        })
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Navigate to test case detail / edit page
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         //run test case
@@ -265,14 +173,11 @@ describe('QDM Test Case Highlighting accurately appears for a single PC measure'
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
-            Utilities.waitForElementVisible('[data-testid="cql-highlighting"]', 35000)
-            cy.get('[data-testid="cql-highlighting"]').should('contain.text', 'define "Initial Population":\n' +
-                '      ["Encounter, Performed": "Emergency Department Visit"]\n' +
-                '      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n' +
-                '      union ["Encounter, Performed": "Dementia"]')
-        })
+        Utilities.waitForElementVisible('[data-testid="cql-highlighting"]', 35000)
+        cy.get('[data-testid="cql-highlighting"]').should('contain.text', 'define "Initial Population":\n' +
+            '      ["Encounter, Performed": "Emergency Department Visit"]\n' +
+            '      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n' +
+            '      union ["Encounter, Performed": "Dementia"]')
 
         // verify Results arrow is shown
         cy.contains('Results').should('have.descendants', 'svg')
@@ -300,15 +205,16 @@ describe('QDM Test Case Highlighting accurately appears for a multiple PC measur
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0, false, 'Initial Population', 'Denominator Exclusion', '', 'Numerator', '', 'Denominator', 'boolean'
+        )
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0, false, 'Initial Population', 'Denominator Exclusion', '', 'Numerator', '', 'Denominator', 'boolean', 2
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
-        //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -318,62 +224,8 @@ describe('QDM Test Case Highlighting accurately appears for a multiple PC measur
 
     it('Both PCs populate highlighting upon execution', () => {
         let currentUser = Cypress.env('selectedUser')
-        let measureGroupPath = 'cypress/fixtures/' + currentUser + '/groupId'
-        let measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/groupId2'
-        let measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusion")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
-
-        //intercept group id once update to the measure group is saved
-        cy.readFile(measurePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
-        })
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureGroupPath, request?.response?.body.id)
-        })
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
-        Utilities.waitForElementVisible(MeasureGroupPage.addMeasureGroupButton, 35000)
-        cy.get(MeasureGroupPage.addMeasureGroupButton).scrollIntoView().click({ force: true })
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria2).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
-        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusion")
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
-
-        //intercept group id once update to the measure group is saved
-        cy.readFile(measurePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
-        })
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait('@group', { timeout: 60000 }).then((request) => {
-            cy.writeFile(measureSecondGroupPath, request?.response?.body.id)
-        })
-
-        //validation successful update message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Navigate to test case detail / edit page
+        let measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId2'
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         //run test case
@@ -386,17 +238,13 @@ describe('QDM Test Case Highlighting accurately appears for a multiple PC measur
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
-            Utilities.waitForElementVisible(':nth-child(1) > :nth-child(1) > pre', 35000)
-            cy.get(':nth-child(1) > :nth-child(1) > pre').should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
-        })
+        Utilities.waitForElementVisible(':nth-child(1) > :nth-child(1) > pre', 35000)
+        cy.get(':nth-child(1) > :nth-child(1) > pre').should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
 
         Utilities.waitForElementVisible(TestCasesPage.highlightingPCTabSelector, 35000)
         cy.get(TestCasesPage.highlightingPCTabSelector).click()
         cy.readFile(measureSecondGroupPath).should('exist').then((secondGroupId) => {
             cy.get('[data-testid="option-' + secondGroupId + '"]').scrollIntoView().click({ force: true })
-            cy.get('[data-testid="group-coverage-nav-' + secondGroupId + '"]').contains('IP').click()
             Utilities.waitForElementVisible(':nth-child(1) > :nth-child(1) > pre', 35000)
             cy.get(':nth-child(1) > :nth-child(1) > pre').should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
         })
