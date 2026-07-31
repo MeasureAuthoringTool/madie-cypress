@@ -133,9 +133,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
 
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',
@@ -154,7 +152,6 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
         //verify user can delete newly created test case after versioning
-        TestCasesPage.checkTestCase(2)
         TestCasesPage.checkTestCase(2)
 
         cy.get(TestCasesPage.actionCenterDelete).should('be.enabled')
@@ -224,9 +221,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
 
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get('[data-testid="test-case-alerts"]').should(

@@ -1728,9 +1728,9 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
                     )
 
                 Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
-                cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
+                TestCasesPage.toggleHighlightingResults(TestCasesPage.tcIPHighlightingDetails)
                 Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
-                cy.get(TestCasesPage.tcIPHighlightingDetails).contains('Results').first().scrollIntoView().click()
+                TestCasesPage.toggleHighlightingResults(TestCasesPage.tcIPHighlightingDetails)
                 Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
                 cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'FALSE (false)')
 
@@ -1744,9 +1744,9 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
                 )
 
                 Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
-                cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
+                TestCasesPage.toggleHighlightingResults(TestCasesPage.tcDENOMHighlightingDetails)
                 Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
-                cy.get(TestCasesPage.tcDENOMHighlightingDetails).contains('Results').first().scrollIntoView().click()
+                TestCasesPage.toggleHighlightingResults(TestCasesPage.tcDENOMHighlightingDetails)
                 Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
                 cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'UNHIT')
 
@@ -1760,9 +1760,9 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
                 )
 
                 Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
-                cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
+                TestCasesPage.toggleHighlightingResults(TestCasesPage.tcNUMERHighlightingDetails)
                 Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
-                cy.get(TestCasesPage.tcNUMERHighlightingDetails).contains('Results').first().scrollIntoView().click()
+                TestCasesPage.toggleHighlightingResults(TestCasesPage.tcNUMERHighlightingDetails)
                 Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
                 cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'UNHIT')
             })
@@ -1784,8 +1784,8 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
         )
 
         Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
-        cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
-        cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).contains('Results').first().scrollIntoView().click()
+        TestCasesPage.toggleHighlightingResults(TestCasesPage.tcUNUSEDHightlightingDetails)
+        TestCasesPage.toggleHighlightingResults(TestCasesPage.tcUNUSEDHightlightingDetails)
         Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
         cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'NA')
     })

@@ -492,24 +492,18 @@ describe('Qi-Core Code Search - Measure ownership Validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.expandCQLBuilderPanel()
 
-        //Navigate to Saved Functions tab
-        cy.get(CQLEditorPage.codesTab).click().wait(2000)
-        cy.get(CQLEditorPage.savedCodesTab).click()
-
-        cy.intercept('/api/terminology/get-code-systems').as('codeSystemReturn')
-        cy.intercept('/api/terminology/codes').as('codeReturn')
-
         //Navigate to Saved Codes page
-
-        //work around - jump to valuesets and back
-        cy.get(CQLEditorPage.valueSetsTab).click()
+        cy.intercept('POST', '/api/terminology/codes').as('savedCodes')
         cy.get(CQLEditorPage.codesTab).click()
-        cy.wait('@codeSystemReturn', { timeout: 12500 })
-        cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.wait('@codeReturn', { timeout: 9500 })
+        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)').click()
+        cy.wait('@savedCodes', { timeout: 30000 }).then(({ response }) => {
+            expect(response?.statusCode).to.eq(200)
+        })
 
         //Edit button should not be visible
-        Utilities.waitForElementVisible('[data-testid="saved-code-row-0"]', 30000)
+        cy.get(CQLEditorPage.savedCodesTable)
+            .should('be.visible')
+            .and('contain.text', 'Left (qualifier value)')
         cy.get(CQLEditorPage.editCodeBtn).should('not.exist')
 
         //Delete button should not be visible

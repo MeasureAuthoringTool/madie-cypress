@@ -1,13 +1,13 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { QiCore4Cql } from '../../../../../Shared/FHIRMeasuresCQL'
 
 const measureName = 'PCCTCList' + Date.now()
 const CqlLibraryName = 'PCCTCListLib' + Date.now()
@@ -15,57 +15,82 @@ const testCaseTitle = 'Title for Auto Test'
 const secondTestCaseTitle = 'Second Test case'
 const testCaseDescription = 'DENOMFail' + Date.now()
 const testCaseSeries = 'SBTestSeries'
-const validTestCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 const measureCQL = QiCore4Cql.reduced_CQL_Multiple_Populations
+const multipleGroupTestTitle = 'Verify Measure highlighting for multiple Measure groups on test case list page'
+
+const makeTestCaseExecutable = (secondTestCase = false): void => {
+    TestCasesPage.clickEditforCreatedTestCase(secondTestCase)
+    TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+    TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+    TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
+    TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
+
+    cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').click()
+    Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 15000)
+    TestCasesPage.openTestCasesTab(TestCasesPage.testCaseListPassingPercTab)
+}
 
 describe('Code Coverage Highlighting', () => {
-
-    beforeEach('Create Measure', () => {
+    beforeEach('Create Measure', function () {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false,
-            'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, false, true)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Initial Population',
+            '',
+            'Initial Population',
+            'Boolean'
+        )
+
+        if (this.currentTest?.title === multipleGroupTestTitle) {
+            MeasureGroupPage.CreateProportionMeasureGroupAPI(
+                0,
+                false,
+                'Initial PopulationOne',
+                '',
+                '',
+                'Initial PopulationOne',
+                '',
+                'Initial PopulationOne',
+                'Boolean',
+                1
+            )
+        }
+
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        TestCasesPage.CreateTestCaseAPI(
+            secondTestCaseTitle,
+            testCaseSeries,
+            testCaseDescription,
+            validTestCaseJson,
+            false,
+            true
+        )
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout', () => {
-        
         Utilities.deleteMeasure()
     })
 
     it('Validate Passing and Code Coverage tabs contain the initial "-" value, and displays a percentage when Test Case is ran', () => {
-
         //navigate to the test case list page
-        cy.get(EditMeasurePage.testCasesTab).should('exist')
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.testCaseListPassingPercTab)
 
         //verify initial "-" value, appears in the passing and code coverage tabs
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '-')
 
-        //click on edit button to go into the edit form for the test case
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //navigate back to the test case list page
-        cy.get(EditMeasurePage.testCasesTab).should('exist')
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        makeTestCaseExecutable()
+        makeTestCaseExecutable(true)
 
         //click the Execute Test Cases button
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
@@ -79,46 +104,18 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('not.contain.text', '-')
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
-        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', '\ndefine "Initial Population":\n   true\n')
+        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should(
+            'contain.text',
+            '\ndefine "Initial Population":\n   true\n'
+        )
     })
 
-    it('Verify Measure highlighting for multiple Measure groups on test case list page', () => {
-
-        //Add second Measure group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-
-        Utilities.setMeasureGroupType()
-
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Boolean')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial PopulationOne')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial PopulationOne')
-
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
-        cy.get(MeasureGroupPage.reportingTab).click()
-
-        //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('be.visible')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+    it(multipleGroupTestTitle, () => {
+        makeTestCaseExecutable()
+        makeTestCaseExecutable(true)
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
 
         cy.get(TestCasesPage.leftNavMenuList).should('contain', 'Population Criteria 1')
         cy.get(TestCasesPage.leftNavMenuList).should('contain', 'Population Criteria 2')
@@ -137,7 +134,10 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
 
-       cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', '\ndefine "Initial Population":\n   true\n')
+        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should(
+            'contain.text',
+            '\ndefine "Initial Population":\n   true\n'
+        )
 
         //Verify Highlighting for second Measure group
         cy.get(TestCasesPage.leftNavMenuList).contains('Population Criteria 2').click()
@@ -151,6 +151,9 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
 
-       cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('not.contain.text', '\ndefine "Initial Population":\n   true\n')
+        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should(
+            'not.contain.text',
+            '\ndefine "Initial Population":\n   true\n'
+        )
     })
 })

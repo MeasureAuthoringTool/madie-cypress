@@ -71,7 +71,10 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveCql({
+            collapseEditor: true,
+            waitForDisabled: true,
+        })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
