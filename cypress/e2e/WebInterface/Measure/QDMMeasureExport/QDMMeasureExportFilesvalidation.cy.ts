@@ -122,12 +122,13 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.version)
-        cy.contains('Version ' + versionNumber).should('be.visible')
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
-        Utilities.waitForElementEnabled(EditMeasurePage.editMeasureButtonActionBtn, 30000)
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
-        EditMeasurePage.actionCenter(EditMeasureActions.export)
+        MeasuresPage.actionCenter('export')
 
         //verify zip file exists
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.zip'), { timeout: 60000 }).should('exist')

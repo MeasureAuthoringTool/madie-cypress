@@ -322,7 +322,13 @@ export class EditMeasurePage {
     }
 
     public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
-        cy.get(this.editMeasureButtonActionBtn).click()
+        cy.get(this.editMeasureButtonActionBtn)
+            .should('be.visible')
+            .closest('button')
+            .should('be.enabled')
+            .then(($button) => {
+                $button[0].click()
+            })
 
         switch (action) {
             case EditMeasureActions.export: {

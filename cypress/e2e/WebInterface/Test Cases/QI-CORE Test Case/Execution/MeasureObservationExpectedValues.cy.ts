@@ -117,19 +117,19 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Validate measure observation expected values
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '@#')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '@#', { clearFirst: true })
         cy.get(TestCasesPage.denominatorObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
         )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, 'ab12')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, 'ab12', { clearFirst: true })
         cy.get(TestCasesPage.numeratorObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
         )
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '-15')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '-15', { clearFirst: true })
         cy.get(TestCasesPage.numeratorObservationExpectedValueError).should(
             'contain.text',
             'Only positive numeric values can be entered in the expected values',
