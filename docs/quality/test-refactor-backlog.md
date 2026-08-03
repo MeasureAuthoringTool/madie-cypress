@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-07-31
+Last updated: 2026-08-03
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -37,7 +37,7 @@ Work boundaries:
 
 | Area | Status | Next action |
 | --- | --- | --- |
-| `RatioPatientTwoIPsWithMOs.cy.ts` | DEV product bug: measure observations are missing in Expected/Actual after the original Population Criteria readiness issue was fixed. | Retest after the DEV fix; preserve the observation assertions. |
+| `RatioPatientTwoIPsWithMOs.cy.ts`, `RatioPatientTwoIPsWithMOsUsingSameFunction.cy.ts` | TEST product bug: denominator measure observations are missing in Expected/Actual after the original Population Criteria readiness issue was fixed. | Retest after the product fix; preserve the observation assertions. |
 | `ExecuteInvalidTestCases.cy.ts` | Product remains `Invalid` instead of `Pass` after execution. | Product follow-up; do not accept `Invalid`. |
 | `ElementTable.cy.ts` | Deferred by team; React action transition can detach or close without opening the editor. | Resume only when explicitly prioritized; diagnose destination transition. |
 | `CQLLibraryDelete.cy.ts` | Environment/account drift: inactive-user `400` and admin `403 insufficient_scope`. | Repair account/scope state before refactoring. |

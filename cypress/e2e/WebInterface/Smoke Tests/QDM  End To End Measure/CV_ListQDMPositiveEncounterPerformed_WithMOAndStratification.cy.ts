@@ -146,7 +146,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
             false,
             false,
             '2025-01-01',
-            '2025-12-31',
+            '2025-12-31'
         )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
@@ -192,7 +192,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
         cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
             'contain.text',
-            'Measure Base Configuration ' + 'Updated Successfully',
+            'Measure Base Configuration ' + 'Updated Successfully'
         )
 
         //add pop criteria
@@ -218,7 +218,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Population details for ' + 'this group saved successfully.',
+            'Population details for ' + 'this group saved successfully.'
         )
 
         //Add Supplemental Data Elements
@@ -233,7 +233,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Measure Supplemental Data have been Saved Successfully',
+            'Measure Supplemental Data have been Saved Successfully'
         )
 
         //Add Elements to first Test case
@@ -247,7 +247,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
             'Living',
             'White',
             'Male',
-            'Not Hispanic or Latino',
+            'Not Hispanic or Latino'
         )
 
         //Element - Encounter:Performed:Emergency Department Visit
@@ -310,18 +310,28 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 30000)
         //Add Expected value for Test case
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1', {
+            clearFirst: true
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', {
+            clearFirst: true
+        })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '60', { clearFirst: true })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStrata1ExpectedValue, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, '1', { index: 0 })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStrata1ExpectedValue, '1', {
+            clearFirst: true
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, '1', {
+            clearFirst: true,
+            index: 0
+        })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedMeasurePopulationExpectedValue, '1', {
+            clearFirst: true,
             index: 0
         })
         //Commented until MAT-6608 is fixed
@@ -329,7 +339,6 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
             clearFirst: true,
             index: 0
         })
-
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
@@ -345,7 +354,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
             'Living',
             'White',
             'Male',
-            'Not Hispanic or Latino',
+            'Not Hispanic or Latino'
         )
 
         //Element - Encounter:Performed:Emergency Department Visit
@@ -458,27 +467,37 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(TestCasesPage.addAttribute).click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 30000)
 
         //Add Expected value for Test case
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2', {
+            clearFirst: true
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '2', {
+            clearFirst: true
+        })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '45', {
             clearFirst: true,
             index: 1
         })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStrata1ExpectedValue, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, '2', { index: 0 })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStrata1ExpectedValue, '2', {
+            clearFirst: true
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedInitialPopulationExpectedValue, '2', {
+            clearFirst: true,
+            index: 0
+        })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedMeasurePopulationExpectedValue, '2', {
+            clearFirst: true,
             index: 0
         })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.qdmStratifiedMeasureObservationExpectedValue(4), '45', {
             clearFirst: true
         })
-
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')

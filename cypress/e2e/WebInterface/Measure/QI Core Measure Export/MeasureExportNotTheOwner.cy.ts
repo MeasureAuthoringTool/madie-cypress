@@ -36,7 +36,7 @@ describe('FHIR Measure Export, Not the Owner', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
-    it('Validate the zip file Export is downloaded for FHIR Measure', () => {
+    it('Export, unzip, and verify file types for FHIR Measure', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -47,9 +47,6 @@ describe('FHIR Measure Export, Not the Owner', () => {
 
         cy.readFile(path.join(downloadsFolder, expectedFileName), { timeout: 60000 }).should('exist')
         cy.log('Successfully verified zip file export')
-    })
-
-    it('Unzip the downloaded file and verify file types for FHIR Measure', () => {
 
         cy.verifyDownload(expectedFileName)
 
@@ -65,4 +62,3 @@ describe('FHIR Measure Export, Not the Owner', () => {
         cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.json')
     })
 })
-

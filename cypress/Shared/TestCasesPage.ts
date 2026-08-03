@@ -1004,23 +1004,31 @@ export class TestCasesPage {
     const { clearFirst = false, index } = options
 
     this.normalizeExpectedActualPopulationPanel()
-    const typeValue = (input: Cypress.Chainable<JQuery<HTMLElement>>) => {
-      const readyInput = input.should('exist').should('be.enabled')
+    const getInput = () => {
+      const input = cy.get(inputSelector)
+
+      return typeof index === 'number' ? input.eq(index) : input
+    }
+    const typeValue = () => {
+      getInput()
+        .should('exist')
+        .should('be.enabled')
+        .then(($input) => {
+          $input[0].scrollIntoView({ block: 'center', inline: 'nearest' })
+        })
+
+      this.normalizeExpectedActualPopulationPanel()
 
       if (clearFirst) {
-        readyInput.clear({ scrollBehavior: false }).type(value, { scrollBehavior: false })
-        return
+        getInput().clear({ scrollBehavior: false }).type(value, { scrollBehavior: false })
+      } else {
+        getInput().type(value, { scrollBehavior: false })
       }
 
-      readyInput.type(value, { scrollBehavior: false })
+      getInput().should('have.value', value)
     }
 
-    if (typeof index === 'number') {
-      typeValue(cy.get(inputSelector).eq(index))
-      return
-    }
-
-    typeValue(cy.get(inputSelector))
+    typeValue()
   }
 
   public static toggleHighlightingResults(highlightingSectionSelector: string): void {
@@ -1028,7 +1036,11 @@ export class TestCasesPage {
       .should('be.visible')
       .contains('Results')
       .first()
-      .click({ scrollBehavior: false })
+      .should('exist')
+      .should('not.have.attr', 'aria-disabled', 'true')
+      .then(($control) => {
+        $control[0].click()
+      })
   }
 
   private static normalizeExpectedActualPopulationPanel(options: {
