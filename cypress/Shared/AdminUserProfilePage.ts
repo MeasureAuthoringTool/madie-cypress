@@ -20,11 +20,13 @@ export class AdminUserProfilePage {
     public static readonly humanReadableButton = '[data-testid="view-hr-action-btn"]'
     public static readonly historyButton = '[data-testid="history-action-btn"]'
     public static readonly compareVersionsButton = MeasuresPage.compareVersionsBtn
+    public static readonly transferButton = '[data-testid="transfer-action-btn"]'
 
     public static readonly exportTooltip = '[data-testid="export-action-tooltip"]'
     public static readonly humanReadableTooltip = '[data-testid="view-hr-action-tooltip"]'
     public static readonly historyTooltip = '[data-testid="history-action-tooltip"]'
     public static readonly compareVersionsTooltip = '[data-testid="compare-versions-action-tooltip"]'
+    public static readonly transferTooltip = '[data-testid="transfer-action-tooltip"]'
 
     public static openAdminWorkspace(): void {
         cy.visit('/admin')
