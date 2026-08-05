@@ -11,6 +11,10 @@ export class AdminUserProfilePage {
     public static readonly ownedLibrariesTab = CQLLibraryPage.ownedLibrariesTab
     public static readonly sharedLibrariesTab = CQLLibraryPage.sharedLibrariesTab
     public static readonly librariesTable = '[data-testid="user-profile-libraries-tbl"]'
+    public static readonly librarySearchInput = '[data-testid="user-profile-measures-list-search-input"]'
+    public static readonly libraryClearSearch = '[data-testid="user-profile-measures-clear-search"]'
+    public static readonly libraryFilterBy = '[data-testid="filter-by-select"]'
+    public static readonly libraryFilterByInput = '[data-testid="filter-by-select-input"]'
 
     public static readonly exportButton = '[data-testid="export-action-btn"]'
     public static readonly humanReadableButton = '[data-testid="view-hr-action-btn"]'
@@ -94,6 +98,38 @@ export class AdminUserProfilePage {
         cy.get(tabSelector).should('be.visible').click()
         cy.get(tabSelector).should('have.attr', 'aria-selected', 'true')
         cy.get(this.librariesTable).should('be.visible')
+    }
+
+    public static assertLibrarySearchControls(): void {
+        cy.get(this.librarySearchInput).should('be.visible').and('be.enabled')
+        cy.get(this.libraryFilterBy).should('be.visible')
+    }
+
+    public static assertLibraryFilterOptions(): void {
+        cy.get(this.libraryFilterBy).click()
+        cy.get('[role="listbox"]').should('be.visible').find('[role="option"]').then(($options) => {
+            const options = [...$options].map((option) => option.textContent?.trim())
+            expect(options).to.deep.eq(['-', 'Library', 'Version', 'Model'])
+        })
+        cy.get('body').type('{esc}')
+    }
+
+    public static selectLibraryFilter(option: 'Library' | 'Version' | 'Model'): void {
+        cy.get(this.libraryFilterBy).should('be.visible').click()
+        cy.get(`li[data-value="${option}"]`).should('be.visible').click()
+        cy.get(this.libraryFilterBy).should('contain.text', option)
+    }
+
+    public static submitLibrarySearch(searchText: string): void {
+        cy.get(this.librarySearchInput).clear().type(`${searchText}{enter}`)
+    }
+
+    public static clearLibrarySearch(): void {
+        cy.get(this.libraryClearSearch)
+            .should('be.visible')
+            .find('button')
+            .should('be.enabled')
+            .click()
     }
 
     public static findLibraryRow(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
