@@ -1,4 +1,5 @@
 import { OktaLogin } from './OktaLogin'
+import { CQLLibraryPage } from './CQLLibraryPage'
 import { MeasuresPage } from './MeasuresPage'
 
 export class AdminUserProfilePage {
@@ -7,6 +8,9 @@ export class AdminUserProfilePage {
     public static readonly userHarpIdCell = '[data-testid$="_harpId"]'
     public static readonly userNameLink = '[data-testid^="user-name-link-"]'
     public static readonly measuresTable = '[data-testid="user-profile-measures-tbl"]'
+    public static readonly ownedLibrariesTab = CQLLibraryPage.ownedLibrariesTab
+    public static readonly sharedLibrariesTab = CQLLibraryPage.sharedLibrariesTab
+    public static readonly librariesTable = '[data-testid="user-profile-libraries-tbl"]'
 
     public static readonly exportButton = '[data-testid="export-action-btn"]'
     public static readonly humanReadableButton = '[data-testid="view-hr-action-btn"]'
@@ -84,6 +88,28 @@ export class AdminUserProfilePage {
         cy.get(tabSelector).should('be.visible').click()
         cy.get(tabSelector).should('have.attr', 'aria-selected', 'true')
         cy.get(this.measuresTable).should('be.visible')
+    }
+
+    public static openLibrariesTab(tabSelector: string): void {
+        cy.get(tabSelector).should('be.visible').click()
+        cy.get(tabSelector).should('have.attr', 'aria-selected', 'true')
+        cy.get(this.librariesTable).should('be.visible')
+    }
+
+    public static findLibraryRow(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.contains(`${this.librariesTable} tbody td`, libraryName)
+            .should('be.visible')
+            .closest('tr')
+    }
+
+    public static expandLibrarySet(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        this.findLibraryRow(libraryName)
+            .find('[data-testid^="expand-library-toggle-"]')
+            .should('be.visible')
+            .click()
+
+        return cy.get(`${this.librariesTable} tr.expanded-row:visible`)
+            .should('have.length.greaterThan', 0)
     }
 
     public static selectMeasureByName(measureName: string): Cypress.Chainable<JQuery<HTMLElement>> {
