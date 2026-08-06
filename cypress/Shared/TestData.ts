@@ -465,6 +465,22 @@ export class TestData {
         })
     }
 
+    public static requestAdminCqlLibraryDeleteById<T = CqlLibraryBody>(
+        libraryId: string,
+        harpId: string,
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.requestWithAccessToken<T>({
+            ...options,
+            url: `/api/cql-libraries/admin/${libraryId}`,
+            method: 'DELETE',
+            headers: {
+                ...options.headers,
+                harpId
+            }
+        })
+    }
+
     public static updateCqlLibrary<T = CqlLibraryBody>(
         body: CqlLibraryBody,
         options: Partial<Cypress.RequestOptions> = {}
