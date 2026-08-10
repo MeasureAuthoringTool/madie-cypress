@@ -1020,7 +1020,7 @@ export class TestCasesPage {
       this.normalizeExpectedActualPopulationPanel()
 
       if (clearFirst) {
-        getInput().clear({ scrollBehavior: false }).type(value, { scrollBehavior: false })
+        getInput().type(`{selectAll}{backspace}${value}`, { scrollBehavior: false })
       } else {
         getInput().type(value, { scrollBehavior: false })
       }
@@ -1143,8 +1143,7 @@ export class TestCasesPage {
     cy.get(selector, { timeout: 20000 })
       .should('be.visible')
       .should('be.enabled')
-      .clear()
-      .type(value)
+      .type(`{selectAll}{backspace}${value}`, { delay: 0 })
     cy.get(selector).should('have.value', value).blur()
   }
 

@@ -164,7 +164,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Enter value in to Measure observation Expected values
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1.3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1.3', { clearFirst: true })
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -243,8 +243,8 @@ describe('Measure observation expected result', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
 
         //Enter values in to Measure population(MP) & Measure population exclusion(MPE) fields and verify MP-MPE = number of observation rows
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '5')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLEXExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '5', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLEXExpected, '1', { clearFirst: true })
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 2')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 3')
@@ -328,15 +328,15 @@ describe('Measure observation expected result', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })
 
         //Enter values in to Denominator & Denominator exclusion(DE) fields and verify Denominator-DE = number of Denominator observation rows
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '4')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '4', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1', { clearFirst: true })
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Observation 1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Observation 2')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Denominator Observation 3')
 
         //Enter values in to Numerator & Numerator exclusion(NE) fields and verify Denominator-NE = number of Numerator observation rows
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '4')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '4', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '1', { clearFirst: true })
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Numerator Observation 1')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Numerator Observation 2')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Numerator Observation 3')

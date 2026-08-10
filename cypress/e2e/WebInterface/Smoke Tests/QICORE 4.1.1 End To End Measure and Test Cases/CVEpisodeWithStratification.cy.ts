@@ -132,24 +132,17 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
-        cy.get(TestCasesPage.measureObservationRow).type('2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '2', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.initialPopulationStratificationExpectedValue, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measurePopulationStratificationExpectedValue, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.initialPopulationStrata2ExpectedValue, '0', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measurePopulationStrata2ExpectedValue, '0', { clearFirst: true })
 
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
-        cy.get(TestCasesPage.measurePopulationStratificationExpectedValue).type('1')
-        cy.get(TestCasesPage.initialPopulationStrata2ExpectedValue).type('0')
-        cy.get(TestCasesPage.measurePopulationStrata2ExpectedValue).type('0')
-
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',

@@ -87,12 +87,12 @@ describe('Ratio based measure with measure observations', () => {
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
 
         // set expected values
-        TestCasesPage.openExpectedActualTab()
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
 
         // save - return to list
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -135,7 +135,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.testCaseAction0Btn).click()
 
         // check expected values
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '3')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('have.value', '1')
@@ -189,10 +189,10 @@ describe('Proportion based measure with no observations', () => {
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
 
         // set expected values
-        TestCasesPage.openExpectedActualTab()
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', { clearFirst: true })
 
         // save - return to list
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -234,7 +234,7 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.testCaseAction0Btn).click()
 
         // check expected values
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '3')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('have.value', '2')

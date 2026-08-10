@@ -5,12 +5,7 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 import { Utilities } from '../../../../Shared/Utilities'
-import {
-    MeasureGroupPage,
-    MeasureScoring,
-    MeasureType,
-    PopulationBasis
-} from '../../../../Shared/MeasureGroupPage'
+import { MeasureGroupPage, MeasureScoring, MeasureType, PopulationBasis } from '../../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { Toasts } from '../../../../Shared/Toasts'
 

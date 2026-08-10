@@ -132,7 +132,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
+        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')

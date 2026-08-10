@@ -74,9 +74,7 @@ describe('Test Case Execution with codes', () => {
         TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.executionContextWarning).should(
             'have.text',

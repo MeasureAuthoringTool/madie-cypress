@@ -8,27 +8,68 @@ import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
 
-const now = Date.now()
-let measureName = 'TCValidations' + now
-let CqlLibraryName = 'TCValidationsLib' + now
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + now
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let measureCQL = MeasureCQL.ICFCleanTest_CQL
-let testCaseSeries = 'SBTestSeries'
-let twoFiftyTwoCharacters =
+let measureName: string
+let cqlLibraryName: string
+let testCaseDescription: string
+let updatedTestCaseDescription: string
+
+const testCaseTitle = 'test case title'
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const testCaseSeries = 'SBTestSeries'
+const twoFiftyTwoCharacters =
     'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
-let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
-let updatedTestCaseSeries = 'CMSTestSeries'
+const updatedTestCaseSeries = 'CMSTestSeries'
+
+const initializeTestData = (): void => {
+    const suffix = `${Date.now()}${Cypress._.random(100000, 999999)}`
+    measureName = `TCValidations${suffix}`
+    cqlLibraryName = `TCValidationsLib${suffix}`
+    testCaseDescription = `DENOMFail${suffix}`
+    updatedTestCaseDescription = `${testCaseDescription} UpdatedTestCaseDescription`
+}
+
+const createMeasureViaApi = (cql = measureCQL): void => {
+    initializeTestData()
+    CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, cql)
+}
+
+const createRatioMeasureViaApi = (): void => {
+    createMeasureViaApi(measureCQL)
+    MeasureGroupPage.CreateRatioMeasureGroupAPI(
+        false,
+        false,
+        'Surgical Absence of Cervix',
+        'Surgical Absence of Cervix',
+        'Surgical Absence of Cervix',
+        'Procedure'
+    )
+}
+
+const createCohortMeasureViaApi = (): void => {
+    createMeasureViaApi(measureCQL)
+    MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
+}
+
+const createTestCaseViaApi = (jsonValue?: string, secondTestCase?: boolean): void => {
+    TestCasesPage.CreateTestCaseAPI(
+        secondTestCase ? 'SecondTestCase' : testCaseTitle,
+        secondTestCase ? 'SecondTestCaseGroup' : testCaseSeries,
+        testCaseDescription,
+        jsonValue,
+        false,
+        secondTestCase
+    )
+}
 
 describe('Create Test Case Validations', () => {
     beforeEach('Login', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        createMeasureViaApi()
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Create Test Case: Description more than 250 characters', () => {
@@ -90,26 +131,24 @@ describe('Create Test Case Validations', () => {
 
 describe('Edit Test Case Validations', () => {
     beforeEach('Create measure, test case, and login', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        createMeasureViaApi()
+        createTestCaseViaApi(validTestCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Edit Test Case: Description more than 250 characters', () => {
         MeasuresPage.actionCenter('edit')
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.openDetailsTab(TestCasesPage.testCaseDescriptionTextBox)
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, { delay: 0 })
+        TestCasesPage.replaceTestCaseDetailsInput(TestCasesPage.testCaseDescriptionTextBox, twoFiftyTwoCharacters)
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.editTCSaveTooltip).should(
-            'have.attr',
-            'aria-label',
-            'description: Test Case Description cannot be more than 250 characters.'
+        cy.get(TestCasesPage.editTestCaseDescriptionInlineError).should(
+            'contain.text',
+            'Test Case Description cannot be more than 250 characters.'
         )
     })
 
@@ -117,12 +156,14 @@ describe('Edit Test Case Validations', () => {
         MeasuresPage.actionCenter('edit')
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.openDetailsTab(TestCasesPage.testCaseTitle)
-        cy.get(TestCasesPage.testCaseTitle).should('be.visible').should('be.enabled').focus().clear()
-        cy.get(TestCasesPage.testCaseTitle).invoke('val', '')
-        cy.get(TestCasesPage.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
+        TestCasesPage.replaceTestCaseDetailsInput(TestCasesPage.testCaseTitle, twoFiftyTwoCharacters)
         cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.editTCSaveTooltip).should(
+            'have.attr',
+            'aria-label',
+            'title: Test Case Title cannot be more than 250 characters.'
+        )
         cy.get(TestCasesPage.editTestCaseTitleInlineError).contains(
             'Test Case Title cannot be more ' + 'than 250 characters.'
         )
@@ -140,20 +181,12 @@ describe('Edit Test Case Validations', () => {
 
 describe('Attempting to create a test case without a title', () => {
     beforeEach('Create measure and login', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(
-            false,
-            false,
-            'Surgical Absence of Cervix',
-            'Surgical Absence of Cervix',
-            'Surgical Absence of Cervix',
-            'Procedure'
-        )
+        createRatioMeasureViaApi()
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Create Test Case without a title', () => {
@@ -174,21 +207,13 @@ describe('Attempting to create a test case without a title', () => {
 
 describe('Editing a test case without a title', () => {
     beforeEach('Create measure, test case, and login', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(
-            false,
-            false,
-            'Surgical Absence of Cervix',
-            'Surgical Absence of Cervix',
-            'Surgical Absence of Cervix',
-            'Procedure'
-        )
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        createRatioMeasureViaApi()
+        createTestCaseViaApi(validTestCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Edit and update test case to have no title', () => {
@@ -314,14 +339,13 @@ describe('Editing a test case without a title', () => {
 
 describe('Duplicate Test Case Title and Group validations', () => {
     beforeEach('Create Measure, Test case and Login', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        createCohortMeasureViaApi()
+        createTestCaseViaApi()
         OktaLogin.Login()
     })
 
     afterEach('Cleanup and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
@@ -353,7 +377,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
 
-        TestCasesPage.clickCreateTestCaseButton()
+        cy.get(TestCasesPage.createTestCaseSaveButton).should('be.visible').should('be.enabled').click()
 
         cy.get(EditMeasurePage.errorMessage).should(
             'contain.text',
@@ -364,22 +388,14 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
 describe('Edit Duplicate Test Case Title and Group validations', () => {
     beforeEach('Create measure, two test cases, and login', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
-        TestCasesPage.CreateTestCaseAPI(
-            'SecondTestCase',
-            'SecondTestCaseGroup',
-            testCaseDescription,
-            undefined,
-            false,
-            true
-        )
+        createCohortMeasureViaApi()
+        createTestCaseViaApi()
+        createTestCaseViaApi(undefined, true)
         OktaLogin.Login()
     })
 
     afterEach('Cleanup and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
