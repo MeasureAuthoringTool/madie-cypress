@@ -84,6 +84,13 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
+        cy.get(EditMeasurePage.cmsIdInput)
+            .should('be.visible')
+            .invoke('val')
+            .then((cmsId) => {
+                expect(cmsId).to.be.a('string').and.not.be.empty
+                newQDMMeasureSetID = cmsId as string
+            })
 
         //Save Endorsement Organization
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
@@ -213,10 +220,12 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         cy.get(EditMeasurePage.sureDialogContinueBtn).click()
 
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit', 2)
 
         //confirming the cms id on the QI Core measure
         cy.get(EditMeasurePage.cmsIdInput)
+            .should('be.visible')
             .invoke('val')
             .then((val) => {
                 expect(val).to.contain(newQDMMeasureSetID + 'FHIR')
