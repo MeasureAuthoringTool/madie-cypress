@@ -20,7 +20,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     const measureData: CreateMeasureOptions = {}
 
     beforeEach('Create Measure and login', () => {
-
         newMeasureName = measureName + Date.now()
         newCqlLibraryName = CqlLibraryName + Date.now()
 
@@ -38,7 +37,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     })
 
     afterEach('Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -77,7 +75,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
@@ -110,7 +108,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         //navigate away from measure group page
@@ -172,7 +170,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should(
             'contain.text',
-            'Increased score indicates improvement',
+            'Increased score indicates improvement'
         )
 
         //Add Improvement Notation --'Decreased score indicates improvement'
@@ -200,7 +198,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should(
             'contain.text',
-            'Decreased score indicates improvement',
+            'Decreased score indicates improvement'
         )
 
         //Add Improvement Notation --'Other'
@@ -210,7 +208,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         Utilities.waitForElementDisabled(MeasureGroupPage.measureReportingSaveBtn, 30000)
 
         cy.get(MeasureGroupPage.improvementNotationDescText).type(
-            'This is the required text when IN is set to \"Other\"',
+            'This is the required text when IN is set to \"Other\"'
         )
 
         //save population definition with scoring unit
@@ -235,7 +233,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Other')
         cy.get(MeasureGroupPage.improvementNotationDescText).should(
             'contain.text',
-            'This is the required text when IN is set to \"Other\"',
+            'This is the required text when IN is set to \"Other\"'
         )
     })
 
@@ -293,7 +291,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Measure Risk Adjustments have been Saved Successfully',
+            'Measure Risk Adjustments have been Saved Successfully'
         )
 
         //click on the Supplemental Data button / link on the left page to populate fields on the right
@@ -308,7 +306,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.QDMSaveSupplementalDataElements).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Measure Supplemental Data have been Saved Successfully',
+            'Measure Supplemental Data have been Saved Successfully'
         )
     })
 })
@@ -317,7 +315,6 @@ describe('No values in QDM PC fields, when no CQL', () => {
     const measureData: CreateMeasureOptions = {}
 
     beforeEach('Create Measure and login', () => {
-
         newMeasureName = measureName + Date.now()
         newCqlLibraryName = CqlLibraryName + Date.now()
 
@@ -360,7 +357,6 @@ describe('Save Population Criteria on QDM measure', () => {
     const measureData: CreateMeasureOptions = {}
 
     beforeEach('Create Measure and login', () => {
-
         newMeasureName = measureName + Date.now()
         newCqlLibraryName = CqlLibraryName + Date.now()
 
@@ -394,7 +390,7 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(2000).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
@@ -408,7 +404,7 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
     })
 })
@@ -417,7 +413,6 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     const measureData: CreateMeasureOptions = {}
 
     beforeEach('Create Measure and login', () => {
-
         newMeasureName = measureName + Date.now()
         newCqlLibraryName = CqlLibraryName + Date.now()
 
@@ -434,7 +429,6 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -459,7 +453,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Population details for this group saved successfully.',
+            'Population details for this group saved successfully.'
         )
 
         Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 30000)
@@ -469,7 +463,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should(
             'contain.text',
-            'For Patient-based Measures, selected definitions must return a Boolean.',
+            'For Patient-based Measures, selected definitions must return a Boolean.'
         )
     })
 })
@@ -478,7 +472,6 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
     const measureData: CreateMeasureOptions = {}
 
     beforeEach('Create Measure and login', () => {
-
         newMeasureName = measureName + Date.now()
         newCqlLibraryName = CqlLibraryName + Date.now()
 
@@ -495,7 +488,6 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
     })
 
     afterEach('Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -517,7 +509,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should(
             'contain.text',
-            'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean)',
+            'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean)'
         )
 
         //select a value that will return the correct boolean type
