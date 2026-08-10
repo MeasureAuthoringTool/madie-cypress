@@ -67,6 +67,7 @@ Reuse these established paths before adding request code:
 - Toggle Highlighting Results through the shared Results-header helper; the split-view sash can cover the right-edge icon.
 - Treat Ace's transparent keyboard textarea as intentionally hidden. Prove readiness on the visible editor and use the shared JSON editor helper.
 - Keep clear and type contiguous for controlled React inputs that restore prior values between events; assert the final value after re-querying.
+- For Expected/Actual numeric inputs with an existing value, use `typeExpectedActualValue(..., { clearFirst: true })`; it replaces the value in one action so React rerenders do not detach the input between clear and type.
 
 ## CQL and Population Criteria
 

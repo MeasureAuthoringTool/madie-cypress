@@ -117,20 +117,18 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
-        cy.get(TestCasesPage.measureObservationRow).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1', { clearFirst: true })
 
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.initialPopulationStratificationExpectedValue)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.measurePopulationStratificationExpectedValue)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.initialPopulationStrata2ExpectedValue)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.measurePopulationStrata2ExpectedValue)
 
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast).should(
             'contain.text',

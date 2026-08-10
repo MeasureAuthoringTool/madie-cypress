@@ -53,9 +53,7 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
 

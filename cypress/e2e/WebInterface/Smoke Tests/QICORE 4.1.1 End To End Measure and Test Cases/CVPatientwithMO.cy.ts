@@ -80,7 +80,7 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)

@@ -96,11 +96,11 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             TestCasesPage.clickEditforCreatedTestCase()
 
             //click on Expected/Actual tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            TestCasesPage.openExpectedActualTab()
+            TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
             //Click on RunTest Button
-            cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
+            TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', {
+                clearFirst: true
+            })
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
             cy.get(TestCasesPage.runTestButton).should('exist')
             cy.get(TestCasesPage.runTestButton).should('be.visible')
@@ -275,12 +275,12 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             TestCasesPage.clickEditforCreatedTestCase()
 
             //click on Expected/Actual tab
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-            cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-            TestCasesPage.openExpectedActualTab()
+            TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseMSRPOPLExpected })
 
             //Click on RunTest Button
-            cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
+            TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', {
+                clearFirst: true
+            })
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
             Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 21500)
             cy.get(TestCasesPage.runTestButton).should('exist')
