@@ -1,9 +1,5 @@
-import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import {
-    CqlLibraryBody,
-    CqlLibrarySearchResponse,
-    TestData
-} from "../../../Shared/TestData"
+import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
+import { CqlLibraryBody, CqlLibrarySearchResponse, TestData } from '../../../Shared/TestData'
 
 const defaultModel = 'QI-Core v4.1.1'
 
@@ -82,11 +78,26 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get specific CQL Library', () => {
-        TestData.readCqlLibrary().then((response) => {
-            expect(response.status).to.eql(200)
-            expect(response.body).to.not.be.null
-            expect(response.body.id).to.be.exist
+        const cqlLibraryName = `GetSpecificCqlLibrary${Date.now()}`
+        let cqlLibraryId = ''
+
+        requestCreateLibrary({
+            cqlLibraryName,
+            createdBy: harpUser
         })
+            .then((createResponse) => {
+                expect(createResponse.status).to.eql(201)
+                expect(createResponse.body.id).to.be.exist
+                cqlLibraryId = createResponse.body.id!
+
+                return TestData.requestCqlLibraryById<CqlLibraryBody>('GET', cqlLibraryId)
+            })
+            .then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body).to.not.be.null
+                expect(response.body.id).to.eql(cqlLibraryId)
+                expect(response.body.cqlLibraryName).to.eql(cqlLibraryName)
+            })
     })
 
     it('Get All CQL Libraries created by logged in User', () => {
@@ -184,7 +195,9 @@ describe('CQL Library Name validations', () => {
             { failOnStatusCode: false }
         ).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name cannot be more than 64 characters.')
+            expect(response.body.validationErrors.cqlLibraryName).to.eql(
+                'Library name cannot be more than 64 characters.'
+            )
         })
     })
 
