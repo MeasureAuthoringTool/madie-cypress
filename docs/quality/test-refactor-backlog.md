@@ -37,7 +37,6 @@ Work boundaries:
 
 | Area | Status | Next action |
 | --- | --- | --- |
-| `RatioPatientTwoIPsWithMOs.cy.ts`, `RatioPatientTwoIPsWithMOsUsingSameFunction.cy.ts` | TEST product bug: denominator measure observations are missing in Expected/Actual after the original Population Criteria readiness issue was fixed. | Retest after the product fix; preserve the observation assertions. |
 | `ExecuteInvalidTestCases.cy.ts` | Product remains `Invalid` instead of `Pass` after execution. | Product follow-up; do not accept `Invalid`. |
 | `ElementTable.cy.ts` | Deferred by team; React action transition can detach or close without opening the editor. | Resume only when explicitly prioritized; diagnose destination transition. |
 | `CQLLibraryDelete.cy.ts` | Environment/account drift: inactive-user `400` and admin `403 insufficient_scope`. | Repair account/scope state before refactoring. |
@@ -76,6 +75,7 @@ Work boundaries:
 ### Test-case reliability
 
 - Proven native, destination-aware navigation for Test Cases, Details, JSON, Expected/Actual, and Highlighting Results.
+- Retested the Ratio Patient measure-observation Expected/Actual assertions after MAT-10284; the product defect is resolved, and both specs now use the shared numeric-entry and Details-tab helpers.
 - Proven shared checkbox and numeric-entry helpers across Qi-Core and QDM split-panel and non-panel layouts.
 - Stabilized QDM demographics, row checkbox selection, search, SDE navigation, clone/copy, execution, highlighting, validation, and action-center flows.
 - Stabilized Qi-Core population values, search, invalid-case navigation, non-owner execution, list coverage, and versioned clone/import flows.

@@ -164,8 +164,14 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
-        cy.get(TestCasesPage.measureObservationRow).eq(0).clear().type('8')
-        cy.get(TestCasesPage.measureObservationRow).eq(1).clear().type('8')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '8', {
+            clearFirst: true,
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '8', {
+            clearFirst: true,
+            index: 1,
+        })
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')

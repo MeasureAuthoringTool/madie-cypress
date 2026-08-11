@@ -157,17 +157,12 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('exist')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('be.enabled')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('be.visible')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).clear().type('44')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '44', {
+            clearFirst: true,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
 
-        cy.get(TestCasesPage.numeratorObservationRow).should('exist')
-        cy.get(TestCasesPage.numeratorObservationRow).should('be.enabled')
-        cy.get(TestCasesPage.numeratorObservationRow).should('be.visible')
-        cy.get(TestCasesPage.numeratorObservationRow).clear().type('1')
-
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',
@@ -229,17 +224,12 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('exist')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('be.enabled')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('be.visible')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).clear().type('33')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '33', {
+            clearFirst: true,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
 
-        cy.get(TestCasesPage.numeratorObservationRow).should('exist')
-        cy.get(TestCasesPage.numeratorObservationRow).should('be.enabled')
-        cy.get(TestCasesPage.numeratorObservationRow).should('be.visible')
-        cy.get(TestCasesPage.numeratorObservationRow).clear().type('1')
-
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',

@@ -200,13 +200,19 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('3')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('2')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('6')
-        cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
-        cy.get(TestCasesPage.numeratorObservationRow).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '3')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '2', {
+            clearFirst: true,
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '6', {
+            clearFirst: true,
+            index: 1,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -316,12 +322,15 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('2')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('3')
-        cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
-        cy.get(TestCasesPage.numeratorObservationRow).type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '3', {
+            clearFirst: true,
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

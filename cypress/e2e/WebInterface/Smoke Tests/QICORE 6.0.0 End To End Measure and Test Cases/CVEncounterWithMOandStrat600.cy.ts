@@ -105,15 +105,14 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
-        cy.get(TestCasesPage.measureObservationRow).clear().type('125')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '125', { clearFirst: true })
 
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
-        cy.get(TestCasesPage.measurePopulationStratificationExpectedValue).type('1')
-        cy.get(TestCasesPage.initialPopulationStrata2ExpectedValue).type('0')
-        cy.get(TestCasesPage.measurePopulationStrata2ExpectedValue).type('0')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.initialPopulationStratificationExpectedValue, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measurePopulationStratificationExpectedValue, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.initialPopulationStrata2ExpectedValue, '0')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measurePopulationStrata2ExpectedValue, '0')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast, { timeout: 7500 }).should(
