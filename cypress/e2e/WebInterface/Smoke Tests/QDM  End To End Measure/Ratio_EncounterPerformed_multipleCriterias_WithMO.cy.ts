@@ -277,20 +277,40 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).type('4')
-        cy.get(TestCasesPage.testCaseDENOMExpected).eq(0).type('1')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('4')
-        cy.get(TestCasesPage.testCaseNUMERExpected).eq(0).type('1')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(0).clear().type('2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '4', { index: 0 })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1', {
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '4', {
+            clearFirst: true,
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', {
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '2', {
+            clearFirst: true,
+            index: 0,
+        })
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).type('4')
-        cy.get(TestCasesPage.testCaseDENOMExpected).eq(1).type('1')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('24')
-        cy.get(TestCasesPage.testCaseNUMERExpected).eq(1).type('1')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(1).clear().type('8')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '4', { index: 1 })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1', {
+            index: 1,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '24', {
+            clearFirst: true,
+            index: 1,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', {
+            index: 1,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '8', {
+            clearFirst: true,
+            index: 1,
+        })
 
         //run test case on edit test case page
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()

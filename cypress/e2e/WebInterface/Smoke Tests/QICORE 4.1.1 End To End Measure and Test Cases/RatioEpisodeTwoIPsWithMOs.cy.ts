@@ -100,41 +100,41 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).clear().type('2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2', {
+            clearFirst: true,
+            index: 0,
+        })
 
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).clear().type('2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2', {
+            clearFirst: true,
+            index: 1,
+        })
 
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).clear().type('2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2', { clearFirst: true })
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('have.length', 2)
 
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).should('exist')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).should('be.enabled')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1', {
+            clearFirst: true,
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1', {
+            clearFirst: true,
+            index: 1,
+        })
 
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).should('exist')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '2', { clearFirst: true })
+        cy.get(TestCasesPage.numeratorObservationRow).should('have.length', 2)
 
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).clear().type('2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', {
+            clearFirst: true,
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', {
+            clearFirst: true,
+            index: 1,
+        })
 
-        cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('exist')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('be.enabled')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(0).scrollIntoView()
-        cy.get(TestCasesPage.numeratorObservationRow).eq(0).clear().type('1')
-
-        cy.get(TestCasesPage.numeratorObservationRow).eq(1).should('exist')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(1).should('be.enabled')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(1).clear().type('1')
-
-        cy.get(TestCasesPage.detailsTab).click()
+        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast).should(
             'contain.text',

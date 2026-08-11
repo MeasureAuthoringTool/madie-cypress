@@ -157,8 +157,14 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('8')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('8')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '8', {
+            clearFirst: true,
+            index: 0,
+        })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '8', {
+            clearFirst: true,
+            index: 1,
+        })
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
         //save changes
