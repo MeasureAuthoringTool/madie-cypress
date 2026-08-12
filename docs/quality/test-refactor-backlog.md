@@ -39,7 +39,7 @@ Work boundaries:
 | --- | --- | --- |
 | `ExecuteInvalidTestCases.cy.ts` | Product remains `Invalid` instead of `Pass` after execution. | Product follow-up; do not accept `Invalid`. |
 | `ElementTable.cy.ts` | Deferred by team; React action transition can detach or close without opening the editor. | Resume only when explicitly prioritized; diagnose destination transition. |
-| `CQLLibraryDelete.cy.ts` | Environment/account drift: inactive-user `400` and admin `403 insufficient_scope`. | Repair account/scope state before refactoring. |
+| `CQLLibraryDelete.cy.ts` | DEV proof on 2026-08-06 passed the new MAT-9892 admin single-instance delete coverage. A legacy transferred-user versioning scenario still receives `403`. | Isolate whether transferred users should be allowed to version a library before refactoring that legacy scenario. |
 | `CQLLibraryTransfer.cy.ts` | Inactive alt-user responses plus slow UI switching. | Resolve account state before session-flow changes. |
 | `Measure.cy.ts` special-character validation | Service returns `500` instead of expected `400`. | Product/service follow-up. |
 | `QDMRunExecuteTC.cy.ts` non-owner path | Previously reached VSAC `401`. | Recheck environment/session dependency independently. |

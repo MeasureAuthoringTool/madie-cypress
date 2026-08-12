@@ -40,6 +40,29 @@ const draftCurrentCqlLibrary = (): Cypress.Chainable<Cypress.Response<CqlLibrary
     }))
 }
 
+const createSecondVersion = (): Cypress.Chainable<{
+    historicalLibraryId: string
+    latestLibraryId: string
+}> => {
+    return TestData.versionCqlLibrary<CqlLibraryBody>(versionNumber).then((historicalResponse) => {
+        const historicalLibraryId = historicalResponse.body.id
+        expect(historicalLibraryId, 'historical library id').to.be.a('string').and.not.be.empty
+
+        return draftCurrentCqlLibrary().then((draftResponse) => {
+            expect(draftResponse.status).to.eq(201)
+            expect(draftResponse.body.draft).to.eq(true)
+            TestData.writeCqlLibraryId(draftResponse.body.id, 1)
+
+            return TestData.versionCqlLibrary<CqlLibraryBody>('2.0.000', 1).then((latestResponse) => {
+                const latestLibraryId = latestResponse.body.id
+                expect(latestLibraryId, 'latest library id').to.be.a('string').and.not.be.empty
+
+                return cy.wrap({ historicalLibraryId, latestLibraryId })
+            })
+        })
+    })
+}
+
 const deleteAllCqlLibraryVersions = (
     harpId: string,
     options: Partial<Cypress.RequestOptions> = {}
@@ -128,6 +151,62 @@ describe('Delete CQL Library', () => {
 
             deleteCurrentCqlLibrary({ failOnStatusCode: false }).then((response) => {
                 expect(response.status).to.eql(409)
+            })
+        })
+    })
+
+    // MAT-9892: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
+    it.skip('Admin deletes only the selected latest CQL Library version by document ID', () => {
+        const harpUser = OktaLogin.setupUserSession(false)
+
+        createSecondVersion().then(({ historicalLibraryId, latestLibraryId }) => {
+            OktaLogin.setupAdminSession()
+            TestData.requestAdminCqlLibraryDeleteById<CqlLibraryBody>(
+                latestLibraryId,
+                harpUser
+            ).then((response) => {
+                expect(response.status).to.eq(200)
+                expect(response.body.id).to.eq(latestLibraryId)
+                expect(response.body.version).to.eq('2.0.000')
+            })
+
+            OktaLogin.setupUserSession(false)
+            TestData.requestCqlLibraryById<CqlLibraryBody>('GET', latestLibraryId, {
+                failOnStatusCode: false
+            }).then((response) => {
+                expect(response.status).to.eq(404)
+            })
+            TestData.requestCqlLibraryById<CqlLibraryBody>('GET', historicalLibraryId).then(
+                (response) => {
+                    expect(response.status).to.eq(200)
+                    expect(response.body.id).to.eq(historicalLibraryId)
+                    expect(response.body.version).to.eq(versionNumber)
+                }
+            )
+        })
+    })
+
+    // MAT-9892: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
+    it.skip('Admin cannot delete a CQL Library version when harpId does not match the owner', () => {
+        const harpUserALT = OktaLogin.getUser(true)
+
+        OktaLogin.setupUserSession(false)
+        TestData.versionCqlLibrary<CqlLibraryBody>(versionNumber).then((versionResponse) => {
+            const libraryId = versionResponse.body.id
+
+            OktaLogin.setupAdminSession()
+            TestData.requestAdminCqlLibraryDeleteById<CqlLibraryBody>(libraryId, harpUserALT, {
+                failOnStatusCode: false
+            }).then((response) => {
+                expect(response.status).to.eq(409)
+                expect(response.body).to.have.property('message').and.contain(harpUserALT)
+                expect(response.body).to.have.property('message').and.contain(libraryId)
+            })
+
+            OktaLogin.setupUserSession(false)
+            TestData.requestCqlLibraryById<CqlLibraryBody>('GET', libraryId).then((response) => {
+                expect(response.status).to.eq(200)
+                expect(response.body.id).to.eq(libraryId)
             })
         })
     })

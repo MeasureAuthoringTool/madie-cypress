@@ -22,6 +22,7 @@ export class AdminUserProfilePage {
     public static readonly compareVersionsButton = MeasuresPage.compareVersionsBtn
     public static readonly transferButton = '[data-testid="transfer-action-btn"]'
     public static readonly shareButton = '[data-testid="share-action-btn"]'
+    public static readonly deleteButton = '[data-testid="delete-action-btn"]'
 
     public static readonly exportTooltip = '[data-testid="export-action-tooltip"]'
     public static readonly humanReadableTooltip = '[data-testid="view-hr-action-tooltip"]'
@@ -29,6 +30,7 @@ export class AdminUserProfilePage {
     public static readonly compareVersionsTooltip = '[data-testid="compare-versions-action-tooltip"]'
     public static readonly transferTooltip = '[data-testid="transfer-action-tooltip"]'
     public static readonly shareTooltip = '[data-testid="share-action-tooltip"]'
+    public static readonly deleteTooltip = '[data-testid="delete-action-tooltip"]'
 
     public static openAdminWorkspace(): void {
         cy.visit('/admin')
@@ -140,6 +142,13 @@ export class AdminUserProfilePage {
         return cy.contains(`${this.librariesTable} tbody td`, libraryName)
             .should('be.visible')
             .closest('tr')
+    }
+
+    public static selectLibraryByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return this.findLibraryRow(libraryName)
+            .find('input[type="checkbox"]')
+            .should('be.visible')
+            .check()
     }
 
     public static expandLibrarySet(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
