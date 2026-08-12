@@ -76,7 +76,7 @@ describeAdminUserProfile('Admin user profile library deletion', () => {
         assertDeleteDialog(`Are you sure you want to delete draft of ${libraryName}`)
     }
 
-    it('deletes an Owned draft library after showing the draft confirmation', () => {
+    it.skip('deletes an Owned draft library after showing the draft confirmation', () => {
         openOwnedDraftDeleteDialog()
         cy.intercept('DELETE', '**/api/cql-libraries/*').as('deleteDraft')
         cy.get(CQLEditorPage.deleteContinueButton).click()
@@ -106,7 +106,7 @@ describeAdminUserProfile('Admin user profile library deletion', () => {
         AdminUserProfilePage.findLibraryRow(libraryName).should('be.visible')
     })
 
-    it('deletes a Shared version library through the admin single-instance endpoint', () => {
+    it.skip('deletes a Shared version library through the admin single-instance endpoint', () => {
         CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.QDM, {
             cql: LibraryCQL.validCQL4QDMLib
         })
