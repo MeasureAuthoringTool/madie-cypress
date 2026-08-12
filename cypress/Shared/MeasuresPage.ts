@@ -7,6 +7,7 @@ import { FixtureOwner, TestData } from './TestData'
 
 export type MeasureActionOptions = {
     exportForPublish?: boolean
+    targetVersion?: string
     versionType?: string
     updateModelVersion?: boolean
     altUser?: boolean
@@ -109,6 +110,30 @@ export class MeasuresPage {
             Utilities.waitForElementVisible(`${rowSelector} > [class="px-1"] > [type="checkbox"]`, 60000)
             Utilities.waitForElementVisible(`${rowSelector} > [class="px-1"] > [class=" cursor-pointer"]`, 60000)
             cy.get(rowSelector).find('[type="checkbox"]').scrollIntoView().check()
+        })
+    }
+
+    private static selectVersionedMeasureRow(targetVersion: string, measureNumber = 0, options?: MeasureActionOptions): void {
+        TestData.readMeasureId(measureNumber, this.fixtureOwner(options)).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId))
+                .closest('tr')
+                .find('td')
+                .eq(1)
+                .invoke('text')
+                .then((measureName) => {
+                    cy.get(this.measureListRows)
+                        .filter((_, row) => {
+                            const cells = Cypress.$(row).find('td')
+                            return (
+                                cells.eq(1).text().trim() === measureName.trim() &&
+                                cells.eq(2).text().trim() === targetVersion
+                            )
+                        })
+                        .should('have.length', 1)
+                        .find('[type="checkbox"]')
+                        .scrollIntoView()
+                        .check()
+                })
         })
     }
 
@@ -221,7 +246,11 @@ export class MeasuresPage {
             return
         }
 
-        this.selectMeasureRow(selectedMeasureNumber, options)
+        if (options?.targetVersion) {
+            this.selectVersionedMeasureRow(options.targetVersion, selectedMeasureNumber, options)
+        } else {
+            this.selectMeasureRow(selectedMeasureNumber, options)
+        }
 
         switch (normalizedAction) {
             case 'view': {

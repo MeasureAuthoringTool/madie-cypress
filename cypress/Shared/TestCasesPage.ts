@@ -949,10 +949,12 @@ export class TestCasesPage {
 
     if (typeof index === 'number') {
       checkbox.eq(index).should('exist').check({ scrollBehavior: 'center' })
+      cy.get(checkboxSelector).eq(index).should('be.checked')
       return
     }
 
     checkbox.should('exist').check({ scrollBehavior: 'center' })
+    cy.get(checkboxSelector).should('be.checked')
   }
 
   public static clickExpectedActualCheckbox(

@@ -16,6 +16,14 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 const measureCQL = MeasureCQL.CQL_Populations
 const zipFile = 'eCQMTitle4QICore-v1.0.000-FHIR.zip'
 
+const replaceRichText = (value: string) => {
+    cy.get(EditMeasurePage.measureGenericFieldRTETextBox)
+        .should('be.visible')
+        .click()
+        .type('{selectAll}{backspace}')
+        .type(value, { parseSpecialCharSequences: false })
+}
+
 describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
     deleteDownloadsFolderBeforeAll()
 
@@ -51,29 +59,27 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox)
-            .clear()
-            .type(
-                'Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery',
-            )
+        replaceRichText(
+            'Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery',
+        )
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
         //Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        replaceRichText('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
         cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
 
         //Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        replaceRichText('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
         cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
 
         //Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        replaceRichText('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureRationaleSaveButton).click()
         cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
 
@@ -129,28 +135,19 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
 
-        MeasuresPage.actionCenter('export')
+        MeasuresPage.actionCenter('export', undefined, { targetVersion: '1.0.000' })
 
         cy.verifyDownload(zipFile)
-        cy.log('Successfully verified zip file export')
-        console.log('Successfully verified zip file export')
-
-        OktaLogin.UILogout()
-    })
-
-    it('Unzip the downloaded file and verify file types', () => {
-        cy.verifyDownload(zipFile)
-
-        // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: zipFile, path: downloadsFolder }).then((results) => {
+        cy.task('unzipFile', { zipFile, path: downloadsFolder }).then(() => {
             cy.log('unzipFile Task finished')
-            console.log('unzipFile Task finished')
         })
 
-        //Verify all files exist in exported zip file
+        // Verify all files exist in the exported zip file.
         cy.readFile(path.join(downloadsFolder, zipFile))
             .should('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.html')
             .and('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.xml')
             .and('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.json')
+
+        OktaLogin.UILogout()
     })
 })
