@@ -19,9 +19,15 @@ function getConfigurationByFile(file) {
 
 function unzipFile(zipFile, outputPath) {
     const zipPath = path.join(outputPath, zipFile)
-    const readStream = fs.createReadStream(zipPath)
+    return new Promise((resolve, reject) => {
+        const readStream = fs.createReadStream(zipPath)
+        const extraction = unzipper.Extract({ path: outputPath })
 
-    readStream.pipe(unzipper.Extract({ path: outputPath }))
+        readStream.on('error', reject)
+        extraction.on('error', reject)
+        extraction.on('close', () => resolve(null))
+        readStream.pipe(extraction)
+    })
 }
 
 function readLock(filePath) {
@@ -109,8 +115,7 @@ module.exports = (on, config) => {
             return null
         },
         unzipFile(zipFileAndPath) {
-            unzipFile(zipFileAndPath.zipFile, zipFileAndPath.path)
-            return null
+            return unzipFile(zipFileAndPath.zipFile, zipFileAndPath.path)
         },
         lighthouse: lighthouse((lighthouseReport) => {
             console.log('---- Writing lighthouse report to disk ----')

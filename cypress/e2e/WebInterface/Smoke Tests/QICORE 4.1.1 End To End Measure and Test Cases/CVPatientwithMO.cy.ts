@@ -84,7 +84,8 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseMSRPOPLExpected)
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1')
+        cy.get(TestCasesPage.measureObservationRow).should('have.value', '0')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1', { clearFirst: true })
 
         TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
