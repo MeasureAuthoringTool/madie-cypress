@@ -139,9 +139,17 @@ export class AdminUserProfilePage {
     }
 
     public static findLibraryRow(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.contains(`${this.librariesTable} tbody td`, libraryName)
+        return cy.contains(`${this.librariesTable} td`, libraryName)
             .should('be.visible')
             .closest('tr')
+    }
+
+    public static findLibraryRowById(libraryId: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(`[data-testid="checkbox-${libraryId}"]`).should('be.visible').closest('tr')
+    }
+
+    public static findLibraryAction(libraryId: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(`[data-testid="library-action-${libraryId}"]`).should('be.visible')
     }
 
     public static selectLibraryByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
@@ -162,12 +170,19 @@ export class AdminUserProfilePage {
     }
 
     public static selectMeasureByName(measureName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.contains(`${this.measuresTable} tbody td`, measureName)
+        return this.findMeasureRow(measureName)
             .should('be.visible')
-            .closest('tr')
             .find('input[type="checkbox"]')
             .should('be.visible')
             .check()
+    }
+
+    public static findMeasureRow(measureName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.contains(`${this.measuresTable} tbody td`, measureName).should('be.visible').closest('tr')
+    }
+
+    public static findMeasureAction(measureId: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(`[data-testid="measure-action-${measureId}"]`).should('be.visible')
     }
 
     public static expandMeasureSet(
