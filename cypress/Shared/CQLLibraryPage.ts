@@ -292,6 +292,11 @@ export class CQLLibraryPage {
         cy.get(this.actionCenterReview).should('not.exist')
     }
 
+    public static openReviewDialog(): void {
+        this.openActionCenter()
+        cy.get(this.actionCenterReview).scrollIntoView().should('be.visible').and('be.enabled').click()
+    }
+
     private static openActionCenter(): void {
         cy.get(this.actionCenterButton)
             .scrollIntoView()

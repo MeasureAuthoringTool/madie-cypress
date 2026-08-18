@@ -163,6 +163,10 @@ export class MeasuresPage {
         cy.get(this.reviewActionTooltip).trigger('mouseout')
     }
 
+    public static openReviewDialog(): void {
+        cy.get(this.reviewActionButton).scrollIntoView().should('be.visible').and('be.enabled').click()
+    }
+
     public static waitForMeasureListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
         return cy.wait(alias).then((interception) => {
             expect(interception.response?.statusCode).to.eq(200)

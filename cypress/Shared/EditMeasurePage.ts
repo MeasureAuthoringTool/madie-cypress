@@ -330,6 +330,11 @@ export class EditMeasurePage {
         cy.get(this.reviewMeasureActionBtn).trigger('mouseout')
     }
 
+    public static openReviewDialog(): void {
+        this.openActionCenter()
+        cy.get(this.reviewMeasureActionBtn).scrollIntoView().should('be.visible').and('be.enabled').click()
+    }
+
     private static openActionCenter(): void {
         cy.get(this.editMeasureButtonActionBtn)
             .scrollIntoView()
