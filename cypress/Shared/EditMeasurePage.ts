@@ -11,7 +11,7 @@ export enum EditMeasureActions {
     viewHR = 'viewHR',
     share = 'share',
     transfer = 'transfer',
-    viewHistory = 'viewHistory',
+    viewHistory = 'viewHistory'
 }
 
 export type MeasureLockedModalCloseMethod = 'x' | 'button'
@@ -57,6 +57,7 @@ export class EditMeasurePage {
     public static readonly shareMeasureActionBtn = '[data-testid="Share/Unshare"]'
     public static readonly transferMeasureActionBtn = '[data-testid="transfer-action-btn"]'
     public static readonly viewHistoryActionBtn = '[data-testid="ViewHistory"]'
+    public static readonly reviewMeasureActionBtn = '[data-testid="Review"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
     public static readonly humanReadableEcqmTitle = '.ecqm-title'
@@ -321,14 +322,27 @@ export class EditMeasurePage {
         })
     }
 
-    public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
+    public static assertReviewActionEnabled(): void {
+        this.openActionCenter()
+        cy.get(this.reviewMeasureActionBtn).scrollIntoView().should('be.visible').and('be.enabled')
+        cy.get(this.reviewMeasureActionBtn).realHover({ scrollBehavior: false })
+        cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
+        cy.get(this.reviewMeasureActionBtn).trigger('mouseout')
+    }
+
+    private static openActionCenter(): void {
         cy.get(this.editMeasureButtonActionBtn)
+            .scrollIntoView()
             .should('be.visible')
             .closest('button')
             .should('be.enabled')
             .then(($button) => {
                 $button[0].click()
             })
+    }
+
+    public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
+        this.openActionCenter()
 
         switch (action) {
             case EditMeasureActions.export: {

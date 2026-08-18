@@ -32,6 +32,8 @@ export class CQLLibrariesPage {
     public static readonly actionCenterTransferBtn = '[data-testid="transfer-action-btn"]'
     public static readonly actionCenterHistoryBtn = '[data-testid="library-history-action-btn"]'
     public static readonly actionCenterCompareVersions = '[data-testid="compare-versions-action-btn"]'
+    public static readonly reviewActionButton = '[data-testid="review-action-btn"]'
+    public static readonly reviewActionTooltip = '[data-testid="review-action-tooltip"]'
 
     //Share/Un share Library
     public static readonly shareOption = '[data-testid="Share With-option"]'
@@ -70,10 +72,8 @@ export class CQLLibrariesPage {
     }
 
     private static goToLibrariesList(): void {
-        cy.get(Header.cqlLibraryTab).should('exist').should('be.visible').click()
-        cy.location('pathname', { timeout: 35000 }).should(($pathname) => {
-            expect($pathname, 'pathname after clicking Libraries tab').to.not.include('/measures')
-        })
+        cy.visit('/cql-libraries')
+        cy.location('pathname').should('eq', '/cql-libraries')
         cy.get(CQLLibraryPage.ownedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.allLibrariesTab, { timeout: 35000 }).should('be.visible')
@@ -97,6 +97,39 @@ export class CQLLibrariesPage {
                 expect(response?.statusCode).to.eq(200)
             })
         })
+    }
+
+    public static openLibraryDetailsFromCurrentList(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        this.openLibraryAction(libraryNumber, owner)
+        cy.get('[data-testid="CQL Library Details"]').should('be.visible').click()
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            cy.location('pathname').should('contain', `/cql-libraries/${libraryId}/edit/details`)
+        })
+        cy.get(CQLLibraryPage.actionCenterButton).should('be.visible')
+    }
+
+    public static selectLibraryRow(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            cy.get(this.libraryContentSelector(libraryId))
+                .closest('tr')
+                .find('input[type="checkbox"]')
+                .should('be.visible')
+                .check()
+        })
+    }
+
+    public static assertReviewActionEnabled(): void {
+        cy.get(this.reviewActionButton).should('be.visible').and('be.enabled')
+        cy.get(this.reviewActionTooltip).realHover({ scrollBehavior: false })
+        cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
+        cy.get(this.reviewActionTooltip).trigger('mouseout')
+    }
+
+    public static assertReviewActionDisabled(): void {
+        cy.get(this.reviewActionButton).should('be.visible').and('be.disabled')
+        cy.get(this.reviewActionTooltip).trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Select a library to update Review status')
+        cy.get(this.reviewActionTooltip).trigger('mouseout')
     }
 
     public static waitForLibraryListRefresh(alias: `@${string}`): Cypress.Chainable<any> {

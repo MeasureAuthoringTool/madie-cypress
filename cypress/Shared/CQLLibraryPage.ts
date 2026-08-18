@@ -103,6 +103,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterSecondaryShare = '[data-testid="Share/Unshare"]' // in case we need both
     public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
+    public static readonly actionCenterReview = '[data-testid="Review"]'
 
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
@@ -213,7 +214,7 @@ export class CQLLibraryPage {
     }
 
     public static actionCenter(action: EditLibraryActions): void {
-        cy.get(this.actionCenterButton).should('be.visible').click()
+        this.openActionCenter()
 
         switch (action) {
             case EditLibraryActions.delete: {
@@ -276,6 +277,30 @@ export class CQLLibraryPage {
             default: {
             }
         }
+    }
+
+    public static assertReviewActionEnabled(): void {
+        this.openActionCenter()
+        cy.get(this.actionCenterReview).scrollIntoView().should('be.visible').and('be.enabled')
+        cy.get(this.actionCenterReview).realHover({ scrollBehavior: false })
+        cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
+        cy.get(this.actionCenterReview).trigger('mouseout')
+    }
+
+    public static assertReviewActionAbsent(): void {
+        this.openActionCenter()
+        cy.get(this.actionCenterReview).should('not.exist')
+    }
+
+    private static openActionCenter(): void {
+        cy.get(this.actionCenterButton)
+            .scrollIntoView()
+            .should('be.visible')
+            .closest('button')
+            .should('be.enabled')
+            .then(($button) => {
+                $button[0].click()
+            })
     }
 
     public static createLibraryAPI(libraryName: string, model: SupportedModels, options?: CreateLibraryOptions) {

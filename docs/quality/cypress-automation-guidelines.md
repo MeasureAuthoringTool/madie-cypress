@@ -49,11 +49,13 @@ Reuse these established paths before adding request code:
 - Put reusable selectors in the relevant page object. Inline selectors are acceptable for one-off assertions.
 - Select created rows by stored ID, generated name, title, or case number tied to the scenario. Do not rely on row index or table order.
 - Account for pagination and submitted search state before assuming a created row is visible.
+- On paginated library lists, submit the generated library name with `CQLLibrariesPage.searchForLibraryByName(...)` before selecting or opening its row; pair the filtered UI row with the stored library ID when an action targets that library.
 - Do not assert `be.enabled` on non-form containers such as MUI SpeedDial roots or anchor-backed tabs. Target the actual button or use `aria-disabled`.
 
 ## Navigation and Readiness
 
 - A selected tab is not proof that its content rendered. Pass a destination readiness selector whenever the next command depends on tab content.
+- When a library scenario does not validate header navigation, enter the Libraries workspace through `CQLLibrariesPage.openLibrariesList()`; it visits `/cql-libraries` and waits for the library list to render.
 - Use the shared native activation paths for Test Cases, Details, JSON, Expected/Actual, and return navigation. Cypress actionability scrolling can shift split views or leave stale content mounted.
 - Use `EditMeasurePage.openPopulationCriteriaTab(...)` after CQL saves or route updates, with a concrete Population Criteria control as readiness.
 - When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content.

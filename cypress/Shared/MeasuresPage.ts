@@ -87,6 +87,10 @@ export class MeasuresPage {
     //CQL to ELM version field
     public static readonly measureCQLToElmVersionTxtBox = '[data-testid="translator-version-text-field"]'
 
+    // Review status
+    public static readonly reviewActionButton = '[data-testid="review-action-btn"]'
+    public static readonly reviewActionTooltip = '[data-testid="review-action-tooltip"]'
+
     private static fixtureOwner(options?: MeasureActionOptions): FixtureOwner {
         return options?.altUser ? 'selectedAltUser' : 'selectedUser'
     }
@@ -113,7 +117,11 @@ export class MeasuresPage {
         })
     }
 
-    private static selectVersionedMeasureRow(targetVersion: string, measureNumber = 0, options?: MeasureActionOptions): void {
+    private static selectVersionedMeasureRow(
+        targetVersion: string,
+        measureNumber = 0,
+        options?: MeasureActionOptions
+    ): void {
         TestData.readMeasureId(measureNumber, this.fixtureOwner(options)).then((measureId) => {
             cy.get(this.measureActionSelector(measureId))
                 .closest('tr')
@@ -139,6 +147,20 @@ export class MeasuresPage {
 
     private static clickEnabledAction(actionSelector: string): void {
         cy.get(actionSelector).scrollIntoView().should('be.enabled').click()
+    }
+
+    public static assertReviewActionEnabled(): void {
+        cy.get(this.reviewActionButton).should('be.visible').and('be.enabled')
+        cy.get(this.reviewActionTooltip).realHover({ scrollBehavior: false })
+        cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
+        cy.get(this.reviewActionTooltip).trigger('mouseout')
+    }
+
+    public static assertReviewActionDisabled(): void {
+        cy.get(this.reviewActionButton).should('be.visible').and('be.disabled')
+        cy.get(this.reviewActionTooltip).trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Select a measure to update Review status')
+        cy.get(this.reviewActionTooltip).trigger('mouseout')
     }
 
     public static waitForMeasureListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
