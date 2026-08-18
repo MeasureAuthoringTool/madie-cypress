@@ -5,7 +5,8 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 import { Utilities } from '../../../Shared/Utilities'
 
-describe('MAT-10149 Library Review action', () => {
+// MAT-10149: Enable when LibraryReviewStatus is available in TEST.
+describe.skip('MAT-10149 Library Review action', () => {
     let ownedFhirLibraryName = ''
     let sharedQdmLibraryName = ''
 

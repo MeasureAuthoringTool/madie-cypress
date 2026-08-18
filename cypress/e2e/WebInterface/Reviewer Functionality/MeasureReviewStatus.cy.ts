@@ -6,7 +6,8 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 import { Utilities } from '../../../Shared/Utilities'
 
-describe('MAT-10138 Measure Review action', () => {
+// MAT-10138: Enable when MeasureReviewStatus is available in TEST.
+describe.skip('MAT-10138 Measure Review action', () => {
     let ownedFhirMeasureName = ''
     let sharedQdmMeasureName = ''
 
