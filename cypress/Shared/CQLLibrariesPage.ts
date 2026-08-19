@@ -55,6 +55,8 @@ export class CQLLibrariesPage {
     public static readonly hdrShared = '[data-testid="header-librarySet.acls"]'
     public static readonly hdrUpdated = '[data-testid="header-lastModifiedAt"]'
 
+    public static readonly reviewStatusCell = (row = 0) => `[data-testid="measure-name-${row}_reviewStatus"]`
+
     private static fixtureOwner(altUser?: boolean): FixtureOwner {
         return altUser ? 'selectedAltUser' : 'selectedUser'
     }
@@ -189,6 +191,22 @@ export class CQLLibrariesPage {
             .contains('td', libraryName)
             .closest('tr')
             .should('be.visible')
+    }
+
+    public static assertReviewColumnVisible(): void {
+        cy.get(this.librariesList).contains('th', 'Review').should('be.visible')
+    }
+
+    public static assertReviewColumnAbsent(): void {
+        cy.get(this.librariesList).contains('th', 'Review').should('not.exist')
+    }
+
+    public static assertReviewColumnIsNotSortable(): void {
+        cy.get(this.librariesList)
+            .contains('th', 'Review')
+            .should('not.have.attr', 'aria-sort')
+        cy.get(this.librariesList).contains('th', 'Review').click()
+        cy.get(this.librariesList).contains('th', 'Review').should('not.have.attr', 'aria-sort')
     }
 
     public static selectLibraryByName(libraryName: string): void {

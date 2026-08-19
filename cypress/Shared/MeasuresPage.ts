@@ -38,6 +38,7 @@ export class MeasuresPage {
     public static readonly filterVersionOption = '[data-testid="filter-by-Version"]'
     public static readonly filterModelOption = '[data-testid="filter-by-Model"]'
     public static readonly filterCMSIdOption = '[data-testid="filter-by-CMS ID"]'
+    public static readonly filterReviewOption = '[data-testid="filter-by-Review"]'
 
     //export
     public static readonly exportNonPublishingOption = '[data-testid="export-option"]'
@@ -176,6 +177,52 @@ export class MeasuresPage {
         cy.get(this.reviewActionButton).scrollIntoView().should('be.visible').and('be.enabled').click()
     }
 
+    public static selectReviewFilter(): void {
+        this.clickFilterByElement(this.filterByDropdown)
+        this.clickFilterByElement(this.filterReviewOption)
+        cy.get(this.filterByDropdown).should('contain.text', 'Review')
+    }
+
+    public static assertReviewFilterIsLastOption(): void {
+        this.clickFilterByElement(this.filterByDropdown)
+        cy.get(this.filterReviewOption).should('be.visible')
+        cy.get('[role="option"]:visible').last().should('have.attr', 'data-testid', 'filter-by-Review')
+    }
+
+    public static clearFilter(): void {
+        cy.get('body').then(($body) => {
+            if ($body.find(`${this.filterNoOption}:visible`).length) {
+                return
+            }
+
+            this.clickFilterByElement(this.filterByDropdown)
+        })
+        this.clickFilterByElement(this.filterNoOption)
+    }
+
+    public static searchMeasures(searchText: string): void {
+        cy.get(this.searchInputBox).should('be.visible').clear().type(`${searchText}{enter}`)
+    }
+
+    public static assertMeasureSearchRowContains(
+        measureNumber: number,
+        expectedText: string,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId)).closest('tr').should('contain.text', expectedText)
+        })
+    }
+
+    public static assertMeasureSearchRowAbsent(
+        measureNumber: number,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId)).should('not.exist')
+        })
+    }
+
     public static waitForMeasureListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
         return cy.wait(alias).then((interception) => {
             expect(interception.response?.statusCode).to.eq(200)
@@ -192,6 +239,12 @@ export class MeasuresPage {
                 })
                 .then(() => interception)
         })
+    }
+
+    private static clickFilterByElement(selector: string): void {
+        cy.get(selector)
+            .should('be.visible')
+            .click()
     }
 
     public static checkFirstRow(expectedData: MeasureRow) {

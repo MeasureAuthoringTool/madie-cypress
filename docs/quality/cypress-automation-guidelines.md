@@ -91,6 +91,7 @@ Reuse these established paths before adding request code:
 ## Waits and Interactions
 
 - Do not add fixed waits. Use route aliases, visible/enabled assertions, save settlement, or purposeful polling.
+- For a visible standard control, use Cypress's default `click()`. Do not add `scrollBehavior` as a workaround for viewport movement; first identify the component-specific interaction and reuse its established helper when one exists.
 - Use `{ force: true }` only for intentionally hidden/native controls with a documented reason.
 - Prefer `step(...)` over ad hoc `cy.log(...)` for reusable helpers or high-value flow narration.
 
