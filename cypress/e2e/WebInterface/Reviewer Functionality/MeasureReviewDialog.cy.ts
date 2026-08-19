@@ -53,7 +53,6 @@ describe.skip('MAT-10139 Mark Measure Ready for Review dialog', () => {
         })
         MeasuresPage.openReviewDialog()
         ReviewDialogPage.assertInitialState('Mark Measure Ready for Review')
-        ReviewDialogPage.enterComments('Ready for review')
         ReviewDialogPage.markAsReady()
         ReviewDialogPage.closeWithCancel()
     })

@@ -96,6 +96,7 @@ export class CQLLibraryPage {
 
     // Edit page action center
     public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
+    public static readonly reviewAndHistoryActionCenterButton = '[data-testid="action-center-button"]'
     public static readonly actionCenterDelete = '[data-testid="DeleteLibrary"]'
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
     public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
@@ -104,6 +105,18 @@ export class CQLLibraryPage {
     public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
     public static readonly actionCenterReview = '[data-testid="Review"]'
+
+    public static libraryHistoryActionType(index: number): string {
+        return `[data-testid="library-history-${index}_actionType"]`
+    }
+
+    public static libraryHistoryPerformedBy(index: number): string {
+        return `[data-testid="library-history-${index}_performedBy"]`
+    }
+
+    public static libraryHistoryAdditionalInfo(index: number): string {
+        return `[data-testid="library-history-${index}_additionalActionMessage"]`
+    }
 
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
@@ -214,7 +227,11 @@ export class CQLLibraryPage {
     }
 
     public static actionCenter(action: EditLibraryActions): void {
-        this.openActionCenter()
+        if (action === EditLibraryActions.viewHistory) {
+            this.openReviewOrHistoryActionCenter(this.actionCenterHistory)
+        } else {
+            this.openActionCenter()
+        }
 
         switch (action) {
             case EditLibraryActions.delete: {
@@ -268,9 +285,11 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.viewHistory: {
-                cy.get(this.actionCenterHistory).should('be.visible')
-                cy.get(this.actionCenterHistory).should('be.enabled')
-                cy.get(this.actionCenterHistory).click()
+                cy.get(this.reviewAndHistoryActionCenterButton)
+                    .find(this.actionCenterHistory)
+                    .should('be.visible')
+                    .and('be.enabled')
+                    .click()
 
                 break
             }
@@ -280,11 +299,14 @@ export class CQLLibraryPage {
     }
 
     public static assertReviewActionEnabled(): void {
-        this.openActionCenter()
-        cy.get(this.actionCenterReview).scrollIntoView().should('be.visible').and('be.enabled')
-        cy.get(this.actionCenterReview).realHover({ scrollBehavior: false })
+        this.openReviewOrHistoryActionCenter(this.actionCenterReview)
+        cy.get(this.reviewAndHistoryActionCenterButton)
+            .find(this.actionCenterReview)
+            .should('be.visible')
+            .and('be.enabled')
+            .realHover({ scrollBehavior: false })
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
-        cy.get(this.actionCenterReview).trigger('mouseout')
+        cy.get(this.reviewAndHistoryActionCenterButton).find(this.actionCenterReview).trigger('mouseout')
     }
 
     public static assertReviewActionAbsent(): void {
@@ -293,8 +315,12 @@ export class CQLLibraryPage {
     }
 
     public static openReviewDialog(): void {
-        this.openActionCenter()
-        cy.get(this.actionCenterReview).scrollIntoView().should('be.visible').and('be.enabled').click()
+        this.openReviewOrHistoryActionCenter(this.actionCenterReview)
+        cy.get(this.reviewAndHistoryActionCenterButton)
+            .find(this.actionCenterReview)
+            .should('be.visible')
+            .and('be.enabled')
+            .click()
     }
 
     private static openActionCenter(): void {
@@ -306,6 +332,23 @@ export class CQLLibraryPage {
             .then(($button) => {
                 $button[0].click()
             })
+    }
+
+    private static openReviewOrHistoryActionCenter(actionSelector: string): void {
+        cy.get(this.reviewAndHistoryActionCenterButton).find(actionSelector).then(($action) => {
+            if (!$action.is(':visible')) {
+                cy.get(this.reviewAndHistoryActionCenterButton)
+                    .scrollIntoView()
+                    .should('be.visible')
+                    .find(this.actionCenterButton)
+                    .should('be.visible')
+                    .closest('button')
+                    .should('be.enabled')
+                    .then(($button) => {
+                        $button[0].click()
+                    })
+            }
+        })
     }
 
     public static createLibraryAPI(libraryName: string, model: SupportedModels, options?: CreateLibraryOptions) {

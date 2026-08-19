@@ -55,6 +55,7 @@ export class MeasuresPage {
     public static readonly userActionRow = '[data-testid="measure-history-cell-0_actionType"]'
     public static readonly harpIdRow = '[data-testid="measure-history-cell-0_performedBy"]'
     public static readonly additionalActionRow = '[data-testid="measure-history-cell-0_additionalActionMessage"]'
+    public static readonly additionalActionContent = '[data-testid="measure-history-additionalInfo_0-content"]'
 
     //Compare Measure Versions
     public static readonly compareVersionsBtn = '[data-testid="compare-versions-action-btn"]'
@@ -101,6 +102,14 @@ export class MeasuresPage {
 
     public static getMeasureActionSelector(measureId: string): string {
         return this.measureActionSelector(measureId)
+    }
+
+    public static openMeasureDetailsFromCurrentList(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId)).should('be.visible').and('have.text', 'Edit').click()
+            cy.location('pathname').should('contain', `/measures/${measureId}/edit`)
+            cy.get(EditMeasurePage.editMeasureButtonActionBtn).should('be.visible')
+        })
     }
 
     private static measureRowSelectSelector(measureId: string): string {

@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-07-31
+Last updated: 2026-08-19
 
 This document contains stable automation rules. Current priorities, audit counts, proof status, and blockers belong in `docs/quality/test-refactor-backlog.md`.
 
@@ -51,6 +51,7 @@ Reuse these established paths before adding request code:
 - Account for pagination and submitted search state before assuming a created row is visible.
 - On paginated library lists, submit the generated library name with `CQLLibrariesPage.searchForLibraryByName(...)` before selecting or opening its row; pair the filtered UI row with the stored library ID when an action targets that library.
 - Do not assert `be.enabled` on non-form containers such as MUI SpeedDial roots or anchor-backed tabs. Target the actual button or use `aria-disabled`.
+- For MUI SpeedDial action centers, scope child actions to their parent container and scroll the main trigger before opening it. Do not scroll a child action after opening the menu; that interaction can collapse the SpeedDial.
 
 ## Navigation and Readiness
 
