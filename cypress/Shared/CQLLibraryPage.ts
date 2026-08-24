@@ -105,6 +105,7 @@ export class CQLLibraryPage {
     public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
     public static readonly actionCenterReview = '[data-testid="Review"]'
+    public static readonly reviewStatus = '[data-testid="cql-library-status"]'
 
     public static libraryHistoryActionType(index: number): string {
         return `[data-testid="library-history-${index}_actionType"]`
@@ -312,6 +313,14 @@ export class CQLLibraryPage {
     public static assertReviewActionAbsent(): void {
         this.openActionCenter()
         cy.get(this.actionCenterReview).should('not.exist')
+    }
+
+    public static assertReviewStatusReady(): void {
+        cy.get(this.reviewStatus).should('be.visible').and('have.text', 'Review Status: Ready')
+    }
+
+    public static assertReviewStatusAbsent(): void {
+        cy.get(this.reviewStatus).should('not.exist')
     }
 
     public static openReviewDialog(): void {

@@ -59,6 +59,7 @@ export class EditMeasurePage {
     public static readonly transferMeasureActionBtn = '[data-testid="transfer-action-btn"]'
     public static readonly viewHistoryActionBtn = '[data-testid="ViewHistory"]'
     public static readonly reviewMeasureActionBtn = '[data-testid="Review"]'
+    public static readonly reviewStatus = '[data-testid="measure-review-status"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
     public static readonly humanReadableEcqmTitle = '.ecqm-title'
@@ -332,6 +333,14 @@ export class EditMeasurePage {
             .realHover({ scrollBehavior: false })
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
         cy.get(this.reviewAndHistoryActionCenterButton).find(this.reviewMeasureActionBtn).trigger('mouseout')
+    }
+
+    public static assertReviewStatusReady(): void {
+        cy.get(this.reviewStatus).should('be.visible').and('have.text', 'Review Status: Ready')
+    }
+
+    public static assertReviewStatusAbsent(): void {
+        cy.get(this.reviewStatus).should('not.exist')
     }
 
     public static openReviewDialog(): void {

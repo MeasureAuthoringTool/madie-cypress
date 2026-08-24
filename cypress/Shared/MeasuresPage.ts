@@ -205,14 +205,19 @@ export class MeasuresPage {
     }
 
     public static searchMeasures(searchText: string): void {
-        cy.get(this.searchInputBox).should('be.visible').clear().type(`${searchText}{enter}`)
+        this.enterSearchText(searchText)
     }
 
     public static searchForMeasureByName(measureName: string): void {
         this.clickFilterByElement(this.filterByDropdown)
         this.clickFilterByElement(this.filterMeasureOption)
         cy.get(this.filterByDropdown).should('contain.text', 'Measure')
-        cy.get(this.searchInputBox).should('be.visible').clear().type(`${measureName}{enter}`)
+        this.enterSearchText(measureName)
+    }
+
+    private static enterSearchText(searchText: string): void {
+        cy.get(this.searchInputBox).scrollIntoView()
+        cy.get(this.searchInputBox).should('be.visible').clear().type(`${searchText}{enter}`)
     }
 
     public static assertMeasureSearchRowContains(
