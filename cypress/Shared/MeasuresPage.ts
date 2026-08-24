@@ -117,6 +117,10 @@ export class MeasuresPage {
         return `[data-testid="measure-name-${measureId}_select"]`
     }
 
+    private static measureReviewStatusSelector(measureId: string): string {
+        return `[data-testid="measure-name-${measureId}_reviewStatus"]`
+    }
+
     private static selectMeasureRow(measureNumber = 0, options?: MeasureActionOptions): void {
         TestData.readMeasureId(measureNumber, this.fixtureOwner(options)).then((measureId) => {
             const rowSelector = this.measureRowSelectSelector(measureId)
@@ -204,6 +208,13 @@ export class MeasuresPage {
         cy.get(this.searchInputBox).should('be.visible').clear().type(`${searchText}{enter}`)
     }
 
+    public static searchForMeasureByName(measureName: string): void {
+        this.clickFilterByElement(this.filterByDropdown)
+        this.clickFilterByElement(this.filterMeasureOption)
+        cy.get(this.filterByDropdown).should('contain.text', 'Measure')
+        cy.get(this.searchInputBox).should('be.visible').clear().type(`${measureName}{enter}`)
+    }
+
     public static assertMeasureSearchRowContains(
         measureNumber: number,
         expectedText: string,
@@ -220,6 +231,30 @@ export class MeasuresPage {
     ): void {
         TestData.readMeasureId(measureNumber, owner).then((measureId) => {
             cy.get(this.measureActionSelector(measureId)).should('not.exist')
+        })
+    }
+
+    public static assertReviewColumnVisible(): void {
+        cy.get(this.measureListTitles).contains('th', 'Review').should('be.visible')
+    }
+
+    public static assertReviewColumnAbsent(): void {
+        cy.get(this.measureListTitles).contains('th', 'Review').should('not.exist')
+    }
+
+    public static assertReviewColumnIsNotSortable(): void {
+        cy.get(this.measureListTitles).contains('th', 'Review').should('not.have.attr', 'aria-sort')
+        cy.get(this.measureListTitles).contains('th', 'Review').click()
+        cy.get(this.measureListTitles).contains('th', 'Review').should('not.have.attr', 'aria-sort')
+    }
+
+    public static assertMeasureReviewStatus(
+        measureNumber: number,
+        expectedStatus: 'Ready' | '-',
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureReviewStatusSelector(measureId)).should('have.text', expectedStatus)
         })
     }
 
@@ -242,9 +277,9 @@ export class MeasuresPage {
     }
 
     private static clickFilterByElement(selector: string): void {
-        cy.get(selector)
-            .should('be.visible')
-            .click()
+        cy.get(selector).scrollIntoView()
+        cy.get(selector).should('be.visible')
+        cy.get(selector).click()
     }
 
     public static checkFirstRow(expectedData: MeasureRow) {
