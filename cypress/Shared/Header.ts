@@ -1,7 +1,12 @@
 export class Header {
-
-    public static readonly userProfileSelect = '[data-testid="user-profile-select"]'
+    public static readonly userProfileSelect = '#user-profile-select'
     public static readonly userProfileSelectSignOutOption = '[data-testid="user-profile-logout-option"]'
+    public static readonly userUmlsSelect = '#user-umls-select'
+    public static readonly userUmlsMenu = '#menu-user-umls-select'
+    public static readonly userUmlsMenuList = '#menu-user-umls-select [role="listbox"]'
+    public static readonly userUmlsMenuOptions = '#menu-user-umls-select [role="listbox"] > [role="option"]'
+    public static readonly umlsStatusOption = '[data-testid="user-umls-status"]'
+    public static readonly umlsConnectOption = '[data-value="Connect to UMLS"]'
     //Main MADiE page
     public static readonly mainMadiePageButton = '#fulllogo'
     public static readonly cqlLibraryTab = '[data-testid="main-nav-bar-cql-library"]'
@@ -12,6 +17,4 @@ export class Header {
     public static readonly umlsLogOutConfirmCancel = '[data-testid="confirm-dialog-cancel-button"]'
     public static readonly umlsLogOutConfirmContinue = '[data-testid="confirm-dialog-continue-button"]'
     public static readonly umlsConnectButtonCurrentStatus = '[data-testid="UMLS-connect-button"]'
-
 }
-
