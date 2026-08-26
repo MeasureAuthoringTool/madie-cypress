@@ -25,6 +25,12 @@ Add guidance only when it is supported by committed code, focused validation, au
 - Page objects own UI interaction. `TestData` and domain request helpers own tokens, fixture paths, IDs, and service setup.
 - Keep negative authorization, validation, and error assertions explicit when setup moves to APIs.
 - For feature-flagged contracts, keep current coverage active and add new coverage alongside it. Put persistence and payload checks in service specs first.
+
+## Reviewer Account Isolation
+
+- Use `OktaLogin.ReviewerLogin()` only for reviewer-role UI coverage. It reserves the current reviewer account (`harpUser2` / `MadieTestUser1`) through the existing primary-user lock, so ordinary parallel specs cannot share its session.
+- Reviewer specs must call `OktaLogin.releaseReviewer()` in `afterEach`. If reviewer tests wait for the user lock or time out, first check whether another primary-user spec is using `harpUser2` or a prior run left its lock file marked.
+- Do not remove the reviewer account from the primary user pool unless CI concurrency and replacement-account capacity have been reviewed.
 - Split large specs by behavior only after shared setup and data helpers are stable.
 
 ## Test Data and API Helpers

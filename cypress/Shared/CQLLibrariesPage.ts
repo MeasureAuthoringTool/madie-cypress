@@ -262,6 +262,52 @@ export class CQLLibrariesPage {
         cy.get(this.librariesList).contains('th', 'Review').should('not.have.attr', 'aria-sort')
     }
 
+    public static assertAllReviewsTabCount(): void {
+        cy.get(CQLLibraryPage.allReviewsTab)
+            .should('be.visible')
+            .invoke('text')
+            .should('match', /^All Reviews \(\d+\)$/)
+    }
+
+    public static assertAllReviewsTabFollowsAllLibraries(): void {
+        cy.get(CQLLibraryPage.allLibrariesTab)
+            .should('be.visible')
+            .next()
+            .should('have.attr', 'data-testid', 'all-reviews-tab')
+    }
+
+    public static openAllReviewsTab(): void {
+        cy.get(CQLLibraryPage.allReviewsTab).should('be.visible').click()
+        cy.get(this.librariesList).should('be.visible')
+    }
+
+    public static assertAllReviewsColumns(): void {
+        cy.get(this.librariesList).within(() => {
+            cy.get('thead th').first().should('exist')
+            cy.get(this.hdrLibrary).should('have.text', 'Library')
+            cy.get(this.hdrVersion).should('have.text', 'Version')
+            cy.get(this.hdrStatus).should('have.text', 'Status')
+            cy.get(this.hdrModel).should('have.text', 'Model')
+            cy.get(this.hdrShared).should('have.text', 'Shared')
+            cy.get(this.hdrUpdated).should('have.text', 'Updated')
+            cy.contains('th', 'Review').should('be.visible')
+            cy.contains('th', 'Action').should('be.visible')
+            cy.contains('th', 'Owner').should('not.exist')
+        })
+    }
+
+    public static assertLibrariesAppearInUpdatedDescendingOrder(libraryIds: string[]): void {
+        cy.get(this.libraryListRows).then(($rows) => {
+            const rowOrder = [...$rows]
+                .map((row) => row.querySelector('[data-testid^="cql-library-action-"]')?.getAttribute('data-testid'))
+                .filter((testId): testId is string => Boolean(testId))
+                .map((testId) => testId.replace('cql-library-action-', ''))
+                .filter((libraryId) => libraryIds.includes(libraryId))
+
+            expect(rowOrder, 'created review-library order').to.deep.equal(libraryIds)
+        })
+    }
+
     private static clickFilterByElement(selector: string): void {
         cy.get(selector).should('be.visible').click()
     }

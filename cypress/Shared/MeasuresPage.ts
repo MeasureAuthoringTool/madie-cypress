@@ -30,6 +30,7 @@ export class MeasuresPage {
     public static readonly ownedMeasures = '[data-testid="owned-measures-tab"]'
     public static readonly sharedMeasures = '[data-testid="shared-measures-tab"]'
     public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
+    public static readonly allReviewsTab = '[data-testid="all-reviews-tab"]'
     public static readonly filterSearchInputBox = '[data-testid="measure-search-input"]'
     public static readonly searchInputBox = '[data-testid="measure-list-search-input"]'
     public static readonly filterByDropdown = '[data-testid="filter-by-select"]'

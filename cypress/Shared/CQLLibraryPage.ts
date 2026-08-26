@@ -39,6 +39,7 @@ export class CQLLibraryPage {
     public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
     public static readonly sharedLibrariesTab = '[data-testid="shared-libraries-tab"]'
     public static readonly allLibrariesTab = '[data-testid="all-libraries-tab"]'
+    public static readonly allReviewsTab = '[data-testid="all-reviews-tab"]'
 
     // create library dropdown
     public static readonly fhir = '[data-testid="all-libraries-tab"]'

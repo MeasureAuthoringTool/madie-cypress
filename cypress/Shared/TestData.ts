@@ -97,7 +97,7 @@ export type TestCaseImportResponse = {
 }
 
 export type ShareableMadieObject = 'measure' | 'library'
-export type ReviewStatus = 'READY_FOR_REVIEW' | 'NOT_READY_FOR_REVIEW'
+export type ReviewStatus = 'READY_FOR_REVIEW' | 'NOT_READY_FOR_REVIEW' | 'IN_PROGRESS' | 'COMPLETE'
 
 export type MeasureDraftBody = {
     measureSetId?: string
