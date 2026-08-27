@@ -11,7 +11,7 @@ export enum EditMeasureActions {
     viewHR = 'viewHR',
     share = 'share',
     transfer = 'transfer',
-    viewHistory = 'viewHistory',
+    viewHistory = 'viewHistory'
 }
 
 export type MeasureLockedModalCloseMethod = 'x' | 'button'
@@ -45,11 +45,15 @@ export class EditMeasurePage {
     public static assertDeleteMeasureConfirmation(measureName: string): void {
         cy.get(this.deleteMeasureConfirmationMsg)
             .should('contain.text', measureName)
-            .and('contain.text', 'This Action cannot be undone.')
+            .and(
+                'contain.text',
+                'Are you sure you want to delete draft of ' + measureName + 'This action cannot be undone.'
+            )
     }
     public static readonly testCasesTab = '[data-testid="patients-tab"]'
     public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
     public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
+    public static readonly deleteMeasureBtn = '[data-testid="DeleteMeasure"]'
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
     public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
     public static readonly editMeasureExportActionBtn = '[data-testid="ExportMeasure"]'

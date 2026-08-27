@@ -10,6 +10,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Header } from '../../../../Shared/Header'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { TestData } from '../../../../Shared/TestData'
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
 const measureName = 'MeasureHistory'
@@ -39,8 +40,8 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
 
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
-        cy.readFile('cypress/fixtures/accountRealNames.json').then((nameData) => {
-            harpUserALTDisplay = `${nameData[harpUserALT]} (${harpUserALT})`
+        TestData.getAccountDisplayName(harpUserALT).then((displayName) => {
+            harpUserALTDisplay = `${displayName} (${harpUserALT})`
         })
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
@@ -66,7 +67,6 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
     })
 
     it('Verify that Create and Delete CMS ID actions are recorded in Measure History', () => {
-        let currentUser = Cypress.env('selectedUser')
         //Generate CMS ID
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
@@ -81,7 +81,7 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
             .invoke('val')
             .then((val) => {
                 const cmsId = val?.toString().valueOf()
-                cy.writeFile('cypress/fixtures/' + currentUser + '/cmsId', cmsId!)
+                TestData.writeFixture('cmsId', cmsId!)
                 cy.log('CMS ID Generated successfully: ' + cmsId)
             })
 
@@ -95,35 +95,23 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
 
         //Delete CMS ID
         OktaLogin.setupAdminSession()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                .should('exist')
-                .then((measureId) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/cmsId')
-                        .should('exist')
-                        .then((cmsId) => {
-                            cy.readFile('cypress/fixtures/' + currentUser + '/measureSetId')
-                                .should('exist')
-                                .then((measureSetId) => {
-                                    cy.request({
-                                        url: '/api/admin/measures/' + measureId + '/delete-cms-id?cmsId=' + cmsId,
-                                        method: 'DELETE',
-                                        headers: {
-                                            authorization: 'Bearer ' + accessToken?.value,
-                                            harpId: harpUser
-                                        }
-                                    }).then((response) => {
-                                        expect(response.status).to.eql(200)
-                                        expect(response.body).to.eql(
-                                            'CMS id of ' +
-                                                cmsId +
-                                                ' was deleted successfully from measure set with measure set id of ' +
-                                                measureSetId
-                                        )
-                                    })
-                                })
-                        })
+        TestData.readMeasureId().then((measureId) => {
+            TestData.readFixture('cmsId').then((cmsId) => {
+                TestData.readMeasureSetId().then((measureSetId) => {
+                    TestData.requestWithAccessToken({
+                        url: `/api/admin/measures/${measureId}/delete-cms-id?cmsId=${cmsId}`,
+                        method: 'DELETE',
+                        headers: {
+                            harpId: harpUser
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body).to.eql(
+                            `CMS id of ${cmsId} was deleted successfully from measure set with measure set id of ${measureSetId}`
+                        )
+                    })
                 })
+            })
         })
 
         OktaLogin.setupUserSession(false)
@@ -161,15 +149,20 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
         cy.get(MeasuresPage.additionalActionRow).should('contain.text', 'Shared with - ' + harpUserALTDisplay)
 
         //Close History popup
-        cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
-        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get('[data-testid="measure-history-close-button"]').click()
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).should('be.visible').click()
 
         //Un Share Measure
         EditMeasurePage.actionCenter(EditMeasureActions.share)
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
-        cy.get(EditMeasurePage.unshareCheckBox).click()
-        cy.get(EditMeasurePage.saveUserBtn).click()
-        cy.get(EditMeasurePage.acceptBtn).click()
+        cy.contains(EditMeasurePage.sharedUserTable, harpUserALT)
+            .find(EditMeasurePage.unshareCheckBox)
+            .should('be.checked')
+            .click()
+        cy.intercept('PUT', '**/api/measures/unshared').as('unshareMeasure')
+        cy.get(EditMeasurePage.saveUserBtn).should('be.enabled').click()
+        cy.get(EditMeasurePage.acceptBtn).should('be.visible').click()
+        cy.wait('@unshareMeasure').its('response.statusCode').should('eq', 200)
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully unshared.')
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
@@ -220,8 +213,8 @@ describe('Measure History - Version and Draft actions', () => {
         cy.get(MeasuresPage.additionalActionRow).should('contain.text', 'Versioned to 1.0.000')
 
         //Close History popup
-        cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
-        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get('[data-testid="measure-history-close-button"]').click()
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).should('be.visible').click()
 
         //Draft Measure
         EditMeasurePage.actionCenter(EditMeasureActions.draft)
@@ -240,12 +233,7 @@ describe('Measure History - Version and Draft actions', () => {
 })
 
 describe('Measure History - Associate Measure and Export Measure actions', () => {
-    let measureQDMManifestName1 = 'AssociateMeasureHistoryQDM' + Date.now()
-    let QDMCqlLibraryName1 = 'AssociateMeasureHistoryQDMLib' + Date.now()
-
     const qdmMeasure: CreateMeasureOptions = {
-        ecqmTitle: measureQDMManifestName1,
-        cqlLibraryName: QDMCqlLibraryName1,
         measureScoring: 'Proportion',
         patientBasis: 'false',
         measureCql: qdmManifestTestCQL,
@@ -253,10 +241,13 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
         mpEndDate: '2025-12-31'
     }
 
-    let QiCoreMeasureName1 = 'AssociateMeasureHistoryQiCore' + Date.now()
-    let QiCoreCqlLibraryName1 = 'AssociateMeasureHistoryQiCoreLib' + Date.now()
-
     beforeEach('Create Measure', () => {
+        const timestamp = Date.now()
+        qdmMeasure.ecqmTitle = 'AssociateMeasureHistoryQDM' + timestamp
+        qdmMeasure.cqlLibraryName = 'AssociateMeasureHistoryQDMLib' + timestamp
+        const qiCoreMeasureName = 'AssociateMeasureHistoryQiCore' + timestamp
+        const qiCoreCqlLibraryName = 'AssociateMeasureHistoryQiCoreLib' + timestamp
+
         harpUser = OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 
@@ -276,7 +267,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
 
         //Create new QI Core measure
         //1
-        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 1)
+        CreateMeasurePage.CreateQICoreMeasureAPI(qiCoreMeasureName, qiCoreCqlLibraryName, measureCQLPFTests, 1)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             1,
             false,
@@ -305,7 +296,6 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
     })
 
     it('Verify that Associate Measure actions are recorded in Measure History', () => {
-        let currentUser = Cypress.env('selectedUser')
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
@@ -319,32 +309,18 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
         cy.get(Header.mainMadiePageButton).click()
 
         OktaLogin.UILogout()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                .should('exist')
-                .then((qdmId1) => {
-                    cy.readFile('cypress/fixtures/' + currentUser + '/measureId1')
-                        .should('exist')
-                        .then((qicoreId1) => {
-                            cy.request({
-                                failOnStatusCode: false,
-                                url:
-                                    '/api/measures/cms-id-association?qiCoreMeasureId=' +
-                                    qicoreId1 +
-                                    '&qdmMeasureId=' +
-                                    qdmId1 +
-                                    '&copyMetaData=true',
-                                headers: {
-                                    authorization: 'Bearer ' + accessToken?.value
-                                },
-                                method: 'PUT',
-                                body: {}
-                            }).then((response) => {
-                                expect(response.status).to.eql(200)
-                                cy.log('CMS ID was associated.')
-                            })
-                        })
+        TestData.readMeasureId().then((qdmMeasureId) => {
+            TestData.readMeasureId(1).then((qiCoreMeasureId) => {
+                TestData.requestWithAccessToken({
+                    failOnStatusCode: false,
+                    url: `/api/measures/cms-id-association?qiCoreMeasureId=${qiCoreMeasureId}&qdmMeasureId=${qdmMeasureId}&copyMetaData=true`,
+                    method: 'PUT',
+                    body: {}
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    cy.log('CMS ID was associated.')
                 })
+            })
         })
 
         OktaLogin.Login()
@@ -374,12 +350,17 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
 describe('Measure History - Qi Core Export Test case Action', () => {
     deleteDownloadsFolderBeforeAll()
     deleteDownloadsFolderBeforeEach()
+    let qiCoreMeasureName = ''
+    let qiCoreCqlLibraryName = ''
 
     beforeEach('Create Measure and Set Access Token', () => {
+        const timestamp = Date.now()
+        qiCoreMeasureName = measureName + timestamp
+        qiCoreCqlLibraryName = cqlLibraryName + timestamp
         harpUser = OktaLogin.getUser(false)
         harpUserALT = OktaLogin.getUser(true)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, qiCoreMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(qiCoreMeasureName, qiCoreCqlLibraryName, qiCoreMeasureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
     })
@@ -402,7 +383,7 @@ describe('Measure History - Qi Core Export Test case Action', () => {
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.actionCenterExport)
 
         // export
         TestCasesPage.checkTestCase(1)
@@ -463,13 +444,11 @@ describe('Measure History - QDM Export Test case Action', () => {
     })
 
     it('Verify that Export QDM Test case Action is recorded in Measure History', () => {
-        let currentUser = Cypress.env('selectedUser')
-
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 45000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 45000)

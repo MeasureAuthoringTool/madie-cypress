@@ -1,17 +1,19 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header"
-import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { Header } from '../../../../Shared/Header'
+import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const qiCorev6Cql = QiCore6Cql.cqlCMS529
 
-let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n\n' +
+let measureCQL =
+    "library TestLibrary1685544523170534 version '0.0.000'\n" +
+    "using QDM version '5.6'\n\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -41,12 +43,10 @@ let newMeasureName = ''
 let tempCqlLibName = ''
 
 describe('Measure List Page Searching', () => {
-
     let measureName = ''
     let CqlLibraryName = ''
 
     beforeEach('Login', () => {
-
         measureName = 'MeasureSearch1' + Date.now()
         CqlLibraryName = 'MeasureSearchLib1' + Date.now()
 
@@ -60,7 +60,6 @@ describe('Measure List Page Searching', () => {
     })
 
     it('Measure search on My Measures and All Measures tab', () => {
-
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(measureName).type('{enter}')
@@ -77,8 +76,8 @@ describe('Measure List Page Searching', () => {
         MeasuresPage.actionCenter('edit')
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
-        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureBtn, 5000)
+        cy.get(EditMeasurePage.deleteMeasureBtn).click()
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg)
             .should('contain.text', 'Are you sure you want to delete')
             .and('contain.text', measureName)
@@ -99,7 +98,6 @@ describe('Measure List Page Searching', () => {
     })
 
     it('Verify warning message on Measure list page', () => {
-
         //Warning Message on My Measures page
         cy.get(MeasuresPage.searchInputBox).type('!@#$').type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('not.exist')
@@ -111,11 +109,9 @@ describe('Measure List Page Searching', () => {
     })
 
     it('When searching, page count always resets to 1', () => {
-
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        cy.wait(5500)
 
         cy.get('.pagination-container').contains('button', '6').click()
         cy.url().should('include', 'page=6')
@@ -131,18 +127,24 @@ describe('Measure List Page Searching', () => {
 })
 
 describe('Measure Filter on measure list page and searching with filters', () => {
-
     before('Login', () => {
-
-        let currentUser = Cypress.env('selectedUser')
-        let measureSetFilePath = 'cypress/fixtures/' + currentUser + '/measureSetId'
-
         //Create New Qi Core Measure
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: qiCorev6Cql })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: qiCorev6Cql
+        })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
 
         //Create New QDM Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(QDMmeasureName, QDMCqlLibraryName, measureCQL, false, false, undefined, undefined, 1)
+        CreateMeasurePage.CreateQDMMeasureAPI(
+            QDMmeasureName,
+            QDMCqlLibraryName,
+            measureCQL,
+            false,
+            false,
+            undefined,
+            undefined,
+            1
+        )
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 1)
 
         OktaLogin.Login()
@@ -159,12 +161,12 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         MeasuresPage.actionCenter('edit', 0)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         //intercept cmd id once cms id is generated
-        cy.readFile(measureSetFilePath).should('exist').then((fileContents) => {
+        TestData.readMeasureSetId().then((fileContents) => {
             cy.intercept('PUT', '/api/measures/' + fileContents + '/create-cms-id').as('cmdIdGen')
         })
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.wait('@cmdIdGen', { timeout: 90000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/' + currentUser +'/cmsId4QiCore', (request?.response?.body.cmsId).toString())
+            TestData.writeFixture('cmsId4QiCore', (request?.response?.body.cmsId).toString())
         })
         cy.get(EditMeasurePage.cmsIdInput).should('not.be.null')
         cy.get(Header.mainMadiePageButton).click()
@@ -173,19 +175,18 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         //intercept cmd id once cms id is generated
-        cy.readFile(measureSetFilePath + 1).should('exist').then((fileContents) => {
+        TestData.readFixture('measureSetId1').then((fileContents) => {
             cy.intercept('PUT', '/api/measures/' + fileContents + '/create-cms-id').as('cmdIdGen')
         })
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.wait('@cmdIdGen', { timeout: 60000 }).then((request) => {
-            cy.writeFile('cypress/fixtures/' + currentUser +'/cmsId4QDM', (request?.response?.body.cmsId).toString())
+            TestData.writeFixture('cmsId4QDM', (request?.response?.body.cmsId).toString())
         })
         cy.get(EditMeasurePage.cmsIdInput).should('not.be.null')
         cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Logout', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
         Utilities.deleteMeasure(QDMmeasureName, QDMCqlLibraryName, false, false, 1)
     })
@@ -318,13 +319,13 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.searchInputBox).type(measureName).type('{enter}')
 
         CreateMeasurePage.CreateMeasure(measureName, tempCqlLibName, SupportedModels.qiCore6)
-        cy.get(Header.mainMadiePageButton).wait(1500).click()
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.filterByDropdown).should('contain', 'Measure')
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
     })
 
     it('Measure search on My Measures and All Measures tab using the Version filter', () => {
-
         //Login
         OktaLogin.Login()
 
@@ -355,7 +356,6 @@ describe('Measure Filter on measure list page and searching with filters', () =>
     })
 
     it('Measure search on My Measures and All Measures tab using the Model filter', () => {
-
         //Login
         OktaLogin.Login()
 
@@ -416,8 +416,6 @@ describe('Measure Filter on measure list page and searching with filters', () =>
     })
 
     it('Measure search on My Measures and All Measures tab using the CMS ID filter', () => {
-        let currentUser = Cypress.env('selectedUser')
-
         //Login
         OktaLogin.Login()
 
@@ -426,7 +424,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.filterCMSIdOption).click()
         cy.get(MeasuresPage.filterByDropdown).should('contain', 'CMS ID')
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
-        cy.readFile('cypress/fixtures/' + currentUser +'/cmsId4QiCore').should('exist').then((fileContents) => {
+        TestData.readFixture('cmsId4QiCore').then((fileContents) => {
             cy.get(MeasuresPage.searchInputBox).type(fileContents).type('{enter}')
         })
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
@@ -443,7 +441,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.filterCMSIdOption).click()
         cy.get(MeasuresPage.filterByDropdown).should('contain', 'CMS ID')
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
-        cy.readFile('cypress/fixtures/' + currentUser +'/cmsId4QDM').should('exist').then((fileContents) => {
+        TestData.readFixture('cmsId4QDM').then((fileContents) => {
             cy.get(MeasuresPage.searchInputBox).type(fileContents).type('{enter}')
         })
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', QDMmeasureName)
@@ -462,7 +460,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.filterCMSIdOption).click()
         cy.get(MeasuresPage.filterByDropdown).should('contain', 'CMS ID')
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
-        cy.readFile('cypress/fixtures/' + currentUser + '/cmsId4QiCore').should('exist').then((fileContents) => {
+        TestData.readFixture('cmsId4QiCore').then((fileContents) => {
             cy.get(MeasuresPage.searchInputBox).type(fileContents).type('{enter}')
         })
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
@@ -479,14 +477,13 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         cy.get(MeasuresPage.filterCMSIdOption).click()
         cy.get(MeasuresPage.filterByDropdown).should('contain', 'CMS ID')
         cy.get(MeasuresPage.searchInputBox).should('be.empty')
-        cy.readFile('cypress/fixtures/' + currentUser + '/cmsId4QDM').should('exist').then((fileContents) => {
+        TestData.readFixture('cmsId4QDM').then((fileContents) => {
             cy.get(MeasuresPage.searchInputBox).type(fileContents).type('{enter}')
         })
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', QDMmeasureName)
     })
 
     it('Measure search on My Measures and All Measures tab using no filter', () => {
-
         //Login
         OktaLogin.Login()
 

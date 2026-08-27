@@ -83,7 +83,7 @@ describe('QI-Core Measure Export', () => {
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Measure Risk Adjustments have been Saved Successfully',
+            'Measure Risk Adjustments have been Saved Successfully'
         )
 
         //Add SDE to the Measure
@@ -103,7 +103,7 @@ describe('QI-Core Measure Export', () => {
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Measure Supplemental Data have been Saved Successfully',
+            'Measure Supplemental Data have been Saved Successfully'
         )
 
         //Navigate to Measures page
@@ -138,7 +138,7 @@ describe('QI-Core Measure Export', () => {
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR.zip', path: downloadsFolder }).then(
             (results) => {
                 cy.log('unzipFile Task finished')
-            },
+            }
         )
 
         /* 
@@ -164,7 +164,7 @@ describe('QI-Core Measure Export', () => {
         cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.json')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'resources/library-QICoreCommon-1.2.000.json')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'resources/library-SupplementalDataElements-3.5.000.json')).should(
-            'exist',
+            'exist'
         )
         cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryName + '-1.0.000.json')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryName + '-1.0.000.xml')).should('exist')
@@ -185,7 +185,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             0,
             false,
             mpStartDate,
-            mpEndDate,
+            mpEndDate
         )
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
@@ -196,7 +196,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             'Qualifying Encounters',
             '',
             'Qualifying Encounters',
-            'Encounter',
+            'Encounter'
         )
 
         OktaLogin.Login()
@@ -221,7 +221,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR.zip', path: downloadsFolder }).then(
             (results) => {
                 cy.log('unzipFile Task finished')
-            },
+            }
         )
     })
 
@@ -239,7 +239,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Metadata\nTitle\t' +
                     measureNameFC +
                     '\nVersion\tDraft based on 0.0.000' +
-                    '\nShort Name\teCQMTitle4QICore',
+                    '\nShort Name\teCQMTitle4QICore'
             )
 
             expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\n')
@@ -251,7 +251,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
                     '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nCitation\t\n\nText 1\n\n\n' +
                     'Justification\tDescription:\n\nText 3\n\n\nDefinition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
-                    "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field",
+                    "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field"
             )
 
             //measure group meta data
@@ -266,7 +266,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     'https://madie.cms.gov/Library/' +
                     CqlLibraryNameFC +
                     '\nContents\tPopulation Criteria\nLogic Definitions\n' +
-                    'Terminology\nDependencies\nData Requirements',
+                    'Terminology\nDependencies\nData Requirements'
             )
 
             //Population Criteria
@@ -301,7 +301,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
-                    '    where ValidEncounter.period during "Measurement Period"',
+                    '    where ValidEncounter.period during "Measurement Period"'
             )
 
             //logic definitions
@@ -329,7 +329,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     '        if period."start" is null then\n' +
                     '            Interval(period."start".value, period."end".value]\n' +
                     '        else\n' +
-                    '            Interval[period."start".value, period."end".value]',
+                    '            Interval[period."start".value, period."end".value]'
             )
 
             //Terminology
@@ -349,7 +349,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
                     'Value Set\tDescription: Value set Home Healthcare Services\n' +
                     'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
-                    'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016',
+                    'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016'
             )
 
             //Dependencies
@@ -361,7 +361,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     'Canonical URL: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
                     'Dependency\tDescription: Library FHIRHelpers\n' +
                     'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
-                    'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000',
+                    'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000'
             )
 
             //Data Requirements
@@ -400,7 +400,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     'Must Support Elements: type, period\n' +
                     'Code Filter(s):\n' +
                     'Path: type\n' +
-                    'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016',
+                    'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016'
             )
 
             expect(bodyText).to.include('Generated using version 0.5.5 of the sample-content-ig Liquid templates')
@@ -424,7 +424,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
             0,
             false,
             mpStartDate,
-            mpEndDate,
+            mpEndDate
         )
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
@@ -435,7 +435,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
             'Qualifying Encounters',
             '',
             'Qualifying Encounters',
-            'Encounter',
+            'Encounter'
         )
 
         OktaLogin.Login()
@@ -486,7 +486,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR.zip', path: downloadsFolder }).then(
             (results) => {
                 cy.log('unzipFile Task finished')
-            },
+            }
         )
     })
 
@@ -500,7 +500,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
             const bodyText = doc.body.innerText
             //meta details
             expect(bodyText).to.include(
-                'Metadata\nTitle\t' + measureNameFC + '\nVersion\t1.0.000' + '\nShort Name\teCQMTitle4QICore',
+                'Metadata\nTitle\t' + measureNameFC + '\nVersion\t1.0.000' + '\nShort Name\teCQMTitle4QICore'
             )
 
             expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\n')
@@ -512,7 +512,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
                     '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nCitation\t\n\nText 1\n\n\n' +
                     'Justification\tDescription:\n\nText 3\n\n\nDefinition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
-                    "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field",
+                    "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field"
             )
 
             //measure group meta data
@@ -527,7 +527,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     'https://madie.cms.gov/Library/' +
                     CqlLibraryNameFC +
                     '\nContents\tPopulation Criteria\nLogic Definitions\n' +
-                    'Terminology\nDependencies\nData Requirements',
+                    'Terminology\nDependencies\nData Requirements'
             )
 
             //Population Criteria
@@ -562,7 +562,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
-                    '    where ValidEncounter.period during "Measurement Period"',
+                    '    where ValidEncounter.period during "Measurement Period"'
             )
 
             //logic definitions
@@ -590,7 +590,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     '        if period."start" is null then\n' +
                     '            Interval(period."start".value, period."end".value]\n' +
                     '        else\n' +
-                    '            Interval[period."start".value, period."end".value]',
+                    '            Interval[period."start".value, period."end".value]'
             )
 
             //Terminology
@@ -610,7 +610,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
                     'Value Set\tDescription: Value set Home Healthcare Services\n' +
                     'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
-                    'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016',
+                    'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016'
             )
 
             //Dependencies
@@ -622,7 +622,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     'Canonical URL: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
                     'Dependency\tDescription: Library FHIRHelpers\n' +
                     'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
-                    'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000',
+                    'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000'
             )
 
             //Data Requirements
@@ -661,7 +661,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     'Must Support Elements: type, period\n' +
                     'Code Filter(s):\n' +
                     'Path: type\n' +
-                    'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016',
+                    'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016'
             )
 
             expect(bodyText).to.include('Generated using version 0.5.5 of the sample-content-ig Liquid templates')
