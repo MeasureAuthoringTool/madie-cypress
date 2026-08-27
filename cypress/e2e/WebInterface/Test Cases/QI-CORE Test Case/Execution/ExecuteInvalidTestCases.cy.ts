@@ -1,11 +1,11 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
@@ -15,15 +15,17 @@ const testCase: TestCase = {
     description: 'DENOMFail' + now,
     group: 'SBTestSeries'
 }
-let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n\n' +
-    'using QICore version \'4.1.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n\n' +
+let measureCQL =
+    "library CohortEpisodeEncounter1699460161402 version '0.0.000'\n\n" +
+    "using QICore version '4.1.1'\n\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
+    "include CQMCommon version '1.0.000' called Global\n\n" +
     'context Patient\n\n' +
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
-const invalidTestCaseJson = '{\n' +
+const invalidTestCaseJson =
+    '{\n' +
     '  "resourceType": "Account",\n' +
     '  "id": "ip-pass-Encounter",\n' +
     '  "meta": {\n' +
@@ -119,7 +121,6 @@ const invalidTestCaseJson = '{\n' +
     '}'
 
 describe('Run / Execute Invalid Test Cases', () => {
-
     beforeEach('Login and Create Measure', () => {
         measureName = 'TestMeasure' + Date.now()
         CqlLibraryName = 'RETCBVLibrary' + Date.now()
@@ -127,7 +128,7 @@ describe('Run / Execute Invalid Test Cases', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({log: true})
+        cy.clearAllSessionStorage({ log: true })
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
@@ -136,13 +137,11 @@ describe('Run / Execute Invalid Test Cases', () => {
     })
 
     afterEach('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
         OktaLogin.UILogout()
     })
 
     it('Run / Execute Invalid Test case on Test Case list page when the Execute Invalid Test case option is enabled', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
@@ -154,7 +153,10 @@ describe('Run / Execute Invalid Test Cases', () => {
         cy.get(TestCasesPage.executionOptionsSubTab).click()
         cy.get(TestCasesPage.executeInvalidTestCasesCheckBox).click()
         cy.get(TestCasesPage.saveExecutionOptionsBtn).click()
-        cy.get(TestCasesPage.executionOptionsSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+        cy.get(TestCasesPage.executionOptionsSuccessMsg).should(
+            'contain.text',
+            'Test Case Configuration Updated Successfully'
+        )
         Utilities.waitForElementToNotExist(TestCasesPage.executionOptionsSuccessMsg, 70000)
 
         //Navigate back to Test case page
@@ -163,12 +165,13 @@ describe('Run / Execute Invalid Test Cases', () => {
         //Verify execution status on Test Case list page and Run
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.intercept('POST', '**/test-cases/**').as('executeInvalidTestCase')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus, { timeout: 105000 }).should('contain.text', 'Pass')
+        cy.wait('@executeInvalidTestCase', { timeout: 105000 }).its('response.statusCode').should('eq', 400)
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
     })
 
     it('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
-
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
@@ -180,7 +183,10 @@ describe('Run / Execute Invalid Test Cases', () => {
         cy.get(TestCasesPage.executionOptionsSubTab).click()
         cy.get(TestCasesPage.executeInvalidTestCasesCheckBox).click()
         cy.get(TestCasesPage.saveExecutionOptionsBtn).click()
-        cy.get(TestCasesPage.executionOptionsSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+        cy.get(TestCasesPage.executionOptionsSuccessMsg).should(
+            'contain.text',
+            'Test Case Configuration Updated Successfully'
+        )
         Utilities.waitForElementToNotExist(TestCasesPage.executionOptionsSuccessMsg, 70000)
 
         //Navigate back to Test case page

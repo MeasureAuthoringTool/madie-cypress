@@ -69,22 +69,33 @@ export class TestCaseBuilder {
     public static readonly horizontalSlider = "[data-testid='builder-slider']"
 
     public static addEditNewResource(addition: Profile, resourceNumber?: number) {
-        let bundleIndex = 0
-        let resourceId = ''
-        if (resourceNumber) {
-            bundleIndex = resourceNumber
-        }
+        const bundleIndex = resourceNumber ?? 0
+        const addResourceSelector = `[data-testid="add-element-${addition}"]`
+        const searchTerm = addition.replace(/^qicore-/, 'QICore ').replace(/-/g, ' ')
 
-        cy.get('[data-testid="add-element-' + addition + '"]').click().wait(500)
-
-        cy.window().its('store').then(store => {
-
-            resourceId = store.bundle.entry[bundleIndex].resource.id
-
-            TestData.writeBuilderResourceId(resourceId, resourceNumber)
-
-            this.editAddedResource(resourceId)
+        cy.get(this.availableTab)
+            .should('not.have.attr', 'aria-disabled', 'true')
+            .then(($tab) => {
+                if ($tab.attr('aria-selected') !== 'true') {
+                    $tab[0].click()
+                }
         })
+        cy.get(this.availableTab).should('have.attr', 'aria-selected', 'true')
+        // The Available search input can be clipped by the Builder split pane.
+        // Avoid Cypress actionability scrolling, which changes the pane layout.
+        cy.get(this.availableSearch)
+            .should('exist')
+            .clear({ force: true })
+            .type(`${searchTerm}{enter}`, { force: true })
+        cy.get(addResourceSelector).should('be.visible').click()
+
+        cy.window()
+            .its(`store.bundle.entry.${bundleIndex}.resource.id`)
+            .should('be.a', 'string')
+            .then((resourceId) => {
+                TestData.writeBuilderResourceId(resourceId, resourceNumber)
+                this.editAddedResource(resourceId)
+            })
     }
 
     public static editAddedResource(resourceId: string) {
@@ -125,6 +136,8 @@ export class TestCaseBuilder {
 
     public static applyAndWait() {
         cy.get(TestCaseBuilder.applyButton).click()
+        // The Builder disables Apply before its local dirty state settles; changing
+        // attributes sooner opens the Discard Changes dialog.
         cy.wait(1000)
         Utilities.waitForElementDisabled(TestCaseBuilder.applyButton, 8500)
     }
