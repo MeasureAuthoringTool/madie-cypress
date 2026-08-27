@@ -121,6 +121,7 @@ export class CQLLibrariesPage {
         this.goToLibrariesList()
         this.openLibraryAction(libraryNumber ?? 0, this.fixtureOwner(altUser))
         cy.get('[data-testid="CQL Library Details"]').click()
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox, { timeout: 30000 }).should('be.visible')
     }
 
     public static clickViewforCreatedLibrary(libraryNumber?: number, altUserAction?: boolean): void {
@@ -143,21 +144,17 @@ export class CQLLibrariesPage {
 
     public static searchForLibraryByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
         Utilities.dropdownSelect(CQLLibraryPage.filterByDropdown, 'Library')
-        cy.get(CQLLibraryPage.LibFilterTextField)
-            .should('be.visible')
-            .clear()
-            .type(`${libraryName}{enter}`)
+        cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible').clear().type(`${libraryName}{enter}`)
 
-        return cy.get(this.libraryListRows, { timeout: 30000 })
+        return cy
+            .get(this.libraryListRows, { timeout: 30000 })
             .contains('td', libraryName)
             .closest('tr')
             .should('be.visible')
     }
 
     public static selectLibraryByName(libraryName: string): void {
-        this.searchForLibraryByName(libraryName)
-            .find('input[type="checkbox"]')
-            .check()
+        this.searchForLibraryByName(libraryName).find('input[type="checkbox"]').check()
     }
 
     public static selectCreatedLibraryRow(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
@@ -168,6 +165,8 @@ export class CQLLibrariesPage {
             cy.get(this.libraryContentSelector(libraryId))
                 .closest('tr')
                 .find('[data-testid$="_select"]', { timeout: 30000 })
+                .find('[class="px-1"]')
+                .find('[class=" cursor-pointer"]')
                 .scrollIntoView()
                 .click()
         })
@@ -187,29 +186,7 @@ export class CQLLibrariesPage {
     }
 
     public static cqlLibraryActionCenter(action: string, libraryNumber?: number): void {
-        if (libraryNumber === undefined || libraryNumber === null) {
-            Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 60000)
-            cy.get('[data-testid="measure-name-0_select"]')
-                .find('[class="px-1"]')
-                .find('[class=" cursor-pointer"]')
-                .scrollIntoView()
-            cy.get('[data-testid="measure-name-0_select"]')
-                .find('[class="px-1"]')
-                .find('[class=" cursor-pointer"]')
-                .click()
-        }
-
-        if (libraryNumber && libraryNumber > 0) {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + libraryNumber + '_select"]', 60000)
-            cy.get('[data-testid="measure-name-' + libraryNumber + '_select"]')
-                .find('[class="px-1"]')
-                .find('[class=" cursor-pointer"]')
-                .scrollIntoView()
-            cy.get('[data-testid="measure-name-0_select"]')
-                .find('[class="px-1"]')
-                .find('[class=" cursor-pointer"]')
-                .click()
-        }
+        this.selectCreatedLibraryRow(libraryNumber ?? 0)
 
         switch (action.valueOf().toString().toLowerCase()) {
             case 'delete': {

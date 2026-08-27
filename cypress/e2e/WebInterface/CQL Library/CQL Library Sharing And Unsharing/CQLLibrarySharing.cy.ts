@@ -1,12 +1,12 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Header } from "../../../../Shared/Header"
-import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibraryPage"
-import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
-import { TestData } from "../../../../Shared/TestData"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Header } from '../../../../Shared/Header'
+import { CQLLibraryPage, EditLibraryActions } from '../../../../Shared/CQLLibraryPage'
+import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
+import { MadieObject, PermissionActions, Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { LibraryCQL } from '../../../../Shared/LibraryCQL'
+import { TestData } from '../../../../Shared/TestData'
 
 const now = Date.now()
 const randomCQLLibraryName = 'LibrarySharingDraft' + now
@@ -16,9 +16,7 @@ let harpUserALT = ''
 let CQLLibraryName = ''
 
 describe('CQL Library Sharing', () => {
-
     beforeEach('Create CQL Library', () => {
-
         CQLLibraryName = 'LibrarySharing1' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
@@ -26,7 +24,6 @@ describe('CQL Library Sharing', () => {
     })
 
     afterEach('LogOut', () => {
-
         Utilities.deleteLibrary()
     })
 
@@ -53,7 +50,6 @@ describe('CQL Library Sharing', () => {
     })
 
     it('Verify admin user can share libraries they do not own', () => {
-
         OktaLogin.AdminLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
 
@@ -65,8 +61,7 @@ describe('CQL Library Sharing', () => {
         //Share Library with ALT user
         // standard share functions won't work here - data-testid's are generated differently based on the admin permissions
         cy.get(CQLLibraryPage.actionCenterButton).click()
-        cy.wait(250)
-        cy.get('[data-testid="Share/Unshare"]').click()
+        cy.get(CQLLibraryPage.actionCenterSecondaryShare).should('be.visible').click()
         cy.get(CQLLibrariesPage.shareOption).click({ force: true })
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
@@ -74,15 +69,15 @@ describe('CQL Library Sharing', () => {
         //Verify that the Harp id is added to the table
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
-        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.intercept('PUT', '**/api/cql-libraries/share').as('shareLibrary')
+        cy.get(CQLLibrariesPage.saveUserBtn).should('be.enabled').click()
+        cy.wait('@shareLibrary').its('response.statusCode').should('eq', 200)
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(s) were successfully shared.')
     })
 })
 
 describe('CQL Library Sharing - Multiple instances', () => {
-
     beforeEach('Create CQL Library', () => {
-
         CQLLibraryName = 'LibrarySharing2' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
@@ -90,17 +85,15 @@ describe('CQL Library Sharing - Multiple instances', () => {
     })
 
     afterEach('LogOut', () => {
-
         Utilities.deleteLibrary()
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Shared to the new owner', () => {
-
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
 
         //Version the CQL Library
-        CQLLibrariesPage.cqlLibraryActionCenter("version")
+        CQLLibrariesPage.cqlLibraryActionCenter('version')
 
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('be.enabled')
@@ -109,7 +102,10 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createVersionContinueButton).should('exist')
         cy.get(CQLLibrariesPage.createVersionContinueButton).should('be.visible')
         cy.get(CQLLibrariesPage.createVersionContinueButton).click()
-        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New version of CQL Library is Successfully created')
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should(
+            'contain.text',
+            'New version of CQL Library is Successfully created'
+        )
         CQLLibrariesPage.validateVersionNumber(CQLLibraryName, versionNumber)
         cy.log('Version Created Successfully')
 
@@ -136,7 +132,10 @@ describe('CQL Library Sharing - Multiple instances', () => {
             TestData.writeCqlLibraryId(request.response!.body.id)
         })
 
-        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should(
+            'contain.text',
+            'New Draft of CQL Library is Successfully created'
+        )
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
         //Share Library with ALT User
@@ -161,10 +160,8 @@ describe('CQL Library Sharing - Multiple instances', () => {
     })
 })
 
-describe('Remove user\'s share access from a library', () => {
-
+describe("Remove user's share access from a library", () => {
     beforeEach('Create library and Set Access Token', () => {
-
         CQLLibraryName = 'LibrarySharing' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
@@ -175,12 +172,10 @@ describe('Remove user\'s share access from a library', () => {
     })
 
     afterEach('Log out and Clean up', () => {
-
         Utilities.deleteLibrary()
     })
 
     it('After removing access, user can no longer edit the library', () => {
-
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
@@ -209,9 +204,7 @@ describe('Remove user\'s share access from a library', () => {
 })
 
 describe('Share CQL Library using Action Center buttons', () => {
-
     beforeEach('Create CQL Library', () => {
-
         CQLLibraryName = 'LibrarySharing3' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
@@ -219,7 +212,6 @@ describe('Share CQL Library using Action Center buttons', () => {
     })
 
     afterEach('LogOut', () => {
-
         Utilities.deleteLibrary()
     })
 
@@ -241,7 +233,9 @@ describe('Share CQL Library using Action Center buttons', () => {
         //Verify that the Harp id is added to the table
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
-        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.intercept('PUT', '**/api/cql-libraries/share').as('shareLibrary')
+        cy.get(CQLLibrariesPage.saveUserBtn).should('be.enabled').click()
+        cy.wait('@shareLibrary').its('response.statusCode').should('eq', 200)
         cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
 
         //Login as ALT User
@@ -256,7 +250,11 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         //Delete button disabled for shared owner
         Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        cy.get('[data-testid="measure-name-0_select"]')
+            .find('[class="px-1"]')
+            .find('[class=" cursor-pointer"]')
+            .scrollIntoView()
+            .click()
 
         cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
 
@@ -270,7 +268,6 @@ describe('Share CQL Library using Action Center buttons', () => {
     })
 
     it('Verify CQL Library owner can share Library from Edit Library page Action centre share button', () => {
-
         //Login as Regular user
         OktaLogin.Login()
 
@@ -286,24 +283,29 @@ describe('Share CQL Library using Action Center buttons', () => {
         //Verify that the Harp id is added to the table
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
-        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.intercept('PUT', '**/api/cql-libraries/share').as('shareLibrary')
+        cy.get(CQLLibrariesPage.saveUserBtn).should('be.enabled').click()
+        cy.wait('@shareLibrary').its('response.statusCode').should('eq', 200)
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(s) were successfully shared.')
     })
 
     it('Action centre share button disabled for Non Library Owner', () => {
-
         //Login as Alt User
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
 
         //Navigate to All Libraries tab
-        cy.get(Header.cqlLibraryTab).click().wait(2000)
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        cy.get('[data-testid="measure-name-0_select"]')
+            .find('[class="px-1"]')
+            .find('[class=" cursor-pointer"]')
+            .scrollIntoView()
+            .click()
 
         cy.get('[data-testid="share-action-btn"]').should('be.visible')
         cy.get('[data-testid="share-action-btn"]').should('be.disabled')
@@ -311,7 +313,6 @@ describe('Share CQL Library using Action Center buttons', () => {
 
     // fails in Cypress, will always pass when done manually
     it.skip('Verify error message when CQL Library is shared with same user multiple times', () => {
-
         OktaLogin.Login()
 
         //Navigate to CQL Library Page
@@ -329,14 +330,15 @@ describe('Share CQL Library using Action Center buttons', () => {
         //Share the Library with same user again
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
-        cy.get(MeasuresPage.newOwnerErrorText).should('contain.text', 'The selected library(s) are already shared with this user.')
+        cy.get(MeasuresPage.newOwnerErrorText).should(
+            'contain.text',
+            'The selected library(s) are already shared with this user.'
+        )
     })
 })
 
 describe('Share CQL Library using Action Center buttons - Multiple instances', () => {
-
     beforeEach('Create CQL Library', () => {
-
         CQLLibraryName = 'LibrarySharing4' + Date.now()
         harpUserALT = OktaLogin.getUser(true)
 
@@ -344,7 +346,6 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
     })
 
     afterEach('LogOut', () => {
-
         Utilities.deleteLibrary()
     })
 
@@ -365,7 +366,10 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.createVersionContinueButton).should('exist')
         cy.get(CQLLibrariesPage.createVersionContinueButton).should('be.visible')
         cy.get(CQLLibrariesPage.createVersionContinueButton).click()
-        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New version of CQL Library is Successfully created')
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should(
+            'contain.text',
+            'New version of CQL Library is Successfully created'
+        )
         CQLLibrariesPage.validateVersionNumber(CQLLibraryName, versionNumber)
         cy.log('Version Created Successfully')
 
@@ -390,17 +394,22 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
             expect(request.response?.body.id).to.be.a('string').and.not.be.empty
             TestData.writeCqlLibraryId(request.response!.body.id)
         })
-        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should(
+            'contain.text',
+            'New Draft of CQL Library is Successfully created'
+        )
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
 
         //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
-        cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
+        CQLLibrariesPage.cqlLibraryActionCenter('share')
         cy.get(CQLLibrariesPage.shareOption).click({ force: true })
 
         //Verify information text on share screen
-        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a Library, all versions and drafts are shared, so\n                only the most recent library name appears here.')
+        cy.get('[class="share-unshare-dialog-info-text"]').should(
+            'contain.text',
+            'When sharing a Library, all versions and drafts are shared, so\n                only the most recent library name appears here.'
+        )
 
         //Share Library with ALT user
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
@@ -409,7 +418,9 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         //Verify that the Harp id is added to the table
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
-        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.intercept('PUT', '**/api/cql-libraries/share').as('shareLibrary')
+        cy.get(CQLLibrariesPage.saveUserBtn).should('be.enabled').click()
+        cy.wait('@shareLibrary').its('response.statusCode').should('eq', 200)
         Utilities.waitForElementVisible('.MuiAlert-message', 60000)
         cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
 

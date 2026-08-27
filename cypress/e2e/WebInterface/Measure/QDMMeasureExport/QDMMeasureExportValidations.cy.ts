@@ -48,10 +48,7 @@ const measureData: CreateMeasureOptions = {
     patientBasis: 'false'
 }
 
-/*
-        Tests below all involve failures of the export process.
-        EditMeasurePage.actionCenter() assumes success, so we can't use it
-    */
+const invalidCqlDefinition = '\ndefine "Invalid CQL":\n'
 
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
     before('Create New Measure and Login', () => {
@@ -76,35 +73,14 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward, Developers, and Type', () => {
-        let currentUser = Cypress.env('selectedUser')
-        //return to measures list
         cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
-
-                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-                cy.get('[class="error-message"] > ul > :nth-child(1)').should(
-                    'contain.text',
-                    'Missing Measure Developers'
-                )
-                cy.get('[class="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
-                cy.get('[class="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
-                cy.get('[class="error-message"] > ul > :nth-child(4)').should(
-                    'contain.text',
-                    'Measure Type is required'
-                )
-            })
+        cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+        cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Measure Developers')
+        cy.get('[class="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
+        cy.get('[class="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
+        cy.get('[class="error-message"] > ul > :nth-child(4)').should('contain.text', 'Measure Type is required')
     })
 })
 
@@ -133,46 +109,23 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForExport')
         cy.get(Header.measures).click()
         MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForExport')
-        MeasuresPage.selectMeasure()
-        cy.get('[data-testid="export-action-btn"]').should('be.visible').and('be.enabled').click()
-        cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
         cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
-        let currentUser = Cypress.env('selectedUser')
-        //Update Measure CQL with errors
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-                '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-                '{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
-                '{backspace}{backspace}'
-        )
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.libWarningTopMsg).should(
-            'contain.text',
-            'Library statement was incorrect. MADiE has overwritten it.'
-        )
+        CQLEditorPage.saveCql({
+            appendCommand: invalidCqlDefinition,
+            parseSpecialCharSequences: false,
+            waitForDisabled: true
+        })
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Error')
 
         cy.get(Header.measures).click()
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
-
-                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure')
-                cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
-            })
+        MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
+        cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure')
+        cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
     })
 })
 
@@ -193,28 +146,11 @@ describe('Error Message on Measure Export when the Measure does not have Populat
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
-        let currentUser = Cypress.env('selectedUser')
         cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
-
-                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-                cy.get('[class="error-message"] > ul > :nth-child(1)').should(
-                    'contain.text',
-                    'Missing Population Criteria'
-                )
-            })
+        cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+        cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Population Criteria')
     })
 })
 
@@ -234,11 +170,10 @@ describe('Error Message on Measure Export when the Population Criteria does not 
     })
 
     it('Verify error message on Measure Export when the Population Criteria does not match with CQL', () => {
-        let currentUser = Cypress.env('selectedUser')
         cy.get(Header.measures).click()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openCqlEditor()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type(updatedMeasureCQL)
 
@@ -250,25 +185,12 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         )
 
         cy.get(Header.measures).click()
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
-
-                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-                cy.get('[class="error-message"] > ul > :nth-child(1)').should(
-                    'contain.text',
-                    'CQL Populations Return Types are invalid'
-                )
-            })
+        MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
+        cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+        cy.get('[class="error-message"] > ul > :nth-child(1)').should(
+            'contain.text',
+            'CQL Populations Return Types are invalid'
+        )
     })
 })
 
@@ -293,7 +215,7 @@ describe('Error Message on Measure Export for Publish when measure was versioned
         cy.get(EditMeasurePage.editMeasureExportActionBtn).click()
 
         Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
-        cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+        cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Publishable Export').click()
 
         // verify error
         cy.get('.loading-title').should('contain.text', 'Your download could not be completed')

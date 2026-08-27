@@ -211,28 +211,12 @@ describe('Test Case Expected Measure Group population values based on initial me
             //click on Expected / Actual tab
             TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
-            cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-
-            cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
-            cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-            cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseNUMEXExpected).type('2')
-
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-            cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
+            TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
+            TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '2')
+            TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '3')
 
             //navigate to the Details tab to see confirmation message
-            cy.get(TestCasesPage.detailsTab).should('exist')
-            cy.get(TestCasesPage.detailsTab).should('be.visible')
-            cy.get(TestCasesPage.detailsTab).click()
-
-            cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
-            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+            TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
             cy.get(TestCasesPage.successMsg).should(
@@ -287,8 +271,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             TestCasesPage.openExpectedActualTab()
 
             //confirm that check boxes that were checked are no longer checked
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
+            cy.get(TestCasesPage.testCaseIPPExpected).should('exist').and('be.empty')
         }
     )
 

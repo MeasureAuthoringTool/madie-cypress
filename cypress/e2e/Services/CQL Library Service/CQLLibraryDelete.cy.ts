@@ -6,7 +6,6 @@ import { CqlLibraryBody, TestData } from "../../../Shared/TestData"
 
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
-let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const versionNumber = '1.0.000'
 
 const deleteCurrentCqlLibrary = (
@@ -82,7 +81,7 @@ describe('Delete CQL Library', () => {
     beforeEach('Set Access Token', () => {
 
         CQLLibraryName = 'DeleteCqlLibrary' + Date.now()
-        measureCQLAlt = measureCQLAlt.replace('SimpleFhirLibrary', CQLLibraryName)
+        const measureCQLAlt = MeasureCQL.ICFCleanTestQICore.replace('SimpleFhirLibrary', CQLLibraryName)
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
     })
 
@@ -146,8 +145,15 @@ describe('Delete CQL Library', () => {
         transferCurrentCqlLibrary(harpUserALT).then((response) => {
             expect(response.status).to.eql(200)
         }).then(() => {
-            OktaLogin.setupUserSession(true)
-            CQLLibraryPage.versionLibraryAPI(versionNumber)
+            TestData.versionCqlLibrary<CqlLibraryBody>(
+                versionNumber,
+                0,
+                'selectedAltUser',
+                {},
+                'selectedUser'
+            ).then((response) => {
+                expect(response.status).to.eql(200)
+            })
 
             deleteCurrentCqlLibrary({ failOnStatusCode: false }).then((response) => {
                 expect(response.status).to.eql(409)

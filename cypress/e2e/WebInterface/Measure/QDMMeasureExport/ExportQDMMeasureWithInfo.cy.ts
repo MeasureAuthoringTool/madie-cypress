@@ -12,8 +12,28 @@ const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const qdmMeasureCQL = QdmCql.severeObstetricComplications
+const exportFileName = 'eCQMTitle4QDM-v0.0.000-QDM'
 
-const measureData: CreateMeasureOptions = {}
+const createMeasureData = (measureName: string, cqlLibraryName: string): CreateMeasureOptions => ({
+    ecqmTitle: measureName,
+    cqlLibraryName,
+    measureScoring: 'Proportion',
+    patientBasis: 'false',
+    measureCql: qdmMeasureCQL
+})
+
+const exportAndUnzipMeasure = (exportOptions: MeasureActionOptions): void => {
+    MeasuresPage.actionCenter('export', undefined, exportOptions)
+    cy.verifyDownload(exportFileName + '.zip', { timeout: 5500 })
+    cy.log('Successfully verified zip file export')
+
+    cy.task('unzipFile', { zipFile: exportFileName + '.zip', path: downloadsFolder }).then(() => {
+        cy.log('unzipFile Task finished')
+    })
+}
+
+const cqlWarnings = (annotations: Array<{ errorSeverity?: string; type?: string }>) =>
+    annotations.filter((annotation) => annotation.errorSeverity === 'warning' && annotation.type === 'CqlToElmError')
 
 describe('Successful QDM Measure Export with Info', () => {
     const exportOptions: MeasureActionOptions = {
@@ -25,13 +45,9 @@ describe('Successful QDM Measure Export with Info', () => {
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-        measureData.ecqmTitle = qdmMeasureName
-        measureData.cqlLibraryName = qdmCqlLibraryName
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmMeasureCQL
-
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(
+            createMeasureData(qdmMeasureName, qdmCqlLibraryName)
+        )
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
@@ -50,31 +66,18 @@ describe('Successful QDM Measure Export with Info', () => {
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
-
-        MeasuresPage.actionCenter('export', undefined, exportOptions)
-        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', { timeout: 5500 })
-        cy.log('Successfully verified zip file export')
-
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-            cy.wait(1000)
-        })
+        exportAndUnzipMeasure(exportOptions)
     })
 
     after('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
     it('Validate CQL info appears as annotations on the library JSON', () => {
         const elmFile = path.join(downloadsFolder, 'resources', qdmCqlLibraryName + '-0.0.000.json')
 
         cy.readFile(elmFile).then((fileContents) => {
-            // remove other types of warnings/info
-            const warnings = fileContents.library.annotation.filter((obj) => {
-                return obj.errorSeverity === 'warning' && obj.type === 'CqlToElmError'
-            })
-            // assert exact number of warnings we expect
-            expect(warnings).to.have.length(43)
+            expect(cqlWarnings(fileContents.library.annotation)).to.have.length(43)
         })
     })
 })
@@ -89,13 +92,9 @@ describe('Successful QDM Measure Export for Publish', () => {
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-        measureData.ecqmTitle = qdmMeasureName
-        measureData.cqlLibraryName = qdmCqlLibraryName
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmMeasureCQL
-
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(
+            createMeasureData(qdmMeasureName, qdmCqlLibraryName)
+        )
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
@@ -114,15 +113,7 @@ describe('Successful QDM Measure Export for Publish', () => {
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
-
-        MeasuresPage.actionCenter('export', undefined, exportOptions)
-        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', { timeout: 5500 })
-        cy.log('Successfully verified zip file export')
-
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-            cy.wait(1000)
-        })
+        exportAndUnzipMeasure(exportOptions)
     })
 
     after('Clean up and Logout', () => {
@@ -134,12 +125,7 @@ describe('Successful QDM Measure Export for Publish', () => {
 
         cy.readFile(elmFile).then((fileContents) => {
             expect(fileContents.library.annotation).to.have.length(2)
-            // remove other types of warnings/info
-            const warnings = fileContents.library.annotation.filter((obj) => {
-                return obj.errorSeverity === 'warning' && obj.type === 'CqlToElmError'
-            })
-            // assert exact number of warnings we expect
-            expect(warnings).to.have.length(0)
+            expect(cqlWarnings(fileContents.library.annotation)).to.have.length(0)
         })
     })
 })

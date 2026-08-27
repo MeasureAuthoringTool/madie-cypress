@@ -145,7 +145,7 @@ describe('Measure with Negation Rationale', () => {
             false,
             false,
             '2012-01-01',
-            '2012-12-31',
+            '2012-12-31'
         )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
@@ -189,7 +189,7 @@ describe('Measure with Negation Rationale', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
         cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
             'contain.text',
-            'Measure Base Configuration ' + 'Updated Successfully',
+            'Measure Base Configuration ' + 'Updated Successfully'
         )
 
         //add pop criteria
@@ -197,7 +197,7 @@ describe('Measure with Negation Rationale', () => {
 
         Utilities.dropdownSelect(
             MeasureGroupPage.initialPopulationSelect,
-            'BCG Not Available Within 6 Months After Bladder Cancer Staging',
+            'BCG Not Available Within 6 Months After Bladder Cancer Staging'
         )
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -206,7 +206,7 @@ describe('Measure with Negation Rationale', () => {
 
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Population details for ' + 'this group saved successfully.',
+            'Population details for ' + 'this group saved successfully.'
         )
 
         //Add Supplemental Data Elements
@@ -222,7 +222,7 @@ describe('Measure with Negation Rationale', () => {
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
         cy.get(EditMeasurePage.successMessage).should(
             'contain.text',
-            'Measure Supplemental Data have been Saved Successfully',
+            'Measure Supplemental Data have been Saved Successfully'
         )
 
         //Add Elements to the Test case
@@ -236,7 +236,7 @@ describe('Measure with Negation Rationale', () => {
             'Living',
             'White',
             'Female',
-            'Not Hispanic or Latino',
+            'Not Hispanic or Latino'
         )
 
         //Element - Condition, Diagnosis: Bladder Cancer for Urology Care
@@ -247,7 +247,7 @@ describe('Measure with Negation Rationale', () => {
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
         QDMElements.addElement('medication', 'Administered: BCG Bacillus Calmette Guerin for Urology Care')
         QDMElements.addTimingRelevantPeriodDateTime('03/01/2012 08:00 AM', '03/01/2012 10:15 AM')
-        QDMElements.addCode('RxNORM', '1653579')
+        QDMElements.addCode('rxnorm', '1653579')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 

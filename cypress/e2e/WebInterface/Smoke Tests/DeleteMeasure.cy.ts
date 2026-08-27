@@ -1,8 +1,8 @@
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../Shared/Utilities"
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../Shared/Utilities'
 
 let measureOne = ''
 let CqlLibraryOne = ''
@@ -11,9 +11,7 @@ let CqlLibraryTwo = ''
 const now = Date.now()
 
 describe('Delete Measure', () => {
-
     beforeEach('Create measure and Login', () => {
-
         measureOne = 'DeleteMeasure1' + now
         CqlLibraryOne = 'DeleteLibrary1' + now
         CreateMeasurePage.CreateMeasureAPI(measureOne, CqlLibraryOne, SupportedModels.qiCore6)
@@ -21,7 +19,6 @@ describe('Delete Measure', () => {
     })
 
     it('Verify Measure Owner can Delete Measure through Action center', () => {
-
         MeasuresPage.actionCenter('delete')
 
         EditMeasurePage.assertDeleteMeasureConfirmation(measureOne)
@@ -40,9 +37,7 @@ describe('Delete Measure', () => {
 })
 
 describe('Delete Measure ownership validation', () => {
-
     beforeEach('Create measure and Login as ALT User', () => {
-
         measureTwo = 'DeleteMeasure2' + now
         CqlLibraryTwo = 'DeleteLibrary2' + now
         CreateMeasurePage.CreateMeasureAPI(measureTwo, CqlLibraryTwo, SupportedModels.qiCore6)
@@ -51,7 +46,6 @@ describe('Delete Measure ownership validation', () => {
     })
 
     afterEach('Logout and cleanup', () => {
-
         Utilities.deleteMeasure()
     })
 
@@ -63,9 +57,14 @@ describe('Delete Measure ownership validation', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
-        })
+        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
+            .should('exist')
+            .then((fileContents) => {
+                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
+                    .find('[class="px-1"]')
+                    .find('[class=" cursor-pointer"]')
+                    .click()
+            })
 
         cy.get('[data-testid="delete-action-btn"]').should('not.be.enabled')
     })

@@ -8,9 +8,9 @@ import { Header } from '../../../../Shared/Header'
 import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 
-let measureName = 'QDMLibraryIncludes' + Date.now()
-let CqlLibraryName = 'QDMLibraryIncludesLib' + Date.now()
-let measureCQL =
+let measureName = ''
+let cqlLibraryName = ''
+const measureCQL =
   "library TestLibrary1685544523170534 version '0.0.000'\n" +
   "using QDM version '5.6'\n\n" +
   "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n" +
@@ -37,14 +37,17 @@ let measureCQL =
 
 describe('QDM Library Includes fields', () => {
   beforeEach('Create Measure and Login', () => {
-    CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+    const timestamp = Date.now()
+    measureName = 'QDMLibraryIncludes' + timestamp
+    cqlLibraryName = 'QDMLibraryIncludesLib' + timestamp
+
+    CreateMeasurePage.CreateQDMMeasureAPI(measureName, cqlLibraryName, measureCQL)
     OktaLogin.SessionLogin()
 
     //Click on Edit Button
     MeasuresPage.actionCenter('edit')
 
-    //Save CQL
-    cy.get(EditMeasurePage.cqlEditorTab).click()
+    CQLEditorPage.openCqlEditor()
     CQLEditorPage.expandCQLBuilderPanel()
   })
 
@@ -505,7 +508,7 @@ describe('QDM Library Includes fields', () => {
   it('Verify error message appears on Includes tab when there is an error in the Measure CQL', () => {
     //Navigate to Includes tab and verify no error message appears
     cy.get(CQLEditorPage.includesTab).click()
-    cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+    cy.get('[data-testid="cql-builder-errors"]').should('not.exist')
     //Navigate to Includes tab and verify saved Libraries appear
     cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
 

@@ -7,6 +7,7 @@ import { FixtureOwner, TestData } from './TestData'
 
 export type MeasureActionOptions = {
     exportForPublish?: boolean
+    expectExportSuccess?: boolean
     targetVersion?: string
     versionType?: string
     updateModelVersion?: boolean
@@ -40,8 +41,8 @@ export class MeasuresPage {
     public static readonly filterCMSIdOption = '[data-testid="filter-by-CMS ID"]'
 
     //export
-    public static readonly exportNonPublishingOption = '[data-testid="export-option"]'
-    public static readonly exportPublishingOption = '[data-testid="export-publishing-option"]'
+    public static readonly exportNonPublishingOption = '[data-testid="executable-export-option"]'
+    public static readonly exportPublishingOption = '[data-testid="publishable-export-option"]'
     public static readonly exportingDialog = '[class="MuiBox-root css-1c2c0mn"]'
     public static readonly exportingSpinner = '.spinner'
     public static readonly exportFinishedCheck = '[data-testid="CheckCircleOutlineIcon"]'
@@ -113,7 +114,11 @@ export class MeasuresPage {
         })
     }
 
-    private static selectVersionedMeasureRow(targetVersion: string, measureNumber = 0, options?: MeasureActionOptions): void {
+    private static selectVersionedMeasureRow(
+        targetVersion: string,
+        measureNumber = 0,
+        options?: MeasureActionOptions
+    ): void {
         TestData.readMeasureId(measureNumber, this.fixtureOwner(options)).then((measureId) => {
             cy.get(this.measureActionSelector(measureId))
                 .closest('tr')
@@ -270,18 +275,23 @@ export class MeasuresPage {
             case 'export': {
                 step('Select Export from Action Center')
                 const exportForPublish = options?.exportForPublish
+                const expectExportSuccess = options?.expectExportSuccess ?? true
                 cy.get('[data-testid="export-action-btn"]').scrollIntoView()
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
 
                 if (exportForPublish) {
                     Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 15000)
-                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing')
+                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Publishable Export')
                     cy.get(MeasuresPage.exportPublishingOption).click()
                 } else {
                     Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 15000)
-                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export')
+                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export')
                     cy.get(MeasuresPage.exportNonPublishingOption).click()
+                }
+
+                if (!expectExportSuccess) {
+                    break
                 }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
