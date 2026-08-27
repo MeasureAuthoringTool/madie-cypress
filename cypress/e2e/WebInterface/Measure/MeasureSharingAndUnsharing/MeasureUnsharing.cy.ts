@@ -9,14 +9,13 @@ import { LandingPage } from "../../../../Shared/LandingPage"
 let measureName = ''
 let cqlLibraryName = ''
 let harpUserALT = ''
-let measureCQL = MeasureCQL.SBTEST_CQL
+const measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Un Sharing', () => {
-
-    measureName = 'MeasureUnshare' + Date.now()
-    cqlLibraryName = 'MeasureUnshareLib' + Date.now()
-
     beforeEach('Create Measure and Set Access Token', () => {
+        const timestamp = Date.now()
+        measureName = 'MeasureUnshare' + timestamp
+        cqlLibraryName = 'MeasureUnshareLib' + timestamp
 
         harpUserALT = OktaLogin.getUser(true)
 
@@ -27,7 +26,7 @@ describe('Measure Un Sharing', () => {
 
         OktaLogin.UILogout()
         OktaLogin.setupUserSession(false)
-        Utilities.deleteMeasure()
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('Verify Measure owner can unshare Measure from Measures page Action centre share button', () => {
@@ -67,9 +66,14 @@ describe('Measure Un Sharing', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
         EditMeasurePage.actionCenter(EditMeasureActions.share)
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
-        cy.get(EditMeasurePage.unshareCheckBox).eq(1).click()
-        cy.get(EditMeasurePage.saveUserBtn).click()
-        cy.get(EditMeasurePage.acceptBtn).click()
+        cy.contains(EditMeasurePage.sharedUserTable, harpUserALT)
+            .find(EditMeasurePage.unshareCheckBox)
+            .should('be.checked')
+            .click()
+        cy.intercept('PUT', '**/api/measures/unshared').as('unshareMeasure')
+        cy.get(EditMeasurePage.saveUserBtn).should('be.enabled').click()
+        cy.get(EditMeasurePage.acceptBtn).should('be.visible').click()
+        cy.wait('@unshareMeasure').its('response.statusCode').should('eq', 200)
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully unshared.')
 
@@ -90,9 +94,7 @@ describe('Measure Un Sharing', () => {
 
         //Unshare Measure
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        cy.get('[type="checkbox"]').eq(1).click()
-        Utilities.waitForElementVisible('[data-testid="share-action-btn"]', 30000)
-        cy.get('[data-testid="share-action-btn"]').should('be.enabled').click()
+        MeasuresPage.actionCenter('share')
         cy.get(EditMeasurePage.unshareOption).click({ force: true })
 
         //Assert text on the popup screen
@@ -110,4 +112,3 @@ describe('Measure Un Sharing', () => {
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
     })
 })
-

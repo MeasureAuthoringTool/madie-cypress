@@ -8,15 +8,21 @@ import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Header } from '../../../../Shared/Header'
 
-let qdmMeasureName = 'QDMExportFiles' + Date.now()
-let qdmCqlLibraryName = 'QDMExportFilesLib' + Date.now()
-let versionNumber = '1.0.000'
+const qdmMeasureName = 'QDMExportFiles' + Date.now()
+const qdmCqlLibraryName = 'QDMExportFilesLib' + Date.now()
+const versionNumber = '1.0.000'
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
-let description = 'SemanticBits test'
+const qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
+const description = 'SemanticBits test'
+
+const unzipMeasureArchive = (fileName: string) => {
+    cy.task('unzipFile', { zipFile: fileName + '.zip', path: downloadsFolder }).then(() => {
+        cy.log('unzipFile Task finished')
+    })
+}
 
 const measureData: CreateMeasureOptions = {
     measureCql: qdmMeasureCQL,
@@ -41,13 +47,10 @@ describe('Verify QDM Measure Export file contents', () => {
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 90000 }).should('exist')
+        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', { timeout: 90000 })
         cy.log('Successfully verified zip file export')
 
-        // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-        })
+        unzipMeasureArchive('eCQMTitle4QDM-v0.0.000-QDM')
     })
 
     after('Clean up', () => {
@@ -83,10 +86,7 @@ describe('QDM Measure Export, Not the Owner', () => {
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveCql({ waitForDisabled: true })
         OktaLogin.UILogout()
 
         OktaLogin.AltLogin()
@@ -105,7 +105,7 @@ describe('QDM Measure Export, Not the Owner', () => {
 
         MeasuresPage.actionCenter('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 60000 }).should('exist')
+        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', { timeout: 60000 })
         cy.log('Successfully verified zip file export')
     })
 })
@@ -131,13 +131,14 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.zip'), { timeout: 60000 }).should('exist')
+        cy.verifyDownload('eCQMTitle4QDM-v1.0.000-QDM.zip', { timeout: 60000 })
         cy.log('Successfully verified zip file export')
 
-        // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v1.0.000-QDM.zip', path: downloadsFolder }).then((results) => {
-            cy.log('unzipFile Task finished')
-        })
+        unzipMeasureArchive('eCQMTitle4QDM-v1.0.000-QDM')
+    })
+
+    after('Clean up', () => {
+        Utilities.deleteMeasure()
     })
 
     it('Version measure, unzip the downloaded file, and verify file contents for the HR, for QDM Measure', () => {

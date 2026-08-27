@@ -273,9 +273,12 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.share: {
-                cy.get(this.actionCenterShare).should('be.visible')
-                cy.get(this.actionCenterShare).should('be.enabled')
-                cy.get(this.actionCenterShare).click()
+                cy.get(`${this.actionCenterShare}, ${this.actionCenterSecondaryShare}`)
+                    .filter(':visible')
+                    .should('have.length.at.least', 1)
+                    .first()
+                    .should('be.enabled')
+                    .click()
 
                 break
             }

@@ -88,17 +88,11 @@ describe('Test Case Builder Basics', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        // after the page is ready (e.g., available tab visible)
-        cy.get('[data-testid="available-tab"]').should('be.visible')
-
-        cy.dragAnySashToRight()
-
         TestCaseBuilder.addEditNewResource(Profile.Patient)
 
         Utilities.dropdownSelect('[data-testid="code-selector-Patient.gender"]', 'female')
 
         TestCaseBuilder.applyAndWait()
-
         TestCaseBuilder.selectLeftMenu(' *Identifier')
         cy.get('[data-testid="uri-field-Patient.identifier[0].system"]').type('http://hospital.smarthealthit.org')
         cy.get('[data-testid="string-field-input-Patient.identifier[0].value"]').type('999999995')
@@ -142,8 +136,6 @@ describe('Test Case Builder Basics', () => {
         TestCaseBuilder.applyAndWait()
 
         cy.get('[data-testid="close-resource-editor-button"]').click()
-
-        cy.get('[data-testid="available-tab"]').click()
 
         TestCaseBuilder.addEditNewResource(Profile.Encounter, 1)
 

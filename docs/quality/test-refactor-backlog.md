@@ -37,9 +37,7 @@ Work boundaries:
 
 | Area | Status | Next action |
 | --- | --- | --- |
-| `ExecuteInvalidTestCases.cy.ts` | Product remains `Invalid` instead of `Pass` after execution. | Product follow-up; do not accept `Invalid`. |
 | `ElementTable.cy.ts` | Deferred by team; React action transition can detach or close without opening the editor. | Resume only when explicitly prioritized; diagnose destination transition. |
-| `CQLLibraryDelete.cy.ts` | DEV proof on 2026-08-06 passed the new MAT-9892 admin single-instance delete coverage. A legacy transferred-user versioning scenario still receives `403`. | Isolate whether transferred users should be allowed to version a library before refactoring that legacy scenario. |
 | `CQLLibraryTransfer.cy.ts` | Inactive alt-user responses plus slow UI switching. | Resolve account state before session-flow changes. |
 | `Measure.cy.ts` special-character validation | Service returns `500` instead of expected `400`. | Product/service follow-up. |
 | `QDMRunExecuteTC.cy.ts` non-owner path | Previously reached VSAC `401`. | Recheck environment/session dependency independently. |
@@ -79,6 +77,7 @@ Work boundaries:
 - Proven shared checkbox and numeric-entry helpers across Qi-Core and QDM split-panel and non-panel layouts.
 - Stabilized QDM demographics, row checkbox selection, search, SDE navigation, clone/copy, execution, highlighting, validation, and action-center flows.
 - Stabilized Qi-Core population values, search, invalid-case navigation, non-owner execution, list coverage, and versioned clone/import flows.
+- Corrected invalid-test-case execution expectations: the option permits submission, while an unparseable patient bundle is explicitly rejected with `400` and remains `Invalid`.
 
 ### Measure lifecycle and export
 
@@ -91,6 +90,7 @@ Work boundaries:
 
 - Stabilized library comparison, history display names, sharing/drafting, name-based admin transfer, saved-code permissions, and list searching.
 - General account display-name lookup now lives in `TestData`.
+- Fixed CQL library transferred-user versioning to authenticate as the transferee while reading the original owner fixture; focused TEST coverage passes.
 
 ## Latest Audit Signal
 

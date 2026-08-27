@@ -149,10 +149,11 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     afterEach('Clean up and Logout', () => {
         //Delete Drafted Measure
+        // Need to update this to Delete Measure API call
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
-        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureBtn, 5000)
+        cy.get(EditMeasurePage.deleteMeasureBtn).click()
         EditMeasurePage.assertDeleteMeasureConfirmation(updatedMeasuresPageName)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')

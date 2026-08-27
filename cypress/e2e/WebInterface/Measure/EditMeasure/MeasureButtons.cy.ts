@@ -8,6 +8,7 @@ import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Header } from '../../../../Shared/Header'
 import { QdmCql } from '../../../../Shared/QDMMeasuresCQL'
+import { TestData } from '../../../../Shared/TestData'
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -75,8 +76,8 @@ describe('Delete measure on the measure edit page', () => {
         MeasuresPage.actionCenter('edit', 1)
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 30000)
-        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureBtn, 30000)
+        cy.get(EditMeasurePage.deleteMeasureBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
@@ -93,8 +94,8 @@ describe('Delete measure on the measure edit page', () => {
         MeasuresPage.actionCenter('edit')
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 30000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 30000)
-        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureBtn, 30000)
+        cy.get(EditMeasurePage.deleteMeasureBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 30000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
@@ -372,7 +373,6 @@ describe('Share measure from the Edit Measure page', () => {
     })
 
     it('Verify Measure owner can share QDM 5.6 Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
@@ -387,7 +387,9 @@ describe('Share measure from the Edit Measure page', () => {
         //Verify that the Harp id is added to the table
         cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
 
-        cy.get(EditMeasurePage.saveUserBtn).click()
+        cy.intercept('PUT', '**/api/measures/shared').as('shareMeasure')
+        cy.get(EditMeasurePage.saveUserBtn).should('be.enabled').click()
+        cy.wait('@shareMeasure').its('response.statusCode').should('eq', 200)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
         OktaLogin.UILogout()
 
@@ -397,17 +399,12 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', measureQDM)
 
         //Delete button disabled for shared owner
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[type="checkbox"]')
-                    .scrollIntoView()
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[type="checkbox"]')
-                    .check()
-            })
+        TestData.readMeasureId().then((measureId) => {
+            const measureRowSelector = `[data-testid="measure-name-${measureId}_select"]`
+            Utilities.waitForElementVisible(measureRowSelector, 30000)
+            cy.get(measureRowSelector).find('[type="checkbox"]').scrollIntoView()
+            cy.get(measureRowSelector).find('[type="checkbox"]').check()
+        })
         cy.get('[data-testid="delete-action-btn"]').should('be.disabled')
 
         //Edit Measure details
@@ -434,7 +431,8 @@ describe('Share measure from the Edit Measure page', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -474,7 +472,9 @@ describe('Share measure from the Edit Measure page', () => {
         //Verify that the Harp id is added to the table
         cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
 
-        cy.get(EditMeasurePage.saveUserBtn).click()
+        cy.intercept('PUT', '**/api/measures/shared').as('shareMeasure')
+        cy.get(EditMeasurePage.saveUserBtn).should('be.enabled').click()
+        cy.wait('@shareMeasure').its('response.statusCode').should('eq', 200)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
         OktaLogin.UILogout()
 
