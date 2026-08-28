@@ -30,6 +30,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 
 - Use `OktaLogin.ReviewerLogin()` only for reviewer-role UI coverage. It reserves the current reviewer account (`harpUser2` / `MadieTestUser1`) through the existing primary-user lock, so ordinary parallel specs cannot share its session.
 - Reviewer specs must call `OktaLogin.releaseReviewer()` in `afterEach`. If reviewer tests wait for the user lock or time out, first check whether another primary-user spec is using `harpUser2` or a prior run left its lock file marked.
+- Validate reviewer lock release with a terminal `cypress run` command, not an individual Cypress Open rerun. The terminal runner completes the support-file `after` hook that releases the primary and alternate user allocations.
 - Do not remove the reviewer account from the primary user pool unless CI concurrency and replacement-account capacity have been reviewed.
 - Split large specs by behavior only after shared setup and data helpers are stable.
 

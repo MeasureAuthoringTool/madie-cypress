@@ -4,10 +4,11 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 import { Utilities } from '../../../Shared/Utilities'
 
-// MAT-10160: Enable when reviewer functionality is available in TEST.
+// MAT-10160: Reviewer coverage is enabled for DEV validation. Confirm TEST
+// availability separately before adding it to the TEST regression collection.
 // MAT-10161 tracks a unique all-reviews-tab test ID; until then, the reviewer
 // assertion uses the current all-measures-tab ID with its All Reviews label.
-describe.skip('MAT-10160 All Reviews', () => {
+describe('MAT-10160 All Reviews', () => {
     beforeEach(() => {
         const suffix = Date.now()
         CreateMeasurePage.CreateMeasureAPI(
@@ -50,6 +51,6 @@ describe.skip('MAT-10160 All Reviews', () => {
 
     it('shows All Reviews to a reviewer', () => {
         OktaLogin.ReviewerLogin()
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').and('contain.text', 'All Reviews')
+        cy.get(MeasuresPage.allReviewsTab).should('be.visible').and('contain.text', 'All Reviews')
     })
 })

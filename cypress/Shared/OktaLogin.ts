@@ -2,6 +2,7 @@ import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { umlsLoginForm } from "./umlsLoginForm"
 import { Header } from "./Header"
+import { step } from "../utils/step"
 
 export class OktaLogin {
 
@@ -181,8 +182,11 @@ export class OktaLogin {
         logPrefix?: string;
     }): void {
         const logPrefix = args.logPrefix ?? 'Login';
+        const rawWho = Cypress.env(args.selectedEnvVar);
+        const who: string = typeof rawWho === 'string' ? rawWho : String(rawWho ?? '');
 
         // Reset state
+        step(`${logPrefix}: Reset browser state for ${who || 'unassigned user'}`);
         sessionStorage.clear();
         cy.clearAllCookies();
         cy.clearLocalStorage();
@@ -197,26 +201,28 @@ export class OktaLogin {
         cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
 
         // Visit login and ensure fresh sessionStorage (with retry on network errors)
+        step(`${logPrefix}: Load application bootstrap`);
         cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
 
         // Capture and write feature flags — use a generous timeout because
         // retries inside visitWithRetry can delay when the request fires.
         cy.wait('@serviceConfig', { timeout: 60000 }).then((config) => {
             cy.writeFile('cypress/fixtures/featureFlags', config.response!.body.features);
+            step(`${logPrefix}: Application bootstrap ready`);
         });
-
-        // Normalize the user key to a plain string (avoids TS index weirdness)
-        const rawWho = Cypress.env(args.selectedEnvVar);
-        const who: string = typeof rawWho === 'string' ? rawWho : String(rawWho ?? '');
 
         // 1) Set token cookie if mapped for this user
         let cookieSet = false;
         if (who && Object.prototype.hasOwnProperty.call(args.cookieSetters, who)) {
             const setCookie = (args.cookieSetters as Record<string, () => void>)[who];
             if (typeof setCookie === 'function') {
+                step(`${logPrefix}: Acquire token cookie for ${who}`);
                 setCookie();
                 cookieSet = true;
+                step(`${logPrefix}: Token cookie acquired for ${who}`);
             }
+        } else {
+            step(`${logPrefix}: No token cookie mapping for ${who || 'unassigned user'}`);
         }
 
         // Local selectors (avoid `this` in closures where not needed)
@@ -283,10 +289,12 @@ export class OktaLogin {
             if (state === 'landing') {
                 // Already authenticated — UMLS intercept was registered early
                 // so it will have captured/will capture the request.
+                step(`${logPrefix}: App auth resolved to landing page`);
                 return;
             }
 
             if (state === 'login') {
+                step(`${logPrefix}: App auth resolved to login form`);
                 cy.log(`${logPrefix}: Login form visible — performing form-based login.`);
                 doFormLogin();
                 return;
@@ -298,6 +306,7 @@ export class OktaLogin {
             // NOT clear cookies up-front — if the cookie auth actually did work
             // we'd be throwing away a valid session and forcing form login,
             // which then fails because /login auto-redirects to /measures.
+            step(`${logPrefix}: App auth state timed out; retry login route`);
             cy.log(`${logPrefix}: Timed out detecting UI state. Re-probing after /login navigation...`);
 
             // Re-register UMLS intercept before navigating — previous alias
@@ -313,10 +322,12 @@ export class OktaLogin {
 
                 if (state2 === 'landing') {
                     // Cookie auth completed during the fallback — we're in.
+                    step(`${logPrefix}: Fallback auth resolved to landing page`);
                     return;
                 }
 
                 if (state2 === 'login') {
+                    step(`${logPrefix}: Fallback auth resolved to login form`);
                     cy.log(`${logPrefix}: Login form visible after fallback — performing form-based login.`);
                     doFormLogin();
                     return;
@@ -324,6 +335,7 @@ export class OktaLogin {
 
                 // Still neither: cookie was truly rejected and form never showed.
                 // Last resort: clear cookies and force the form to render.
+                step(`${logPrefix}: Fallback auth timed out; clear state for form login`);
                 cy.log(`${logPrefix}: Still no UI state. Clearing cookies and forcing form login.`);
                 cy.clearAllCookies();
                 cy.clearLocalStorage();
@@ -336,14 +348,18 @@ export class OktaLogin {
         });
 
         // 4) Post-login checks — wait for UMLS
+        step(`${logPrefix}: Check UMLS readiness`);
         cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
+            step(`${logPrefix}: UMLS status ${response?.statusCode ?? 'missing'}`);
             if (!response || response.statusCode !== 200) {
+                step(`${logPrefix}: Start UMLS login fallback`);
                 umlsLoginForm.UMLSLogin();
             }
         });
 
+        step(`${logPrefix}: Assert landing page readiness`);
         cy.get(selectors.landing, { timeout: 60000 }).should('be.visible');
-        cy.log(`${logPrefix} Successful`);
+        step(`${logPrefix}: Login successful`);
     }
 
     public static UILogout(): void {
@@ -351,7 +367,6 @@ export class OktaLogin {
         // UILogout is called from afterEach/after hooks. If it throws,
         // it cascades and skips remaining tests in the suite. Wrap
         // everything so cleanup failures are logged, not fatal.
-        cy.wait(4500)
         cy.reload()
         cy.get('body', { timeout: 50000 }).should('exist').then(() => {
             // Check if we're already on the login page
@@ -369,11 +384,11 @@ export class OktaLogin {
                         cy.get(Header.userProfileSelectSignOutOption, { timeout: 60000 })
                             .should('be.visible')
                             .click({ force: true })
-                        // Wait briefly for logout to take effect, but don't assert
-                        // on the Okta login form — the selector is brittle and
-                        // failure here shouldn't kill the suite.
-                        cy.wait(3000)
-                        cy.log('Log out successful')
+                        // Keep logout best-effort: callers may immediately begin a
+                        // new login, which clears browser auth state independently.
+                        // Do not add a fixed delay or make teardown fail on an
+                        // external Okta redirect.
+                        cy.log('Log out requested')
                     } else {
                         cy.log('⚠️ User profile menu not found — skipping UI logout')
                     }

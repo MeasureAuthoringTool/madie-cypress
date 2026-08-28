@@ -51,7 +51,7 @@ Work boundaries:
 - Remaining raw numeric Expected/Actual consumers and legacy openings without concrete readiness selectors.
 - Remaining forced interactions in `TestCasesPage.ts`, import validation, highlighting, and editor flows.
 - Remaining export specs with repeated unzip/download setup.
-- `OktaLogin.ts` fixed waits and shared authentication readiness.
+- `OktaLogin.ts` shared authentication readiness.
 - Global `uncaught:exception` suppression in `cypress/support/e2e.ts`.
 - Skipped tests requiring an owner, ticket, or removal decision.
 
@@ -69,6 +69,9 @@ Work boundaries:
 - Centralized user-scoped fixture, token, ID, cleanup, lock, share, measure-group, test-case, and CQL-library request mechanics through `TestData` and domain helpers.
 - Added bounded Cypress worker inactivity handling and CI diagnostics.
 - Removed helper-level fixed waits from `CQLEditorPage`, `CQLLibraryPage`, and `MeasureGroupPage` paths covered by focused tests.
+- Removed the fixed waits from `OktaLogin.UILogout()`; `AdminMeasureShare.cy.ts` passed in TEST after primary, admin, and alternate-user session transitions.
+- Added phase-level `STEP:` diagnostics to `OktaLogin.runLoginFlow()` for shared authentication troubleshooting; focused TEST coverage passes.
+- Enabled the Measure and Library All Reviews reviewer specs for DEV validation. Both pass through terminal Cypress runs and release their primary, alternate, and reviewer account locks.
 
 ### Test-case reliability
 
