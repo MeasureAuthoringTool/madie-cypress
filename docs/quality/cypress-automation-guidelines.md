@@ -69,6 +69,8 @@ Reuse these established paths before adding request code:
 - When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content.
 - After route-changing actions, verify the intended page content, not only the URL. MADiE can update the route before React remounts the destination.
 - After saves, wait for a settled condition such as a disabled Save button or completed request. A success toast alone may precede the final rerender.
+- After editing test-case elements, use `TestCasesPage.saveTestCaseAndWait()` before opening Expected/Actual or another panel that depends on the saved test-case state.
+- When a transient success toast can obstruct the next UI action, use `Toasts.clearToast(selector, expectedText)` to verify its message and settle the toast; automatic dismissal is also a settled state.
 
 ## Test Case Split Views
 

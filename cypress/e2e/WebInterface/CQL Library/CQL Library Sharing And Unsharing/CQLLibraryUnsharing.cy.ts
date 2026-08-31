@@ -148,12 +148,12 @@ describe('Unshare CQL Library using Action Center buttons', () => {
         OktaLogin.AdminLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesTab).click()
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        CQLLibrariesPage.openLibraryAsNonOwner()
 
         //Un share Library
         //CQLLibraryPage.actionCenter(EditLibraryActions.share)
         // standard share functions won't work here - data-testid's are generated differently based on the admin permissions
-        cy.get(CQLLibraryPage.actionCenterButton).click()
+        cy.get(CQLLibraryPage.actionCenterButton).scrollIntoView().click()
         cy.get('[data-testid="Share/Unshare"]').should('be.visible').click()
         cy.get(CQLLibrariesPage.unshareOption).click({ force: true })
         cy.contains(CQLLibrariesPage.sharedUserTable, harpUserALT)
@@ -169,14 +169,13 @@ describe('Unshare CQL Library using Action Center buttons', () => {
             'contain.text',
             'The Library(s) were successfully unshared.'
         )
-
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
+        //Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
     })
 })

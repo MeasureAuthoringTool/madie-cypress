@@ -126,7 +126,6 @@ describe('Create Test Case Validations', () => {
             'Test Case Group cannot be more ' + 'than 250 characters.'
         )
     })
-
 })
 
 describe('Edit Test Case Validations', () => {

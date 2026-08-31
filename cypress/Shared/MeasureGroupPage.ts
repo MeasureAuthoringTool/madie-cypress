@@ -7,6 +7,7 @@ import { UUIDTypes, v4 as uuidv4 } from 'uuid'
 import { Stratification } from '@madie/madie-models'
 import { OktaLogin } from './OktaLogin'
 import { FixtureOwner, MeasureGroupBody, TestData } from './TestData'
+import { Toasts } from './Toasts'
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -884,12 +885,10 @@ export class MeasureGroupPage {
 
         //Save Supplemental data
         cy.get(this.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 50000)
-        cy.get(EditMeasurePage.successMessage).should(
-            'contain.text',
-            'Measure Supplemental Data have been Saved Successfully'
+        Toasts.clearToast(
+            EditMeasurePage.successMessage,
+            'Measure Supplemental Data have been Saved Successfully',
         )
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
         Utilities.waitForElementDisabled(this.saveSupplementalDataElements, 60000)
     }
 

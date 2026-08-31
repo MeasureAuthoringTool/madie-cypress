@@ -1,12 +1,12 @@
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header"
-import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import { LockedEntityValidation } from "../../../../Shared/LockedEntityValidation"
-import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { TestData } from "../../../../Shared/TestData"
-import { step } from "../../../../utils/step"
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { MadieObject, PermissionActions, Utilities } from '../../../../Shared/Utilities'
+import { Header } from '../../../../Shared/Header'
+import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
+import { LockedEntityValidation } from '../../../../Shared/LockedEntityValidation'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { TestData } from '../../../../Shared/TestData'
+import { step } from '../../../../utils/step'
 
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -19,7 +19,7 @@ describe('CQL Library Locking Validations', () => {
     }
 
     beforeEach('Create CQL Library', () => {
-        newCQLLibraryName = `LibraryLocking${Date.now()}${Math.floor((Math.random() * 1000) + 1)}`
+        newCQLLibraryName = `LibraryLocking${Date.now()}${Math.floor(Math.random() * 1000 + 1)}`
         harpUserAlt = OktaLogin.getUser(true)
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)

@@ -365,7 +365,7 @@ describe('Error Message on Measure Export for Publish when measure was versioned
         cy.get('.loading-title').should('contain.text', 'Your download could not be completed')
         cy.get('.error-message').should(
             'contain.text',
-            'Measure cannot be exported for publishing because it was versioned prior to MADiE version 2.2.0. Please use a newer version or select "Export" for this measure.'
+            'Measure cannot be exported for publishing because it was versioned prior to MADiE version 2.2.0. Please use a newer version or select "Executable Export" for this measure.'
         )
     })
 })

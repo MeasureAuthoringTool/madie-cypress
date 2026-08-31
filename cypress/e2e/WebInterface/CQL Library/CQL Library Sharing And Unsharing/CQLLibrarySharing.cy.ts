@@ -56,11 +56,11 @@ describe('CQL Library Sharing', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        CQLLibrariesPage.openLibraryAsNonOwner()
 
         //Share Library with ALT user
         // standard share functions won't work here - data-testid's are generated differently based on the admin permissions
-        cy.get(CQLLibraryPage.actionCenterButton).click()
+        cy.get(CQLLibraryPage.actionCenterButton).scrollIntoView().click()
         cy.get(CQLLibraryPage.actionCenterSecondaryShare).should('be.visible').click()
         cy.get(CQLLibrariesPage.shareOption).click({ force: true })
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
