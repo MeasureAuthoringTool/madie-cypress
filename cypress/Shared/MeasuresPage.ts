@@ -115,6 +115,14 @@ export class MeasuresPage {
         })
     }
 
+    public static openMeasureDetailsById(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.visit(`/measures/${measureId}/edit/details`)
+            cy.location('pathname').should('contain', `/measures/${measureId}/edit/details`)
+            cy.get(EditMeasurePage.reviewAndHistoryActionCenterButton).should('be.visible')
+        })
+    }
+
     private static measureRowSelectSelector(measureId: string): string {
         return `[data-testid="measure-name-${measureId}_select"]`
     }
@@ -181,6 +189,11 @@ export class MeasuresPage {
 
     public static openReviewDialog(): void {
         cy.get(this.reviewActionButton).scrollIntoView().should('be.visible').and('be.enabled').click()
+    }
+
+    public static openAllReviewsTab(): void {
+        cy.get(this.allReviewsTab).scrollIntoView().should('be.visible').click()
+        cy.get(this.measureListTitles).should('be.visible')
     }
 
     public static selectReviewFilter(): void {
@@ -514,5 +527,9 @@ export class MeasuresPage {
                 .scrollIntoView()
                 .click()
         })
+    }
+
+    public static selectMeasureForReview(measureNumber = 0): void {
+        this.selectMeasureRow(measureNumber)
     }
 }

@@ -334,7 +334,7 @@ export class EditMeasurePage {
             .find(this.reviewMeasureActionBtn)
             .should('be.visible')
             .and('be.enabled')
-            .realHover({ scrollBehavior: false })
+            .trigger('mouseover')
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
         cy.get(this.reviewAndHistoryActionCenterButton).find(this.reviewMeasureActionBtn).trigger('mouseout')
     }
@@ -368,20 +368,16 @@ export class EditMeasurePage {
     }
 
     private static openReviewOrHistoryActionCenter(actionSelector: string): void {
-        cy.get(this.reviewAndHistoryActionCenterButton).find(actionSelector).then(($action) => {
-            if (!$action.is(':visible')) {
-                cy.get(this.reviewAndHistoryActionCenterButton)
-                    .scrollIntoView()
-                    .should('be.visible')
-                    .find(this.editMeasureButtonActionBtn)
-                    .should('be.visible')
-                    .closest('button')
-                    .should('be.enabled')
-                    .then(($button) => {
-                        $button[0].click()
-                    })
-            }
-        })
+        cy.get(this.reviewAndHistoryActionCenterButton)
+            .should('be.visible')
+            .find(actionSelector)
+            .then(($action) => {
+                if (!$action.is(':visible')) {
+                    this.openActionCenter()
+                }
+            })
+
+        cy.get(this.reviewAndHistoryActionCenterButton).find(actionSelector).should('be.visible')
     }
 
     public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
