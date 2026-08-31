@@ -781,6 +781,21 @@ export class TestCasesPage {
     cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
   }
 
+  public static saveTestCaseAndWait(): void {
+    cy.intercept('PUT', '/api/measures/**/test-cases/**').as('saveTestCase')
+
+    cy.get(this.editTestCaseSaveButton)
+      .should('be.visible')
+      .should('be.enabled')
+      .click()
+
+    cy.wait('@saveTestCase', { timeout: 60000 })
+      .its('response.statusCode')
+      .should('be.oneOf', [200, 202])
+
+    Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 30000)
+  }
+
   public static updateTestCase(
     updatedTestCaseTitle: string,
     updatedTestCaseDescription: string,
@@ -1018,8 +1033,6 @@ export class TestCasesPage {
         .then(($input) => {
           $input[0].scrollIntoView({ block: 'center', inline: 'nearest' })
         })
-
-      this.normalizeExpectedActualPopulationPanel()
 
       if (clearFirst) {
         getInput().type(`{selectAll}{backspace}${value}`, { scrollBehavior: false })
