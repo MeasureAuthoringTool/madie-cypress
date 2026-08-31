@@ -1,20 +1,18 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header"
-import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { Header } from '../../../../Shared/Header'
+import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Validate Qi-Core CQL on CQL Library page', () => {
-
     beforeEach('Create CQL library', () => {
-
         apiCQLLibraryName = 'CqlValidationsLib' + Date.now()
 
         CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
@@ -23,10 +21,12 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
     })
 
     it('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/CQLForTestCaseExecution.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
         //enter description detail
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
@@ -42,13 +42,14 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains(apiCQLLibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains('version \'0.0.000\'')
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains("version '0.0.000'")
 
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('not.exist')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('not.exist')
     })
 
     it('Verify errors appear on CQL Library page and in the CQL Editor object, on save and on tab / page load', () => {
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //Clear the text in CQL Library Editor
@@ -76,10 +77,18 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.")
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 5:13 | Member SDE Sex not found for type null.")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .invoke('show')
+            .click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should('contain.text', 'ELM: 1:3 | Could not resolve identifier SDE in the current library.')
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should('contain.text', 'ELM: 5:13 | Member SDE Sex not found for type null.')
 
         //Navigate away from the page
         cy.get(Header.mainMadiePageButton).click()
@@ -93,21 +102,31 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.")
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 5:13 | Member SDE Sex not found for type null.")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .invoke('show')
+            .click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should('contain.text', 'ELM: 1:3 | Could not resolve identifier SDE in the current library.')
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should('contain.text', 'ELM: 5:13 | Member SDE Sex not found for type null.')
     })
 
     it('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load, when included library is not found', () => {
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         //Update text in the CQL Library Editor that will cause error
-        Utilities.typeFileContents('cypress/fixtures/EXM124v7QICore4Entry_FHIR_404.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/EXM124v7QICore4Entry_FHIR_404.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         //enter description detail
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
@@ -131,27 +150,35 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:55 | Library resource HospiceQICore4 version \'2.0.000\' is not found.")
+        Utilities.validateErrors(
+            CQLEditorPage.errorInCQLEditorWindow,
+            CQLEditorPage.errorContainer,
+            "ELM: 1:55 | Library resource HospiceQICore4 version \'2.0.000\' is not found."
+        )
     })
 
     it('FHIRHelpers library alias is force corrected when changed by the user', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         //Update text in the CQL Library Editor that will cause error
-        Utilities.typeFileContents('cypress/fixtures/CQLlibraryFHIRHelpersAliasWrong.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/CQLlibraryFHIRHelpersAliasWrong.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
+        cy.get(CQLLibraryPage.libraryWarning).should(
+            'contain.text',
+            "FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with 'FHIRHelpers'."
+        )
     })
 
     it('Verify that adding a definition without a name will throw an exact error for that issue', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefNoName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
@@ -161,16 +188,26 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "Parse: 7:8 | Definition is missing a name.")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .invoke('show')
+            .click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .invoke('show')
+            .click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should('contain.text', 'Parse: 7:8 | Definition is missing a name.')
     })
 
     it('Verify that adding a definition named a reserved keyword will throw an exact error for that issue', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/CQLWithDefReservedKeyword.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/CQLWithDefReservedKeyword.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -178,28 +215,42 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "Parse: 7:15 | Definition names must not be a reserved word.")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .invoke('show')
+            .click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should('contain.text', 'Parse: 7:15 | Definition names must not be a reserved word.')
     })
 
     it('Verify error message when Code System name is missing from Code declaration', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        CQLEditorPage.replaceCqlDocument('cypress/fixtures/CQLWithoutCodeSystemName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        CQLEditorPage.replaceCqlDocument(
+            'cypress/fixtures/CQLWithoutCodeSystemName.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 
-        cy.get(CQLEditorPage.errorMsg).should('be.visible').and('contain.text',
-            'Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
+        cy.get(CQLEditorPage.errorMsg)
+            .should('be.visible')
+            .and(
+                'contain.text',
+                "Parse: 29:36 | code statement requires a codesystem reference. Please add a 'from' clause to your statement."
+            )
     })
 
     it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/QiCoreCQLWithoutIncludedLibraryVersion.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/QiCoreCQLWithoutIncludedLibraryVersion.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -207,15 +258,26 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:49 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .invoke('show')
+            .click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should(
+                'contain.text',
+                'ELM: 1:49 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.'
+            )
     })
 
     it('Verify error message on CQL Editor page when CQL contains an access modifier like "private"', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/QiCoreLibraryPrivateAccessModifier.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/QiCoreLibraryPrivateAccessModifier.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -223,14 +285,21 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Access modifiers like Public and Private can not be used in MADiE.")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should(
+            'contain.text',
+            'Access modifiers like Public and Private can not be used in MADiE.'
+        )
     })
 
     it('Verify error message when context is set to anything except Patient', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/CQLWithPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/CQLWithPractitionerContext.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -238,32 +307,45 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Parse: 7:20 | Measure Context must be 'Patient'.")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should(
+            'contain.text',
+            "Parse: 7:20 | Measure Context must be 'Patient'."
+        )
     })
 
     it('When Concept constructor is used in the Library CQL, the constructor was removed and a success message is displayed while saving CQL', () => {
-
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/CQLWithConceptConstructor.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/CQLWithConceptConstructor.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis', { parseSpecialCharSequences: false })
+        cy.get(EditMeasurePage.cqlEditorTextBox)
+            .type('{enter}')
+            .type(
+                "Concept {Code '66071002' from \"SNOMED-CT\",Code 'B18.1' from \"ICD-10-CM\"} display 'Type B viral hepatitis",
+                { parseSpecialCharSequences: false }
+            )
 
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         Utilities.waitForElementVisible('#content', 60000)
 
         cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should(
+            'not.contain',
+            "Concept {Code '66071002' from \"SNOMED-CT\",Code 'B18.1' from \"ICD-10-CM\"} display 'Type B viral hepatitis"
+        )
     })
 })
 
 describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
-
     beforeEach('Create CQL library', () => {
-
         apiCQLLibraryName = 'TestLibrary' + Date.now()
         CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
 
@@ -272,10 +354,12 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
     })
 
     it('Value Sets are valid', () => {
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/ValueSetTestingEntryValid.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/ValueSetTestingEntryValid.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         //enter description detail
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
@@ -293,10 +377,12 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
     })
 
     it('Value Set Invalid', () => {
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/ValueSetTestingEntryInValid.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/ValueSetTestingEntryInValid.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         //enter description detail
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
@@ -319,18 +405,28 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
-            'ELM: 0:101 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900 ' +
-            'location = 18:0-18:101')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div')
+            .find(CQLLibraryPage.errorInCQLEditorWindow)
+            .should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .invoke('show')
+            .click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip')
+            .invoke('show')
+            .should(
+                'contain.text',
+                'ELM: 0:101 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900 ' +
+                    'location = 18:0-18:101'
+            )
     })
 
     it('Dirty Check Modal is displayed', () => {
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/ValueSetTestingEntryInValid.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        Utilities.typeFileContents(
+            'cypress/fixtures/ValueSetTestingEntryInValid.txt',
+            CQLLibraryPage.cqlLibraryEditorTextBox
+        )
 
         cy.get(Header.mainMadiePageButton).click()
 

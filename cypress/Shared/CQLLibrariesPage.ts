@@ -120,8 +120,17 @@ export class CQLLibrariesPage {
     public static clickEditforCreatedLibrary(libraryNumber?: number, altUser?: boolean): void {
         this.goToLibrariesList()
         this.openLibraryAction(libraryNumber ?? 0, this.fixtureOwner(altUser))
-        cy.get('[data-testid="CQL Library Details"]').click()
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox, { timeout: 30000 }).should('be.visible')
+        cy.get('[data-testid="CQL Library Details"]').should('be.visible').scrollIntoView().click()
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox, { timeout: 30000 })
+            .scrollIntoView()
+            .should('be.visible')
+    }
+
+    public static openLibraryAsNonOwner(libraryNumber = 0): void {
+        this.openLibraryAction(libraryNumber)
+        cy.get(CQLLibraryPage.nonOwnerLibraryMessage, { timeout: 30000 })
+            .should('be.visible')
+            .and('have.text', CQLLibraryPage.nonOwnerLibraryMessageText)
     }
 
     public static clickViewforCreatedLibrary(libraryNumber?: number, altUserAction?: boolean): void {

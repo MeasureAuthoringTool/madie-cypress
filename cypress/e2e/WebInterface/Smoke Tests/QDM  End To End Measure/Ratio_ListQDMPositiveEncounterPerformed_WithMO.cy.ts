@@ -8,6 +8,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { QDMElements } from '../../../../Shared/QDMElements'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { Toasts } from '../../../../Shared/Toasts'
 
 const now = Date.now()
 const measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + now
@@ -27,7 +28,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
             false,
             false,
             '2023-01-01',
-            '2023-12-31',
+            '2023-12-31'
         )
 
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -44,82 +45,40 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
-        //Group Creation
-        //Click on Measure Group tab
+        // Group Creation
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        //Select Type
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible').click()
         cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
         cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-
-        //select 'Cohort' scoring on measure
         Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringRatio)
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Ratio')
-
-        //Update the Patient Basis to 'No'
         cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
-
-        //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
-            'contain.text',
-            'Measure Base Configuration ' + 'Updated Successfully',
-        )
+        Toasts.clearToast(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 'Measure Base Configuration Updated Successfully')
 
-        //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-
-        cy.get(MeasureGroupPage.denominatorObservation).should('exist')
         cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'DenominatorObservations')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Numerator Exclusions')
-
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'NumeratorObservations')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible').click()
+        Toasts.clearToast(EditMeasurePage.successMessage, 'Population details for this group saved successfully.')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(EditMeasurePage.successMessage).should(
-            'contain.text',
-            'Population details for ' + 'this group saved successfully.',
-        )
-
-        //Add Supplemental Data Elements
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
-
-        //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should(
-            'contain.text',
-            'Measure Supplemental Data have been Saved Successfully',
-        )
+        MeasureGroupPage.includeSdeData()
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -132,7 +91,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
             'Living',
             'White',
             'Male',
-            'Not Hispanic or Latino',
+            'Not Hispanic or Latino'
         )
 
         //Element - Condition: Diagnosis: Diabetes
@@ -193,30 +152,31 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //add Code
         QDMElements.addCode('SNOMEDCT', '183452005')
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //Add Expected value for Test case
-        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+
+        // Enter IPP last because prior population updates rerender this controlled input.
         TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3')
         TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '3')
         TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '2', {
             clearFirst: true,
-            index: 0,
+            index: 0
         })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '6', {
             clearFirst: true,
-            index: 1,
+            index: 1
         })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
         TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
         TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
-
         //Save Test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        TestCasesPage.saveTestCaseAndWait()
+        Toasts.clearToast(EditMeasurePage.successMessage, 'Test Case Updated Successfully')
 
         //Add Elements to the second Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -229,7 +189,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
             'Living',
             'White',
             'Male',
-            'Not Hispanic or Latino',
+            'Not Hispanic or Latino'
         )
 
         //Element - Condition: Diagnosis: Diabetes
@@ -315,34 +275,30 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //add attribute to test case action
         QDMElements.addAttribute()
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //Add Expected value for Test case
-        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        // Enter IPP last because prior population updates rerender this controlled input.
         TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2', { clearFirst: true })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '3', {
             clearFirst: true,
-            index: 0,
+            index: 0
         })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1', { clearFirst: true })
+        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', { clearFirst: true })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
 
         //Save Test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        TestCasesPage.saveTestCaseAndWait()
+        Toasts.clearToast(EditMeasurePage.successMessage, 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
