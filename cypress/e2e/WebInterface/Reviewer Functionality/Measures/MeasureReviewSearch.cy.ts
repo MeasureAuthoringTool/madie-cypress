@@ -1,8 +1,8 @@
-import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10142: Enable when MeasureReviewStatus search is available in TEST.
 describe.skip('MAT-10142 Measure Review search', () => {

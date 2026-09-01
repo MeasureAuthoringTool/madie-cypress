@@ -1,11 +1,11 @@
-import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { EditMeasureActions, EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { ManageReviewDialogPage } from '../../../Shared/ManageReviewDialogPage'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { Toasts } from '../../../Shared/Toasts'
-import { Utilities } from '../../../Shared/Utilities'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { ManageReviewDialogPage } from '../../../../Shared/ManageReviewDialogPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { Toasts } from '../../../../Shared/Toasts'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10185: Proven in DEV. Enable when MeasureReviewStatus is available in TEST.
 describe.skip('MAT-10185 Manage Review persistence', () => {

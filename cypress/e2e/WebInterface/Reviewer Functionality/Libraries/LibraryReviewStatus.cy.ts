@@ -1,9 +1,9 @@
-import { CQLLibrariesPage } from '../../../Shared/CQLLibrariesPage'
-import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
-import { SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10149: Enable when LibraryReviewStatus is available in TEST.
 describe.skip('MAT-10149 Library Review action', () => {

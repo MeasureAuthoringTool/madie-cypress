@@ -311,7 +311,7 @@ export class CQLLibraryPage {
             .find(this.actionCenterReview)
             .should('be.visible')
             .and('be.enabled')
-            .realHover({ scrollBehavior: false })
+            .trigger('mouseover')
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
         cy.get(this.reviewAndHistoryActionCenterButton).find(this.actionCenterReview).trigger('mouseout')
     }
@@ -321,12 +321,27 @@ export class CQLLibraryPage {
         cy.get(this.actionCenterReview).should('not.exist')
     }
 
+    public static assertReviewStatus(status: 'Ready' | 'In Progress' | 'Complete'): void {
+        cy.get(this.reviewStatus).should('be.visible').and('have.text', `Review Status: ${status}`)
+    }
+
     public static assertReviewStatusReady(): void {
-        cy.get(this.reviewStatus).should('be.visible').and('have.text', 'Review Status: Ready')
+        this.assertReviewStatus('Ready')
     }
 
     public static assertReviewStatusAbsent(): void {
         cy.get(this.reviewStatus).should('not.exist')
+    }
+
+    public static assertLatestLibraryReviewHistory(
+        action: 'READY_FOR_REVIEW' | 'REVIEW_IN_PROGRESS' | 'REVIEW_COMPLETE',
+        performedBy: string
+    ): void {
+        cy.get('[data-testid="library-history-table"]').should('be.visible')
+        cy.get(this.libraryHistoryActionType(0)).should('contain.text', action)
+        cy.get(this.libraryHistoryPerformedBy(0)).should('contain.text', performedBy)
+        cy.get(this.libraryHistoryAdditionalInfo(0)).should('have.text', '-')
+        cy.get('#cql-library-history-dialog').should('not.contain.text', 'UPDATED')
     }
 
     public static openReviewDialog(): void {

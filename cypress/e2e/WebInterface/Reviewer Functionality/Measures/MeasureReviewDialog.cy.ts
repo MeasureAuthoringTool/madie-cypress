@@ -1,10 +1,10 @@
-import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { ReviewDialogPage } from '../../../Shared/ReviewDialogPage'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { ReviewDialogPage } from '../../../../Shared/ReviewDialogPage'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10139: Enable when MeasureReviewStatus is available in TEST.
 describe.skip('MAT-10139 Mark Measure Ready for Review dialog', () => {

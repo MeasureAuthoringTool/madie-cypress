@@ -112,6 +112,14 @@ export class CQLLibrariesPage {
         cy.get(CQLLibraryPage.actionCenterButton).should('be.visible')
     }
 
+    public static openLibraryDetailsById(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            cy.visit(`/cql-libraries/${libraryId}/edit/details`)
+            cy.location('pathname').should('contain', `/cql-libraries/${libraryId}/edit/details`)
+            cy.get(CQLLibraryPage.reviewAndHistoryActionCenterButton).should('be.visible')
+        })
+    }
+
     public static selectLibraryRow(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
         TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
             cy.get(this.libraryContentSelector(libraryId))
@@ -268,6 +276,13 @@ export class CQLLibrariesPage {
             .should('not.have.attr', 'aria-sort')
         cy.get(this.librariesList).contains('th', 'Review').click()
         cy.get(this.librariesList).contains('th', 'Review').should('not.have.attr', 'aria-sort')
+    }
+
+    public static assertLibraryReviewStatus(
+        libraryNumber: number,
+        expectedStatus: 'Ready' | 'In Progress' | 'Complete' | '-'
+    ): void {
+        cy.get(this.reviewStatusCell(libraryNumber)).should('be.visible').and('have.text', expectedStatus)
     }
 
     public static assertAllReviewsTabCount(): void {

@@ -1,10 +1,10 @@
-import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { Header } from '../../../Shared/Header'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Header } from '../../../../Shared/Header'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10138: Enable when MeasureReviewStatus is available in TEST.
 describe.skip('MAT-10138 Measure Review action', () => {

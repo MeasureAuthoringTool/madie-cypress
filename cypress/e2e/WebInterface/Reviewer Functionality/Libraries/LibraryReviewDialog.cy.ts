@@ -1,9 +1,9 @@
-import { CQLLibrariesPage } from '../../../Shared/CQLLibrariesPage'
-import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
-import { SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { ReviewDialogPage } from '../../../Shared/ReviewDialogPage'
-import { Utilities } from '../../../Shared/Utilities'
+import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { ReviewDialogPage } from '../../../../Shared/ReviewDialogPage'
+import { Utilities } from '../../../../Shared/Utilities'
 
 describe.skip('MAT-10150 Mark Library Ready for Review dialog', () => {
     let ownedFhirLibraryName = ''

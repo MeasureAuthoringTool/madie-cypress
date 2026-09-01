@@ -1,10 +1,10 @@
-import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { ManageReviewDialogPage } from '../../../Shared/ManageReviewDialogPage'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { ManageReviewDialogPage } from '../../../../Shared/ManageReviewDialogPage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10184: Proven in DEV; skipped until Manage Review is available in TEST.
 // The current Manage Review comment is rendered read-only; this suite verifies

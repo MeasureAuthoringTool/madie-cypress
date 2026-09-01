@@ -1,10 +1,10 @@
-import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { EditMeasureActions, EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { ReviewDialogPage } from '../../../Shared/ReviewDialogPage'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { ReviewDialogPage } from '../../../../Shared/ReviewDialogPage'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10140: Enable when MeasureReviewStatus persistence is available in TEST.
 describe.skip('MAT-10140 Measure review persistence', () => {

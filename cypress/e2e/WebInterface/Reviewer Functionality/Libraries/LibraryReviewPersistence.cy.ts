@@ -1,10 +1,10 @@
-import { CQLLibrariesPage } from '../../../Shared/CQLLibrariesPage'
-import { CQLLibraryPage, EditLibraryActions } from '../../../Shared/CQLLibraryPage'
-import { SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { ReviewDialogPage } from '../../../Shared/ReviewDialogPage'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { CQLLibrariesPage } from '../../../../Shared/CQLLibrariesPage'
+import { CQLLibraryPage, EditLibraryActions } from '../../../../Shared/CQLLibraryPage'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { ReviewDialogPage } from '../../../../Shared/ReviewDialogPage'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 // MAT-10151: Enable when LibraryReviewStatus persistence is available in TEST.
 describe.skip('MAT-10151 Library review persistence', () => {
