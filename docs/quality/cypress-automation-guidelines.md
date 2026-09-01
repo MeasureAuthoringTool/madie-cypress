@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-08-19
+Last updated: 2026-09-01
 
 This document contains stable automation rules. Current priorities, audit counts, proof status, and blockers belong in `docs/quality/test-refactor-backlog.md`.
 
@@ -54,6 +54,7 @@ Reuse these established paths before adding request code:
 - Prefer selectors in this order: `data-testid`, accessible role/name, stable text, stable container plus child, then CSS class.
 - Put reusable selectors in the relevant page object. Inline selectors are acceptable for one-off assertions.
 - Select created rows by stored ID, generated name, title, or case number tied to the scenario. Do not rely on row index or table order.
+- For autocomplete or multi-select options, target the exact displayed value or a dedicated `data-testid`; do not select `first()` or `last()` unless the scenario specifically validates ordering.
 - Account for pagination and submitted search state before assuming a created row is visible.
 - On paginated library lists, submit the generated library name with `CQLLibrariesPage.searchForLibraryByName(...)` before selecting or opening its row; pair the filtered UI row with the stored library ID when an action targets that library.
 - Do not assert `be.enabled` on non-form containers such as MUI SpeedDial roots or anchor-backed tabs. Target the actual button or use `aria-disabled`.

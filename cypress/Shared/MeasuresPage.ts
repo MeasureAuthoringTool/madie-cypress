@@ -55,6 +55,7 @@ export class MeasuresPage {
     public static readonly transferContinueButton = '[data-testid="transfer-save-button"]'
 
     //history
+    public static readonly measureHistoryTable = '[data-testid="measure-history-table"]'
     public static readonly userActionRow = '[data-testid="measure-history-cell-0_actionType"]'
     public static readonly harpIdRow = '[data-testid="measure-history-cell-0_performedBy"]'
     public static readonly additionalActionRow = '[data-testid="measure-history-cell-0_additionalActionMessage"]'
@@ -112,6 +113,30 @@ export class MeasuresPage {
             cy.get(this.measureActionSelector(measureId)).should('be.visible').and('have.text', 'Edit').click()
             cy.location('pathname').should('contain', `/measures/${measureId}/edit`)
             cy.get(EditMeasurePage.editMeasureButtonActionBtn).should('be.visible')
+        })
+    }
+
+    public static openMeasureDetailsFromCurrentListInEditOrViewMode(
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId))
+                .should('be.visible')
+                .should(($action) => {
+                    expect($action.text().trim()).to.be.oneOf(['Edit', 'View'])
+                })
+                .click()
+            cy.location('pathname').should('contain', `/measures/${measureId}/edit`)
+            EditMeasurePage.dismissMeasureLockedModalIfPresent()
+        })
+    }
+
+    public static openReviewMeasureDetailsFromCurrentList(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId)).should('be.visible').and('have.text', 'View').click()
+            cy.location('pathname').should('contain', `/measures/${measureId}/edit/details`)
+            cy.get(EditMeasurePage.reviewAndHistoryActionCenterButton).should('be.visible')
         })
     }
 
@@ -270,12 +295,22 @@ export class MeasuresPage {
 
     public static assertMeasureReviewStatus(
         measureNumber: number,
-        expectedStatus: 'Ready' | '-',
+        expectedStatus: 'Ready' | 'In Progress' | 'Complete' | '-',
         owner: FixtureOwner = 'selectedUser'
     ): void {
         TestData.readMeasureId(measureNumber, owner).then((measureId) => {
             cy.get(this.measureReviewStatusSelector(measureId)).should('have.text', expectedStatus)
         })
+    }
+
+    public static assertLatestMeasureReviewHistory(
+        action: 'READY_FOR_REVIEW' | 'REVIEW_IN_PROGRESS' | 'REVIEW_COMPLETE',
+        performedBy: string
+    ): void {
+        cy.get(this.userActionRow).should('contain.text', action)
+        cy.get(this.harpIdRow).should('contain.text', performedBy)
+        cy.get(this.additionalActionContent).should('have.text', '-')
+        cy.get(this.measureHistoryTable).should('not.contain.text', 'UPDATED')
     }
 
     public static waitForMeasureListRefresh(alias: `@${string}`): Cypress.Chainable<any> {

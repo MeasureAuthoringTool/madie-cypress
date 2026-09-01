@@ -12,7 +12,11 @@ export class Toasts {
     public static readonly warningOffsetText = 'Test case updated successfully with warnings in JSONTimezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
     public static readonly successOffsetText = 'Test case updated successfully!Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
 
-    public static clearToast(toastSelector: string, expectedText: string): void {
+    public static clearToast(
+        toastSelector: string,
+        expectedText: string,
+        closeButtonSelector = this.closeToastButton
+    ): void {
         cy.get(toastSelector)
             .should('be.visible')
             .and('contain.text', expectedText)
@@ -24,7 +28,7 @@ export class Toasts {
                 return
             }
 
-            const $closeButton = $toastMessage.closest(this.generalToast).find(this.closeToastButton).first()
+            const $closeButton = $toastMessage.closest(this.generalToast).find(closeButtonSelector).first()
 
             if ($closeButton.length) {
                 cy.wrap($closeButton).click()

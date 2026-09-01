@@ -302,6 +302,14 @@ export class EditMeasurePage {
         cy.get(this.measureLockedModalMessage).should('not.exist')
     }
 
+    public static dismissMeasureLockedModalIfPresent(): void {
+        cy.get('body').then(($body) => {
+            if ($body.find(this.measureLockedModalMessage).filter(':visible').length) {
+                this.closeMeasureLockedModalByButton()
+            }
+        })
+    }
+
     public static dismissMeasureLockedModal(
         expectedText: string,
         closeMethod: MeasureLockedModalCloseMethod = 'button'
@@ -339,8 +347,12 @@ export class EditMeasurePage {
         cy.get(this.reviewAndHistoryActionCenterButton).find(this.reviewMeasureActionBtn).trigger('mouseout')
     }
 
+    public static assertReviewStatus(status: 'Ready' | 'In Progress' | 'Complete'): void {
+        cy.get(this.reviewStatus).should('be.visible').and('have.text', `Review Status: ${status}`)
+    }
+
     public static assertReviewStatusReady(): void {
-        cy.get(this.reviewStatus).should('be.visible').and('have.text', 'Review Status: Ready')
+        this.assertReviewStatus('Ready')
     }
 
     public static assertReviewStatusAbsent(): void {

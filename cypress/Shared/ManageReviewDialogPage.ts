@@ -13,6 +13,8 @@ export class ManageReviewDialogPage {
     public static readonly comment = '[data-testid="manage-review-comment"]'
     public static readonly saveButton = '[data-testid="manage-review-dialog-save-button"]'
     public static readonly cancelButton = '[data-testid="manage-review-dialog-cancel-button"]'
+    public static readonly successToast = '[data-testid="manage-review-dialog-success-text"]'
+    public static readonly successToastCloseButton = '[data-testid="manage-review-dialog-toast-close-button"]'
 
     public static assertInitialState(comment: string, status: 'Ready' | 'In Progress' | 'Complete' = 'Ready'): void {
         cy.get(this.content).should('be.visible')
@@ -46,6 +48,21 @@ export class ManageReviewDialogPage {
         cy.get(this.saveButton).should('be.enabled')
     }
 
+    public static selectReviewer(expectedDisplayName: string): void {
+        this.openReviewerOptions()
+        this.reviewerOption(expectedDisplayName).click()
+        cy.get(this.saveButton).should('be.enabled')
+        this.closeReviewerOptions()
+    }
+
+    public static assertReviewerSelected(expectedDisplayName: string): void {
+        this.openReviewerOptions()
+        this.reviewerOption(expectedDisplayName)
+            .find('input[type="checkbox"]')
+            .should('be.checked')
+        this.closeReviewerOptions()
+    }
+
     public static assertStatusOptions(): void {
         cy.get(this.statusInput).should('be.visible').click()
         cy.get(this.readyStatusOption).should('be.visible')
@@ -61,9 +78,13 @@ export class ManageReviewDialogPage {
         }[status]
 
         cy.get(this.statusInput).should('be.visible').click()
-        cy.get(option).should('be.visible').click()
+        cy.get(option).filter(':visible').should('have.length', 1).click()
         cy.get(this.statusInput).should('contain.text', status)
         cy.get(this.saveButton).should('be.enabled')
+    }
+
+    public static save(): void {
+        cy.get(this.saveButton).should('be.visible').and('be.enabled').click()
     }
 
     public static closeWithX(): void {
@@ -74,5 +95,15 @@ export class ManageReviewDialogPage {
     public static closeWithCancel(): void {
         cy.get(this.cancelButton).should('be.visible').click()
         cy.get(this.content).should('not.exist')
+    }
+
+    private static reviewerOption(expectedDisplayName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(this.reviewerOptions).filter((_, option) => {
+            return option.textContent?.trim() === expectedDisplayName
+        }).should('have.length', 1)
+    }
+
+    private static closeReviewerOptions(): void {
+        cy.get(this.reviewersInput).type('{esc}').should('have.attr', 'aria-expanded', 'false')
     }
 }

@@ -90,3 +90,60 @@ describe.skip('MAT-10143 Measure Review Status header', () => {
         EditMeasurePage.assertReviewStatusAbsent()
     })
 })
+
+// MAT-10185: Enable when MeasureReviewStatus is available in TEST.
+describe.skip('MAT-10185 Measure Review Status header updates', () => {
+    let measureName = ''
+
+    const createMeasureWithReviewStatus = (
+        namePrefix: string,
+        libraryNamePrefix: string,
+        model: SupportedModels,
+        reviewStatus: 'IN_PROGRESS' | 'COMPLETE'
+    ): void => {
+        const suffix = Date.now()
+        measureName = `${namePrefix}${suffix}`
+        CreateMeasurePage.CreateMeasureAPI(measureName, `${libraryNamePrefix}${suffix}`, model, undefined, 0)
+        TestData.requestMeasureReview(reviewStatus, '', 0).its('status').should('eq', 201)
+    }
+
+    beforeEach(() => {
+        measureName = ''
+    })
+
+    afterEach(() => {
+        if (measureName) {
+            Utilities.deleteMeasure(undefined, undefined, false, false, 0)
+        }
+    })
+
+    it('shows Review Status: In Progress to an editor even when the measure opens in View mode', () => {
+        createMeasureWithReviewStatus(
+            'MeasureReviewHeaderInProgressFHIR',
+            'MeasureReviewHeaderInProgressFHIRLib',
+            SupportedModels.qiCore6,
+            'IN_PROGRESS'
+        )
+
+        OktaLogin.Login()
+        cy.get(MeasuresPage.ownedMeasures).filter(':visible').first().click()
+        MeasuresPage.searchForMeasureByName(measureName)
+        MeasuresPage.openMeasureDetailsFromCurrentListInEditOrViewMode(0)
+        EditMeasurePage.assertReviewStatus('In Progress')
+    })
+
+    it('shows Review Status: Complete to an editor even when the measure opens in View mode', () => {
+        createMeasureWithReviewStatus(
+            'MeasureReviewHeaderCompleteQDM',
+            'MeasureReviewHeaderCompleteQDMLib',
+            SupportedModels.QDM,
+            'COMPLETE'
+        )
+
+        OktaLogin.Login()
+        cy.get(MeasuresPage.ownedMeasures).filter(':visible').first().click()
+        MeasuresPage.searchForMeasureByName(measureName)
+        MeasuresPage.openMeasureDetailsFromCurrentListInEditOrViewMode(0)
+        EditMeasurePage.assertReviewStatus('Complete')
+    })
+})

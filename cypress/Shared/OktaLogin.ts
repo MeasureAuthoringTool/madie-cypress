@@ -87,6 +87,17 @@ export class OktaLogin {
         }
     }
 
+    public static getReviewerUser(): string {
+        const reviewerUser = Cypress.env('reviewerUser')
+
+        if (reviewerUser === 'harpUser2') {
+            return Environment.credentials().harpUser2.toLowerCase()
+        }
+
+        cy.log(`⚠️ getReviewerUser: Unknown reviewer user type: ${reviewerUser}`)
+        return ''
+    }
+
     public static AdminLogin(): void {
         this.runLoginFlow({
             selectedEnvVar: 'selectedUser',
