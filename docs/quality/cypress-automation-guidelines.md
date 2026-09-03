@@ -36,6 +36,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 ## Test Data and API Helpers
 
 - Use owner-aware `TestData` helpers for `selectedUser` and `selectedAltUser`.
+- Put setup in `beforeEach` only when every test in the suite requires it. Create scenario-specific records in the test or a named scenario helper so visibility, layout, and negative tests do not pay for unrelated data setup.
 - Prefer `fixturePath`, `readFixture`, `writeFixture`, `readMeasureId`, `readCqlLibraryId`, `readTestCaseId`, and related helpers over hand-built fixture paths.
 - Prefer `withAccessToken`, `requestWithAccessToken`, and domain request helpers over inline cookie or token plumbing.
 - Use `TestData.getAccountDisplayName(harpId)` for UI text that includes a display name and HARP ID.
@@ -93,6 +94,7 @@ Reuse these established paths before adding request code:
 ## Assertions and Error Handling
 
 - Assert durable UI contracts: stable selectors, meaningful text fragments, request status, and destination state.
+- Give each test one principal acceptance criterion. Shared setup may establish multiple prerequisites, but keep independently failing outcomes—such as tab visibility, list contents, exclusions, ordering, columns, and action availability—in separate tests.
 - Use shared dialog and toast helpers when the same contract appears in multiple specs.
 - Keep product failures visible. Do not weaken assertions to accept an incorrect state.
 - Do not add broad `uncaught:exception` suppression. Any tolerated exception must be narrowly scoped and explained.

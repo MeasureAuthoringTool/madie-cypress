@@ -3,8 +3,11 @@ import { Utilities } from './Utilities'
 import { CQLLibraryPage } from './CQLLibraryPage'
 import { FixtureOwner, TestData } from './TestData'
 
+export type LibraryListAction = 'Edit' | 'View'
+
 export class CQLLibrariesPage {
     public static readonly librariesList = '[data-testid="library-list-tbl"]'
+    public static readonly librariesListBody = `${CQLLibrariesPage.librariesList} tbody.table-body.measures-list`
     public static readonly libraryListRows = '.table-body tr'
 
     //Version and Draft CQL Library
@@ -34,7 +37,11 @@ export class CQLLibrariesPage {
     public static readonly actionCenterCompareVersions = '[data-testid="compare-versions-action-btn"]'
     public static readonly reviewActionButton = '[data-testid="review-action-btn"]'
     public static readonly reviewActionTooltip = '[data-testid="review-action-tooltip"]'
+    public static readonly actionCenterActionButtons = '[data-testid$="-action-btn"]'
     public static readonly filterNoOption = '[data-testid="filter-by--"]'
+    public static readonly filterLibraryOption = '[data-testid="filter-by-Library"]'
+    public static readonly filterModelOption = '[data-testid="filter-by-Model"]'
+    public static readonly filterVersionOption = '[data-testid="filter-by-Version"]'
     public static readonly filterReviewOption = '[data-testid="filter-by-Review"]'
 
     //Share/Un share Library
@@ -71,6 +78,16 @@ export class CQLLibrariesPage {
         return this.libraryActionSelector(libraryId)
     }
 
+    public static assertLibraryActionLabel(
+        expectedAction: LibraryListAction,
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            cy.get(this.libraryActionSelector(libraryId)).should('be.visible').and('have.text', expectedAction)
+        })
+    }
+
     private static libraryContentSelector(libraryId: string): string {
         return `[data-testid="cqlLibrary-button-${libraryId}-content"]`
     }
@@ -81,7 +98,7 @@ export class CQLLibrariesPage {
         cy.get(CQLLibraryPage.ownedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.allLibrariesTab, { timeout: 35000 }).should('be.visible')
-        Utilities.waitForElementVisible(this.librariesList, 35000)
+        Utilities.waitForElementVisible(this.librariesListBody, 35000)
     }
 
     public static openLibrariesList(): void {
@@ -110,6 +127,22 @@ export class CQLLibrariesPage {
             cy.location('pathname').should('contain', `/cql-libraries/${libraryId}/edit/details`)
         })
         cy.get(CQLLibraryPage.actionCenterButton).should('be.visible')
+    }
+
+    public static openLibraryFromCurrentListWithExpectedAction(
+        expectedAction: LibraryListAction,
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            const actionSelector = this.libraryActionSelector(libraryId)
+            cy.intercept('GET', `/api/cql-libraries/${libraryId}`).as('cqlLibrary')
+
+            cy.get(actionSelector).should('be.visible').and('have.text', expectedAction).click()
+            cy.wait('@cqlLibrary').its('response.statusCode').should('eq', 200)
+            cy.get('[data-testid="CQL Library Details"]').should('be.visible').click()
+            cy.location('pathname').should('contain', `/cql-libraries/${libraryId}/edit/details`)
+        })
     }
 
     public static openLibraryDetailsById(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
@@ -190,7 +223,7 @@ export class CQLLibrariesPage {
         } else {
             cy.get(Header.cqlLibraryTab).should('exist').should('be.visible').click()
         }
-        Utilities.waitForElementVisible(this.librariesList, 35000)
+        Utilities.waitForElementVisible(this.librariesListBody, 35000)
         this.openLibraryAction(libraryNumber ?? 0)
     }
 
@@ -219,6 +252,16 @@ export class CQLLibrariesPage {
 
     public static assertReviewFilterIsLastOption(): void {
         this.clickFilterByElement(CQLLibraryPage.filterByDropdown)
+        cy.get(this.filterReviewOption).should('be.visible')
+        cy.get('[role="option"]:visible').last().should('have.attr', 'data-testid', 'filter-by-Review')
+    }
+
+    public static assertReviewSearchControls(): void {
+        cy.get(CQLLibraryPage.LibFilterTextField).scrollIntoView().should('be.visible')
+        this.clickFilterByElement(CQLLibraryPage.filterByDropdown)
+        cy.get(this.filterLibraryOption).should('be.visible')
+        cy.get(this.filterModelOption).should('be.visible')
+        cy.get(this.filterVersionOption).should('be.visible')
         cy.get(this.filterReviewOption).should('be.visible')
         cy.get('[role="option"]:visible').last().should('have.attr', 'data-testid', 'filter-by-Review')
     }
@@ -285,6 +328,50 @@ export class CQLLibrariesPage {
         cy.get(this.reviewStatusCell(libraryNumber)).should('be.visible').and('have.text', expectedStatus)
     }
 
+    public static hoverLibraryReviewStatus(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            cy.get(this.libraryActionSelector(libraryId))
+                .closest('tr')
+                .find('[data-testid$="_reviewStatus"]')
+                .should('have.length', 1)
+                .scrollIntoView()
+                .then(($reviewStatus) => {
+                    const tooltipTarget = $reviewStatus.find('span')
+                    cy.wrap(tooltipTarget.length ? tooltipTarget : $reviewStatus).trigger('mouseover')
+                })
+        })
+    }
+
+    public static assertAssignedReviewerTooltip(expectedReviewerNames: string[]): void {
+        cy.get('.MuiTooltip-tooltip:visible')
+            .last()
+            .should(($tooltip) => {
+                const reviewerNames = $tooltip
+                    .text()
+                    .split(/\r?\n/)
+                    .map((reviewerName) => reviewerName.trim())
+                    .filter(Boolean)
+
+                expect(reviewerNames, 'assigned reviewer tooltip').to.deep.equal(expectedReviewerNames)
+            })
+    }
+
+    public static assertReviewStatusTooltipAbsent(): void {
+        cy.get('body').find('.MuiTooltip-tooltip:visible').should('have.length', 0)
+    }
+
+    public static clearLibraryReviewStatusHover(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            cy.get(this.libraryActionSelector(libraryId))
+                .closest('tr')
+                .find('[data-testid$="_reviewStatus"]')
+                .then(($reviewStatus) => {
+                    const tooltipTarget = $reviewStatus.find('span')
+                    cy.wrap(tooltipTarget.length ? tooltipTarget : $reviewStatus).trigger('mouseout')
+                })
+        })
+    }
+
     public static assertAllReviewsTabCount(): void {
         cy.get(CQLLibraryPage.allReviewsTab)
             .should('be.visible')
@@ -301,7 +388,7 @@ export class CQLLibrariesPage {
 
     public static openAllReviewsTab(): void {
         cy.get(CQLLibraryPage.allReviewsTab).should('be.visible').click()
-        cy.get(this.librariesList).should('be.visible')
+        cy.get(this.librariesListBody).should('be.visible')
     }
 
     public static assertAllReviewsColumns(): void {
@@ -316,6 +403,57 @@ export class CQLLibrariesPage {
             cy.contains('th', 'Review').should('be.visible')
             cy.contains('th', 'Action').should('be.visible')
             cy.contains('th', 'Owner').should('not.exist')
+        })
+    }
+
+    public static assertMyReviewsTabCount(): void {
+        cy.get(CQLLibraryPage.myReviewsTab)
+            .should('be.visible')
+            .invoke('text')
+            .should('match', /^My Reviews \(\d+\)$/)
+    }
+
+    public static assertMyReviewsTabFollowsAllReviews(): void {
+        cy.get(CQLLibraryPage.allReviewsTab)
+            .should('be.visible')
+            .next()
+            .should('have.attr', 'data-testid', 'owned-reviews-tab')
+    }
+
+    public static openMyReviewsTab(): void {
+        cy.get(CQLLibraryPage.myReviewsTab).scrollIntoView().should('be.visible').click()
+        cy.get(this.librariesListBody).should('be.visible')
+    }
+
+    public static assertMyReviewsColumns(): void {
+        const expectedColumns = ['Library', 'Version', 'Status', 'Model', 'Shared', 'Updated', 'Review', 'Action']
+
+        cy.get(this.librariesList).within(() => {
+            cy.get('thead th').first().should('exist')
+            expectedColumns.forEach((column) => cy.contains('th', column).should('be.visible'))
+            cy.contains('th', 'Owner').should('not.exist')
+        })
+    }
+
+    public static assertMyReviewsActionCenterShowsOnlyReview(): void {
+        cy.get(this.actionCenterActionButtons)
+            .should('have.length', 1)
+            .and('have.attr', 'data-testid', 'review-action-btn')
+        cy.get(this.reviewActionTooltip).should('be.visible')
+    }
+
+    public static assertLibraryReviewStatusById(
+        libraryNumber: number,
+        expectedStatus: 'Ready' | 'In Progress' | 'Complete'
+    ): void {
+        TestData.readCqlLibraryId(libraryNumber).then((libraryId) => {
+            cy.get(this.libraryActionSelector(libraryId)).closest('tr').should('contain.text', expectedStatus)
+        })
+    }
+
+    public static assertLibraryAbsentById(libraryNumber: number): void {
+        TestData.readCqlLibraryId(libraryNumber).then((libraryId) => {
+            cy.get(this.libraryActionSelector(libraryId)).should('not.exist')
         })
     }
 

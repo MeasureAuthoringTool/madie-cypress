@@ -15,6 +15,7 @@ export enum EditMeasureActions {
 }
 
 export type MeasureLockedModalCloseMethod = 'x' | 'button'
+export type MeasureDetailsMode = 'edit' | 'view'
 
 export class EditMeasurePage {
     //dirty modal
@@ -97,6 +98,15 @@ export class EditMeasurePage {
     public static readonly cmsIDDialogContinue = '[data-testid="cms-identifier-dialog-continue-button"]'
     public static readonly cmsIdInput = '[data-testid="cms-id-text-field"]'
     public static readonly successfulMeasureSaveMsg = '[data-testid="edit-measure-information-success-text"]'
+
+    public static assertMeasureDetailsMode(mode: MeasureDetailsMode): void {
+        if (mode === 'edit') {
+            cy.get(this.measureNameTextBox).should('be.visible').and('be.enabled')
+            return
+        }
+
+        cy.get(this.readOnlyMeasureName).should('be.visible')
+    }
 
     //Endorser fields
     public static readonly endorsementNumber = '[data-testid="endorsement-number-input"]'
@@ -349,6 +359,24 @@ export class EditMeasurePage {
 
     public static assertReviewStatus(status: 'Ready' | 'In Progress' | 'Complete'): void {
         cy.get(this.reviewStatus).should('be.visible').and('have.text', `Review Status: ${status}`)
+    }
+
+    public static hoverReviewStatus(): void {
+        cy.get(this.reviewStatus).should('be.visible').realHover({ scrollBehavior: false })
+    }
+
+    public static assertAssignedReviewerTooltip(expectedReviewerNames: string[]): void {
+        cy.get('.MuiTooltip-tooltip:visible')
+            .last()
+            .should(($tooltip) => {
+                const reviewerNames = $tooltip
+                    .text()
+                    .split(/\r?\n/)
+                    .map((reviewerName) => reviewerName.trim())
+                    .filter(Boolean)
+
+                expect(reviewerNames, 'assigned reviewer tooltip').to.deep.equal(expectedReviewerNames)
+            })
     }
 
     public static assertReviewStatusReady(): void {

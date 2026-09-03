@@ -98,6 +98,10 @@ export class OktaLogin {
         return ''
     }
 
+    public static getConfiguredReviewerUser(): string {
+        return Environment.credentials().harpUser2.toLowerCase()
+    }
+
     public static AdminLogin(): void {
         this.runLoginFlow({
             selectedEnvVar: 'selectedUser',

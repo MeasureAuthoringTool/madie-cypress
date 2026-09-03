@@ -1,7 +1,6 @@
 export class ManageReviewDialogPage {
     public static readonly content = '[data-testid="manage-review-dialog-content"]'
     public static readonly closeButton = '[data-testid="close-button"]'
-    public static readonly reviewerDropdownIcon = '[data-testid="ArrowDropDownIcon"]'
     public static readonly reviewersInput = '[data-testid="manage-review-reviewers-input"]'
     // The reviewer Autocomplete exposes the popup through the input's
     // aria-controls value, rather than applying a listbox role to its popper.
@@ -28,7 +27,14 @@ export class ManageReviewDialogPage {
     }
 
     public static openReviewerOptions(): void {
-        cy.get(this.reviewersInput).should('be.visible').click()
+        cy.get(this.reviewersInput)
+            .should('be.visible')
+            .then(($input) => {
+                if ($input.attr('aria-expanded') === 'true') {
+                    $input[0].blur()
+                }
+            })
+        cy.get(this.reviewersInput).should('have.attr', 'aria-expanded', 'false').click()
         cy.get(this.reviewerOptions).should('have.length.at.least', 2)
     }
 
@@ -48,9 +54,31 @@ export class ManageReviewDialogPage {
         cy.get(this.saveButton).should('be.enabled')
     }
 
-    public static selectReviewer(expectedDisplayName: string): void {
+    public static selectFirstReviewerAndStoreName(alias: string): void {
         this.openReviewerOptions()
+
+        cy.get(this.reviewerOptions).first().invoke('text').then((reviewerName) => {
+            cy.wrap(reviewerName.trim(), { log: false }).as(alias)
+        })
+        cy.get(this.reviewerOptions).first().click()
+        cy.get(this.saveButton).should('be.enabled')
+    }
+
+    public static selectReviewer(expectedDisplayName: string): void {
+        cy.get(this.reviewersInput).should('be.visible').clear().type(expectedDisplayName)
         this.reviewerOption(expectedDisplayName).click()
+        cy.get(this.saveButton).should('be.enabled')
+        this.closeReviewerOptions()
+    }
+
+    public static selectReviewerOtherThan(excludedDisplayName: string): void {
+        this.openReviewerOptions()
+
+        cy.get(this.reviewerOptions)
+            .filter((_, option) => option.textContent?.trim() !== excludedDisplayName)
+            .should('have.length.at.least', 1)
+            .first()
+            .click()
         cy.get(this.saveButton).should('be.enabled')
         this.closeReviewerOptions()
     }
@@ -104,6 +132,13 @@ export class ManageReviewDialogPage {
     }
 
     private static closeReviewerOptions(): void {
-        cy.get(this.reviewersInput).type('{esc}').should('have.attr', 'aria-expanded', 'false')
+        cy.get(this.reviewersInput)
+            .should('be.visible')
+            .then(($input) => {
+                if ($input.attr('aria-expanded') === 'true') {
+                    $input[0].blur()
+                }
+            })
+        cy.get(this.reviewersInput).should('have.attr', 'aria-expanded', 'false')
     }
 }

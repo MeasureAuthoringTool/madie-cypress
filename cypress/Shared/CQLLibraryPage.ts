@@ -31,6 +31,8 @@ export type CreateLibraryOptions = {
     publisher?: string
 }
 
+export type LibraryDetailsMode = 'edit' | 'view'
+
 export class CQLLibraryPage {
     private static fixtureOwner(altUser?: boolean): FixtureOwner {
         return altUser ? 'selectedAltUser' : 'selectedUser'
@@ -40,6 +42,7 @@ export class CQLLibraryPage {
     public static readonly sharedLibrariesTab = '[data-testid="shared-libraries-tab"]'
     public static readonly allLibrariesTab = '[data-testid="all-libraries-tab"]'
     public static readonly allReviewsTab = '[data-testid="all-reviews-tab"]'
+    public static readonly myReviewsTab = '[data-testid="owned-reviews-tab"]'
 
     // create library dropdown
     public static readonly fhir = '[data-testid="all-libraries-tab"]'
@@ -96,6 +99,15 @@ export class CQLLibraryPage {
     public static readonly libraryLockedIndicator = '[data-testid^="lock-indicator-"]'
     public static readonly libraryLockedIndicatorChip = '[data-testid$="-inuse-chip"]'
     public static readonly libraryLockedIcon = '[data-testid="locked-icon"]'
+
+    public static assertLibraryDetailsMode(mode: LibraryDetailsMode): void {
+        if (mode === 'edit') {
+            cy.get(this.cqlLibraryNameTextbox).should('be.visible').and('be.enabled')
+            return
+        }
+
+        cy.get(this.readOnlyCqlLibraryName).should('be.visible').and('have.attr', 'readonly')
+    }
 
     // Edit page action center
     public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
@@ -333,6 +345,29 @@ export class CQLLibraryPage {
         cy.get(this.reviewStatus).should('not.exist')
     }
 
+    public static hoverReviewStatus(): void {
+        cy.get(this.reviewStatus)
+            .should('be.visible')
+            .then(($reviewStatus) => {
+                const tooltipTarget = $reviewStatus.find('span')
+                cy.wrap(tooltipTarget.length ? tooltipTarget : $reviewStatus).trigger('mouseover')
+            })
+    }
+
+    public static assertAssignedReviewerTooltip(expectedReviewerNames: string[]): void {
+        cy.get('.MuiTooltip-tooltip:visible')
+            .last()
+            .should(($tooltip) => {
+                const reviewerNames = $tooltip
+                    .text()
+                    .split(/\r?\n/)
+                    .map((reviewerName) => reviewerName.trim())
+                    .filter(Boolean)
+
+                expect(reviewerNames, 'assigned reviewer tooltip').to.deep.equal(expectedReviewerNames)
+            })
+    }
+
     public static assertLatestLibraryReviewHistory(
         action: 'READY_FOR_REVIEW' | 'REVIEW_IN_PROGRESS' | 'REVIEW_COMPLETE',
         performedBy: string
@@ -365,20 +400,16 @@ export class CQLLibraryPage {
     }
 
     private static openReviewOrHistoryActionCenter(actionSelector: string): void {
-        cy.get(this.reviewAndHistoryActionCenterButton).find(actionSelector).then(($action) => {
-            if (!$action.is(':visible')) {
-                cy.get(this.reviewAndHistoryActionCenterButton)
-                    .scrollIntoView()
-                    .should('be.visible')
-                    .find(this.actionCenterButton)
-                    .should('be.visible')
-                    .closest('button')
-                    .should('be.enabled')
-                    .then(($button) => {
-                        $button[0].click()
-                    })
-            }
-        })
+        cy.get(this.reviewAndHistoryActionCenterButton)
+            .should('be.visible')
+            .find(actionSelector)
+            .then(($action) => {
+                if (!$action.is(':visible')) {
+                    this.openActionCenter()
+                }
+            })
+
+        cy.get(this.reviewAndHistoryActionCenterButton).find(actionSelector).should('be.visible')
     }
 
     public static createLibraryAPI(libraryName: string, model: SupportedModels, options?: CreateLibraryOptions) {

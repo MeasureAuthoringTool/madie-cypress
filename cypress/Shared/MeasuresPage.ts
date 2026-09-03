@@ -25,6 +25,8 @@ export type MeasureRow = {
     updated?: string
 }
 
+export type MeasureListAction = 'Edit' | 'View'
+
 export class MeasuresPage {
     public static readonly measureListTitles = '[data-testid="measure-list-tbl"]'
     public static readonly measureListRows = '.measures-list tr'
@@ -32,6 +34,7 @@ export class MeasuresPage {
     public static readonly sharedMeasures = '[data-testid="shared-measures-tab"]'
     public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
     public static readonly allReviewsTab = '[data-testid="all-reviews-tab"]'
+    public static readonly myReviewsTab = '[data-testid="my-reviews-tab"]'
     public static readonly filterSearchInputBox = '[data-testid="measure-search-input"]'
     public static readonly searchInputBox = '[data-testid="measure-list-search-input"]'
     public static readonly filterByDropdown = '[data-testid="filter-by-select"]'
@@ -93,6 +96,7 @@ export class MeasuresPage {
     public static readonly measureCQLToElmVersionTxtBox = '[data-testid="translator-version-text-field"]'
 
     // Review status
+    public static readonly actionCenterActionButtons = '[data-testid$="-action-btn"]'
     public static readonly reviewActionButton = '[data-testid="review-action-btn"]'
     public static readonly reviewActionTooltip = '[data-testid="review-action-tooltip"]'
 
@@ -126,6 +130,31 @@ export class MeasuresPage {
                 .should(($action) => {
                     expect($action.text().trim()).to.be.oneOf(['Edit', 'View'])
                 })
+                .click()
+            cy.location('pathname').should('contain', `/measures/${measureId}/edit`)
+            EditMeasurePage.dismissMeasureLockedModalIfPresent()
+        })
+    }
+
+    public static assertMeasureActionLabel(
+        expectedAction: MeasureListAction,
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId)).should('be.visible').and('have.text', expectedAction)
+        })
+    }
+
+    public static openMeasureFromCurrentListWithExpectedAction(
+        expectedAction: MeasureListAction,
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureActionSelector(measureId))
+                .should('be.visible')
+                .and('have.text', expectedAction)
                 .click()
             cy.location('pathname').should('contain', `/measures/${measureId}/edit`)
             EditMeasurePage.dismissMeasureLockedModalIfPresent()
@@ -199,14 +228,14 @@ export class MeasuresPage {
     }
 
     public static assertReviewActionEnabled(): void {
-        cy.get(this.reviewActionButton).should('be.visible').and('be.enabled')
+        cy.get(this.reviewActionButton).scrollIntoView().should('be.visible').and('be.enabled')
         cy.get(this.reviewActionTooltip).realHover({ scrollBehavior: false })
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
         cy.get(this.reviewActionTooltip).trigger('mouseout')
     }
 
     public static assertReviewActionDisabled(): void {
-        cy.get(this.reviewActionButton).should('be.visible').and('be.disabled')
+        cy.get(this.reviewActionButton).scrollIntoView().should('be.visible').and('be.disabled')
         cy.get(this.reviewActionTooltip).trigger('mouseover')
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Select a measure to update Review status')
         cy.get(this.reviewActionTooltip).trigger('mouseout')
@@ -221,6 +250,60 @@ export class MeasuresPage {
         cy.get(this.measureListTitles).should('be.visible')
     }
 
+    public static assertMyReviewsTabCount(): void {
+        cy.get(this.myReviewsTab)
+            .should('be.visible')
+            .invoke('text')
+            .should('match', /^My Reviews \(\d+\)$/)
+    }
+
+    public static assertMyReviewsTabFollowsAllReviews(): void {
+        cy.get(this.allReviewsTab)
+            .should('be.visible')
+            .next()
+            .should('have.attr', 'data-testid', 'my-reviews-tab')
+    }
+
+    public static openMyReviewsTab(): void {
+        cy.get(this.myReviewsTab).scrollIntoView().should('be.visible').click()
+        cy.get(this.measureListTitles).should('be.visible')
+    }
+
+    public static assertMyReviewsColumns(): void {
+        const expectedColumns = ['Measure', 'Version', 'Status', 'Model', 'Shared', 'CMS ID', 'Updated', 'Review', 'Action']
+
+        cy.get(this.measureListTitles).within(() => {
+            cy.get('thead th').first().should('exist')
+            expectedColumns.forEach((column) => cy.contains('th', column).should('be.visible'))
+        })
+    }
+
+    public static assertMyReviewsActionCenterShowsOnlyReview(): void {
+        cy.get(this.actionCenterActionButtons)
+            .should('have.length', 1)
+            .and('have.attr', 'data-testid', 'review-action-btn')
+    }
+
+    public static assertMeasuresAppearInUpdatedDescendingOrder(measureNumbers: number[]): void {
+        const measureIds: string[] = []
+
+        measureNumbers.forEach((measureNumber) => {
+            TestData.readMeasureId(measureNumber).then((measureId) => measureIds.push(measureId))
+        })
+
+        cy.then(() => {
+            cy.get(this.measureListRows).then(($rows) => {
+                const displayedMeasureIds = [...$rows]
+                    .map((row) => row.querySelector('[data-testid^="measure-action-"]')?.getAttribute('data-testid'))
+                    .filter((testId): testId is string => Boolean(testId))
+                    .map((testId) => testId.replace('measure-action-', ''))
+                    .filter((measureId) => measureIds.includes(measureId))
+
+                expect(displayedMeasureIds, 'created review-measure order').to.deep.equal([...measureIds].reverse())
+            })
+        })
+    }
+
     public static selectReviewFilter(): void {
         this.clickFilterByElement(this.filterByDropdown)
         this.clickFilterByElement(this.filterReviewOption)
@@ -229,6 +312,17 @@ export class MeasuresPage {
 
     public static assertReviewFilterIsLastOption(): void {
         this.clickFilterByElement(this.filterByDropdown)
+        cy.get(this.filterReviewOption).should('be.visible')
+        cy.get('[role="option"]:visible').last().should('have.attr', 'data-testid', 'filter-by-Review')
+    }
+
+    public static assertReviewSearchControls(): void {
+        cy.get(this.searchInputBox).scrollIntoView().should('be.visible')
+        this.clickFilterByElement(this.filterByDropdown)
+        cy.get(this.filterMeasureOption).should('be.visible')
+        cy.get(this.filterModelOption).should('be.visible')
+        cy.get(this.filterVersionOption).should('be.visible')
+        cy.get(this.filterCMSIdOption).should('be.visible')
         cy.get(this.filterReviewOption).should('be.visible')
         cy.get('[role="option"]:visible').last().should('have.attr', 'data-testid', 'filter-by-Review')
     }
@@ -300,6 +394,45 @@ export class MeasuresPage {
     ): void {
         TestData.readMeasureId(measureNumber, owner).then((measureId) => {
             cy.get(this.measureReviewStatusSelector(measureId)).should('have.text', expectedStatus)
+        })
+    }
+
+    public static hoverMeasureReviewStatus(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureReviewStatusSelector(measureId))
+                .scrollIntoView()
+                .should('be.visible')
+                .then(($reviewStatus) => {
+                    const tooltipTarget = $reviewStatus.find('span')
+                    cy.wrap(tooltipTarget.length ? tooltipTarget : $reviewStatus).trigger('mouseover')
+                })
+        })
+    }
+
+    public static assertAssignedReviewerTooltip(expectedReviewerNames: string[]): void {
+        cy.get('.MuiTooltip-tooltip:visible')
+            .last()
+            .should(($tooltip) => {
+                const reviewerNames = $tooltip
+                    .text()
+                    .split(/\r?\n/)
+                    .map((reviewerName) => reviewerName.trim())
+                    .filter(Boolean)
+
+                expect(reviewerNames, 'assigned reviewer tooltip').to.deep.equal(expectedReviewerNames)
+            })
+    }
+
+    public static assertReviewStatusTooltipAbsent(): void {
+        cy.get('body').find('.MuiTooltip-tooltip:visible').should('have.length', 0)
+    }
+
+    public static clearMeasureReviewStatusHover(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.get(this.measureReviewStatusSelector(measureId)).then(($reviewStatus) => {
+                const tooltipTarget = $reviewStatus.find('span')
+                cy.wrap(tooltipTarget.length ? tooltipTarget : $reviewStatus).trigger('mouseout')
+            })
         })
     }
 
