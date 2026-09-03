@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-07-31
+Last updated: 2026-09-01
 
 This document contains stable automation rules. Current priorities, audit counts, proof status, and blockers belong in `docs/quality/test-refactor-backlog.md`.
 
@@ -25,11 +25,18 @@ Add guidance only when it is supported by committed code, focused validation, au
 - Page objects own UI interaction. `TestData` and domain request helpers own tokens, fixture paths, IDs, and service setup.
 - Keep negative authorization, validation, and error assertions explicit when setup moves to APIs.
 - For feature-flagged contracts, keep current coverage active and add new coverage alongside it. Put persistence and payload checks in service specs first.
+
+## Reviewer Account Isolation
+
+- Use `OktaLogin.ReviewerLogin()` only for reviewer-role UI coverage. It reserves the current reviewer account (`harpUser2` / `MadieTestUser1`) through the existing primary-user lock, so ordinary parallel specs cannot share its session.
+- Reviewer specs must call `OktaLogin.releaseReviewer()` in `afterEach`. If reviewer tests wait for the user lock or time out, first check whether another primary-user spec is using `harpUser2` or a prior run left its lock file marked.
+- Do not remove the reviewer account from the primary user pool unless CI concurrency and replacement-account capacity have been reviewed.
 - Split large specs by behavior only after shared setup and data helpers are stable.
 
 ## Test Data and API Helpers
 
 - Use owner-aware `TestData` helpers for `selectedUser` and `selectedAltUser`.
+- Put setup in `beforeEach` only when every test in the suite requires it. Create scenario-specific records in the test or a named scenario helper so visibility, layout, and negative tests do not pay for unrelated data setup.
 - Prefer `fixturePath`, `readFixture`, `writeFixture`, `readMeasureId`, `readCqlLibraryId`, `readTestCaseId`, and related helpers over hand-built fixture paths.
 - Prefer `withAccessToken`, `requestWithAccessToken`, and domain request helpers over inline cookie or token plumbing.
 - Use `TestData.getAccountDisplayName(harpId)` for UI text that includes a display name and HARP ID.
@@ -48,12 +55,17 @@ Reuse these established paths before adding request code:
 - Prefer selectors in this order: `data-testid`, accessible role/name, stable text, stable container plus child, then CSS class.
 - Put reusable selectors in the relevant page object. Inline selectors are acceptable for one-off assertions.
 - Select created rows by stored ID, generated name, title, or case number tied to the scenario. Do not rely on row index or table order.
+- For autocomplete or multi-select options, target the exact displayed value or a dedicated `data-testid`; do not select `first()` or `last()` unless the scenario specifically validates ordering.
 - Account for pagination and submitted search state before assuming a created row is visible.
+- On paginated library lists, submit the generated library name with `CQLLibrariesPage.searchForLibraryByName(...)` before selecting or opening its row; pair the filtered UI row with the stored library ID when an action targets that library.
 - Do not assert `be.enabled` on non-form containers such as MUI SpeedDial roots or anchor-backed tabs. Target the actual button or use `aria-disabled`.
+- For MUI SpeedDial action centers, scope child actions to their parent container and scroll the main trigger before opening it. Do not scroll a child action after opening the menu; that interaction can collapse the SpeedDial.
 
 ## Navigation and Readiness
 
 - A selected tab is not proof that its content rendered. Pass a destination readiness selector whenever the next command depends on tab content.
+- Use the Measure and Library list Filter By helpers instead of raw dropdown interactions. The Measure helper scrolls and re-queries the control because a fixed ancestor can otherwise cover it.
+- When a library scenario does not validate header navigation, enter the Libraries workspace through `CQLLibrariesPage.openLibrariesList()`; it visits `/cql-libraries` and waits for the library list to render.
 - Use the shared native activation paths for Test Cases, Details, JSON, Expected/Actual, and return navigation. Cypress actionability scrolling can shift split views or leave stale content mounted.
 - Use `EditMeasurePage.openPopulationCriteriaTab(...)` after CQL saves or route updates, with a concrete Population Criteria control as readiness.
 - When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content.
@@ -82,6 +94,7 @@ Reuse these established paths before adding request code:
 ## Assertions and Error Handling
 
 - Assert durable UI contracts: stable selectors, meaningful text fragments, request status, and destination state.
+- Give each test one principal acceptance criterion. Shared setup may establish multiple prerequisites, but keep independently failing outcomes—such as tab visibility, list contents, exclusions, ordering, columns, and action availability—in separate tests.
 - Use shared dialog and toast helpers when the same contract appears in multiple specs.
 - Keep product failures visible. Do not weaken assertions to accept an incorrect state.
 - Do not add broad `uncaught:exception` suppression. Any tolerated exception must be narrowly scoped and explained.
@@ -90,6 +103,7 @@ Reuse these established paths before adding request code:
 ## Waits and Interactions
 
 - Do not add fixed waits. Use route aliases, visible/enabled assertions, save settlement, or purposeful polling.
+- For a visible standard control, use Cypress's default `click()`. Do not add `scrollBehavior` as a workaround for viewport movement; first identify the component-specific interaction and reuse its established helper when one exists.
 - Use `{ force: true }` only for intentionally hidden/native controls with a documented reason.
 - Prefer `step(...)` over ad hoc `cy.log(...)` for reusable helpers or high-value flow narration.
 

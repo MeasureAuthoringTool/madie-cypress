@@ -56,6 +56,52 @@ export class OktaLogin {
         });
     }
 
+    public static ReviewerLogin(): void {
+        // MAT-10160: MadieTestUser1 is the current reviewer account. It must
+        // be acquired through the primary pool lock to avoid parallel session
+        // collisions with ordinary specs that can also use harpUser2.
+        cy.task('getAvailableReviewer').then((reviewerUser) => {
+            expect(reviewerUser, 'Available reviewer user').to.not.be.null
+            Cypress.env('reviewerUser', reviewerUser)
+            this.runLoginFlow({
+                selectedEnvVar: 'reviewerUser',
+                cookieSetters: {
+                    harpUser2: () => cy.setAccessTokenCookie2(),
+                },
+                credsForUser: (user) =>
+                    user === 'harpUser2'
+                        ? { username: Environment.credentials().harpUser2, password: Environment.credentials().password2 }
+                        : null,
+                logPrefix: 'Reviewer Login',
+            })
+        })
+    }
+
+    public static releaseReviewer(): void {
+        // Reviewer suites must call this from afterEach so harpUser2 returns
+        // to the primary pool even when a reviewer assertion fails.
+        const reviewerUser = Cypress.env('reviewerUser')
+        if (reviewerUser) {
+            cy.task('releaseReviewer', reviewerUser)
+            Cypress.env('reviewerUser', null)
+        }
+    }
+
+    public static getReviewerUser(): string {
+        const reviewerUser = Cypress.env('reviewerUser')
+
+        if (reviewerUser === 'harpUser2') {
+            return Environment.credentials().harpUser2.toLowerCase()
+        }
+
+        cy.log(`⚠️ getReviewerUser: Unknown reviewer user type: ${reviewerUser}`)
+        return ''
+    }
+
+    public static getConfiguredReviewerUser(): string {
+        return Environment.credentials().harpUser2.toLowerCase()
+    }
+
     public static AdminLogin(): void {
         this.runLoginFlow({
             selectedEnvVar: 'selectedUser',
@@ -144,7 +190,7 @@ export class OktaLogin {
     // PRIVATE: shared hardened engine
     // ------------------------------------------------------
     private static runLoginFlow(args: {
-        selectedEnvVar: 'selectedUser' | 'selectedAltUser';
+        selectedEnvVar: 'selectedUser' | 'selectedAltUser' | 'reviewerUser';
         cookieSetters: Record<string, () => void>;
         credsForUser: (userKey: string) => { username: string; password: string } | null;
         logPrefix?: string;

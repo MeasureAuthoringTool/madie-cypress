@@ -15,6 +15,7 @@ export enum EditMeasureActions {
 }
 
 export type MeasureLockedModalCloseMethod = 'x' | 'button'
+export type MeasureDetailsMode = 'edit' | 'view'
 
 export class EditMeasurePage {
     //dirty modal
@@ -52,6 +53,7 @@ export class EditMeasurePage {
     }
     public static readonly testCasesTab = '[data-testid="patients-tab"]'
     public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
+    public static readonly reviewAndHistoryActionCenterButton = '[data-testid="action-center-button"]'
     public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
     public static readonly deleteMeasureBtn = '[data-testid="DeleteMeasure"]'
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
@@ -61,6 +63,8 @@ export class EditMeasurePage {
     public static readonly shareMeasureActionBtn = '[data-testid="Share/Unshare"]'
     public static readonly transferMeasureActionBtn = '[data-testid="transfer-action-btn"]'
     public static readonly viewHistoryActionBtn = '[data-testid="ViewHistory"]'
+    public static readonly reviewMeasureActionBtn = '[data-testid="Review"]'
+    public static readonly reviewStatus = '[data-testid="measure-review-status"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
     public static readonly humanReadableEcqmTitle = '.ecqm-title'
@@ -94,6 +98,15 @@ export class EditMeasurePage {
     public static readonly cmsIDDialogContinue = '[data-testid="cms-identifier-dialog-continue-button"]'
     public static readonly cmsIdInput = '[data-testid="cms-id-text-field"]'
     public static readonly successfulMeasureSaveMsg = '[data-testid="edit-measure-information-success-text"]'
+
+    public static assertMeasureDetailsMode(mode: MeasureDetailsMode): void {
+        if (mode === 'edit') {
+            cy.get(this.measureNameTextBox).should('be.visible').and('be.enabled')
+            return
+        }
+
+        cy.get(this.readOnlyMeasureName).should('be.visible')
+    }
 
     //Endorser fields
     public static readonly endorsementNumber = '[data-testid="endorsement-number-input"]'
@@ -299,6 +312,14 @@ export class EditMeasurePage {
         cy.get(this.measureLockedModalMessage).should('not.exist')
     }
 
+    public static dismissMeasureLockedModalIfPresent(): void {
+        cy.get('body').then(($body) => {
+            if ($body.find(this.measureLockedModalMessage).filter(':visible').length) {
+                this.closeMeasureLockedModalByButton()
+            }
+        })
+    }
+
     public static dismissMeasureLockedModal(
         expectedText: string,
         closeMethod: MeasureLockedModalCloseMethod = 'button'
@@ -325,14 +346,86 @@ export class EditMeasurePage {
         })
     }
 
-    public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
+    public static assertReviewActionEnabled(): void {
+        this.openReviewOrHistoryActionCenter(this.reviewMeasureActionBtn)
+        cy.get(this.reviewAndHistoryActionCenterButton)
+            .find(this.reviewMeasureActionBtn)
+            .should('be.visible')
+            .and('be.enabled')
+            .trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', 'Review')
+        cy.get(this.reviewAndHistoryActionCenterButton).find(this.reviewMeasureActionBtn).trigger('mouseout')
+    }
+
+    public static assertReviewStatus(status: 'Ready' | 'In Progress' | 'Complete'): void {
+        cy.get(this.reviewStatus).should('be.visible').and('have.text', `Review Status: ${status}`)
+    }
+
+    public static hoverReviewStatus(): void {
+        cy.get(this.reviewStatus).should('be.visible').realHover({ scrollBehavior: false })
+    }
+
+    public static assertAssignedReviewerTooltip(expectedReviewerNames: string[]): void {
+        cy.get('.MuiTooltip-tooltip:visible')
+            .last()
+            .should(($tooltip) => {
+                const reviewerNames = $tooltip
+                    .text()
+                    .split(/\r?\n/)
+                    .map((reviewerName) => reviewerName.trim())
+                    .filter(Boolean)
+
+                expect(reviewerNames, 'assigned reviewer tooltip').to.deep.equal(expectedReviewerNames)
+            })
+    }
+
+    public static assertReviewStatusReady(): void {
+        this.assertReviewStatus('Ready')
+    }
+
+    public static assertReviewStatusAbsent(): void {
+        cy.get(this.reviewStatus).should('not.exist')
+    }
+
+    public static openReviewDialog(): void {
+        this.openReviewOrHistoryActionCenter(this.reviewMeasureActionBtn)
+        cy.get(this.reviewAndHistoryActionCenterButton)
+            .find(this.reviewMeasureActionBtn)
+            .should('be.visible')
+            .and('be.enabled')
+            .click()
+    }
+
+    private static openActionCenter(): void {
         cy.get(this.editMeasureButtonActionBtn)
+            .scrollIntoView()
             .should('be.visible')
             .closest('button')
             .should('be.enabled')
             .then(($button) => {
                 $button[0].click()
             })
+    }
+
+    private static openReviewOrHistoryActionCenter(actionSelector: string): void {
+        cy.get(this.reviewAndHistoryActionCenterButton)
+            .should('be.visible')
+            .find(actionSelector)
+            .then(($action) => {
+                if (!$action.is(':visible')) {
+                    this.openActionCenter()
+                }
+            })
+
+        cy.get(this.reviewAndHistoryActionCenterButton).find(actionSelector).should('be.visible')
+    }
+
+    public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
+        if (action === EditMeasureActions.viewHistory) {
+            this.openReviewOrHistoryActionCenter(this.viewHistoryActionBtn)
+        } else {
+            this.openActionCenter()
+        }
 
         switch (action) {
             case EditMeasureActions.export: {
@@ -429,9 +522,11 @@ export class EditMeasurePage {
             }
 
             case EditMeasureActions.viewHistory: {
-                cy.get(this.viewHistoryActionBtn).should('be.visible')
-                cy.get(this.viewHistoryActionBtn).should('be.enabled')
-                cy.get(this.viewHistoryActionBtn).click()
+                cy.get(this.reviewAndHistoryActionCenterButton)
+                    .find(this.viewHistoryActionBtn)
+                    .should('be.visible')
+                    .and('be.enabled')
+                    .click()
 
                 break
             }

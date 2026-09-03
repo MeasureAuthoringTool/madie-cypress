@@ -89,6 +89,34 @@ function claimFirstAvailableUser(filePath, users) {
     })
 }
 
+function claimSpecificUser(filePath, user) {
+    // Reviewer specs use the existing primary-user lock for harpUser2. Do not
+    // move this user into a separate pool: that would reduce normal parallel
+    // capacity and allow two specs to authenticate as the same account.
+    const startedAt = Date.now()
+
+    while (Date.now() - startedAt < lockAcquireTimeoutMs) {
+        const claimed = withFileLock(filePath, () => {
+            const lock = readLock(filePath)
+            if (lock[user]) {
+                return false
+            }
+
+            lock[user] = true
+            writeLock(filePath, lock)
+            return true
+        })
+
+        if (claimed) {
+            return user
+        }
+
+        sleepMs(lockRetryIntervalMs)
+    }
+
+    return null
+}
+
 function releaseLockedUser(filePath, user) {
     if (!user) {
         return null
@@ -135,6 +163,14 @@ module.exports = (on, config) => {
         },
         releaseAltUser(user) {
             return releaseLockedUser(altLockFilePath, user)
+        },
+        getAvailableReviewer() {
+            // MadieTestUser1 is TEST_USERNAME2 / harpUser2. Reserve it from
+            // the primary pool before a reviewer spec starts its browser flow.
+            return claimSpecificUser(lockFilePath, 'harpUser2')
+        },
+        releaseReviewer(user) {
+            return releaseLockedUser(lockFilePath, user)
         }
     })
 

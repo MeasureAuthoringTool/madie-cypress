@@ -97,6 +97,7 @@ export type TestCaseImportResponse = {
 }
 
 export type ShareableMadieObject = 'measure' | 'library'
+export type ReviewStatus = 'READY_FOR_REVIEW' | 'NOT_READY_FOR_REVIEW' | 'IN_PROGRESS' | 'COMPLETE'
 
 export type MeasureDraftBody = {
     measureSetId?: string
@@ -632,6 +633,52 @@ export class TestData {
             url: `/api/measures/${measureId}`,
             method,
             ...(body ? { body } : {})
+        })
+    }
+
+    public static requestMeasureReview<T = unknown>(
+        status: ReviewStatus,
+        comment = '',
+        measureNumber = 0,
+        owner: FixtureOwner = 'selectedUser',
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        this.setupUserScope(owner)
+
+        return this.readMeasureId(measureNumber, owner).then((measureId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/measures/${measureId}/review`,
+                method: 'POST',
+                body: {
+                    measureId,
+                    status,
+                    comment
+                }
+            })
+        })
+    }
+
+    public static requestCqlLibraryReview<T = unknown>(
+        status: ReviewStatus,
+        comment = '',
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser',
+        options: Partial<Cypress.RequestOptions> = {}
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        this.setupUserScope(owner)
+
+        return this.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            return this.requestWithAccessToken<T>({
+                ...options,
+                url: `/api/cql-libraries/${libraryId}/review`,
+                method: 'POST',
+                body: {
+                    libraryId,
+                    status,
+                    comment
+                }
+            })
         })
     }
 
