@@ -1,17 +1,50 @@
 import { CQLLibraryPage, EditLibraryActions } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { Header } from "../../../Shared/Header"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { SupportedModels } from "../../../Shared/CreateMeasurePage"
+import { TestData } from "../../../Shared/TestData"
 
 let CQLLibraryName = ''
 let harpUserALT = ''
 const CQLLibraryPublisher = 'SemanticBits'
 const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const versionNumber = '1.0.000'
+
+const transferLibraryToAltUser = (): void => {
+    TestData.transferCurrentCqlLibrary(harpUserALT).then((response) => {
+        expect(response.status).to.eql(200)
+    })
+}
+
+const openCreatedLibraryFromAllLibraries = (): void => {
+    CQLLibrariesPage.openLibrariesList()
+    cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible').click()
+    CQLLibrariesPage.searchForLibraryByName(CQLLibraryName)
+}
+
+const openCreatedLibraryFromSharedLibraries = (): void => {
+    CQLLibrariesPage.openLibrariesList()
+    cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible').click()
+    CQLLibrariesPage.searchForLibraryByName(CQLLibraryName)
+}
+
+const selectCreatedLibraryFromAllLibraries = (): void => {
+    openCreatedLibraryFromAllLibraries()
+    CQLLibrariesPage.selectLibraryRow()
+}
+
+const openCreatedLibraryDetailsFromAllLibraries = (): void => {
+    openCreatedLibraryFromAllLibraries()
+    CQLLibrariesPage.openLibraryDetailsFromCurrentList()
+}
+
+const openCreatedLibraryDetailsFromSharedLibraries = (): void => {
+    openCreatedLibraryFromSharedLibraries()
+    CQLLibrariesPage.openLibraryDetailsFromCurrentList()
+}
 
 describe('Delete CQL Library Validations - Library List page', () => {
 
@@ -29,13 +62,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
 
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
-        cy.get(CQLLibraryPage.allLibrariesTab).click()
-
-        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        OktaLogin.SessionAltLogin()
+        selectCreatedLibraryFromAllLibraries()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -43,27 +71,12 @@ describe('Delete CQL Library Validations - Library List page', () => {
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
 
         //Transfer Library to the ALT User
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value,
-                        'harpid': harpUserALT
-                    },
-                    body: [id],
-                    method: 'PUT',
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                })
-            })
-        })
+        transferLibraryToAltUser()
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        CQLLibrariesPage.cqlLibraryActionCenter('delete')
+        OktaLogin.SessionAltLogin()
+        selectCreatedLibraryFromAllLibraries()
+        cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('be.visible').and('be.enabled').click()
 
         //verify deleting Library removes it from library list
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
@@ -71,22 +84,15 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryGreenToast, 50000)
         cy.get(CQLLibraryPage.cqlLibraryGreenToast).should('contain.text', 'The Draft CQL Library has been deleted.')
-        cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((fileContents) => {
-            Utilities.waitForElementToNotExist('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
-        })
+        CQLLibrariesPage.assertLibrarySearchRowAbsent(0)
     })
 
     it('Delete CQL Library - Draft Library - user has had the Library shared with them', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
-        cy.get(CQLLibraryPage.allLibrariesTab).click()
-
-        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        OktaLogin.SessionAltLogin()
+        selectCreatedLibraryFromAllLibraries()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -98,42 +104,21 @@ describe('Delete CQL Library Validations - Library List page', () => {
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Login as Regular User
-        OktaLogin.Login()
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        OktaLogin.SessionLogin()
+        selectCreatedLibraryFromAllLibraries()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
-        const currentUser = Cypress.env('selectedUser')
         //Version Library
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Transfer Library to ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value,
-                        'harpid': harpUserALT
-                    },
-                    body: [id],
-                    method: 'PUT',
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                })
-            })
-        })
+        transferLibraryToAltUser()
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        OktaLogin.SessionAltLogin()
+        selectCreatedLibraryFromAllLibraries()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -147,13 +132,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.sharedLibrariesTab).click().wait(1500)
-        cy.get(CQLLibraryPage.allLibrariesTab).click()
-
-        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
-        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        OktaLogin.SessionAltLogin()
+        selectCreatedLibraryFromAllLibraries()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -174,46 +154,20 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
 
-        //Login as ALT User
-
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        CQLLibrariesPage.clickViewforCreatedLibrary()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.readOnlyCqlLibraryName, 11500)
-
-        cy.contains('You are not the owner of the CQL Library. Only owner can edit it.').should('be.visible')
+        OktaLogin.SessionAltLogin()
+        openCreatedLibraryFromAllLibraries()
+        CQLLibrariesPage.openLibraryAsNonOwner()
     })
 
     it('Delete CQL Library - Draft Library - user has had the Library transferred to them', () => {
 
         //Transfer Library to the ALT User
-        const currentUser = Cypress.env('selectedUser')
         OktaLogin.setupUserSession(false)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value,
-                        'harpid': harpUserALT
-                    },
-                    body: [id],
-                    method: 'PUT',
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                })
-            })
-        })
+        transferLibraryToAltUser()
 
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        OktaLogin.SessionAltLogin()
+        openCreatedLibraryDetailsFromAllLibraries()
 
         CQLLibraryPage.actionCenter(EditLibraryActions.delete)
 
@@ -227,11 +181,8 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        OktaLogin.SessionAltLogin()
+        openCreatedLibraryDetailsFromSharedLibraries()
         cy.get(CQLLibraryPage.actionCenterButton).click()
         Utilities.waitForElementToNotExist(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
@@ -243,59 +194,35 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
         //Login as Regular User
 
-        OktaLogin.Login()
-        cy.get(Header.cqlLibraryTab).click()
-
-        CQLLibrariesPage.clickViewforCreatedLibrary()
+        OktaLogin.SessionLogin()
+        openCreatedLibraryDetailsFromAllLibraries()
         cy.get(CQLLibraryPage.actionCenterButton).click()
         cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('not.exist')
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
-        const currentUser = Cypress.env('selectedUser')
         //Version Library
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Transfer Library to ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/transfer?retainShareAccess=false',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken?.value,
-                        'harpid': harpUserALT
-                    },
-                    body: [id],
-                    method: 'PUT',
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                })
-            })
-        })
+        transferLibraryToAltUser()
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-
-        CQLLibrariesPage.clickViewforCreatedLibrary()
+        OktaLogin.SessionAltLogin()
+        openCreatedLibraryDetailsFromAllLibraries()
         cy.get(CQLLibraryPage.actionCenterButton).click()
         cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('not.exist')
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
-        const currentUser = Cypress.env('selectedUser')
         //Version Library
         OktaLogin.setupUserSession(false)
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
-        OktaLogin.setupUserSession(true)
         //Login as ALT User
-        OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-
-        CQLLibrariesPage.clickViewforCreatedLibrary()
+        OktaLogin.SessionAltLogin()
+        openCreatedLibraryDetailsFromSharedLibraries()
         cy.get(CQLLibraryPage.actionCenterButton).click()
         cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('not.exist')
     })

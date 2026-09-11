@@ -482,6 +482,22 @@ export class TestData {
         })
     }
 
+    public static transferCurrentCqlLibrary<T = CqlLibraryBody>(
+        harpId: string,
+        retainShareAccess = false,
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            return this.requestWithAccessToken<T>({
+                url: `/api/cql-libraries/transfer?retainShareAccess=${retainShareAccess}`,
+                method: 'PUT',
+                headers: { harpId },
+                body: [libraryId]
+            })
+        })
+    }
+
     public static updateCqlLibrary<T = CqlLibraryBody>(
         body: CqlLibraryBody,
         options: Partial<Cypress.RequestOptions> = {}
