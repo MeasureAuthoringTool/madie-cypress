@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-08-03
+Last updated: 2026-09-09
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -24,7 +24,8 @@ Current focus order:
 2. Complete remaining Test Case Details, JSON, Test Cases, and Expected/Actual migrations by repeated interaction pattern.
 3. Investigate the inconclusive `QDMRunExecuteTC.cy.ts` single-pass scenario separately from its already-proven helper paths.
 4. Verify CI collection for specs that produced no runner output before treating them as test failures.
-5. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
+5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
+6. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
 
 Work boundaries:
 
@@ -91,23 +92,26 @@ Work boundaries:
 - Stabilized library comparison, history display names, sharing/drafting, name-based admin transfer, saved-code permissions, and list searching.
 - General account display-name lookup now lives in `TestData`.
 - Fixed CQL library transferred-user versioning to authenticate as the transferee while reading the original owner fixture; focused TEST coverage passes.
+- Migrated CQL Library creation and validation coverage from QI-Core v4.1.1 to US Quality Core v0.5.0, including a valid USQC CQL fixture, model-specific selectors, duplicate-name setup, and name-filtered post-create navigation; the full spec passes.
+- Migrated CQL Library transfer coverage from QI-Core v4.1.1 to QI-Core v6.0.0 using the existing QI-Core 6 cohort CQL fixture.
+- Migrated CQL Library version, draft, invalid-CQL, and version-comparison UI coverage from QI-Core v4.1.1 to QI-Core v6.0.0; all five lifecycle specs pass. The shared draft-request capture stores the resulting library ID through `TestData` and is proven by both draft and compare consumers.
 
 ## Latest Audit Signal
 
-Command: `npm run quality:no-focused-tests` on 2026-07-31.
+Command: `npm run quality:no-focused-tests` on 2026-09-04.
 
 | Metric | Count |
 | --- | ---: |
-| Specs | 259 |
-| Spec lines | 65,371 |
-| Shared files | 30 |
-| Shared lines | 19,379 |
+| Specs | 308 |
+| Spec lines | 72,024 |
+| Shared files | 33 |
+| Shared lines | 20,849 |
 | Support files / lines | 3 / 629 |
 | Scripts / lines | 9 / 1,561 |
-| Skipped tests | 12 |
-| Manual fixture paths | 179 |
-| Manual access-token plumbing | 87 |
-| Fixed waits | 35 |
+| Skipped tests | 67 |
+| Manual fixture paths | 153 |
+| Manual access-token plumbing | 84 |
+| Fixed waits | 29 |
 | Forced interactions | 170 |
 | Global exception suppression | 1 |
 
@@ -115,6 +119,7 @@ Largest current concentrations:
 
 - `TestCasesPage.ts` and remaining consumers that bypass its navigation/editor helpers.
 - `OktaLogin.ts` fixed waits and shared startup latency.
+- Repeated full `OktaLogin.Login()` calls in UI specs that do not validate authentication or switch users. `DeleteCQLLibrary.cy.ts` confirmed the session-cached path is applicable; audit other candidates individually.
 - Import, highlighting, and editor specs with forced interactions.
 - Service-tail fixture/token plumbing.
 - Global exception suppression in `cypress/support/e2e.ts`.

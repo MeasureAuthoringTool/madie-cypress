@@ -5,18 +5,19 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { TestData } from "../../../../Shared/TestData"
 
 let CqlLibraryOne: string
 const versionNumber = '1.0.000'
-const validCql = LibraryCQL.validCQL4QICORELib
+const validCql = QiCore6Cql.CQL_For_Cohort_Six
 
 describe('CompareLibraryVersions', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
         CqlLibraryOne = 'CompareLibraryVersion' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore6, { cql: validCql })
         CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
     
@@ -27,9 +28,6 @@ describe('CompareLibraryVersions', () => {
     })
 
     it('Compare two Versions of a CQL Library', () => {
-        let currentUser = Cypress.env('selectedUser')
-        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
-        const filePath2 = 'cypress/fixtures/' + currentUser + '/cqlLibraryId2'
         let updatedCqlLibraryName = 'Updated' + CqlLibraryOne + Date.now()
         //Add Draft to Versioned Library
         OktaLogin.Login()
@@ -44,15 +42,9 @@ describe('CompareLibraryVersions', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
-        //intercept draft id once library is drafted
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
-        })
+        CQLLibrariesPage.interceptDraftCreation()
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
-
-        cy.wait('@draft', {timeout: 60000}).then((request) => {
-            cy.writeFile(filePath2, request?.response?.body.id)
-        })
+        CQLLibrariesPage.storeDraftLibraryId()
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
 
@@ -62,12 +54,12 @@ describe('CompareLibraryVersions', () => {
         cy.get(CQLLibrariesPage.row0_ExpandArrow).should('be.visible')
         cy.get(CQLLibrariesPage.row0_ExpandArrow).click()
 
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
-            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.visible')
-            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.enabled')
+        TestData.readCqlLibraryId().then((libraryId) => {
+            cy.get('[data-testid="cqlLibrary-expanded-' + libraryId + '"]').should('be.visible')
+            cy.get('[data-testid="cqlLibrary-button-' + libraryId + '-version-content"]').should('contain.text', '1.0.000')
+            cy.get('[data-testid="cqlLibrary-button-' + libraryId + '-content"]').should('contain.text', CqlLibraryOne)
+            cy.get('[data-testid="cql-library-action-' + libraryId + '"]').should('be.visible')
+            cy.get('[data-testid="cql-library-action-' + libraryId + '"]').should('be.enabled')
         })
 
         cy.log('Draft Created Successfully')
@@ -78,8 +70,8 @@ describe('CompareLibraryVersions', () => {
         cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
 
         //Expand arrow and check Versioned Library
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '_select"] > input').click()
+        TestData.readCqlLibraryId().then((libraryId) => {
+            cy.get('[data-testid="cqlLibrary-button-' + libraryId + '_select"] > input').click()
         })
 
         //Click on Compare Versions button

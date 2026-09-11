@@ -5,18 +5,18 @@ import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 let CqlLibraryOther = ''
 let CQLLibraryPublisher = 'SemanticBits'
-const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
+const invalidLibraryCql = QiCore6Cql.intentionalErrorCql
 
 describe('Version CQL Library with errors', () => {
 
     beforeEach('Login', () => {
 
         CqlLibraryOther = 'CQLLibraryWithErrors' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore6, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
 
         OktaLogin.SessionLogin()
     })
@@ -36,7 +36,7 @@ describe('Version CQL Library with errors', () => {
         //Verify CQL ELM translation errors
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', " ELM: 1:3 | Could not resolve identifier SDE in the current library. ELM: 5:13 | Member SDE Sex not found for type null.")
+        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.empty')
 
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('version')

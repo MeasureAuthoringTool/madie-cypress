@@ -5,12 +5,12 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 let CQLLibraryName = ''
 let harpUserALT = ''
 const versionNumber = '1.0.000'
-const validCql = LibraryCQL.validCQL4QICORELib
+const validCql = QiCore6Cql.CQL_For_Cohort_Six
 
 describe('CQL Library Transfer', () => {
 
@@ -18,7 +18,7 @@ describe('CQL Library Transfer', () => {
 
         CQLLibraryName = 'TransferLibrary' + Date.now()
 
-        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore6)
 
         harpUserALT = OktaLogin.getUser(true)
     })
@@ -97,7 +97,7 @@ describe('CQL Library Transfer - Action Centre buttons', () => {
 
         CQLLibraryName = 'ACTransferLibrary' + Date.now()
 
-        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore6)
 
         harpUserALT = OktaLogin.getUser(true)
     })
@@ -260,7 +260,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
 
         CQLLibraryName = 'TransferMultipleLibraries' + Date.now()
 
-        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore6, { cql: validCql })
 
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -344,4 +344,3 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get('.expanded-row').should('contain', CQLLibraryName)
     })
 })
-

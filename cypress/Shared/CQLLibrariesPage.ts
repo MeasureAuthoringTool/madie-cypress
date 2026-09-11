@@ -105,6 +105,20 @@ export class CQLLibrariesPage {
         this.goToLibrariesList()
     }
 
+    public static interceptDraftCreation(libraryNumber = 0): void {
+        TestData.readCqlLibraryId(libraryNumber).then((libraryId) => {
+            cy.intercept('POST', `/api/cql-libraries/draft/${libraryId}`).as('draftLibrary')
+        })
+    }
+
+    public static storeDraftLibraryId(libraryNumber = 2): void {
+        cy.wait('@draftLibrary', { timeout: 60000 }).then(({ response }) => {
+            expect(response?.statusCode).to.eq(201)
+            expect(response?.body.id).to.be.a('string')
+            TestData.writeCqlLibraryId(response!.body.id, libraryNumber)
+        })
+    }
+
     private static openLibraryAction(libraryNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
         TestData.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
             const actionSelector = this.libraryActionSelector(libraryId)

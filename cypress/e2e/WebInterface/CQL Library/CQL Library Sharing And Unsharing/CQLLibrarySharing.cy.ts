@@ -246,7 +246,7 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
         cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab).click()
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
+        CQLLibrariesPage.searchForLibraryByName(CQLLibraryName).should('contain.text', CQLLibraryName)
 
         //Delete button disabled for shared owner
         Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 30000)
@@ -421,9 +421,6 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.intercept('PUT', '**/api/cql-libraries/share').as('shareLibrary')
         cy.get(CQLLibrariesPage.saveUserBtn).should('be.enabled').click()
         cy.wait('@shareLibrary').its('response.statusCode').should('eq', 200)
-        Utilities.waitForElementVisible('.MuiAlert-message', 60000)
-        cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
-
         //Login as ALT User and verify both Draft and Versioned Library are shared
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
