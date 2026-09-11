@@ -9,10 +9,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 
-// MAT-9820: AdminUserProfile is not yet available in TEST; prove this coverage in DEV first.
-const describeAdminUserProfile = describe.skip
-
-describeAdminUserProfile('Admin user profile measure View and Edit navigation', () => {
+describe('Admin user profile measure View and Edit navigation', () => {
     let measureName = ''
     let libraryName = ''
     let measureOwner = ''
@@ -141,7 +138,11 @@ describeAdminUserProfile('Admin user profile measure View and Edit navigation', 
             expect(createdMeasureId, 'created measure ID').not.to.be.empty
             cy.get(`[data-testid="measure-lock-icon-${createdMeasureId}"]`).should('be.visible')
         })
+        cy.then(() => {
+            cy.intercept('GET', `/api/measures/${createdMeasureId}`).as('lockedMeasure')
+        })
         findCreatedMeasureAction().click()
+        cy.wait('@lockedMeasure').its('response.statusCode').should('eq', 200)
         cy.then(() => {
             cy.location('pathname').should('contain', `/measures/${createdMeasureId}/edit`)
         })

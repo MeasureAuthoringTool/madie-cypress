@@ -4,27 +4,26 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 let CqlLibraryOne = ''
 let CqlLibraryOther = ''
 let updatedCqlLibraryName = ''
 const versionNumber = '1.0.000'
-const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
-const validCql = LibraryCQL.validCQL4QICORELib
+const validCql = QiCore6Cql.CQL_For_Cohort_Six
 
 describe('Action Center Buttons - Draft and Version Validations', () => {
 
     before('Create CQL Library for duplicate name test', () => {
-        //create a single use CQL Library with invalid CQL (used for duplicate-name draft test)
+        //create a single use CQL Library used for duplicate-name draft test
         CqlLibraryOther = 'Another' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { cql: invalidLibraryCql, cqlErrors: true })
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore6, { cql: validCql })
     })
 
     beforeEach('Create CQL Library and Login', () => {
         //create a fresh CQL Library with valid CQL for versioning
         CqlLibraryOne = 'VersionLib' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore6, { cql: validCql })
         OktaLogin.SessionLogin()
     })
 

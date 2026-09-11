@@ -7,8 +7,7 @@ import { SupportedModels } from '../../../Shared/CreateMeasurePage'
 
 type LibraryOwnershipType = 'OWNED' | 'SHARED'
 
-// MAT-9810: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile library search and filtering', () => {
+describe('Admin user profile library search and filtering', () => {
     let targetLibraryName = ''
     let controlLibraryName = ''
     let libraryOwner = ''

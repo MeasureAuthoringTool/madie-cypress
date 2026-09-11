@@ -77,7 +77,8 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         })
 
         //Close History popup
-        cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
+        cy.get(CQLLibraryPage.libraryHistoryCloseButton).click()
+        cy.get(CQLLibraryPage.libraryHistoryDialog).should('not.exist')
         cy.get(CQLLibraryPage.actionCenterButton).click()
 
         //Un Share Library
@@ -140,7 +141,8 @@ describe('Library History - Version and Draft actions', () => {
         cy.get('[data-testid="library-history-0_additionalActionMessage"]').should('contain.text', 'Versioned to 1.0.000')
 
         //Close History popup
-        cy.get('[data-testid="measure-history-close-button"]').click().wait(1000)
+        cy.get(CQLLibraryPage.libraryHistoryCloseButton).click()
+        cy.get(CQLLibraryPage.libraryHistoryDialog).should('not.exist')
 
         //Draft Library
         cy.get(CQLLibraryPage.actionCenterButton).click()

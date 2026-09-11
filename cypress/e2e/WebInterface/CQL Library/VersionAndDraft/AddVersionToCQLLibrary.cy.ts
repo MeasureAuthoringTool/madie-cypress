@@ -5,18 +5,18 @@ import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 let CqlLibraryOne: string
 const versionNumber = '1.0.000'
-const validCql = LibraryCQL.validCQL4QICORELib
+const validCql = QiCore6Cql.CQL_For_Cohort_Six
 
 describe('Action Center Buttons - Add Version to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
         CqlLibraryOne = 'AddLibraryVersion' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore6, { cql: validCql })
         OktaLogin.Login()
     })
 

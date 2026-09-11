@@ -7,10 +7,7 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { SupportedModels } from '../../../Shared/CreateMeasurePage'
 import { TestData } from '../../../Shared/TestData'
 
-// MAT-9817: Proven in DEV; enable when the AdminUserProfile feature is available in TEST.
-const describeAdminUserProfile = describe.skip
-
-describeAdminUserProfile('Admin user profile library sharing and unsharing', () => {
+describe.skip('Admin user profile library sharing and unsharing', () => {
     let qicoreLibraryName = ''
     let qdmLibraryName = ''
     let libraryOwner = ''
@@ -29,8 +26,8 @@ describeAdminUserProfile('Admin user profile library sharing and unsharing', () 
     const shareLibrariesWithProfileUser = (): void => {
         ;[0, 1].forEach((libraryNumber) => {
             TestData.readCqlLibraryId(libraryNumber).then((libraryId) => {
-                TestData.requestSharePermissions('library', 'GRANT', libraryId, sharedProfileUser).then(
-                    (response) => expect(response.status).to.eq(200)
+                TestData.requestSharePermissions('library', 'GRANT', libraryId, sharedProfileUser).then((response) =>
+                    expect(response.status).to.eq(200)
                 )
             })
         })
@@ -69,9 +66,10 @@ describeAdminUserProfile('Admin user profile library sharing and unsharing', () 
         const credentials = Environment.credentials()
         qicoreLibraryName = `MAT9817QiCore${uniqueSuffix}`
         qdmLibraryName = `MAT9817Qdm${uniqueSuffix}`
-        sharedProfileUser = [credentials.harpUser2, credentials.harpUser3, credentials.altHarpUser]
-            .map((user) => user?.toLowerCase() ?? '')
-            .find((user) => user && user !== OktaLogin.getUser(false)) ?? ''
+        sharedProfileUser =
+            [credentials.harpUser2, credentials.harpUser3, credentials.altHarpUser]
+                .map((user) => user?.toLowerCase() ?? '')
+                .find((user) => user && user !== OktaLogin.getUser(false)) ?? ''
 
         expect(sharedProfileUser, 'shared profile user').not.to.be.empty
         createLibraries()
@@ -203,13 +201,12 @@ describeAdminUserProfile('Admin user profile library sharing and unsharing', () 
         cy.get(CQLLibrariesPage.unshareOption).click()
 
         assertShareDialogControls('Unshare From')
-        cy.get('[role="dialog"]')
-            .within(() => {
-                cy.contains(qicoreLibraryName).should('be.visible')
-                cy.contains(qdmLibraryName).should('be.visible')
-                cy.contains(sharedProfileUser).should('be.visible')
-                cy.get('input[type="checkbox"]:checked').uncheck()
-            })
+        cy.get('[role="dialog"]').within(() => {
+            cy.contains(qicoreLibraryName).should('be.visible')
+            cy.contains(qdmLibraryName).should('be.visible')
+            cy.contains(sharedProfileUser).should('be.visible')
+            cy.get('input[type="checkbox"]:checked').uncheck()
+        })
 
         cy.intercept('PUT', '**/api/cql-libraries/unshare').as('unshareSharedLibraries')
         cy.get(CQLLibrariesPage.saveUserBtn).should('be.enabled').click()

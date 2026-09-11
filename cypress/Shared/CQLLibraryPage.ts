@@ -53,6 +53,7 @@ export class CQLLibraryPage {
     // older versions, in case
     public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly cqlLibraryModelQDM = '[data-testid="cql-library-model-option-QDM v5.6"]'
+    public static readonly cqlLibraryModelUSQC = '[data-testid="cql-library-model-option-US Quality Core v0.5.0"]'
 
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
     public static readonly cqlLibraryGreenToast = '[data-testid="cql-library-list-snackBar"]'
@@ -84,7 +85,7 @@ export class CQLLibraryPage {
     public static readonly headerDetails = '[class="details"]'
     public static readonly cqlLibraryDesc = '[id="cql-library-description"]'
     public static readonly cqlLibraryCreatePublisher = '[data-testid="publisher"]'
-    public static readonly cqlLibraryModalField = '[id="model-select"]'
+    public static readonly cqlLibraryModalField = '[data-testid="dialog-form"]'
     public static readonly cqlLibraryCreateForm = '[id="menu-model"]'
     public static readonly cqlLibraryEditPublisher = '[data-testid="publisher"]'
     public static readonly cqlLibDescHelperText = '[data-testid="cql-library-description-helper-text"]'
@@ -120,6 +121,8 @@ export class CQLLibraryPage {
     public static readonly actionCenterTransfer = '[data-testid="Transfer"]'
     public static readonly actionCenterHistory = '[data-testid="History"]'
     public static readonly actionCenterReview = '[data-testid="Review"]'
+    public static readonly libraryHistoryDialog = '#cql-library-history-dialog'
+    public static readonly libraryHistoryCloseButton = '[data-testid="library-history-close-button"]'
     public static readonly reviewStatus = '[data-testid="cql-library-status"]'
 
     public static libraryHistoryActionType(index: number): string {

@@ -7,8 +7,6 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { SupportedModels } from '../../../Shared/CreateMeasurePage'
 import { TestData } from '../../../Shared/TestData'
 
-const describeAdminUserProfile = Cypress.env('environment') === 'test' ? describe.skip : describe
-
 const assertDeleteDialog = (message: string): void => {
     cy.get(CQLLibraryPage.cqlLibraryDeleteDialog)
         .should('be.visible')
@@ -32,8 +30,7 @@ const assertDeleteDialog = (message: string): void => {
         })
 }
 
-// MAT-9816: Run in DEV until the AdminUserProfile feature and delete flows are proven.
-describeAdminUserProfile('Admin user profile library deletion', () => {
+describe('Admin user profile library deletion', () => {
     let libraryName = ''
     let libraryOwner = ''
     let profileUser = ''
@@ -57,7 +54,7 @@ describeAdminUserProfile('Admin user profile library deletion', () => {
     })
 
     const openOwnedDraftDeleteDialog = (): void => {
-        CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.qiCore4, {
+        libraryOwner = CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.qiCore4, {
             cql: LibraryCQL.validCQL4QICORELib
         })
 
@@ -76,7 +73,7 @@ describeAdminUserProfile('Admin user profile library deletion', () => {
         assertDeleteDialog(`Are you sure you want to delete draft of ${libraryName}`)
     }
 
-    it.skip('deletes an Owned draft library after showing the draft confirmation', () => {
+    it('deletes an Owned draft library after showing the draft confirmation', () => {
         openOwnedDraftDeleteDialog()
         cy.intercept('DELETE', '**/api/cql-libraries/*').as('deleteDraft')
         cy.get(CQLEditorPage.deleteContinueButton).click()
@@ -85,7 +82,7 @@ describeAdminUserProfile('Admin user profile library deletion', () => {
     })
 
     // MAT-9816: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
-    it.skip('cancels an Owned draft deletion without sending a delete request', () => {
+    it('cancels an Owned draft deletion without sending a delete request', () => {
         openOwnedDraftDeleteDialog()
         cy.intercept('DELETE', '**/api/cql-libraries/**').as('deleteLibrary')
 
@@ -96,7 +93,7 @@ describeAdminUserProfile('Admin user profile library deletion', () => {
     })
 
     // MAT-9816: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
-    it.skip('closes an Owned draft deletion with the dialog X without sending a delete request', () => {
+    it('closes an Owned draft deletion with the dialog X without sending a delete request', () => {
         openOwnedDraftDeleteDialog()
         cy.intercept('DELETE', '**/api/cql-libraries/**').as('deleteLibrary')
 
@@ -106,8 +103,9 @@ describeAdminUserProfile('Admin user profile library deletion', () => {
         AdminUserProfilePage.findLibraryRow(libraryName).should('be.visible')
     })
 
+    // MAT-10457: The UI sends a HARP ID that does not match the shared library's owner.
     it.skip('deletes a Shared version library through the admin single-instance endpoint', () => {
-        CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.QDM, {
+        libraryOwner = CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.QDM, {
             cql: LibraryCQL.validCQL4QDMLib
         })
         TestData.versionCqlLibrary('1.0.000').then((versionResponse) => {

@@ -1,67 +1,68 @@
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Header } from "../../../Shared/Header"
-import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
-import { Utilities } from "../../../Shared/Utilities"
-import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
+import { CQLLibrariesPage } from '../../../Shared/CQLLibrariesPage'
+import { Utilities } from '../../../Shared/Utilities'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { SupportedModels } from '../../../Shared/CreateMeasurePage'
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 
 describe('CQL Library Validations', () => {
+    let cleanupDuplicateLibrary = false
+
+    const openCreateLibraryDialog = (): void => {
+        CQLLibrariesPage.openLibrariesList()
+        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible').and('be.enabled').click()
+        cy.get(CQLLibraryPage.cqlLibraryModalField).should('be.visible')
+    }
+
+    const selectUSQCModel = (): void => {
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).should('be.visible').click()
+        cy.get(CQLLibraryPage.cqlLibraryModelUSQC).should('be.visible').click()
+    }
+
+    const enterLibraryDescription = (): void => {
+        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible').type('Some random data')
+    }
+
+    const selectPublisher = (): void => {
+        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible').type('SemanticBits{downArrow}{enter}')
+    }
+
+    const searchForAndEditLibrary = (libraryName: string): void => {
+        CQLLibrariesPage.openLibrariesList()
+        CQLLibrariesPage.searchForLibraryByName(libraryName)
+        CQLLibrariesPage.openLibraryFromCurrentListWithExpectedAction('Edit')
+    }
 
     beforeEach('Login', () => {
-
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout', () => {
-
-        
+    afterEach('Clean up duplicate library', () => {
+        if (cleanupDuplicateLibrary) {
+            Utilities.deleteLibrary()
+            cleanupDuplicateLibrary = false
+        }
     })
 
     it('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {
-
         const dayjs = require('dayjs')
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         let newCQLLibraryName = CQLLibraryName + randValue
         let lastUpdated = dayjs().format('M/D/YYYY')
-        //navigate to the main CQL Library list page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
-        cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+        openCreateLibraryDialog()
         //Enter a name for the new CQL Library
         cy.get(CQLLibraryPage.newCQLLibName).click()
         cy.get(CQLLibraryPage.newCQLLibName).focused().type(newCQLLibraryName)
-        //select a model value
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
-        cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //enter / select a publisher value
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
+        selectUSQCModel()
+        enterLibraryDescription()
+        selectPublisher()
         Utilities.waitForElementEnabled(CQLLibraryPage.saveCQLLibraryBtn, 60000)
 
         //save the new CQL Library
         CQLLibraryPage.clickCreateLibraryButton()
-        //navigate to CQL Library list page
-        cy.get(Header.cqlLibraryTab).click()
-        //Click Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        searchForAndEditLibrary(newCQLLibraryName)
 
         //validate header
         cy.get(CQLLibraryPage.headerDetails).should('exist')
@@ -70,72 +71,44 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.headerDetails).should('include.text', newCQLLibraryName)
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'Version 0.0.000')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'Draft')
-        cy.get(CQLLibraryPage.headerDetails).should('include.text', 'QI-Core v4.1.1')
+        cy.get(CQLLibraryPage.headerDetails).should('include.text', 'US Quality Core v0.5.0')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', lastUpdated)
-
-
     })
 
     it('CQL Library cancel / discard changes button', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        //navigate to the main CQL Library list page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+        let randValue = Math.floor(Math.random() * 1000 + 1)
+        openCreateLibraryDialog()
         //Enter a name for the new CQL Library
         cy.get(CQLLibraryPage.newCQLLibName).click()
         cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName + randValue)
-        //select a model value
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
-        cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //enter / select a publisher value
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get('#publisher-option-0').click()
-
+        selectUSQCModel()
+        enterLibraryDescription()
+        selectPublisher()
 
         //save the new CQL Library
         CQLLibraryPage.clickCreateLibraryButton()
-        //navigate to CQL Library list page
-        cy.get(Header.cqlLibraryTab).click()
-        //Click Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        searchForAndEditLibrary(CQLLibraryName + randValue)
         //change up the value of the CQL Library name
-        cy.get(CQLLibraryPage.currentCQLLibName).click().type(CQLLibraryName + randValue + 'Updated')
+        cy.get(CQLLibraryPage.currentCQLLibName)
+            .click()
+            .type(CQLLibraryName + randValue + 'Updated')
         //verify the existence, accessibility, the text and the functionality of the Discard button
         cy.get(CQLLibraryPage.discardChanges).should('exist')
         cy.get(CQLLibraryPage.discardChanges).should('be.visible')
         cy.get(CQLLibraryPage.discardChanges).should('be.enabled')
         cy.get(CQLLibraryPage.discardChanges).should('contain.text', 'Discard Changes')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('alias')
         cy.get(CQLLibraryPage.discardChanges).click()
 
         cy.get(Utilities.dirtCheckModal).should('be.visible')
     })
 
     it('CQL Library Name Validations', () => {
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+        const duplicateLibraryName = `DuplicateUSQCLibrary${Date.now()}`
+        CQLLibraryPage.createLibraryAPI(duplicateLibraryName, SupportedModels.USQC)
+        cy.then(() => {
+            cleanupDuplicateLibrary = true
+        })
+        openCreateLibraryDialog()
 
         //Verify error message when the CQL Library Name field is empty
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).click()
@@ -145,91 +118,86 @@ describe('CQL Library Validations', () => {
 
         //Verify error message when the CQL Library Name has special characters
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type('Test_@Measure')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters'
+        )
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name does not start with an Upper Case letter
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('testMeasure')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+        )
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has spaces
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('Test   Measure')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+        )
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has numbers
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('35657')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+        )
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has more than 255 characters
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name cannot be more than 64 characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox)
+            .clear()
+            .type(
+                'Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw'
+            )
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name cannot be more than 64 characters.'
+        )
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message for duplicate CQL Library Name
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('TestLibrary')
-        Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, CQLLibraryPage.cqlLibraryModelQICore)
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type(duplicateLibraryName)
+        selectUSQCModel()
+        enterLibraryDescription()
+        selectPublisher()
 
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //enter / select a publisher value
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
-
+        cy.intercept('POST', '/api/cql-libraries').as('duplicateLibrary')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).click()
-        cy.get(CQLLibraryPage.duplicateCQLLibraryNameError).should('contain.text', 'Library name must be unique. cqlLibraryName : Library name must be unique.')
-
+        cy.wait('@duplicateLibrary').its('response.statusCode').should('eq', 400)
+        cy.get(CQLLibraryPage.duplicateCQLLibraryNameError).should(
+            'contain.text',
+            'Library name must be unique. cqlLibraryName : Library name must be unique.'
+        )
     })
 
     it('CQL Library Model Validations', () => {
-
         //Verify error message for empty CQL Library Model
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+        openCreateLibraryDialog()
 
         cy.get(CQLLibraryPage.newCQLLibName).should('exist')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.visible')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.enabled')
         cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName)
 
-        cy.get(CQLLibraryPage.cqlLibraryModalField).click()
-        cy.get(CQLLibraryPage.cqlLibraryCreateForm).click()
-        cy.get(TestCasesPage.testCaseStatus).click()
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
+        cy.get('body').type('{esc}')
+        cy.get(CQLLibraryPage.cqlLibraryDesc).click()
         cy.get(CQLLibraryPage.cqlLibraryModelErrorMsg).should('contain.text', 'A CQL library model is required.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
     })
 
     it('CQL Library Description Validations', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         let LibraryName = CQLLibraryName + randValue
 
-        //navigate to the CQL Library page and create new CQL Library
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+        openCreateLibraryDialog()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryModalField).click()
-        cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
+        selectUSQCModel()
 
         //move to and then away from the description detail field
         cy.get(CQLLibraryPage.cqlLibraryDesc).click()
@@ -237,32 +205,16 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibDescHelperText).should('contain.text', 'Description is required.')
         cy.get(CQLLibraryPage.cqlLibDescHelperText).should('have.color', '#AE1C1C')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
-
-
     })
 
     it('CQL Library Publisher Validations', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         let LibraryName = CQLLibraryName + randValue
 
-        //navigate to the CQL Library page and create new CQL Library
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+        openCreateLibraryDialog()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
-        cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
+        selectUSQCModel()
+        enterLibraryDescription()
 
         //move to and then away from the publisher field
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).dblclick()
@@ -272,58 +224,28 @@ describe('CQL Library Validations', () => {
     })
 
     it('Create new CQL Library Creation with CQL', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = Math.floor(Math.random() * 1000 + 1)
         let LibraryName = CQLLibraryName + randValue
 
-        //navigate to the CQL Library page and create new CQL Library
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+        openCreateLibraryDialog()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
-        cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //enter / select a publisher value
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get('#publisher-option-0').click()
+        selectUSQCModel()
+        enterLibraryDescription()
+        selectPublisher()
 
         CQLLibraryPage.clickCreateLibraryButton()
 
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
-        //Click Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/AdultOutpatientEncountersQICore4Entry.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        searchForAndEditLibrary(LibraryName)
+        Utilities.typeFileContents('cypress/fixtures/USQCTestLibrary.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        //Click Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        searchForAndEditLibrary(LibraryName)
 
         cy.get(CQLLibraryPage.currentCQLLibName).should('contain.value', LibraryName)
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).invoke('text').then((text) => {
-            expect(text.length).greaterThan(700)
-        })
-
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('contain.text', "using USQualityCore version '0.5.0'")
     })
 })

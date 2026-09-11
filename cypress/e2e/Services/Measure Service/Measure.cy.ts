@@ -25,7 +25,8 @@ const measureCQL = MeasureCQL.SBTEST_CQL
 const eCQMTitle = 'eCQMTitle'
 const randValue = Math.floor(Math.random() * 1000 + 1)
 const cqlLibraryNameValidationError =
-    'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.'
+    'Measure Library Name must start with an uppercase letter and can only contain alphanumeric characters.'
+const cqlLibraryNameUnderscoreValidationError = 'Measure Library Name can not contain underscores.'
 const rejectedMeasureNameInputs = ['Test<abc>', 'Test{abc}', '%7Bbase%7D*1', '%7Bbase%7D-0']
 const rejectedCqlLibraryNameInputs = ['Test<abc>', 'Test{abc}', 'Test!@#%$^&', '%7Bbase%7D*1', '%7Bbase%7D-0']
 const measureValidationBody = (overrides: Partial<MeasureBody> = {}): Partial<MeasureBody> => ({
@@ -348,41 +349,41 @@ describe('Measure Service: CQL Library name validations', () => {
     })
 
     it('Validation Error: CQL library Name contains spaces', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: 'test',
-            cqlLibraryName: 'Test 222'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: 'test',
+                cqlLibraryName: 'Test 222'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
-            console.log('validations errors were:\n' + response.body.validationErrors.measure.toString())
-            expect(response.body.validationErrors.measure).to.eql(
-                cqlLibraryNameValidationError
-            )
+            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
         })
     })
 
     it('Validation Error: CQL library Name contains underscores', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: 'test',
-            cqlLibraryName: 'Test_222'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: 'test',
+                cqlLibraryName: 'Test_222'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
-            console.log('validations errors were:\n' + response.body.validationErrors.measure.toString())
-            expect(response.body.validationErrors.measure).to.eql(
-                cqlLibraryNameValidationError
-            )
+            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameUnderscoreValidationError)
         })
     })
 
     it('Validation Error: CQL library Name contains special characters', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: 'test',
-            cqlLibraryName: 'Test!@#%$^&'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: 'test',
+                cqlLibraryName: 'Test!@#%$^&'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
-            console.log('validations errors were:\n' + response.body.validationErrors.measure.toString())
-            expect(response.body.validationErrors.measure).to.eql(
-                cqlLibraryNameValidationError
-            )
+            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
         })
     })
 
@@ -390,63 +391,69 @@ describe('Measure Service: CQL Library name validations', () => {
         .filter((invalidCqlLibraryName) => invalidCqlLibraryName !== 'Test!@#%$^&')
         .forEach((invalidCqlLibraryName) => {
             it(`Validation Error: CQL library Name rejects ${invalidCqlLibraryName}`, () => {
-                TestData.requestMeasure(measureValidationBody({
-                    measureName: 'test',
-                    cqlLibraryName: invalidCqlLibraryName
-                }), { failOnStatusCode: false }).then((response) => {
+                TestData.requestMeasure(
+                    measureValidationBody({
+                        measureName: 'test',
+                        cqlLibraryName: invalidCqlLibraryName
+                    }),
+                    { failOnStatusCode: false }
+                ).then((response) => {
                     expect(response.status).to.eql(400)
                     expect(response.body.id).to.not.exist
-                    expect(response.body.validationErrors.measure).to.eql(cqlLibraryNameValidationError)
+                    expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
                 })
             })
         })
 
     it('Validation Error: CQL library Name empty', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: measureNameU,
-            cqlLibraryName: ''
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: measureNameU,
+                cqlLibraryName: ''
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.validationErrors.cqlLibraryName).to.eql('Measure Library Name is required.')
         })
     })
 
     it('Validation Error: CQL library Name does not starts with an upper case letter', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: measureNameU,
-            cqlLibraryName: 'test'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: measureNameU,
+                cqlLibraryName: 'test'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
-            console.log('validations errors were:\n' + response.body.validationErrors.measure.toString())
-            expect(response.body.validationErrors.measure).to.eql(
-                cqlLibraryNameValidationError
-            )
+            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
         })
     })
 
     it('Validation Error: CQL library Name does not contain alphabets', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: 'test',
-            cqlLibraryName: '123456'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: 'test',
+                cqlLibraryName: '123456'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
-            console.log('validations errors were:\n' + response.body.validationErrors.measure.toString())
-            expect(response.body.validationErrors.measure).to.eql(
-                cqlLibraryNameValidationError
-            )
+            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
         })
     })
 
     it('Validation Error: CQL library Name start with number', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: 'test',
-            cqlLibraryName: '123Test'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: 'test',
+                cqlLibraryName: '123Test'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
-            console.log('validations errors were:\n' + response.body.validationErrors.measure.toString())
-            expect(response.body.validationErrors.measure).to.eql(
-                cqlLibraryNameValidationError
-            )
+            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
         })
     })
 
@@ -459,21 +466,19 @@ describe('Measure Service: CQL Library name validations', () => {
             measureValidationBody({
                 measureName: 'measureName6677',
                 cqlLibraryName: CQLLibraryName,
-                    cql: 'library SimpleFhirMeasure version \'0.0.001\'\n\nusing FHIR version \'4.0.1\'\n\ninclude FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\nparameter "Measurement Period" Interval<DateTime>\n\ncontext Patient\n\ndefine "ipp":\n  exists ["Encounter"] E where E.period.start during "Measurement Period"\n\ndefine "denom":\n "ipp"\n\ndefine "num":\n  exists ["Encounter"] E where E.status ~ \'finished\'\n\ndefine "numeratorExclusion":\n    "num"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function "isFinishedEncounter"(Enc Encounter):\n  true\n',
-                    elmJson:
-                        '{"library":{"identifier":{"id":"SimpleFhirMeasure","version":"0.0.001"},"schemaIdentifier":{"id":"urn:hl7-org:elm","version":"r1"},"usings":{"def":[{"localIdentifier":"System","uri":"urn:hl7-org:elm-types:r1"},{"localId":"1","locator":"3:1-3:26","localIdentifier":"FHIR","uri":"http://hl7.org/fhir","version":"4.0.1","annotation":[{"type":"Annotation","s":{"r":"1","s":[{"value":["","using "]},{"s":[{"value":["FHIR"]}]},{"value":[" version ","\'4.0.1\'"]}]}}]}]},"includes":{"def":[{"localId":"2","locator":"5:1-5:56","localIdentifier":"FHIRHelpers","path":"FHIRHelpers","version":"4.1.000","annotation":[{"type":"Annotation","s":{"r":"2","s":[{"value":["","include "]},{"s":[{"value":["FHIRHelpers"]}]},{"value":[" version ","\'4.1.000\'"," called ","FHIRHelpers"]}]}}]}]},"parameters":{"def":[{"localId":"5","locator":"7:1-7:49","name":"Measurement Period","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"5","s":[{"value":["","parameter ","\\"Measurement Period\\""," "]},{"r":"4","s":[{"value":["Interval<"]},{"r":"3","s":[{"value":["DateTime"]}]},{"value":[">"]}]}]}}],"resultTypeSpecifier":{"type":"IntervalTypeSpecifier","pointType":{"name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}},"parameterTypeSpecifier":{"localId":"4","locator":"7:32-7:49","type":"IntervalTypeSpecifier","resultTypeSpecifier":{"type":"IntervalTypeSpecifier","pointType":{"name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}},"pointType":{"localId":"3","locator":"7:41-7:48","resultTypeName":"{urn:hl7-org:elm-types:r1}DateTime","name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}}}]},"contexts":{"def":[{"locator":"9:1-9:15","name":"Patient"}]},"statements":{"def":[{"locator":"9:1-9:15","name":"Patient","context":"Patient","expression":{"type":"SingletonFrom","operand":{"locator":"9:1-9:15","dataType":"{http://hl7.org/fhir}Patient","templateId":"http://hl7.org/fhir/StructureDefinition/Patient","type":"Retrieve"}}},{"localId":"15","locator":"11:1-12:73","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"ipp","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"15","s":[{"value":["","define ","\\"ipp\\"",":\\n  "]},{"r":"14","s":[{"value":["exists "]},{"r":"13","s":[{"s":[{"r":"7","s":[{"r":"6","s":[{"r":"6","s":[{"value":["[","\\"Encounter\\"","]"]}]}]},{"value":[" ","E"]}]}]},{"value":[" "]},{"r":"12","s":[{"value":["where "]},{"r":"12","s":[{"r":"10","s":[{"r":"9","s":[{"r":"8","s":[{"value":["E"]}]},{"value":["."]},{"r":"9","s":[{"value":["period"]}]}]},{"value":["."]},{"r":"10","s":[{"value":["start"]}]}]},{"r":"12","value":[" ","during"," "]},{"r":"11","s":[{"value":["\\"Measurement Period\\""]}]}]}]}]}]}]}}],"expression":{"localId":"14","locator":"12:3-12:73","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"Exists","operand":{"localId":"13","locator":"12:10-12:73","type":"Query","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"source":[{"localId":"7","locator":"12:10-12:24","alias":"E","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"expression":{"localId":"6","locator":"12:10-12:22","dataType":"{http://hl7.org/fhir}Encounter","templateId":"http://hl7.org/fhir/StructureDefinition/Encounter","type":"Retrieve","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}}}}],"relationship":[],"where":{"localId":"12","locator":"12:26-12:73","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"In","operand":[{"name":"ToDateTime","libraryName":"FHIRHelpers","type":"FunctionRef","operand":[{"localId":"10","locator":"12:32-12:45","resultTypeName":"{http://hl7.org/fhir}dateTime","path":"start","type":"Property","source":{"localId":"9","locator":"12:32-12:39","resultTypeName":"{http://hl7.org/fhir}Period","path":"period","scope":"E","type":"Property"}}]},{"localId":"11","locator":"12:54-12:73","name":"Measurement Period","type":"ParameterRef","resultTypeSpecifier":{"type":"IntervalTypeSpecifier","pointType":{"name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}}}]}}}},{"localId":"17","locator":"14:1-15:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"denom","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"17","s":[{"value":["","define ","\\"denom\\"",":\\n "]},{"r":"16","s":[{"value":["\\"ipp\\""]}]}]}}],"expression":{"localId":"16","locator":"15:2-15:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"ipp","type":"ExpressionRef"}},{"localId":"26","locator":"17:1-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"num","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"26","s":[{"value":["","define ","\\"num\\"",":\\n  "]},{"r":"25","s":[{"value":["exists "]},{"r":"24","s":[{"s":[{"r":"19","s":[{"r":"18","s":[{"r":"18","s":[{"value":["[","\\"Encounter\\"","]"]}]}]},{"value":[" ","E"]}]}]},{"value":[" "]},{"r":"23","s":[{"value":["where "]},{"r":"23","s":[{"r":"21","s":[{"r":"20","s":[{"value":["E"]}]},{"value":["."]},{"r":"21","s":[{"value":["status"]}]}]},{"value":[" ","~"," "]},{"r":"22","s":[{"value":["\'finished\'"]}]}]}]}]}]}]}}],"expression":{"localId":"25","locator":"18:3-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"Exists","operand":{"localId":"24","locator":"18:10-18:52","type":"Query","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"source":[{"localId":"19","locator":"18:10-18:24","alias":"E","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"expression":{"localId":"18","locator":"18:10-18:22","dataType":"{http://hl7.org/fhir}Encounter","templateId":"http://hl7.org/fhir/StructureDefinition/Encounter","type":"Retrieve","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}}}}],"relationship":[],"where":{"localId":"23","locator":"18:26-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"Equivalent","operand":[{"name":"ToString","libraryName":"FHIRHelpers","type":"FunctionRef","operand":[{"localId":"21","locator":"18:32-18:39","resultTypeName":"{http://hl7.org/fhir}EncounterStatus","path":"status","scope":"E","type":"Property"}]},{"localId":"22","locator":"18:43-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}String","valueType":"{urn:hl7-org:elm-types:r1}String","value":"finished","type":"Literal"}]}}}},{"localId":"28","locator":"20:1-21:9","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"numeratorExclusion","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"28","s":[{"value":["","define ","\\"numeratorExclusion\\"",":\\n    "]},{"r":"27","s":[{"value":["\\"num\\""]}]}]}}],"expression":{"localId":"27","locator":"21:5-21:9","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"num","type":"ExpressionRef"}},{"localId":"47","locator":"23:1-32:12","resultTypeName":"{urn:hl7-org:elm-types:r1}Code","name":"ToCode","context":"Patient","accessLevel":"Public","type":"FunctionDef","annotation":[{"type":"Annotation","s":{"r":"47","s":[{"value":["","define function ","ToCode","(","coding"," "]},{"r":"29","s":[{"value":["FHIR",".","Coding"]}]},{"value":["):\\n "]},{"r":"46","s":[{"r":"46","s":[{"value":["if "]},{"r":"31","s":[{"r":"30","s":[{"value":["coding"]}]},{"value":[" is null"]}]},{"r":"32","value":[" then\\n   ","null","\\n      else\\n        "]},{"r":"45","s":[{"value":["System",".","Code"," {\\n           "]},{"s":[{"value":["code",": "]},{"r":"35","s":[{"r":"34","s":[{"r":"33","s":[{"value":["coding"]}]},{"value":["."]},{"r":"34","s":[{"value":["code"]}]}]},{"value":["."]},{"r":"35","s":[{"value":["value"]}]}]}]},{"value":[",\\n           "]},{"s":[{"value":["system",": "]},{"r":"38","s":[{"r":"37","s":[{"r":"36","s":[{"value":["coding"]}]},{"value":["."]},{"r":"37","s":[{"value":["system"]}]}]},{"value":["."]},{"r":"38","s":[{"value":["value"]}]}]}]},{"value":[",\\n          "]},{"s":[{"value":["version",": "]},{"r":"41","s":[{"r":"40","s":[{"r":"39","s":[{"value":["coding"]}]},{"value":["."]},{"r":"40","s":[{"value":["version"]}]}]},{"value":["."]},{"r":"41","s":[{"value":["value"]}]}]}]},{"value":[",\\n           "]},{"s":[{"value":["display",": "]},{"r":"44","s":[{"r":"43","s":[{"r":"42","s":[{"value":["coding"]}]},{"value":["."]},{"r":"43","s":[{"value":["display"]}]}]},{"value":["."]},{"r":"44","s":[{"value":["value"]}]}]}]},{"value":["\\n           }"]}]}]}]}]}}],"expression":{"localId":"46","locator":"24:2-32:12","resultTypeName":"{urn:hl7-org:elm-types:r1}Code","type":"If","condition":{"localId":"31","locator":"24:5-24:18","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"IsNull","operand":{"localId":"30","locator":"24:5-24:10","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}},"then":{"asType":"{urn:hl7-org:elm-types:r1}Code","type":"As","operand":{"localId":"32","locator":"25:4-25:7","resultTypeName":"{urn:hl7-org:elm-types:r1}Any","type":"Null"}},"else":{"localId":"45","locator":"27:9-32:12","resultTypeName":"{urn:hl7-org:elm-types:r1}Code","classType":"{urn:hl7-org:elm-types:r1}Code","type":"Instance","element":[{"name":"code","value":{"localId":"35","locator":"28:18-28:34","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"34","locator":"28:18-28:28","resultTypeName":"{http://hl7.org/fhir}code","path":"code","type":"Property","source":{"localId":"33","locator":"28:18-28:23","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}},{"name":"system","value":{"localId":"38","locator":"29:20-29:38","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"37","locator":"29:20-29:32","resultTypeName":"{http://hl7.org/fhir}uri","path":"system","type":"Property","source":{"localId":"36","locator":"29:20-29:25","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}},{"name":"version","value":{"localId":"41","locator":"30:20-30:39","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"40","locator":"30:20-30:33","resultTypeName":"{http://hl7.org/fhir}string","path":"version","type":"Property","source":{"localId":"39","locator":"30:20-30:25","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}},{"name":"display","value":{"localId":"44","locator":"31:21-31:40","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"43","locator":"31:21-31:34","resultTypeName":"{http://hl7.org/fhir}string","path":"display","type":"Property","source":{"localId":"42","locator":"31:21-31:26","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}}]}},"operand":[{"name":"coding","operandTypeSpecifier":{"localId":"29","locator":"23:31-23:41","resultTypeName":"{http://hl7.org/fhir}Coding","name":"{http://hl7.org/fhir}Coding","type":"NamedTypeSpecifier"}}]},{"localId":"50","locator":"34:1-35:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"fun","context":"Patient","accessLevel":"Public","type":"FunctionDef","annotation":[{"type":"Annotation","s":{"r":"50","s":[{"value":["","define function ","fun","(","notPascalCase"," "]},{"r":"48","s":[{"value":["Integer"]}]},{"value":[" ):\\n  "]},{"r":"49","s":[{"r":"49","value":["true"]}]}]}}],"expression":{"localId":"49","locator":"35:3-35:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","valueType":"{urn:hl7-org:elm-types:r1}Boolean","value":"true","type":"Literal"},"operand":[{"name":"notPascalCase","operandTypeSpecifier":{"localId":"48","locator":"34:35-34:41","resultTypeName":"{urn:hl7-org:elm-types:r1}Integer","name":"{urn:hl7-org:elm-types:r1}Integer","type":"NamedTypeSpecifier"}}]},{"localId":"53","locator":"37:1-38:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"isFinishedEncounter","context":"Patient","accessLevel":"Public","type":"FunctionDef","annotation":[{"type":"Annotation","s":{"r":"53","s":[{"value":["","define function ","\\"isFinishedEncounter\\"","(","Enc"," "]},{"r":"51","s":[{"value":["Encounter"]}]},{"value":["):\\n  "]},{"r":"52","s":[{"r":"52","value":["true"]}]}]}}],"expression":{"localId":"52","locator":"38:3-38:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","valueType":"{urn:hl7-org:elm-types:r1}Boolean","value":"true","type":"Literal"},"operand":[{"name":"Enc","operandTypeSpecifier":{"localId":"51","locator":"37:43-37:51","resultTypeName":"{http://hl7.org/fhir}Encounter","name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}}]}]}},"externalErrors":[]}',
-                   measureScoring: 'Cohort',
-                   ecqmTitle: 'ecqmTitle',
-                   measurementPeriodStart: '2020-01-01T05:00:00.000+00:00',
-                   measurementPeriodEnd: '2023-01-01T05:00:00.000+00:00'
+                cql: 'library SimpleFhirMeasure version \'0.0.001\'\n\nusing FHIR version \'4.0.1\'\n\ninclude FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\nparameter "Measurement Period" Interval<DateTime>\n\ncontext Patient\n\ndefine "ipp":\n  exists ["Encounter"] E where E.period.start during "Measurement Period"\n\ndefine "denom":\n "ipp"\n\ndefine "num":\n  exists ["Encounter"] E where E.status ~ \'finished\'\n\ndefine "numeratorExclusion":\n    "num"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function "isFinishedEncounter"(Enc Encounter):\n  true\n',
+                elmJson:
+                    '{"library":{"identifier":{"id":"SimpleFhirMeasure","version":"0.0.001"},"schemaIdentifier":{"id":"urn:hl7-org:elm","version":"r1"},"usings":{"def":[{"localIdentifier":"System","uri":"urn:hl7-org:elm-types:r1"},{"localId":"1","locator":"3:1-3:26","localIdentifier":"FHIR","uri":"http://hl7.org/fhir","version":"4.0.1","annotation":[{"type":"Annotation","s":{"r":"1","s":[{"value":["","using "]},{"s":[{"value":["FHIR"]}]},{"value":[" version ","\'4.0.1\'"]}]}}]}]},"includes":{"def":[{"localId":"2","locator":"5:1-5:56","localIdentifier":"FHIRHelpers","path":"FHIRHelpers","version":"4.1.000","annotation":[{"type":"Annotation","s":{"r":"2","s":[{"value":["","include "]},{"s":[{"value":["FHIRHelpers"]}]},{"value":[" version ","\'4.1.000\'"," called ","FHIRHelpers"]}]}}]}]},"parameters":{"def":[{"localId":"5","locator":"7:1-7:49","name":"Measurement Period","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"5","s":[{"value":["","parameter ","\\"Measurement Period\\""," "]},{"r":"4","s":[{"value":["Interval<"]},{"r":"3","s":[{"value":["DateTime"]}]},{"value":[">"]}]}]}}],"resultTypeSpecifier":{"type":"IntervalTypeSpecifier","pointType":{"name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}},"parameterTypeSpecifier":{"localId":"4","locator":"7:32-7:49","type":"IntervalTypeSpecifier","resultTypeSpecifier":{"type":"IntervalTypeSpecifier","pointType":{"name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}},"pointType":{"localId":"3","locator":"7:41-7:48","resultTypeName":"{urn:hl7-org:elm-types:r1}DateTime","name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}}}]},"contexts":{"def":[{"locator":"9:1-9:15","name":"Patient"}]},"statements":{"def":[{"locator":"9:1-9:15","name":"Patient","context":"Patient","expression":{"type":"SingletonFrom","operand":{"locator":"9:1-9:15","dataType":"{http://hl7.org/fhir}Patient","templateId":"http://hl7.org/fhir/StructureDefinition/Patient","type":"Retrieve"}}},{"localId":"15","locator":"11:1-12:73","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"ipp","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"15","s":[{"value":["","define ","\\"ipp\\"",":\\n  "]},{"r":"14","s":[{"value":["exists "]},{"r":"13","s":[{"s":[{"r":"7","s":[{"r":"6","s":[{"r":"6","s":[{"value":["[","\\"Encounter\\"","]"]}]}]},{"value":[" ","E"]}]}]},{"value":[" "]},{"r":"12","s":[{"value":["where "]},{"r":"12","s":[{"r":"10","s":[{"r":"9","s":[{"r":"8","s":[{"value":["E"]}]},{"value":["."]},{"r":"9","s":[{"value":["period"]}]}]},{"value":["."]},{"r":"10","s":[{"value":["start"]}]}]},{"r":"12","value":[" ","during"," "]},{"r":"11","s":[{"value":["\\"Measurement Period\\""]}]}]}]}]}]}]}}],"expression":{"localId":"14","locator":"12:3-12:73","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"Exists","operand":{"localId":"13","locator":"12:10-12:73","type":"Query","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"source":[{"localId":"7","locator":"12:10-12:24","alias":"E","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"expression":{"localId":"6","locator":"12:10-12:22","dataType":"{http://hl7.org/fhir}Encounter","templateId":"http://hl7.org/fhir/StructureDefinition/Encounter","type":"Retrieve","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}}}}],"relationship":[],"where":{"localId":"12","locator":"12:26-12:73","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"In","operand":[{"name":"ToDateTime","libraryName":"FHIRHelpers","type":"FunctionRef","operand":[{"localId":"10","locator":"12:32-12:45","resultTypeName":"{http://hl7.org/fhir}dateTime","path":"start","type":"Property","source":{"localId":"9","locator":"12:32-12:39","resultTypeName":"{http://hl7.org/fhir}Period","path":"period","scope":"E","type":"Property"}}]},{"localId":"11","locator":"12:54-12:73","name":"Measurement Period","type":"ParameterRef","resultTypeSpecifier":{"type":"IntervalTypeSpecifier","pointType":{"name":"{urn:hl7-org:elm-types:r1}DateTime","type":"NamedTypeSpecifier"}}}]}}}},{"localId":"17","locator":"14:1-15:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"denom","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"17","s":[{"value":["","define ","\\"denom\\"",":\\n "]},{"r":"16","s":[{"value":["\\"ipp\\""]}]}]}}],"expression":{"localId":"16","locator":"15:2-15:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"ipp","type":"ExpressionRef"}},{"localId":"26","locator":"17:1-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"num","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"26","s":[{"value":["","define ","\\"num\\"",":\\n  "]},{"r":"25","s":[{"value":["exists "]},{"r":"24","s":[{"s":[{"r":"19","s":[{"r":"18","s":[{"r":"18","s":[{"value":["[","\\"Encounter\\"","]"]}]}]},{"value":[" ","E"]}]}]},{"value":[" "]},{"r":"23","s":[{"value":["where "]},{"r":"23","s":[{"r":"21","s":[{"r":"20","s":[{"value":["E"]}]},{"value":["."]},{"r":"21","s":[{"value":["status"]}]}]},{"value":[" ","~"," "]},{"r":"22","s":[{"value":["\'finished\'"]}]}]}]}]}]}]}}],"expression":{"localId":"25","locator":"18:3-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"Exists","operand":{"localId":"24","locator":"18:10-18:52","type":"Query","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"source":[{"localId":"19","locator":"18:10-18:24","alias":"E","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}},"expression":{"localId":"18","locator":"18:10-18:22","dataType":"{http://hl7.org/fhir}Encounter","templateId":"http://hl7.org/fhir/StructureDefinition/Encounter","type":"Retrieve","resultTypeSpecifier":{"type":"ListTypeSpecifier","elementType":{"name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}}}}],"relationship":[],"where":{"localId":"23","locator":"18:26-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"Equivalent","operand":[{"name":"ToString","libraryName":"FHIRHelpers","type":"FunctionRef","operand":[{"localId":"21","locator":"18:32-18:39","resultTypeName":"{http://hl7.org/fhir}EncounterStatus","path":"status","scope":"E","type":"Property"}]},{"localId":"22","locator":"18:43-18:52","resultTypeName":"{urn:hl7-org:elm-types:r1}String","valueType":"{urn:hl7-org:elm-types:r1}String","value":"finished","type":"Literal"}]}}}},{"localId":"28","locator":"20:1-21:9","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"numeratorExclusion","context":"Patient","accessLevel":"Public","annotation":[{"type":"Annotation","s":{"r":"28","s":[{"value":["","define ","\\"numeratorExclusion\\"",":\\n    "]},{"r":"27","s":[{"value":["\\"num\\""]}]}]}}],"expression":{"localId":"27","locator":"21:5-21:9","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"num","type":"ExpressionRef"}},{"localId":"47","locator":"23:1-32:12","resultTypeName":"{urn:hl7-org:elm-types:r1}Code","name":"ToCode","context":"Patient","accessLevel":"Public","type":"FunctionDef","annotation":[{"type":"Annotation","s":{"r":"47","s":[{"value":["","define function ","ToCode","(","coding"," "]},{"r":"29","s":[{"value":["FHIR",".","Coding"]}]},{"value":["):\\n "]},{"r":"46","s":[{"r":"46","s":[{"value":["if "]},{"r":"31","s":[{"r":"30","s":[{"value":["coding"]}]},{"value":[" is null"]}]},{"r":"32","value":[" then\\n   ","null","\\n      else\\n        "]},{"r":"45","s":[{"value":["System",".","Code"," {\\n           "]},{"s":[{"value":["code",": "]},{"r":"35","s":[{"r":"34","s":[{"r":"33","s":[{"value":["coding"]}]},{"value":["."]},{"r":"34","s":[{"value":["code"]}]}]},{"value":["."]},{"r":"35","s":[{"value":["value"]}]}]}]},{"value":[",\\n           "]},{"s":[{"value":["system",": "]},{"r":"38","s":[{"r":"37","s":[{"r":"36","s":[{"value":["coding"]}]},{"value":["."]},{"r":"37","s":[{"value":["system"]}]}]},{"value":["."]},{"r":"38","s":[{"value":["value"]}]}]}]},{"value":[",\\n          "]},{"s":[{"value":["version",": "]},{"r":"41","s":[{"r":"40","s":[{"r":"39","s":[{"value":["coding"]}]},{"value":["."]},{"r":"40","s":[{"value":["version"]}]}]},{"value":["."]},{"r":"41","s":[{"value":["value"]}]}]}]},{"value":[",\\n           "]},{"s":[{"value":["display",": "]},{"r":"44","s":[{"r":"43","s":[{"r":"42","s":[{"value":["coding"]}]},{"value":["."]},{"r":"43","s":[{"value":["display"]}]}]},{"value":["."]},{"r":"44","s":[{"value":["value"]}]}]}]},{"value":["\\n           }"]}]}]}]}]}}],"expression":{"localId":"46","locator":"24:2-32:12","resultTypeName":"{urn:hl7-org:elm-types:r1}Code","type":"If","condition":{"localId":"31","locator":"24:5-24:18","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","type":"IsNull","operand":{"localId":"30","locator":"24:5-24:10","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}},"then":{"asType":"{urn:hl7-org:elm-types:r1}Code","type":"As","operand":{"localId":"32","locator":"25:4-25:7","resultTypeName":"{urn:hl7-org:elm-types:r1}Any","type":"Null"}},"else":{"localId":"45","locator":"27:9-32:12","resultTypeName":"{urn:hl7-org:elm-types:r1}Code","classType":"{urn:hl7-org:elm-types:r1}Code","type":"Instance","element":[{"name":"code","value":{"localId":"35","locator":"28:18-28:34","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"34","locator":"28:18-28:28","resultTypeName":"{http://hl7.org/fhir}code","path":"code","type":"Property","source":{"localId":"33","locator":"28:18-28:23","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}},{"name":"system","value":{"localId":"38","locator":"29:20-29:38","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"37","locator":"29:20-29:32","resultTypeName":"{http://hl7.org/fhir}uri","path":"system","type":"Property","source":{"localId":"36","locator":"29:20-29:25","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}},{"name":"version","value":{"localId":"41","locator":"30:20-30:39","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"40","locator":"30:20-30:33","resultTypeName":"{http://hl7.org/fhir}string","path":"version","type":"Property","source":{"localId":"39","locator":"30:20-30:25","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}},{"name":"display","value":{"localId":"44","locator":"31:21-31:40","resultTypeName":"{urn:hl7-org:elm-types:r1}String","path":"value","type":"Property","source":{"localId":"43","locator":"31:21-31:34","resultTypeName":"{http://hl7.org/fhir}string","path":"display","type":"Property","source":{"localId":"42","locator":"31:21-31:26","resultTypeName":"{http://hl7.org/fhir}Coding","name":"coding","type":"OperandRef"}}}}]}},"operand":[{"name":"coding","operandTypeSpecifier":{"localId":"29","locator":"23:31-23:41","resultTypeName":"{http://hl7.org/fhir}Coding","name":"{http://hl7.org/fhir}Coding","type":"NamedTypeSpecifier"}}]},{"localId":"50","locator":"34:1-35:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"fun","context":"Patient","accessLevel":"Public","type":"FunctionDef","annotation":[{"type":"Annotation","s":{"r":"50","s":[{"value":["","define function ","fun","(","notPascalCase"," "]},{"r":"48","s":[{"value":["Integer"]}]},{"value":[" ):\\n  "]},{"r":"49","s":[{"r":"49","value":["true"]}]}]}}],"expression":{"localId":"49","locator":"35:3-35:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","valueType":"{urn:hl7-org:elm-types:r1}Boolean","value":"true","type":"Literal"},"operand":[{"name":"notPascalCase","operandTypeSpecifier":{"localId":"48","locator":"34:35-34:41","resultTypeName":"{urn:hl7-org:elm-types:r1}Integer","name":"{urn:hl7-org:elm-types:r1}Integer","type":"NamedTypeSpecifier"}}]},{"localId":"53","locator":"37:1-38:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","name":"isFinishedEncounter","context":"Patient","accessLevel":"Public","type":"FunctionDef","annotation":[{"type":"Annotation","s":{"r":"53","s":[{"value":["","define function ","\\"isFinishedEncounter\\"","(","Enc"," "]},{"r":"51","s":[{"value":["Encounter"]}]},{"value":["):\\n  "]},{"r":"52","s":[{"r":"52","value":["true"]}]}]}}],"expression":{"localId":"52","locator":"38:3-38:6","resultTypeName":"{urn:hl7-org:elm-types:r1}Boolean","valueType":"{urn:hl7-org:elm-types:r1}Boolean","value":"true","type":"Literal"},"operand":[{"name":"Enc","operandTypeSpecifier":{"localId":"51","locator":"37:43-37:51","resultTypeName":"{http://hl7.org/fhir}Encounter","name":"{http://hl7.org/fhir}Encounter","type":"NamedTypeSpecifier"}}]}]}},"externalErrors":[]}',
+                measureScoring: 'Cohort',
+                ecqmTitle: 'ecqmTitle',
+                measurementPeriodStart: '2020-01-01T05:00:00.000+00:00',
+                measurementPeriodEnd: '2023-01-01T05:00:00.000+00:00'
             }),
             { failOnStatusCode: false }
         ).then((response) => {
             console.log(response)
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(
-                'CQL library with given name already exists.'
-            )
+            expect(response.body.validationErrors.cqlLibraryName).to.eql('CQL library with given name already exists.')
         })
     })
 })
@@ -493,10 +498,12 @@ describe('Measure Service: Authentication', () => {
                 headers: {
                     authorization: 'Bearer ' + accessToken + 'TEST'
                 },
-                body: TestData.measureBody(measureValidationBody({
-                    measureName: 'MeasureScoringTest' + Date.now(),
-                    cqlLibraryName: 'ScoringTestLibrary' + Date.now()
-                }))
+                body: TestData.measureBody(
+                    measureValidationBody({
+                        measureName: 'MeasureScoringTest' + Date.now(),
+                        cqlLibraryName: 'ScoringTestLibrary' + Date.now()
+                    })
+                )
             }).then((response) => {
                 expect(response.status).to.eql(401)
                 expect(response.statusText).to.eql('Unauthorized')
@@ -536,11 +543,16 @@ describe('Measure Service: Update Delete Flag', () => {
         OktaLogin.setupUserSession(true)
 
         TestData.readCurrentMeasureContext().then((context) => {
-            TestData.requestMeasureById('PUT', context.measureId, { failOnStatusCode: false }, updateDeleteMeasureBody(context, {
-                ecqmTitle: 'ecqmTitle',
-                measureScoring: 'Ratio',
-                active: false
-            })).then((response) => {
+            TestData.requestMeasureById(
+                'PUT',
+                context.measureId,
+                { failOnStatusCode: false },
+                updateDeleteMeasureBody(context, {
+                    ecqmTitle: 'ecqmTitle',
+                    measureScoring: 'Ratio',
+                    active: false
+                })
+            ).then((response) => {
                 expect(response.status).to.eql(403)
             })
         })
@@ -560,13 +572,21 @@ describe('Measure Service: Update Delete Flag', () => {
         TestData.readCurrentMeasureContext().then((context) => {
             const missingMeasureId = `${context.measureId}1`
 
-            TestData.requestMeasureById('PUT', missingMeasureId, { failOnStatusCode: false }, updateDeleteMeasureBody({
-                ...context,
-                measureId: missingMeasureId
-            }, {
-                active: false,
-                createdBy: defaultUser
-            })).then((response) => {
+            TestData.requestMeasureById(
+                'PUT',
+                missingMeasureId,
+                { failOnStatusCode: false },
+                updateDeleteMeasureBody(
+                    {
+                        ...context,
+                        measureId: missingMeasureId
+                    },
+                    {
+                        active: false,
+                        createdBy: defaultUser
+                    }
+                )
+            ).then((response) => {
                 expect(response.status).to.eql(404)
             })
         })
@@ -755,10 +775,13 @@ describe('Measurement Period Validations', () => {
     })
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measurementPeriodStart: mpEndDate,
-            measurementPeriodEnd: mpStartDate
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measurementPeriodStart: mpEndDate,
+                measurementPeriodEnd: mpStartDate
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.message).to.eql(
                 'Measurement period end date should be greater than measurement period start date.'
@@ -767,42 +790,54 @@ describe('Measurement Period Validations', () => {
     })
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measurementPeriodStart: '',
-            measurementPeriodEnd: ''
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measurementPeriodStart: '',
+                measurementPeriodEnd: ''
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.message).to.eql('Measurement period date is required and must be valid')
         })
     })
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measurementPeriodStart: '1823-01-01T05:00:00.000+0000',
-            measurementPeriodEnd: '3023-01-01T05:00:00.000+0000'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measurementPeriodStart: '1823-01-01T05:00:00.000+0000',
+                measurementPeriodEnd: '3023-01-01T05:00:00.000+0000'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.message).to.eql('Measurement periods should be between the years 1900 and 2099.')
         })
     })
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measurementPeriodStart: '01/01/2021',
-            measurementPeriodEnd: '01/01/2023'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measurementPeriodStart: '01/01/2021',
+                measurementPeriodEnd: '01/01/2023'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.error).to.eql('Bad Request')
         })
     })
 
     it('Verify error message when the Measurement Period start and end dates are same', () => {
-        TestData.requestMeasure(measureValidationBody({
-            measureName: 'TestMeasure5' + Date.now(),
-            cqlLibraryName: 'TestCql5' + Date.now(),
-            measurementPeriodStart: '2023-01-01T05:00:00.000+0000',
-            measurementPeriodEnd: '2023-01-01T05:00:00.000+0000'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                measureName: 'TestMeasure5' + Date.now(),
+                cqlLibraryName: 'TestCql5' + Date.now(),
+                measurementPeriodStart: '2023-01-01T05:00:00.000+0000',
+                measurementPeriodEnd: '2023-01-01T05:00:00.000+0000'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.error).to.eql('Bad Request')
             expect(response.body.message).to.eql(
@@ -818,18 +853,24 @@ describe('Measure Service: eCQM abbreviated title validations', () => {
     })
 
     it('Validation error: ecqm abbreviated title empty', () => {
-        TestData.requestMeasure(measureValidationBody({
-            ecqmTitle: ''
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                ecqmTitle: ''
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.validationErrors.ecqmTitle).to.eql('eCQM Abbreviated Title is required.')
         })
     })
 
     it('Validation error: ecqm abbreviated title more than 32 characters', () => {
-        TestData.requestMeasure(measureValidationBody({
-            ecqmTitle: 'This test is for measure name validation.This test is'
-        }), { failOnStatusCode: false }).then((response) => {
+        TestData.requestMeasure(
+            measureValidationBody({
+                ecqmTitle: 'This test is for measure name validation.This test is'
+            }),
+            { failOnStatusCode: false }
+        ).then((response) => {
             expect(response.status).to.eql(400)
             expect(response.body.validationErrors.ecqmTitle).to.eql(
                 'eCQM Abbreviated Title cannot be more than 32 characters.'

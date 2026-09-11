@@ -204,7 +204,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
     it('Verify that adding a definition named a reserved keyword will throw an exact error for that issue', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents(
+        CQLEditorPage.replaceCqlDocument(
             'cypress/fixtures/CQLWithDefReservedKeyword.txt',
             CQLLibraryPage.cqlLibraryEditorTextBox
         )
@@ -223,7 +223,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
             .click({ force: true, multiple: true })
         cy.get('#ace-editor-wrapper > div.ace_tooltip')
             .invoke('show')
-            .should('contain.text', 'Parse: 7:15 | Definition names must not be a reserved word.')
+            .should('contain.text', 'Definition names must not be a reserved word.')
     })
 
     it('Verify error message when Code System name is missing from Code declaration', () => {

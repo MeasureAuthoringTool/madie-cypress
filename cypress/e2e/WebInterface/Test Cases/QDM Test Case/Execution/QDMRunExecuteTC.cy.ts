@@ -392,7 +392,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
-        TestCasesPage.clickEditforCreatedTestCase()
+        TestCasesPage.clickEditforCreatedTestCase(false, TestCasesPage.runQDMTestCaseBtn)
 
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')

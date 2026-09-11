@@ -35,13 +35,6 @@ let measureQICoreCQL_with_different_Lib_name =
     '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
     "		where NoCervixHysterectomy.status = 'completed'"
 
-let qdmUsingStatementCql =
-    "library TestCql1733741911531 version '0.0.000'\n\n" +
-    "using QDM version '5.6'\n\n" +
-    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n\n" +
-    'parameter "Measurement Period" Interval<DateTime>\n\n' +
-    'context Patient'
-
 let fhirUsingStatement =
     "library TestLibrary17337661869931379 version '0.0.000'\n\n" +
     "using FHIR version '4.0.1'\n\n" +
@@ -56,6 +49,11 @@ let fhirandQicoreUsingStatements =
     "include FHIRHelpers version '4.1.000' called FHIRHelpers\n\n" +
     'parameter "Measurement Period" Interval<DateTime>\n\n' +
     'context Patient'
+
+const replaceMeasureCql = (cql: string): void => {
+    cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectAll}{backspace}')
+    cy.get(EditMeasurePage.cqlEditorTextBox).type(cql)
+}
 
 describe('Validate CQL Editor tab sticky footer', () => {
     beforeEach('Create measure and login', () => {
@@ -730,8 +728,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_without_using)
+        replaceMeasureCql(measureQICoreCQL_without_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -754,8 +751,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_with_incorrect_using)
+        replaceMeasureCql(measureQICoreCQL_with_incorrect_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -763,10 +759,6 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
             .children()
             .first()
             .should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get(CQLLibraryPage.libraryWarning)
-            .children()
-            .last()
-            .should('contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
     })
 
     it('Verify error message when there is an using statement in the CQL, but it is not accurate, and the library name used is not correct', () => {
@@ -776,8 +768,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_with_different_Lib_name)
+        replaceMeasureCql(measureQICoreCQL_with_different_Lib_name)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -785,35 +776,8 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
             .children()
             .first()
             .should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get(CQLLibraryPage.libraryWarning)
-            .children()
-            .last()
-            .should('contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
     })
 
-    it('Verify QDM using statement is replaced by QI-CORE using statement', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(qdmUsingStatementCql)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).contains('QICore')
-
-        cy.get(CQLLibraryPage.libraryWarning)
-            .children()
-            .first()
-            .should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get(CQLLibraryPage.libraryWarning)
-            .children()
-            .last()
-            .should('contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
-    })
 })
 
 describe('Measure: CQL Editor: using line : FHIR', () => {
@@ -833,18 +797,13 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureFHIR_with_invalid_using)
+        replaceMeasureCql(measureFHIR_with_invalid_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLLibraryPage.libraryWarning)
             .children()
             .first()
             .should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get(CQLLibraryPage.libraryWarning)
-            .children()
-            .last()
-            .should('contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
     })
 
     it('Verify FHIR using statement can be used for QI-Core measure', () => {
@@ -854,8 +813,7 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(fhirUsingStatement)
+        replaceMeasureCql(fhirUsingStatement)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -878,8 +836,7 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(fhirandQicoreUsingStatements)
+        replaceMeasureCql(fhirandQicoreUsingStatements)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 

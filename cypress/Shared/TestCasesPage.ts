@@ -763,13 +763,21 @@ export class TestCasesPage {
 
   public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false): void {
     if (navigateToJsonTab) {
-      this.activateTab(TestCasesPage.jsonTab, 30000)
+      cy.get(TestCasesPage.topJsonTab, { timeout: 30000 })
+        .should('not.have.attr', 'aria-disabled', 'true')
+        .then(($tab) => {
+          $tab[0].click()
+        })
     }
 
     this.waitForJsonEditorReady()
     cy.get(TestCasesPage.aceEditorJsonInput)
       .click({ force: true })
-      .clear({ force: true })
+      // Ace keeps its document separate from the hidden text input. Use
+      // keyboard commands so the existing document is replaced, rather than
+      // calling clear() on only the hidden input element.
+      .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
+    cy.get(TestCasesPage.aceEditorJsonInput)
       .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
   }
 
@@ -803,7 +811,7 @@ export class TestCasesPage {
   ): void {
     cy.intercept('PUT', '/api/measures/**/test-cases/**').as('saveTestCase')
 
-    this.activateTab(this.detailsTab, 30000)
+    this.openDetailsTab(this.testCaseTitle)
 
     // Title
     cy.get(this.testCaseTitle).should('exist').and('be.visible').and('be.enabled')
@@ -960,16 +968,20 @@ export class TestCasesPage {
     const { index } = options
 
     this.normalizeExpectedActualPopulationPanel()
-    const checkbox = cy.get(checkboxSelector)
-
-    if (typeof index === 'number') {
-      checkbox.eq(index).should('exist').check({ scrollBehavior: 'center' })
-      cy.get(checkboxSelector).eq(index).should('be.checked')
-      return
+    const getCheckbox = () => {
+      const checkbox = cy.get(checkboxSelector)
+      return typeof index === 'number' ? checkbox.eq(index) : checkbox
     }
 
-    checkbox.should('exist').check({ scrollBehavior: 'center' })
-    cy.get(checkboxSelector).should('be.checked')
+    getCheckbox()
+      .should('exist')
+      .then(($checkbox) => {
+        $checkbox[0].scrollIntoView({ block: 'center', inline: 'center' })
+      })
+      .should('be.visible')
+      .check({ scrollBehavior: false })
+
+    getCheckbox().should('be.checked')
   }
 
   public static clickExpectedActualCheckbox(
@@ -1000,14 +1012,21 @@ export class TestCasesPage {
     const { index } = options
 
     this.normalizeExpectedActualPopulationPanel()
-    const checkbox = cy.get(checkboxSelector)
-
-    if (typeof index === 'number') {
-      checkbox.eq(index).should('exist').uncheck({ scrollBehavior: 'center' })
-      return
+    const getCheckbox = () => {
+      const checkbox = cy.get(checkboxSelector)
+      return typeof index === 'number' ? checkbox.eq(index) : checkbox
     }
 
-    checkbox.should('exist').uncheck({ scrollBehavior: 'center' })
+    getCheckbox()
+      .should('exist')
+      .should('be.checked')
+      .then(($checkbox) => {
+        $checkbox[0].scrollIntoView({ block: 'center', inline: 'center' })
+      })
+      .should('be.visible')
+      .click({ scrollBehavior: false })
+
+    getCheckbox().should('not.be.checked')
   }
 
   public static typeExpectedActualValue(
@@ -1221,7 +1240,7 @@ export class TestCasesPage {
       .blur() // commit without Enter
   }
 
-  public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+  public static clickEditforCreatedTestCase(secondTestCase?: boolean, readySelector = this.testCaseTitle): void {
     let callstackIntercepted = false
 
     cy.intercept('PUT', '/api/fhir/cql/callstacks', (req) => {
@@ -1244,7 +1263,7 @@ export class TestCasesPage {
         })
 
         cy.url({ timeout: 60000 }).should('include', `/test-cases/${tcId}`)
-        cy.get(this.detailsTab, { timeout: 60000 }).should('exist')
+        this.openDetailsTab(readySelector)
       })
   }
 
@@ -1398,10 +1417,12 @@ export class TestCasesPage {
     }
 
     if (race) {
-      const raceSelector = `[data-value="${race}__2.16.840.1.114222.4.11.836"]`
-
       this.clickVisible(TestCasesPage.QDMRace, 50000)
-      this.clickVisible(raceSelector, 50000)
+      cy.get('[role="listbox"]', { timeout: 50000 })
+        .should('be.visible')
+        .contains('[role="option"]', race, { matchCase: false })
+        .should('be.visible')
+        .click()
       cy.get(TestCasesPage.editTestCaseSaveButton, { timeout: 30000 })
         .should('be.visible')
         .then(($saveButton) => {
@@ -1419,19 +1440,12 @@ export class TestCasesPage {
     }
 
     if (ethnicity) {
-      const ethnicityOne = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.837"]`
-      const ethnicityTwo = `[data-value="${ethnicity}__2.16.840.1.114222.4.11.877"]`
-
       this.clickVisible(TestCasesPage.QDMEthnicity, 30000)
-      cy.get('body', { timeout: 10000 }).then(($body: JQuery<HTMLElement>) => {
-        if ($body.find(ethnicityOne).length > 0) {
-          this.clickVisible(ethnicityOne, 30000)
-        } else if ($body.find(ethnicityTwo).length > 0) {
-          this.clickVisible(ethnicityTwo, 30000)
-        } else {
-          throw new Error('No matching ethnicity element found in the DOM.')
-        }
-      })
+      cy.get('[role="listbox"]', { timeout: 30000 })
+        .should('be.visible')
+        .contains('[role="option"]', ethnicity, { matchCase: false })
+        .should('be.visible')
+        .click()
     }
 
     if (dob) {

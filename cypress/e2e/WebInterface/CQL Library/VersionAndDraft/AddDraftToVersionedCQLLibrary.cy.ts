@@ -6,25 +6,23 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
-import { LibraryCQL } from "../../../../Shared/LibraryCQL"
+import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { TestData } from "../../../../Shared/TestData"
 
 let CqlLibraryOne: string
 const versionNumber = '1.0.000'
-const validCql = LibraryCQL.validCQL4QICORELib
+const validCql = QiCore6Cql.CQL_For_Cohort_Six
 
 describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
         CqlLibraryOne = 'DraftingLibrary' + Date.now()
-        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { cql: validCql })
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore6, { cql: validCql })
         CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
 
     it('Add Draft to the versioned Library from Owned Libraries', () => {
-        let currentUser = Cypress.env('selectedUser')
-        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
-        const filePath2 = 'cypress/fixtures/' + currentUser + '/cqlLibraryId2'
         //Add Draft to Versioned Library
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -38,15 +36,9 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
-        //intercept draft id once library is drafted
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
-        })
+        CQLLibrariesPage.interceptDraftCreation()
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
-
-        cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile(filePath2, request?.response?.body.id)
-        })
+        CQLLibrariesPage.storeDraftLibraryId()
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
 
@@ -56,13 +48,13 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.get(CQLLibrariesPage.row0_ExpandArrow).should('be.visible')
         cy.get(CQLLibrariesPage.row0_ExpandArrow).click()
         
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
+        TestData.readCqlLibraryId().then((libraryId) => {
+            cy.get('[data-testid="cqlLibrary-expanded-' + libraryId + '"]').should('be.visible')
             //Nested objects are using cqlLibrary-button abd not measue-name, so changing to cqlLibrary-button for nested objects
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
-            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
-            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.visible')
-            cy.get('[data-testid="cql-library-action-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="cqlLibrary-button-' + libraryId + '-version-content"]').should('contain.text', '1.0.000')
+            cy.get('[data-testid="cqlLibrary-button-' + libraryId + '-content"]').should('contain.text', CqlLibraryOne)
+            cy.get('[data-testid="cql-library-action-' + libraryId + '"]').should('be.visible')
+            cy.get('[data-testid="cql-library-action-' + libraryId + '"]').should('be.enabled')
         })
 
         cy.log('Draft Created Successfully')
@@ -73,12 +65,7 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     })
 
     it('Add Draft to the versioned Library from Edit Library screen', () => {
-        let currentUser = Cypress.env('selectedUser')
-        const filePath = 'cypress/fixtures/' + currentUser + '/cqlLibraryId'
-        //intercept draft id once library is drafted
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
-        })
+        CQLLibrariesPage.interceptDraftCreation()
 
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
@@ -86,9 +73,7 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         CQLLibrariesPage.clickViewforCreatedLibrary()
         CQLLibraryPage.actionCenter(EditLibraryActions.draft)
 
-        cy.wait('@draft', { timeout: 60000 }).then((request) => {
-            cy.writeFile(filePath, request?.response?.body.id)
-        })
+        CQLLibrariesPage.storeDraftLibraryId(0)
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibraryPage.draftBubble).should('be.visible')

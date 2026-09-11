@@ -1,6 +1,5 @@
 import { TestCasesPage } from './TestCasesPage'
 import { Utilities } from './Utilities'
-import { umlsLoginForm } from './umlsLoginForm'
 
 export class QDMElements {
     public static addElement(elementCategory: string, elementTitle: string): void {
@@ -106,11 +105,14 @@ export class QDMElements {
         cy.get(TestCasesPage.codeSystemSelector).click()
 
         const exactSelector = '[data-testid="code-system-option-' + codeSystem + '"]'
+        const legacySelector = '[data-testid="option-' + codeSystem + '"]'
         const fallbackPrefix = this.codeSystemFallbacks[codeSystem]
 
         cy.get('body').then(($body) => {
             if ($body.find(exactSelector).length > 0) {
                 cy.get(exactSelector).click()
+            } else if ($body.find(legacySelector).length > 0) {
+                cy.get(legacySelector).click()
             } else if (fallbackPrefix) {
                 cy.get('[data-testid^="code-system-option-' + fallbackPrefix + '"]')
                     .first()
@@ -151,11 +153,14 @@ export class QDMElements {
      */
     public static selectCodeSystemOption(codeSystem: string): void {
         const exactSelector = '[data-testid="code-system-option-' + codeSystem + '"]'
+        const legacySelector = '[data-testid="option-' + codeSystem + '"]'
         const fallbackPrefix = this.codeSystemFallbacks[codeSystem]
 
         cy.get('body').then(($body) => {
             if ($body.find(exactSelector).length > 0) {
                 cy.get(exactSelector).click()
+            } else if ($body.find(legacySelector).length > 0) {
+                cy.get(legacySelector).click()
             } else if (fallbackPrefix) {
                 cy.get('[data-testid^="code-system-option-' + fallbackPrefix + '"]')
                     .first()
@@ -167,6 +172,13 @@ export class QDMElements {
     }
 
     public static closeElement(): void {
-        cy.get(umlsLoginForm.closeGenericError).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCard)
+            .should('be.visible')
+            .find(TestCasesPage.ExpandedOSSDetailCardClose)
+            .should('have.length', 1)
+            .scrollIntoView()
+            .should('be.visible')
+            .click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).should('not.exist')
     }
 }

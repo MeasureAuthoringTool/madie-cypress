@@ -7,8 +7,7 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { MeasureDraftBody, TestData } from '../../../Shared/TestData'
 import { Utilities } from '../../../Shared/Utilities'
 
-// MAT-9813: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile Compare Measure Versions', () => {
+describe('Admin user profile Compare Measure Versions', () => {
     let measureName = ''
     let draftMeasureName = ''
     let cqlLibraryName = ''
@@ -64,6 +63,12 @@ describe.skip('Admin user profile Compare Measure Versions', () => {
         Utilities.deleteMeasure(undefined, undefined, false, false, 1)
     })
 
+    const searchForMeasureSet = () => {
+        cy.intercept('PUT', '**/api/admin/userProfile/*/measures/searches*').as('filteredProfileMeasures')
+        AdminUserProfilePage.submitMeasureSearch(measureName)
+        cy.wait('@filteredProfileMeasures').its('response.statusCode').should('eq', 200)
+    }
+
     const compareSelectedInstances = () => {
         TestData.readMeasureId(1).then((draftMeasureId) => {
             const draftRow = `[data-testid="measure-name-${draftMeasureId}_select"]`
@@ -89,6 +94,7 @@ describe.skip('Admin user profile Compare Measure Versions', () => {
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(profileOwner)
         cy.contains(profileOwner).should('be.visible')
+        searchForMeasureSet()
         cy.contains(`${AdminUserProfilePage.measuresTable} tbody td`, draftMeasureName).should('be.visible')
 
         compareSelectedInstances()
@@ -115,6 +121,7 @@ describe.skip('Admin user profile Compare Measure Versions', () => {
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(sharedProfileUser)
         AdminUserProfilePage.openMeasuresTab(MeasuresPage.sharedMeasures)
+        searchForMeasureSet()
         cy.contains(`${AdminUserProfilePage.measuresTable} tbody td`, draftMeasureName).should('be.visible')
 
         compareSelectedInstances()
@@ -151,6 +158,7 @@ describe.skip('Admin user profile Compare Measure Versions', () => {
 
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(profileOwner)
+        searchForMeasureSet()
         cy.contains(`${AdminUserProfilePage.measuresTable} tbody td`, secondDraftName).should('be.visible')
 
         TestData.readMeasureId(2).then((secondDraftId) => {

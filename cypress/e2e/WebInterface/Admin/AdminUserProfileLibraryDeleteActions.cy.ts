@@ -6,22 +6,15 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { SupportedModels } from '../../../Shared/CreateMeasurePage'
 import { TestData } from '../../../Shared/TestData'
 
-const describeAdminUserProfile = Cypress.env('environment') === 'test' ? describe.skip : describe
-
-// MAT-9816: Run in DEV until the AdminUserProfile delete action is proven.
-describeAdminUserProfile('Admin user profile library delete action states', () => {
+describe('Admin user profile library delete action states', () => {
     let libraryOwner = ''
     let profileUser = ''
     let libraryNamePrefix = ''
     let createdLibraryNumbers: number[] = []
 
-    const createLibrary = (
-        libraryName: string,
-        model: SupportedModels,
-        libraryNumber = 0
-    ): void => {
+    const createLibrary = (libraryName: string, model: SupportedModels, libraryNumber = 0): void => {
         createdLibraryNumbers.push(libraryNumber)
-        CQLLibraryPage.createLibraryAPI(libraryName, model, {
+        libraryOwner = CQLLibraryPage.createLibraryAPI(libraryName, model, {
             cql: model === SupportedModels.QDM ? LibraryCQL.validCQL4QDMLib : LibraryCQL.validCQL4QICORELib,
             libraryNumber
         })
@@ -56,7 +49,7 @@ describeAdminUserProfile('Admin user profile library delete action states', () =
     })
 
     // MAT-9816: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
-    it.skip('disables Delete on Owned and Shared Libraries when nothing is selected', () => {
+    it('disables Delete on Owned and Shared Libraries when nothing is selected', () => {
         createLibrary(libraryNamePrefix, SupportedModels.qiCore4)
         shareLibrary()
 
@@ -79,7 +72,7 @@ describeAdminUserProfile('Admin user profile library delete action states', () =
     })
 
     // MAT-9816: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
-    it.skip('enables Delete for the latest draft and disables it for a historical version', () => {
+    it('enables Delete for the latest draft and disables it for a historical version', () => {
         createLibrary(libraryNamePrefix, SupportedModels.QDM)
         TestData.versionCqlLibrary('1.0.000').then((versionResponse) => {
             TestData.draftCqlLibrary((libraryId) => ({
@@ -119,7 +112,7 @@ describeAdminUserProfile('Admin user profile library delete action states', () =
     })
 
     // MAT-9816: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
-    it.skip('disables Delete when multiple Shared Libraries are selected', () => {
+    it('disables Delete when multiple Shared Libraries are selected', () => {
         const firstLibraryName = `${libraryNamePrefix}One`
         const secondLibraryName = `${libraryNamePrefix}Two`
         createLibrary(firstLibraryName, SupportedModels.qiCore4)
@@ -141,7 +134,7 @@ describeAdminUserProfile('Admin user profile library delete action states', () =
     })
 
     // MAT-9816: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
-    it.skip('enables Delete for a latest version on both Owned and Shared Libraries', () => {
+    it('enables Delete for a latest version on both Owned and Shared Libraries', () => {
         createLibrary(libraryNamePrefix, SupportedModels.qiCore4)
         TestData.versionCqlLibrary('1.0.000').then((versionResponse) => {
             expect(versionResponse.body.id, 'version id').to.be.a('string').and.not.be.empty
@@ -171,7 +164,7 @@ describeAdminUserProfile('Admin user profile library delete action states', () =
     })
 
     // MAT-9816: Proven in DEV on 2026-08-06. Keep as regression coverage without rerunning by default.
-    it.skip('disables Delete when multiple Owned Libraries are selected', () => {
+    it('disables Delete when multiple Owned Libraries are selected', () => {
         const firstLibraryName = `${libraryNamePrefix}One`
         const secondLibraryName = `${libraryNamePrefix}Two`
         createLibrary(firstLibraryName, SupportedModels.qiCore4)

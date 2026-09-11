@@ -6,8 +6,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
 import { Utilities } from '../../../Shared/Utilities'
 
-// MAT-9813: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile QDM Measure actions', () => {
+describe('Admin user profile QDM Measure actions', () => {
     let measureName = ''
     let cqlLibraryName = ''
     let profileOwner = ''
@@ -55,10 +54,10 @@ describe.skip('Admin user profile QDM Measure actions', () => {
         )
 
         cy.get(AdminUserProfilePage.exportButton).click()
-        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Export')
+        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Executable Export')
         cy.get(MeasuresPage.exportPublishingOption)
             .should('be.visible')
-            .and('have.text', 'Export for Publishing')
+            .and('have.text', 'Publishable Export')
     })
 
     it('opens Human Readable for a QDM Measure', () => {

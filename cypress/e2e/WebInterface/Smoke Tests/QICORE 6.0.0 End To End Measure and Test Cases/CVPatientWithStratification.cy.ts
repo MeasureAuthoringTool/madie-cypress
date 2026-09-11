@@ -17,7 +17,7 @@ const testCaseSeries = 'SBTestSeries'
 const testCaseJson = TestCaseJson.CVPatientWithStratification_PASS
 const measureCQL =
     "library CVPatientWithStratification version '0.0.000'\n\n" +
-    "using QICore version '4.1.1'\n\n" +
+    "using QICore version '6.0.0'\n\n" +
     "include FHIRHelpers version '4.4.000' called FHIRHelpers\n" +
     "include CQMCommon version '4.1.000' called Global\n\n" +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n\n' +
@@ -59,7 +59,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
             measureCql: measureCQL,
             mpStartDate: '2012-01-01',
-            mpEndDate: '2012-12-31',
+            mpEndDate: '2012-12-31'
         })
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -67,9 +67,9 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         OktaLogin.Login()
     })
 
-    after('Clean up', () => {
-        Utilities.deleteMeasure()
-    })
+    // after('Clean up', () => {
+    //     Utilities.deleteMeasure()
+    // })
 
     it('End to End CV Patient Measure with Stratification, Pass Result', () => {
         //Click on Edit Button
@@ -132,7 +132,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(Toasts.otherSuccessToast).should(
             'contain.text',
-            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
+            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'
         )
 
         cy.get(EditMeasurePage.testCasesTab).click()
