@@ -9,7 +9,7 @@ import {
     MeasureGroups,
     MeasureScoring,
     MeasureType,
-    PopulationBasis,
+    PopulationBasis
 } from '../../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { QDMElements } from '../../../../../Shared/QDMElements'
@@ -36,7 +36,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         initialPopulation: 'Initial Population',
         denominator: 'Denominator',
         denomExclusion: 'Denominator Exclusions',
-        numerator: 'Numerator',
+        numerator: 'Numerator'
     }
 
     before('Create Measure', () => {
@@ -45,7 +45,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
             MeasureType.process,
             PopulationBasis.episode,
             MeasureScoring.Proportion,
-            pops,
+            pops
         )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
@@ -62,7 +62,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         CQLEditorPage.saveCql({
             appendNewLine: true,
             collapseEditor: true,
-            waitForDisabled: true,
+            waitForDisabled: true
         })
 
         // Click on Measure Group tab
@@ -82,7 +82,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
             'Living',
             'AMERICAN INDIAN OR ALASKA NATIVE',
             'Female',
-            'Not Hispanic or Latino',
+            'Not Hispanic or Latino'
         )
 
         //Element - Condition:Diagnosis: Uveitis
@@ -142,7 +142,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
             .should('have.attr', 'aria-live', 'polite')
             .and(
                 'have.text',
-                "Your measure's Race, Sex, or Ethnicity value set has changed. The value in this test case is no longer valid. Please update the value to successfully match your measure.",
+                "Your measure's Race, Sex, or Ethnicity value set has changed. The value in this test case is no longer valid. Please update the value to successfully match your measure."
             )
 
         // verify 2nd warning for changes to relevant elements & what element changed
@@ -151,7 +151,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
             .should('have.attr', 'aria-live', 'polite')
             .and(
                 'have.text',
-                'The following data elements in this test case are no longer relevant to the measure.Procedure, Performed',
+                'The following data elements in this test case are no longer relevant to the measure.Procedure, Performed'
             )
     })
 })
