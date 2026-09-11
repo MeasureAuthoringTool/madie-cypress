@@ -41,7 +41,7 @@ const qiCore6MeasureCQL =
 describe('Create and Update Test Case for Qi Core 6 Measure', () => {
     beforeEach('Create Qi Core 6 Measure and login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
-            measureCql: qiCore6MeasureCQL,
+            measureCql: qiCore6MeasureCQL
         })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
 
@@ -49,7 +49,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({
             collapseEditor: true,
-            successTimeout: 20700,
+            successTimeout: 20700
         })
     })
 

@@ -1878,7 +1878,7 @@ export class TestCaseJson {
         '\t"type": "collection",\n' +
         '\t"entry": [\n' +
         '\t\t{\n' +
-        '\t\t\t"fullUrl": "b1ba7de7-9fa0-44fa-ac1e-a4b407d3a54b",\n' +
+        '\t\t\t"fullUrl": "https://madie.cms.gov/Encounter/237ec3c0-b58e-4a23-82b0-98b4424d405c",\n' +
         '\t\t\t"resource": {\n' +
         '\t\t\t\t"resourceType": "Encounter",\n' +
         '\t\t\t\t"id": "237ec3c0-b58e-4a23-82b0-98b4424d405c",\n' +
@@ -1914,7 +1914,7 @@ export class TestCaseJson {
         '\t\t\t}\n' +
         '\t\t},\n' +
         '\t\t{\n' +
-        '\t\t\t"fullUrl": "a5ba7de7-9fa0-20fa-ac1e-a4b405d3a32b",\n' +
+        '\t\t\t"fullUrl": "https://madie.cms.gov/Patient/8d8dc304-a56a-4464-8e1e-703e866e989e",\n' +
         '\t\t\t"resource": {\n' +
         '\t\t\t\t"resourceType": "Patient",\n' +
         '\t\t\t\t"id": "8d8dc304-a56a-4464-8e1e-703e866e989e",\n' +
@@ -2782,7 +2782,7 @@ export class TestCaseJson {
         'T09:00:00+00:00" } } } ] }'
 
     public static readonly CVPatientWithStratification_PASS = '{ "resourceType": "Bundle", "id": "IP-Pass-CVPatient", "meta": { "versionId": ' +
-        '"1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collection", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "reso' +
+        '"1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collection", "entry": [ { "fullUrl": "https://madie.cms.gov/Patient/609bde3598086b0a16d79fc6", "reso' +
         'urce": { "resourceType": "Patient", "id": "609bde3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureD' +
         'efinition/qicore-patient" ] }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hap' +
         'iHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPropertyTable\\"><tbody><tr><td>Ident' +
@@ -2802,7 +2802,7 @@ export class TestCaseJson {
         'g/CodeSystem/v3-NullFlavor", "code": "ASKU", "display": "asked but unknown" } ], "text": "asked but unknown" } } ], "identifier": [ { "typ' +
         'e": { "coding": [ { "system": "http://terminology.hl7.org/CodeSystem/v2-0203", "code": "MR" } ] }, "system": "http://MyGoodHealthare.com/M' +
         'edicalRecord", "value": "8065dc8d26797064d8766be71f2bf020" } ], "active": true, "name": [ { "use": "usual", "family": "IPPass", "given": [ "' +
-        'IPPass" ] } ], "gender": "male", "birthDate": "1954-02-10" } }, { "fullUrl": "5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Enco' +
+        'IPPass" ] } ], "gender": "male", "birthDate": "1954-02-10" } }, { "fullUrl": "https://madie.cms.gov/Encounter/5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Enco' +
         'unter", "id": "5c6c61ceb84846536a9a98f9", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter" ] }, "s' +
         'tatus": "finished", "class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "IMP", "display": "inpatient encounter" ' +
         '}, "type": [ { "coding": [ { "system": "http://snomed.info/sct", "code": "183452005" } ] } ], "subject": { "reference": "Patient/609bde359808' +

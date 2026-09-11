@@ -7,6 +7,7 @@ import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { QDMElements } from '../../../../../Shared/QDMElements'
 
 const measureName = 'PracticionerAttribute' + Date.now()
 const CqlLibraryName = 'PracticionerAttribute' + Date.now()
@@ -96,7 +97,7 @@ describe('Practitioner Attribute', () => {
         Utilities.waitForElementVisible('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]', 734000)
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click() //Select Emergency Department Visit
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get('[data-testid=option-SNOMEDCT]').click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).click()
         Utilities.waitForElementVisible('[data-testid=option-4525004]', 734000)
         cy.get('[data-testid=option-4525004]').click() //Select Emergency Department Patient visit (Procedure)
@@ -107,7 +108,7 @@ describe('Practitioner Attribute', () => {
         Utilities.waitForElementVisible('[data-testid="option-2.16.840.1.113883.3.666.5.307"]', 734000)
         cy.get('[data-testid="option-2.16.840.1.113883.3.666.5.307"]').click() //Select Encounter Inpatient
         cy.get(TestCasesPage.codeSystemSelector).eq(1).click()
-        cy.get('[data-testid=option-SNOMEDCT]').click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).eq(1).click()
         Utilities.waitForElementVisible('[data-testid=option-183452005]', 734000)
         cy.get('[data-testid=option-183452005]').click() //Select Emergency Hospital Admission
@@ -118,13 +119,13 @@ describe('Practitioner Attribute', () => {
         Utilities.waitForElementVisible('[data-testid="option-2.16.840.1.114222.4.11.837"]', 734000)
         cy.get('[data-testid="option-2.16.840.1.114222.4.11.837"]').click() //Select Ethnicity
         cy.get(TestCasesPage.codeSystemSelector).eq(2).click()
-        cy.get('[data-testid="option-CDCREC"]').click()
+        QDMElements.selectCodeSystemOption('urn:oid:2.16.840.1.113883.6.238')
         cy.get(TestCasesPage.codeSelector).eq(2).click()
         cy.get('[data-testid=option-2135-2]').click() //Select Hispanic or Latino
         cy.get(TestCasesPage.addAttribute).click()
         cy.get(TestCasesPage.attributeChip).should(
             'contain.text',
-            'Performer - Practitioner Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: CDCREC : 2135-2',
+            'Performer - Practitioner Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: urn:oid:2.16.840.1.113883.6.238 : 2135-2',
         )
     })
 })

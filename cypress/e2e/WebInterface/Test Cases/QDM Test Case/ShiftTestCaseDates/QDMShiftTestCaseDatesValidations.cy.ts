@@ -10,7 +10,6 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { QDMElements } from '../../../../../Shared/QDMElements'
 import { Header } from '../../../../../Shared/Header'
 import { LandingPage } from '../../../../../Shared/LandingPage'
-import { umlsLoginForm } from '../../../../../Shared/umlsLoginForm'
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const now = Date.now()
@@ -96,7 +95,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.MedicationElementTab).click()
         cy.get('[data-testid="data-type-Medication, Discharge: Antithrombotic Therapy for Ischemic Stroke"]').click()
         cy.get(TestCasesPage.authorDateTime).type('06/01/2025 01:00 PM')
-        QDMElements.addCode('rxnorm', '1536498')
+        QDMElements.addCode('RXNORM', '1536498')
 
         //add negation
         Utilities.waitForElementVisible(TestCasesPage.negationTab, 35000)
@@ -116,10 +115,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).scrollIntoView()
-        cy.scrollTo(100, 0)
-        Utilities.waitForElementVisible(umlsLoginForm.closeGenericError, 35000)
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get(TestCasesPage.EncounterElementTab).scrollIntoView().click()
@@ -162,7 +158,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.MedicationElementTab).click()
         cy.get('[data-testid="data-type-Medication, Discharge: Antithrombotic Therapy for Ischemic Stroke"]').click()
         cy.get(TestCasesPage.authorDateTime).type('02/28/2024 01:00 PM')
-        QDMElements.addCode('rxnorm', '1536498')
+        QDMElements.addCode('RXNORM', '1536498')
 
         //add negation
         Utilities.waitForElementVisible(TestCasesPage.negationTab, 35000)
@@ -182,10 +178,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).scrollIntoView()
-        cy.scrollTo(100, 0)
-        Utilities.waitForElementVisible(umlsLoginForm.closeGenericError, 35000)
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get(TestCasesPage.EncounterElementTab).scrollIntoView().click()

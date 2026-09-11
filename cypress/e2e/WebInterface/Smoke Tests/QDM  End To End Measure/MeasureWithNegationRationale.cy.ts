@@ -247,7 +247,7 @@ describe('Measure with Negation Rationale', () => {
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
         QDMElements.addElement('medication', 'Administered: BCG Bacillus Calmette Guerin for Urology Care')
         QDMElements.addTimingRelevantPeriodDateTime('03/01/2012 08:00 AM', '03/01/2012 10:15 AM')
-        QDMElements.addCode('rxnorm', '1653579')
+        QDMElements.addCode('RXNORM', '1653579')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 

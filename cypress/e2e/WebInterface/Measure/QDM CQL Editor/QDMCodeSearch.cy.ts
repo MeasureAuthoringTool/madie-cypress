@@ -477,6 +477,9 @@ describe('Error Message on Codes tab', () => {
 
         //Navigate to CQL builder
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.validateSuccessfulCQLUpdate()
         CQLEditorPage.expandCQLBuilderPanel()
     })
 
@@ -487,14 +490,13 @@ describe('Error Message on Codes tab', () => {
     it('Verify error message appears on Codes tab when there is an error in the Measure CQL', () => {
         //Navigate to Codes tab and verify no error message appears
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist')
         //Navigate to Codes tab and verify saved codes appear
         cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)')
 
         //Add errors to CQL
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 18500)
 
         //Navigate to Codes tab
         // cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -505,7 +507,7 @@ describe('Error Message on Codes tab', () => {
         )
 
         //Navigate to Saved Codes tab
-        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)').click()
+        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(0)').click()
         cy.get('[data-testid="saved-codes-tbl"]').should('contain.text', 'No Results were found')
     })
 })
