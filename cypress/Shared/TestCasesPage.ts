@@ -968,8 +968,10 @@ export class TestCasesPage {
     const { index } = options
 
     this.normalizeExpectedActualPopulationPanel()
-    const checkbox = cy.get(checkboxSelector)
-    const getCheckbox = () => (typeof index === 'number' ? checkbox.eq(index) : checkbox)
+    const getCheckbox = () => {
+      const checkbox = cy.get(checkboxSelector)
+      return typeof index === 'number' ? checkbox.eq(index) : checkbox
+    }
 
     getCheckbox()
       .should('exist')
@@ -1010,8 +1012,10 @@ export class TestCasesPage {
     const { index } = options
 
     this.normalizeExpectedActualPopulationPanel()
-    const checkbox = cy.get(checkboxSelector)
-    const getCheckbox = () => (typeof index === 'number' ? checkbox.eq(index) : checkbox)
+    const getCheckbox = () => {
+      const checkbox = cy.get(checkboxSelector)
+      return typeof index === 'number' ? checkbox.eq(index) : checkbox
+    }
 
     getCheckbox()
       .should('exist')
@@ -1236,7 +1240,7 @@ export class TestCasesPage {
       .blur() // commit without Enter
   }
 
-  public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+  public static clickEditforCreatedTestCase(secondTestCase?: boolean, readySelector = this.testCaseTitle): void {
     let callstackIntercepted = false
 
     cy.intercept('PUT', '/api/fhir/cql/callstacks', (req) => {
@@ -1259,7 +1263,7 @@ export class TestCasesPage {
         })
 
         cy.url({ timeout: 60000 }).should('include', `/test-cases/${tcId}`)
-        this.openDetailsTab(this.testCaseTitle)
+        this.openDetailsTab(readySelector)
       })
   }
 
