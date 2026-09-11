@@ -138,7 +138,11 @@ describe('Admin user profile measure View and Edit navigation', () => {
             expect(createdMeasureId, 'created measure ID').not.to.be.empty
             cy.get(`[data-testid="measure-lock-icon-${createdMeasureId}"]`).should('be.visible')
         })
+        cy.then(() => {
+            cy.intercept('GET', `/api/measures/${createdMeasureId}`).as('lockedMeasure')
+        })
         findCreatedMeasureAction().click()
+        cy.wait('@lockedMeasure').its('response.statusCode').should('eq', 200)
         cy.then(() => {
             cy.location('pathname').should('contain', `/measures/${createdMeasureId}/edit`)
         })

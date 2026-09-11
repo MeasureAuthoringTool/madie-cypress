@@ -54,10 +54,10 @@ describe('Admin user profile QDM Measure actions', () => {
         )
 
         cy.get(AdminUserProfilePage.exportButton).click()
-        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Export')
+        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Executable Export')
         cy.get(MeasuresPage.exportPublishingOption)
             .should('be.visible')
-            .and('have.text', 'Export for Publishing')
+            .and('have.text', 'Publishable Export')
     })
 
     it('opens Human Readable for a QDM Measure', () => {
