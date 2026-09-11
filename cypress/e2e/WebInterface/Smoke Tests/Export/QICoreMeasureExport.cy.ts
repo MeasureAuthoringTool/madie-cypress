@@ -249,30 +249,27 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     'Description\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\nTEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\n' +
                     'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\t{"extension":' +
                     '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
-                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nCitation\t\n\nText 1\n\n\n' +
-                    'Justification\tDescription:\n\nText 3\n\n\nDefinition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
+                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDefinition (Term)\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
                     "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field"
             )
 
             //measure group meta data
             cy.log('made it to Measure Group (Rate)')
             expect(bodyText).to.include(
-                'Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
+                'Measure Rate (Group) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
                     'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
                     'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
                     'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
                     '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
-                    'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
+                    'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nSupplemental Data Elements\nMeasure Logic\nPrimary Library\t' +
                     'https://madie.cms.gov/Library/' +
-                    CqlLibraryNameFC +
-                    '\nContents\tPopulation Criteria\nLogic Definitions\n' +
-                    'Terminology\nDependencies\nData Requirements'
+                    CqlLibraryNameFC
             )
 
             //Population Criteria
             expect(bodyText).to.include(
                 'Population Criteria\n' +
-                    'Measure Group (Rate) (ID: Group_1)\n' +
+                    'Measure Rate (Group) (ID: Group_1)\n' +
                     'Initial Population\n' +
                     '\n' +
                     'define "Qualifying Encounters":\n' +
@@ -364,6 +361,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000'
             )
 
+            expect(bodyText).to.include(
+                'Citations and References\nCitation\t\n\nText 1\n\n\nJustification\tDescription:\n\nText 3'
+            )
+
             //Data Requirements
             expect(bodyText).to.include(
                 'Data Requirements\n' +
@@ -403,7 +404,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016'
             )
 
-            expect(bodyText).to.include('Generated using version 0.5.5 of the sample-content-ig Liquid templates')
+            expect(bodyText).to.include('Generated using version 0.5.6 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -510,30 +511,27 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     'Description\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\nTEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\n' +
                     'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\t{"extension":' +
                     '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
-                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nCitation\t\n\nText 1\n\n\n' +
-                    'Justification\tDescription:\n\nText 3\n\n\nDefinition\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
+                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDefinition (Term)\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
                     "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field"
             )
 
             //measure group meta data
             cy.log('made it to Measure Group (Rate)')
             expect(bodyText).to.include(
-                'Measure Group (Rate) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
+                'Measure Rate (Group) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
                     'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
                     'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
                     'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
                     '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
-                    'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nMeasure Logic\nPrimary Library\t' +
+                    'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nSupplemental Data Elements\nMeasure Logic\nPrimary Library\t' +
                     'https://madie.cms.gov/Library/' +
-                    CqlLibraryNameFC +
-                    '\nContents\tPopulation Criteria\nLogic Definitions\n' +
-                    'Terminology\nDependencies\nData Requirements'
+                    CqlLibraryNameFC
             )
 
             //Population Criteria
             expect(bodyText).to.include(
                 'Population Criteria\n' +
-                    'Measure Group (Rate) (ID: Group_1)\n' +
+                    'Measure Rate (Group) (ID: Group_1)\n' +
                     'Initial Population\n' +
                     '\n' +
                     'define "Qualifying Encounters":\n' +
@@ -625,6 +623,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000'
             )
 
+            expect(bodyText).to.include(
+                'Citations and References\nCitation\t\n\nText 1\n\n\nJustification\tDescription:\n\nText 3'
+            )
+
             //Data Requirements
             expect(bodyText).to.include(
                 'Data Requirements\n' +
@@ -664,7 +666,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016'
             )
 
-            expect(bodyText).to.include('Generated using version 0.5.5 of the sample-content-ig Liquid templates')
+            expect(bodyText).to.include('Generated using version 0.5.6 of the sample-content-ig Liquid templates')
         })
     })
 })

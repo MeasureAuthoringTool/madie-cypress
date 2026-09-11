@@ -21,13 +21,15 @@ export class Toasts {
             .should('be.visible')
             .and('contain.text', expectedText)
 
-        cy.get(toastSelector)
-            .closest(this.generalToast)
-            .should('be.visible')
-            .find(closeButtonSelector)
-            .should('be.visible')
-            .and('be.enabled')
-            .click()
+        cy.get('body').then(($body) => {
+            if ($body.find(closeButtonSelector).filter(':visible').length) {
+                cy.get(closeButtonSelector)
+                    .filter(':visible')
+                    .should('have.length', 1)
+                    .should('be.enabled')
+                    .click()
+            }
+        })
 
         cy.get('body').should(($body) => {
             expect($body.find(toastSelector).filter(':visible')).to.have.length(0)

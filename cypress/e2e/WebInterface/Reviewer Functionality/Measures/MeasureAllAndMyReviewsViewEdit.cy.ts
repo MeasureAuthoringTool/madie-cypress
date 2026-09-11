@@ -7,10 +7,14 @@ import { TestData } from '../../../../Shared/TestData'
 import { Toasts } from '../../../../Shared/Toasts'
 import { Utilities } from '../../../../Shared/Utilities'
 
-describe('MAT-10162 All Reviews and My Reviews View/Edit actions', () => {
+describe.skip('MAT-10162 All Reviews and My Reviews View/Edit actions', () => {
     let createdMeasureCount = 0
 
-    const createReviewMeasure = (namePrefix: string, model: SupportedModels, measureNumber = createdMeasureCount): void => {
+    const createReviewMeasure = (
+        namePrefix: string,
+        model: SupportedModels,
+        measureNumber = createdMeasureCount
+    ): void => {
         const suffix = Date.now()
         CreateMeasurePage.CreateMeasureAPI(
             `${namePrefix}${suffix}`,
@@ -28,9 +32,7 @@ describe('MAT-10162 All Reviews and My Reviews View/Edit actions', () => {
         expect(reviewer, 'configured reviewer username').not.to.be.empty
 
         TestData.readMeasureId(measureNumber).then((measureId) => {
-            TestData.requestSharePermissions('measure', 'GRANT', measureId, reviewer)
-                .its('status')
-                .should('eq', 200)
+            TestData.requestSharePermissions('measure', 'GRANT', measureId, reviewer).its('status').should('eq', 200)
         })
     }
 

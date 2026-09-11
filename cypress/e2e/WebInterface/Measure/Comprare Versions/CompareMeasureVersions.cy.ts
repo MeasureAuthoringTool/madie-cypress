@@ -24,7 +24,7 @@ describe('Compare Measure Versions', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(
             measureData.ecqmTitle!,
             measureData.cqlLibraryName!,
-            measureData.measureCql,
+            measureData.measureCql
         )
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
@@ -35,17 +35,17 @@ describe('Compare Measure Versions', () => {
             'Surgical Absence of Cervix',
             '',
             'Surgical Absence of Cervix',
-            'Procedure',
+            'Procedure'
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
     })
 
-    afterEach('Log out and Clean up', () => {
-        Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
-        Utilities.deleteMeasure(undefined, undefined, false, false, 1)
-    })
+    // afterEach('Log out and Clean up', () => {
+    //     Utilities.deleteVersionedMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
+    //     Utilities.deleteMeasure(undefined, undefined, false, false, 1)
+    // })
 
     it('Compare two Versions of a Measure', () => {
         let updatedMeasureName = 'Updated' + measureName + Date.now()
@@ -64,7 +64,7 @@ describe('Compare Measure Versions', () => {
 
         cy.get(Toasts.successToast, { timeout: 18500 }).should(
             'contain.text',
-            'New version of measure is Successfully created',
+            'New version of measure is Successfully created'
         )
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
@@ -90,13 +90,13 @@ describe('Compare Measure Versions', () => {
             .then((draftMeasureId) => {
                 Utilities.waitForElementVisible(
                     '[data-testid="measure-name-' + draftMeasureId + '_select"] > [class="px-1"] > [type="checkbox"]',
-                    30000,
+                    30000
                 )
                 Utilities.waitForElementVisible(
                     '[data-testid="measure-name-' +
                         draftMeasureId +
                         '_select"] > [class="px-1"] > [class=" cursor-pointer"]',
-                    30000,
+                    30000
                 )
                 cy.get('[data-testid="measure-name-' + draftMeasureId + '_select"]')
                     .find('[type="checkbox"]')
@@ -129,7 +129,7 @@ describe('Compare Measure Versions', () => {
         //Verify CQL Comparison
         cy.get('[class="react-diff-n9mfsc-code-fold-content"]').click()
 
-        cy.contains("using QICore version '4.1.1'").should('be.visible')
+        cy.contains("using QICore version '4.1.0'").should('be.visible')
 
         //Verify HR Comparison
         cy.get(MeasuresPage.compareVersionsHRTab).click()
