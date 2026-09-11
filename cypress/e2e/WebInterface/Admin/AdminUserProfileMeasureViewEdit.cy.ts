@@ -9,10 +9,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 
-// MAT-9820: AdminUserProfile is not yet available in TEST; prove this coverage in DEV first.
-const describeAdminUserProfile = describe.skip
-
-describeAdminUserProfile('Admin user profile measure View and Edit navigation', () => {
+describe('Admin user profile measure View and Edit navigation', () => {
     let measureName = ''
     let libraryName = ''
     let measureOwner = ''

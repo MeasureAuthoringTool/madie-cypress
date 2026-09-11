@@ -8,6 +8,7 @@ export class AdminUserProfilePage {
     public static readonly userHarpIdCell = '[data-testid$="_harpId"]'
     public static readonly userNameLink = '[data-testid^="user-name-link-"]'
     public static readonly measuresTable = '[data-testid="user-profile-measures-tbl"]'
+    public static readonly measureSearchInput = '[data-testid="user-profile-measures-list-search-input"]'
     public static readonly ownedLibrariesTab = CQLLibraryPage.ownedLibrariesTab
     public static readonly sharedLibrariesTab = CQLLibraryPage.sharedLibrariesTab
     public static readonly librariesTable = '[data-testid="user-profile-libraries-tbl"]'
@@ -74,7 +75,7 @@ export class AdminUserProfilePage {
         expectedTooltip: string
     ): void {
         cy.get(buttonSelector).should('be.enabled')
-        cy.get(buttonSelector).realHover({ scrollBehavior: false })
+        cy.get(tooltipSelector).should('be.visible').trigger('mouseover')
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', expectedTooltip)
         cy.get(tooltipSelector).trigger('mouseout')
     }
@@ -98,6 +99,10 @@ export class AdminUserProfilePage {
         cy.get(tabSelector).should('be.visible').click()
         cy.get(tabSelector).should('have.attr', 'aria-selected', 'true')
         cy.get(this.measuresTable).should('be.visible')
+    }
+
+    public static submitMeasureSearch(searchText: string): void {
+        cy.get(this.measureSearchInput).should('be.visible').clear().type(`${searchText}{enter}`)
     }
 
     public static openLibrariesTab(tabSelector: string): void {
@@ -190,14 +195,11 @@ export class AdminUserProfilePage {
         expectedExpandedRows = 1
     ): Cypress.Chainable<JQuery<HTMLElement>> {
         const measureRow = `[data-testid="measure-name-${measureId}_select"]`
-        const expandIcon = `[data-testid="measure-name-${measureId}_expandArrow"]`
+        const expandToggle = `[data-testid="expand-toggle-${measureId}"]`
 
         cy.get(measureRow).should('be.visible')
-        cy.get(expandIcon)
-            .should('be.visible')
-            .find('svg')
-            .should('be.visible')
-            .click()
+        cy.get(expandToggle).should('be.visible')
+        cy.get(expandToggle).click()
 
         return cy
             .get(this.measuresTable)

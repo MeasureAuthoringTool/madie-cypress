@@ -21,7 +21,7 @@ const assertTransferDialog = (
                 'contain.text',
                 `You are about to Transfer ownership of the ${selectedLibraryCount} selected library(s) below. All versions and drafts will be transferred, but only the most recent library name appears in the list below.`
             )
-            ;['Library', 'Model', 'CMS ID', 'Current Library Owner'].forEach((columnName) => {
+            ;['Library', 'Model', 'Current Library Owner'].forEach((columnName) => {
                 cy.contains(columnName).should('be.visible')
             })
 
@@ -43,10 +43,7 @@ const assertTransferDialog = (
     cy.get('body').type('{esc}')
 }
 
-// MAT-9818: Run in DEV while AdminUserProfile is feature-flagged; keep TEST excluded after proof.
-const describeAdminUserProfile = Cypress.env('environment') === 'test' ? describe.skip : describe
-
-describeAdminUserProfile('Admin user profile Library Transfer', () => {
+describe('Admin user profile Library Transfer', () => {
     let qicoreLibraryName = ''
     let qdmLibraryName = ''
     let libraryOwner = ''

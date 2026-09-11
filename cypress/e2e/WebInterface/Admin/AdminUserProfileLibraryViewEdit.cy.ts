@@ -7,10 +7,7 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 import { MadieObject, Utilities } from '../../../Shared/Utilities'
 
-// MAT-9821: AdminUserProfile is not yet available in TEST; prove this coverage in DEV first.
-const describeAdminUserProfile = describe.skip
-
-describeAdminUserProfile('Admin user profile library View and Edit navigation', () => {
+describe('Admin user profile library View and Edit navigation', () => {
     let libraryName = ''
     let libraryOwner = ''
     let sharedProfileUser = ''
@@ -139,7 +136,11 @@ describeAdminUserProfile('Admin user profile library View and Edit navigation', 
         cy.then(() => {
             cy.get(`[data-testid="library-lock-icon-${createdLibraryId}"]`).should('be.visible')
         })
+        cy.then(() => {
+            cy.intercept('GET', `/api/cql-libraries/${createdLibraryId}`).as('lockedLibrary')
+        })
         findCreatedLibraryAction().click()
+        cy.wait('@lockedLibrary').its('response.statusCode').should('eq', 200)
         cy.then(() => {
             cy.location('pathname').should('contain', `/cql-libraries/${createdLibraryId}/edit/details`)
         })

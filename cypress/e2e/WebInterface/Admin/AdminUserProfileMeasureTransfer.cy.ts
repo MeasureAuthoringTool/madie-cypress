@@ -43,8 +43,7 @@ const assertTransferDialog = (
     cy.get('body').type('{esc}')
 }
 
-// MAT-9815: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile Measure Transfer', () => {
+describe('Admin user profile Measure Transfer', () => {
     let measureName = ''
     let cqlLibraryName = ''
     let measureOwner = ''

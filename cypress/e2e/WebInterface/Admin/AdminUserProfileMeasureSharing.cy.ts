@@ -7,8 +7,6 @@ import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 import { Utilities } from '../../../Shared/Utilities'
 
-const describeAdminUserProfile = Cypress.env('environment') === 'test' ? describe.skip : describe
-
 const assertShareDialogControls = (title: string, instructions: string[]): void => {
     cy.get('[role="dialog"]')
         .should('be.visible')
@@ -24,8 +22,7 @@ const assertShareDialogControls = (title: string, instructions: string[]): void 
         })
 }
 
-// MAT-9814: AdminUserProfile is proven in DEV but is not yet available in TEST.
-describeAdminUserProfile('Admin user profile Measure Sharing and Unsharing', () => {
+describe('Admin user profile Measure Sharing and Unsharing', () => {
     let qicoreMeasureName = ''
     let qdmMeasureName = ''
     let qicoreLibraryName = ''

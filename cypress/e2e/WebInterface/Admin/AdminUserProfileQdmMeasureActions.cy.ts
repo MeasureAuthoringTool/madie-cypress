@@ -6,8 +6,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
 import { Utilities } from '../../../Shared/Utilities'
 
-// MAT-9813: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile QDM Measure actions', () => {
+describe('Admin user profile QDM Measure actions', () => {
     let measureName = ''
     let cqlLibraryName = ''
     let profileOwner = ''

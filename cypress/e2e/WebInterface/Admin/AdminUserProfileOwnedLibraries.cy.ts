@@ -7,8 +7,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 
-// MAT-9806: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile Owned Libraries', () => {
+describe('Admin user profile Owned Libraries', () => {
     let libraryName = ''
     let libraryOwner = ''
     let createdLibraryCount = 1

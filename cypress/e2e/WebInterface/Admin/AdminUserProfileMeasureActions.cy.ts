@@ -10,8 +10,7 @@ import { Utilities } from '../../../Shared/Utilities'
 
 let profileUser = ''
 
-// MAT-9813: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile measure actions', () => {
+describe('Admin user profile measure actions', () => {
     beforeEach(() => {
         profileUser = Environment.credentials().adminUser?.toLowerCase() ?? ''
         expect(profileUser, 'configured Admin profile user').not.to.be.empty
@@ -107,7 +106,7 @@ describe.skip('Admin user profile measure actions', () => {
 
 })
 
-describe.skip('Admin user profile unrelated Owned Measure selections', () => {
+describe('Admin user profile unrelated Owned Measure selections', () => {
     let firstMeasureName = ''
     let secondMeasureName = ''
     let firstLibraryName = ''

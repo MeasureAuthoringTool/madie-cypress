@@ -8,8 +8,7 @@ import { SupportedModels } from '../../../Shared/CreateMeasurePage'
 import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { LibraryCQL } from '../../../Shared/LibraryCQL'
 
-// MAT-9807: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile Shared Libraries', () => {
+describe('Admin user profile Shared Libraries', () => {
     let libraryName = ''
     let libraryOwner = ''
     let libraryOwnerDisplayName = ''

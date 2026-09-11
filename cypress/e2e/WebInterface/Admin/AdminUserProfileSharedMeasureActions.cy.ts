@@ -9,8 +9,7 @@ import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { TestData } from '../../../Shared/TestData'
 import { Utilities } from '../../../Shared/Utilities'
 
-// MAT-9813: Enable when the AdminUserProfile feature is available in TEST.
-describe.skip('Admin user profile Shared Measure actions', () => {
+describe('Admin user profile Shared Measure actions', () => {
     let measureName = ''
     let cqlLibraryName = ''
     let profileUser = ''
@@ -107,7 +106,7 @@ describe.skip('Admin user profile Shared Measure actions', () => {
     })
 })
 
-describe.skip('Admin user profile unrelated Shared Measure selections', () => {
+describe('Admin user profile unrelated Shared Measure selections', () => {
     let firstMeasureName = ''
     let secondMeasureName = ''
     let firstLibraryName = ''
