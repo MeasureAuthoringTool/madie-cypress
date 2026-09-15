@@ -7,7 +7,6 @@ import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { QDMElements } from '../../../../Shared/QDMElements'
-import { umlsLoginForm } from '../../../../Shared/umlsLoginForm'
 
 const now = Date.now()
 const measureName = 'CVWithMOAndStratification' + now
@@ -277,7 +276,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('#quantity-unit-input-quantity').type('d')
         cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get(TestCasesPage.EncounterElementTab).click()
@@ -296,7 +295,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('#quantity-unit-input-quantity').type('d')
         cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter, Order Decision to Admit to Hospital Inpatient
         cy.get(TestCasesPage.EncounterElementTab).click()
@@ -379,7 +378,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         QDMElements.addTimingLocationPeriodDateTime(' ', '01/29/2025 06:15 PM')
         cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get(TestCasesPage.EncounterElementTab).click()
@@ -392,7 +391,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="code-option-183452005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter: Order: Decision to Admit to Hospital Inpatient
         cy.get(TestCasesPage.EncounterElementTab).click()
@@ -405,7 +404,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="code-option-10378005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get(TestCasesPage.EncounterElementTab).click()
@@ -429,7 +428,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         QDMElements.addTimingLocationPeriodDateTime(' ', '02/06/2025 08:15 PM')
         cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get(TestCasesPage.EncounterElementTab).click()
@@ -442,7 +441,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="code-option-183452005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //Element - Assessment: Performed: Emergency Department Evaluation
         cy.get(TestCasesPage.AssessmentElementTab).click()
@@ -503,13 +502,12 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        TestCasesPage.returnToTestCasesList(TestCasesPage.executeTestCaseButton)
+        cy.get(TestCasesPage.executeTestCaseButton)
+            .filter(':visible')
+            .should('have.length', 1)
+            .should('be.enabled')
+            .click()
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
     })

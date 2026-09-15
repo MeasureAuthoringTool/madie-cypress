@@ -294,7 +294,7 @@ describe('Delete Saved Parameters', () => {
 
             cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'You have unsaved changes.Are you sure you want to discard your changes?')
 
-            cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
+            cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This action cannot be undone.')
 
             cy.get(Utilities.discardChangesContinue).should('be.enabled')
             cy.get(Utilities.keepWorkingCancel).should('be.enabled').click()
@@ -327,7 +327,7 @@ describe('Delete Saved Parameters', () => {
 
             cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'Are you sure you want to delete this Parameter?')
 
-            cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
+            cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This action cannot be undone.')
 
             cy.get(CQLEditorPage.deleteCancelButton).should('be.enabled')
             cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()

@@ -1,14 +1,13 @@
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { QDMElements } from "../../../../../Shared/QDMElements"
-import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { QDMElements } from '../../../../../Shared/QDMElements'
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -20,9 +19,7 @@ let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
 const measureData: CreateMeasureOptions = {}
 
 describe('Clone QDM Test Case', () => {
-
     beforeEach('Create Measure', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Ratio'
@@ -36,7 +33,7 @@ describe('Clone QDM Test Case', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-        
+
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -45,12 +42,10 @@ describe('Clone QDM Test Case', () => {
     })
 
     afterEach('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Clone QDM Test Case Element - Success scenario', () => {
-
         //Group Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -75,15 +70,17 @@ describe('Clone QDM Test Case', () => {
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully'
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.wait(4500)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -97,8 +94,10 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -106,7 +105,13 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -121,7 +126,7 @@ describe('Clone QDM Test Case', () => {
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -135,15 +140,19 @@ describe('Clone QDM Test Case', () => {
 
         // clone that element
         TestCasesPage.qdmTestCaseElementAction('clone')
-        cy.get("tr").eq(1).should('contain', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM')
-
+        cy.get('tr')
+            .eq(1)
+            .should(
+                'contain',
+                'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM'
+            )
 
         // edit the element
         TestCasesPage.qdmTestCaseElementAction('edit')
         QDMElements.addTimingRelevantPeriodDateTime('03/09/2023 08:00 AM', '03/10/2023 08:15 AM')
 
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -153,12 +162,15 @@ describe('Clone QDM Test Case', () => {
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         //confirm changes was updated to the corrected element
-        cy.get("tr").eq(1).should('contain', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM')
-
+        cy.get('tr')
+            .eq(1)
+            .should(
+                'contain',
+                'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM'
+            )
     })
 
     it('Clone QDM Test Case Element - Non Measure owner unable to clone', () => {
-
         //Group Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -183,15 +195,17 @@ describe('Clone QDM Test Case', () => {
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully'
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.wait(4500)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -205,8 +219,10 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -214,7 +230,13 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -229,7 +251,7 @@ describe('Clone QDM Test Case', () => {
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -253,7 +275,7 @@ describe('Clone QDM Test Case', () => {
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.clickEditforCreatedTestCase()
+        TestCasesPage.clickEditforCreatedTestCase(false, TestCasesPage.qdmTCElementTable)
 
         //clone option is not available
         cy.get(TestCasesPage.qdmTCElementTable).find('[class="qpp-c-button"]').first().click({ force: true })

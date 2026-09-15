@@ -35,7 +35,7 @@ const openLockedMeasureInView = (): void => {
 const openLockedTestCaseInView = (): void => {
     step('Open locked test case in view mode')
     MeasuresPage.actionCenter('edit')
-    TestCasesPage.clickEditforCreatedTestCase()
+    TestCasesPage.clickEditforCreatedTestCase(false, TestCasesPage.testCaseLockedModalMessage, { openDetails: false })
 }
 
 const openUnlockedSecondTestCaseInView = (): void => {

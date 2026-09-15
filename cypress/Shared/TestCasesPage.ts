@@ -1240,7 +1240,11 @@ export class TestCasesPage {
       .blur() // commit without Enter
   }
 
-  public static clickEditforCreatedTestCase(secondTestCase?: boolean, readySelector = this.testCaseTitle): void {
+  public static clickEditforCreatedTestCase(
+    secondTestCase?: boolean,
+    readySelector = this.testCaseTitle,
+    options: { openDetails?: boolean } = {},
+  ): void {
     let callstackIntercepted = false
 
     cy.intercept('PUT', '/api/fhir/cql/callstacks', (req) => {
@@ -1263,6 +1267,11 @@ export class TestCasesPage {
         })
 
         cy.url({ timeout: 60000 }).should('include', `/test-cases/${tcId}`)
+        if (options.openDetails === false) {
+          cy.get(readySelector, { timeout: 35000 }).should('be.visible')
+          return
+        }
+
         this.openDetailsTab(readySelector)
       })
   }
