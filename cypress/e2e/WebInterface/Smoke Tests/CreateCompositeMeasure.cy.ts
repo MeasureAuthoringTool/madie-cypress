@@ -7,6 +7,7 @@ import { CreateMeasurePage, SupportedCompositeModels } from '../../../Shared/Cre
 import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { TestCaseJson } from '../../../Shared/TestCaseJson'
+import { MadieObject, PermissionActions } from '../../../Shared/Utilities'
 import { step } from '../../../utils/step'
 
 const testCase = TestCaseJson.fromCMS1017NumPass
@@ -50,6 +51,14 @@ const createTestCaseAndOpenEditPage = (): void => {
     TestCasesPage.clickEditforCreatedTestCase()
 }
 
+const openCompositeTestCaseAsSharedUser = (): void => {
+    Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, OktaLogin.getUser(true))
+    OktaLogin.AltLogin()
+    cy.get(MeasuresPage.sharedMeasures).should('be.visible').click()
+    MeasuresPage.actionCenter('edit', 0, { expectCqlEditorTab: false })
+    TestCasesPage.clickEditforCreatedTestCase()
+}
+
 //Skipping until Feature flag 'QICoreCompositeMeasure' is turned on
 describe.skip('Create Composite Measure', () => {
     beforeEach('Login', () => {
@@ -58,10 +67,9 @@ describe.skip('Create Composite Measure', () => {
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 11500)
     })
 
-    // afterEach('Cleanup and Logout', () => {
-
-    //     Utilities.deleteMeasure()
-    // })
+    afterEach('Cleanup and Logout', () => {
+        Utilities.deleteMeasure()
+    })
 
     it('Create QI Core Composite Measure and add Population Criteria', () => {
         createCompositeMeasureWithPopulationCriteria()
@@ -133,26 +141,25 @@ describe.skip('Create Composite Measure', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
         //Validate Edit and Json tab is editable and available respectively
     })
-    //Skipping until Feature flag 'QICoreCompositeMeasure' is turned on and add in the correct functionality to check that a read only viewer cannot edit through the builder or json tab
-    it.skip('Create Composite Measure and Verify Read Only Viewer Cannot Edit Test Case through Added Json Tab', () => {
+    it('Create Composite Measure and Verify Read Only Viewer Cannot Edit Test Case through Added Json Tab', () => {
         createCompositeMeasureWithPopulationCriteria()
         reopenMeasureForTestCases()
         createTestCaseAndOpenEditPage()
 
-        TestCasesPage.editTestCaseJson(testCase, true)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
-        //Validate Edit and Json tab is editable and available respectively
+        openCompositeTestCaseAsSharedUser()
+        cy.get(TestCasesPage.compositeJsonTab).should('be.visible').click()
+        cy.get(TestCasesPage.aceEditor).should('be.visible').and('have.class', 'ace_read-only')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('not.exist')
     })
-    //Skipping until Feature flag 'QICoreCompositeMeasure' is turned on and add in the correct functionality to check that a read only viewer cannot edit through the builder or json tab
-    it.skip('Create Composite Measure and Verify Read Only Viewer Cannot Edit Test Case through Added Builder Tab', () => {
+    it('Create Composite Measure and Verify Read Only Viewer Cannot Edit Test Case through Added Builder Tab', () => {
         createCompositeMeasureWithPopulationCriteria()
         reopenMeasureForTestCases()
         createTestCaseAndOpenEditPage()
 
+        openCompositeTestCaseAsSharedUser()
         cy.get(TestCasesPage.compositeAddedTab).should('be.visible').click()
         TestCasesPage.grabAddedId(1)
-        //Validate Edit and Json tab is editable and available respectively
-        TestCasesPage.compositeTestCaseAddedAction('edit')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('not.exist')
+        cy.get(TestCasesPage.compositeAddedPanel).should('be.visible')
     })
 })

@@ -45,10 +45,7 @@ export class AdminUserProfilePage {
         cy.get(this.userSearchInput).clear().type(harpId)
         cy.get(this.userSearchButton).should('be.visible').click()
         cy.intercept('PUT', '**/api/admin/userProfile/*/measures/searches*').as('profileMeasures')
-        cy.contains(this.userHarpIdCell, harpId)
-            .closest('tr')
-            .find(this.userNameLink)
-            .click()
+        cy.contains(this.userHarpIdCell, harpId).closest('tr').find(this.userNameLink).click()
 
         cy.wait('@profileMeasures').its('response.statusCode').should('eq', 200)
         cy.wait('@profileMeasures').its('response.statusCode').should('eq', 200)
@@ -58,22 +55,14 @@ export class AdminUserProfilePage {
         cy.get(this.measuresTable).should('be.visible')
     }
 
-    public static assertDisabledAction(
-        buttonSelector: string,
-        tooltipSelector: string,
-        expectedTooltip: string
-    ): void {
+    public static assertDisabledAction(buttonSelector: string, tooltipSelector: string, expectedTooltip: string): void {
         cy.get(buttonSelector).should('be.disabled')
         cy.get(tooltipSelector).trigger('mouseover')
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', expectedTooltip)
         cy.get(tooltipSelector).trigger('mouseout')
     }
 
-    public static assertEnabledAction(
-        buttonSelector: string,
-        tooltipSelector: string,
-        expectedTooltip: string
-    ): void {
+    public static assertEnabledAction(buttonSelector: string, tooltipSelector: string, expectedTooltip: string): void {
         cy.get(buttonSelector).should('be.enabled')
         cy.get(tooltipSelector).should('be.visible').trigger('mouseover')
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', expectedTooltip)
@@ -81,18 +70,15 @@ export class AdminUserProfilePage {
     }
 
     public static selectMeasureRow(rowIndex: number): void {
-        cy.get(this.measuresTable)
-            .find('tbody tr')
-            .eq(rowIndex)
-            .find('input[type="checkbox"]')
-            .check()
+        cy.get(this.measuresTable).find('tbody tr').eq(rowIndex).find('input[type="checkbox"]').check()
     }
 
     public static selectMeasureByVersion(version: string): void {
-        cy.contains(`${this.measuresTable} tbody td`, version)
-            .closest('tr')
-            .find('input[type="checkbox"]')
-            .check()
+        cy.contains(`${this.measuresTable} tbody td`, version).closest('tr').find('input[type="checkbox"]').check()
+    }
+
+    public static selectMeasureById(measureId: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(`[data-testid="checkbox-${measureId}"]`).should('be.visible').check()
     }
 
     public static openMeasuresTab(tabSelector: string): void {
@@ -135,10 +121,13 @@ export class AdminUserProfilePage {
 
     public static assertLibraryFilterOptions(): void {
         cy.get(this.libraryFilterBy).click()
-        cy.get('[role="listbox"]').should('be.visible').find('[role="option"]').then(($options) => {
-            const options = [...$options].map((option) => option.textContent?.trim())
-            expect(options).to.deep.eq(['-', 'Library', 'Version', 'Model'])
-        })
+        cy.get('[role="listbox"]')
+            .should('be.visible')
+            .find('[role="option"]')
+            .then(($options) => {
+                const options = [...$options].map((option) => option.textContent?.trim())
+                expect(options).to.deep.eq(['-', 'Library', 'Version', 'Model'])
+            })
         cy.get('body').type('{esc}')
     }
 
@@ -153,17 +142,11 @@ export class AdminUserProfilePage {
     }
 
     public static clearLibrarySearch(): void {
-        cy.get(this.libraryClearSearch)
-            .should('be.visible')
-            .find('button')
-            .should('be.enabled')
-            .click()
+        cy.get(this.libraryClearSearch).should('be.visible').find('button').should('be.enabled').click()
     }
 
     public static findLibraryRow(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.contains(`${this.librariesTable} td`, libraryName)
-            .should('be.visible')
-            .closest('tr')
+        return cy.contains(`${this.librariesTable} td`, libraryName).should('be.visible').closest('tr')
     }
 
     public static findLibraryRowById(libraryId: string): Cypress.Chainable<JQuery<HTMLElement>> {
@@ -175,20 +158,13 @@ export class AdminUserProfilePage {
     }
 
     public static selectLibraryByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        return this.findLibraryRow(libraryName)
-            .find('input[type="checkbox"]')
-            .should('be.visible')
-            .check()
+        return this.findLibraryRow(libraryName).find('input[type="checkbox"]').should('be.visible').check()
     }
 
     public static expandLibrarySet(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        this.findLibraryRow(libraryName)
-            .find('[data-testid^="expand-library-toggle-"]')
-            .should('be.visible')
-            .click()
+        this.findLibraryRow(libraryName).find('[data-testid^="expand-library-toggle-"]').should('be.visible').click()
 
-        return cy.get(`${this.librariesTable} tr.expanded-row:visible`)
-            .should('have.length.greaterThan', 0)
+        return cy.get(`${this.librariesTable} tr.expanded-row:visible`).should('have.length.greaterThan', 0)
     }
 
     public static selectMeasureByName(measureName: string): Cypress.Chainable<JQuery<HTMLElement>> {
@@ -218,10 +194,6 @@ export class AdminUserProfilePage {
         cy.get(expandToggle).should('be.visible')
         cy.get(expandToggle).click()
 
-        return cy
-            .get(this.measuresTable)
-            .find('tr.expanded-row:visible')
-            .should('have.length', expectedExpandedRows)
+        return cy.get(this.measuresTable).find('tr.expanded-row:visible').should('have.length', expectedExpandedRows)
     }
-
 }
