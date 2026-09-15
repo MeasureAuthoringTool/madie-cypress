@@ -131,14 +131,14 @@ function fetchAccessTokenAndSetCookie(
     username: string,
     password: string,
     opts?: { failOnStatusCode?: boolean; uppercaseUsername?: boolean }
-): void {
+): Cypress.Chainable<Cypress.Cookie> {
     const failOnStatus = opts?.failOnStatusCode ?? false
     const effectiveUsername = opts?.uppercaseUsername ? username.toUpperCase() : username
 
     cy.clearCookies()
     cy.clearLocalStorage()
 
-    cy.request({
+    return cy.request({
         url: authnUrl,
         method: 'POST',
         headers: {
@@ -178,7 +178,7 @@ function fetchAccessTokenAndSetCookie(
             '&state=iTIppKJsrKTXektB6F1h1dRsQEaDCjlTD3xtjDbYKZ1FlPFKVcq1u7FRuPgPMqxZ' +
             '&scope=openid%20email%20profile'
 
-        cy.request({
+        return cy.request({
             url: url,
             method: 'GET',
             headers: {
@@ -199,7 +199,7 @@ function fetchAccessTokenAndSetCookie(
                 return String.fromCharCode(parseInt(arguments[1], 16))
             })
 
-            cy.request({
+            return cy.request({
                 url: tokenUrl,
                 method: 'POST',
                 headers: {
@@ -219,7 +219,7 @@ function fetchAccessTokenAndSetCookie(
                 expect(tokenResponse.status).to.eql(200)
                 const access_token = tokenResponse.body.access_token
                 // setting the cookie value to be grabbed for api authentication
-                cy.setCookie('accessToken', access_token)
+                return cy.setCookie('accessToken', access_token)
             })
         })
     })
@@ -227,44 +227,44 @@ function fetchAccessTokenAndSetCookie(
 
 // --- Thin wrappers that preserve the original public API ---
 
-export function setAccessTokenCookie() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser, Environment.credentials().password, {
+export function setAccessTokenCookie(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().harpUser, Environment.credentials().password, {
         failOnStatusCode: false
     })
 }
 
-export function setAccessTokenCookie2() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser2, Environment.credentials().password2, {
+export function setAccessTokenCookie2(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().harpUser2, Environment.credentials().password2, {
         failOnStatusCode: false
     })
 }
 
-export function setAccessTokenCookie3() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser3, Environment.credentials().password3, {
+export function setAccessTokenCookie3(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().harpUser3, Environment.credentials().password3, {
         failOnStatusCode: false
     })
 }
 
-export function setAccessTokenCookieCAMELCASE() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().harpUser, Environment.credentials().password, {
+export function setAccessTokenCookieCAMELCASE(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().harpUser, Environment.credentials().password, {
         uppercaseUsername: true
     })
 }
 
-export function setAccessTokenCookieALT() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser, Environment.credentials().passwordALT)
+export function setAccessTokenCookieALT(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser, Environment.credentials().passwordALT)
 }
 
-export function setAccessTokenCookieALT2() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser2, Environment.credentials().passwordALT2)
+export function setAccessTokenCookieALT2(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser2, Environment.credentials().passwordALT2)
 }
 
-export function setAccessTokenCookieALT3() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser3, Environment.credentials().passwordALT3)
+export function setAccessTokenCookieALT3(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().altHarpUser3, Environment.credentials().passwordALT3)
 }
 
-export function setAccessTokenCookieAdmin() {
-    fetchAccessTokenAndSetCookie(Environment.credentials().adminUser, Environment.credentials().adminPassword)
+export function setAccessTokenCookieAdmin(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().adminUser, Environment.credentials().adminPassword)
 }
 
 export function UMLSAPIKeyLogin() {

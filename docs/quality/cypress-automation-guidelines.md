@@ -39,6 +39,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 - Put setup in `beforeEach` only when every test in the suite requires it. Create scenario-specific records in the test or a named scenario helper so visibility, layout, and negative tests do not pay for unrelated data setup.
 - Prefer `fixturePath`, `readFixture`, `writeFixture`, `readMeasureId`, `readCqlLibraryId`, `readTestCaseId`, and related helpers over hand-built fixture paths.
 - Prefer `withAccessToken`, `requestWithAccessToken`, and domain request helpers over inline cookie or token plumbing.
+- Custom Cypress commands that enqueue authentication or API work must return their final Cypress chain. Returning `void` allows later setup requests to run before authentication has completed.
 - Use `TestData.getAccountDisplayName(harpId)` for UI text that includes a display name and HARP ID.
 - Generate unique names inside retryable hooks such as `beforeEach`; spec-load names can collide when Cypress retries setup.
 
