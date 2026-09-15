@@ -332,8 +332,9 @@ export class TestData {
     }
 
     public static withAccessToken(callback: (accessToken: string) => Cypress.Chainable | void): Cypress.Chainable {
-        return cy.getCookie('accessToken').then((cookie) => {
+        return cy.getCookie('accessToken').should((cookie) => {
             expect(cookie?.value, 'accessToken cookie').to.be.a('string').and.not.be.empty
+        }).then((cookie) => {
             return callback(cookie.value)
         })
     }
@@ -479,6 +480,22 @@ export class TestData {
                 ...options.headers,
                 harpId
             }
+        })
+    }
+
+    public static transferCurrentCqlLibrary<T = CqlLibraryBody>(
+        harpId: string,
+        retainShareAccess = false,
+        libraryNumber = 0,
+        owner: FixtureOwner = 'selectedUser'
+    ): Cypress.Chainable<Cypress.Response<T>> {
+        return this.readCqlLibraryId(libraryNumber, owner).then((libraryId) => {
+            return this.requestWithAccessToken<T>({
+                url: `/api/cql-libraries/transfer?retainShareAccess=${retainShareAccess}`,
+                method: 'PUT',
+                headers: { harpId },
+                body: [libraryId]
+            })
         })
     }
 

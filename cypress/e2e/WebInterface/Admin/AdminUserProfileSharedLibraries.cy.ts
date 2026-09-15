@@ -45,6 +45,18 @@ describe('Admin user profile Shared Libraries', () => {
         cy.wait('@sharedLibrariesCount').its('response.statusCode').should('eq', 200)
     }
 
+    const searchForCreatedLibrary = (): void => {
+        cy.intercept({
+            pathname: `/api/cql-libraries/admin/userProfile/${profileUser}/searches`,
+            query: { ownershipType: 'SHARED' }
+        }).as('searchedSharedLibraries')
+        AdminUserProfilePage.submitLibrarySearch(libraryName)
+        AdminUserProfilePage.waitForLibraryListRefresh('@searchedSharedLibraries').then(({ response }) => {
+            expect(response?.statusCode).to.eq(200)
+            expect(JSON.stringify(response?.body), 'searched Shared Libraries response').to.include(libraryName)
+        })
+    }
+
     beforeEach(() => {
         const uniqueSuffix = Date.now()
         const credentials = Environment.credentials()
@@ -103,13 +115,14 @@ describe('Admin user profile Shared Libraries', () => {
                 page: '0',
                 sortInfo: 'lastModifiedAt,false'
             })
-            expect(JSON.stringify(response?.body), 'Shared Libraries response').to.include(libraryName)
         })
         cy.get(AdminUserProfilePage.librariesTable).within(() => {
             ;['Library', 'Version', 'Status', 'Model', 'Owner', 'Updated'].forEach((columnName) => {
                 cy.contains('th', columnName).should('be.visible')
             })
         })
+
+        searchForCreatedLibrary()
 
         AdminUserProfilePage.findLibraryRow(libraryName)
             .should('contain.text', libraryName)
@@ -135,8 +148,9 @@ describe('Admin user profile Shared Libraries', () => {
         })
         openSharedLibraries()
         AdminUserProfilePage.openLibrariesTab(AdminUserProfilePage.sharedLibrariesTab)
-        cy.wait('@sharedLibraries').its('response.statusCode').should('eq', 200)
+        AdminUserProfilePage.waitForLibraryListRefresh('@sharedLibraries')
 
+        searchForCreatedLibrary()
         AdminUserProfilePage.findLibraryRow(libraryName).should('contain.text', '1.0.000')
         AdminUserProfilePage.expandLibrarySet(libraryName)
             .should('contain.text', libraryName)
@@ -162,8 +176,8 @@ describe('Admin user profile Shared Libraries', () => {
                 pathname: `/api/cql-libraries/admin/userProfile/${profileUser}/searches`,
                 query: { ownershipType: 'SHARED', limit: '10', page: '0', sortInfo }
             }).as(`sortSharedLibraries${index}`)
-            cy.get(selector).should('be.visible').click()
-            cy.wait(`@sortSharedLibraries${index}`).its('response.statusCode').should('eq', 200)
+            cy.get(AdminUserProfilePage.librariesTable).find(selector).should('be.visible').click()
+            AdminUserProfilePage.waitForLibraryListRefresh(`@sortSharedLibraries${index}`)
         })
     })
 

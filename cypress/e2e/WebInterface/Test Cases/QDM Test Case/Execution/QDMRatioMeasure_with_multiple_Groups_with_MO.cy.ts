@@ -1,15 +1,14 @@
-import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { QDMElements } from "../../../../../Shared/QDMElements"
-import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
-import { Header } from "../../../../../Shared/Header"
+import { CreateMeasureOptions, CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { QDMElements } from '../../../../../Shared/QDMElements'
+import { Header } from '../../../../../Shared/Header'
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -22,9 +21,7 @@ let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
 const measureData: CreateMeasureOptions = {}
 
 describe('Measure Creation: Patient Based: Ratio measure with multiple groups with MOs', () => {
-
     before('Create Measure', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Ratio'
@@ -39,6 +36,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        //cy.pause()
 
         // //adding supplemental data
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -48,12 +46,10 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
     })
 
     after('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Test Case execution with patient based groups with MOs', () => {
-
         //Group Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -78,14 +74,16 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully'
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -99,8 +97,10 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //add second PC / group to measure
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')
@@ -108,7 +108,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -122,8 +122,10 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -131,7 +133,13 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -146,7 +154,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -159,11 +167,11 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
         TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '8', {
             clearFirst: true,
-            index: 0,
+            index: 0
         })
         TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '8', {
             clearFirst: true,
-            index: 1,
+            index: 1
         })
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
 
@@ -184,9 +192,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
 })
 
 describe('Measure Creation: Non-patient based: Ratio measure with multiple groups with MOs', () => {
-
     before('Create Measure', () => {
-
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = 'Ratio'
@@ -209,12 +215,10 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
     })
 
     after('Logout and Clean up', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Test Case execution with non-patient based groups with MOs', () => {
-
         //Group Creation
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -239,14 +243,16 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         //click on the save button and confirm save success message Base Config
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should(
+            'contain.text',
+            'Measure Base Configuration ' + 'Updated Successfully'
+        )
 
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -260,8 +266,10 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //add second PC / group to measure
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')
@@ -269,7 +277,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -283,9 +291,10 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
-
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Population details for ' + 'this group saved successfully.'
+        )
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -293,7 +302,13 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics(
+            '07/31/2003 12:00 AM',
+            'Living',
+            'White',
+            'Male',
+            'Not Hispanic or Latino'
+        )
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -308,7 +323,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get(umlsLoginForm.closeGenericError).click()
+        QDMElements.closeElement()
 
         //save changes
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -354,7 +369,6 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
 
         //run test cases
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')

@@ -94,7 +94,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                 cy.get('[data-testid="export-action-btn"]').should('be.visible')
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
 
                 cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
                 cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
@@ -137,7 +137,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForExport')
         MeasuresPage.selectMeasure()
         cy.get('[data-testid="export-action-btn"]').should('be.visible').and('be.enabled').click()
-        cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+        cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
         cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
     })
 
@@ -189,7 +189,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
                 cy.get('[data-testid="export-action-btn"]').should('be.visible')
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
 
                 cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
                 cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
@@ -322,7 +322,7 @@ describe('Error Message on Measure Export when the PC does not have Improvement 
                 cy.get('[data-testid="export-action-btn"]').should('be.visible')
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
 
                 cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
                 cy.get('[class="error-message"] > ul > :nth-child(1)').should(

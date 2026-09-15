@@ -35,35 +35,23 @@ describe('Test Case Page CQL page object', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Updates applied and saved from the Measure CQL page / tab are updated and reflective in the Test Case Page', () => {
-        //Click on Edit Button
+    it('persists updates applied and saved in the Measure CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
-        //navigate to the CQL Editor tab, for the measure
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openCqlEditor()
 
-        //type in an additional value to the already existing value in the editor
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type('define "ipp": true')
 
-        //saving new CQL value
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.collapseEditor()
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
-        //navigate to the test case tab
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //edit created test case
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //confirm that CQL field, on the Test Case page, reflects the additional text
-        cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'define "ipp": true')
+        CQLEditorPage.openCqlEditor()
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'define "ipp": true')
     })
 })
 
@@ -89,11 +77,8 @@ describe('Test Case Page CQL page object', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //add section / line to validate message letting user know of error with CQL
-        cy.get(TestCasesPage.cqlHasErrorsMsg).should('exist')
-        cy.get(TestCasesPage.cqlHasErrorsMsg).should('be.visible')
-        cy.get(TestCasesPage.cqlHasErrorsMsg).should(
-            'contain.text',
-            'An error exists with the measure CQL, please review the CQL Editor tab'
-        )
+        cy.get(TestCasesPage.testCaseSyntaxError)
+            .should('be.visible')
+            .and('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
     })
 })

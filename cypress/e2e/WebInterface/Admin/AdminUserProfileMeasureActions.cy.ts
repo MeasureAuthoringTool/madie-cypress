@@ -71,10 +71,10 @@ describe('Admin user profile measure actions', () => {
         AdminUserProfilePage.selectMeasureRow(0)
 
         cy.get(AdminUserProfilePage.exportButton).should('be.enabled').click()
-        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Export')
+        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Executable Export')
         cy.get(MeasuresPage.exportPublishingOption)
             .should('be.visible')
-            .and('have.text', 'Export for Publishing')
+            .and('have.text', 'Publishable Export')
     })
 
     it('exports one selected Owned Measure and records the Admin attribution', () => {
