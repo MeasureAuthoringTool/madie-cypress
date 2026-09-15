@@ -1,23 +1,26 @@
-import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
-import { Header } from "../../../Shared/Header"
-import { Utilities } from "../../../Shared/Utilities"
-import { umlsLoginForm } from "../../../Shared/umlsLoginForm"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { CQLLibrariesPage } from '../../../Shared/CQLLibrariesPage'
+import { Utilities } from '../../../Shared/Utilities'
+import { umlsLoginForm } from '../../../Shared/umlsLoginForm'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 
-let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
-var CQLLibraryNameAlt = ""
-let CQLLibraryPublisherAlt = 'ICFerALTUser'
+const CQLLibraryPublisher = 'SemanticBits'
+let CQLLibraryNameAlt = ''
+const CQLLibraryPublisherAlt = 'ICFerALTUser'
+
+const createUniqueLibraryName = (): string => `TestLibrary${Date.now()}${Math.floor(Math.random() * 1000 + 1)}`
+
+const openCreatedLibraryFromAllLibraries = (): void => {
+    CQLLibrariesPage.openLibrariesList()
+    cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible').click()
+    CQLLibrariesPage.searchForLibraryByName(CQLLibraryNameAlt)
+}
 
 describe('Edit CQL Library validations', () => {
-
     beforeEach('Create CQL Library and Login', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCQLLibraryName = CQLLibraryName + randValue + randValue + 2
+        newCQLLibraryName = createUniqueLibraryName()
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
 
@@ -25,14 +28,10 @@ describe('Edit CQL Library validations', () => {
     })
 
     afterEach('Logout', () => {
-
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
     it('CQL Library edit page level validations on the CQL Library name, error messaging and accessibility of the save button', () => {
-
-        cy.get(Header.cqlLibraryTab).click()
-
         //Click on Edit button, Verify error message when the CQL Library Name field is empty
         CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.currentCQLLibName).clear()
@@ -42,34 +41,50 @@ describe('Edit CQL Library validations', () => {
 
         //Verify error message when the CQL Library Name has special characters
         cy.get(CQLLibraryPage.currentCQLLibName).type('UpdatedTest_@Library')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+        )
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name does not start with an Upper Case letter
         cy.get(CQLLibraryPage.currentCQLLibName).clear().type('updatedTestLibrary')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+        )
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has spaces
         cy.get(CQLLibraryPage.currentCQLLibName).clear().type('UpdatedTest   Library')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+        )
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has only numbers
         cy.get(CQLLibraryPage.currentCQLLibName).clear().type('35657')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+        )
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has more than 255 characters
-        cy.get(CQLLibraryPage.currentCQLLibName).clear().type('Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name cannot be more than 64 characters.')
+        cy.get(CQLLibraryPage.currentCQLLibName)
+            .clear()
+            .type(
+                'Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw'
+            )
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should(
+            'contain.text',
+            'Library name cannot be more than 64 characters.'
+        )
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
     })
 
     it('CQL Library Edit page validation on description and publisher field', () => {
-
-        cy.get(Header.cqlLibraryTab).click()
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -88,9 +103,6 @@ describe('Edit CQL Library validations', () => {
     })
 
     it('CQL Library Edit page validation that the "Experimental" check box can be checked or unchecked -- not required', () => {
-
-        cy.get(Header.cqlLibraryTab).click()
-
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -102,7 +114,6 @@ describe('Edit CQL Library validations', () => {
         //experimental check box
         cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).focus().check()
-
 
         //enter / select a publisher value
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).should('exist')
@@ -116,13 +127,9 @@ describe('Edit CQL Library validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.enabled')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 30000)
 
         //navigate back to the CQL Library page and navigate to the edit CQL Library page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //experimental check box make sure it is still checked
@@ -141,16 +148,12 @@ describe('Edit CQL Library validations', () => {
 })
 
 describe('CQL Library Validations -- User ownership', () => {
-
     beforeEach('Login', () => {
-        var randValue = (Math.floor((Math.random() * 1000) + 1))
-        CQLLibraryNameAlt = 'TestLibrary' + Date.now() + randValue
+        CQLLibraryNameAlt = createUniqueLibraryName()
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt)
     })
 
     afterEach('Logout', () => {
-
-        
         Utilities.deleteLibrary(CQLLibraryNameAlt)
     })
 
@@ -158,49 +161,19 @@ describe('CQL Library Validations -- User ownership', () => {
         //log in as user that does not own the Library
         OktaLogin.SessionLogin()
 
-        //navigate to the main CQL Library list page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.openLibrariesList()
+        CQLLibrariesPage.searchForLibraryByName(CQLLibraryNameAlt).should('contain.text', CQLLibraryNameAlt)
 
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
-        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
-        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
-
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
-
-        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesTab).click()
-
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible').click()
+        CQLLibrariesPage.searchForLibraryByName(CQLLibraryNameAlt).should('contain.text', CQLLibraryNameAlt)
     })
 
     it('Owner is not the user and the library details are viewed via a View button and Library cannot be edited', () => {
-        const currentUser = Cypress.env('selectedUser')
         //log in as user that own the Library
         OktaLogin.SessionAltLogin()
 
-        //navigate to the main CQL Library list page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
-
-        //ensure we are on the All Libraries tab
-        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesTab).click()
-
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
-
-        CQLLibrariesPage.clickViewforCreatedLibrary()
-
-        cy.contains('You are not the owner of the CQL Library. Only owner can edit it.').should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'readonly')
+        openCreatedLibraryFromAllLibraries()
+        CQLLibrariesPage.openLibraryAsNonOwner()
+        CQLLibraryPage.assertLibraryDetailsMode('view')
     })
 })
