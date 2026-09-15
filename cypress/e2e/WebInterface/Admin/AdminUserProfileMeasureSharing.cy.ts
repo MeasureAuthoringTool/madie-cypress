@@ -53,7 +53,10 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
             TestData.readMeasureId(measureNumber).then((measureId) => {
                 TestData.requestSharePermissions('measure', 'GRANT', measureId, sharedProfileUser).then(
                     (response) => {
-                        expect(response.status).to.eq(200)
+                        expect(
+                            response.status,
+                            `share measure ${measureId} with ${sharedProfileUser}: ${JSON.stringify(response.body)}`
+                        ).to.eq(200)
                     }
                 )
             })
@@ -73,6 +76,9 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
         qdmLibraryName = `AdminProfileShareQdmLib${uniqueSuffix}`
         measureOwner = OktaLogin.getUser(false)
         sharedProfileUser = OktaLogin.getUser(true)
+        expect(measureOwner, 'measure owner').not.to.be.empty
+        expect(sharedProfileUser, 'shared profile user').not.to.be.empty
+        expect(sharedProfileUser, 'shared profile user differs from measure owner').not.to.eq(measureOwner)
         createMeasures()
     })
 

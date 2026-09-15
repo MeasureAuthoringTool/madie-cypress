@@ -111,6 +111,23 @@ export class AdminUserProfilePage {
         cy.get(this.librariesTable).should('be.visible')
     }
 
+    public static waitForLibraryListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
+        return cy.wait(alias).then((interception) => {
+            expect(interception.response?.statusCode).to.eq(200)
+
+            return cy
+                .get(this.librariesTable)
+                .should('be.visible')
+                .find('tbody tr')
+                .should('have.length.greaterThan', 0)
+                .first()
+                .find('td')
+                .first()
+                .should('be.visible')
+                .then(() => interception)
+        })
+    }
+
     public static assertLibrarySearchControls(): void {
         cy.get(this.librarySearchInput).should('be.visible').and('be.enabled')
         cy.get(this.libraryFilterBy).should('be.visible')

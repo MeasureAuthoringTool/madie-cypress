@@ -12,13 +12,18 @@ import { Utilities } from '../../../Shared/Utilities'
 describe('Admin user profile Shared Measure actions', () => {
     let measureName = ''
     let cqlLibraryName = ''
+    let measureOwner = ''
     let profileUser = ''
 
     beforeEach(() => {
         const uniqueSuffix = Date.now()
         measureName = `AdminProfileShared${uniqueSuffix}`
         cqlLibraryName = `AdminProfileSharedLib${uniqueSuffix}`
+        measureOwner = OktaLogin.getUser(false)
         profileUser = OktaLogin.getUser(true)
+        expect(measureOwner, 'measure owner').not.to.be.empty
+        expect(profileUser, 'shared profile user').not.to.be.empty
+        expect(profileUser, 'shared profile user differs from measure owner').not.to.eq(measureOwner)
 
         const measureCql = MeasureCQL.CQL_For_Cohort
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCql)
@@ -28,7 +33,10 @@ describe('Admin user profile Shared Measure actions', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         TestData.readMeasureId().then((measureId) => {
             TestData.requestSharePermissions('measure', 'GRANT', measureId, profileUser).then((response) => {
-                expect(response.status).to.eq(200)
+                expect(
+                    response.status,
+                    `share measure ${measureId} with ${profileUser}: ${JSON.stringify(response.body)}`
+                ).to.eq(200)
                 expect(response.body[measureId][0].userId).to.eq(profileUser)
                 expect(response.body[measureId][0].roles).to.include('SHARED_WITH')
             })
@@ -67,10 +75,10 @@ describe('Admin user profile Shared Measure actions', () => {
         )
 
         cy.get(AdminUserProfilePage.exportButton).click()
-        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Export')
+        cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Executable Export')
         cy.get(MeasuresPage.exportPublishingOption)
             .should('be.visible')
-            .and('have.text', 'Export for Publishing')
+            .and('have.text', 'Publishable Export')
     })
 
     it('opens Human Readable for a Shared Measure', () => {
@@ -84,8 +92,8 @@ describe('Admin user profile Shared Measure actions', () => {
     })
 
     ;[
-        { name: 'Export', selector: MeasuresPage.exportNonPublishingOption },
-        { name: 'Export for Publishing', selector: MeasuresPage.exportPublishingOption }
+        { name: 'Executable Export', selector: MeasuresPage.exportNonPublishingOption },
+        { name: 'Publishable Export', selector: MeasuresPage.exportPublishingOption }
     ].forEach(({ name, selector }) => {
         it(`exports a Shared Measure using ${name}`, () => {
             cy.intercept('GET', '**/api/measures/*/exports?*').as('measureExport')
@@ -96,7 +104,7 @@ describe('Admin user profile Shared Measure actions', () => {
             cy.get(MeasuresPage.exportFinishedCheck, { timeout: 60000 }).should('be.visible')
             cy.get(TestCasesPage.successMsg).should('contain.text', 'Measure exported successfully')
 
-            if (name === 'Export') {
+            if (name === 'Executable Export') {
                 cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('be.visible').click()
                 cy.get(AdminUserProfilePage.historyButton).should('be.enabled').click()
                 cy.get(MeasuresPage.userActionRow).should('contain.text', 'EXPORTED_MEASURE')
@@ -111,6 +119,7 @@ describe('Admin user profile unrelated Shared Measure selections', () => {
     let secondMeasureName = ''
     let firstLibraryName = ''
     let secondLibraryName = ''
+    let measureOwner = ''
     let profileUser = ''
 
     beforeEach(() => {
@@ -119,7 +128,11 @@ describe('Admin user profile unrelated Shared Measure selections', () => {
         secondMeasureName = `AdminProfileSharedTwo${uniqueSuffix}`
         firstLibraryName = `AdminProfileSharedLibOne${uniqueSuffix}`
         secondLibraryName = `AdminProfileSharedLibTwo${uniqueSuffix}`
+        measureOwner = OktaLogin.getUser(false)
         profileUser = OktaLogin.getUser(true)
+        expect(measureOwner, 'measure owner').not.to.be.empty
+        expect(profileUser, 'shared profile user').not.to.be.empty
+        expect(profileUser, 'shared profile user differs from measure owner').not.to.eq(measureOwner)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(
             firstMeasureName,
@@ -136,7 +149,10 @@ describe('Admin user profile unrelated Shared Measure selections', () => {
         ;[0, 1].forEach((measureNumber) => {
             TestData.readMeasureId(measureNumber).then((measureId) => {
                 TestData.requestSharePermissions('measure', 'GRANT', measureId, profileUser).then((response) => {
-                    expect(response.status).to.eq(200)
+                    expect(
+                        response.status,
+                        `share measure ${measureId} with ${profileUser}: ${JSON.stringify(response.body)}`
+                    ).to.eq(200)
                 })
             })
         })

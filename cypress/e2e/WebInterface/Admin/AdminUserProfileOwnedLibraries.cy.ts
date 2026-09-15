@@ -37,7 +37,7 @@ describe('Admin user profile Owned Libraries', () => {
             query: { ownershipType: 'OWNED' }
         }).as('searchedOwnedLibraries')
         AdminUserProfilePage.submitLibrarySearch(libraryName)
-        cy.wait('@searchedOwnedLibraries').then(({ response }) => {
+        AdminUserProfilePage.waitForLibraryListRefresh('@searchedOwnedLibraries').then(({ response }) => {
             expect(response?.statusCode).to.eq(200)
             expect(JSON.stringify(response?.body), 'searched Owned Libraries response').to.include(libraryName)
         })
@@ -72,7 +72,7 @@ describe('Admin user profile Owned Libraries', () => {
         })
 
         AdminUserProfilePage.openLibrariesTab(AdminUserProfilePage.ownedLibrariesTab)
-        cy.wait('@ownedLibraries').then(({ request, response }) => {
+        AdminUserProfilePage.waitForLibraryListRefresh('@ownedLibraries').then(({ request, response }) => {
             expect(response?.statusCode).to.eq(200)
             expect(request.query).to.include({
                 ownershipType: 'OWNED',
@@ -112,7 +112,7 @@ describe('Admin user profile Owned Libraries', () => {
 
         openOwnedLibraries()
         AdminUserProfilePage.openLibrariesTab(AdminUserProfilePage.ownedLibrariesTab)
-        cy.wait('@ownedLibraries').its('response.statusCode').should('eq', 200)
+        AdminUserProfilePage.waitForLibraryListRefresh('@ownedLibraries')
 
         searchForCreatedLibrary()
         AdminUserProfilePage.findLibraryRow(libraryName)
@@ -142,8 +142,8 @@ describe('Admin user profile Owned Libraries', () => {
                 pathname: `/api/cql-libraries/admin/userProfile/${libraryOwner}/searches`,
                 query: { ownershipType: 'OWNED', limit: '10', page: '0', sortInfo }
             }).as(`sortOwnedLibraries${index}`)
-            cy.get(selector).should('be.visible').click()
-            cy.wait(`@sortOwnedLibraries${index}`).its('response.statusCode').should('eq', 200)
+            cy.get(AdminUserProfilePage.librariesTable).find(selector).should('be.visible').click()
+            AdminUserProfilePage.waitForLibraryListRefresh(`@sortOwnedLibraries${index}`)
         })
     })
 

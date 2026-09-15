@@ -437,10 +437,10 @@ export class EditMeasurePage {
 
                 if (exportForPublish) {
                     Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
-                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Publishable Export').click()
                 } else {
                     Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 50000)
-                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
                 }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
