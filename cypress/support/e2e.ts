@@ -23,6 +23,7 @@ import 'cypress-axe'
 import 'axe-core'
 import cypress = require("cypress");
 import "@cypress-audit/lighthouse/commands"
+import { Environment } from '../Shared/Environment'
 const addContext = require('mochawesome/addContext')
 require('cy-verify-downloads').addCustomCommand()
 export { }
@@ -47,19 +48,22 @@ Cypress.on('test:after:run', (test, runnable) => {
 
 
 before(() => {
-    cy.task('getAvailableUser').then((user) => {
-        expect(user, 'No users available').to.not.be.null;
-        Cypress.env('selectedUser', user)
-    })
-    cy.task('getAvailableAltUser').then((altUser) => {
-        expect(altUser, 'No altUsers available').to.not.be.null;
-        Cypress.env('selectedAltUser', altUser)
+    return Environment.initialize().then(() => {
+        return cy.task('getAvailableUser').then((user) => {
+            expect(user, 'No users available').to.not.be.null;
+            Cypress.expose('selectedUser', user)
+        }).then(() => {
+            return cy.task('getAvailableAltUser').then((altUser) => {
+                expect(altUser, 'No altUsers available').to.not.be.null;
+                Cypress.expose('selectedAltUser', altUser)
+            })
+        })
     })
 })
 
 after(() => {
-    const user = Cypress.env('selectedUser')
-    const altUser = Cypress.env('selectedAltUser')
+    const user = Cypress.expose('selectedUser')
+    const altUser = Cypress.expose('selectedAltUser')
     if (user) {
         cy.task('releaseUser', user)
     }

@@ -70,13 +70,6 @@ declare global {
     }
 }
 
-const authnUrl = Environment.authentication().authnUrl
-const authUri = Environment.authentication().authUri
-const redirectUri = Environment.authentication().redirectUri
-const clientId = Environment.authentication().clientId
-const authCodeUrl = authUri + '/v1/authorize'
-const tokenUrl = authUri + '/v1/token'
-const codeVerifier = Cypress.env('MADIE_CODEVERIFIER')
 require('cypress-delete-downloads-folder').addCustomCommand()
 
 // -------------------------------------------------------
@@ -132,6 +125,13 @@ function fetchAccessTokenAndSetCookie(
     password: string,
     opts?: { failOnStatusCode?: boolean; uppercaseUsername?: boolean }
 ): Cypress.Chainable<Cypress.Cookie> {
+    const authentication = Environment.authentication()
+    const authnUrl = authentication.authnUrl
+    const authCodeUrl = authentication.authUri + '/v1/authorize'
+    const tokenUrl = authentication.authUri + '/v1/token'
+    const redirectUri = authentication.redirectUri
+    const clientId = authentication.clientId
+    const codeVerifier = Environment.codeVerifier()
     const failOnStatus = opts?.failOnStatusCode ?? false
     const effectiveUsername = opts?.uppercaseUsername ? username.toUpperCase() : username
 
@@ -267,9 +267,9 @@ export function setAccessTokenCookieAdmin(): Cypress.Chainable<Cypress.Cookie> {
     return fetchAccessTokenAndSetCookie(Environment.credentials().adminUser, Environment.credentials().adminPassword)
 }
 
-export function UMLSAPIKeyLogin() {
-    cy.getCookie('accessToken').then((accessToken) => {
-        cy.request({
+export function UMLSAPIKeyLogin(): Cypress.Chainable<Cypress.Response<unknown>> {
+    return cy.getCookie('accessToken').should('exist').then((accessToken) => {
+        return cy.request({
             url: '/api/vsac/umls-credentials',
             method: 'POST',
             headers: {
