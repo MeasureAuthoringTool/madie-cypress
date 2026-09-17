@@ -19,8 +19,8 @@ export class OktaLogin {
     // ------------------------------------------------------
     // PUBLIC: keep these intact so tests DO NOT change
     // ------------------------------------------------------
-    public static Login(): void {
-        this.runLoginFlow({
+    public static Login(): Cypress.Chainable<void> {
+        return this.runLoginFlow({
             selectedEnvVar: 'selectedUser',
             cookieSetters: {
                 harpUser:  () => cy.setAccessTokenCookie(),
@@ -37,8 +37,8 @@ export class OktaLogin {
         });
     }
 
-    public static AltLogin(): void {
-        this.runLoginFlow({
+    public static AltLogin(): Cypress.Chainable<void> {
+        return this.runLoginFlow({
             selectedEnvVar: 'selectedAltUser',
             cookieSetters: {
                 altHarpUser:  () => cy.setAccessTokenCookieALT(),
@@ -101,8 +101,8 @@ export class OktaLogin {
         return Environment.credentials().harpUser2.toLowerCase()
     }
 
-    public static AdminLogin(): void {
-        this.runLoginFlow({
+    public static AdminLogin(): Cypress.Chainable<void> {
+        return this.runLoginFlow({
             selectedEnvVar: 'selectedUser',
             cookieSetters: {
                 any: () => cy.setAccessTokenCookieAdmin()
@@ -189,7 +189,7 @@ export class OktaLogin {
         cookieSetters: Record<string, () => void>;
         credsForUser: (userKey: string) => { username: string; password: string } | null;
         logPrefix?: string;
-    }): void {
+    }): Cypress.Chainable<void> {
         const logPrefix = args.logPrefix ?? 'Login';
 
         // Reset state
@@ -336,8 +336,10 @@ export class OktaLogin {
         // during navigation or on a dropdown whose markup varies by release.
         this.ensureUmlsAuthenticated();
 
-        cy.get(selectors.landing, { timeout: 60000 }).should('be.visible');
-        cy.log(`${logPrefix} Successful`);
+        return cy.get(selectors.landing, { timeout: 60000 }).should('be.visible').then(() => {
+            cy.log(`${logPrefix} Successful`)
+            return undefined
+        })
     }
 
     private static ensureUmlsAuthenticated(): Cypress.Chainable<void> {
@@ -369,14 +371,14 @@ export class OktaLogin {
         }).then(() => undefined)
     }
 
-    public static UILogout(): void {
+    public static UILogout(): Cypress.Chainable<void> {
 
         // UILogout is called from afterEach/after hooks. If it throws,
         // it cascades and skips remaining tests in the suite. Wrap
         // everything so cleanup failures are logged, not fatal.
         cy.wait(4500)
         cy.reload()
-        cy.get('body', { timeout: 50000 }).should('exist').then(() => {
+        return cy.get('body', { timeout: 50000 }).should('exist').then(() => {
             // Check if we're already on the login page
             cy.url().then((url) => {
                 if (url.endsWith('/login')) {
@@ -402,7 +404,7 @@ export class OktaLogin {
                     }
                 })
             })
-        })
+        }).then(() => undefined)
     }
 
 

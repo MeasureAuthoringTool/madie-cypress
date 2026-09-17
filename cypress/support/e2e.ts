@@ -64,10 +64,9 @@ before(() => {
 after(() => {
     const user = Cypress.expose('selectedUser')
     const altUser = Cypress.expose('selectedAltUser')
-    if (user) {
-        cy.task('releaseUser', user)
-    }
-    if (altUser) {
-        cy.task('releaseAltUser', altUser)
-    }
+    return cy.then(() => {
+        return user ? cy.task('releaseUser', user) : undefined
+    }).then(() => {
+        return altUser ? cy.task('releaseAltUser', altUser) : undefined
+    }).then(() => undefined)
 })

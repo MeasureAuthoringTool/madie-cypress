@@ -86,33 +86,34 @@ Cypress.Commands.add(
         const baseUrl = Cypress.config('baseUrl') || ''
         const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`
 
-        function waitForServer(attempt: number): void {
-            cy.task('checkUrl', fullUrl, { log: false }).then((result: any) => {
+        function waitForServer(attempt: number): Cypress.Chainable<void> {
+            return cy.task('checkUrl', fullUrl, { log: false }).then((result: any) => {
                 if (result.reachable) {
                     cy.log(`visitWithRetry: server reachable on probe ${attempt}, loading page...`)
                     // Server confirmed reachable — call cy.visit with a generous timeout
-                    cy.visit(url, { ...options, timeout: 120000 })
+                    return cy.visit(url, { ...options, timeout: 120000 }).then(() => undefined)
                 } else if (attempt < maxAttempts) {
                     cy.log(
                         `visitWithRetry: probe ${attempt}/${maxAttempts} — server not reachable ("${result.error}"). Waiting ${delayMs / 1000}s...`
                     )
-                    cy.wait(delayMs)
-                    // Re-register intercepts that need to capture the page load
-                    cy.intercept('/env-config/serviceConfig.json').as('serviceConfig')
-                    cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
-                    waitForServer(attempt + 1)
+                    return cy.wait(delayMs).then(() => {
+                        // Re-register intercepts that need to capture the page load
+                        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig')
+                        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+                        return waitForServer(attempt + 1)
+                    })
                 } else {
                     // All probes failed — attempt cy.visit anyway so Cypress
                     // reports the real error instead of a generic task error
                     cy.log(
                         `visitWithRetry: server still unreachable after ${maxAttempts} probes. Attempting cy.visit as last resort...`
                     )
-                    cy.visit(url, { ...options, timeout: 120000 })
+                    return cy.visit(url, { ...options, timeout: 120000 }).then(() => undefined)
                 }
             })
         }
 
-        waitForServer(1)
+        return waitForServer(1)
     }
 )
 

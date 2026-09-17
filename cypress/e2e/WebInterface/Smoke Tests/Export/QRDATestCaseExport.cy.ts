@@ -48,12 +48,11 @@ describe('QDM Test Cases : Export Test Case', () => {
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(anotherTestCaseTitle, anotherTestCaseSeries, testCaseDescription)
 
-        OktaLogin.Login()
+        return OktaLogin.Login()
     })
 
     afterEach('Log out and Clean up', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure().then(() => OktaLogin.UILogout())
     })
 
     it('Successful QRDA Export for QDM Test Cases', () => {
@@ -181,12 +180,11 @@ describe('Export Test cases by Non Measure Owner', () => {
             'contain.text',
             'CQL updated successfully ' + 'but the following issues were found',
         )
-        OktaLogin.UILogout()
+        return OktaLogin.UILogout()
     })
 
     afterEach('Log out and Clean up', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure().then(() => OktaLogin.UILogout())
     })
 
     it('Non Measure Owner should be able to Export Test cases', () => {
