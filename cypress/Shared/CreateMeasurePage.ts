@@ -534,7 +534,7 @@ export class CreateMeasurePage {
     public static CreateQDMMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         let user = ''
         const now = require('dayjs')
@@ -705,7 +705,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions, measureNumber?: number): string {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0

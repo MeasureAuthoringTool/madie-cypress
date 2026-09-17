@@ -160,9 +160,7 @@ export class CQLLibraryPage {
             desc = options.description
         }
 
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibrariesPage.librariesList, 30000)
+        CQLLibrariesPage.openLibrariesList()
 
       //  Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
         cy.get(this.createCQLLibraryBtn).should('be.enabled')
@@ -178,29 +176,28 @@ export class CQLLibraryPage {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(publisher).type('{downArrow}{enter}')
 
-        this.clickCreateLibraryButton()
-        Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        TestData.readCqlLibraryId().then((libraryId) => {
+        this.clickCreateLibraryButton().then((libraryId) => {
+            Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
+            CQLLibrariesPage.openLibrariesList()
             cy.get(`[data-testid="cqlLibrary-button-${libraryId}-content"]`).should('contain', CQLLibraryName)
             // ToDo?: add a check here for model
         })
         cy.log('CQL Library Created Successfully')
     }
 
-    public static clickCreateLibraryButton(): void {
+    public static clickCreateLibraryButton(): Cypress.Chainable<string> {
         let alias = 'library' + (Date.now().valueOf() + 1).toString()
         const libraryAlias: `@${string}` = `@${alias}`
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/cql-libraries').as(alias)
 
         cy.get(this.saveCQLLibraryBtn).click()
-        //saving measureID to file to use later
-        cy.wait(libraryAlias).then(({ response }) => {
+        // saving library ID to the fixture for existing cleanup flows and returning it for this flow's list assertion
+        return cy.wait(libraryAlias).then(({ response }) => {
             expect(response?.statusCode).to.eq(201)
-            TestData.writeCqlLibraryId(response?.body.id)
+            const libraryId = response?.body.id
+            expect(libraryId, 'created CQL library ID').to.be.a('string')
+            return TestData.writeCqlLibraryId(libraryId).then(() => libraryId)
         })
     }
 

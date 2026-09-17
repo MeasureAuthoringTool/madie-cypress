@@ -98,7 +98,6 @@ export class CQLLibrariesPage {
         cy.get(CQLLibraryPage.ownedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.allLibrariesTab, { timeout: 35000 }).should('be.visible')
-        Utilities.waitForElementVisible(this.librariesListBody, 35000)
     }
 
     public static openLibrariesList(): void {
