@@ -16,7 +16,7 @@ describe('Edit Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         OktaLogin.setupUserSession(false)
 
         //Create Measure with out Steward and Developer

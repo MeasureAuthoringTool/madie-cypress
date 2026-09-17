@@ -44,6 +44,7 @@ Work boundaries:
 | `QDMRunExecuteTC.cy.ts` non-owner path | Previously reached VSAC `401`. | Recheck environment/session dependency independently. |
 | Locking follow-up | Okta auth failures prevented helper-path validation. | Rerun after authentication stabilizes. |
 | `BooleanAndNonBooleanExpectedValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts` | No runner output in a reported run. | Verify spec collection and runner artifacts first. |
+| QDM code-system readiness in headless smoke tests | The code-system option is rendered but remains disabled for 50 seconds in QDM cohort/list flows. | Identify and await the terminology-loading prerequisite; do not force-click the disabled UI control. |
 
 ## Next Architecture Targets
 
@@ -73,9 +74,11 @@ Work boundaries:
 
 ### Test-case reliability
 
+- Proven FHIR Expected/Actual stabilization for ratio scenarios with observations. Checkbox flows use the helper to wait for the initial terminology expansion and normalize post-refresh selections; Encounter-basis numeric flows wait for that expansion before entering base expectations and require observation rows before entering their values. When the first numeric write triggers the expansion, the final inputs are cleared and re-entered after it settles. Five focused smoke specs pass.
 - Proven native, destination-aware navigation for Test Cases, Details, JSON, Expected/Actual, and Highlighting Results.
 - Retested the Ratio Patient measure-observation Expected/Actual assertions after MAT-10284; the product defect is resolved, and both specs now use the shared numeric-entry and Details-tab helpers.
 - Proven shared checkbox and numeric-entry helpers across Qi-Core and QDM split-panel and non-panel layouts.
+- Proven shared checkbox persistence through save, reopen, and named list-status validation in QDM Expected/Actual flows.
 - Stabilized QDM demographics, row checkbox selection, search, SDE navigation, clone/copy, execution, highlighting, validation, and action-center flows.
 - Stabilized Qi-Core population values, search, invalid-case navigation, non-owner execution, list coverage, and versioned clone/import flows.
 - Corrected invalid-test-case execution expectations: the option permits submission, while an unparseable patient bundle is explicitly rejected with `400` and remains `Invalid`.
@@ -84,6 +87,7 @@ Work boundaries:
 
 - Stabilized draft/version setup, retry-safe unique names, missing-CQL validation, and delete confirmation/toast contracts.
 - Proven Qi-Core and QDM negative export paths without using success-only export helpers.
+- Stabilized QI-Core and QDM human-readable export assertions: QI-Core accepts either supported representation of absent Copyright/Disclaimer metadata, and QDM rich-text assertions preserve ordered content while ignoring renderer-only whitespace layout.
 - Proven versioned QDM export from the same measure edit session after settled CQL save and action-center rerender.
 - Proven Population Criteria native activation with destination readiness; the ratio observation product defect remains separate.
 

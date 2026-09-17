@@ -8,7 +8,6 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
-import { Toasts } from '../../../../Shared/Toasts'
 
 const measureName = 'CohortEpisodeWithStrat' + Date.now()
 const CqlLibraryName = 'CohortEpisodeWithStrat' + Date.now()
@@ -56,28 +55,29 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        const expectedValues = [
+            { selector: TestCasesPage.testCaseIPPExpected, value: '1' },
+            { selector: TestCasesPage.initialPopulationStratificationExpectedValue, value: '1' },
+        ]
+        TestCasesPage.clearExpectedActualValues(expectedValues)
+        TestCasesPage.typeExpectedActualValues(expectedValues)
+        TestCasesPage.saveTestCaseAndWait({
+            expectedPopulationValues: {
+                initialPopulation: '1',
+            },
+        })
 
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.enabled')
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast).should(
-            'contain.text',
-            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
-        )
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualValues(expectedValues)
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        TestCasesPage.openTestCasesTabAndWaitForList()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.assertTestCaseStatus(testCaseTitle, 'Pass')
     })
 })

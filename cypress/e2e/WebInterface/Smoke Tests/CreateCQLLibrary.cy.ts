@@ -13,8 +13,7 @@ describe('Create CQL Library', () => {
     })
 
     afterEach('Logout', () => {
-
-        Utilities.deleteLibrary()
+        return Utilities.deleteLibrary()
     })
 
     it('Navigate to CQL Library Page and create New QI-Core 6.0.0 CQL Library', () => {

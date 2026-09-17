@@ -55,7 +55,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                     measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z'
                 }
             }).then((response) => {
-                let currentUser = Cypress.env('selectedUser')
+                let currentUser = Cypress.expose('selectedUser')
                 expect(response.status).to.eql(201)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
@@ -79,7 +79,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -175,7 +175,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
@@ -256,7 +256,7 @@ describe('Error Message on Measure Export when the PC does not have Improvement 
     })
 
     it('Verify Error Message on Measure Export when Population Criteria does not have IN set', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         // based on CreateProportionMeasureGroupAPI, but hardcoded values for this test
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId')

@@ -4,7 +4,6 @@ import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import {
     CVGroups,
@@ -100,29 +99,29 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
         CQLEditorPage.saveCql({ collapseEditor: true })
 
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1', { clearFirst: true })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', { clearFirst: true })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.measureObservationRow, '1', { clearFirst: true })
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        const expectedValues = [
+            { selector: TestCasesPage.testCaseIPPExpected, value: '1', clearFirst: true },
+            { selector: TestCasesPage.testCaseMSRPOPLExpected, value: '1', clearFirst: true },
+            { selector: TestCasesPage.measureObservationRow, value: '1', clearFirst: true },
+        ]
+        TestCasesPage.typeExpectedActualValues(expectedValues)
 
-        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should(
-            'contain.text',
-            'Test case updated successfully ' + 'with warnings in JSON',
-        )
+        TestCasesPage.saveTestCaseAndWait({
+            expectedPopulationValues: { initialPopulation: '1', measurePopulation: '1' },
+        })
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualValues(expectedValues)
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.runTestCaseAndWaitForCompletion()
+
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitle, 'Pass')
     })
 })

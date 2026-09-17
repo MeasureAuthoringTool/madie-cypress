@@ -50,7 +50,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
     })
 
     it('Shift all Test Case dates to the future using the tab in left menu', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -130,7 +130,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
     })
 
     it('Shift single test case dates to the past using the action center option', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 

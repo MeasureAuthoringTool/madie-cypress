@@ -34,7 +34,7 @@ describe('Create Test Case with a very long name', () => {
     })
 
     it('Create and Update Test Case for Qi Core Version 4.1.1 Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.testCasesTab).click()

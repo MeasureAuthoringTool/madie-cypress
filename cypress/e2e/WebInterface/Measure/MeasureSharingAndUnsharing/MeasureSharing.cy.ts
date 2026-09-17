@@ -113,7 +113,7 @@ describe('Measure Sharing', () => {
     })
 
     it('Verify Measure owner can share Measure from Action centre share button and shared user is able to edit Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
 
@@ -200,7 +200,7 @@ describe('Measure Sharing', () => {
     })
 
     it('Action centre share button disabled for Non Measure Owner', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Login
         OktaLogin.AltLogin()
@@ -270,7 +270,7 @@ describe('Measure Sharing - Multiple instances', () => {
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'

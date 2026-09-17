@@ -50,7 +50,7 @@ describe('Delete Measure ownership validation', () => {
     })
 
     it('Verify Non Measure Owner can not Delete Measure through Action center', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Verify the Measure is not on My Measures Page List
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureTwo)
 

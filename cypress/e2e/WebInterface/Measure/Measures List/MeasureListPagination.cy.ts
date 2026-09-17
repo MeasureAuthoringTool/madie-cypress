@@ -14,7 +14,7 @@ describe('Measure List Pagination', () => {
 
     before('Create Measures and Login', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         OktaLogin.setupUserSession(false)
 
         let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
@@ -64,7 +64,7 @@ describe('Measure List Pagination', () => {
 
     after('Cleanup Measures and Logout', () => {
 
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let versionIdPath = 'cypress/fixtures/' + currentUser + '/versionId'
         let measureSetIdPath = 'cypress/fixtures/' + currentUser + '/measureSetId'
 

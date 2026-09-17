@@ -98,7 +98,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
     })
 
     it('Export icon is present and enables correctly', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
         cy.get('[data-testid="export-tooltip"]').should(
             'have.attr',
@@ -200,7 +200,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
     })
 
     it('Export icon is present and it enables correctly', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.actionCenterDelete).should('be.disabled')
@@ -294,7 +294,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
     })
 
     it('Non-owner sees Export icon; it enables correctly', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         // checks that delete, clone, shift dates are not present at all
         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
