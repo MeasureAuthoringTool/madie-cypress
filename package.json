@@ -110,10 +110,8 @@
     "devDependencies": {
         "@cypress-audit/lighthouse": "^1.4.2",
         "@types/node": "^24.1.0",
-        "axe-core": "^4.11.0",
         "cy-verify-downloads": "^0.3.0",
         "cypress": "^16.1.0",
-        "cypress-axe": "^1.7.0",
         "cypress-commands": "^3.0.0",
         "cypress-delete-downloads-folder": "^0.0.6",
         "cypress-file-upload": "^5.0.8",

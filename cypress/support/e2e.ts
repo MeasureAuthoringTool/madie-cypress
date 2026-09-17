@@ -19,8 +19,6 @@
 import './failedTestFilter'
 import 'cypress-real-events'
 import './commands'
-import 'cypress-axe'
-import 'axe-core'
 import cypress = require("cypress");
 import "@cypress-audit/lighthouse/commands"
 import { Environment } from '../Shared/Environment'
