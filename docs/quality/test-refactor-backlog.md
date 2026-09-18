@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-09-09
+Last updated: 2026-09-18
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -20,10 +20,10 @@ Goal: replace unstable navigation, waits, forced interactions, and UI-heavy setu
 
 Current focus order:
 
-1. Triage the next independent weekly-regression failure supplied by the team.
-2. Complete remaining Test Case Details, JSON, Test Cases, and Expected/Actual migrations by repeated interaction pattern.
-3. Investigate the inconclusive `QDMRunExecuteTC.cy.ts` single-pass scenario separately from its already-proven helper paths.
-4. Verify CI collection for specs that produced no runner output before treating them as test failures.
+1. Run the Cypress 16.1.0 smoke collection in CI at the existing three-worker parallelism; retain runner artifacts for every worker.
+2. Audit custom Cypress commands and lifecycle hooks that queue login, retry, cleanup, or release work. Return the final chain before migrating more consumers.
+3. Complete remaining Test Case Details, JSON, Test Cases, and Expected/Actual migrations by repeated interaction pattern.
+4. Verify CI collection for specs that produce no runner output before treating them as test failures.
 5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
 6. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
 
@@ -33,6 +33,21 @@ Work boundaries:
 - Convert one repeated interaction bucket at a time.
 - Do not combine unrelated export, transfer, highlighting, and editor refactors.
 - Do not add retries or weaker assertions for known product defects.
+- Do not perform a suite-wide mechanical conversion. Migrate one repeated interaction bucket at a time, starting with consumers already covered by a shared helper.
+
+## Cypress 16 Conversion Scope
+
+The Cypress 16.1.0 compatibility baseline is complete: clean installation, binary verification, compile, focused helper consumers, and static quality checks pass. The remaining suite work is a reliability migration, not a framework migration.
+
+| Batch | Scope | Completion evidence | Do not include |
+| --- | --- | --- | --- |
+| A — Lifecycle ownership | Custom commands and hooks that queue login, logout, retry navigation, cleanup, or user-lock tasks. | Each changed command returns its final chain; one focused lifecycle consumer passes. | Broad authentication redesign or new retries. |
+| B — Test Case readiness | Specs bypassing `TestCasesPage` save, execution, list, Expected/Actual, and status helpers. | Focused save/run/list flow proves response completion and named-row status. | Product-result expectation changes. |
+| C — UI interaction debt | Repeated forced interactions and fixed waits in shared helpers, import, highlighting, and editor clusters. | Replace one repeated reason with a selector/readiness helper and validate a consumer. | One-off force-clicks intentionally targeting native controls. |
+| D — Service setup tail | Repeated fixture-path and access-token plumbing in service/admin specs. | Existing `TestData` or request helper replaces a repeated pattern; service test remains API-focused. | Moving UI rendering assertions into service tests. |
+| E — Account/session efficiency | UI specs that repeatedly perform full login but do not validate authentication or switch users. | Explicit `SessionLogin()` eligibility review and focused role/ownership coverage. | Reviewer, permission, multi-user, and logout scenarios. |
+
+Sequence batches by independent CI failures and shared-helper consumer count. Commit and validate each batch separately; do not treat a passing manual run as proof for unrelated specs.
 
 ## Deferred or Blocked
 
@@ -44,7 +59,6 @@ Work boundaries:
 | `QDMRunExecuteTC.cy.ts` non-owner path | Previously reached VSAC `401`. | Recheck environment/session dependency independently. |
 | Locking follow-up | Okta auth failures prevented helper-path validation. | Rerun after authentication stabilizes. |
 | `BooleanAndNonBooleanExpectedValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts` | No runner output in a reported run. | Verify spec collection and runner artifacts first. |
-| QDM code-system readiness in headless smoke tests | The code-system option is rendered but remains disabled for 50 seconds in QDM cohort/list flows. | Identify and await the terminology-loading prerequisite; do not force-click the disabled UI control. |
 
 ## Next Architecture Targets
 
@@ -68,6 +82,10 @@ Work boundaries:
 
 ### Shared infrastructure
 
+- Upgraded Cypress to 16.1.0 and updated configuration, public environment exposure, plugin loading, failed-test selection, and lifecycle command-chain ownership. Clean `npm ci`, binary verification, compile, and focused Cypress validation pass.
+- Removed inactive `cypress-axe@1.7.0` and unused `axe-core` because its declared Cypress peer range ends at v15 and blocked clean Cypress 16 installation. Reintroduce accessibility automation only with a Cypress 16-compatible integration.
+- Proven QDM code-system option normalization: the shared selector accepts the domain value `LOINC` and the rendered `http://loinc.org` data-testid. Focused cohort, ratio, and CV QDM consumers pass; the former headless code-system blocker is resolved.
+- Proven lifecycle chain ownership across navigation retry, login/logout, cleanup, global user release, and QRDA export hooks. Commands must return their terminal Cypress chain to prevent work from executing after teardown.
 - Centralized user-scoped fixture, token, ID, cleanup, lock, share, measure-group, test-case, and CQL-library request mechanics through `TestData` and domain helpers.
 - Added bounded Cypress worker inactivity handling and CI diagnostics.
 - Removed helper-level fixed waits from `CQLEditorPage`, `CQLLibraryPage`, and `MeasureGroupPage` paths covered by focused tests.
@@ -102,21 +120,21 @@ Work boundaries:
 
 ## Latest Audit Signal
 
-Command: `npm run quality:no-focused-tests` on 2026-09-04.
+Command: `npm run quality:no-focused-tests` on 2026-09-18.
 
 | Metric | Count |
 | --- | ---: |
-| Specs | 308 |
-| Spec lines | 72,024 |
-| Shared files | 33 |
-| Shared lines | 20,849 |
-| Support files / lines | 3 / 629 |
-| Scripts / lines | 9 / 1,561 |
-| Skipped tests | 67 |
-| Manual fixture paths | 153 |
-| Manual access-token plumbing | 84 |
-| Fixed waits | 29 |
-| Forced interactions | 170 |
+| Specs | 311 |
+| Spec lines | 72,028 |
+| Shared files | 35 |
+| Shared lines | 21,324 |
+| Support files / lines | 3 / 631 |
+| Scripts / lines | 9 / 1,565 |
+| Skipped tests | 49 |
+| Manual fixture paths | 147 |
+| Manual access-token plumbing | 81 |
+| Fixed waits | 28 |
+| Forced interactions | 168 |
 | Global exception suppression | 1 |
 
 Largest current concentrations:

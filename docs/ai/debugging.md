@@ -92,6 +92,17 @@ If native tab activation updates the URL but the previously selected tab remains
 
 For versioned measures, distinguish View mode from Edit mode when using measure action helpers. Do not wait for an edit-only CQL tab when the action opens a versioned measure for viewing; open the Test Cases tab and synchronize on its destination content instead.
 
+## Lifecycle and Teardown Failures
+
+When Cypress reports that `cy.task()` may only be called from a spec or support file, or an `afterEach`/`after` failure appears after the browser has returned to the landing page:
+
+1. Identify the command chain immediately before the hook completed, especially login, logout, retry navigation, cleanup, or lock release.
+2. Confirm the custom command and the hook both `return` the final `Cypress.Chainable`; a function that queues commands but returns `void` can continue after Cypress has ended the hook.
+3. Check whether the runner's displayed error is a wrapper error around the lifecycle violation. A `DOMException` message-mutation error can hide the original late-command failure.
+4. Fix the chain ownership; do not mask the problem with hook-level retries, fixed waits, or exception suppression.
+
+This pattern was proven while upgrading to Cypress 16: returning the chains from `visitWithRetry`, login/logout, cleanup, and global user release removed QRDA export teardown failures caused by commands running after teardown.
+
 ## API/Data Debugging
 
 Check:
