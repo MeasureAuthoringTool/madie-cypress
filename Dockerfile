@@ -20,8 +20,8 @@ RUN wget -q "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -O /tmp/a
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
-# npm install
-RUN npm install
+# Locked dependency install
+RUN npm ci --no-audit --no-fund
 RUN npx cypress verify
 
 COPY ./test-files.txt ./test-files.txt
