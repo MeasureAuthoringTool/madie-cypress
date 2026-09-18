@@ -37,7 +37,10 @@ const credentialKeys = [
 
 type CredentialKey = typeof credentialKeys[number]
 const credentialKeySet = new Set<string>(credentialKeys)
-let values: ReadonlyMap<CredentialKey, string> | undefined
+
+type EnvironmentGlobal = typeof globalThis & {
+    madieCypressEnvironmentValues?: ReadonlyMap<CredentialKey, string>
+}
 
 function isCredentialKey(key: string): key is CredentialKey {
     return credentialKeySet.has(key)
@@ -54,10 +57,11 @@ function setValues(environmentValues: unknown): void {
         })
     }
 
-    values = nextValues
+    ;(globalThis as EnvironmentGlobal).madieCypressEnvironmentValues = nextValues
 }
 
 function envValue(key: CredentialKey): NullableString {
+    const values = (globalThis as EnvironmentGlobal).madieCypressEnvironmentValues
     if (!values) {
         throw new Error('Environment has not been initialized. Call Environment.initialize() from a root hook first.')
     }

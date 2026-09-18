@@ -127,7 +127,7 @@ Command: `npm run quality:no-focused-tests` on 2026-09-18.
 | Specs | 311 |
 | Spec lines | 72,028 |
 | Shared files | 35 |
-| Shared lines | 21,332 |
+| Shared lines | 21,336 |
 | Support files / lines | 3 / 631 |
 | Scripts / lines | 9 / 1,565 |
 | Skipped tests | 49 |
