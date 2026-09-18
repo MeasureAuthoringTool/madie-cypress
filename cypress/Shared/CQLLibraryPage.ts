@@ -176,10 +176,10 @@ export class CQLLibraryPage {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(publisher).type('{downArrow}{enter}')
 
-        this.clickCreateLibraryButton().then((libraryId) => {
+        this.clickCreateLibraryButton().then(() => {
             Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
             CQLLibrariesPage.openLibrariesList()
-            cy.get(`[data-testid="cqlLibrary-button-${libraryId}-content"]`).should('contain', CQLLibraryName)
+            CQLLibrariesPage.searchForLibraryByName(CQLLibraryName).should('contain', CQLLibraryName)
             // ToDo?: add a check here for model
         })
         cy.log('CQL Library Created Successfully')
