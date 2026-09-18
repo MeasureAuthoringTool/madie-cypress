@@ -247,8 +247,9 @@ export class CQLLibrariesPage {
     }
 
     public static searchForLibraryByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        Utilities.dropdownSelect(CQLLibraryPage.filterByDropdown, 'Library')
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible').clear().type(`${libraryName}{enter}`)
+        this.clickFilterByElement(CQLLibraryPage.filterByDropdown)
+        this.clickFilterByElement(this.filterLibraryOption)
+        cy.get(CQLLibraryPage.LibFilterTextField).filter(':visible').should('be.visible').clear().type(`${libraryName}{enter}`)
 
         return cy
             .get(this.libraryListRows, { timeout: 30000 })
