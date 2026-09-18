@@ -36,25 +36,33 @@ const credentialKeys = [
 ] as const
 
 type CredentialKey = typeof credentialKeys[number]
-type EnvironmentValues = Partial<Record<CredentialKey, string>>
+const credentialKeySet = new Set<string>(credentialKeys)
+let values: ReadonlyMap<CredentialKey, string> | undefined
 
-const valuesKey = Symbol.for('madie.cypress.environment-values')
-
-function getValues(): EnvironmentValues | undefined {
-    return (globalThis as Record<symbol, EnvironmentValues | undefined>)[valuesKey]
+function isCredentialKey(key: string): key is CredentialKey {
+    return credentialKeySet.has(key)
 }
 
-function setValues(nextValues: EnvironmentValues): void {
-    ;(globalThis as Record<symbol, EnvironmentValues | undefined>)[valuesKey] = nextValues
+function setValues(environmentValues: unknown): void {
+    const nextValues = new Map<CredentialKey, string>()
+
+    if (environmentValues && typeof environmentValues === 'object') {
+        Object.entries(environmentValues).forEach(([key, value]) => {
+            if (isCredentialKey(key) && typeof value === 'string') {
+                nextValues.set(key, value)
+            }
+        })
+    }
+
+    values = nextValues
 }
 
 function envValue(key: CredentialKey): NullableString {
-    const values = getValues()
     if (!values) {
         throw new Error('Environment has not been initialized. Call Environment.initialize() from a root hook first.')
     }
 
-    return values[key] ?? null
+    return values.get(key) ?? null
 }
 
 function currentEnvironment(): string {
@@ -94,7 +102,7 @@ export class Environment {
      */
     public static initialize(): Cypress.Chainable<void> {
         return cy.env([...credentialKeys]).then((environmentValues) => {
-            setValues(environmentValues as EnvironmentValues)
+            setValues(environmentValues)
             return undefined
         })
     }
