@@ -412,7 +412,7 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
 
     it('Replace HCPCS URL with oid value', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', 'Denominator Exclusions', 

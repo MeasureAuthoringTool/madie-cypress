@@ -35,11 +35,15 @@ Add guidance only when it is supported by committed code, focused validation, au
 
 ## Test Data and API Helpers
 
+- On Cypress 16+, read secrets only through `cy.env()` and keep them inside Cypress command-chain support code. Use `Cypress.expose()` only for public configuration or non-secret per-spec state such as allocated account-slot names; never expose credentials, tokens, passwords, or API keys.
+- Initialize shared secret configuration from a root support hook before specs use authentication, `Environment`, or API helpers. Keep authentication configuration lazy so support-file imports do not access secrets before that hook runs.
 - Use owner-aware `TestData` helpers for `selectedUser` and `selectedAltUser`.
 - Put setup in `beforeEach` only when every test in the suite requires it. Create scenario-specific records in the test or a named scenario helper so visibility, layout, and negative tests do not pay for unrelated data setup.
 - Prefer `fixturePath`, `readFixture`, `writeFixture`, `readMeasureId`, `readCqlLibraryId`, `readTestCaseId`, and related helpers over hand-built fixture paths.
 - Prefer `withAccessToken`, `requestWithAccessToken`, and domain request helpers over inline cookie or token plumbing.
 - Custom Cypress commands that enqueue authentication or API work must return their final Cypress chain. Returning `void` allows later setup requests to run before authentication has completed.
+- `before`, `beforeEach`, `afterEach`, and `after` hooks that invoke Cypress commands must return the final Cypress chain. This is especially important for login, logout, navigation retries, cleanup, and user-release tasks; otherwise Cypress can close the hook while queued work continues into the next test or after global teardown.
+- For test-case execution UI coverage, wait for the save or execution response before asserting highlighting or status. When returning to the list, wait for `GET /api/measures/{measureId}/test-cases` and assert the named test-case row instead of a generic visual-status selector. When updating several controlled Expected/Actual inputs, reassert previously entered values after each update and validate the save payload before execution.
 - Use `TestData.getAccountDisplayName(harpId)` for UI text that includes a display name and HARP ID.
 - Generate unique names inside retryable hooks such as `beforeEach`; spec-load names can collide when Cypress retries setup.
 
@@ -57,6 +61,7 @@ Reuse these established paths before adding request code:
 - Put reusable selectors in the relevant page object. Inline selectors are acceptable for one-off assertions.
 - Select created rows by stored ID, generated name, title, or case number tied to the scenario. Do not rely on row index or table order.
 - For autocomplete or multi-select options, target the exact displayed value or a dedicated `data-testid`; do not select `first()` or `last()` unless the scenario specifically validates ordering.
+- When a control's visible label and stable DOM value differ, keep that normalization in the existing domain helper. For example, QDM code-system selection accepts `LOINC` while the rendered option may identify itself as `http://loinc.org`; consumers must use `QDMElements` rather than duplicate option selectors.
 - Account for pagination and submitted search state before assuming a created row is visible.
 - On paginated library lists, submit the generated library name with `CQLLibrariesPage.searchForLibraryByName(...)` before selecting or opening its row; pair the filtered UI row with the stored library ID when an action targets that library.
 - Do not assert `be.enabled` on non-form containers such as MUI SpeedDial roots or anchor-backed tabs. Target the actual button or use `aria-disabled`.
@@ -84,6 +89,10 @@ Reuse these established paths before adding request code:
 - Keep clear and type contiguous for controlled React inputs that restore prior values between events; assert the final value after re-querying.
 - Use `typeExpectedActualValue(...)` for every Expected/Actual text or numeric field. Pass `{ clearFirst: true }` only when replacing an existing value; initially empty controlled inputs must use the helper's default type-only mode to avoid a clearing rerender.
 - Use `checkExpectedActualCheckbox(...)` and `uncheckExpectedActualCheckbox(...)` for every Expected/Actual checkbox; do not use raw checkbox commands in the split panel.
+- Treat `checkExpectedActualCheckbox(...)` as an idempotent state setter: it preserves an already-checked control and checks only when necessary. Do not assume a new test case begins unchecked.
+- Do not make Expected/Actual progress depend on `PUT /api/terminology/value-sets/expansion/fhir`. The request is conditional and may be absent under parallel execution. Use the generic checkbox or numeric helpers, then verify the saved values after reopening Expected/Actual and verify the save/run responses.
+- Confirm the rendered control type before selecting the interaction. Encounter-basis flows can render Initial Population, Denominator, and Numerator as numeric text inputs; clear any prepopulated numeric value before typing its final value.
+- Use `ensureExpectedActualCheckboxesAfterFhirExpansion(...)` only when an individual flow has independently proven that it requires post-refresh checkbox reconciliation. Pass `false` for its initial-expansion argument when the refresh is optional.
 
 ## CQL and Population Criteria
 
@@ -127,6 +136,23 @@ git diff --check
 ```
 
 Run focused Cypress coverage for each touched shared path. Use `--env configFile=test` for TEST regression proof.
+
+### Cypress Upgrade and CI Baseline
+
+For a Cypress major/minor upgrade, prove installation and runner startup before interpreting test failures:
+
+```bash
+npm ci
+env -u ELECTRON_RUN_AS_NODE npx cypress verify
+npm run compile
+npm run quality:no-focused-tests
+git diff --check
+```
+
+- Do not use `--legacy-peer-deps`, `--force`, or a committed npm configuration that suppresses peer-dependency conflicts to complete an upgrade. Resolve or remove the incompatible direct dependency instead.
+- Verify every direct Cypress plugin's declared peer range during the upgrade. If an inactive plugin blocks a clean install, remove it rather than retaining an unsupported dependency solely for commented examples.
+- `ELECTRON_RUN_AS_NODE=1` makes the Cypress Electron binary behave as Node and causes misleading `--no-sandbox`/`--smoke-test` verify errors. Clear it for manual verification; the headless project scripts already do so.
+- After this baseline, run focused consumers for each changed shared path. Use a full parallel smoke run as CI confirmation, not as the first debugging tool for an unexplained failure.
 
 ## Intentional Exceptions
 

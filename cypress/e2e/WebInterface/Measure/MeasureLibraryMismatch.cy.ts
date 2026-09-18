@@ -19,7 +19,7 @@ let measurePath = ''
 
 describe('Mismatch between measure model and library model -- error state', () => {
     before(() => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         measurePath = 'cypress/fixtures/' + currentUser + '/measureId'
     })
 

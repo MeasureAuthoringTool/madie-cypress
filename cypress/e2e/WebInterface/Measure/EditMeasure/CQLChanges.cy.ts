@@ -42,7 +42,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         'Updating CQL to be erroneous, after initial CQL, PC, and Test Case has been setup, causes errors and the errors' +
             ' flag to be set to the mismatch flag. Correcting the CQL removes the errors flag',
         () => {
-            let currentUser = Cypress.env('selectedUser')
+            let currentUser = Cypress.expose('selectedUser')
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
 
@@ -222,7 +222,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         'Updating CQL to be errorneous, after initial CQL, PC, and Test Case has been setup, causes errors and the errors' +
             ' flag to be set to the mismatch flag. Correcting the PC selections to match CQL expectations removes the errors flag',
         () => {
-            let currentUser = Cypress.env('selectedUser')
+            let currentUser = Cypress.expose('selectedUser')
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
 

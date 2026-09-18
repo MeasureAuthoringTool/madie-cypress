@@ -34,7 +34,7 @@ describe('Admin API - Reset test case expected values', () => {
     })
 
     it('Reset test case expected values of current draft back to state from last version of the measure', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         // establish original measure - measureId
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'Encounter')

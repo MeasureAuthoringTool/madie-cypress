@@ -14,7 +14,7 @@ const lockRetryIntervalMs = Number(process.env.CYPRESS_USER_LOCK_RETRY_MS || 100
 
 function getConfigurationByFile(file) {
     const pathToConfigFile = path.resolve('./cypress/', 'config', `${file}.json`)
-    return fs.readJson(pathToConfigFile)
+    return fs.readJsonSync(pathToConfigFile)
 }
 
 function unzipFile(zipFile, outputPath) {
@@ -174,5 +174,11 @@ module.exports = (on, config) => {
         }
     })
 
-    return getConfigurationByFile(file)
+    const resolvedConfig = getConfigurationByFile(file)
+    resolvedConfig.expose = {
+        ...resolvedConfig.expose,
+        environment: resolvedConfig.env.environment
+    }
+
+    return resolvedConfig
 }

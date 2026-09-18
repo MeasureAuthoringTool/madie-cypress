@@ -546,9 +546,10 @@ export class MeasuresPage {
                             .should('be.visible')
                             .should('be.enabled')
                             .scrollIntoView()
-                            .click({ force: true })
+                            .click()
 
                         if (expectCqlEditor) {
+                            cy.location('pathname', { timeout: 60000 }).should('contain', `/measures/${measureId}/edit`)
                             Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
                         }
                     })

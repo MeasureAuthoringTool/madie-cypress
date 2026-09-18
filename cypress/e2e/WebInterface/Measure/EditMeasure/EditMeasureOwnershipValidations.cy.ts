@@ -158,7 +158,7 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     it('Test Cases are read / view only', () => {
         // since altUser created the measure & tc
-        let ownerAccount = Cypress.env('selectedAltUser')
+        let ownerAccount = Cypress.expose('selectedAltUser')
 
         //navigate to the all measures tab
         cy.get(LandingPage.allMeasuresTab).should('be.visible')

@@ -23,7 +23,7 @@ describe('Create New Measure with very long name', () => {
     })
 
     it('Create QI Core 6.0.0 Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore6)
         cy.get(Header.mainMadiePageButton).click()
 

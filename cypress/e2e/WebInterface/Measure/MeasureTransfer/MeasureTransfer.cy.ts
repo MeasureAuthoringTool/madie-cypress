@@ -61,7 +61,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(randomMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
 
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         cy.wait('@drafted').then(int => {
             // capture measureId of new draft
             cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int?.response?.body.id)
@@ -90,7 +90,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         // ALT User now owns both measures in the measureSet
         cy.get(MeasuresPage.measureListTitles).should('contain', randomMeasureName)
 
-        currentUser = Cypress.env('selectedUser')
+        currentUser = Cypress.expose('selectedUser')
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId1').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_expandArrow"]').click().wait(1000)
             cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
@@ -108,7 +108,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         //Select the Measure
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
@@ -121,7 +121,7 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
 
         //Logout and Delete Measure with Regular user
         OktaLogin.UILogout()
-        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentAltUser = Cypress.expose('selectedAltUser')
         OktaLogin.setupUserSession(false)
         Utilities.deleteMeasure()
     })

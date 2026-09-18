@@ -24,7 +24,7 @@ describe('Transfer ownership of library via Admin API', () => {
     })
 
     it('Request sent with no library data returns 400', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         OktaLogin.setupAdminSession()
 
@@ -46,7 +46,7 @@ describe('Transfer ownership of library via Admin API', () => {
 
     // added for https://jira.cms.gov/browse/MAT-9630
     it('Admin transfer requires valid user', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const altUserName = OktaLogin.getUser(true)
 
         OktaLogin.setupAdminSession()
@@ -71,7 +71,7 @@ describe('Transfer ownership of library via Admin API', () => {
     })
 
     it('Successful admin transfer of 1 Library', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const altUserName = OktaLogin.getUser(true)
 
         OktaLogin.setupAdminSession()
@@ -96,7 +96,7 @@ describe('Transfer ownership of library via Admin API', () => {
     })
 
     it('Partial success case - attempt to admin transfer 2 libraries - 1 succeed, 1 fails due to lock', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const altUserName = OktaLogin.getUser(true)
 
         // as current owner, lock Measure with measureId

@@ -175,7 +175,7 @@ describe('Library History - Transfer action', () => {
 
     it('Verify that Transfer Library action is recorded in Library History', () => {
 
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Transfer Library to ALT User
         cy.getCookie('accessToken').then((accessToken) => {

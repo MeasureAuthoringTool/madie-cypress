@@ -38,7 +38,7 @@ describe('QDM Test Case Excel Export', () => {
 
     it('Successful Excel Export for QDM Test Cases', () => {
 
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
