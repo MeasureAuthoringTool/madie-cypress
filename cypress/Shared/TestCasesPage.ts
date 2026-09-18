@@ -1709,8 +1709,12 @@ export class TestCasesPage {
 
     if (dob) {
       cy.get(TestCasesPage.QDMDob)
+        .filter(':visible')
         .should('be.visible')
         .should('be.enabled')
+        .should('not.have.attr', 'readonly')
+      cy.get(TestCasesPage.QDMDob)
+        .filter(':visible')
         .clear()
         .type(dob)
         .should('have.value', dob)
