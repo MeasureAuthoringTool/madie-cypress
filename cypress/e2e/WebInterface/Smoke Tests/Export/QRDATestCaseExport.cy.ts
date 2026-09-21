@@ -75,8 +75,8 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Run the Test cases
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 35000)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
+        Utilities.waitForElementEnabled('[data-testid="export-action-btn"]', 60000)
 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         cy.get('#export-menu').contains('QRDA').click()
@@ -141,7 +141,7 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get('[data-testid="export-tooltip"]').should('not.be.enabled')
 
         //Run the Test cases
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
         Utilities.waitForElementEnabled('[data-testid="export-action-btn"]', 60000)
 
         //Export test case button should be enabled
@@ -202,8 +202,8 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Run the Test cases
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 35000)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
+        Utilities.waitForElementEnabled('[data-testid="export-action-btn"]', 60000)
 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         cy.get('#export-menu').contains('QRDA').click()
