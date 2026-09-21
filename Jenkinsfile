@@ -136,7 +136,7 @@ pipeline {
       agent {
         docker {
           image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
-          args "-u 0 -v $HOME/.npm:/.npm"
+          args "-u 0 -v $HOME/.npm:/.npm -v $HOME/.cache/Cypress:/root/.cache/Cypress"
           reuseNode true
         }
       }
@@ -145,6 +145,8 @@ pipeline {
           cd "$WORKSPACE"
           echo "Installing locked dependencies in $WORKSPACE ..."
           npm ci --no-audit --no-fund
+          npx cypress install
+          npx cypress verify
         '''
 
         slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
@@ -215,7 +217,7 @@ pipeline {
       agent {
         docker {
           image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
-          args "-u 0 -v $HOME/.npm:/.npm"
+          args "-u 0 -v $HOME/.npm:/.npm -v $HOME/.cache/Cypress:/root/.cache/Cypress"
           reuseNode true
         }
       }
@@ -223,6 +225,8 @@ pipeline {
         sh '''
           set -e
           cd "$WORKSPACE"
+          npx cypress install
+          npx cypress verify
 
           # Determine which rerun script to use based on the initial TEST_SCRIPT
           case "${TEST_SCRIPT}" in
