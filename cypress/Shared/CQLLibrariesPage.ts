@@ -98,6 +98,10 @@ export class CQLLibrariesPage {
         cy.get(CQLLibraryPage.ownedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.sharedLibrariesTab, { timeout: 35000 }).should('be.visible')
         cy.get(CQLLibraryPage.allLibrariesTab, { timeout: 35000 }).should('be.visible')
+        cy.get(this.librariesList, { timeout: 50000 }).should('be.visible')
+        cy.get(CQLLibraryPage.filterByDropdown, { timeout: 50000 })
+            .filter(':visible')
+            .should('have.length', 1)
     }
 
     public static openLibrariesList(): void {
@@ -251,6 +255,10 @@ export class CQLLibrariesPage {
         this.clickFilterByElement(this.filterLibraryOption)
         cy.get(CQLLibraryPage.LibFilterTextField).filter(':visible').should('be.visible').clear().type(`${libraryName}{enter}`)
 
+        return this.findLibraryRowByName(libraryName)
+    }
+
+    public static findLibraryRowByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
         return cy
             .get(this.libraryListRows, { timeout: 30000 })
             .contains('td', libraryName)
@@ -484,7 +492,10 @@ export class CQLLibrariesPage {
     }
 
     private static clickFilterByElement(selector: string): void {
-        cy.get(selector).should('be.visible').click()
+        cy.get(selector)
+            .filter(':visible')
+            .should('have.length', 1)
+            .click()
     }
 
     public static selectLibraryByName(libraryName: string): void {

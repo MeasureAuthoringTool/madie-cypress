@@ -218,9 +218,20 @@ function fetchAccessTokenAndSetCookie(
                 failOnStatusCode: failOnStatus
             }).then((tokenResponse) => {
                 expect(tokenResponse.status).to.eql(200)
-                const access_token = tokenResponse.body.access_token
-                // setting the cookie value to be grabbed for api authentication
-                return cy.setCookie('accessToken', access_token)
+                const accessToken = tokenResponse.body?.access_token
+
+                // A successful token response is not sufficient if its body is
+                // incomplete. Failing here prevents the browser from making
+                // later application requests with `Bearer undefined`.
+                expect(accessToken, 'Okta access token').to.be.a('string').and.not.be.empty
+                expect(accessToken, 'Okta access token').not.to.equal('undefined')
+
+                return cy.setCookie('accessToken', accessToken).then(() => {
+                    return cy.getCookie('accessToken').should((cookie) => {
+                        expect(cookie?.value, 'accessToken cookie').to.be.a('string').and.not.be.empty
+                        expect(cookie?.value, 'accessToken cookie').not.to.equal('undefined')
+                    }).then((cookie) => cookie as Cypress.Cookie)
+                })
             })
         })
     })

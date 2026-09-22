@@ -146,6 +146,16 @@ export class CQLLibraryPage {
     //Error marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
 
+    public static selectCQLLibraryModel(model: SupportedModels): void {
+        cy.get(this.cqlLibraryModelDropdown)
+            .filter(':visible')
+            .should('have.length', 1)
+            .click()
+        cy.get(`[role="option"][data-value="${model}"]:visible`)
+            .should('have.length', 1)
+            .click()
+    }
+
     public static createCQLLibrary(CQLLibraryName: string, options?: CreateLibraryOptions): void {
         let publisher = 'ICF'
         if (options?.publisher) {
@@ -169,7 +179,7 @@ export class CQLLibraryPage {
         Utilities.waitForElementVisible(this.newCQLLibName, 7500)
         cy.get(this.newCQLLibName).type(CQLLibraryName)
 
-        Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, model)
+        this.selectCQLLibraryModel(model)
 
         cy.get(this.cqlLibraryDesc).type(desc)
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')

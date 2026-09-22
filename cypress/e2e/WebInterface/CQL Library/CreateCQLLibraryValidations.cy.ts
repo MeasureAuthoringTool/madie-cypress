@@ -17,8 +17,7 @@ describe('CQL Library Validations', () => {
     }
 
     const selectUSQCModel = (): void => {
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).should('be.visible').click()
-        cy.get(CQLLibraryPage.cqlLibraryModelUSQC).should('be.visible').click()
+        CQLLibraryPage.selectCQLLibraryModel(SupportedModels.USQC)
     }
 
     const enterLibraryDescription = (): void => {
