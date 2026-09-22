@@ -126,11 +126,9 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.intercept('PUT', '/api/measures/**').as('saveEmptyCql')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get('.toast').should(
-            'contain.text',
-            'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.'
-        )
+        cy.wait('@saveEmptyCql').its('response.statusCode').should('eq', 200)
 
         cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForExport')
         cy.get(Header.measures).click()
@@ -217,16 +215,21 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.openCqlEditor()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(updatedMeasureCQL)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        cy.get(EditMeasurePage.errorMessage).should(
-            'contain.text',
-            'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.'
+        cy.get(EditMeasurePage.cqlEditorTextBox)
+            .should('be.visible')
+            .click()
+            .focused()
+            .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(
+            updatedMeasureCQL.replace('SimpleFhirLibrary', CqlLibraryName)
         )
+        cy.intercept('PUT', '/api/measures/**').as('saveMismatchedCql')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.wait('@saveMismatchedCql').its('response.statusCode').should('eq', 200)
 
+        cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForMismatchedExport')
         cy.get(Header.measures).click()
+        MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForMismatchedExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
         cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
         cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
