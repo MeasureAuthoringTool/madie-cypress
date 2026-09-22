@@ -7,6 +7,7 @@ import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
 
 const now = Date.now()
 const measureName = 'BooleanNonBooleanEV' + now
@@ -14,8 +15,12 @@ const CqlLibraryName = 'BooleanNonBooleanEVLib' + now
 const testCaseTitle = 'Title for Auto Test'
 const testCaseDescription = 'DENOMFail 123'
 const testCaseSeries = 'SBTestSeries'
-const testCaseJson = 'test'
+const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const measureCQL = MeasureCQL.CQL_Multiple_Populations
+
+const assertJsonWarningToast = (): void => {
+    cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+}
 
 describe('Non Boolean Population Basis Expected values', () => {
     beforeEach('Create measure and login', () => {
@@ -69,10 +74,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         //Save updated test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.errorToastMsg).should(
-            'contain.text',
-            'Test case updated successfully with ' + 'errors in JSON'
-        )
+        assertJsonWarningToast()
 
         TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCaseIPPExpected).should('contain.value', '1')
@@ -156,10 +158,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         //Save updated test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.errorToastMsg).should(
-            'contain.text',
-            'Test case updated successfully with ' + 'errors in JSON'
-        )
+        assertJsonWarningToast()
 
         //Assert Expected values for Population Basis Encounter (Proportion Measure Group)
         TestCasesPage.openExpectedActualTab()
@@ -265,10 +264,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         //Save updated test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.errorToastMsg).should(
-            'contain.text',
-            'Test case updated successfully with ' + 'errors in JSON'
-        )
+        assertJsonWarningToast()
 
         TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCaseIPPExpected).should('contain.value', '1')
@@ -367,10 +363,7 @@ describe('Boolean Population Basis Expected Values', () => {
 
         //Save updated test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.errorToastMsg).should(
-            'contain.text',
-            'Test case updated successfully with ' + 'errors in JSON'
-        )
+        assertJsonWarningToast()
 
         //Assert Expected values for Population Basis Encounter (Proportion Measure Group)
         TestCasesPage.openExpectedActualTab()
@@ -539,10 +532,7 @@ describe('Expected values for second initial population', () => {
 
         //Save updated test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.errorToastMsg).should(
-            'contain.text',
-            'Test case updated successfully with ' + 'errors in JSON'
-        )
+        assertJsonWarningToast()
 
         //Assert Expected values for Initial population
         TestCasesPage.openExpectedActualTab()

@@ -105,7 +105,9 @@ export class OktaLogin {
         return this.runLoginFlow({
             selectedEnvVar: 'selectedUser',
             cookieSetters: {
-                any: () => cy.setAccessTokenCookieAdmin()
+                harpUser: () => cy.setAccessTokenCookieAdmin(),
+                harpUser2: () => cy.setAccessTokenCookieAdmin(),
+                harpUser3: () => cy.setAccessTokenCookieAdmin()
             },
             credsForUser: (u) => {
                 return { username: Environment.credentials().adminUser, password: Environment.credentials().adminPassword }
