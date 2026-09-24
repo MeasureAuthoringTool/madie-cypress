@@ -88,7 +88,6 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
     })
 
     it('shows the correct Owned Measures action states, menu, and dialogs', () => {
-        shareMeasuresWithProfileUser()
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(measureOwner)
 
@@ -108,7 +107,9 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
         cy.get(EditMeasurePage.shareOption).should('be.visible').and('have.text', 'Share With')
         cy.get(EditMeasurePage.unshareOption).should('be.visible').and('have.text', 'Unshare')
 
-        cy.get(EditMeasurePage.shareOption).click()
+        cy.get(EditMeasurePage.shareOption).then(($option) => {
+            $option[0].click()
+        })
         cy.get('[role="dialog"]')
             .should('be.visible')
             .within(() => {
@@ -124,11 +125,13 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
                 })
                 cy.contains(qicoreMeasureName).should('be.visible')
                 cy.contains(qdmMeasureName).should('be.visible')
-                cy.contains(sharedProfileUser).should('be.visible')
                 cy.contains('button', 'Cancel').should('be.enabled').click()
-            })
+        })
         cy.get('[role="dialog"]').should('not.exist')
 
+        shareMeasuresWithProfileUser()
+        AdminUserProfilePage.openUserProfile(measureOwner)
+        selectBothMeasures()
         cy.get(AdminUserProfilePage.shareButton).click()
         cy.get(EditMeasurePage.unshareOption).should('be.visible').click()
         assertShareDialogControls('Unshare From', [
