@@ -103,9 +103,8 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.intercept('PUT', '/api/measures/**').as('saveEmptyCql')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait('@saveEmptyCql').its('response.statusCode').should('eq', 200)
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForExport')
         cy.get(Header.measures).click()
@@ -155,7 +154,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
     })
 })
 
-describe('Error Message on Measure Export when the saved CQL contains errors', () => {
+describe('Error Message on Measure Export when the Population Criteria does not match', () => {
     before('Create New Measure and Login', () => {
         measureData.ecqmTitle = measureName + randValue
         measureData.cqlLibraryName = CqlLibraryName + randValue
@@ -170,33 +169,27 @@ describe('Error Message on Measure Export when the saved CQL contains errors', (
         Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
-    it('Verify export is blocked when the saved CQL contains errors', () => {
+    it('Verify error message on Measure Export when the Population Criteria does not match with CQL', () => {
         cy.get(Header.measures).click()
 
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.openCqlEditor()
-        cy.get(EditMeasurePage.cqlEditorTextBox)
-            .should('be.visible')
-            .click()
-            .focused()
-            .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(
-            updatedMeasureCQL.replace('TestLibrary1685544523170534', measureData.cqlLibraryName)
-        )
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(updatedMeasureCQL)
 
-        cy.intercept('PUT', '/api/measures/**').as('saveMismatchedCql')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.wait('@saveMismatchedCql').its('response.statusCode').should('eq', 200)
+        cy.get(EditMeasurePage.libWarningTopMsg).should(
+            'contain.text',
+            'Library statement was incorrect. MADiE has overwritten it.'
+        )
 
-        cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForMismatchedExport')
         cy.get(Header.measures).click()
-        MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForMismatchedExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
         cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
         cy.get('[class="error-message"] > ul > :nth-child(1)').should(
             'contain.text',
-            'CQL Contains Errors'
+            'CQL Populations Return Types are invalid'
         )
     })
 })
