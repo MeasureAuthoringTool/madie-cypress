@@ -19,9 +19,8 @@ describe('Validate QDM CQL on CQL Library page', () => {
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout', () => {
-
-        
+    afterEach('Clean up CQL library', () => {
+        return Utilities.deleteLibrary()
     })
 
     it('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
@@ -130,8 +129,13 @@ describe('Validate QDM CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 2:25 | Retrieves must contain a code or value set filter")
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow)
+            .first()
+            .click({ force: true })
+        cy.get(CQLEditorPage.errorContainer).should(
+            'contain.text',
+            'ELM: 2:25 | Retrieves must contain a code or value set filter'
+        )
     })
 
     it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
@@ -179,9 +183,8 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout and Clean up Measures', () => {
-
-        
+    afterEach('Clean up CQL library', () => {
+        return Utilities.deleteLibrary()
     })
 
     it('Value Sets are valid', () => {
