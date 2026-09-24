@@ -102,7 +102,7 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
         AdminUserProfilePage.assertEnabledAction(
             AdminUserProfilePage.shareButton,
             AdminUserProfilePage.shareTooltip,
-            'Share/Unshare'
+            'Share/unshare'
         )
         cy.get(AdminUserProfilePage.shareButton).click()
         cy.get(EditMeasurePage.shareOption).should('be.visible').and('have.text', 'Share With')

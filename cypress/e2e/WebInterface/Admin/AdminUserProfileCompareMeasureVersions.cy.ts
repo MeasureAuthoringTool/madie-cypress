@@ -82,7 +82,7 @@ describe('Admin user profile Compare Measure Versions', () => {
         AdminUserProfilePage.assertEnabledAction(
             AdminUserProfilePage.compareVersionsButton,
             AdminUserProfilePage.compareVersionsTooltip,
-            'Compare Measure Versions'
+            'Compare measure versions'
         )
         cy.get(AdminUserProfilePage.compareVersionsButton).click()
         cy.contains('h2', 'Compare Measure Versions').should('be.visible')
