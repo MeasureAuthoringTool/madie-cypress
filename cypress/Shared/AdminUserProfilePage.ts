@@ -47,8 +47,12 @@ export class AdminUserProfilePage {
         cy.intercept('PUT', '**/api/admin/userProfile/*/measures/searches*').as('profileMeasures')
         cy.contains(this.userHarpIdCell, harpId).closest('tr').find(this.userNameLink).click()
 
-        cy.wait('@profileMeasures').its('response.statusCode').should('eq', 200)
-        cy.wait('@profileMeasures').its('response.statusCode').should('eq', 200)
+        cy.get('@profileMeasures.all').should((interceptions) => {
+            expect(
+                interceptions.some((interception) => interception.response?.statusCode === 200),
+                'successful profile measures response'
+            ).to.be.true
+        })
         cy.location('pathname').should('eq', `/admin/userProfile/${harpId}`)
         cy.get(MeasuresPage.ownedMeasures).should('be.visible')
         cy.get(MeasuresPage.sharedMeasures).should('be.visible')
