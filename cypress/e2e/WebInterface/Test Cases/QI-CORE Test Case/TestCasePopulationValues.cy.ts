@@ -26,19 +26,28 @@ const createScenarioNames = (): void => {
 
 const setupInitialPopulationGroup = (testTitle: string): void => {
     if (testTitle.includes('when the measure is initially created')) {
-        MeasureGroupPage.CreateProportionMeasureGroupAPI()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'ipp',
+            undefined,
+            undefined,
+            'num',
+            undefined,
+            'denom'
+        )
     } else if (testTitle.includes('reset of population values') || testTitle.includes('are reset on all test cases')) {
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, undefined, undefined, undefined, 'Procedure')
     } else if (testTitle.includes('required populations')) {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
             'Procedure'
         )
     }
@@ -47,11 +56,15 @@ const setupInitialPopulationGroup = (testTitle: string): void => {
 describe('Test Case Expected Measure Group population values based on initial measure scoring', () => {
     beforeEach('Create measure and login', function () {
         createScenarioNames()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        setupInitialPopulationGroup(this.currentTest?.title ?? '')
-        TestData.saveMeasureCql(measureCQL).then((response) => {
+        const cqlForScenario = this.currentTest?.title.includes('when the measure is initially created')
+            ? MeasureCQL.SBTEST_CQL
+            : measureCQL
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, cqlForScenario)
+        TestData.saveMeasureCql(cqlForScenario).then((response) => {
             TestData.expectSavedMeasureCql(response)
         })
+        setupInitialPopulationGroup(this.currentTest?.title ?? '')
         OktaLogin.SessionLogin()
     })
 
@@ -352,12 +365,12 @@ describe('Test Case Expected Measure Group population values based on initial me
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
+            'Surgical Absence of Cervix',
             'Procedure'
         )
         TestData.saveMeasureCql(measureCQL).then((response) => {
