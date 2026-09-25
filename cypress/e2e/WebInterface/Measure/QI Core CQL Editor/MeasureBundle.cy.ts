@@ -10,6 +10,17 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 const measureName = 'MeasureBundle ' + Date.now()
 const CqlLibraryName = 'MeasureBundleLib' + Date.now()
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const measureCQLWithPopulationDefinitions = `${measureCQL}
+define "ipp":
+    true
+define "denom":
+    "ipp"
+define "num":
+    exists ["Encounter"] E where E.status ~ 'finished'
+define "numeratorExclusion":
+    "num"
+define function "booleanFunction"():
+    true`
 
 describe('Measure Bundle end points', () => {
 
@@ -185,7 +196,7 @@ describe('Measure bundle end point returns stratifications', () => {
 
     beforeEach('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLWithPopulationDefinitions)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
@@ -281,17 +292,6 @@ describe('Measure bundle end point returns stratifications', () => {
 
     it('Measure bundle end point returns stratifications for Continuous Variable Measure', () => {
         let currentUser = Cypress.expose('selectedUser')
-
-        //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
