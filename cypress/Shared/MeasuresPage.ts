@@ -448,7 +448,9 @@ export class MeasuresPage {
 
     public static waitForMeasureListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
         return cy.wait(alias).then((interception) => {
-            expect(interception.response?.statusCode).to.eq(200)
+            if (interception.response) {
+                expect(interception.response.statusCode).to.eq(200)
+            }
             return cy
                 .get(this.measureListTitles, { timeout: 30000 })
                 .should('be.visible')
