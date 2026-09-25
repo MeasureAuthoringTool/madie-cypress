@@ -22,7 +22,6 @@ const measure = {
 }
 const measureCQL = QiCore6Cql.cqlCMS1017
 const testCase = TestCaseJson.fromCMS1017NumPass
-const adminAPIKey = Environment.credentials().adminApiKey
 let harpUser = ''
 
 describe('Admin API - Reset test case expected values', () => {
@@ -34,6 +33,7 @@ describe('Admin API - Reset test case expected values', () => {
     })
 
     it('Reset test case expected values of current draft back to state from last version of the measure', () => {
+        const adminAPIKey = Environment.credentials().adminApiKey
         const currentUser = Cypress.expose('selectedUser')
         // establish original measure - measureId
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libraryName, SupportedModels.qiCore6, { measureCql: measureCQL })

@@ -185,7 +185,7 @@ export class TestCasesPage {
   public static readonly tcColumnAscendingArrow = '[data-testid="KeyboardArrowUpIcon"]'
   public static readonly tcColumnDescendingArrow = '[data-testid="KeyboardArrowDownIcon"]'
   public static readonly tcColumnHeading = '[class="cursor-pointer select-none header-button"]'
-  public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
+  public static readonly tcGroupCoverageHighlighting = '[data-testid^="group-coverage-nav-"]'
   public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
   public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
   public static readonly tcCQLHighlightingDetails = '[data-testid="cql-highlighting"]'

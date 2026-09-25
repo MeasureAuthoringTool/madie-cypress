@@ -415,7 +415,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to Edit Test Case page
-        TestCasesPage.clickEditforCreatedTestCase()
+        TestCasesPage.clickEditforCreatedTestCase(false, TestCasesPage.roTestCaseTitle)
 
         //click on the Expected / Actual tab
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseDENOMExpected })

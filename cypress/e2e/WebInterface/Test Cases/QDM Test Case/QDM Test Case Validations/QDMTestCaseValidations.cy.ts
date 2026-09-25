@@ -64,7 +64,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.clickEditforCreatedTestCase()
+        TestCasesPage.clickEditforCreatedTestCase(false, TestCasesPage.roTestCaseTitle)
         cy.get('[id="date-of-birth"]').should('have.attr', 'readonly', 'readonly')
         cy.get(TestCasesPage.QDMLivingStatus).should('have.attr', 'readonly', 'readonly')
         cy.get(TestCasesPage.QDMRace).should('have.attr', 'readonly', 'readonly')
