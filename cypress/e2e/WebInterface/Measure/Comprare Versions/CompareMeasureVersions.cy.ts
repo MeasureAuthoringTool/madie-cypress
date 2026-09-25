@@ -49,7 +49,7 @@ describe('Compare Measure Versions', () => {
 
     it('Compare two Versions of a Measure', () => {
         let updatedMeasureName = 'Updated' + measureName + Date.now()
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)

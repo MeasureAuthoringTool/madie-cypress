@@ -164,7 +164,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
 
-            TestCasesPage.clickEditforCreatedTestCase()
+            TestCasesPage.clickEditforCreatedTestCase(false, TestCasesPage.roTestCaseTitle)
 
             //navigate to the details tab for the test case
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()

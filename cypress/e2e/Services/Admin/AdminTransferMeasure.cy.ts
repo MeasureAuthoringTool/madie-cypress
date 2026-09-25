@@ -25,7 +25,7 @@ describe('Transfer ownership of measure via Admin API', () => {
     })
 
     it('Request sent with no measure data returns 400', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const altUserName = OktaLogin.getUser(true)
         OktaLogin.setupAdminSession()
 
@@ -47,7 +47,7 @@ describe('Transfer ownership of measure via Admin API', () => {
 
     // added for https://jira.cms.gov/browse/MAT-9627
     it('Admin transfer requires valid target user', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         OktaLogin.setupAdminSession()
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -70,7 +70,7 @@ describe('Transfer ownership of measure via Admin API', () => {
     })
 
     it('Successful admin transfer of 1 measure', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const altUserName = OktaLogin.getUser(true)
         OktaLogin.setupAdminSession()
 
@@ -94,7 +94,7 @@ describe('Transfer ownership of measure via Admin API', () => {
     })
 
     it('Partial success case - attempt to admin transfer 3 measures - 2 succeed, 1 fails due to lock', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const altUserName = OktaLogin.getUser(true)
 
         // as current owner, lock Measure with measureId

@@ -110,10 +110,14 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '1')
+        TestCasesPage.typeExpectedActualValues([
+            { selector: TestCasesPage.testCaseIPPExpected, value: '1' },
+        ])
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait({
+            expectedPopulationValues: { initialPopulation: '1' },
+        })
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',
             'Test case updated successfully ' + 'with warnings in JSON',
@@ -121,17 +125,16 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
         TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '1')
 
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
+        TestCasesPage.runTestCaseAndWaitForCompletion()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitleIppPass, 'Pass')
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO, Multiple Episodes Pass Result', () => {
@@ -155,13 +158,22 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMEXExpected, '1')
+        TestCasesPage.typeExpectedActualValues([
+            { selector: TestCasesPage.testCaseIPPExpected, value: '2' },
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '2' },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '2' },
+            { selector: TestCasesPage.testCaseNUMEXExpected, value: '1' },
+        ])
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait({
+            expectedPopulationValues: {
+                initialPopulation: '2',
+                denominator: '2',
+                numerator: '2',
+                numeratorExclusion: '1',
+            },
+        })
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',
             'Test case updated successfully ' + 'with warnings in JSON',
@@ -169,16 +181,20 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
         TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        TestCasesPage.assertExpectedActualValues([
+            { selector: TestCasesPage.testCaseIPPExpected, value: '2' },
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '2' },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '2' },
+            { selector: TestCasesPage.testCaseNUMEXExpected, value: '1' },
+        ])
 
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
+        TestCasesPage.runTestCaseAndWaitForCompletion()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitleMultipleEpisodesPass, 'Pass')
     })
 })

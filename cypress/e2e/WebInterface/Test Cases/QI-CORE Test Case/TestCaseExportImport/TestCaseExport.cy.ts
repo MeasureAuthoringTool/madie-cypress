@@ -46,7 +46,7 @@ describe('QI-Core Single Test Case Export', () => {
 
     it('Export single QI-Core Test Case', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
 
         OktaLogin.Login()
@@ -79,7 +79,7 @@ describe('QI-Core Single Test Case Export', () => {
 
     it('Non-owner of Measure: Export single QI-Core Test case', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
 
         OktaLogin.AltLogin()
@@ -115,7 +115,7 @@ describe('QI-Core Single Test Case Export', () => {
 
     it('QMIG STU5 Reference Validations', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
 
         OktaLogin.Login()
@@ -174,7 +174,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
 
     it('Export All QI-Core Test cases', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
         testCasePIdPathSecnD = 'cypress/fixtures/' + currentUser + '/testCasePId2'
     
@@ -214,7 +214,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
 
     it('Non-owner of Measure: Export All QI-Core Test cases', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         testCasePIdPath = 'cypress/fixtures/' + currentUser + '/testCasePId'
         testCasePIdPathSecnD = 'cypress/fixtures/' + currentUser + '/testCasePId2'
 

@@ -1,95 +1,105 @@
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
-import { Header } from "../../../Shared/Header"
-import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { SupportedModels } from "../../../Shared/CreateMeasurePage"
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { Utilities } from '../../../Shared/Utilities'
+import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
+import { CQLLibrariesPage } from '../../../Shared/CQLLibrariesPage'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { SupportedModels } from '../../../Shared/CreateMeasurePage'
 
-let apiCQLLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
+const pageSize = 10
+const libraryNumbers = Array.from({ length: pageSize + 1 }, (_, index) => index + 1)
+const cqlLibraryPublisher = 'SemanticBits'
 
-describe('Validate QDM CQL on CQL Library page', () => {
+const createQdmLibraries = (): void => {
+    const libraryNamePrefix = `QdmPaginationLibrary${Date.now()}`
 
-    beforeEach('Create CQL library', () => {
+    libraryNumbers.forEach((libraryNumber) => {
+        CQLLibraryPage.createLibraryAPI(`${libraryNamePrefix}${libraryNumber}`, SupportedModels.QDM, {
+            publisher: cqlLibraryPublisher,
+            libraryNumber
+        })
+    })
+}
 
-        apiCQLLibraryName = 'QdmValidationsLib' + Date.now()
+const createQiCoreLibraries = (): void => {
+    const libraryNamePrefix = `QiCorePaginationLibrary${Date.now()}`
 
-        for (var x = 1; x <= 12; x++) {
-            CQLLibraryPage.createLibraryAPI(apiCQLLibraryName + x, SupportedModels.QDM, { publisher: CQLLibraryPublisher })      
-        }
+    libraryNumbers.forEach((libraryNumber) => {
+        CQLLibraryPage.createLibraryAPI(`${libraryNamePrefix}${libraryNumber}`, SupportedModels.qiCore4, {
+            publisher: `${cqlLibraryPublisher}${libraryNumber}`,
+            libraryNumber
+        })
+    })
+}
+
+const cleanUpLibraries = (): Cypress.Chainable<void> => {
+    return libraryNumbers.reduce<Cypress.Chainable<void>>(
+        (cleanup, libraryNumber) => cleanup.then(() => Utilities.deleteLibrary(undefined, false, libraryNumber)),
+        cy.then(() => undefined)
+    )
+}
+
+const waitForLibraryList = (): void => {
+    cy.get(CQLLibrariesPage.librariesList).should('be.visible')
+    cy.get(CQLLibrariesPage.libraryListRows).should(($rows) => {
+        expect($rows.length, 'library list rows').to.be.greaterThan(0)
+    })
+}
+
+const openLibraries = (tab?: string): void => {
+    CQLLibrariesPage.openLibrariesList()
+
+    if (tab) {
+        cy.get(tab).should('be.visible').click()
+    }
+
+    waitForLibraryList()
+}
+
+const verifyPagination = (): void => {
+    cy.url().should('not.include', 'page=2')
+
+    cy.get(MeasuresPage.paginationNextButton)
+        .should('be.visible')
+        .closest('button')
+        .should('not.be.disabled')
+        .click()
+    cy.url().should('include', 'page=2')
+    cy.get('button[aria-current="page"]').should('have.text', '2')
+    waitForLibraryList()
+
+    cy.get(MeasuresPage.paginationPreviousButton)
+        .should('be.visible')
+        .closest('button')
+        .should('not.be.disabled')
+        .click()
+    cy.url().should('include', 'page=1')
+    cy.get('button[aria-current="page"]').should('have.text', '1')
+    waitForLibraryList()
+
+    cy.get(MeasuresPage.paginationLimitSelect).should('contain', '10').click()
+    cy.get('[data-value="25"]:visible').should('be.visible').click()
+    cy.get(MeasuresPage.paginationLimitSelect).should('contain', '25')
+    waitForLibraryList()
+}
+
+describe('CQL Library pagination', () => {
+    beforeEach('Login', () => {
         OktaLogin.SessionLogin()
     })
 
-    it('Verify Pagination for "All Libraries"', () => {
-
-        cy.get(Header.cqlLibraryTab).click().wait(2000)
-        Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 5000)
-        cy.get(CQLLibraryPage.allLibrariesTab).click().wait(2000)
-        //Verify URL before clicking on Next button
-        cy.url().should('not.include', 'page=2')
-        //Click on Next Button
-        cy.get(MeasuresPage.paginationNextButton).click({ force: true })
-        //Verify if Next Page loaded
-        cy.url().should('include', 'page=2')
-
-        //Click on Previous Button
-        cy.get(MeasuresPage.paginationPreviousButton).click()
-        //Verify if Previous Page loaded
-        cy.url().should('include', 'page=1')
-
-        //Verify pagination limit before change
-        cy.get(MeasuresPage.paginationLimitSelect).should('contain', '10')
-        cy.get(MeasuresPage.paginationLimitSelect).click()
-        Utilities.waitForElementVisible('[data-value="10"]', 50000)
-        Utilities.waitForElementVisible('[data-value="25"]', 50000)
-        Utilities.waitForElementVisible('[data-value="50"]', 50000)
-        //Change pagination limit to 25
-        cy.get(MeasuresPage.paginationLimitEquals25).click({ force: true })
-        //Verify pagination limit after change
-        cy.get(MeasuresPage.paginationLimitSelect).should('contain', '25')
-    })
-})
-
-describe('Validate Qi-Core CQL on CQL Library page', () => {
-
-    beforeEach('Create CQL library', () => {
-
-        apiCQLLibraryName = 'CqlValidationsLib' + Date.now()
-        for (var x = 1; x <= 12; x++) {
-            CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName + x, CQLLibraryPublisher + x)
-        }
-        OktaLogin.SessionLogin()
+    afterEach('Clean up generated libraries', () => {
+        cleanUpLibraries()
     })
 
-    afterEach('Logout', () => {
-
-        
+    it('paginates All Libraries with QDM libraries', () => {
+        createQdmLibraries()
+        openLibraries(CQLLibraryPage.allLibrariesTab)
+        verifyPagination()
     })
 
-    it('Verify Pagination for the "Owned Libraries"', () => {
-
-        cy.get(Header.cqlLibraryTab).click()
-        //Verify URL before clicking on Next button
-        cy.url().should('not.include', 'page=2')
-        //Click on Next Button
-        cy.get(MeasuresPage.paginationNextButton).click({ force: true })
-        //Verify if Next Page loaded
-        cy.url().should('include', 'page=2')
-
-        //Click on Previous Button
-        cy.get(MeasuresPage.paginationPreviousButton).click()
-        //Verify if Previous Page loaded
-        cy.url().should('include', 'page=1')
-
-        //Verify pagination limit before change
-        cy.get(MeasuresPage.paginationLimitSelect).should('contain', '10')
-        cy.get(MeasuresPage.paginationLimitSelect).click()
-        Utilities.waitForElementVisible('[data-value="10"]', 50000)
-        Utilities.waitForElementVisible('[data-value="25"]', 50000)
-        Utilities.waitForElementVisible('[data-value="50"]', 50000)
-        //Change pagination limit to 25
-        cy.get(MeasuresPage.paginationLimitEquals25).click({ force: true })
-        //Verify pagination limit after change
-        cy.get(MeasuresPage.paginationLimitSelect).should('contain', '25')
+    it('paginates Owned Libraries with QI-Core libraries', () => {
+        createQiCoreLibraries()
+        openLibraries()
+        verifyPagination()
     })
 })

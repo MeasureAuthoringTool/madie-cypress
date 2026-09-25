@@ -110,8 +110,8 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
     })
 
     it('Association: QDM -> Qi Core 6.0.0 measure: Validations', () => {
-        let currentUser = Cypress.env('selectedUser')
-        let currentAltUser = Cypress.env('selectedAltUser')
+        let currentUser = Cypress.expose('selectedUser')
+        let currentAltUser = Cypress.expose('selectedAltUser')
 
         const options: CreateMeasureOptions = {
             measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean,

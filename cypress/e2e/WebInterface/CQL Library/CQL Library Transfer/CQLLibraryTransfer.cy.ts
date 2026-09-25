@@ -25,7 +25,7 @@ describe('CQL Library Transfer', () => {
 
     it('Verify transferred CQL Library is viewable under Owned Libraries tab', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         OktaLogin.setupUserSession(false)
 
         //Transfer Library to ALT User
@@ -55,7 +55,7 @@ describe('CQL Library Transfer', () => {
     })
 
     it('Verify CQL Library can be edited by the transferred user', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const updatedCQLLibraryName = CQLLibraryName + 'SomeUpdate' + Date.now()
 
         OktaLogin.setupUserSession(false)
@@ -274,7 +274,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
 
     it('Verify all instances in the Library set (Version and Draft) are Transferred to the new owner', () => {
         const randomCQLLibraryName = 'TransferTestCQLLibrary' + Date.now()
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         //Version the CQL Library
         CQLLibrariesPage.cqlLibraryActionCenter("version")
 

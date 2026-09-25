@@ -70,13 +70,6 @@ declare global {
     }
 }
 
-const authnUrl = Environment.authentication().authnUrl
-const authUri = Environment.authentication().authUri
-const redirectUri = Environment.authentication().redirectUri
-const clientId = Environment.authentication().clientId
-const authCodeUrl = authUri + '/v1/authorize'
-const tokenUrl = authUri + '/v1/token'
-const codeVerifier = Cypress.env('MADIE_CODEVERIFIER')
 require('cypress-delete-downloads-folder').addCustomCommand()
 
 // -------------------------------------------------------
@@ -93,33 +86,34 @@ Cypress.Commands.add(
         const baseUrl = Cypress.config('baseUrl') || ''
         const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`
 
-        function waitForServer(attempt: number): void {
-            cy.task('checkUrl', fullUrl, { log: false }).then((result: any) => {
+        function waitForServer(attempt: number): Cypress.Chainable<void> {
+            return cy.task('checkUrl', fullUrl, { log: false }).then((result: any) => {
                 if (result.reachable) {
                     cy.log(`visitWithRetry: server reachable on probe ${attempt}, loading page...`)
                     // Server confirmed reachable — call cy.visit with a generous timeout
-                    cy.visit(url, { ...options, timeout: 120000 })
+                    return cy.visit(url, { ...options, timeout: 120000 }).then(() => undefined)
                 } else if (attempt < maxAttempts) {
                     cy.log(
                         `visitWithRetry: probe ${attempt}/${maxAttempts} — server not reachable ("${result.error}"). Waiting ${delayMs / 1000}s...`
                     )
-                    cy.wait(delayMs)
-                    // Re-register intercepts that need to capture the page load
-                    cy.intercept('/env-config/serviceConfig.json').as('serviceConfig')
-                    cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
-                    waitForServer(attempt + 1)
+                    return cy.wait(delayMs).then(() => {
+                        // Re-register intercepts that need to capture the page load
+                        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig')
+                        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
+                        return waitForServer(attempt + 1)
+                    })
                 } else {
                     // All probes failed — attempt cy.visit anyway so Cypress
                     // reports the real error instead of a generic task error
                     cy.log(
                         `visitWithRetry: server still unreachable after ${maxAttempts} probes. Attempting cy.visit as last resort...`
                     )
-                    cy.visit(url, { ...options, timeout: 120000 })
+                    return cy.visit(url, { ...options, timeout: 120000 }).then(() => undefined)
                 }
             })
         }
 
-        waitForServer(1)
+        return waitForServer(1)
     }
 )
 
@@ -132,6 +126,13 @@ function fetchAccessTokenAndSetCookie(
     password: string,
     opts?: { failOnStatusCode?: boolean; uppercaseUsername?: boolean }
 ): Cypress.Chainable<Cypress.Cookie> {
+    const authentication = Environment.authentication()
+    const authnUrl = authentication.authnUrl
+    const authCodeUrl = authentication.authUri + '/v1/authorize'
+    const tokenUrl = authentication.authUri + '/v1/token'
+    const redirectUri = authentication.redirectUri
+    const clientId = authentication.clientId
+    const codeVerifier = Environment.codeVerifier()
     const failOnStatus = opts?.failOnStatusCode ?? false
     const effectiveUsername = opts?.uppercaseUsername ? username.toUpperCase() : username
 
@@ -217,9 +218,20 @@ function fetchAccessTokenAndSetCookie(
                 failOnStatusCode: failOnStatus
             }).then((tokenResponse) => {
                 expect(tokenResponse.status).to.eql(200)
-                const access_token = tokenResponse.body.access_token
-                // setting the cookie value to be grabbed for api authentication
-                return cy.setCookie('accessToken', access_token)
+                const accessToken = tokenResponse.body?.access_token
+
+                // A successful token response is not sufficient if its body is
+                // incomplete. Failing here prevents the browser from making
+                // later application requests with `Bearer undefined`.
+                expect(accessToken, 'Okta access token').to.be.a('string').and.not.be.empty
+                expect(accessToken, 'Okta access token').not.to.equal('undefined')
+
+                return cy.setCookie('accessToken', accessToken).then(() => {
+                    return cy.getCookie('accessToken').should((cookie) => {
+                        expect(cookie?.value, 'accessToken cookie').to.be.a('string').and.not.be.empty
+                        expect(cookie?.value, 'accessToken cookie').not.to.equal('undefined')
+                    }).then((cookie) => cookie as Cypress.Cookie)
+                })
             })
         })
     })
@@ -267,9 +279,9 @@ export function setAccessTokenCookieAdmin(): Cypress.Chainable<Cypress.Cookie> {
     return fetchAccessTokenAndSetCookie(Environment.credentials().adminUser, Environment.credentials().adminPassword)
 }
 
-export function UMLSAPIKeyLogin() {
-    cy.getCookie('accessToken').then((accessToken) => {
-        cy.request({
+export function UMLSAPIKeyLogin(): Cypress.Chainable<Cypress.Response<unknown>> {
+    return cy.getCookie('accessToken').should('exist').then((accessToken) => {
+        return cy.request({
             url: '/api/vsac/umls-credentials',
             method: 'POST',
             headers: {

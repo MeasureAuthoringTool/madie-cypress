@@ -7,7 +7,6 @@ import { Measure } from '@madie/madie-models'
 import { OktaLogin } from './OktaLogin'
 import { FixtureOwner, TestData } from './TestData'
 
-const adminApiKey = Environment.credentials().adminApiKey
 let harpUser = ''
 let harpUserALT = ''
 
@@ -54,13 +53,12 @@ export class Utilities {
         deleteSecondMeasure?: boolean,
         altUser?: boolean,
         measureNumber?: number
-    ): void {
+    ): Cypress.Chainable<void> {
         const owner: FixtureOwner = altUser ? 'selectedAltUser' : 'selectedUser'
-        const currentUser = Cypress.env(owner)
+        const currentUser = Cypress.expose(owner)
 
         if (!currentUser) {
-            cy.log('⚠️ deleteMeasure: No user set — skipping cleanup')
-            return
+            return cy.log('⚠️ deleteMeasure: No user set — skipping cleanup').then(() => undefined)
         }
 
         const measurePath = TestData.measureIdPath(deleteSecondMeasure ? 2 : (measureNumber ?? 0), owner)
@@ -71,12 +69,12 @@ export class Utilities {
 
         TestData.setupUserScope(owner)
 
-        cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
+        return cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
             if (!id) {
                 cy.log(`⚠️ deleteMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`)
                 return
             }
-            TestData.requestMeasureDeleteActionById(id, { failOnStatusCode: false }).then((response) => {
+            return TestData.requestMeasureDeleteActionById(id, { failOnStatusCode: false }).then((response) => {
                 if (response.status === 200) {
                     cy.log('Measure deleted (hard delete) via API successfully')
                 } else {
@@ -85,7 +83,7 @@ export class Utilities {
                     )
                 }
             })
-        })
+        }).then(() => undefined)
     }
 
     public static deleteVersionedMeasure(
@@ -95,7 +93,7 @@ export class Utilities {
         altUser?: boolean,
         measureNumber?: number
     ): void {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         if (!currentUser) {
             cy.log('⚠️ deleteVersionedMeasure: No user set — skipping cleanup')
@@ -125,7 +123,7 @@ export class Utilities {
             TestData.requestAdminMeasureDeleteById(id, user, {
                 failOnStatusCode: false,
                 headers: {
-                    'api-key': adminApiKey
+                    'api-key': Environment.credentials().adminApiKey
                 }
             }).then((response) => {
                 if (response.status === 200) {
@@ -410,13 +408,16 @@ export class Utilities {
         cy.get('thead th').find('input[type="checkbox"]').check()
     }
 
-    public static deleteLibrary(libraryName?: string, altUser?: boolean, libraryNumber?: number) {
+    public static deleteLibrary(
+        libraryName?: string,
+        altUser?: boolean,
+        libraryNumber?: number
+    ): Cypress.Chainable<void> {
         const owner: FixtureOwner = altUser ? 'selectedAltUser' : 'selectedUser'
-        const currentUser = Cypress.env(owner)
+        const currentUser = Cypress.expose(owner)
 
         if (!currentUser) {
-            cy.log('⚠️ deleteLibrary: No user set — skipping cleanup')
-            return
+            return cy.log('⚠️ deleteLibrary: No user set — skipping cleanup').then(() => undefined)
         }
 
         if (altUser === undefined || altUser === null) {
@@ -426,12 +427,12 @@ export class Utilities {
 
         TestData.setupUserScope(owner)
 
-        cy.task('readFileSafe', libraryPath, { log: false }).then((id: string | null) => {
+        return cy.task('readFileSafe', libraryPath, { log: false }).then((id: string | null) => {
             if (!id) {
                 cy.log(`⚠️ deleteLibrary: Fixture file ${libraryPath} is empty or missing — skipping cleanup`)
                 return
             }
-            TestData.requestCqlLibraryById('DELETE', id, { failOnStatusCode: false }).then((response) => {
+            return TestData.requestCqlLibraryById('DELETE', id, { failOnStatusCode: false }).then((response) => {
                 if (response.status === 200) {
                     cy.log('Library deleted successfully')
                 } else {
@@ -440,7 +441,7 @@ export class Utilities {
                     )
                 }
             })
-        })
+        }).then(() => undefined)
     }
 
     public static lockControl(type: MadieObject, lockObject: boolean, altUser?: boolean) {

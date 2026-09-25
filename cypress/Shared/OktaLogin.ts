@@ -1,6 +1,5 @@
 import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
-import { umlsLoginForm } from "./umlsLoginForm"
 import { Header } from "./Header"
 
 export class OktaLogin {
@@ -20,8 +19,8 @@ export class OktaLogin {
     // ------------------------------------------------------
     // PUBLIC: keep these intact so tests DO NOT change
     // ------------------------------------------------------
-    public static Login(): void {
-        this.runLoginFlow({
+    public static Login(): Cypress.Chainable<void> {
+        return this.runLoginFlow({
             selectedEnvVar: 'selectedUser',
             cookieSetters: {
                 harpUser:  () => cy.setAccessTokenCookie(),
@@ -38,8 +37,8 @@ export class OktaLogin {
         });
     }
 
-    public static AltLogin(): void {
-        this.runLoginFlow({
+    public static AltLogin(): Cypress.Chainable<void> {
+        return this.runLoginFlow({
             selectedEnvVar: 'selectedAltUser',
             cookieSetters: {
                 altHarpUser:  () => cy.setAccessTokenCookieALT(),
@@ -62,7 +61,7 @@ export class OktaLogin {
         // collisions with ordinary specs that can also use harpUser2.
         cy.task('getAvailableReviewer').then((reviewerUser) => {
             expect(reviewerUser, 'Available reviewer user').to.not.be.null
-            Cypress.env('reviewerUser', reviewerUser)
+            Cypress.expose('reviewerUser', reviewerUser)
             this.runLoginFlow({
                 selectedEnvVar: 'reviewerUser',
                 cookieSetters: {
@@ -80,15 +79,15 @@ export class OktaLogin {
     public static releaseReviewer(): void {
         // Reviewer suites must call this from afterEach so harpUser2 returns
         // to the primary pool even when a reviewer assertion fails.
-        const reviewerUser = Cypress.env('reviewerUser')
+        const reviewerUser = Cypress.expose('reviewerUser')
         if (reviewerUser) {
             cy.task('releaseReviewer', reviewerUser)
-            Cypress.env('reviewerUser', null)
+            Cypress.expose('reviewerUser', null)
         }
     }
 
     public static getReviewerUser(): string {
-        const reviewerUser = Cypress.env('reviewerUser')
+        const reviewerUser = Cypress.expose('reviewerUser')
 
         if (reviewerUser === 'harpUser2') {
             return Environment.credentials().harpUser2.toLowerCase()
@@ -102,11 +101,13 @@ export class OktaLogin {
         return Environment.credentials().harpUser2.toLowerCase()
     }
 
-    public static AdminLogin(): void {
-        this.runLoginFlow({
+    public static AdminLogin(): Cypress.Chainable<void> {
+        return this.runLoginFlow({
             selectedEnvVar: 'selectedUser',
             cookieSetters: {
-                any: () => cy.setAccessTokenCookieAdmin()
+                harpUser: () => cy.setAccessTokenCookieAdmin(),
+                harpUser2: () => cy.setAccessTokenCookieAdmin(),
+                harpUser3: () => cy.setAccessTokenCookieAdmin()
             },
             credsForUser: (u) => {
                 return { username: Environment.credentials().adminUser, password: Environment.credentials().adminPassword }
@@ -125,7 +126,7 @@ export class OktaLogin {
     // ------------------------------------------------------
 
     public static SessionLogin(): void {
-        const who = Cypress.env('selectedUser')
+        const who = Cypress.expose('selectedUser')
 
         cy.session('login-' + who, () => {
             // Only acquire the access token via API — no browser navigation.
@@ -153,16 +154,12 @@ export class OktaLogin {
         })
 
         // After session restore/create, navigate to the app.
-        // No intercept/wait for UMLS here — on session restore the request
-        // may fire before the intercept is registered, causing a timeout.
-        // The landing page assertion below is sufficient: if UMLS login is
-        // actually required, the app won't render the landing page.
         cy.visit('/')
         cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
     public static SessionAltLogin(): void {
-        const who = Cypress.env('selectedAltUser')
+        const who = Cypress.expose('selectedAltUser')
 
         cy.session('alt-login-' + who, () => {
             const cookieSetters: Record<string, () => void> = {
@@ -194,7 +191,7 @@ export class OktaLogin {
         cookieSetters: Record<string, () => void>;
         credsForUser: (userKey: string) => { username: string; password: string } | null;
         logPrefix?: string;
-    }): void {
+    }): Cypress.Chainable<void> {
         const logPrefix = args.logPrefix ?? 'Login';
 
         // Reset state
@@ -203,13 +200,8 @@ export class OktaLogin {
         cy.clearLocalStorage();
         cy.clearAllSessionStorage?.({ log: true });
 
-        // Register intercepts BEFORE any navigation so they are in place
-        // when the app fires requests during page load. This prevents the
-        // race condition where the UMLS credentials check fires before the
-        // intercept is registered, causing cy.wait('@umls') to hang for
-        // 110 seconds and fail.
+        // Register the feature-config intercept before navigation.
         cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
-        cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
 
         // Visit login and ensure fresh sessionStorage (with retry on network errors)
         cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
@@ -221,7 +213,7 @@ export class OktaLogin {
         });
 
         // Normalize the user key to a plain string (avoids TS index weirdness)
-        const rawWho = Cypress.env(args.selectedEnvVar);
+        const rawWho = Cypress.expose(args.selectedEnvVar);
         const who: string = typeof rawWho === 'string' ? rawWho : String(rawWho ?? '');
 
         // 1) Set token cookie if mapped for this user
@@ -282,9 +274,6 @@ export class OktaLogin {
 
         // 2) Re-evaluate auth (navigate to root so route guard runs)
         if (cookieSet) {
-            // Re-register the UMLS intercept before navigating — the alias
-            // may have been consumed by the initial /login page load.
-            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
             cy.visitWithRetry('/');
         }
 
@@ -296,8 +285,7 @@ export class OktaLogin {
             cy.log(`${logPrefix}: UI state after first wait: ${state}`);
 
             if (state === 'landing') {
-                // Already authenticated — UMLS intercept was registered early
-                // so it will have captured/will capture the request.
+                // Cookie-based authentication completed.
                 return;
             }
 
@@ -314,10 +302,6 @@ export class OktaLogin {
             // we'd be throwing away a valid session and forcing form login,
             // which then fails because /login auto-redirects to /measures.
             cy.log(`${logPrefix}: Timed out detecting UI state. Re-probing after /login navigation...`);
-
-            // Re-register UMLS intercept before navigating — previous alias
-            // may have been consumed by earlier page loads.
-            cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
 
             // Navigate directly to /login (with retry on network errors).
             // If cookies are still valid, the app will bounce to /measures.
@@ -342,7 +326,6 @@ export class OktaLogin {
                 cy.log(`${logPrefix}: Still no UI state. Clearing cookies and forcing form login.`);
                 cy.clearAllCookies();
                 cy.clearLocalStorage();
-                cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls');
                 cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
                 cy.get(selectors.username, { timeout: 60000 }).should('be.visible').then(() => {
                     doFormLogin();
@@ -350,25 +333,54 @@ export class OktaLogin {
             });
         });
 
-        // 4) Post-login checks — wait for UMLS
-        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
-            if (!response || response.statusCode !== 200) {
-                umlsLoginForm.UMLSLogin();
-            }
-        });
+        // 4) UMLS setup is service state, not a UI interaction. Checking it
+        // directly avoids relying on an intercept that may have been consumed
+        // during navigation or on a dropdown whose markup varies by release.
+        this.ensureUmlsAuthenticated();
 
-        cy.get(selectors.landing, { timeout: 60000 }).should('be.visible');
-        cy.log(`${logPrefix} Successful`);
+        return cy.get(selectors.landing, { timeout: 60000 }).should('be.visible').then(() => {
+            cy.log(`${logPrefix} Successful`)
+            return undefined
+        })
     }
 
-    public static UILogout(): void {
+    private static ensureUmlsAuthenticated(): Cypress.Chainable<void> {
+        return cy.getCookie('accessToken').should('exist').then((accessToken) => {
+            return cy.request({
+                url: '/api/vsac/umls-credentials/status',
+                method: 'GET',
+                headers: { authorization: `Bearer ${accessToken.value}` },
+                failOnStatusCode: false
+            }).then((statusResponse) => ({ accessToken: accessToken.value, statusResponse }))
+        }).then(({ accessToken, statusResponse }) => {
+            if (statusResponse.status === 200) {
+                cy.log('UMLS is already authenticated')
+                return undefined
+            }
+
+            const apiKey = Environment.credentials().umls_API_KEY
+            expect(apiKey, 'VSAC API key').to.be.a('string').and.not.be.empty
+
+            return cy.request({
+                url: '/api/vsac/umls-credentials',
+                method: 'POST',
+                headers: { authorization: `Bearer ${accessToken}` },
+                body: apiKey,
+                failOnStatusCode: false
+            }).then((connectionResponse) => {
+                expect(connectionResponse.status, 'UMLS API-key connection response').to.eq(200)
+            })
+        }).then(() => undefined)
+    }
+
+    public static UILogout(): Cypress.Chainable<void> {
 
         // UILogout is called from afterEach/after hooks. If it throws,
         // it cascades and skips remaining tests in the suite. Wrap
         // everything so cleanup failures are logged, not fatal.
         cy.wait(4500)
         cy.reload()
-        cy.get('body', { timeout: 50000 }).should('exist').then(() => {
+        return cy.get('body', { timeout: 50000 }).should('exist').then(() => {
             // Check if we're already on the login page
             cy.url().then((url) => {
                 if (url.endsWith('/login')) {
@@ -394,15 +406,15 @@ export class OktaLogin {
                     }
                 })
             })
-        })
+        }).then(() => undefined)
     }
 
 
     public static setupUserSession(altUser: boolean) {
         let user = ''
 
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.expose('selectedAltUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         sessionStorage.clear()
         cy.clearAllCookies()
@@ -452,8 +464,8 @@ export class OktaLogin {
 
     public static getUser(altUser: boolean) {
         let user: string
-        const currentAltUser = Cypress.env('selectedAltUser')
-        const currentUser = Cypress.env('selectedUser')
+        const currentAltUser = Cypress.expose('selectedAltUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         if (altUser) {
             switch (currentAltUser) {

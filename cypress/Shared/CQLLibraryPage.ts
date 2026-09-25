@@ -146,6 +146,16 @@ export class CQLLibraryPage {
     //Error marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
 
+    public static selectCQLLibraryModel(model: SupportedModels): void {
+        cy.get(this.cqlLibraryModelDropdown)
+            .filter(':visible')
+            .should('have.length', 1)
+            .click()
+        cy.get(`[role="option"][data-value="${model}"]:visible`)
+            .should('have.length', 1)
+            .click()
+    }
+
     public static createCQLLibrary(CQLLibraryName: string, options?: CreateLibraryOptions): void {
         let publisher = 'ICF'
         if (options?.publisher) {
@@ -160,9 +170,7 @@ export class CQLLibraryPage {
             desc = options.description
         }
 
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibrariesPage.librariesList, 30000)
+        CQLLibrariesPage.openLibrariesList()
 
       //  Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
         cy.get(this.createCQLLibraryBtn).should('be.enabled')
@@ -171,36 +179,35 @@ export class CQLLibraryPage {
         Utilities.waitForElementVisible(this.newCQLLibName, 7500)
         cy.get(this.newCQLLibName).type(CQLLibraryName)
 
-        Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, model)
+        this.selectCQLLibraryModel(model)
 
         cy.get(this.cqlLibraryDesc).type(desc)
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(publisher).type('{downArrow}{enter}')
 
-        this.clickCreateLibraryButton()
-        Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        TestData.readCqlLibraryId().then((libraryId) => {
-            cy.get(`[data-testid="cqlLibrary-button-${libraryId}-content"]`).should('contain', CQLLibraryName)
+        this.clickCreateLibraryButton().then(() => {
+            Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
+            CQLLibrariesPage.openLibrariesList()
+            CQLLibrariesPage.searchForLibraryByName(CQLLibraryName).should('contain', CQLLibraryName)
             // ToDo?: add a check here for model
         })
         cy.log('CQL Library Created Successfully')
     }
 
-    public static clickCreateLibraryButton(): void {
+    public static clickCreateLibraryButton(): Cypress.Chainable<string> {
         let alias = 'library' + (Date.now().valueOf() + 1).toString()
         const libraryAlias: `@${string}` = `@${alias}`
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/cql-libraries').as(alias)
 
         cy.get(this.saveCQLLibraryBtn).click()
-        //saving measureID to file to use later
-        cy.wait(libraryAlias).then(({ response }) => {
+        // saving library ID to the fixture for existing cleanup flows and returning it for this flow's list assertion
+        return cy.wait(libraryAlias).then(({ response }) => {
             expect(response?.statusCode).to.eq(201)
-            TestData.writeCqlLibraryId(response?.body.id)
+            const libraryId = response?.body.id
+            expect(libraryId, 'created CQL library ID').to.be.a('string')
+            return TestData.writeCqlLibraryId(libraryId).then(() => libraryId)
         })
     }
 

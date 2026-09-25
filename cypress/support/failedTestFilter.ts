@@ -1,5 +1,5 @@
-const failedTestTitlesBase64 = Cypress.env('failedTestTitlesBase64')
-const failedTestsBase64 = Cypress.env('failedTestsBase64')
+const failedTestTitlesBase64 = Cypress.expose('failedTestTitlesBase64')
+const failedTestsBase64 = Cypress.expose('failedTestsBase64')
 
 function decodeFailedTestTitles(value: unknown): Set<string> {
   if (!value || typeof value !== 'string') {

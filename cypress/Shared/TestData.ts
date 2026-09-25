@@ -179,7 +179,7 @@ export type SavedMeasureCqlExpectation = {
 
 export class TestData {
     public static selectedUser(owner: FixtureOwner = 'selectedUser'): string {
-        const user = Cypress.env(owner)
+        const user = Cypress.expose(owner)
 
         if (!user) {
             throw new Error(`Cypress env ${owner} is not set. User allocation likely failed in support setup.`)

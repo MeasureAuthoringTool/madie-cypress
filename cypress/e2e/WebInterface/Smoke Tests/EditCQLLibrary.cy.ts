@@ -25,7 +25,9 @@ describe('Smoke test - Edit CQL Library', () => {
     it('Edit CQL Library Name and verify the library is updated on CQL Library page', () => {
 
         //Edit CQL Library Name
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        CQLLibrariesPage.openLibrariesList()
+        CQLLibrariesPage.searchForLibraryByName(CQLLibraryName)
+        CQLLibrariesPage.openLibraryDetailsFromCurrentList()
 
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.value', CQLLibraryName)
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type(updatedCQLLibraryName)
@@ -38,7 +40,6 @@ describe('Smoke test - Edit CQL Library', () => {
 
         //Navigate back to CQL Library page and verify if the Library Name is updated
         cy.get(Header.cqlLibraryTab).click()
-
-        CQLLibrariesPage.validateCQLLibraryName(updatedCQLLibraryName)
+        CQLLibrariesPage.searchForLibraryByName(updatedCQLLibraryName)
     })
 })

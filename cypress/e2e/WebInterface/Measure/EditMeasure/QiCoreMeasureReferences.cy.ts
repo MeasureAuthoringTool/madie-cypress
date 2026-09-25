@@ -28,7 +28,7 @@ describe.skip('Qi Core Measure Reference', () => {
     })
 
     it('Add and Edit Qi Core Measure reference', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Add Measure Reference
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelReference).click()

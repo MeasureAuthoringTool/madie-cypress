@@ -87,12 +87,13 @@ export class QDMElements {
     }
 
     // Fallback URI prefixes (or alternate names) for code systems whose data-testid may have changed
-    private static readonly codeSystemFallbacks: Record<string, string> = {
+    private static readonly codeSystemFallbacks: Record<string, string | string[]> = {
         SNOMEDCT: 'http://snomed',
         ICD10CM: 'http://hl7.org/fhir/sid/icd-10-cm',
         ICD10PCS: 'http://www.cms.gov/Medicare/Coding/ICD10',
         SOP: 'SOPT',
         SOPT: 'SOP',
+        LOINC: ['LOINC', 'http://loinc.org'],
         RxNORM: 'RXNORM',
         RXNORM: 'RxNORM',
         rxnorm: 'http://www.nlm.nih.gov/research/umls/rxnorm'
@@ -103,25 +104,7 @@ export class QDMElements {
         Utilities.waitForElementVisible(TestCasesPage.ExpandedOSSDetailCardTabCodes, 120000)
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get(TestCasesPage.codeSystemSelector).click()
-
-        const exactSelector = '[data-testid="code-system-option-' + codeSystem + '"]'
-        const legacySelector = '[data-testid="option-' + codeSystem + '"]'
-        const fallbackPrefix = this.codeSystemFallbacks[codeSystem]
-
-        cy.get('body').then(($body) => {
-            if ($body.find(exactSelector).length > 0) {
-                cy.get(exactSelector).click()
-            } else if ($body.find(legacySelector).length > 0) {
-                cy.get(legacySelector).click()
-            } else if (fallbackPrefix) {
-                cy.get('[data-testid^="code-system-option-' + fallbackPrefix + '"]')
-                    .first()
-                    .click()
-            } else {
-                // no fallback — use exact selector so it fails with a clear message
-                cy.get(exactSelector).click()
-            }
-        })
+        this.selectCodeSystemOption(codeSystem)
 
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-' + code + '"]').click()
@@ -152,23 +135,25 @@ export class QDMElements {
      * if the exact testid isn't in the DOM.
      */
     public static selectCodeSystemOption(codeSystem: string): void {
+        cy.get(this.codeSystemOptionSelector(codeSystem), { timeout: 60000 })
+            .filter(':visible')
+            .first()
+            .click()
+    }
+
+    private static codeSystemOptionSelector(codeSystem: string): string {
         const exactSelector = '[data-testid="code-system-option-' + codeSystem + '"]'
         const legacySelector = '[data-testid="option-' + codeSystem + '"]'
-        const fallbackPrefix = this.codeSystemFallbacks[codeSystem]
+        const fallbackPrefixes = this.codeSystemFallbacks[codeSystem]
+        const fallbackSelector = (Array.isArray(fallbackPrefixes)
+            ? fallbackPrefixes
+            : fallbackPrefixes ? [fallbackPrefixes] : [])
+            .flatMap((prefix) => [
+                '[data-testid^="code-system-option-' + prefix + '"]',
+                '[data-testid*="code-system-option-' + prefix + '"]',
+            ])
 
-        cy.get('body').then(($body) => {
-            if ($body.find(exactSelector).length > 0) {
-                cy.get(exactSelector).click()
-            } else if ($body.find(legacySelector).length > 0) {
-                cy.get(legacySelector).click()
-            } else if (fallbackPrefix) {
-                cy.get('[data-testid^="code-system-option-' + fallbackPrefix + '"]')
-                    .first()
-                    .click()
-            } else {
-                cy.get(exactSelector).click()
-            }
-        })
+        return [exactSelector, legacySelector, ...fallbackSelector].join(', ')
     }
 
     public static closeElement(): void {
