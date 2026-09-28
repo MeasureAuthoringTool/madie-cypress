@@ -212,6 +212,14 @@ export class MeasureGroupPage {
     //add measure group
     public static readonly addMeasureGroupButton = '[data-testid="add-measure-group-button"]'
 
+    public static openNewMeasureGroupForm(): void {
+        cy.get('body').then(($body) => {
+            if ($body.find(this.addMeasureGroupButton).is(':visible')) {
+                cy.get(this.addMeasureGroupButton).click()
+            }
+        })
+    }
+
     //update measure group
     public static readonly updateMeasureGroupConfirmationMsg = '.MuiDialogContent-root > div'
     public static readonly popUpConfirmationModal =

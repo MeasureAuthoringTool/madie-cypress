@@ -298,6 +298,26 @@ export class CQLEditorPage {
         Utilities.typeFileContents(filePath, editorSelector)
     }
 
+    public static replaceCqlDocumentText(cql: string, editorSelector = EditMeasurePage.cqlEditorTextBox): void {
+        Utilities.waitForElementWriteEnabled(editorSelector, 8500)
+
+        cy.get(editorSelector)
+            .should('be.visible')
+            .closest('.ace_editor')
+            .then(($editor) => {
+                const aceEditor = ($editor.get(0) as any)?.env?.editor
+
+                expect(aceEditor, 'Ace editor instance').to.exist
+                aceEditor.setValue(cql)
+                aceEditor.clearSelection()
+                expect(aceEditor.getValue(), 'CQL editor contents').to.eq(cql)
+            })
+
+        // Ace emits its own change event, but the app's dirty-state handler
+        // requires a keyboard event before it enables Save.
+        cy.get(editorSelector).type('{moveToEnd} {backspace}')
+    }
+
     // Clicking expand can trigger a URL navigation that collapses the panel.
     // This helper clicks expand, waits for the page to stabilise, and retries
     // up to several times until the definitions tab is finally visible.

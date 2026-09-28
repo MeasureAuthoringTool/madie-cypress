@@ -98,6 +98,7 @@ Reuse these established paths before adding request code:
 ## CQL and Population Criteria
 
 - Reuse `CQLEditorPage.saveCql(...)` and wait for the Save button to become disabled when later setup depends on compiled CQL.
+- Keep CQL fixtures as raw valid CQL; never embed Cypress key commands such as `{home}` or `{del}` in fixture content. For full-document replacement in the Ace editor, use `CQLEditorPage.replaceCqlDocumentText(...)`, which verifies the exact editor value and triggers MADiE's dirty-state handling before the normal UI Save.
 - Create or update Population Criteria only after valid CQL has settled.
 - Use API group setup when the scenario does not validate the Population Criteria UI itself.
 - Preserve intentional invalid-CQL UI flows when the test verifies editor error persistence or visible validation behavior.

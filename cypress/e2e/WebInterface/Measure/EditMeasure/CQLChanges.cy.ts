@@ -8,6 +8,7 @@ import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -31,11 +32,8 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout and Clean up Measures', () => {
-        randValue = Math.floor(Math.random() * 1000 + 1)
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+    afterEach('Clean up Measure', () => {
+        Utilities.deleteMeasure()
     })
 
     it(
@@ -101,7 +99,13 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseMSRPOPLExpected, '1', {
                 clearFirst: true
             })
-            cy.get(TestCasesPage.editTestCaseSaveButton).click()
+            cy.get(TestCasesPage.editTestCaseSaveButton)
+                .should('be.visible')
+                .then(($saveButton) => {
+                    if (!$saveButton.is(':disabled')) {
+                        TestCasesPage.saveTestCaseAndWait()
+                    }
+                })
             cy.get(TestCasesPage.runTestButton).should('exist')
             cy.get(TestCasesPage.runTestButton).should('be.visible')
             cy.get(TestCasesPage.runTestButton).should('be.enabled')
@@ -112,6 +116,12 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTab).should('exist')
             cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
             cy.get(EditMeasurePage.cqlEditorTab).click()
+            cy.get('body').then(($body) => {
+                if ($body.find(Utilities.discardChangesContinue).is(':visible')) {
+                    cy.get(Utilities.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+                    cy.get(Utilities.discardChangesContinue).click()
+                }
+            })
 
             cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
             //remove the dayObs line(s) from CQL
@@ -183,37 +193,17 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
             cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
 
-            //remove the dayObs line(s) from CQL
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(
-                measureCQL + '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{del}'
-            )
+            CQLEditorPage.replaceCqlDocumentText(measureCQL)
 
             //save changes to CQL
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
             cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
             //verify that the errors flag contains no errors / has been cleared
 
-            //log out of UI
-
-            //log into backend
-
-            OktaLogin.setupUserSession(false)
-            cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                    .should('exist')
-                    .then((id) => {
-                        cy.request({
-                            url: '/api/measures/' + id,
-                            headers: {
-                                authorization: 'Bearer ' + accessToken?.value
-                            },
-                            method: 'GET'
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            expect(response.body.errors).is.empty
-                        })
-                    })
+            TestData.readMeasure().then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body.errors).is.empty
             })
         }
     )
