@@ -244,8 +244,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //open edit page for test case
-        TestCasesPage.clickEditforCreatedTestCase()
+        //open read-only test case details as the non-owner
+        TestCasesPage.clickEditforCreatedTestCase(false, TestCasesPage.roTestCaseTitle)
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
