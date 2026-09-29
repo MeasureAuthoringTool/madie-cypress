@@ -64,8 +64,7 @@ describe('Delete Test Case', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
     })
 
     afterEach('Logout and Clean up Measures', () => {

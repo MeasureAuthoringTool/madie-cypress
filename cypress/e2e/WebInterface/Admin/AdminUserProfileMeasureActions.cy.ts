@@ -1,23 +1,41 @@
 import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
 import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
 import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { Environment } from '../../../Shared/Environment'
 import { MeasureCQL } from '../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
+import { TestData } from '../../../Shared/TestData'
 import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { Utilities } from '../../../Shared/Utilities'
 
 let profileUser = ''
+let measureName = ''
+let cqlLibraryName = ''
 
 describe('Admin user profile measure actions', () => {
     beforeEach(() => {
-        profileUser = Environment.credentials().adminUser?.toLowerCase() ?? ''
-        expect(profileUser, 'configured Admin profile user').not.to.be.empty
+        const uniqueSuffix = Date.now()
+        measureName = `AdminProfileActions${uniqueSuffix}`
+        cqlLibraryName = `AdminProfileActionsLib${uniqueSuffix}`
+        profileUser = OktaLogin.getUser(false)
+        expect(profileUser, 'measure owner').not.to.be.empty
+
+        const measureCql = MeasureCQL.CQL_For_Cohort
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCql)
+        TestData.saveMeasureCql(`${measureCql}\n`).then((response) => {
+            TestData.expectSavedMeasureCql(response)
+        })
+        MeasureGroupPage.CreateCohortMeasureGroupAPI()
+
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(profileUser)
+        AdminUserProfilePage.openMeasuresTab(MeasuresPage.ownedMeasures)
     })
 
+    afterEach(() => {
+        Utilities.deleteMeasure()
+    })
     ;[
         { name: 'Owned Measures', selector: MeasuresPage.ownedMeasures },
         { name: 'Shared Measures', selector: MeasuresPage.sharedMeasures }
@@ -30,12 +48,12 @@ describe('Admin user profile measure actions', () => {
             AdminUserProfilePage.assertDisabledAction(
                 AdminUserProfilePage.exportButton,
                 AdminUserProfilePage.exportTooltip,
-                'Select measure to export'
+                'Select a measure to export'
             )
             AdminUserProfilePage.assertDisabledAction(
                 AdminUserProfilePage.humanReadableButton,
                 AdminUserProfilePage.humanReadableTooltip,
-                'Select measure to view human readable'
+                'Select a measure to view human readable'
             )
             AdminUserProfilePage.assertDisabledAction(
                 AdminUserProfilePage.compareVersionsButton,
@@ -52,7 +70,7 @@ describe('Admin user profile measure actions', () => {
 
     it('opens Human Readable for one selected Owned Measure', () => {
         cy.get(MeasuresPage.ownedMeasures).click()
-        AdminUserProfilePage.selectMeasureRow(0)
+        AdminUserProfilePage.selectMeasureByName(measureName)
 
         cy.get(AdminUserProfilePage.humanReadableButton).should('be.enabled').click()
         cy.get(EditMeasurePage.humanReadablePopup).should('be.visible').and('contain.text', 'Human Readable')
@@ -60,7 +78,7 @@ describe('Admin user profile measure actions', () => {
 
     it('opens Measure History for one selected Owned Measure', () => {
         cy.get(MeasuresPage.ownedMeasures).click()
-        AdminUserProfilePage.selectMeasureRow(0)
+        AdminUserProfilePage.selectMeasureByName(measureName)
 
         cy.get(AdminUserProfilePage.historyButton).should('be.enabled').click()
         cy.get('[data-testid="measure-history-header"]').should('be.visible')
@@ -68,18 +86,16 @@ describe('Admin user profile measure actions', () => {
 
     it('shows both export options for one selected Owned Measure', () => {
         cy.get(MeasuresPage.ownedMeasures).click()
-        AdminUserProfilePage.selectMeasureRow(0)
+        AdminUserProfilePage.selectMeasureByName(measureName)
 
         cy.get(AdminUserProfilePage.exportButton).should('be.enabled').click()
         cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').and('have.text', 'Executable Export')
-        cy.get(MeasuresPage.exportPublishingOption)
-            .should('be.visible')
-            .and('have.text', 'Publishable Export')
+        cy.get(MeasuresPage.exportPublishingOption).should('be.visible').and('have.text', 'Publishable Export')
     })
 
     it('exports one selected Owned Measure and records the Admin attribution', () => {
         cy.get(MeasuresPage.ownedMeasures).click()
-        AdminUserProfilePage.selectMeasureByVersion('1.0.000')
+        AdminUserProfilePage.selectMeasureByName(measureName)
 
         cy.get(AdminUserProfilePage.exportButton).should('be.enabled').click()
         cy.get(MeasuresPage.exportNonPublishingOption).should('be.visible').click()
@@ -95,7 +111,7 @@ describe('Admin user profile measure actions', () => {
 
     it('exports one selected Owned Measure for publishing', () => {
         cy.get(MeasuresPage.ownedMeasures).click()
-        AdminUserProfilePage.selectMeasureByVersion('1.0.000')
+        AdminUserProfilePage.selectMeasureByName(measureName)
 
         cy.get(AdminUserProfilePage.exportButton).should('be.enabled').click()
         cy.get(MeasuresPage.exportPublishingOption).should('be.visible').click()
@@ -103,7 +119,6 @@ describe('Admin user profile measure actions', () => {
         cy.get(MeasuresPage.exportFinishedCheck, { timeout: 60000 }).should('be.visible')
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Measure exported successfully')
     })
-
 })
 
 describe('Admin user profile unrelated Owned Measure selections', () => {
@@ -121,18 +136,8 @@ describe('Admin user profile unrelated Owned Measure selections', () => {
         secondLibraryName = `AdminProfileUnrelatedLibTwo${uniqueSuffix}`
         profileOwner = OktaLogin.getUser(false)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(
-            firstMeasureName,
-            firstLibraryName,
-            MeasureCQL.CQL_For_Cohort,
-            0
-        )
-        CreateMeasurePage.CreateQICoreMeasureAPI(
-            secondMeasureName,
-            secondLibraryName,
-            MeasureCQL.CQL_For_Cohort,
-            1
-        )
+        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, firstLibraryName, MeasureCQL.CQL_For_Cohort, 0)
+        CreateMeasurePage.CreateQICoreMeasureAPI(secondMeasureName, secondLibraryName, MeasureCQL.CQL_For_Cohort, 1)
 
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(profileOwner)
@@ -159,7 +164,7 @@ describe('Admin user profile unrelated Owned Measure selections', () => {
         AdminUserProfilePage.assertEnabledAction(
             AdminUserProfilePage.historyButton,
             AdminUserProfilePage.historyTooltip,
-            'View History'
+            'View measure history'
         )
 
         AdminUserProfilePage.selectMeasureByName(secondMeasureName)
@@ -167,12 +172,12 @@ describe('Admin user profile unrelated Owned Measure selections', () => {
         AdminUserProfilePage.assertDisabledAction(
             AdminUserProfilePage.exportButton,
             AdminUserProfilePage.exportTooltip,
-            'Select measure to export'
+            'Select a measure to export'
         )
         AdminUserProfilePage.assertDisabledAction(
             AdminUserProfilePage.humanReadableButton,
             AdminUserProfilePage.humanReadableTooltip,
-            'Select measure to view human readable'
+            'Select a measure to view human readable'
         )
         AdminUserProfilePage.assertDisabledAction(
             AdminUserProfilePage.historyButton,

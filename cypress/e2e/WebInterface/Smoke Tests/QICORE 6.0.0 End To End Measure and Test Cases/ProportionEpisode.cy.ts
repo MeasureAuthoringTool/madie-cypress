@@ -13,7 +13,6 @@ import {
     MeasureType,
     PopulationBasis,
 } from '../../../../Shared/MeasureGroupPage'
-import { Toasts } from '../../../../Shared/Toasts'
 
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
@@ -84,28 +83,33 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab()
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(Toasts.otherSuccessToast).should(
-            'contain.text',
-            'Test case updated successfully! Test case validation has started running, please continue working in MADiE.',
-        )
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        const expectedValues = [
+            { selector: TestCasesPage.testCaseIPPExpected, value: '1' },
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '1' },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '1' },
+        ]
+        TestCasesPage.clearExpectedActualValues(expectedValues)
+        TestCasesPage.typeExpectedActualValues(expectedValues)
+        TestCasesPage.saveTestCaseAndWait({
+            expectedPopulationValues: {
+                initialPopulation: '1',
+                denominator: '1',
+                numerator: '1',
+            },
+        })
 
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30000)
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualValues(expectedValues)
+
+        TestCasesPage.runTestCaseAndWaitForCompletion()
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitle, 'Pass')
     })
 })

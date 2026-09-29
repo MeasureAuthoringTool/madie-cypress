@@ -13,8 +13,8 @@ import { Header } from '../../../../Shared/Header'
 
 const measureName = 'MeasureSharing' + Date.now()
 const cqlLibraryName = 'MeasureSharingLib' + Date.now()
-const updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
-const updatedMeasureName = measureName + 'someUpdate'
+let updatedCqlLibraryName = ''
+let updatedMeasureName = ''
 const measureCQL = MeasureCQL.SBTEST_CQL
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const testCaseTitle = 'Title for Auto Test'
@@ -29,6 +29,11 @@ describe('Measure Sharing', () => {
     let newCqlLibraryName = cqlLibraryName + randValue
 
     beforeEach('Create Measure and Set Access Token', () => {
+        randValue = Math.floor(Math.random() * 1000 + 1)
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = cqlLibraryName + randValue
+        updatedMeasureName = newMeasureName + 'someUpdate'
+        updatedCqlLibraryName = newCqlLibraryName + 'someUpdate'
         harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
@@ -73,23 +78,17 @@ describe('Measure Sharing', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
-
-        //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.collapseEditor()
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
+            CQLEditorPage.replaceCqlDocumentText(cql)
+        })
+        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+        MeasureGroupPage.openNewMeasureGroupForm()
         MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -113,7 +112,7 @@ describe('Measure Sharing', () => {
     })
 
     it('Verify Measure owner can share Measure from Action centre share button and shared user is able to edit Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
 
@@ -160,23 +159,17 @@ describe('Measure Sharing', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
-
-        //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.collapseEditor()
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
+            CQLEditorPage.replaceCqlDocumentText(cql)
+        })
+        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+        MeasureGroupPage.openNewMeasureGroupForm()
         MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -200,7 +193,7 @@ describe('Measure Sharing', () => {
     })
 
     it('Action centre share button disabled for Non Measure Owner', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Login
         OktaLogin.AltLogin()
@@ -270,7 +263,7 @@ describe('Measure Sharing - Multiple instances', () => {
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
@@ -362,6 +355,7 @@ describe("Remove user's share access from a measure", () => {
     })
 
     afterEach('Log out and Clean up', () => {
+        Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
         Utilities.deleteMeasure()
     })
 
@@ -380,10 +374,11 @@ describe("Remove user's share access from a measure", () => {
                 cy.get(EditMeasurePage.testCasesTab).click()
 
                 // add a test case to prove edit access
-                TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS', 'null')
+                TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS')
 
                 // Log out ALT user and revoke share as the measure owner
                 OktaLogin.UILogout()
+                Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
                 OktaLogin.setupUserSession(false)
                 Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
 

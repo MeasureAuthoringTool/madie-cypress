@@ -1,5 +1,4 @@
 import { Utilities } from "../../../Shared/Utilities"
-import { Environment } from "../../../Shared/Environment"
 import { CreateMeasureOptions, CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
@@ -395,7 +394,6 @@ const testCase: TestCase = {
     description: 'example tc for testing codesystem update',
     json: testCaseJson
 }
-const adminAPIKey = Environment.credentials().adminApiKey
 let harpUser = ''
 
 describe('Admin API - Update CodeSystem value in QDM test cases', () => {
@@ -412,7 +410,7 @@ describe('Admin API - Update CodeSystem value in QDM test cases', () => {
 
     it('Replace HCPCS URL with oid value', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', 'Denominator Exclusions', 

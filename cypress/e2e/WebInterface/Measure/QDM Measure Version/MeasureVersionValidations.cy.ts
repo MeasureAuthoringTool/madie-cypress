@@ -337,7 +337,7 @@ describe('Non Measure owner unable to create Version', () => {
     })
 
     it('Verify Version button is not visible for non Measure owner', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 

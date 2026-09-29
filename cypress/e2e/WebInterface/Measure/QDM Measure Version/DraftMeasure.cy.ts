@@ -72,7 +72,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 
     it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 

@@ -102,26 +102,30 @@ function writeRerunMetadata() {
   console.log(`Wrote rerun metadata -> ${path.resolve(rerunMetadataFile)}`)
 }
 
-function runCypress(specs, extraEnv = {}) {
+function runCypress(specs, extraExpose = {}) {
   if (!specs.length) {
     return 0
   }
 
-  const envPairs = [`configFile=${configFile}`]
-  for (const [key, value] of Object.entries(extraEnv)) {
-    envPairs.push(`${key}=${value}`)
+  const exposePairs = []
+  for (const [key, value] of Object.entries(extraExpose)) {
+    exposePairs.push(`${key}=${value}`)
   }
 
   const args = [
     'cypress',
     'run',
     '--env',
-    envPairs.join(','),
+    `configFile=${configFile}`,
     '--browser',
     browser,
     '--spec',
     specs.join(',')
   ]
+
+  if (exposePairs.length) {
+    args.push('--expose', exposePairs.join(','))
+  }
 
   if (headed) {
     args.push('--headed')

@@ -25,7 +25,7 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Successful Measure sharing as admin', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         
         OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
@@ -50,7 +50,7 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Verify error when non-admin attempts to share', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({
@@ -79,7 +79,7 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Verify error message when the Measure does not exist in MADiE', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
@@ -110,7 +110,7 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Get details of Measure shared with', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
@@ -134,7 +134,7 @@ describe('Measure Sharing Service', () => {
     })
 
     it('Verify error Message when Non Measure owner tried to get details of Measure Shared with', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((id) => {
                 cy.request({

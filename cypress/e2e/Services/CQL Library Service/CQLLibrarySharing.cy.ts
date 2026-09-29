@@ -28,7 +28,7 @@ describe('CQL Library Sharing Service', () => {
     })
 
     it('Get details of CQL Library shared with', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         OktaLogin.setupAdminSession()
 
@@ -67,7 +67,7 @@ describe('CQL Library sharing Validations', () => {
     })
 
     it('Verify error when non-admin attempts to share', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/cqlLibraryId').should('exist').then((id) => {
@@ -98,7 +98,7 @@ describe('CQL Library sharing Validations', () => {
     })
 
     it('Verify error message when the CQL Library does not exist in MADiE', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {
@@ -130,7 +130,7 @@ describe('CQL Library sharing Validations', () => {
     })
 
     it('Verify error Message when Non Measure owner tried to get details of CQL Library Shared with', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         OktaLogin.setupAdminSession()
         cy.getCookie('accessToken').then((accessToken) => {

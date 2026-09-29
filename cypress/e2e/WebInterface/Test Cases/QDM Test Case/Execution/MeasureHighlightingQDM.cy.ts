@@ -223,7 +223,7 @@ describe('QDM Test Case Highlighting accurately appears for a multiple PC measur
     })
 
     it('Both PCs populate highlighting upon execution', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let measureSecondGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId2'
         TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()

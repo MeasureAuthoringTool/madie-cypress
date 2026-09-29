@@ -4,7 +4,6 @@ import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { TestCaseJson } from '../../../Shared/TestCaseJson'
 import { Utilities } from '../../../Shared/Utilities'
 import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 
@@ -23,7 +22,29 @@ const testCaseSeries = 'SBTestSeries'
 const updatedTestCaseTitle = testCaseTitle + ' some update'
 const updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 const updatedTestCaseSeries = 'CMSTestSeries'
-const testCaseJson = TestCaseJson.TestCaseJson_Valid
+const testCaseJson = JSON.stringify({
+    resourceType: 'Bundle',
+    type: 'collection',
+    entry: [
+        {
+            fullUrl: 'https://madie.cms.gov/Patient/create-update-test-case',
+            resource: {
+                resourceType: 'Patient',
+                id: 'create-update-test-case',
+                meta: {
+                    profile: ['http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient'],
+                },
+                identifier: [{
+                    system: 'http://example.org/mrn',
+                    value: 'create-update-test-case',
+                }],
+                name: [{ family: 'Test', given: ['Automation'] }],
+                gender: 'female',
+                birthDate: '2000-10-11',
+            },
+        },
+    ],
+})
 
 const qiCore6MeasureCQL =
     "library QICoreTestLibrary1733500481375 version '0.0.000'\n" +
@@ -65,7 +86,11 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         cy.get(TestCasesPage.lastSavedDate).should('contain', todaysDate)
 
         //Edit / update Test Case
+        cy.intercept('PUT', '/api/fhir/cql/relevant-elements').as('qiCoreRelevantElementsAfterReopen')
         TestCasesPage.clickEditforCreatedTestCase()
+        cy.wait('@qiCoreRelevantElementsAfterReopen', { timeout: 60000 })
+            .its('response.statusCode')
+            .should('eq', 200)
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
 
         cy.get(TestCasesPage.lastSavedDate).should('contain.text', utcTime)

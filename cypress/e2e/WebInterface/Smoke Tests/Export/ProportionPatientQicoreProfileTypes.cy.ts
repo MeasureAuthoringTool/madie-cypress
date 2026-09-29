@@ -116,8 +116,11 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.get(EditMeasurePage.measureGenericFieldRTETextBox).type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
+        cy.get('[data-testid="ClearIcon"]').should('be.visible').click()
 
+        cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForExport')
         cy.get(Header.measures).click()
+        MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForExport')
 
         //version measure
         MeasuresPage.actionCenter('version')

@@ -29,7 +29,7 @@ return Tuple {
   relevantDays: "Days In Period"(relevantPeriod)
 }
 
-{home}define "Days with Glucose Results":
+define "Days with Glucose Results":
   "Days in Hospitalization" InpatientHospitalDays
 return Tuple {
   encounter: InpatientHospitalDays.encounter,
@@ -53,7 +53,7 @@ where Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPe
 )
 }
 
-{home}define "Days with Hyperglycemic Events":
+define "Days with Hyperglycemic Events":
   "Days with Glucose Results" EncounterWithResultDays
 let eligibleEventDays: EncounterWithResultDays.relevantDays EncounterDay
 where EncounterDay.dayNumber > 1
@@ -73,79 +73,79 @@ relevantPeriod: EncounterWithResultDays.relevantPeriod,
 eligibleEventDays: eligibleEventDays
 }
 
-{home}define "Denominator":
+define "Denominator":
   "Initial Population"
 
-{home}define "Denominator Exclusions":
+define "Denominator Exclusions":
   "Encounter with First Glucose Greater Than or Equal to 1000"
 
-{home}define "Encounter with Elevated Glucose Greater Than or Equal to 200":
+define "Encounter with Elevated Glucose Greater Than or Equal to 200":
   "Encounter with Hospitalization Period" Hospitalization
 with ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest
 such that Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod ) during Hospitalization.hospitalizationPeriod
 and GlucoseTest.result >= 200 'mg/dL'
 return Hospitalization.encounter
 
-{home}define "Encounter with Existing Diabetes Diagnosis":
+define "Encounter with Existing Diabetes Diagnosis":
   "Encounter with Hospitalization Period" Hospitalization
 with ["Diagnosis": "Diabetes"] DiabetesCondition
 such that DiabetesCondition.prevalencePeriod starts before 
 end of Hospitalization.hospitalizationPeriod
 return Hospitalization.encounter
 
-{home}define "Encounter with Hospitalization Period":
+define "Encounter with Hospitalization Period":
   "Qualifying Encounter" QualifyingHospitalization
 return Tuple {
   encounter: QualifyingHospitalization,
 hospitalizationPeriod: Global."HospitalizationWithObservation" ( QualifyingHospitalization )
 }
 
-{home}define "Encounter with Hyperglycemic Events":
+define "Encounter with Hyperglycemic Events":
   "Days with Hyperglycemic Events" HyperglycemicEventDays
 where exists ( HyperglycemicEventDays.eligibleEventDays EligibleEventDay
 where EligibleEventDay.hasHyperglycemicEvent
 )
 return HyperglycemicEventDays.encounter
 
-{home}define "Encounter with Hypoglycemic Medication":
+define "Encounter with Hypoglycemic Medication":
   "Encounter with Hospitalization Period" Hospitalization
 with ["Medication, Administered": "Hypoglycemics Treatment Medications"] HypoglycemicMedication
 such that Global."NormalizeInterval" ( HypoglycemicMedication.relevantDatetime, HypoglycemicMedication.relevantPeriod ) starts during Hospitalization.hospitalizationPeriod
 return Hospitalization.encounter
 
-{home}define "Initial Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":
+define "Initial Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":
   "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" GlucoseResult1000
 where not ( GlucoseResult1000.id in "Glucose Tests Earlier Than Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start".id )
 
-{home}define "Initial Population":
+define "Initial Population":
   "Encounter with Existing Diabetes Diagnosis"
 union "Encounter with Hypoglycemic Medication"
 union "Encounter with Elevated Glucose Greater Than or Equal to 200"
 
-{home}define "Measurement Population":
+define "Measurement Population":
   "Denominator"
 
-{home}define "Numerator":
+define "Numerator":
   "Encounter with Hyperglycemic Events"
 
-{home}define "Qualifying Encounter":
+define "Qualifying Encounter":
   ["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter
 where InpatientEncounter.relevantPeriod ends during day of "Measurement Period"
 and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod)>= 18
 
-{home}define "SDE Ethnicity":
+define "SDE Ethnicity":
   ["Patient Characteristic Ethnicity": "Detailed Ethnicity"]
 
-{home}define "SDE Payer":
+define "SDE Payer":
   ["Patient Characteristic Payer": "Payer"]
 
-{home}define "SDE Race":
+define "SDE Race":
   ["Patient Characteristic Race": "Race"]
 
-{home}define "SDE Sex":
+define "SDE Sex":
   ["Patient Characteristic Sex": "CMS Sex"]
 
-{home}define "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":
+define "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":
   from
 "Initial Population" InpatientHospitalization,
 ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest
@@ -156,7 +156,7 @@ and GlucoseTest.result is not null
 and GlucoseTestTime during Interval[( start of HospitalizationInterval - 1 hour ), ( start of HospitalizationInterval + 6 hours )]
 return GlucoseTest
 
-{home}define "Encounter with First Glucose Greater Than or Equal to 1000":
+define "Encounter with First Glucose Greater Than or Equal to 1000":
   "Initial Population" InpatientHospitalization
 with "Initial Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" FirstGlucoseResult
 such that FirstGlucoseResult.result is not null
@@ -164,7 +164,7 @@ and FirstGlucoseResult.result >= 1000 'mg/dL'
 and Global."EarliestOf" ( FirstGlucoseResult.relevantDatetime, FirstGlucoseResult.relevantPeriod ) during Interval[( start of Global."HospitalizationWithObservation" ( InpatientHospitalization ) - 1 hour ), ( start of Global."HospitalizationWithObservation" ( InpatientHospitalization ) + 6 hours )]
 return InpatientHospitalization
 
-{home}define "Glucose Tests Earlier Than Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":
+define "Glucose Tests Earlier Than Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":
   from
 "Initial Population" InpatientHospitalization,
 "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" GlucoseResult1000,
@@ -178,17 +178,17 @@ and EarlierGlucoseTest is not null
 and EarlierGlucoseTest.id !~ GlucoseResult1000.id
 return GlucoseResult1000
 
-{home}define function "Interval To Day Numbers"(Period Interval<DateTime> ):
+define function "Interval To Day Numbers"(Period Interval<DateTime> ):
   ( expand { Interval[1, days between start of Period and 
 end of Period]} ) DayExpand
 return 
 end of DayExpand
 
-{home}define function "Hospital Days Max 10"(Period Interval<DateTime> ):
+define function "Hospital Days Max 10"(Period Interval<DateTime> ):
   Interval[start of Period, Min({ end of Period, 
   start of Period + 10 days })]
 
-{home}define function "Days In Period"(Period Interval<DateTime> ):
+define function "Days In Period"(Period Interval<DateTime> ):
   ( "Interval To Day Numbers"(Period)) DayNumber
 let startPeriod: start of Period + ( 24 hours * ( DayNumber - 1 ) ),
 endPeriod: if ( hours between startPeriod and 
@@ -200,7 +200,7 @@ return Tuple {
 dayPeriod: Interval[startPeriod, endPeriod]
 }
 
-{home}define function "Denominator Observations"(QualifyingEncounter "Encounter, Performed" ):
+define function "Denominator Observations"(QualifyingEncounter "Encounter, Performed" ):
   if QualifyingEncounter.id in "Denominator Exclusions".id then singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays
 where EncounterWithEventDays.encounter = QualifyingEncounter
 return 0
@@ -210,7 +210,7 @@ where EncounterWithEventDays.encounter = QualifyingEncounter
 return Count(EncounterWithEventDays.eligibleEventDays)
 )
 
-{home}define function "Numerator Observations"(QualifyingEncounter "Encounter, Performed" ):
+define function "Numerator Observations"(QualifyingEncounter "Encounter, Performed" ):
   if QualifyingEncounter.id in "Denominator Exclusions".id then singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays
 where EncounterWithEventDays.encounter = QualifyingEncounter
 return 0
@@ -220,4 +220,3 @@ where EncounterWithEventDays.encounter = QualifyingEncounter
 return Count(EncounterWithEventDays.eligibleEventDays EligibleEventDay
 where EligibleEventDay.hasHyperglycemicEvent
 ))
-{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}

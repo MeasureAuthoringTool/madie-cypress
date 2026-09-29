@@ -52,35 +52,24 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         CQLEditorPage.saveCql({ collapseEditor: true })
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        const expectedValues = [{ selector: TestCasesPage.testCaseIPPExpected, value: '1', clearFirst: true }]
+        TestCasesPage.typeExpectedActualValues(expectedValues)
+        TestCasesPage.saveTestCaseAndWait({ expectedPopulationValues: { initialPopulation: '1' } })
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualValues(expectedValues)
 
-        TestCasesPage.openExpectedActualTab()
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
+        TestCasesPage.runTestCaseAndWaitForCompletion()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 9500)
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitle, 'Pass')
     })
 })

@@ -137,33 +137,22 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 0 })
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.checked')
+        const expectedSelections = [
+            { selector: TestCasesPage.testCaseDENOMExpected },
+            { selector: TestCasesPage.testCaseNUMERExpected },
+            { selector: TestCasesPage.testCaseIPPExpected, index: 0 },
+            { selector: TestCasesPage.testCaseIPPExpected, index: 1 },
+        ]
+        TestCasesPage.checkExpectedActualCheckboxes(expectedSelections)
 
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 1 })
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.checked')
-
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
-
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '44', {
-            clearFirst: true,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
+        const expectedValues = [
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '44', clearFirst: true },
+            { selector: TestCasesPage.numeratorObservationRow, value: '1', clearFirst: true },
+        ]
+        TestCasesPage.typeExpectedActualValues(expectedValues)
 
         TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',
             'Test case updated successfully ' + 'with warnings in JSON',
@@ -171,22 +160,15 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
         TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        TestCasesPage.assertExpectedActualValues(expectedValues)
 
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
+        TestCasesPage.runTestCaseAndWaitForCompletion()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitleIpp1Pass, 'Pass')
     })
 
     it('End to End Ratio Patient Two IPs w/ MOs, MO fail Result', () => {
@@ -204,33 +186,22 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 0 })
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.checked')
+        const expectedSelections = [
+            { selector: TestCasesPage.testCaseDENOMExpected },
+            { selector: TestCasesPage.testCaseNUMERExpected },
+            { selector: TestCasesPage.testCaseIPPExpected, index: 0 },
+            { selector: TestCasesPage.testCaseIPPExpected, index: 1 },
+        ]
+        TestCasesPage.checkExpectedActualCheckboxes(expectedSelections)
 
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected, { index: 1 })
-        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.checked')
-
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
-
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '33', {
-            clearFirst: true,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
+        const expectedValues = [
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '33', clearFirst: true },
+            { selector: TestCasesPage.numeratorObservationRow, value: '1', clearFirst: true },
+        ]
+        TestCasesPage.typeExpectedActualValues(expectedValues)
 
         TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
         cy.get(TestCasesPage.successMsg).should(
             'contain.text',
             'Test case updated successfully ' + 'with warnings in JSON',
@@ -238,21 +209,14 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
         TestCasesPage.openExpectedActualTab()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        TestCasesPage.assertExpectedActualValues(expectedValues)
 
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
+        TestCasesPage.runTestCaseAndWaitForCompletion()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#ae1c1c')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitleMOFail, 'Fail')
     })
 })

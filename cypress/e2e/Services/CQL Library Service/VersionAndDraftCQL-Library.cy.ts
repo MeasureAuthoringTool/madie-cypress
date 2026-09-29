@@ -15,7 +15,7 @@ const versionNumber = '1.0.000'
 const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
 const validCql = LibraryCQL.validCQL4QICORELib
 const invalidDraftNameMessage =
-    'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.'
+    'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.'
 
 const requestLibraryDraft = (
     cqlLibraryName: string,
@@ -82,7 +82,7 @@ describe('Version and Draft CQL Library', () => {
     it('User can not draft CQL Library if the CQL Library naming validations fail', () => {
         requestLibraryDraft('testLibrary', { failOnStatusCode: false }).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(invalidDraftNameMessage)
+            expect(response.body.validationErrors.cqlLibraryDraft).to.eql(invalidDraftNameMessage)
         })
     })
 

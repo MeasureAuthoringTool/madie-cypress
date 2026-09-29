@@ -141,7 +141,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     })
 
     it('User receives "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let versionNumber = '1.0.000'
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -318,7 +318,7 @@ describe('Non Measure owner unable to create Version', () => {
     })
 
     it('Verify Version button is not visible for non Measure owner', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 

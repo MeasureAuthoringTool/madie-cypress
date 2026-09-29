@@ -9,7 +9,7 @@ pipeline {
   parameters {
     choice(
       choices: [
-        'cy:parallel:test','cy:parallel:test:ui:smoketests','cy:parallel:dev:ui:smoketests',
+        'cy:parallel:test','cy:parallel:test:ui:smoketests','cy:parallel:test:ui:smoketests:headless','cy:parallel:dev:ui:smoketests',
         'cy:parallel:test:all:tests','test:specific:files:parallel','dev:all:ui:tests','dev:all:tests',
         'dev:ui:smoketests','dev:ui:cqllibrary:cqlEditor','dev:ui:cqllibrary','dev:ui:measure:cqlEditor',
         'dev:measure:editMeasure:ui:tests','dev:ui:testCases:testCasePopulationValues',
@@ -136,38 +136,36 @@ pipeline {
       agent {
         docker {
           image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
-          args "-u 0 -v $HOME/.npm:/.npm"
+          args "-u 0 -v $HOME/.npm:/.npm -v $HOME/.cache/Cypress:/root/.cache/Cypress"
           reuseNode true
         }
       }
       steps {
         sh '''
-          cd ${WORKSPACE}
-          if [ ! -d node_modules ]; then
-            echo "Installing dependencies in ${WORKSPACE} ..."
-            npm ci --no-audit --no-fund || npm install --no-audit --no-fund
-          else
-            echo "Using existing node_modules in ${WORKSPACE}"
-          fi
+          cd "$WORKSPACE"
+          echo "Installing locked dependencies in $WORKSPACE ..."
+          npm ci --no-audit --no-fund
+          npx cypress install
+          npx cypress verify
         '''
 
         slackSend(color: "#ffff00", message: "#${env.BUILD_NUMBER} (<${env.BUILD_URL}Open>) - ${params.TEST_SCRIPT} Tests Started")
 
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE', catchInterruptions: true) {
           sh '''
-            cd ${WORKSPACE}
+            cd "$WORKSPACE"
             # Per-run report: start clean
             npm run delete:reports
             if [ -n "${MANUAL_SPEC_LIST:-}" ]; then
-              echo "Writing MANUAL_SPEC_LIST to ${WORKSPACE}/test-files.txt"
+              echo "Writing MANUAL_SPEC_LIST to $WORKSPACE/test-files.txt"
               printf '%s\\n' "${MANUAL_SPEC_LIST}" \
                 | tr -d '\\r' \
                 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;/^$/d' \
-                > ${WORKSPACE}/test-files.txt
-              echo "Manual spec list contains $(wc -l < ${WORKSPACE}/test-files.txt) spec(s):"
-              cat ${WORKSPACE}/test-files.txt
+                > "$WORKSPACE/test-files.txt"
+              echo "Manual spec list contains $(wc -l < "$WORKSPACE/test-files.txt") spec(s):"
+              cat "$WORKSPACE/test-files.txt"
             fi
-            node scripts/resolve-spec-list.js "$TEST_SCRIPT" ${WORKSPACE}/planned-specs-${BUILD_NUMBER}.txt
+            node scripts/resolve-spec-list.js "$TEST_SCRIPT" "$WORKSPACE/planned-specs-$BUILD_NUMBER.txt"
             set +e
             timeout 8h npm run "$TEST_SCRIPT"
             TEST_STATUS=$?
@@ -181,36 +179,36 @@ pipeline {
 
         // Initial failures list and human-readable failure details
         sh '''
-          cd ${WORKSPACE}
-          PLANNED_SPECS_FILE=${WORKSPACE}/planned-specs-${BUILD_NUMBER}.txt \
+          cd "$WORKSPACE"
+          PLANNED_SPECS_FILE="$WORKSPACE/planned-specs-$BUILD_NUMBER.txt" \
           node scripts/extract-failure-details.js \
-            ${WORKSPACE}/failures-${BUILD_NUMBER}.txt \
-            ${WORKSPACE}/failure-details-${BUILD_NUMBER}.txt \
-            ${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json \
+            "$WORKSPACE/failures-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-details-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-summary-$BUILD_NUMBER.json" \
             "Initial run failures"
         '''
 
         // Initial per-run Mochawesome bundle
         sh '''
-          cd ${WORKSPACE}
-          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+          cd "$WORKSPACE"
+          if ls "$WORKSPACE"/cypress/results/*.json >/dev/null 2>&1; then
             npm run combine:reports
             npm run generateOne:report
-            tar -czf ${WORKSPACE}/mochawesome-initial-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
+            tar -czf "$WORKSPACE/mochawesome-initial-$BUILD_NUMBER.tar.gz" -C "$WORKSPACE/mochawesome-report/" .
           else
             echo "No mochawesome JSON for initial run; creating empty bundle."
-            : > ${WORKSPACE}/mochawesome-initial-${BUILD_NUMBER}.tar.gz || true
+            : > "$WORKSPACE/mochawesome-initial-$BUILD_NUMBER.tar.gz" || true
           fi
         '''
 
         // Ensure rerun lists exist
         sh '''
-          : > ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-          : > ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-          printf 'Rerun #1 failures\\n\\nNo rerun performed.\\n' > ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt
-          printf 'Rerun #2 failures\\n\\nNo rerun performed.\\n' > ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt
-          printf '{"runLabel":"Rerun #1 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json
-          printf '{"runLabel":"Rerun #2 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json
+          : > "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt"
+          : > "$WORKSPACE/failures-rerun2-$BUILD_NUMBER.txt"
+          printf 'Rerun #1 failures\\n\\nNo rerun performed.\\n' > "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt"
+          printf 'Rerun #2 failures\\n\\nNo rerun performed.\\n' > "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.txt"
+          printf '{"runLabel":"Rerun #1 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json"
+          printf '{"runLabel":"Rerun #2 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > "$WORKSPACE/failure-summary-rerun2-$BUILD_NUMBER.json"
         '''
       }
     }
@@ -219,14 +217,16 @@ pipeline {
       agent {
         docker {
           image "${env.AWS_ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com/madie-dev-cypress-ecr:latest"
-          args "-u 0 -v $HOME/.npm:/.npm"
+          args "-u 0 -v $HOME/.npm:/.npm -v $HOME/.cache/Cypress:/root/.cache/Cypress"
           reuseNode true
         }
       }
       steps {
         sh '''
           set -e
-          cd ${WORKSPACE}
+          cd "$WORKSPACE"
+          npx cypress install
+          npx cypress verify
 
           # Determine which rerun script to use based on the initial TEST_SCRIPT
           case "${TEST_SCRIPT}" in
@@ -239,27 +239,27 @@ pipeline {
           esac
           echo "Using rerun script: ${RERUN_SCRIPT}"
 
-          if [ ! -s ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ]; then
+          if [ ! -s "$WORKSPACE/failures-$BUILD_NUMBER.txt" ]; then
             echo "No initial failures found. Skipping reruns."
-            : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
-            : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
+            : > "$WORKSPACE/mochawesome-rerun1-$BUILD_NUMBER.tar.gz" || true
+            : > "$WORKSPACE/mochawesome-rerun2-$BUILD_NUMBER.tar.gz" || true
             exit 0
           fi
 
           echo '=== RERUN #1 ==='
           npm run delete:reports
-          rm -f ${WORKSPACE}/mochawesome.json || true
-          rm -rf ${WORKSPACE}/mochawesome-report || true
-          : > ${WORKSPACE}/test-files.txt
-          cat ${WORKSPACE}/failures-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
-          rm -rf ${WORKSPACE}/runner-results/* || true
-          mkdir -p ${WORKSPACE}/runner-results
+          rm -f "$WORKSPACE/mochawesome.json" || true
+          rm -rf "$WORKSPACE/mochawesome-report" || true
+          : > "$WORKSPACE/test-files.txt"
+          cat "$WORKSPACE/failures-$BUILD_NUMBER.txt" > "$WORKSPACE/test-files.txt"
+          rm -rf "$WORKSPACE/runner-results"/* || true
+          mkdir -p "$WORKSPACE/runner-results"
 
           # Run the rerun — for IMPL, invoke cypress directly from the shell
           # (bypasses Node wrapper which triggers Cypress 15 reporter serialization bug)
           case "${TEST_SCRIPT}" in
             impl:*)
-              SPEC_LIST=$(cat ${WORKSPACE}/test-files.txt | tr '\n' ',' | sed 's/,$//')
+              SPEC_LIST=$(cat "$WORKSPACE/test-files.txt" | tr '\n' ',' | sed 's/,$//')
               echo "IMPL rerun specs: ${SPEC_LIST}"
               set +e
               NO_COLOR=1 timeout 2h npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome
@@ -268,8 +268,8 @@ pipeline {
               ;;
             *)
               set +e
-              FAILED_TEST_SUMMARY=${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json \
-                RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-1-${BUILD_NUMBER}.json \
+              FAILED_TEST_SUMMARY="$WORKSPACE/failure-summary-$BUILD_NUMBER.json" \
+                RERUN_TARGETING_FILE="$WORKSPACE/rerun-targeting-1-$BUILD_NUMBER.json" \
                 CYPRESS_RERUN_CONFIG=test \
                 timeout 4h npm run ${RERUN_SCRIPT}
               RERUN_STATUS=$?
@@ -282,45 +282,45 @@ pipeline {
           fi
 
           # Extract failures and human-readable failure details from rerun #1
-          PLANNED_SPECS_FILE=${WORKSPACE}/failures-${BUILD_NUMBER}.txt \
-          RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-1-${BUILD_NUMBER}.json \
+          PLANNED_SPECS_FILE="$WORKSPACE/failures-$BUILD_NUMBER.txt" \
+          RERUN_TARGETING_FILE="$WORKSPACE/rerun-targeting-1-$BUILD_NUMBER.json" \
           node scripts/extract-failure-details.js \
-            ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt \
-            ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt \
-            ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json \
+            "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json" \
             "Rerun #1 failures"
 
-          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+          if ls "$WORKSPACE"/cypress/results/*.json >/dev/null 2>&1; then
             npm run combine:reports
             npm run generateOne:report
-            tar -czf ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
+            tar -czf "$WORKSPACE/mochawesome-rerun1-$BUILD_NUMBER.tar.gz" -C "$WORKSPACE/mochawesome-report/" .
           else
             echo "WARNING: No mochawesome JSON for rerun #1 (possible crash). Carrying forward previous failures."
-            cp ${WORKSPACE}/failures-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt
-            cp ${WORKSPACE}/failure-details-${BUILD_NUMBER}.txt ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt
-            cp ${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json
-            : > ${WORKSPACE}/mochawesome-rerun1-${BUILD_NUMBER}.tar.gz || true
+            cp "$WORKSPACE/failures-$BUILD_NUMBER.txt" "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt"
+            cp "$WORKSPACE/failure-details-$BUILD_NUMBER.txt" "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt"
+            cp "$WORKSPACE/failure-summary-$BUILD_NUMBER.json" "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json"
+            : > "$WORKSPACE/mochawesome-rerun1-$BUILD_NUMBER.tar.gz" || true
           fi
 
-          if [ ! -s ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ]; then
+          if [ ! -s "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt" ]; then
             echo 'No failures left after RERUN #1 – skipping RERUN #2.'
-            : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
+            : > "$WORKSPACE/mochawesome-rerun2-$BUILD_NUMBER.tar.gz" || true
             exit 0
           fi
 
           echo '=== RERUN #2 ==='
           npm run delete:reports
-          rm -f ${WORKSPACE}/mochawesome.json || true
-          rm -rf ${WORKSPACE}/mochawesome-report || true
-          : > ${WORKSPACE}/test-files.txt
-          cat ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt > ${WORKSPACE}/test-files.txt
-          rm -rf ${WORKSPACE}/runner-results/* || true
-          mkdir -p ${WORKSPACE}/runner-results
+          rm -f "$WORKSPACE/mochawesome.json" || true
+          rm -rf "$WORKSPACE/mochawesome-report" || true
+          : > "$WORKSPACE/test-files.txt"
+          cat "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt" > "$WORKSPACE/test-files.txt"
+          rm -rf "$WORKSPACE/runner-results"/* || true
+          mkdir -p "$WORKSPACE/runner-results"
 
           # Run the rerun — for IMPL, invoke cypress directly from the shell
           case "${TEST_SCRIPT}" in
             impl:*)
-              SPEC_LIST=$(cat ${WORKSPACE}/test-files.txt | tr '\n' ',' | sed 's/,$//')
+              SPEC_LIST=$(cat "$WORKSPACE/test-files.txt" | tr '\n' ',' | sed 's/,$//')
               echo "IMPL rerun specs: ${SPEC_LIST}"
               set +e
               NO_COLOR=1 timeout 2h npx cypress run --env configFile=impl --spec "${SPEC_LIST}" --browser chrome
@@ -329,8 +329,8 @@ pipeline {
               ;;
             *)
               set +e
-              FAILED_TEST_SUMMARY=${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json \
-                RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-2-${BUILD_NUMBER}.json \
+              FAILED_TEST_SUMMARY="$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json" \
+                RERUN_TARGETING_FILE="$WORKSPACE/rerun-targeting-2-$BUILD_NUMBER.json" \
                 CYPRESS_RERUN_CONFIG=test \
                 timeout 4h npm run ${RERUN_SCRIPT}
               RERUN_STATUS=$?
@@ -343,24 +343,24 @@ pipeline {
           fi
 
           # Extract failures and human-readable failure details from rerun #2
-          PLANNED_SPECS_FILE=${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt \
-          RERUN_TARGETING_FILE=${WORKSPACE}/rerun-targeting-2-${BUILD_NUMBER}.json \
+          PLANNED_SPECS_FILE="$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt" \
+          RERUN_TARGETING_FILE="$WORKSPACE/rerun-targeting-2-$BUILD_NUMBER.json" \
           node scripts/extract-failure-details.js \
-            ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt \
-            ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt \
-            ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json \
+            "$WORKSPACE/failures-rerun2-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-summary-rerun2-$BUILD_NUMBER.json" \
             "Rerun #2 failures"
 
-          if ls ${WORKSPACE}/cypress/results/*.json >/dev/null 2>&1; then
+          if ls "$WORKSPACE"/cypress/results/*.json >/dev/null 2>&1; then
             npm run combine:reports
             npm run generateOne:report
-            tar -czf ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz -C ${WORKSPACE}/mochawesome-report/ .
+            tar -czf "$WORKSPACE/mochawesome-rerun2-$BUILD_NUMBER.tar.gz" -C "$WORKSPACE/mochawesome-report/" .
           else
             echo "WARNING: No mochawesome JSON for rerun #2 (possible crash). Carrying forward previous failures."
-            cp ${WORKSPACE}/failures-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/failures-rerun2-${BUILD_NUMBER}.txt
-            cp ${WORKSPACE}/failure-details-rerun1-${BUILD_NUMBER}.txt ${WORKSPACE}/failure-details-rerun2-${BUILD_NUMBER}.txt
-            cp ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json
-            : > ${WORKSPACE}/mochawesome-rerun2-${BUILD_NUMBER}.tar.gz || true
+            cp "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt" "$WORKSPACE/failures-rerun2-$BUILD_NUMBER.txt"
+            cp "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt" "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.txt"
+            cp "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json" "$WORKSPACE/failure-summary-rerun2-$BUILD_NUMBER.json"
+            : > "$WORKSPACE/mochawesome-rerun2-$BUILD_NUMBER.tar.gz" || true
           fi
         '''
       }
@@ -376,20 +376,20 @@ pipeline {
       }
       steps {
         sh '''
-          cd ${WORKSPACE}
+          cd "$WORKSPACE"
           node scripts/summarize-failure-runs.js \
-            ${WORKSPACE}/failure-summary-${BUILD_NUMBER}.json \
-            ${WORKSPACE}/failure-summary-rerun1-${BUILD_NUMBER}.json \
-            ${WORKSPACE}/failure-summary-rerun2-${BUILD_NUMBER}.json \
-            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.json \
-            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.md
+            "$WORKSPACE/failure-summary-$BUILD_NUMBER.json" \
+            "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json" \
+            "$WORKSPACE/failure-summary-rerun2-$BUILD_NUMBER.json" \
+            "$WORKSPACE/failure-trend-$BUILD_NUMBER.json" \
+            "$WORKSPACE/failure-trend-$BUILD_NUMBER.md"
           node scripts/render-trend-summary.js \
-            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.json \
-            slack > ${WORKSPACE}/failure-trend-slack-${BUILD_NUMBER}.txt
+            "$WORKSPACE/failure-trend-$BUILD_NUMBER.json" \
+            slack > "$WORKSPACE/failure-trend-slack-$BUILD_NUMBER.txt"
           node scripts/render-trend-summary.js \
-            ${WORKSPACE}/failure-trend-${BUILD_NUMBER}.json \
-            console > ${WORKSPACE}/failure-trend-console-${BUILD_NUMBER}.txt
-          cat ${WORKSPACE}/failure-trend-console-${BUILD_NUMBER}.txt
+            "$WORKSPACE/failure-trend-$BUILD_NUMBER.json" \
+            console > "$WORKSPACE/failure-trend-console-$BUILD_NUMBER.txt"
+          cat "$WORKSPACE/failure-trend-console-$BUILD_NUMBER.txt"
         '''
         archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.txt, failure-details-rerun1-${env.BUILD_NUMBER}.txt, failure-details-rerun2-${env.BUILD_NUMBER}.txt, failure-trend-${env.BUILD_NUMBER}.json, failure-trend-${env.BUILD_NUMBER}.md, failure-trend-slack-${env.BUILD_NUMBER}.txt, failure-trend-console-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }

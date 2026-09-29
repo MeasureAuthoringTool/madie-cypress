@@ -1,6 +1,7 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
@@ -89,8 +90,8 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
-        //Clear the text in CQL Library Editor
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        // Clear the complete Ace document so version validation exercises an empty library.
+        CQLEditorPage.replaceCqlDocumentText('', CQLLibraryPage.cqlLibraryEditorTextBox)
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('be.visible')
 

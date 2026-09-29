@@ -35,7 +35,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
     it('Delete test Case - Success scenario - New Delete End Point', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         OktaLogin.setupUserSession(false)
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -100,7 +100,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
     it('Delete test Case - user has had measure shared with them', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         harpUser = OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
 

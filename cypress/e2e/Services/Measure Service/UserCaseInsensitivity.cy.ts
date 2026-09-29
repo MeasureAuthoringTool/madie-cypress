@@ -22,7 +22,7 @@ describe('Measure Service: Create Measure', () => {
     })
 
     it('Create New Measure, with user name typed in regular case', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //create measure
         cy.getCookie('accessToken').then(accessToken => {
@@ -43,7 +43,7 @@ describe('Measure Service: Create Measure', () => {
                     "measurementPeriodEnd": mpEndDate
                 }
             }).then(function (response) {
-                let currentUser = Cypress.env('selectedUser')
+                let currentUser = Cypress.expose('selectedUser')
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)

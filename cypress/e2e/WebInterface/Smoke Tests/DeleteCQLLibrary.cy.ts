@@ -24,6 +24,7 @@ describe('Delete CQL Library', () => {
 
     it('Verify Library Owner can Delete Library through Action center on Library list Page', () => {
         CQLLibrariesPage.openLibrariesList()
+        CQLLibrariesPage.searchForLibraryByName(libraryName)
 
         openDeleteDialogForCreatedLibrary()
 
@@ -44,8 +45,10 @@ describe('Delete CQL Library', () => {
     })
 
     it('Verify Library Owner can Delete Library through Action center on Edit Library Page', () => {
+        CQLLibrariesPage.openLibrariesList()
+        CQLLibrariesPage.searchForLibraryByName(libraryName)
 
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        CQLLibrariesPage.openLibraryDetailsFromCurrentList()
 
         CQLLibraryPage.actionCenter(EditLibraryActions.delete)
 

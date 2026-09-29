@@ -98,7 +98,7 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
             expect(rows[0]['Code']).to.equal('10D00Z0')
             expect(rows[0]['Code System']).to.equal('http://www.cms.gov/Medicare/Coding/ICD10')
             expect(rows[0]['Description']).to.equal('Extraction of Products of Conception, High, Open Approach')
-            expect(rows[0]['Version']).to.equal('2026')
+            expect(rows[0]['Version']).to.equal('2027')
             expect(rows[0]['Value Set']).to.equal('CesareanBirth')
             expect(rows[0]['Value Set OID/URL']).to.equal('http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.282')
         })

@@ -102,7 +102,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        CQLEditorPage.replaceCqlDocumentText('', EditMeasurePage.cqlEditorTextBox)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
@@ -174,8 +174,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.openCqlEditor()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(updatedMeasureCQL)
+        CQLEditorPage.replaceCqlDocumentText(updatedMeasureCQL, EditMeasurePage.cqlEditorTextBox)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 

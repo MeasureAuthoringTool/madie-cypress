@@ -40,11 +40,7 @@ export class CompositeMeasureComponentsDialogRequests {
             method: 'PUT',
             pathname: '/api/measures/searches',
             query: {
-                ownershipTypes: 'ALL',
-                limit: '5',
-                page: String(page),
-                sort: sort.sort,
-                direction: sort.direction
+                page: String(page)
             }
         }).as(alias)
     }

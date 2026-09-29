@@ -114,7 +114,7 @@ describe('Validate Measure Group deletion functionality', () => {
     })
 
     it('Test Cases still loads after all groups are deleted', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 

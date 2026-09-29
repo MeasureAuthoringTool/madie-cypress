@@ -26,15 +26,59 @@ type Authentication = {
     clientId: string
 }
 
-function envValue(key: string): NullableString {
-    return Cypress.env(key) ?? null
+const credentialKeys = [
+    'TEST_USERNAME', 'TEST_PASSWORD', 'TEST_USERNAME2', 'TEST_PASSWORD2', 'TEST_USERNAME3', 'TEST_PASSWORD3',
+    'TEST_ALT_USERNAME', 'TEST_ALT_USERNAME2', 'TEST_ALT_USERNAME3', 'TEST_ALT_PASSWORD', 'TEST_ALT_PASSWORD2',
+    'TEST_ALT_PASSWORD3', 'VSAC_API_KEY', 'DEV_ADMIN_API_KEY', 'TEST_ADMIN_API_KEY', 'TEST_ADMIN_USERNAME',
+    'TEST_ADMIN_PASSWORD', 'IMPL_USERNAME', 'IMPL_PASSWORD', 'IMPL_ALT_USERNAME', 'IMPL_ALT_PASSWORD',
+    'TEST_MADIE_AUTHURI', 'TEST_MADIE_REDIRECTURI', 'TEST_MADIE_CLIENTID', 'IMPL_MADIE_AUTHURI',
+    'IMPL_MADIE_REDIRECTURI', 'IMPL_MADIE_CLIENTID', 'MADIE_CODEVERIFIER'
+] as const
+
+type CredentialKey = typeof credentialKeys[number]
+const credentialKeySet = new Set<string>(credentialKeys)
+
+type EnvironmentGlobal = typeof globalThis & {
+    madieCypressEnvironmentValues?: ReadonlyMap<CredentialKey, string>
+}
+
+function isCredentialKey(key: string): key is CredentialKey {
+    return credentialKeySet.has(key)
+}
+
+function setValues(environmentValues: unknown): void {
+    const nextValues = new Map<CredentialKey, string>()
+
+    if (environmentValues && typeof environmentValues === 'object') {
+        Object.entries(environmentValues).forEach(([key, value]) => {
+            if (isCredentialKey(key) && typeof value === 'string') {
+                nextValues.set(key, value)
+            }
+        })
+    }
+
+    ;(globalThis as EnvironmentGlobal).madieCypressEnvironmentValues = nextValues
+}
+
+function envValue(key: CredentialKey): NullableString {
+    const values = (globalThis as EnvironmentGlobal).madieCypressEnvironmentValues
+    if (!values) {
+        throw new Error('Environment has not been initialized. Call Environment.initialize() from a root hook first.')
+    }
+
+    return values.get(key) ?? null
 }
 
 function currentEnvironment(): string {
-    return Cypress.env('environment')
+    const environment = Cypress.expose('environment')
+    if (typeof environment !== 'string') {
+        throw new Error('Public Cypress environment is not configured.')
+    }
+
+    return environment
 }
 
-function sharedTestCredentials(adminApiKeyName: string): Credentials {
+function sharedTestCredentials(adminApiKeyName: 'DEV_ADMIN_API_KEY' | 'TEST_ADMIN_API_KEY'): Credentials {
     return {
         harpUser: envValue('TEST_USERNAME'),
         password: envValue('TEST_PASSWORD'),
@@ -56,6 +100,21 @@ function sharedTestCredentials(adminApiKeyName: string): Credentials {
 }
 
 export class Environment {
+    /**
+     * Retrieves only the secrets used by this project. Values remain private
+     * to this support module after the cy.env() command completes.
+     */
+    public static initialize(): Cypress.Chainable<void> {
+        return cy.env([...credentialKeys]).then((environmentValues) => {
+            setValues(environmentValues)
+            return undefined
+        })
+    }
+
+    public static codeVerifier(): NullableString {
+        return envValue('MADIE_CODEVERIFIER')
+    }
+
     public static credentials = (): Credentials => {
         switch (currentEnvironment()) {
             case 'dev':

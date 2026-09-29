@@ -10,6 +10,17 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 const measureName = 'MeasureBundle ' + Date.now()
 const CqlLibraryName = 'MeasureBundleLib' + Date.now()
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const measureCQLWithPopulationDefinitions = `${measureCQL}
+define "ipp":
+    true
+define "denom":
+    "ipp"
+define "num":
+    exists ["Encounter"] E where E.status ~ 'finished'
+define "numeratorExclusion":
+    "num"
+define function "booleanFunction"():
+    true`
 
 describe('Measure Bundle end points', () => {
 
@@ -29,7 +40,7 @@ describe('Measure Bundle end points', () => {
     })
 
     it('Log into the UI and save Measure CQL so the cqlErrors flag will update to true', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -70,7 +81,7 @@ describe('Measure Bundle end points', () => {
     })
 
     it('Upon saving CQL from the UI, GET Bundle request returns elm xml', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -114,7 +125,7 @@ describe('Measure Bundle end points', () => {
     })
 
     it('Measure bundle end point returns scoring type for multiple Measure groups', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -185,7 +196,7 @@ describe('Measure bundle end point returns stratifications', () => {
 
     beforeEach('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLWithPopulationDefinitions)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
@@ -197,7 +208,7 @@ describe('Measure bundle end point returns stratifications', () => {
     })
 
     it('Measure bundle end point returns stratifications for Cohort Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -280,18 +291,7 @@ describe('Measure bundle end point returns stratifications', () => {
     })
 
     it('Measure bundle end point returns stratifications for Continuous Variable Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
-
-        //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -381,7 +381,7 @@ describe('Measure bundle end point returns stratifications', () => {
     })
 
     it('Measure bundle end point returns stratifications for Proportion Measure', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -496,7 +496,7 @@ describe('Verify the criteria reference for measure observations', () => {
     })
 
     it('Measure bundle end point returns criteria reference for CV measure observations and is equal to measure population id', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -587,7 +587,7 @@ describe('Verify the criteria reference for measure observations', () => {
     })
 
     it('Measure bundle end point returns criteria reference for Ratio measure observations and is equal to measure population id', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 

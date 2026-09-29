@@ -41,7 +41,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     })
 
     it('Attempt to use a non-boolean population critieria value for a patient basis that expecting boolean', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //attempt create group
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {
@@ -110,7 +110,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
     })
 
     it('Attempt to use a boolean population critieria value for a patient basis that expecting non-boolean', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         //attempt create group
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((fileContents) => {

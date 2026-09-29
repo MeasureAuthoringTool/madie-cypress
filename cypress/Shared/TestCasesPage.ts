@@ -185,7 +185,7 @@ export class TestCasesPage {
   public static readonly tcColumnAscendingArrow = '[data-testid="KeyboardArrowUpIcon"]'
   public static readonly tcColumnDescendingArrow = '[data-testid="KeyboardArrowDownIcon"]'
   public static readonly tcColumnHeading = '[class="cursor-pointer select-none header-button"]'
-  public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
+  public static readonly tcGroupCoverageHighlighting = '[data-testid^="group-coverage-nav-"]'
   public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
   public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
   public static readonly tcCQLHighlightingDetails = '[data-testid="cql-highlighting"]'
@@ -745,8 +745,18 @@ export class TestCasesPage {
     cy.log('Test Case created successfully')
 
     if (testCaseJson) {
+      if (handleElementsTab) {
+        cy.intercept('PUT', '/api/fhir/cql/relevant-elements').as('qiCoreRelevantElements')
+      }
+
       //edit test test case
       this.clickEditforCreatedTestCase()
+
+      if (handleElementsTab) {
+        cy.wait('@qiCoreRelevantElements', { timeout: 60000 })
+          .its('response.statusCode')
+          .should('eq', 200)
+      }
 
       this.editTestCaseJson(testCaseJson, handleElementsTab)
 
@@ -771,14 +781,33 @@ export class TestCasesPage {
     }
 
     this.waitForJsonEditorReady()
+
+    const parsedJson = JSON.parse(testCaseJson) as {
+      id?: string
+      entry?: Array<{ resource?: { id?: string } }>
+    }
+    const editorMarker = parsedJson.id ?? parsedJson.entry?.[0]?.resource?.id
+    expect(editorMarker, 'test-case JSON requires a Bundle or first-resource ID').to.be.a('string').and.not.be.empty
+
     cy.get(TestCasesPage.aceEditorJsonInput)
       .click({ force: true })
-      // Ace keeps its document separate from the hidden text input. Use
-      // keyboard commands so the existing document is replaced, rather than
-      // calling clear() on only the hidden input element.
-      .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
-    cy.get(TestCasesPage.aceEditorJsonInput)
-      .type(testCaseJson, { parseSpecialCharSequences: false, force: true })
+      // Ace keeps its document separate from the hidden text input. Select the
+      // existing document, then paste the complete JSON in one event. Separate
+      // clear/type commands let the editor restore its generated default JSON
+      // between commands, which appends a second Bundle and makes it invalid.
+      .type('{selectall}', { force: true })
+
+    cy.get(TestCasesPage.aceEditorJsonInput).then(($input) => {
+      const clipboardData = new DataTransfer()
+      clipboardData.setData('text/plain', testCaseJson)
+      $input[0].dispatchEvent(new ClipboardEvent('paste', {
+        bubbles: true,
+        cancelable: true,
+        clipboardData,
+      }))
+    })
+
+    cy.get(TestCasesPage.aceEditor).should('contain.text', editorMarker)
   }
 
   public static waitForJsonEditorReady(): void {
@@ -789,7 +818,11 @@ export class TestCasesPage {
     cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
   }
 
-  public static saveTestCaseAndWait(): void {
+  public static saveTestCaseAndWait(options: {
+    expectedPopulationValues?: Record<string, string>
+  } = {}): void {
+    const { expectedPopulationValues } = options
+
     cy.intercept('PUT', '/api/measures/**/test-cases/**').as('saveTestCase')
 
     cy.get(this.editTestCaseSaveButton)
@@ -797,11 +830,64 @@ export class TestCasesPage {
       .should('be.enabled')
       .click()
 
-    cy.wait('@saveTestCase', { timeout: 60000 })
-      .its('response.statusCode')
-      .should('be.oneOf', [200, 202])
+    cy.wait('@saveTestCase', { timeout: 60000 }).then(({ request, response }) => {
+      expect(response?.statusCode, 'test-case save response').to.be.oneOf([200, 202])
+
+      if (expectedPopulationValues) {
+        const populationValues = request.body?.groupPopulations?.flatMap((group: {
+          populationValues?: Array<{ name: string; expected?: string | number | null }>
+        }) => group.populationValues ?? []) ?? []
+
+        Object.entries(expectedPopulationValues).forEach(([name, expected]) => {
+          const population = populationValues.find((value: { name: string }) => value.name === name)
+          expect(population, `saved ${name} population`).to.exist
+          expect(String(population?.expected), `saved ${name} expected value`).to.eq(expected)
+        })
+      }
+    })
 
     Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 30000)
+  }
+
+  public static runTestCaseAndWaitForCompletion(runButtonSelector = this.runTestButton): void {
+    cy.intercept('POST', '**/test-cases/**').as('runTestCase')
+
+    cy.get(runButtonSelector)
+      .should('be.visible')
+      .should('be.enabled')
+      .click()
+
+    cy.wait('@runTestCase', { timeout: 105000 })
+      .its('response.statusCode')
+      .should('be.oneOf', [200, 201, 202])
+  }
+
+  public static openTestCasesTabAndWaitForList(): void {
+    cy.intercept('GET', /\/api\/measures\/[^/]+\/test-cases(?:\?.*)?$/).as('testCaseList')
+
+    this.openTestCasesTab(this.testCaseListTable)
+
+    cy.wait('@testCaseList', { timeout: 60000 })
+      .its('response.statusCode')
+      .should('eq', 200)
+  }
+
+  public static executeTestCasesAndWaitForCompletion(): void {
+    cy.intercept('POST', '**/test-cases/**').as('executeTestCases')
+
+    cy.get(this.executeTestCaseButton)
+      .should('be.visible')
+      .should('be.enabled')
+      .click()
+
+    cy.wait('@executeTestCases', { timeout: 105000 })
+      .its('response.statusCode')
+      .should('be.oneOf', [200, 201, 202])
+  }
+
+  public static assertTestCaseStatus(title: string, expectedStatus: 'Pass' | 'Fail' | 'Invalid'): void {
+    cy.contains(`${this.testCaseListTable} tr`, title, { timeout: 60000 })
+      .should('contain.text', expectedStatus)
   }
 
   public static updateTestCase(
@@ -975,13 +1061,130 @@ export class TestCasesPage {
 
     getCheckbox()
       .should('exist')
-      .then(($checkbox) => {
-        $checkbox[0].scrollIntoView({ block: 'center', inline: 'center' })
-      })
       .should('be.visible')
-      .check({ scrollBehavior: false })
+      .should('be.enabled')
+
+      .then(($checkbox) => {
+        if (!$checkbox.is(':checked')) {
+          getCheckbox().check({ scrollBehavior: 'center' })
+        }
+      })
 
     getCheckbox().should('be.checked')
+  }
+
+  public static checkExpectedActualCheckboxes(selections: Array<{
+    selector: string
+    index?: number
+  }>): void {
+    const checkedSelections: Array<{ selector: string; index?: number }> = []
+
+    selections.forEach((selection) => {
+      this.checkExpectedActualCheckbox(selection.selector, { index: selection.index })
+
+      checkedSelections.push(selection)
+      this.assertExpectedActualCheckboxesChecked(checkedSelections)
+    })
+  }
+
+  public static assertExpectedActualCheckboxesChecked(selections: Array<{
+    selector: string
+    index?: number
+  }>): void {
+    selections.forEach(({ selector, index }) => {
+      const checkbox = cy.get(selector)
+      const expectedCheckbox = typeof index === 'number' ? checkbox.eq(index) : checkbox
+      expectedCheckbox.should('be.checked')
+    })
+  }
+
+  public static ensureExpectedActualCheckboxesAfterFhirExpansion(
+    selections: Array<{ selector: string; index?: number }>,
+    readySelectors: string[],
+    attemptsRemaining = 3,
+    waitForInitialExpansion = true,
+  ): void {
+    if (waitForInitialExpansion) {
+      this.spyFhirExpectedActualTraffic()
+    }
+
+    const resetSelections = () => {
+      selections.forEach((selection) => {
+        const getCheckbox = () => {
+          const checkbox = cy.get(selection.selector)
+          return typeof selection.index === 'number' ? checkbox.eq(selection.index) : checkbox
+        }
+
+        getCheckbox().then(($checkbox) => {
+          if ($checkbox.is(':checked')) {
+            return getCheckbox().uncheck({ scrollBehavior: 'center' })
+          }
+        })
+
+        getCheckbox().should('not.be.checked')
+        getCheckbox().check({ scrollBehavior: 'center' })
+        getCheckbox().should('be.checked')
+      })
+    }
+
+    if (waitForInitialExpansion) {
+      const firstSelection = selections[0]
+      expect(firstSelection, 'FHIR expected-population selection').to.exist
+
+      this.checkExpectedActualCheckbox(firstSelection.selector, { index: firstSelection.index })
+      cy.wait('@fhirExpectedActualExpansion', { timeout: 60000 })
+        .its('response.statusCode')
+        .should('eq', 200)
+    }
+
+    const expectedActualPanelIsReady = () => {
+      return cy.get('body').then(($body) => {
+        const selectionsPersisted = selections.every((selection) => {
+          const checkboxes = $body.find(selection.selector)
+          const checkbox = typeof selection.index === 'number'
+            ? checkboxes.eq(selection.index)
+            : checkboxes
+          return checkbox.is(':checked')
+        })
+
+        const inputsReady = readySelectors.every((selector) => {
+          const input = $body.find(selector)
+          return input.length > 0 && input.is(':visible') && !input.prop('disabled')
+        })
+
+        return selectionsPersisted && inputsReady
+      })
+    }
+
+    // The expansion can replace the Expected/Actual controls. Reset each desired
+    // selection until the post-expansion form exposes the required inputs.
+    resetSelections()
+
+    expectedActualPanelIsReady().then((ready) => {
+      if (ready) {
+        this.assertExpectedActualCheckboxesChecked(selections)
+        readySelectors.forEach((selector) => {
+          cy.get(selector).should('be.visible').and('be.enabled')
+        })
+        return
+      }
+
+      expect(attemptsRemaining, 'FHIR Expected/Actual controls should stabilize').to.be.greaterThan(1)
+      this.ensureExpectedActualCheckboxesAfterFhirExpansion(
+        selections,
+        readySelectors,
+        attemptsRemaining - 1,
+        false,
+      )
+    })
+  }
+
+  public static spyFhirExpectedActualTraffic(): void {
+    // Passive spies: these aliases make the FHIR refresh and the related API
+    // calls visible in the runner without waiting on or changing their traffic.
+    cy.intercept('PUT', '/api/terminology/value-sets/expansion/fhir').as('fhirExpectedActualExpansion')
+    cy.intercept('GET', '/api/measures/**').as('fhirExpectedActualMeasureApi')
+    cy.intercept('GET', '**/manifest/**').as('fhirExpectedActualManifestApi')
   }
 
   public static clickExpectedActualCheckbox(
@@ -1035,9 +1238,10 @@ export class TestCasesPage {
     options: {
       clearFirst?: boolean
       index?: number
+      assertValue?: boolean
     } = {},
   ): void {
-    const { clearFirst = false, index } = options
+    const { clearFirst = false, index, assertValue = true } = options
 
     this.normalizeExpectedActualPopulationPanel()
     const getInput = () => {
@@ -1045,24 +1249,70 @@ export class TestCasesPage {
 
       return typeof index === 'number' ? input.eq(index) : input
     }
-    const typeValue = () => {
-      getInput()
-        .should('exist')
-        .should('be.enabled')
-        .then(($input) => {
-          $input[0].scrollIntoView({ block: 'center', inline: 'nearest' })
-        })
+    getInput().should('exist').should('be.visible').should('be.enabled')
 
-      if (clearFirst) {
-        getInput().type(`{selectAll}{backspace}${value}`, { scrollBehavior: false })
-      } else {
-        getInput().type(value, { scrollBehavior: false })
-      }
-
-      getInput().should('have.value', value)
+    // Qi Core can replace controlled inputs while the panel is settling. Re-query
+    // after readiness so type() acts on the current node, not a detached subject.
+    if (clearFirst) {
+      getInput().type(`{selectAll}{backspace}${value}`, { scrollBehavior: 'center' })
+    } else {
+      getInput().type(value, { scrollBehavior: 'center' })
     }
 
-    typeValue()
+    if (assertValue) {
+      getInput().should('have.value', value)
+    }
+  }
+
+  public static typeExpectedActualValues(values: Array<{
+    selector: string
+    value: string
+    index?: number
+    clearFirst?: boolean
+  }>): void {
+    const enteredValues: Array<{ selector: string; value: string; index?: number }> = []
+
+    values.forEach((entry) => {
+      this.typeExpectedActualValue(entry.selector, entry.value, {
+        clearFirst: entry.clearFirst,
+        index: entry.index,
+      })
+      enteredValues.push(entry)
+      this.assertExpectedActualValues(enteredValues)
+    })
+  }
+
+  public static clearExpectedActualValues(values: Array<{
+    selector: string
+    index?: number
+  }>): void {
+    values.forEach(({ selector, index }) => {
+      this.normalizeExpectedActualPopulationPanel()
+      const input = cy.get(selector)
+      const expectedInput = typeof index === 'number' ? input.eq(index) : input
+
+      expectedInput
+        .should('exist')
+        .should('be.visible')
+        .should('be.enabled')
+        .type('{selectAll}{backspace}', { scrollBehavior: 'center' })
+
+      const clearedInput = cy.get(selector)
+      const currentInput = typeof index === 'number' ? clearedInput.eq(index) : clearedInput
+      currentInput.should('have.value', '')
+    })
+  }
+
+  public static assertExpectedActualValues(values: Array<{
+    selector: string
+    value: string
+    index?: number
+  }>): void {
+    values.forEach(({ selector, value, index }) => {
+      const input = cy.get(selector)
+      const expectedInput = typeof index === 'number' ? input.eq(index) : input
+      expectedInput.should('have.value', value)
+    })
   }
 
   public static toggleHighlightingResults(highlightingSectionSelector: string): void {
@@ -1459,8 +1709,12 @@ export class TestCasesPage {
 
     if (dob) {
       cy.get(TestCasesPage.QDMDob)
+        .filter(':visible')
         .should('be.visible')
         .should('be.enabled')
+        .should('not.have.attr', 'readonly')
+      cy.get(TestCasesPage.QDMDob)
+        .filter(':visible')
         .clear()
         .type(dob)
         .should('have.value', dob)

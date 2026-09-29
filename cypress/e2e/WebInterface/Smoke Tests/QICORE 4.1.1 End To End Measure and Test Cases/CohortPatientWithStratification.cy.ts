@@ -86,27 +86,25 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(TestCasesPage.clearIconBtn).click()
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
 
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.initialPopulationStratificationExpectedValue)
+        const expectedSelections = [
+            { selector: TestCasesPage.testCaseIPPExpected },
+            { selector: TestCasesPage.initialPopulationStratificationExpectedValue },
+        ]
+        TestCasesPage.checkExpectedActualCheckboxes(expectedSelections)
 
-        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should(
-            'contain.text',
-            'Test case updated successfully ' + 'with warnings in JSON',
-        )
+        TestCasesPage.saveTestCaseAndWait()
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualCheckboxesChecked(expectedSelections)
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        TestCasesPage.openTestCasesTabAndWaitForList()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.assertTestCaseStatus(testCaseTitle, 'Pass')
     })
 })

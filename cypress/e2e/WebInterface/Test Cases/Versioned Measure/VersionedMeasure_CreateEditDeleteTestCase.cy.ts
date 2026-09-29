@@ -106,7 +106,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
     })
 
     it('Versioned Measure: Create New Test Case, delete is enabled', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -199,7 +199,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
     })
 
     it('Versioned Measure: Edit Test Case, delete is disabled', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Click on Edit Button

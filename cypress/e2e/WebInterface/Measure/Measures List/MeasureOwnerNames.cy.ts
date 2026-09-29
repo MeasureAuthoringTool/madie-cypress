@@ -20,7 +20,7 @@ describe('Measure Owner Names Display', () => {
     })
 
     it('Making a new measure shows the username on All Measures tabs & on the Details screen', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const harpId = OktaLogin.getUser(false)
 
         OktaLogin.Login()

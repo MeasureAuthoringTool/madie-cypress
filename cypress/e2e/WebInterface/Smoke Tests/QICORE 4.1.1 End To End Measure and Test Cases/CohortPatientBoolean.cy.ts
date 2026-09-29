@@ -3,7 +3,6 @@ import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
-import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
@@ -43,24 +42,21 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
         CQLEditorPage.saveCql({ collapseEditor: true })
 
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
+        const expectedSelections = [{ selector: TestCasesPage.testCaseIPPExpected }]
+        TestCasesPage.checkExpectedActualCheckboxes(expectedSelections)
 
-        TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.saveTestCaseAndWait()
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualCheckboxesChecked(expectedSelections)
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitle, 'Pass')
     })
 })

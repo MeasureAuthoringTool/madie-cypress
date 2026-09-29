@@ -48,12 +48,11 @@ describe('QDM Test Cases : Export Test Case', () => {
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(anotherTestCaseTitle, anotherTestCaseSeries, testCaseDescription)
 
-        OktaLogin.Login()
+        return OktaLogin.Login()
     })
 
     afterEach('Log out and Clean up', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure().then(() => OktaLogin.UILogout())
     })
 
     it('Successful QRDA Export for QDM Test Cases', () => {
@@ -76,8 +75,8 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Run the Test cases
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 35000)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
+        Utilities.waitForElementEnabled('[data-testid="export-action-btn"]', 60000)
 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         cy.get('#export-menu').contains('QRDA').click()
@@ -142,7 +141,7 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get('[data-testid="export-tooltip"]').should('not.be.enabled')
 
         //Run the Test cases
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
         Utilities.waitForElementEnabled('[data-testid="export-action-btn"]', 60000)
 
         //Export test case button should be enabled
@@ -181,12 +180,11 @@ describe('Export Test cases by Non Measure Owner', () => {
             'contain.text',
             'CQL updated successfully ' + 'but the following issues were found',
         )
-        OktaLogin.UILogout()
+        return OktaLogin.UILogout()
     })
 
     afterEach('Log out and Clean up', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure().then(() => OktaLogin.UILogout())
     })
 
     it('Non Measure Owner should be able to Export Test cases', () => {
@@ -204,8 +202,8 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Run the Test cases
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 35000)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
+        Utilities.waitForElementEnabled('[data-testid="export-action-btn"]', 60000)
 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         cy.get('#export-menu').contains('QRDA').click()

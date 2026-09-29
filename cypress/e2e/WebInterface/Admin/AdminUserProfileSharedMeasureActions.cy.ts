@@ -66,7 +66,7 @@ describe('Admin user profile Shared Measure actions', () => {
         AdminUserProfilePage.assertEnabledAction(
             AdminUserProfilePage.historyButton,
             AdminUserProfilePage.historyTooltip,
-            'View History'
+            'View measure history'
         )
         AdminUserProfilePage.assertDisabledAction(
             AdminUserProfilePage.compareVersionsButton,
@@ -174,12 +174,12 @@ describe('Admin user profile unrelated Shared Measure selections', () => {
         AdminUserProfilePage.assertDisabledAction(
             AdminUserProfilePage.exportButton,
             AdminUserProfilePage.exportTooltip,
-            'Select measure to export'
+            'Select a measure to export'
         )
         AdminUserProfilePage.assertDisabledAction(
             AdminUserProfilePage.humanReadableButton,
             AdminUserProfilePage.humanReadableTooltip,
-            'Select measure to view human readable'
+            'Select a measure to view human readable'
         )
         AdminUserProfilePage.assertDisabledAction(
             AdminUserProfilePage.historyButton,

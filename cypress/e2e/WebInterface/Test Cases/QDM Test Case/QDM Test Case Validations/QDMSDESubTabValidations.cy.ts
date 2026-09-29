@@ -334,11 +334,10 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         // back to cql, edit for new valuesets & update definition
         CQLEditorPage.openCqlEditor()
-        CQLEditorPage.replaceCqlDocument('cypress/fixtures/QDMSDEMeasureAfterChanges.txt')
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 12500)
+        cy.readFile('cypress/fixtures/QDMSDEMeasureAfterChanges.txt').then((cql) => {
+            CQLEditorPage.replaceCqlDocumentText(cql)
+        })
+        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
         // back to test case, edit same one, update affected fields
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

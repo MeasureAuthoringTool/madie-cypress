@@ -19,7 +19,6 @@ export default defineConfig({
   viewportHeight: 800,
   watchForFileChanges: false,
   numTestsKeptInMemory: 0,
-  experimentalMemoryManagement: true,
   reporter: 'mochawesome',
   reporterOptions: {
     reportDir: 'cypress/results',

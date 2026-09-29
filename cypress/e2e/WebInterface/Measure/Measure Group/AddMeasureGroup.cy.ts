@@ -27,7 +27,7 @@ describe('Validate Measure Group additions', () => {
 
     it('Able to add complete group to a measure whom already has a group and previous group is not affected', () => {
 
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //click on Edit button to edit measure

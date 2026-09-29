@@ -50,7 +50,7 @@ describe('Admin user profile QDM Measure actions', () => {
         AdminUserProfilePage.assertEnabledAction(
             AdminUserProfilePage.historyButton,
             AdminUserProfilePage.historyTooltip,
-            'View History'
+            'View measure history'
         )
 
         cy.get(AdminUserProfilePage.exportButton).click()

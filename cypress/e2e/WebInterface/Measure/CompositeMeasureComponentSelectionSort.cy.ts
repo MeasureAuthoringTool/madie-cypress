@@ -17,7 +17,7 @@ type SortableComponentColumn = {
 
 const remainingSortableColumns: SortableComponentColumn[] = [
     { header: 'Version', request: { sort: 'version', direction: 'ASC' } },
-    { header: 'CMS ID', request: { sort: 'measureSet_cmsId', direction: 'DESC' } },
+    { header: 'CMS ID', request: { sort: 'measureSet.cmsId', direction: 'ASC' } },
     { header: 'Translator', request: { sort: 'translatorVersion', direction: 'ASC' } },
     { header: 'Updated', request: { sort: 'lastModifiedAt', direction: 'ASC' } }
 ]

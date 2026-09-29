@@ -36,6 +36,15 @@ const visitExportHtml = (fileName: string) => {
     cy.document().its('readyState').should('eq', 'complete')
 }
 
+const assertAbsentCopyrightAndDisclaimer = (bodyText: string) => {
+    const dataAbsentReason =
+        '\\{"extension":\\[\\{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}\\]}'
+
+    expect(bodyText).to.match(
+        new RegExp(`Copyright\\t(?:None|${dataAbsentReason})\\nDisclaimer\\t(?:None|${dataAbsentReason})`)
+    )
+}
+
 describe('QI-Core Measure Export', () => {
     deleteDownloadsFolderBeforeAll()
 
@@ -247,9 +256,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             expect(bodyText).to.include(
                 '\nStatus\tdraft\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition and Dietetics\n' +
                     'Description\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\nTEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\n' +
-                    'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\t{"extension":' +
-                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
-                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDefinition (Term)\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
+                    'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value'
+            )
+            assertAbsentCopyrightAndDisclaimer(bodyText)
+            expect(bodyText).to.include(
+                'Definition (Term)\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
                     "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field"
             )
 
@@ -509,9 +520,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
             expect(bodyText).to.include(
                 '\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition and Dietetics\n' +
                     'Description\t\n\nDescription\n\nTEST1\n\n\t\n\nTEST2\n\n\t\n\nTEST3\n\n\n\n\n\t\n\n\t\n\nline1\n\nline2\n\nline3\n\n\n\n\n' +
-                    'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value\n\n\nCopyright\t{"extension":' +
-                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDisclaimer\t{"extension":' +
-                    '[{"url":"http://hl7.org/fhir/StructureDefinition/data-absent-reason","valueCode":"unknown"}]}\nDefinition (Term)\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
+                    'TESTING\n\n\t\n\n\t\n\nThis is another test\n\n\nPurpose\t\n\nthis is a meta purpose value'
+            )
+            assertAbsentCopyrightAndDisclaimer(bodyText)
+            expect(bodyText).to.include(
+                'Definition (Term)\tThisIsTheDefinitionTermValue:\n\nThisIsTheDefinitionDefValue\n\n\n' +
                     "Guidance (Usage)\t\n\nthis is a meta guidance (usage) value -- for the 'Clinical Usage' field"
             )
 

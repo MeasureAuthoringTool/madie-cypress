@@ -52,7 +52,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         //intercept draft id once measure is drafted
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         const filePath = 'cypress/fixtures/' + currentUser + '/measureId'
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')

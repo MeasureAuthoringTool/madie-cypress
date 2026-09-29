@@ -69,6 +69,11 @@ export class CreateMeasurePage {
         return altUser ? 'selectedAltUser' : 'selectedUser'
     }
 
+    private static openCreateMeasureForm(): void {
+        cy.get(LandingPage.newMeasureButton, { timeout: 30000 }).should('be.visible').and('be.enabled').click()
+        cy.get(this.measureNameTextbox, { timeout: 30000 }).should('be.visible').and('be.enabled')
+    }
+
     public static clickCreateMeasureButton(): void {
 
         let alias = 'measure' + (Date.now() + 1).toString()
@@ -128,8 +133,7 @@ export class CreateMeasurePage {
             endDate = mpEndDate
         }
 
-        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.get(LandingPage.newMeasureButton).wait(2000).click()
+        this.openCreateMeasureForm()
         cy.get(this.measureNameTextbox).type(measureName)             
         cy.get(this.measureModelDropdown).click()
         cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]').contains(model).click()       
@@ -166,8 +170,7 @@ export class CreateMeasurePage {
             endDate = mpEndDate
         }
 
-        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.get(LandingPage.newMeasureButton).wait(2000).click()
+        this.openCreateMeasureForm()
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
         cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]').contains(model).click()
@@ -534,7 +537,7 @@ export class CreateMeasurePage {
     public static CreateQDMMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
 
         let user = ''
         const now = require('dayjs')
@@ -705,7 +708,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions, measureNumber?: number): string {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0

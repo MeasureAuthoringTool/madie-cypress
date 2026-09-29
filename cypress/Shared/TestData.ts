@@ -179,7 +179,7 @@ export type SavedMeasureCqlExpectation = {
 
 export class TestData {
     public static selectedUser(owner: FixtureOwner = 'selectedUser'): string {
-        const user = Cypress.env(owner)
+        const user = Cypress.expose(owner)
 
         if (!user) {
             throw new Error(`Cypress env ${owner} is not set. User allocation likely failed in support setup.`)
@@ -333,7 +333,10 @@ export class TestData {
 
     public static withAccessToken(callback: (accessToken: string) => Cypress.Chainable | void): Cypress.Chainable {
         return cy.getCookie('accessToken').should((cookie) => {
-            expect(cookie?.value, 'accessToken cookie').to.be.a('string').and.not.be.empty
+            expect(
+                typeof cookie?.value === 'string' && cookie.value.length > 0 && cookie.value !== 'undefined',
+                'accessToken cookie is present'
+            ).to.eq(true)
         }).then((cookie) => {
             return callback(cookie.value)
         })

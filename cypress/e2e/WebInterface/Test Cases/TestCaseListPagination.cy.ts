@@ -23,7 +23,7 @@ let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\
 describe('Test Case List Pagination', () => {
 
     beforeEach('Create Measure, Test Cases and Login', () => {
-        let currentUser = Cypress.env('selectedUser')
+        let currentUser = Cypress.expose('selectedUser')
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
 
         for (let i = 0; i <= 15; i++) {

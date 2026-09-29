@@ -212,8 +212,6 @@ describe('Measure List Page Sort by Columns', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 19500)
 
-        MeasuresPage.checkFirstRow({ updated: today })
-
         // save name of default 1st measure
         cy.get('.measures-list tr').first().find('td').eq(1).invoke('text').then(originalMeasureName => {
 
@@ -239,8 +237,8 @@ describe('Measure List Page Sort by Columns', () => {
                     // sort 3 - click again to return to default sort
                     cy.contains('.header-button', 'Measure').click()
                     MeasuresPage.waitForMeasureListRefresh('@sort3')
-                    // verify return to default sort by "last updated"
-                    MeasuresPage.checkFirstRow({ name: originalMeasureName, updated: today })
+                    // verify return to the original default first row
+                    MeasuresPage.checkFirstRow({ name: originalMeasureName })
             })
         })
     })

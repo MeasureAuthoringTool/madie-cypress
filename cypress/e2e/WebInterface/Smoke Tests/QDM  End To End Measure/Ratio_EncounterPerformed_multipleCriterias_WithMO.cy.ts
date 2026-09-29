@@ -269,7 +269,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //add attribute to test case action
         QDMElements.addAttribute()
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //Add Expected values for Test case
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
@@ -277,61 +277,43 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.enabled')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '4', { index: 0 })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1', {
-            index: 0,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '4', {
-            clearFirst: true,
-            index: 0,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', {
-            index: 0,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '2', {
-            clearFirst: true,
-            index: 0,
-        })
-
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '4', { index: 1 })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '1', {
-            index: 1,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '24', {
-            clearFirst: true,
-            index: 1,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', {
-            index: 1,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '8', {
-            clearFirst: true,
-            index: 1,
-        })
+        const expectedValues = [
+            { selector: TestCasesPage.testCaseIPPExpected, value: '4', index: 0 },
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '1', index: 0 },
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '4', clearFirst: true, index: 0 },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '1', index: 0 },
+            { selector: TestCasesPage.numeratorObservationRow, value: '2', clearFirst: true, index: 0 },
+            { selector: TestCasesPage.testCaseIPPExpected, value: '4', index: 1 },
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '1', index: 1 },
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '24', clearFirst: true, index: 1 },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '1', index: 1 },
+            { selector: TestCasesPage.numeratorObservationRow, value: '8', clearFirst: true, index: 1 },
+        ]
+        TestCasesPage.typeExpectedActualValues(expectedValues)
 
         //run test case on edit test case page
-        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible').and('be.enabled').click()
 
+        // QDM calculates in the client; the updated group labels are its completion signal.
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
         cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
 
         //Save Test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
+        // QDM list execution does not expose a stable request route. The named row
+        // transitions from N/A to Pass when execution has completed.
+        TestCasesPage.assertTestCaseStatus(firstTestCaseTitle, 'Pass')
 
         cy.get('button:contains("Population Criteria 2")').click()
 
-        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
+        TestCasesPage.assertTestCaseStatus(firstTestCaseTitle, 'Pass')
     })
 })

@@ -142,13 +142,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Group Creation
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+        EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.leftPanelBaseConfigTab)
 
         //Select Type
         cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
@@ -187,8 +181,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         MeasureGroupPage.includeSdeData()
 
         //Add Elements to the Test case
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
@@ -214,7 +207,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add attribute to test case action
         QDMElements.addAttribute()
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //Element - Procedure:Performed: Unilateral Mastectomy Right
         //add Element
@@ -235,12 +228,11 @@ describe('Measure Creation: Proportion Patient Based', () => {
         QDMElements.addCode('ICD10PCS', '0HTT0ZZ')
 
         //Save Test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Add Elements to the second Test case
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
@@ -285,7 +277,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Code
         QDMElements.addCode('SNOMEDCT', '137671000119105')
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //click on Expected/Actual tab
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
@@ -296,18 +288,18 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseDENEXExpected)
 
         //Save Test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
+        TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
+        cy.get(TestCasesPage.testCaseDENEXExpected).should('be.checked')
+
         //Execute Test case on Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        TestCasesPage.openTestCasesTabAndWaitForList()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
-        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
+        TestCasesPage.assertTestCaseStatus(firstTestCaseTitle, 'Pass')
+        TestCasesPage.assertTestCaseStatus(secondTestCaseTitle, 'Pass')
     })
 })

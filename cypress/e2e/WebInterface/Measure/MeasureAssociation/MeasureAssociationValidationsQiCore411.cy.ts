@@ -126,8 +126,8 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
     })
 
     it('Association: QDM -> Qi Core measure: Validations', () => {
-        let currentUser = Cypress.env('selectedUser')
-        let currentAltUser = Cypress.env('selectedAltUser')
+        let currentUser = Cypress.expose('selectedUser')
+        let currentAltUser = Cypress.expose('selectedAltUser')
         //validation test: only one measure is selected
 
         MeasuresPage.selectMeasure(3)

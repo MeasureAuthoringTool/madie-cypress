@@ -81,7 +81,7 @@ describe('Copy QDM Test Cases', () => {
     })
 
     it('Copy QDM Test Case to another QDM Measure', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit', 1)
 
@@ -150,7 +150,7 @@ describe('Copy Qi Core Test Cases', () => {
     })
 
     it('Copy Qi Core Test Case to another Qi Core Measure', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit', 1)
 
@@ -181,7 +181,7 @@ describe('Copy Qi Core Test Cases', () => {
         // Target measure needs to have duplicate named tc as original, and tc title must be 226+ characters
         const longTitle =
             'LoremIpsumDolorSitAmetConsecteturAdipiscingElitSedDoEiusmodTemporIncididuntULaboreEtDoloreMagnaAliquaUtEnimAdMinim'
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         // start - M1 with 1 regular tc, M2 with no tc
 
         // step - add tc with long name to M1 and M2

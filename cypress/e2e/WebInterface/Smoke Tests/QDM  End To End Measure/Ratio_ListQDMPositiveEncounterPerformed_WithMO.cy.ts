@@ -19,6 +19,31 @@ const testCaseSeries = 'SBTestSeries'
 const secondTestCaseTitle = '2EncBothGlucose1000inAndoutsideOfTimeframe'
 const measureCQL = MeasureCQL.QDMRatio_ListPositiveEncounterPerformed_withMO
 
+const addDiabetesDiagnosis = (startDate: string, endDate: string) => {
+    QDMElements.addElement('condition', 'Diagnosis: Diabetes')
+    QDMElements.addTimingPrevalencePeriodDateTime(startDate, endDate)
+    QDMElements.addCode('SNOMEDCT', '46635009')
+}
+
+const addInpatientEncounter = (startDate: string, endDate: string) => {
+    QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+    QDMElements.addTimingRelevantPeriodDateTime(startDate, endDate)
+    QDMElements.addCode('SNOMEDCT', '183452005')
+}
+
+const addGlucoseLaboratoryResult = (date: string, code: string, result: string, endDate?: string) => {
+    QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
+    if (endDate) {
+        QDMElements.addTimingRelevantPeriodDateTime(date, endDate)
+    } else {
+        cy.get('[data-testid="relevant-datetime-input"]').type(date)
+    }
+    QDMElements.addCode('LOINC', code)
+    QDMElements.enterAttribute('Result', 'Quantity')
+    QDMElements.enterQuantity(result, 'mg/dl')
+    QDMElements.addAttribute()
+}
+
 describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
     before('Create Measure', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(
@@ -48,9 +73,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         // Group Creation
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.leftPanelBaseConfigTab)
 
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible').click()
         cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
@@ -81,8 +104,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         MeasureGroupPage.includeSdeData()
 
         //Add Elements to first Test case
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
@@ -94,63 +116,17 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
             'Not Hispanic or Latino'
         )
 
-        //Element - Condition: Diagnosis: Diabetes
-        //add Element
-        QDMElements.addElement('condition', 'Diagnosis: Diabetes')
-        QDMElements.addTimingPrevalencePeriodDateTime('07/09/2023 08:00 AM', ' ')
+        addDiabetesDiagnosis('07/09/2023 08:00 AM', ' ')
 
-        //add Code
-        QDMElements.addCode('SNOMEDCT', '46635009')
+        addInpatientEncounter('07/11/2023 08:00 AM', '07/15/2023 09:00 AM')
 
-        //Element - Encounter:Performed:Encounter Inpatient
-        //add Element
-        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('07/11/2023 08:00 AM', '07/15/2023 09:00 AM')
-        //add Code
-        QDMElements.addCode('SNOMEDCT', '183452005')
+        addGlucoseLaboratoryResult('07/11/2023 07:00 AM', '1556-0', '1000')
 
-        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        //add Element
-        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[data-testid="relevant-datetime-input"]').type('07/11/2023 07:00 AM')
-        //add Code
-        QDMElements.addCode('LOINC', '1556-0')
-        // Enter attribute and its type
-        QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
-        QDMElements.enterQuantity('1000', 'mg/dl')
-        //add attribute to test case action
-        QDMElements.addAttribute()
+        addInpatientEncounter('10/11/2023 08:00 AM', '10/18/2023 08:15 AM')
 
-        //Element - Encounter:Performed:Encounter Inpatient
-        //add Element
-        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('10/11/2023 08:00 AM', '10/18/2023 08:15 AM')
-        //add Code
-        QDMElements.addCode('SNOMEDCT', '183452005')
+        addGlucoseLaboratoryResult('10/13/2023 08:00 AM', '1556-0', '1100')
 
-        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        //add Element
-        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[data-testid="relevant-datetime-input"]').type('10/13/2023 08:00 AM')
-        //add Code
-        QDMElements.addCode('LOINC', '1556-0')
-        // Enter attribute and its type
-        QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
-        QDMElements.enterQuantity('1100', 'mg/dl')
-        //add attribute to test case action
-        QDMElements.addAttribute()
-
-        //Element - Encounter:Performed:Encounter Inpatient
-        //add Element
-        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('11/01/2023 08:00 AM', '11/04/2023 08:15 AM')
-        //add Code
-        QDMElements.addCode('SNOMEDCT', '183452005')
+        addInpatientEncounter('11/01/2023 08:00 AM', '11/04/2023 08:15 AM')
 
         TestCasesPage.saveTestCaseAndWait()
 
@@ -160,27 +136,25 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
 
-        // Enter IPP last because prior population updates rerender this controlled input.
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '3')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '3')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '2', {
-            clearFirst: true,
-            index: 0
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '6', {
-            clearFirst: true,
-            index: 1
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
+        const firstExpectedValues = [
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '3' },
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '2', clearFirst: true, index: 0 },
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '6', clearFirst: true, index: 1 },
+            { selector: TestCasesPage.testCaseDENEXExpected, value: '1' },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '1' },
+            { selector: TestCasesPage.numeratorObservationRow, value: '1', clearFirst: true },
+            // Population updates rerender the Initial Population controlled input; enter it last.
+            { selector: TestCasesPage.testCaseIPPExpected, value: '3' }
+        ]
+        TestCasesPage.typeExpectedActualValues(firstExpectedValues)
         //Save Test case
         TestCasesPage.saveTestCaseAndWait()
         Toasts.clearToast(EditMeasurePage.successMessage, 'Test Case Updated Successfully')
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualValues(firstExpectedValues)
 
         //Add Elements to the second Test case
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
@@ -192,13 +166,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
             'Not Hispanic or Latino'
         )
 
-        //Element - Condition: Diagnosis: Diabetes
-        //add Element
-        QDMElements.addElement('condition', 'Diagnosis: Diabetes')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingPrevalencePeriodDateTime('07/09/2023 08:00 AM', '07/11/2023 08:00 AM')
-        //add Code
-        QDMElements.addCode('SNOMEDCT', '46635009')
+        addDiabetesDiagnosis('07/09/2023 08:00 AM', '07/11/2023 08:00 AM')
 
         //Element - Encounter:Performed:Encounter Inpatient
         //add Element
@@ -214,18 +182,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //add attribute to test case action
         QDMElements.addAttribute()
 
-        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        //add Element
-        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[data-testid="relevant-datetime-input"]').type('07/11/2023 08:00 AM')
-        //add Code
-        QDMElements.addCode('LOINC', '1556-0')
-        // Enter attribute and its type
-        QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
-        QDMElements.enterQuantity('1000', 'mg/dl')
-        //add attribute to test case action
-        QDMElements.addAttribute()
+        addGlucoseLaboratoryResult('07/11/2023 08:00 AM', '1556-0', '1000')
 
         //Element - Encounter:Performed: Observation Services
         //add Element
@@ -237,70 +194,40 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Close the Element
         QDMElements.closeElement()
 
-        //Element - Encounter:Performed:Encounter Inpatient
-        //add Element
-        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('03/08/2023 08:30 AM', '03/11/2023 08:15 AM')
-        //add Code
-        QDMElements.addCode('SNOMEDCT', '183452005')
+        addInpatientEncounter('03/08/2023 08:30 AM', '03/11/2023 08:15 AM')
 
-        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        //add Element
-        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('03/08/2023 08:30 AM', '03/08/2023 08:45 AM')
-        //add Code
-        QDMElements.addCode('LOINC', '1547-9')
-        // Enter attribute and its type
-        QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
-        QDMElements.enterQuantity('201', 'mg/dl')
-        //add attribute to test case action
-        QDMElements.addAttribute()
+        addGlucoseLaboratoryResult('03/08/2023 08:30 AM', '1547-9', '201', '03/08/2023 08:45 AM')
         //Close the Element
         QDMElements.closeElement()
 
-        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        //add Element
-        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('03/08/2023 09:30 AM', '03/08/2023 10:15 AM')
-        //add Code
-        QDMElements.addCode('LOINC', '1547-9')
-        // Enter attribute and its type
-        QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
-        QDMElements.enterQuantity('1000', 'mg/dl')
-        //add attribute to test case action
-        QDMElements.addAttribute()
+        addGlucoseLaboratoryResult('03/08/2023 09:30 AM', '1547-9', '1000', '03/08/2023 10:15 AM')
 
         TestCasesPage.saveTestCaseAndWait()
 
         //Add Expected value for Test case
         TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
-        // Enter IPP last because prior population updates rerender this controlled input.
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2')
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2', { clearFirst: true })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '3', {
-            clearFirst: true,
-            index: 0
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENEXExpected, '1', { clearFirst: true })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '1', { clearFirst: true })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', { clearFirst: true })
+        const secondExpectedValues = [
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '2', clearFirst: true },
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '3', clearFirst: true, index: 0 },
+            { selector: TestCasesPage.testCaseDENEXExpected, value: '1', clearFirst: true },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '1', clearFirst: true },
+            { selector: TestCasesPage.numeratorObservationRow, value: '1', clearFirst: true },
+            // Population updates rerender the Initial Population controlled input; enter it last.
+            { selector: TestCasesPage.testCaseIPPExpected, value: '2' }
+        ]
+        TestCasesPage.typeExpectedActualValues(secondExpectedValues)
 
         //Save Test case
         TestCasesPage.saveTestCaseAndWait()
         Toasts.clearToast(EditMeasurePage.successMessage, 'Test Case Updated Successfully')
+        TestCasesPage.openExpectedActualTab({ readySelector: TestCasesPage.testCaseIPPExpected })
+        TestCasesPage.assertExpectedActualValues(secondExpectedValues)
 
         //Execute Test case on Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
-        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
+        // QDM list execution has no stable request route; named row status is the completion signal.
+        TestCasesPage.assertTestCaseStatus(firstTestCaseTitle, 'Pass')
+        TestCasesPage.assertTestCaseStatus(secondTestCaseTitle, 'Pass')
     })
 })

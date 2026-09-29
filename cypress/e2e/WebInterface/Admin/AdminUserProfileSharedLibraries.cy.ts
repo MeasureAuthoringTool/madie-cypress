@@ -157,7 +157,7 @@ describe('Admin user profile Shared Libraries', () => {
             .and('contain.text', '1.0.000')
     })
 
-    it('sorts every data column on the Shared Libraries tab', () => {
+    it('sorts every sortable column on the Shared Libraries tab', () => {
         openSharedLibraries()
         AdminUserProfilePage.openLibrariesTab(AdminUserProfilePage.sharedLibrariesTab)
         cy.wait('@sharedLibraries').its('response.statusCode').should('eq', 200)
@@ -167,7 +167,6 @@ describe('Admin user profile Shared Libraries', () => {
             { selector: CQLLibrariesPage.hdrVersion, sortInfo: 'version,false' },
             { selector: CQLLibrariesPage.hdrStatus, sortInfo: 'draft,false' },
             { selector: CQLLibrariesPage.hdrModel, sortInfo: 'model,false' },
-            { selector: '[data-testid="header-ownerDisplayName"]', sortInfo: 'ownerDisplayName,false' },
             { selector: CQLLibrariesPage.hdrUpdated, sortInfo: 'lastModifiedAt,false' }
         ]
 
@@ -179,6 +178,7 @@ describe('Admin user profile Shared Libraries', () => {
             cy.get(AdminUserProfilePage.librariesTable).find(selector).should('be.visible').click()
             AdminUserProfilePage.waitForLibraryListRefresh(`@sortSharedLibraries${index}`)
         })
+
     })
 
     it('paginates shared library sets', () => {

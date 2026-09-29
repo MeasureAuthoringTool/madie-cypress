@@ -266,7 +266,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     })
 
     it('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         const measureGroupPath = 'cypress/fixtures/' + currentUser + '/measureGroupId'
 
         //Add second Measure Group with return type as Boolean

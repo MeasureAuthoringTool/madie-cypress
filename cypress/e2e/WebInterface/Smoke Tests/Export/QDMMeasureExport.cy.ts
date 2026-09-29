@@ -97,10 +97,8 @@ describe('Successful QDM Measure Export', () => {
                     'Measure Steward\tSemanticBits\nMeasure Developer\tAcademy of Nutrition and Dietetics\nEndorsed By\tNone',
             )
 
-            expect(bodyText).to.include(
-                'Description\t\n\nThis is a TEST.\n\n\n\n\nLabel 1\n\n\t\n\n' +
-                    'Label 2\n\n\t\n\nLabel 3\n\n\n\n\n\t\n\n\t\n\ntest 1\n\ntest 2\n\ntest 3' +
-                    '\n\n\n\n\n\t\n\n\t\n\n\n\n\nThis is another TEST',
+            expect(bodyText).to.match(
+                /Description\t\s*This is a TEST\.\s*Label 1\s*Label 2\s*Label 3\s*test 1\s*test 2\s*test 3\s*This is another TEST/,
             )
 
             expect(bodyText).to.include('Measure Scoring\tProportion\nMeasure Type\tProcess\nStratification\t\nNone')

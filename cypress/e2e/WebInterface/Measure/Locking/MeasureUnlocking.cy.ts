@@ -61,11 +61,11 @@ describe('Measure Locking Validations', () => {
 
     it('Measure owner unable to version Draft Measure, when the Measure is locked by a different User', () => {
 
-        const currentUser = Cypress.env('selectedUser')
+        const currentUser = Cypress.expose('selectedUser')
         let filePath = 'cypress/fixtures/' + currentUser + '/measureId'
 
         //Lock Measure with ALT User
-        const currentAltUser = Cypress.env('selectedAltUser')
+        const currentAltUser = Cypress.expose('selectedAltUser')
         OktaLogin.setupUserSession(true)
         Utilities.lockSharedMeasure(true)
 

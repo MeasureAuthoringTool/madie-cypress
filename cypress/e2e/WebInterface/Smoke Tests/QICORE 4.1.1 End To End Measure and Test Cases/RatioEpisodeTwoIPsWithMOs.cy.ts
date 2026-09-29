@@ -39,10 +39,10 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.measureGroupTypeSelect)
 
         Utilities.setMeasureGroupType()
 
@@ -60,25 +60,27 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         Utilities.populationSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Initial Population 2')
         Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-        cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible').click()
+        cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
+        cy.get(MeasureGroupPage.addNumeratorObservationLink).should('be.visible').click()
+        cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
 
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get('[data-value="Denominator Observation"]').click()
-        cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
-        cy.get('[data-value="Sum"]').click()
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observation')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
         Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get('[data-value="Numerator Observation"]').click()
-        cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
-        cy.get('[data-value="Sum"]').click()
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observation')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
 
         cy.get(MeasureGroupPage.reportingTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
+        cy.intercept('POST', '/api/measures/**/groups').as('createMeasureGroup')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.wait('@createMeasureGroup', { timeout: 60000 })
+            .its('response.statusCode')
+            .should('be.oneOf', [200, 201, 202])
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -86,6 +88,7 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
             'contain.text',
             'Population details for this group saved successfully.',
         )
+        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 30000)
     })
 
     after('Clean up', () => {
@@ -100,42 +103,27 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2', {
-            clearFirst: true,
-            index: 0,
-        })
+        const populationExpectedValues = [
+            { selector: TestCasesPage.testCaseIPPExpected, value: '2', clearFirst: true, index: 0 },
+            { selector: TestCasesPage.testCaseIPPExpected, value: '2', clearFirst: true, index: 1 },
+            { selector: TestCasesPage.testCaseDENOMExpected, value: '2', clearFirst: true },
+            { selector: TestCasesPage.testCaseNUMERExpected, value: '2', clearFirst: true },
+        ]
+        TestCasesPage.typeExpectedActualValues(populationExpectedValues)
 
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseIPPExpected, '2', {
-            clearFirst: true,
-            index: 1,
-        })
-
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseDENOMExpected, '2', { clearFirst: true })
         cy.get(TestCasesPage.denominatorObservationExpectedRow).should('have.length', 2)
-
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1', {
-            clearFirst: true,
-            index: 0,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.denominatorObservationExpectedRow, '1', {
-            clearFirst: true,
-            index: 1,
-        })
-
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.testCaseNUMERExpected, '2', { clearFirst: true })
         cy.get(TestCasesPage.numeratorObservationRow).should('have.length', 2)
-
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', {
-            clearFirst: true,
-            index: 0,
-        })
-        TestCasesPage.typeExpectedActualValue(TestCasesPage.numeratorObservationRow, '1', {
-            clearFirst: true,
-            index: 1,
-        })
+        const expectedValues = [
+            ...populationExpectedValues,
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '1', clearFirst: true, index: 0 },
+            { selector: TestCasesPage.denominatorObservationExpectedRow, value: '1', clearFirst: true, index: 1 },
+            { selector: TestCasesPage.numeratorObservationRow, value: '1', clearFirst: true, index: 0 },
+            { selector: TestCasesPage.numeratorObservationRow, value: '1', clearFirst: true, index: 1 },
+        ]
+        TestCasesPage.typeExpectedActualValues(expectedValues)
 
         TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
         cy.get(Toasts.otherSuccessToast).should(
             'contain.text',
             'Test case updated successfully with warnings in JSON',
@@ -143,17 +131,14 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        TestCasesPage.assertExpectedActualValues(expectedValues)
 
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
+        TestCasesPage.runTestCaseAndWaitForCompletion()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
+        TestCasesPage.assertTestCaseStatus(testCaseTitlePass, 'Pass')
     })
 })

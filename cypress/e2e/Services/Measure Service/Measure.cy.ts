@@ -351,39 +351,43 @@ describe('Measure Service: CQL Library name validations', () => {
     it('Validation Error: CQL library Name contains spaces', () => {
         TestData.requestMeasure(
             measureValidationBody({
-                measureName: 'test',
+                measureName: 'TestMeasure',
                 cqlLibraryName: 'Test 222'
             }),
             { failOnStatusCode: false }
         ).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
+            expect(response.body.validationErrors.measure).to.eql(
+                'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.'
+            )
         })
     })
 
     it('Validation Error: CQL library Name contains underscores', () => {
         TestData.requestMeasure(
             measureValidationBody({
-                measureName: 'test',
+                measureName: 'TestMeasure',
                 cqlLibraryName: 'Test_222'
             }),
             { failOnStatusCode: false }
         ).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameUnderscoreValidationError)
+            expect(response.body.validationErrors.measure).to.eql(
+                'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.'
+            )
         })
     })
 
     it('Validation Error: CQL library Name contains special characters', () => {
         TestData.requestMeasure(
             measureValidationBody({
-                measureName: 'test',
+                measureName: 'TestMeasure',
                 cqlLibraryName: 'Test!@#%$^&'
             }),
             { failOnStatusCode: false }
         ).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
+            expect(response.body.validationErrors.cqlLibraryName).to.eql('Content contains invalid characters.')
         })
     })
 
@@ -393,14 +397,14 @@ describe('Measure Service: CQL Library name validations', () => {
             it(`Validation Error: CQL library Name rejects ${invalidCqlLibraryName}`, () => {
                 TestData.requestMeasure(
                     measureValidationBody({
-                        measureName: 'test',
+                        measureName: 'TestMeasure',
                         cqlLibraryName: invalidCqlLibraryName
                     }),
                     { failOnStatusCode: false }
                 ).then((response) => {
                     expect(response.status).to.eql(400)
                     expect(response.body.id).to.not.exist
-                    expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
+                    expect(response.body.validationErrors.cqlLibraryName).to.eql('Content contains invalid characters.')
                 })
             })
         })
@@ -427,33 +431,39 @@ describe('Measure Service: CQL Library name validations', () => {
             { failOnStatusCode: false }
         ).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
+            expect(response.body.validationErrors.measure).to.eql(
+                'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.'
+            )
         })
     })
 
     it('Validation Error: CQL library Name does not contain alphabets', () => {
         TestData.requestMeasure(
             measureValidationBody({
-                measureName: 'test',
+                measureName: 'TestMeasure',
                 cqlLibraryName: '123456'
             }),
             { failOnStatusCode: false }
         ).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
+            expect(response.body.validationErrors.measure).to.eql(
+                'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.'
+            )
         })
     })
 
     it('Validation Error: CQL library Name start with number', () => {
         TestData.requestMeasure(
             measureValidationBody({
-                measureName: 'test',
+                measureName: 'TestMeasure',
                 cqlLibraryName: '123Test'
             }),
             { failOnStatusCode: false }
         ).then((response) => {
             expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.cqlLibraryName).to.eql(cqlLibraryNameValidationError)
+            expect(response.body.validationErrors.measure).to.eql(
+                'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.'
+            )
         })
     })
 
