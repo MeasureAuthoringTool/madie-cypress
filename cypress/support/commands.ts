@@ -142,6 +142,7 @@ function fetchAccessTokenAndSetCookie(
     return cy.request({
         url: authnUrl,
         method: 'POST',
+        log: false,
         headers: {
             'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -182,6 +183,7 @@ function fetchAccessTokenAndSetCookie(
         return cy.request({
             url: url,
             method: 'GET',
+            log: false,
             headers: {
                 'Accept-Encoding': 'gzip, deflate, br',
                 Accept: '*/*'
@@ -203,6 +205,7 @@ function fetchAccessTokenAndSetCookie(
             return cy.request({
                 url: tokenUrl,
                 method: 'POST',
+                log: false,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept-Encoding': 'gzip, deflate, br',
@@ -223,13 +226,17 @@ function fetchAccessTokenAndSetCookie(
                 // A successful token response is not sufficient if its body is
                 // incomplete. Failing here prevents the browser from making
                 // later application requests with `Bearer undefined`.
-                expect(accessToken, 'Okta access token').to.be.a('string').and.not.be.empty
-                expect(accessToken, 'Okta access token').not.to.equal('undefined')
+                expect(
+                    typeof accessToken === 'string' && accessToken.length > 0 && accessToken !== 'undefined',
+                    'Okta access token is present'
+                ).to.eq(true)
 
-                return cy.setCookie('accessToken', accessToken).then(() => {
-                    return cy.getCookie('accessToken').should((cookie) => {
-                        expect(cookie?.value, 'accessToken cookie').to.be.a('string').and.not.be.empty
-                        expect(cookie?.value, 'accessToken cookie').not.to.equal('undefined')
+                return cy.setCookie('accessToken', accessToken, { log: false }).then(() => {
+                    return cy.getCookie('accessToken', { log: false }).should((cookie) => {
+                        expect(
+                            typeof cookie?.value === 'string' && cookie.value.length > 0 && cookie.value !== 'undefined',
+                            'accessToken cookie is present'
+                        ).to.eq(true)
                     }).then((cookie) => cookie as Cypress.Cookie)
                 })
             })

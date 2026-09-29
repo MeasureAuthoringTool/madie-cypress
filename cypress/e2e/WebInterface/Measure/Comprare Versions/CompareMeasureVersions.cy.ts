@@ -115,7 +115,7 @@ describe('Compare Measure Versions', () => {
         //Click on Compare Versions button
         cy.get(MeasuresPage.compareVersionsBtn).should('be.enabled')
         cy.get('[data-testid="compare-versions-action-tooltip"]').trigger('mouseover')
-        cy.get('.MuiTooltip-tooltip').should('contain.text', 'Compare Measure Versions')
+        cy.get('.MuiTooltip-tooltip').should('contain.text', 'Compare measure versions')
         cy.get(MeasuresPage.compareVersionsBtn).click()
 
         //Verify Popup Screen

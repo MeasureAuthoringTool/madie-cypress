@@ -500,20 +500,13 @@ describe('Share measure from the Edit Measure page', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
+            CQLEditorPage.replaceCqlDocumentText(cql)
+        })
+        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
-        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
-
-        //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+        //Navigate to the existing measure group form.
+        EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.measureGroupTypeSelect)
 
         MeasureGroupPage.setMeasureGroupType()
 

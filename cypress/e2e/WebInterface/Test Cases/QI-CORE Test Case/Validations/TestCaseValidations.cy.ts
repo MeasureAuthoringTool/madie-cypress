@@ -174,7 +174,12 @@ describe('Edit Test Case Validations', () => {
         TestCasesPage.openDetailsTab(TestCasesPage.createTestCaseGroupInput)
         cy.get(TestCasesPage.createTestCaseGroupInput).clear()
         cy.get(TestCasesPage.createTestCaseGroupInput).type(twoFiftyTwoCharacters, { delay: 0 })
+        cy.get(`[data-testid='Add "${twoFiftyTwoCharacters}"-aa-option']`).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.testCaseGroupInlineError).should(
+            'contain.text',
+            'Test Case Group cannot be more than 250 characters.'
+        )
     })
 })
 

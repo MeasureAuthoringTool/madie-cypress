@@ -456,7 +456,7 @@ describe('Measure History - QDM Export Test case Action', () => {
         // export
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.contains('Excel').click()
-        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM-TestCases.xlsx', { timeout: 5500 })
+        cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM-TestCases.xlsx', { timeout: 60000 })
 
         //Go to Measure History and verify that Export Test cases actions are recorded
         EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)

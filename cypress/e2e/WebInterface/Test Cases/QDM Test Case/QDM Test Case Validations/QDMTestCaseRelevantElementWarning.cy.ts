@@ -123,10 +123,10 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
 
         // change cql to randomly chosen valid QDM cql
         CQLEditorPage.openCqlEditor()
-        CQLEditorPage.replaceCqlDocument('cypress/fixtures/QDMSDEMeasureAfterChanges.txt')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.readFile('cypress/fixtures/QDMSDEMeasureAfterChanges.txt').then((cql) => {
+            CQLEditorPage.replaceCqlDocumentText(cql)
+        })
+        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
         // set up intercept - this API has the data needed for this specific check
         cy.intercept('/api/qdm/cql/relevant-elements').as('relevantElements')

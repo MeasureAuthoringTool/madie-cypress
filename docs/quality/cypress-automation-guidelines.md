@@ -36,6 +36,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 ## Test Data and API Helpers
 
 - On Cypress 16+, read secrets only through `cy.env()` and keep them inside Cypress command-chain support code. Use `Cypress.expose()` only for public configuration or non-secret per-spec state such as allocated account-slot names; never expose credentials, tokens, passwords, or API keys.
+- Never log or assert a raw token, cookie value, API key, or password. Disable Cypress command logging for credential-bearing authentication requests and cookie writes, and assert only non-sensitive presence or status conditions.
 - Initialize shared secret configuration from a root support hook before specs use authentication, `Environment`, or API helpers. Keep authentication configuration lazy so support-file imports do not access secrets before that hook runs.
 - Use owner-aware `TestData` helpers for `selectedUser` and `selectedAltUser`.
 - Put setup in `beforeEach` only when every test in the suite requires it. Create scenario-specific records in the test or a named scenario helper so visibility, layout, and negative tests do not pay for unrelated data setup.

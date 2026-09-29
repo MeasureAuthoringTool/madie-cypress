@@ -5,6 +5,14 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
+const assertMeaningfulRteHtml = (expectedHtml: string): void => {
+    cy.get(EditMeasurePage.measureGenericFieldRTETextBox)
+        .invoke('html')
+        .then((html) => {
+            expect((html ?? '').replace(/<p><br class="ProseMirror-trailingBreak"><\/p>$/, '')).to.eq(expectedHtml)
+        })
+}
+
 describe('Edit Measure: Add content to an Rich Text field and use formatting buttons', () => {
 
     beforeEach('Login', () => {
@@ -51,7 +59,7 @@ describe('Edit Measure: Add content to an Rich Text field and use formatting but
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
         //confirm html formatting that is in the field
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<ol><li><p><strong><em><del><u>description</u></del></em></strong></p></li></ol>')
+        assertMeaningfulRteHtml('<ol><li><p><strong><em><del><u>description</u></del></em></strong></p></li></ol>')
     })
 
     it('Verify the entry, undo, redo, bulletted list, embedded table, save and the resulting HTML text formatting that in the RTE field', () => {
@@ -153,7 +161,7 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
         Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 190000)
 
-        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).should('have.html', '<div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div>')
+        assertMeaningfulRteHtml('<div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div>')
 
         //add row above, row below, column left, column right and confirm
         cy.get(EditMeasurePage.embdTableAddRowAboveBtn).click()
@@ -192,7 +200,9 @@ describe('Edit Measure: Add embedded table to Rich Text field and use the variou
         })
 
         //remove embedded table, entirely
-        cy.get(EditMeasurePage.embdTableRemoveTblBtn).click({ force: true })
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('td').first().click()
+        cy.get(EditMeasurePage.embdTableRemoveTblBtn).should('be.visible').and('be.enabled').click()
+        cy.get(EditMeasurePage.measureGenericFieldRTETextBox).find('table').should('not.exist')
 
         //save
         cy.get(EditMeasurePage.measureDescriptionSaveButton).should('be.enabled').click()

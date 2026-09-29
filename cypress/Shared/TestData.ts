@@ -333,7 +333,10 @@ export class TestData {
 
     public static withAccessToken(callback: (accessToken: string) => Cypress.Chainable | void): Cypress.Chainable {
         return cy.getCookie('accessToken').should((cookie) => {
-            expect(cookie?.value, 'accessToken cookie').to.be.a('string').and.not.be.empty
+            expect(
+                typeof cookie?.value === 'string' && cookie.value.length > 0 && cookie.value !== 'undefined',
+                'accessToken cookie is present'
+            ).to.eq(true)
         }).then((cookie) => {
             return callback(cookie.value)
         })

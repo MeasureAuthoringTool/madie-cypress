@@ -125,7 +125,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        CQLEditorPage.replaceCqlDocumentText('', EditMeasurePage.cqlEditorTextBox)
         cy.intercept('PUT', '/api/measures/**').as('saveEmptyCql')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.wait('@saveEmptyCql').its('response.statusCode').should('eq', 200)
@@ -215,13 +215,9 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.openCqlEditor()
-        cy.get(EditMeasurePage.cqlEditorTextBox)
-            .should('be.visible')
-            .click()
-            .focused()
-            .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(
-            updatedMeasureCQL.replace('SimpleFhirLibrary', CqlLibraryName)
+        CQLEditorPage.replaceCqlDocumentText(
+            updatedMeasureCQL.replace('SimpleFhirLibrary', CqlLibraryName),
+            EditMeasurePage.cqlEditorTextBox
         )
         cy.intercept('PUT', '/api/measures/**').as('saveMismatchedCql')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
