@@ -1,17 +1,31 @@
 # Section 508 Accessibility Automation POC Scope
 
-Status: Proposed scope — no compliance claim
+Status: Active implementation POC — no compliance claim
 
 ## Executive Summary
 
 MADiE already has the technical foundation for automated accessibility checks:
 
-- `axe-core` and `cypress-axe` are installed and loaded by Cypress.
-- A `cypress/e2e/WebInterface/508/508Example.cy.ts` example exists, but is skipped and contains no active tests.
+- `axe-core` is available for focused, in-browser Cypress scans through the shared accessibility helper.
 - Lighthouse accessibility thresholds exist, but Lighthouse scores are diagnostic indicators, not a Section 508 conformance test.
 - Jenkins already runs Cypress and retains Mochawesome artifacts, but it has no dedicated accessibility job, policy, or structured violation report.
 
 The POC should establish a repeatable, risk-based accessibility quality signal for representative authenticated MADiE workflows. It must not be presented as full Section 508 certification. Automated tools detect only part of the applicable requirements; a qualified manual assessment is required for a conformance determination.
+
+## Current Ticket-Driven Scope
+
+The POC is being implemented through individual Section 508 remediation tickets, not as a generic full-page scan suite. Each ticket adds a focused Cypress specification for the component and states changed by that ticket. This gives the product team regression protection for the repaired contract while keeping failures attributable to one accessibility requirement.
+
+For every in-scope ticket, the automation should:
+
+- Assert the specific accessible names, native/ARIA roles, states, labels, and DOM semantics required by the acceptance criteria.
+- Exercise only the meaningful interaction states for that component, such as no selection versus one or multiple selections, connected versus disconnected status, and open versus closed menus or dialogs.
+- Verify keyboard behavior, focus visibility/return, and no keyboard trap when those behaviors are part of the ticket's acceptance criteria; retain manual validation for behavior Cypress cannot reliably determine.
+- Run a scoped `axe-core` WCAG 2.0 A/AA scan of the changed header, menu, dialog, or action center rather than relying on an unrelated whole-page result.
+- Use API setup for scenario data, stable generated names and stored IDs for UI selection, and explicit scenario-owned cleanup. Browser flows remain responsible for rendering and interaction assertions.
+- Keep feature-flagged coverage in a separately named suite with the required user role and environment. Run it where the feature is enabled; skip it only when the release target cannot provide that capability, with a ticket comment explaining when to re-enable it.
+
+The initial ticket patterns are the UMLS header and Measure action center. Future 508 tickets should reuse their shared helpers and add only the contract-specific assertions needed for the new component.
 
 ## Compliance Boundary
 
@@ -47,7 +61,7 @@ Keep accessibility scans in UI tests. API setup may create the needed measure, l
 | A11Y-01 | Confirm governing standard and owners   | Obtain written confirmation of the compliance baseline, responsible Section 508 authority, severity definitions, and release policy.                                                                                                                                                | Approved one-page policy and named owners.                                       |
 | A11Y-02 | Select the POC journeys                 | Select 6–8 representative, high-risk authenticated states: landing/list, search/filter, create/edit form, modal/action center, measure editor, test-case editor, library workflow, and reviewer/admin state if in release scope.                                                    | Journey inventory with screen/state, user role, risk, and manual coverage owner. |
 | A11Y-03 | Establish an automated baseline         | Run axe checks in observation mode against the selected states using the approved WCAG 2.0 A/AA ruleset. Capture violations by rule, impact, selector, route, and test name.                                                                                                        | Baseline report, deduplicated issue list, and false-positive review.             |
-| A11Y-04 | Build the Cypress accessibility layer   | Activate the existing `cypress-axe` capability through a typed, named shared helper. The helper injects axe after MADiE is ready, uses one approved ruleset, supports component scans, and produces readable failures.                                                              | Focused specs demonstrate page and modal scans; compile and quality checks pass. |
+| A11Y-04 | Build the Cypress accessibility layer   | Use `axe-core` through a typed, named shared helper. The helper injects axe after MADiE is ready, uses one approved ruleset, supports component scans, and produces readable failures.                                                                                       | Focused specs demonstrate page and modal scans; compile and quality checks pass. |
 | A11Y-05 | Define reporting and issue governance   | Produce a CI-friendly structured report and a human-readable summary. Define defect fields, severity, product owner, remediation target, retest status, and trend.                                                                                                                  | Sample Jenkins artifacts and triage template.                                    |
 | A11Y-06 | Define exception control                | Allow only reviewed, narrow, time-limited exceptions with an issue ID, owner, rationale, affected rule/component, expiry date, and removal test. Never globally disable axe rules or suppress violations without traceability.                                                      | Exception register and enforcement review.                                       |
 | A11Y-07 | Perform manual accessibility validation | Apply a repeatable manual script to the same journeys: keyboard-only operation, visible focus and focus order, modal focus/escape/return, labels and error messaging, semantic structure, zoom/reflow, screen-reader names/roles/states/announcements, and meaningful alternatives. | Manual results with pass/fail/not-applicable evidence and retest outcomes.       |
@@ -59,7 +73,7 @@ Keep accessibility scans in UI tests. API setup may create the needed measure, l
 
 ### Reuse before adding dependencies
 
-No new scanning dependency is needed for the POC. `axe-core` 4.11.0 and `cypress-axe` 1.7.0 are already installed. The dormant 508 example should be replaced with maintainable, purposeful specs rather than enabled unchanged. `@cypress-audit/lighthouse` should remain a performance/diagnostic tool and must not be used as conformance evidence.
+Use `axe-core` directly through the shared Cypress helper. The former `cypress-axe` adapter is not compatible with Cypress 16, and no adapter is needed: the helper injects axe into the application window and runs its documented API. Add maintainable, purposeful specs for real accessibility coverage rather than generic examples. `@cypress-audit/lighthouse` should remain a performance/diagnostic tool and must not be used as conformance evidence.
 
 ### Stable scan points
 
