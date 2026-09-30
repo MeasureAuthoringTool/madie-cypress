@@ -61,6 +61,7 @@ Reuse these established paths before adding request code:
 
 - Prefer selectors in this order: `data-testid`, accessible role/name, stable text, stable container plus child, then CSS class.
 - Put reusable selectors in the relevant page object. Inline selectors are acceptable for one-off assertions.
+- Reuse `UmlsHeader` for UMLS header interactions and `UmlsConnection.ensureConnected()` for UMLS connection setup or cleanup. Accessibility specs should keep semantic assertions and scan policy in the spec. A disconnected-menu scenario may use the UI to disconnect temporarily, but must restore the API connection in `afterEach`.
 - Select created rows by stored ID, generated name, title, or case number tied to the scenario. Do not rely on row index or table order.
 - For autocomplete or multi-select options, target the exact displayed value or a dedicated `data-testid`; do not select `first()` or `last()` unless the scenario specifically validates ordering.
 - When a control's visible label and stable DOM value differ, keep that normalization in the existing domain helper. For example, QDM code-system selection accepts `LOINC` while the rendered option may identify itself as `http://loinc.org`; consumers must use `QDMElements` rather than duplicate option selectors.
