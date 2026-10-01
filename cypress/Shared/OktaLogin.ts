@@ -26,11 +26,13 @@ export class OktaLogin {
                 harpUser:  () => cy.setAccessTokenCookie(),
                 harpUser2: () => cy.setAccessTokenCookie2(),
                 harpUser3: () => cy.setAccessTokenCookie3(),
+                harpUser4: () => cy.setAccessTokenCookie4(),
             },
             credsForUser: (u) => {
                 if (u === 'harpUser')  return { username: Environment.credentials().harpUser,  password: Environment.credentials().password };
                 if (u === 'harpUser2') return { username: Environment.credentials().harpUser2, password: Environment.credentials().password2 };
                 if (u === 'harpUser3') return { username: Environment.credentials().harpUser3, password: Environment.credentials().password3 };
+                if (u === 'harpUser4') return { username: Environment.credentials().harpUser4, password: Environment.credentials().password4 };
                 return null;
             },
             logPrefix: 'Login',
@@ -55,35 +57,44 @@ export class OktaLogin {
         });
     }
 
-    public static ReviewerLogin(): void {
-        // MAT-10160: MadieTestUser1 is the current reviewer account. It must
-        // be acquired through the primary pool lock to avoid parallel session
-        // collisions with ordinary specs that can also use harpUser2.
-        cy.task('getAvailableReviewer').then((reviewerUser) => {
+    public static ReviewerLogin(): Cypress.Chainable<void> {
+        // Reviewer accounts are acquired through the shared user lock so the
+        // shared harpUser2 account cannot collide with ordinary primary specs.
+        return cy.task<string | null>('getAvailableReviewer').then((reviewerUser) => {
             expect(reviewerUser, 'Available reviewer user').to.not.be.null
             Cypress.expose('reviewerUser', reviewerUser)
-            this.runLoginFlow({
+            return this.runLoginFlow({
                 selectedEnvVar: 'reviewerUser',
                 cookieSetters: {
                     harpUser2: () => cy.setAccessTokenCookie2(),
+                    harpUser4: () => cy.setAccessTokenCookie4(),
                 },
-                credsForUser: (user) =>
-                    user === 'harpUser2'
-                        ? { username: Environment.credentials().harpUser2, password: Environment.credentials().password2 }
-                        : null,
+                credsForUser: (user) => {
+                    if (user === 'harpUser2') {
+                        return { username: Environment.credentials().harpUser2, password: Environment.credentials().password2 }
+                    }
+                    if (user === 'harpUser4') {
+                        return { username: Environment.credentials().harpUser4, password: Environment.credentials().password4 }
+                    }
+                    return null
+                },
                 logPrefix: 'Reviewer Login',
             })
-        })
+        }).then(() => undefined)
     }
 
-    public static releaseReviewer(): void {
-        // Reviewer suites must call this from afterEach so harpUser2 returns
-        // to the primary pool even when a reviewer assertion fails.
+    public static releaseReviewer(): Cypress.Chainable<void> {
+        // Reviewer suites must call this from afterEach so the acquired account
+        // returns to the reviewer pool even when a reviewer assertion fails.
         const reviewerUser = Cypress.expose('reviewerUser')
         if (reviewerUser) {
-            cy.task('releaseReviewer', reviewerUser)
-            Cypress.expose('reviewerUser', null)
+            return cy.task('releaseReviewer', reviewerUser).then(() => {
+                Cypress.expose('reviewerUser', null)
+                return undefined
+            })
         }
+
+        return cy.then(() => undefined)
     }
 
     public static getReviewerUser(): string {
@@ -91,6 +102,9 @@ export class OktaLogin {
 
         if (reviewerUser === 'harpUser2') {
             return Environment.credentials().harpUser2.toLowerCase()
+        }
+        if (reviewerUser === 'harpUser4') {
+            return Environment.credentials().harpUser4.toLowerCase()
         }
 
         cy.log(`⚠️ getReviewerUser: Unknown reviewer user type: ${reviewerUser}`)

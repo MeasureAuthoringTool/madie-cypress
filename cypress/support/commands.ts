@@ -39,6 +39,7 @@ declare global {
             setAccessTokenCookie()
             setAccessTokenCookie2()
             setAccessTokenCookie3()
+            setAccessTokenCookie4()
             setAccessTokenCookieALT()
             setAccessTokenCookieALT2()
             setAccessTokenCookieALT3()
@@ -264,6 +265,12 @@ export function setAccessTokenCookie3(): Cypress.Chainable<Cypress.Cookie> {
     })
 }
 
+export function setAccessTokenCookie4(): Cypress.Chainable<Cypress.Cookie> {
+    return fetchAccessTokenAndSetCookie(Environment.credentials().harpUser4, Environment.credentials().password4, {
+        failOnStatusCode: false
+    })
+}
+
 export function setAccessTokenCookieCAMELCASE(): Cypress.Chainable<Cypress.Cookie> {
     return fetchAccessTokenAndSetCookie(Environment.credentials().harpUser, Environment.credentials().password, {
         uppercaseUsername: true
@@ -316,6 +323,9 @@ Cypress.Commands.add('setAccessTokenCookie2', () => {
 })
 Cypress.Commands.add('setAccessTokenCookie3', () => {
     return setAccessTokenCookie3()
+})
+Cypress.Commands.add('setAccessTokenCookie4', () => {
+    return setAccessTokenCookie4()
 })
 Cypress.Commands.add('setAccessTokenCookieALT', () => {
     return setAccessTokenCookieALT()

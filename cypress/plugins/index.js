@@ -6,6 +6,7 @@ const { removeDirectory } = require('cypress-delete-downloads-folder')
 const { lighthouse } = require('@cypress-audit/lighthouse')
 
 const primaryUsers = ['harpUser', 'harpUser2', 'harpUser3']
+const reviewerUsers = ['harpUser2', 'harpUser4']
 const altUsers = ['altHarpUser', 'altHarpUser2', 'altHarpUser3']
 const lockFilePath = path.join(__dirname, 'userLock.json')
 const altLockFilePath = path.join(__dirname, 'altUserLock.json')
@@ -89,25 +90,12 @@ function claimFirstAvailableUser(filePath, users) {
     })
 }
 
-function claimSpecificUser(filePath, user) {
-    // Reviewer specs use the existing primary-user lock for harpUser2. Do not
-    // move this user into a separate pool: that would reduce normal parallel
-    // capacity and allow two specs to authenticate as the same account.
+function claimFirstAvailableUserWithRetry(filePath, users) {
     const startedAt = Date.now()
 
     while (Date.now() - startedAt < lockAcquireTimeoutMs) {
-        const claimed = withFileLock(filePath, () => {
-            const lock = readLock(filePath)
-            if (lock[user]) {
-                return false
-            }
-
-            lock[user] = true
-            writeLock(filePath, lock)
-            return true
-        })
-
-        if (claimed) {
+        const user = claimFirstAvailableUser(filePath, users)
+        if (user) {
             return user
         }
 
@@ -165,9 +153,10 @@ module.exports = (on, config) => {
             return releaseLockedUser(altLockFilePath, user)
         },
         getAvailableReviewer() {
-            // MadieTestUser1 is TEST_USERNAME2 / harpUser2. Reserve it from
-            // the primary pool before a reviewer spec starts its browser flow.
-            return claimSpecificUser(lockFilePath, 'harpUser2')
+            // Reserve reviewer users through the shared lock so harpUser2
+            // cannot collide with ordinary primary-user specs. harpUser4 is
+            // reviewer-only and remains outside the ordinary primary pool.
+            return claimFirstAvailableUserWithRetry(lockFilePath, reviewerUsers)
         },
         releaseReviewer(user) {
             return releaseLockedUser(lockFilePath, user)
