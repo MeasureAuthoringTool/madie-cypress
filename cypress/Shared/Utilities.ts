@@ -92,12 +92,11 @@ export class Utilities {
         deleteSecondMeasure?: boolean,
         altUser?: boolean,
         measureNumber?: number
-    ): void {
+    ): Cypress.Chainable<void> {
         const currentUser = Cypress.expose('selectedUser')
 
         if (!currentUser) {
-            cy.log('⚠️ deleteVersionedMeasure: No user set — skipping cleanup')
-            return
+            return cy.log('⚠️ deleteVersionedMeasure: No user set — skipping cleanup').then(() => undefined)
         }
 
         let user = ''
@@ -113,14 +112,13 @@ export class Utilities {
         OktaLogin.setupAdminSession()
 
         const measurePath = TestData.measureIdPath(deleteSecondMeasure ? 2 : measureNumber)
-        cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
+        return cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
             if (!id) {
-                cy.log(
+                return cy.log(
                     `⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`
                 )
-                return
             }
-            TestData.requestAdminMeasureDeleteById(id, user, {
+            return TestData.requestAdminMeasureDeleteById(id, user, {
                 failOnStatusCode: false,
                 headers: {
                     'api-key': Environment.credentials().adminApiKey
@@ -134,7 +132,7 @@ export class Utilities {
                     )
                 }
             })
-        })
+        }).then(() => undefined)
     }
 
     public static textValues = {
