@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-09-24
+Last updated: 2026-10-01
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -91,6 +91,7 @@ Sequence batches by independent CI failures and shared-helper consumer count. Co
 | `QDMRunExecuteTC.cy.ts` non-owner path | Previously reached VSAC `401`. | Recheck environment/session dependency independently. |
 | Locking follow-up | Okta auth failures prevented helper-path validation. | Rerun after authentication stabilizes. |
 | `BooleanAndNonBooleanExpectedValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts` | No runner output in a reported run. | Verify spec collection and runner artifacts first. |
+| `EditMeasureActionCenterAccessibility.cy.ts` (MAT-10348) | DEV full run found conflicting outer SpeedDial and nested focusable-button names for Review, View Human Readable, and Share/Unshare; the versioned owner-with-edit-access scenario also lacks Delete Measure. | Resolve the product defects in `docs/bugs/MAT-10348-defect-report.md`, then re-enable the defect-linked accessible-name and focus-order assertions. |
 
 ## Next Architecture Targets
 
