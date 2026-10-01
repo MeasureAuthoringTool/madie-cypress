@@ -40,7 +40,7 @@ describe('CQL Library delete dialog', () => {
                 cy.contains(`Are you sure you want to delete draft of ${libraryName}?`).should('be.visible')
                 cy.get(CQLEditorPage.modalActionWarning)
                     .should('be.visible')
-                    .and('contain.text', 'This Action cannot be undone.')
+                    .and('contain.text', 'This action cannot be undone.')
                 cy.contains('button', 'Cancel').should('be.enabled')
                 cy.get(CQLEditorPage.deleteContinueButton)
                     .should('be.enabled')

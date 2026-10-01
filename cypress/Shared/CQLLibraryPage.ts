@@ -266,7 +266,7 @@ export class CQLLibraryPage {
                 cy.get(this.actionCenterDelete).click()
 
                 // confirm we are on deletion modal
-                cy.get('.dialog-warning-action').should('have.text', 'This Action cannot be undone.')
+                cy.get('.dialog-warning-action').should('have.text', 'This action cannot be undone.')
 
                 // click "yes delete"
                 cy.get(CQLEditorPage.deleteContinueButton).should('be.visible')
