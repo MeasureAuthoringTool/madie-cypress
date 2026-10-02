@@ -183,7 +183,7 @@ pipeline {
           PLANNED_SPECS_FILE="$WORKSPACE/planned-specs-$BUILD_NUMBER.txt" \
           node scripts/extract-failure-details.js \
             "$WORKSPACE/failures-$BUILD_NUMBER.txt" \
-            "$WORKSPACE/failure-details-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-details-$BUILD_NUMBER.html" \
             "$WORKSPACE/failure-summary-$BUILD_NUMBER.json" \
             "Initial run failures"
         '''
@@ -205,8 +205,8 @@ pipeline {
         sh '''
           : > "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt"
           : > "$WORKSPACE/failures-rerun2-$BUILD_NUMBER.txt"
-          printf 'Rerun #1 failures\\n\\nNo rerun performed.\\n' > "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt"
-          printf 'Rerun #2 failures\\n\\nNo rerun performed.\\n' > "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.txt"
+          printf '<!doctype html><title>Rerun #1 failures</title><p>No rerun performed.</p>\\n' > "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.html"
+          printf '<!doctype html><title>Rerun #2 failures</title><p>No rerun performed.</p>\\n' > "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.html"
           printf '{"runLabel":"Rerun #1 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json"
           printf '{"runLabel":"Rerun #2 failures","failedSpecCount":0,"failedTestCount":0,"failureTypes":{},"topErrorSignatures":[],"failures":[]}\\n' > "$WORKSPACE/failure-summary-rerun2-$BUILD_NUMBER.json"
         '''
@@ -286,7 +286,7 @@ pipeline {
           RERUN_TARGETING_FILE="$WORKSPACE/rerun-targeting-1-$BUILD_NUMBER.json" \
           node scripts/extract-failure-details.js \
             "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt" \
-            "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.html" \
             "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json" \
             "Rerun #1 failures"
 
@@ -297,7 +297,7 @@ pipeline {
           else
             echo "WARNING: No mochawesome JSON for rerun #1 (possible crash). Carrying forward previous failures."
             cp "$WORKSPACE/failures-$BUILD_NUMBER.txt" "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt"
-            cp "$WORKSPACE/failure-details-$BUILD_NUMBER.txt" "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt"
+            cp "$WORKSPACE/failure-details-$BUILD_NUMBER.html" "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.html"
             cp "$WORKSPACE/failure-summary-$BUILD_NUMBER.json" "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json"
             : > "$WORKSPACE/mochawesome-rerun1-$BUILD_NUMBER.tar.gz" || true
           fi
@@ -347,7 +347,7 @@ pipeline {
           RERUN_TARGETING_FILE="$WORKSPACE/rerun-targeting-2-$BUILD_NUMBER.json" \
           node scripts/extract-failure-details.js \
             "$WORKSPACE/failures-rerun2-$BUILD_NUMBER.txt" \
-            "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.txt" \
+            "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.html" \
             "$WORKSPACE/failure-summary-rerun2-$BUILD_NUMBER.json" \
             "Rerun #2 failures"
 
@@ -358,7 +358,7 @@ pipeline {
           else
             echo "WARNING: No mochawesome JSON for rerun #2 (possible crash). Carrying forward previous failures."
             cp "$WORKSPACE/failures-rerun1-$BUILD_NUMBER.txt" "$WORKSPACE/failures-rerun2-$BUILD_NUMBER.txt"
-            cp "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.txt" "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.txt"
+            cp "$WORKSPACE/failure-details-rerun1-$BUILD_NUMBER.html" "$WORKSPACE/failure-details-rerun2-$BUILD_NUMBER.html"
             cp "$WORKSPACE/failure-summary-rerun1-$BUILD_NUMBER.json" "$WORKSPACE/failure-summary-rerun2-$BUILD_NUMBER.json"
             : > "$WORKSPACE/mochawesome-rerun2-$BUILD_NUMBER.tar.gz" || true
           fi
@@ -391,7 +391,7 @@ pipeline {
             console > "$WORKSPACE/failure-trend-console-$BUILD_NUMBER.txt"
           cat "$WORKSPACE/failure-trend-console-$BUILD_NUMBER.txt"
         '''
-        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.txt, failure-details-rerun1-${env.BUILD_NUMBER}.txt, failure-details-rerun2-${env.BUILD_NUMBER}.txt, failure-trend-${env.BUILD_NUMBER}.json, failure-trend-${env.BUILD_NUMBER}.md, failure-trend-slack-${env.BUILD_NUMBER}.txt, failure-trend-console-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
+        archiveArtifacts artifacts: "mochawesome-initial-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun1-${env.BUILD_NUMBER}.tar.gz, mochawesome-rerun2-${env.BUILD_NUMBER}.tar.gz, failures-${env.BUILD_NUMBER}.txt, failures-rerun1-${env.BUILD_NUMBER}.txt, failures-rerun2-${env.BUILD_NUMBER}.txt, failure-details-${env.BUILD_NUMBER}.html, failure-details-rerun1-${env.BUILD_NUMBER}.html, failure-details-rerun2-${env.BUILD_NUMBER}.html, failure-trend-${env.BUILD_NUMBER}.json, failure-trend-${env.BUILD_NUMBER}.md, failure-trend-slack-${env.BUILD_NUMBER}.txt, failure-trend-console-${env.BUILD_NUMBER}.txt", onlyIfSuccessful: false
       }
     }
   }
@@ -426,9 +426,9 @@ pipeline {
           String urlInit = "${env.BUILD_URL}artifact/mochawesome-initial-${bn}.tar.gz"
           String urlR1   = "${env.BUILD_URL}artifact/mochawesome-rerun1-${bn}.tar.gz"
           String urlR2   = "${env.BUILD_URL}artifact/mochawesome-rerun2-${bn}.tar.gz"
-          String urlDetailsInit = "${env.BUILD_URL}artifact/failure-details-${bn}.txt"
-          String urlDetailsR1   = "${env.BUILD_URL}artifact/failure-details-rerun1-${bn}.txt"
-          String urlDetailsR2   = "${env.BUILD_URL}artifact/failure-details-rerun2-${bn}.txt"
+          String urlDetailsInit = "${env.BUILD_URL}artifact/failure-details-${bn}.html"
+          String urlDetailsR1   = "${env.BUILD_URL}artifact/failure-details-rerun1-${bn}.html"
+          String urlDetailsR2   = "${env.BUILD_URL}artifact/failure-details-rerun2-${bn}.html"
           String urlTrend       = "${env.BUILD_URL}artifact/failure-trend-${bn}.md"
           String normalizedSummary = ''
 
@@ -490,7 +490,7 @@ ${env.JOB_NAME} #${bn} (<${env.BUILD_URL}Open>)
           echo "Post summary/Slack failed: ${e}"
         }
       }
-      archiveArtifacts artifacts: "mochawesome-*.tar.gz, failures-*.txt, failure-details-*.txt, failure-summary-*.json, failure-trend-*.json, failure-trend-*.md, failure-trend-*.txt, cypress/results/*.json, runner-results/*.json", allowEmptyArchive: true, onlyIfSuccessful: false
+      archiveArtifacts artifacts: "mochawesome-*.tar.gz, failures-*.txt, failure-details-*.html, failure-summary-*.json, failure-trend-*.json, failure-trend-*.md, failure-trend-*.txt, cypress/results/*.json, runner-results/*.json", allowEmptyArchive: true, onlyIfSuccessful: false
       cleanWs()
     }
   }
