@@ -103,7 +103,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
     it('Export icon is present and enables correctly', () => {
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
-        cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')
+        TestCasesPage.assertActionCenterExportTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
@@ -118,19 +118,11 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
     it('Shift dates icon is present and enables correctly', () => {
         cy.get(TestCasesPage.actionCenterShiftDates).should('be.disabled')
-        cy.get('[data-testid="shift-test-case-dates-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Select test cases to shift test case dates'
-        )
+        TestCasesPage.assertActionCenterShiftDatesTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
-        cy.get('[data-testid="shift-test-case-dates-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Shift test case dates'
-        )
+        TestCasesPage.assertActionCenterShiftDatesTooltip()
 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
@@ -184,7 +176,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
-        cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')
+        TestCasesPage.assertActionCenterExportTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
@@ -199,11 +191,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 
     it('Copy To icon is present and it enables correctly', () => {
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.disabled')
-        cy.get('[data-testid="copy-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Select test cases to copy to another measure'
-        )
+        TestCasesPage.assertActionCenterCopyTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
@@ -264,7 +252,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
-        cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')
+        TestCasesPage.assertActionCenterExportTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
@@ -279,11 +267,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
 
     it('Non-owner sees Copy To icon; it enables correctly', () => {
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.disabled')
-        cy.get('[data-testid="copy-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Select test cases to copy to another measure'
-        )
+        TestCasesPage.assertActionCenterCopyTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')

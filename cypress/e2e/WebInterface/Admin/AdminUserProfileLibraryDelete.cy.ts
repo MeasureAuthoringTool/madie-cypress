@@ -103,8 +103,7 @@ describe('Admin user profile library deletion', () => {
         AdminUserProfilePage.findLibraryRow(libraryName).should('be.visible')
     })
 
-    // MAT-10457: The UI sends a HARP ID that does not match the shared library's owner.
-    it.skip('deletes a Shared version library through the admin single-instance endpoint', () => {
+    it('deletes a Shared version library through the admin single-instance endpoint', () => {
         libraryOwner = CQLLibraryPage.createLibraryAPI(libraryName, SupportedModels.QDM, {
             cql: LibraryCQL.validCQL4QDMLib
         })

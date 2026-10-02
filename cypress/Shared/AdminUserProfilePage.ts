@@ -73,6 +73,10 @@ export class AdminUserProfilePage {
         cy.get(tooltipSelector).trigger('mouseout')
     }
 
+    public static openShareMenu(): void {
+        cy.get(this.shareButton).scrollIntoView().should('be.visible').and('be.enabled').click()
+    }
+
     public static selectMeasureRow(rowIndex: number): void {
         cy.get(this.measuresTable).find('tbody tr').eq(rowIndex).find('input[type="checkbox"]').check()
     }

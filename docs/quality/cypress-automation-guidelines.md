@@ -68,6 +68,7 @@ Reuse these established paths before adding request code:
 - On paginated library lists, submit the generated library name with `CQLLibrariesPage.searchForLibraryByName(...)` before selecting or opening its row; pair the filtered UI row with the stored library ID when an action targets that library.
 - Do not assert `be.enabled` on non-form containers such as MUI SpeedDial roots or anchor-backed tabs. Target the actual button or use `aria-disabled`.
 - For MUI SpeedDial action centers, scope child actions to their parent container and scroll the main trigger before opening it. Do not scroll a child action after opening the menu; that interaction can collapse the SpeedDial.
+- Keep recurring test-case Action Center tooltip selectors and accessible-label assertions in `TestCasesPage`; specs should call the named helper rather than duplicate the UI copy contract.
 
 ## Navigation and Readiness
 
