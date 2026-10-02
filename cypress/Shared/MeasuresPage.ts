@@ -178,6 +178,14 @@ export class MeasuresPage {
         })
     }
 
+    public static openEditMeasureDetailsById(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.visit(`/measures/${measureId}/edit/details`)
+            cy.location('pathname').should('contain', `/measures/${measureId}/edit/details`)
+            cy.get(EditMeasurePage.measureNameTextBox).should('be.visible').and('be.enabled')
+        })
+    }
+
     private static measureRowSelectSelector(measureId: string): string {
         return `[data-testid="measure-name-${measureId}_select"]`
     }

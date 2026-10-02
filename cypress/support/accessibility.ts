@@ -41,7 +41,17 @@ export const Accessibility = {
 
     violationSummary(results: axe.AxeResults): string {
         return results.violations
-            .map(({ help, id, impact, nodes }) => `${impact ?? 'unknown'}: ${id} (${help}) — ${nodes.length} node(s)`)
+            .map(
+                ({ help, id, impact, nodes }) =>
+                    `${impact ?? 'unknown'}: ${id} (${help}) — ${nodes.length} node(s)\n` +
+                    nodes
+                        .map(
+                            (node) =>
+                                `  target: ${JSON.stringify(node.target)}\n` +
+                                `  ${node.failureSummary ?? 'No axe failure summary provided.'}`
+                        )
+                        .join('\n')
+            )
             .join('\n')
     }
 }

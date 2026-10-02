@@ -1,4 +1,5 @@
 export class Header {
+    public static readonly skipToMainContent = 'a[href="#page-header"]'
     public static readonly userProfileSelect = '#user-profile-select'
     public static readonly userProfileSelectSignOutOption = '[data-testid="user-profile-logout-option"]'
     public static readonly userUmlsSelect = '#user-umls-select'
