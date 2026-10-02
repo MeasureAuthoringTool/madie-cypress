@@ -427,6 +427,9 @@ export class TestCasesPage {
   public static readonly actionCenterExport = 'form [data-testid="export-action-btn"]'
   public static readonly actionCenterMakeJsonMatchUi = '[data-testid="make-json-match-ui-action-btn"]'
   public static readonly actionCenterShiftDates = '[data-testid="shift-test-case-dates-action-btn"]'
+  public static readonly actionCenterCopyTooltip = '[data-testid="copy-tooltip"]'
+  public static readonly actionCenterExportTooltip = '[data-testid="export-tooltip"]'
+  public static readonly actionCenterShiftDatesTooltip = '[data-testid="shift-test-case-dates-tooltip"]'
 
   // copy to modal
   public static readonly copyToSave = '[data-testid="copy-test-cases-continue-button"]'
@@ -584,6 +587,21 @@ export class TestCasesPage {
 
         TestData.writeElementId(elemid)
       })
+  }
+
+  public static assertActionCenterCopyTooltip(): void {
+    step('Assert Copy To action center tooltip label')
+    cy.get(this.actionCenterCopyTooltip).should('have.attr', 'aria-label', 'Copy to Icon')
+  }
+
+  public static assertActionCenterExportTooltip(): void {
+    step('Assert Export action center tooltip label')
+    cy.get(this.actionCenterExportTooltip).should('have.attr', 'aria-label', 'Export Test case(s)')
+  }
+
+  public static assertActionCenterShiftDatesTooltip(): void {
+    step('Assert Shift Dates action center tooltip label')
+    cy.get(this.actionCenterShiftDatesTooltip).should('have.attr', 'aria-label', 'Shift test case dates')
   }
 
   /*
