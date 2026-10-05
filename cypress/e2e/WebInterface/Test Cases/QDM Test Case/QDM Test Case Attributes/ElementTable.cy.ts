@@ -8,6 +8,7 @@ import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../../Shared/Header'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { QDMElements } from '../../../../../Shared/QDMElements'
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -122,7 +123,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //select the SNOMED code system
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
 
         //select a value for the code
         cy.get(TestCasesPage.codeSystemValueSelector).click()
@@ -131,7 +132,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //asserting value that appears in the element table
-        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  SNOMEDCT : 112648003')
+        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  http://snomed.info/sct : 112648003')
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')

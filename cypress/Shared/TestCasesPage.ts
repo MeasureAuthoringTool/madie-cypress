@@ -401,7 +401,6 @@ export class TestCasesPage {
   public static readonly quantityUnitInput = '[data-testid="quantity-unit-input-quantity-input"]'
   public static readonly attributeChip = 'tbody > tr > :nth-child(3)'
   public static readonly codeSystemSelector = '[id="code-system-selector"]'
-  public static readonly codeSNOMEDCTValue = '[data-testid="option-SNOMEDCT"]'
   public static readonly codeLOINCValue = '[data-testid="code-system-option-LOINC"]'
   public static readonly codeSystemValueSelector = '[data-testid="code-selector"]'
   public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
@@ -1429,11 +1428,15 @@ export class TestCasesPage {
     cy.get(actionCenterSelector, { timeout: 50000 })
       .scrollIntoView()
       .should('be.visible')
+
+    cy.get(actionCenterSelector, { timeout: 50000 })
       .find('button')
       .first()
       .should('be.visible')
       .and('be.enabled')
-      .click()
+      .then(($button) => {
+        $button[0].click()
+      })
   }
 
   // -----------------------------
@@ -1750,18 +1753,22 @@ export class TestCasesPage {
 
   private static checkTestCaseRow(cellSelector: string, cellValue: string | number, attempt = 1): void {
     const maxAttempts = 3
+    const row = () => cy.contains(cellSelector, cellValue).parent('tr')
+    const checkbox = () => row().find('input[type="checkbox"]')
 
-    cy.contains(cellSelector, cellValue)
-      .parent('tr')
+    row()
       .scrollIntoView()
       .should('be.visible')
-      .find('input[type="checkbox"]')
-      .should('be.visible')
-      .check()
 
-    cy.contains(cellSelector, cellValue)
-      .parent('tr')
-      .find('input[type="checkbox"]')
+    checkbox()
+      .should('be.visible')
+      .then(($checkbox) => {
+        if (!$checkbox.is(':checked')) {
+          checkbox().check()
+        }
+      })
+
+    checkbox()
       .then(($checkbox) => {
         if ($checkbox.is(':checked')) {
           return

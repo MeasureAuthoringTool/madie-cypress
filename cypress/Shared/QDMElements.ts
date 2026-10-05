@@ -151,6 +151,8 @@ export class QDMElements {
             .flatMap((prefix) => [
                 '[data-testid^="code-system-option-' + prefix + '"]',
                 '[data-testid*="code-system-option-' + prefix + '"]',
+                '[data-testid^="option-' + prefix + '"]',
+                '[data-testid*="option-' + prefix + '"]',
             ])
 
         return [exactSelector, legacySelector, ...fallbackSelector].join(', ')
