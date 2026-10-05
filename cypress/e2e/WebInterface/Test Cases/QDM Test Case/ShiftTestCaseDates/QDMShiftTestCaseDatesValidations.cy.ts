@@ -106,8 +106,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.valueSetOptionValue).click()
         Utilities.waitForElementVisible(TestCasesPage.codeSystemSelector, 35000)
         cy.get(TestCasesPage.codeSystemSelector).click()
-        Utilities.waitForElementVisible(TestCasesPage.codeSNOMEDCTValue, 35000)
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         Utilities.waitForElementVisible(TestCasesPage.codeSelector, 35000)
         cy.get(TestCasesPage.codeSelector).click()
         Utilities.waitForElementVisible('[data-testid="option-1162745003"]', 35000)
@@ -129,7 +128,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.valueSetSelector).scrollIntoView().click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-value="111297002"]').click()
         cy.get('[data-testid="integer-input-field-Rank"]').type('1')
@@ -169,8 +168,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.valueSetOptionValue).click()
         Utilities.waitForElementVisible(TestCasesPage.codeSystemSelector, 35000)
         cy.get(TestCasesPage.codeSystemSelector).click()
-        Utilities.waitForElementVisible(TestCasesPage.codeSNOMEDCTValue, 35000)
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         Utilities.waitForElementVisible(TestCasesPage.codeSelector, 35000)
         cy.get(TestCasesPage.codeSelector).click()
         Utilities.waitForElementVisible('[data-testid="option-1162745003"]', 35000)
@@ -192,7 +190,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.valueSetSelector).scrollIntoView().click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-value="111297002"]').click()
         cy.get('[data-testid="integer-input-field-Rank"]').type('1')
@@ -371,28 +369,29 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         // check 1st tc & initiate shift
         TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
         cy.get(TestCasesPage.actionCenterShiftDates).click()
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
 
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
-        cy.get(TestCasesPage.shiftSpecificTestCaseDates).type('3')
+        cy.get(TestCasesPage.shiftSpecificTestCaseDates).should('be.enabled').type('3')
 
         //shiftSpecificTestCasesCancelBtn
         cy.get(TestCasesPage.shiftSpecificTestCasesCancelBtn).click()
 
         // initiate shift on 1st tc again
+        cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
         cy.get(TestCasesPage.actionCenterShiftDates).click()
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
 
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
-        cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('3')
+        cy.get(TestCasesPage.shiftSpecificTestCaseDates).should('be.enabled').clear().type('3')
 
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
@@ -405,7 +404,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         )
 
         //navigate back to the main test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         //navigate to the edit page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
@@ -427,16 +426,17 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         // check 2nd tc & initiate shift
         TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
         cy.get(TestCasesPage.actionCenterShiftDates).click()
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
 
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
-        cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('3')
+        cy.get(TestCasesPage.shiftSpecificTestCaseDates).should('be.enabled').clear().type('3')
 
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
@@ -465,16 +465,16 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         // check 1st tc & initiate shift
         TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
         cy.get(TestCasesPage.actionCenterShiftDates).click()
 
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
-        cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('-3')
+        cy.get(TestCasesPage.shiftSpecificTestCaseDates).should('be.enabled').clear().type('-3')
 
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
@@ -487,7 +487,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         )
 
         //navigate back to the main test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         //navigate to the edit page for the 1st test case
         TestCasesPage.clickEditforCreatedTestCase()
@@ -508,15 +508,16 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
         // check 2nd tc & initiate shift
         TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
         cy.get(TestCasesPage.actionCenterShiftDates).click()
 
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
-        cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('-3')
+        cy.get(TestCasesPage.shiftSpecificTestCaseDates).should('be.enabled').clear().type('-3')
 
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
