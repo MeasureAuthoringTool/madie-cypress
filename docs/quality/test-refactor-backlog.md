@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-09-24
+Last updated: 2026-10-06
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -58,6 +58,8 @@ Current focus order:
 4. Verify CI collection for specs that produce no runner output before treating them as test failures.
 5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
 6. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
+7. Investigate legacy `serviceConfig` feature-flag capture in `OktaLogin.runLoginFlow()`. Each full login waits for `/env-config/serviceConfig.json` and writes its `features` response to a fixture, but no active TypeScript consumer currently reads that fixture. Prove non-use, then remove the capture and retry-time intercept registration with focused Admin and feature-flag regression coverage.
+8. Establish an incremental `strictNullChecks` migration. The baseline command reports existing nullability and Cypress chain-subject errors across shared helpers and legacy specs, so do not enable it as a blocking suite-wide gate yet. Fix strict diagnostics in touched files, measure the baseline, and introduce a non-blocking report before defining a ratcheted CI gate.
 
 Work boundaries:
 

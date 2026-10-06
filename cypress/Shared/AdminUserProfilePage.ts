@@ -26,6 +26,7 @@ export class AdminUserProfilePage {
     public static readonly changeVersionDialogForm = '[data-testid="dialog-form"]'
     public static readonly changeVersionCancelButton = '[data-testid="change-version-cancel-button"]'
     public static readonly changeVersionSaveButton = '[data-testid="change-version-save-button"]'
+    public static readonly changeVersionSuccessToast = '[data-testid="delete-measure-success-message"]'
     public static readonly selectedMeasureName = '[data-testid="selected-measure-name"]'
     public static readonly selectedLibrary = '[data-testid="selected-library"]'
     public static readonly currentVersionValue = '[data-testid="current-version-value"]'
@@ -138,8 +139,30 @@ export class AdminUserProfilePage {
         cy.get(this.changeVersionDialog).should('be.visible')
     }
 
+    public static submitChangeVersion(): void {
+        cy.get(this.changeVersionSaveButton).should('be.enabled').click()
+    }
+
     public static assertChangeVersionCurrentVersion(version: string): void {
         cy.get(this.currentVersionValue).should('have.text', version)
+    }
+
+    public static blurNewVersionNumber(): void {
+        cy.get(this.newVersionNumberInput).should('be.visible').focus().blur()
+    }
+
+    public static enterNewVersionNumberAndBlur(version: string): void {
+        cy.get(this.newVersionNumberInput).should('be.visible').clear().type(version).blur()
+    }
+
+    public static assertNewVersionValidationError(message: string): void {
+        cy.get(this.newVersionNumberInput).should('have.attr', 'aria-invalid', 'true')
+        cy.contains(this.changeVersionDialogForm, message).should('be.visible')
+        cy.get(this.changeVersionSaveButton).should('be.disabled')
+    }
+
+    public static assertChangeVersionSaveEnabled(): void {
+        cy.get(this.changeVersionSaveButton).should('be.enabled')
     }
 
     public static assertMeasureVersionsInOrder(versions: string[]): void {
@@ -231,6 +254,21 @@ export class AdminUserProfilePage {
 
     public static submitMeasureSearch(searchText: string): void {
         cy.get(this.measureSearchInput).should('be.visible').clear().type(`${searchText}{enter}`)
+    }
+
+    public static waitForMeasureListRefresh(alias: `@${string}`): Cypress.Chainable<any> {
+        return cy.wait(alias).then((interception) => {
+            if (interception.response) {
+                expect(interception.response.statusCode).to.eq(200)
+            }
+
+            return cy
+                .get(this.measuresTable)
+                .should('be.visible')
+                .find('tbody tr')
+                .should('have.length.greaterThan', 0)
+                .then(() => interception)
+        })
     }
 
     public static openLibrariesTab(tabSelector: string): void {
