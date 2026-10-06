@@ -97,8 +97,7 @@ Cypress.Commands.add(
                         `visitWithRetry: probe ${attempt}/${maxAttempts} — server not reachable ("${result.error}"). Waiting ${delayMs / 1000}s...`
                     )
                     return cy.wait(delayMs).then(() => {
-                        // Re-register intercepts that need to capture the page load
-                        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig')
+                        // Re-register the existing UMLS alias for the retry load.
                         cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
                         return waitForServer(attempt + 1)
                     })

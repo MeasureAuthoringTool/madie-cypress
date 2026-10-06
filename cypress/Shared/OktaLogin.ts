@@ -130,9 +130,8 @@ export class OktaLogin {
 
         cy.session('login-' + who, () => {
             // Only acquire the access token via API — no browser navigation.
-            // This avoids the cy.intercept/cy.wait('@serviceConfig') race
-            // condition that occurs when cy.session() resets the page to
-            // about:blank before running the setup function.
+            // cy.session() resets the page to about:blank before running this
+            // setup function, so browser navigation belongs after session restore.
             //
             // The cookie-setter commands do pure HTTP requests to Okta
             // (authn → authorize → token) and set the accessToken cookie.
@@ -200,17 +199,8 @@ export class OktaLogin {
         cy.clearLocalStorage();
         cy.clearAllSessionStorage?.({ log: true });
 
-        // Register the feature-config intercept before navigation.
-        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
-
         // Visit login and ensure fresh sessionStorage (with retry on network errors)
         cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
-
-        // Capture and write feature flags — use a generous timeout because
-        // retries inside visitWithRetry can delay when the request fires.
-        cy.wait('@serviceConfig', { timeout: 60000 }).then((config) => {
-            cy.writeFile('cypress/fixtures/featureFlags', config.response!.body.features);
-        });
 
         // Normalize the user key to a plain string (avoids TS index weirdness)
         const rawWho = Cypress.expose(args.selectedEnvVar);
