@@ -92,12 +92,11 @@ export class Utilities {
         deleteSecondMeasure?: boolean,
         altUser?: boolean,
         measureNumber?: number
-    ): void {
+    ): Cypress.Chainable<void> {
         const currentUser = Cypress.expose('selectedUser')
 
         if (!currentUser) {
-            cy.log('⚠️ deleteVersionedMeasure: No user set — skipping cleanup')
-            return
+            return cy.log('⚠️ deleteVersionedMeasure: No user set — skipping cleanup').then(() => undefined)
         }
 
         let user = ''
@@ -113,28 +112,32 @@ export class Utilities {
         OktaLogin.setupAdminSession()
 
         const measurePath = TestData.measureIdPath(deleteSecondMeasure ? 2 : measureNumber)
-        cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
-            if (!id) {
-                cy.log(
-                    `⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`
-                )
-                return
-            }
-            TestData.requestAdminMeasureDeleteById(id, user, {
-                failOnStatusCode: false,
-                headers: {
-                    'api-key': Environment.credentials().adminApiKey
-                }
-            }).then((response) => {
-                if (response.status === 200) {
-                    cy.log('Versioned measure deleted successfully via admin API')
-                } else {
+        return cy
+            .task('readFileSafe', measurePath, { log: false })
+            .then((id: string | null) => {
+                if (!id) {
                     cy.log(
-                        `⚠️ Versioned measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                        `⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`
                     )
+                    return
                 }
+
+                return TestData.requestAdminMeasureDeleteById(id, user, {
+                    failOnStatusCode: false,
+                    headers: {
+                        'api-key': Environment.credentials().adminApiKey
+                    }
+                }).then((response) => {
+                    if (response.status === 200) {
+                        cy.log('Versioned measure deleted successfully via admin API')
+                    } else {
+                        cy.log(
+                            `⚠️ Versioned measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                        )
+                    }
+                })
             })
-        })
+            .then(() => undefined)
     }
 
     public static textValues = {

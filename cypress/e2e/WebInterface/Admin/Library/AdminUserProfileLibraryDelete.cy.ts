@@ -1,11 +1,11 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
-import { Environment } from '../../../Shared/Environment'
-import { LibraryCQL } from '../../../Shared/LibraryCQL'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { TestData } from '../../../Shared/TestData'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Environment } from '../../../../Shared/Environment'
+import { LibraryCQL } from '../../../../Shared/LibraryCQL'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { TestData } from '../../../../Shared/TestData'
 
 const assertDeleteDialog = (message: string): void => {
     cy.get(CQLLibraryPage.cqlLibraryDeleteDialog)

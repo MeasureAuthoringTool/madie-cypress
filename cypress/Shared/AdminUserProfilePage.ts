@@ -21,6 +21,22 @@ export class AdminUserProfilePage {
     public static readonly humanReadableButton = '[data-testid="view-hr-action-btn"]'
     public static readonly historyButton = '[data-testid="history-action-btn"]'
     public static readonly compareVersionsButton = MeasuresPage.compareVersionsBtn
+    public static readonly changeVersionButton = '[data-testid="change-version-action-btn"]'
+    public static readonly changeVersionDialog = '[data-testid="change-version-dialog"]'
+    public static readonly changeVersionDialogForm = '[data-testid="dialog-form"]'
+    public static readonly changeVersionCancelButton = '[data-testid="change-version-cancel-button"]'
+    public static readonly changeVersionSaveButton = '[data-testid="change-version-save-button"]'
+    public static readonly selectedMeasureName = '[data-testid="selected-measure-name"]'
+    public static readonly selectedLibrary = '[data-testid="selected-library"]'
+    public static readonly currentVersionValue = '[data-testid="current-version-value"]'
+    public static readonly newVersionNumberInput = '[data-testid="new-version-number-input"]'
+    public static readonly newVersionNumberTooltip = '[data-testid="new-version-number-tooltip"]'
+    public static readonly versionChangeCriteria = '[data-testid="version-change-criteria"]'
+    public static readonly measureVersionsToggle = '[data-testid="measure-versions-toggle"]'
+    public static readonly measureVersionsPanel = '[data-testid="measure-versions-panel"]'
+    public static readonly libraryVersionsToggle = '[data-testid="library-versions-toggle"]'
+    public static readonly libraryVersionsPanel = '[data-testid="library-versions-panel"]'
+    public static readonly libraryVersionsTable = '[data-testid="library-versions-table"]'
     public static readonly transferButton = '[data-testid="transfer-action-btn"]'
     public static readonly shareButton = '[data-testid="share-action-btn"]'
     public static readonly deleteButton = '[data-testid="delete-action-btn"]'
@@ -29,6 +45,7 @@ export class AdminUserProfilePage {
     public static readonly humanReadableTooltip = '[data-testid="view-hr-action-tooltip"]'
     public static readonly historyTooltip = '[data-testid="history-action-tooltip"]'
     public static readonly compareVersionsTooltip = '[data-testid="compare-versions-action-tooltip"]'
+    public static readonly changeVersionTooltip = '[data-testid="change-version-action-tooltip"]'
     public static readonly transferTooltip = '[data-testid="transfer-action-tooltip"]'
     public static readonly shareTooltip = '[data-testid="share-action-tooltip"]'
     public static readonly deleteTooltip = '[data-testid="delete-action-tooltip"]'
@@ -71,6 +88,123 @@ export class AdminUserProfilePage {
         cy.get(tooltipSelector).should('be.visible').trigger('mouseover')
         cy.get('.MuiTooltip-tooltip:visible').last().should('have.text', expectedTooltip)
         cy.get(tooltipSelector).trigger('mouseout')
+    }
+
+    public static openChangeVersionDialog(): void {
+        cy.get(this.changeVersionButton).should('be.enabled').click()
+        cy.get(this.changeVersionDialog).should('be.visible')
+    }
+
+    public static assertChangeVersionDialogClosed(): void {
+        cy.get(this.changeVersionDialog).should('not.exist')
+    }
+
+    public static assertChangeVersionMeasureDetails(measureName: string, version: string): void {
+        this.assertChangeVersionDialogDetails(this.selectedMeasureName, measureName, version, 'measure')
+    }
+
+    public static assertChangeVersionLibraryDetails(libraryName: string, version: string): void {
+        this.assertChangeVersionDialogDetails(this.selectedLibrary, libraryName, version, 'library')
+    }
+
+    public static openMeasureVersions(expectedCount: number): void {
+        cy.get(this.measureVersionsToggle).should('contain.text', `Measure Versions (${expectedCount})`).click()
+        cy.get(this.measureVersionsPanel).should('be.visible')
+    }
+
+    public static closeMeasureVersions(): void {
+        cy.get(this.measureVersionsToggle).click()
+        cy.get(this.measureVersionsPanel).should('not.exist')
+    }
+
+    public static openLibraryVersions(expectedCount: number): void {
+        cy.get(this.libraryVersionsToggle).should('contain.text', `Library Versions (${expectedCount})`).click()
+        cy.get(this.libraryVersionsTable).should('be.visible')
+    }
+
+    public static closeLibraryVersions(): void {
+        cy.get(this.libraryVersionsToggle).click()
+        cy.get(this.libraryVersionsTable).should('not.exist')
+    }
+
+    public static cancelChangeVersion(): void {
+        cy.get(this.changeVersionCancelButton).click()
+        this.assertChangeVersionDialogClosed()
+    }
+
+    public static saveChangeVersion(newVersion: string): void {
+        cy.get(this.newVersionNumberInput).type(newVersion)
+        cy.get(this.changeVersionSaveButton).click()
+        cy.get(this.changeVersionDialog).should('be.visible')
+    }
+
+    public static assertChangeVersionCurrentVersion(version: string): void {
+        cy.get(this.currentVersionValue).should('have.text', version)
+    }
+
+    public static assertMeasureVersionsInOrder(versions: string[]): void {
+        cy.get(this.measureVersionsPanel).within(() => {
+            cy.contains('th', 'Version #').should('be.visible')
+            cy.contains('th', 'Measure Name').should('be.visible')
+            cy.contains('th', 'Version Date').should('be.visible')
+            versions.forEach((version, index) => cy.get('tbody tr').eq(index).should('contain.text', version))
+        })
+    }
+
+    public static assertMeasureVersionsScrollable(lastVersion: string): void {
+        this.assertVersionsScrollable(this.measureVersionsPanel, lastVersion)
+    }
+
+    public static assertLibraryVersionsInOrder(versions: string[]): void {
+        cy.get(this.libraryVersionsTable).within(() => {
+            cy.contains('th', 'Version #').should('be.visible')
+            cy.contains('th', 'Library Name').should('be.visible')
+            cy.contains('th', 'Version Date').should('be.visible')
+            versions.forEach((version, index) => cy.get('tbody tr').eq(index).should('contain.text', version))
+        })
+    }
+
+    public static assertLibraryVersionsScrollable(lastVersion: string): void {
+        this.assertVersionsScrollable(this.libraryVersionsPanel, lastVersion)
+    }
+
+    private static assertChangeVersionDialogDetails(
+        selectedRecordSelector: string,
+        recordName: string,
+        version: string,
+        recordType: 'measure' | 'library'
+    ): void {
+        cy.contains(this.changeVersionDialogForm, 'Change Version #').should('be.visible')
+        cy.contains(this.changeVersionDialogForm, 'Indicates required field').should('be.visible')
+        cy.get(selectedRecordSelector).should('contain.text', recordName)
+        cy.contains(this.changeVersionDialogForm, 'Version-change criteria:').should('be.visible')
+        cy.get(this.versionChangeCriteria).should('contain.text', 'Enter a version number that comes before your intended final version.')
+        cy.get(this.versionChangeCriteria).should(
+            'contain.text',
+            `The version number you enter must not be one that has been used previously for this ${recordType}.`
+        )
+        cy.get(this.versionChangeCriteria).should(
+            'contain.text',
+            `After this version # change is complete, you may version the draft ${recordType} again to produce the intended final version.`
+        )
+        cy.get(this.newVersionNumberTooltip).should('be.visible')
+        cy.get(this.changeVersionDialogForm).contains('Enter a version number that comes before your intended final version.').should(
+            'be.visible'
+        )
+        this.assertChangeVersionCurrentVersion(version)
+        cy.get(this.newVersionNumberInput).should('have.value', '')
+        cy.get(this.changeVersionCancelButton).should('be.visible')
+        cy.get(this.changeVersionSaveButton).should('be.visible')
+    }
+
+    private static assertVersionsScrollable(containerSelector: string, lastVersion: string): void {
+        cy.get(containerSelector)
+            .should('be.visible')
+            .scrollTo('bottom')
+            .find('tbody tr')
+            .last()
+            .scrollIntoView()
+            .should('contain.text', lastVersion)
     }
 
     public static openShareMenu(): void {
@@ -167,6 +301,10 @@ export class AdminUserProfilePage {
 
     public static selectLibraryByName(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {
         return this.findLibraryRow(libraryName).find('input[type="checkbox"]').should('be.visible').check()
+    }
+
+    public static selectLibraryById(libraryId: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(`[data-testid="checkbox-${libraryId}"]`).should('be.visible').check()
     }
 
     public static expandLibrarySet(libraryName: string): Cypress.Chainable<JQuery<HTMLElement>> {

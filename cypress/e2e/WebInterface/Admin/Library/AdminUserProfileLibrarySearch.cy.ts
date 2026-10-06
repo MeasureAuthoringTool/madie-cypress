@@ -1,9 +1,9 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
-import { Environment } from '../../../Shared/Environment'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { Environment } from '../../../../Shared/Environment'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
 
 type LibraryOwnershipType = 'OWNED' | 'SHARED'
 

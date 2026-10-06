@@ -26,6 +26,20 @@ Find the cause before changing code.
 
 ## Timeout Debugging
 
+## Focused Local Reproduction
+
+Run one Cypress spec through the repository script before using CI timeout wrappers,
+parallel runners, or a broader collection:
+
+```bash
+env -u ELECTRON_RUN_AS_NODE CI=1 NO_COLOR=1 ./node_modules/.bin/cypress run \
+  --headless --browser chrome --env configFile=test \
+  --spec 'cypress/e2e/<path-to-spec>.cy.ts'
+```
+
+Use the exact spec path. This keeps the CI-style TEST configuration and browser
+selection while limiting failures to the scenario being debugged.
+
 Parallel Cypress workers are terminated when they produce no output for 20 minutes. Use
 `CYPRESS_WORKER_INACTIVITY_TIMEOUT_SECONDS` to tune this threshold for a run, or set it to `0` to
 disable inactivity detection. The worker wrapper captures `scripts/ci-diagnostics.sh` output before

@@ -1,11 +1,11 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { MeasureCQL } from '../../../Shared/MeasureCQL'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 const assertShareDialogControls = (title: string, instructions: string[]): void => {
     cy.get('[role="dialog"]')
