@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-09-24
+Last updated: 2026-10-06
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -58,6 +58,7 @@ Current focus order:
 4. Verify CI collection for specs that produce no runner output before treating them as test failures.
 5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
 6. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
+7. Establish an incremental `strictNullChecks` migration. The baseline command reports existing nullability and Cypress chain-subject errors across shared helpers and legacy specs, so do not enable it as a blocking suite-wide gate yet. Fix strict diagnostics in touched files, measure the baseline, and introduce a non-blocking report before defining a ratcheted CI gate.
 
 Work boundaries:
 
@@ -66,6 +67,10 @@ Work boundaries:
 - Do not combine unrelated export, transfer, highlighting, and editor refactors.
 - Do not add retries or weaker assertions for known product defects.
 - Do not perform a suite-wide mechanical conversion. Migrate one repeated interaction bucket at a time, starting with consumers already covered by a shared helper.
+
+## Recently Completed
+
+- Removed the unused `serviceConfig` feature-flag capture from full login and retry navigation after confirming it had no active TypeScript consumer. The focused Admin Measure Change Version suite passed in under nine minutes after the change.
 
 ## Cypress 16 Conversion Scope
 
@@ -152,21 +157,21 @@ Sequence batches by independent CI failures and shared-helper consumer count. Co
 
 ## Latest Audit Signal
 
-Command: `npm run quality:no-focused-tests` on 2026-09-18.
+Command: `npm run quality:no-focused-tests` on 2026-10-06.
 
 | Metric | Count |
 | --- | ---: |
-| Specs | 311 |
-| Spec lines | 72,028 |
+| Specs | 313 |
+| Spec lines | 72,802 |
 | Shared files | 35 |
-| Shared lines | 21,336 |
-| Support files / lines | 3 / 631 |
-| Scripts / lines | 9 / 1,565 |
-| Skipped tests | 49 |
-| Manual fixture paths | 147 |
-| Manual access-token plumbing | 81 |
+| Shared lines | 21,605 |
+| Support files / lines | 3 / 648 |
+| Scripts / lines | 10 / 1,663 |
+| Skipped tests | 48 |
+| Manual fixture paths | 146 |
+| Manual access-token plumbing | 80 |
 | Fixed waits | 28 |
-| Forced interactions | 168 |
+| Forced interactions | 163 |
 | Global exception suppression | 1 |
 
 Largest current concentrations:

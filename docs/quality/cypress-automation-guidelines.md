@@ -139,6 +139,14 @@ npm run quality:no-focused-tests
 git diff --check
 ```
 
+For every changed TypeScript file, also run the strict-null check scoped to
+those files. This prevents new nullability and Cypress chain-subject errors
+without blocking on diagnostics in untouched legacy files:
+
+```bash
+npm run typecheck:touched -- cypress/path/to/changed-file.ts
+```
+
 Run focused Cypress coverage for each touched shared path. Use `--env configFile=test` for TEST regression proof.
 
 ### Cypress Upgrade and CI Baseline
