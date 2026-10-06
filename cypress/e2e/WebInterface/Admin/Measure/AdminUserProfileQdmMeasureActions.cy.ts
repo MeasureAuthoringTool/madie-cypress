@@ -1,10 +1,10 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { MeasureCQL } from '../../../Shared/MeasureCQL'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { Utilities } from '../../../Shared/Utilities'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
 
 describe('Admin user profile QDM Measure actions', () => {
     let measureName = ''

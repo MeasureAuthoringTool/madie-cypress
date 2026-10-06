@@ -49,6 +49,7 @@ export type MeasureGroupBody = {
         }
     }
     compositeScoring?: string
+    components?: Array<{ measureId: string; groupId: string }>
     improvementNotation?: string
     improvementNotationDescription?: string
 }
