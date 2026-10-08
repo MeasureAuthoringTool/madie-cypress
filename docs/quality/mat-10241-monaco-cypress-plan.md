@@ -131,14 +131,17 @@ The Qi-Core CQL library editor spec is the reference migration. It now uses `Mon
 
 The QDM CQL-library validation spec now uses `MonacoEditor.replaceDocumentFromFile()` for its full-document fixtures and shared Monaco error/marker assertions. The migration removed all Ace wrapper, gutter, and tooltip selectors, the obsolete fixed wait, and legacy `{home}` / `{del}` Cypress key commands from QDM fixtures. Both CQL-library suites retain returned `afterEach(() => Utilities.deleteLibrary())` cleanup. The DEV headless Chrome run passed all 9 scenarios in 4m57s.
 
+### Completed USQC Library Creation Migration: `CreateCQLLibraryValidations.cy.ts`
+
+The USQC library-creation scenario now replaces starter CQL with `MonacoEditor.replaceDocumentFromFile()`. Every successful UI or API library creation registers the existing `Utilities.deleteLibrary()` lifecycle cleanup, and the returned `afterEach` chain removes it after the scenario. The focused DEV headless Chrome rerun passed after the persistence assertion was updated to tolerate Monaco-rendered whitespace while still requiring the `using USQualityCore version '0.5.0'` clause.
+
 ### Remaining MAT-10241 Migration Scope
 
-The current search identifies 13 remaining `Utilities.typeFileContents(...)` or `CQLEditorPage.replaceCqlDocument(...)` callers across four specs:
+The current search identifies 12 remaining `Utilities.typeFileContents(...)` or `CQLEditorPage.replaceCqlDocument(...)` callers across three specs:
 
-1. `CreateCQLLibraryValidations.cy.ts`
-2. `MeasureLibraryMismatch.cy.ts`
-3. `QDMCQLEditorValidations.cy.ts`
-4. `RunAndExecuteTestCaseButtonValidations.cy.ts`
+1. `MeasureLibraryMismatch.cy.ts`
+2. `QDMCQLEditorValidations.cy.ts`
+3. `RunAndExecuteTestCaseButtonValidations.cy.ts`
 
 Migrate one spec at a time. First classify every interaction as blank-document insertion, full replacement, or short append; remove fixture key commands; replace Ace-only assertions with MADiE validation test ids and one representative visible marker test; add/verify cleanup; and run the full changed spec in headless Chrome before taking the next spec. Make small behavior-preserving refactors during each migration when they eliminate duplicate mechanics or obsolete editor code; keep unrelated redesign out of the migration.
 
