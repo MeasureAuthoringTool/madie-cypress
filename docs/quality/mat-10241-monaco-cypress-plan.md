@@ -135,13 +135,30 @@ The QDM CQL-library validation spec now uses `MonacoEditor.replaceDocumentFromFi
 
 The USQC library-creation scenario now replaces starter CQL with `MonacoEditor.replaceDocumentFromFile()`. Every successful UI or API library creation registers the existing `Utilities.deleteLibrary()` lifecycle cleanup, and the returned `afterEach` chain removes it after the scenario. The focused DEV headless Chrome rerun passed after the persistence assertion was updated to tolerate Monaco-rendered whitespace while still requiring the `using USQualityCore version '0.5.0'` clause.
 
+### Expanded Editor-Touchpoint Inventory
+
+The initial remaining-scope search was intentionally limited to `Utilities.typeFileContents(...)` and `CQLEditorPage.replaceCqlDocument(...)`. A broader read-only inventory found the following migration-relevant paths:
+
+| Category | Count | Scope decision |
+| --- | ---: | --- |
+| Direct full-document CQL writers | 22 call sites in 11 specs | In scope; migrate one spec at a time to the proven Monaco helper. |
+| Direct typing into CQL editor selectors | 62 specs | Triage individually. Short editing flows can use native Monaco typing; full-document flows need CDP insertion/replacement. |
+| Ace-specific DOM or instance assumptions | 22 specs | In scope where the test validates editor behavior; replace with Monaco-supported selectors or MADiE validation surfaces. |
+| Test Case JSON data consumers | 79 files | Not editor migration work by itself; most consume JSON constants only. |
+| Test Case JSON editor interactions | `TestCasesPage.editTestCaseJson(...)` and targeted UI consumers | Out of scope for MAT-10241. This remains an Ace-specific JSON-editor migration and requires its own proof and story. |
+
+The 22 direct CQL writers include the three original targets plus `DraftAndVersionValidations.cy.ts`, `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, `MeasureSharing.cy.ts`, `MeasureExportValidations.cy.ts`, `QDMMeasureExportValidations.cy.ts`, `QDMSDESubTabValidations.cy.ts`, and `QDMTestCaseRelevantElementWarning.cy.ts`. Do not change the shared `CQLEditorPage.replaceCqlDocument*` implementation globally: it is still an Ace bridge with many unproven measure and test-case consumers. Migrate and prove consumers individually through `MonacoEditor`.
+
+### Completed Measure Editor Migration: `MeasureLibraryMismatch.cy.ts`
+
+The mismatch scenarios are the first measure-editor proof of `MonacoEditor.replaceDocumentFromFile()`. The spec uses the new `EditMeasurePage.monacoCqlEditor` selector while preserving the legacy Ace selector for unmigrated consumers, asserts errors through MADiE's generic error list, and verifies one rendered Monaco error marker. Both describes return their measure-cleanup chain. The DEV headless Chrome run passed all 6 scenarios in 1m24s.
+
 ### Remaining MAT-10241 Migration Scope
 
-The current search identifies 12 remaining `Utilities.typeFileContents(...)` or `CQLEditorPage.replaceCqlDocument(...)` callers across three specs:
+The next focused batch contains 6 original high-risk call sites across two specs:
 
-1. `MeasureLibraryMismatch.cy.ts`
-2. `QDMCQLEditorValidations.cy.ts`
-3. `RunAndExecuteTestCaseButtonValidations.cy.ts`
+1. `QDMCQLEditorValidations.cy.ts`
+2. `RunAndExecuteTestCaseButtonValidations.cy.ts`
 
 Migrate one spec at a time. First classify every interaction as blank-document insertion, full replacement, or short append; remove fixture key commands; replace Ace-only assertions with MADiE validation test ids and one representative visible marker test; add/verify cleanup; and run the full changed spec in headless Chrome before taking the next spec. Make small behavior-preserving refactors during each migration when they eliminate duplicate mechanics or obsolete editor code; keep unrelated redesign out of the migration.
 
