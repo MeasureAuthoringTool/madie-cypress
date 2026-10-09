@@ -1,12 +1,20 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Utilities } from "./Utilities"
 import { CQLLibraryPage } from "./CQLLibraryPage"
+import { MonacoEditor } from "./MonacoEditor"
 
 type SaveCqlOptions = {
     appendNewLine?: boolean
     appendCommand?: string
     collapseEditor?: boolean
     parseSpecialCharSequences?: boolean
+    successTimeout?: number
+    waitForDisabled?: boolean
+}
+
+type MonacoSaveCqlOptions = {
+    appendNewLine?: boolean
+    collapseEditor?: boolean
     successTimeout?: number
     waitForDisabled?: boolean
 }
@@ -243,6 +251,41 @@ export class CQLEditorPage {
         }
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, successTimeout)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        if (waitForDisabled) {
+            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        }
+
+        if (collapseEditor) {
+            CQLEditorPage.collapseEditor()
+        }
+    }
+
+    public static replaceMonacoCqlDocument(cql: string): void {
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, cql)
+    }
+
+    public static replaceMonacoCqlDocumentFromFile(filePath: string): void {
+        MonacoEditor.replaceDocumentFromFile(filePath, EditMeasurePage.monacoCqlEditor)
+    }
+
+    public static saveMonacoCql(options: MonacoSaveCqlOptions = {}): void {
+        const {
+            appendNewLine = true,
+            collapseEditor = false,
+            successTimeout = 50000,
+            waitForDisabled = false
+        } = options
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        if (appendNewLine) {
+            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, '')
+        }
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, successTimeout)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 

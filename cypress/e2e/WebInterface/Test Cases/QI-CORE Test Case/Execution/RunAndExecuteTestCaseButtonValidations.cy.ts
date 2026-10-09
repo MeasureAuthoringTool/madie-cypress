@@ -29,15 +29,27 @@ const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
 const errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
 const measureCQLPFTests = QiCore6Cql.CQL_Populations
 const measureCQL = QiCore6Cql.reduced_CQL_Multiple_Populations
+const cqlFixture = 'cypress/fixtures/CQLForTestCaseExecution.txt'
+
+const replaceCqlFixture = (): void => {
+    CQLEditorPage.replaceMonacoCqlDocumentFromFile(cqlFixture)
+}
+
+const replaceCqlFixtureWithValidationError = (): void => {
+    cy.readFile(cqlFixture).then((cql) => {
+        CQLEditorPage.replaceMonacoCqlDocument(`${cql}\n\ndefine "Cypress invalid CQL": UnknownIdentifier`)
+    })
+}
 
 describe('Run / Execute Test Case button validations', () => {
     beforeEach('Login and Create Measure', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
         OktaLogin.Login()
+        MeasuresPage.searchForMeasureByName(measureName)
     })
 
     afterEach('Logout and Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Run Test Case button is disabled  -- CQL Errors', () => {
@@ -46,10 +58,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceCqlDocument('cypress/fixtures/CQLForTestCaseExecution.txt')
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{home}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('adjfajsdsdjf{}')
+        replaceCqlFixtureWithValidationError()
 
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
@@ -102,16 +111,10 @@ describe('Run / Execute Test Case button validations', () => {
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceCqlDocument('cypress/fixtures/CQLForTestCaseExecution.txt')
-        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        replaceCqlFixture()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
-        TestCasesPage.createTestCase(
-            testCase.title,
-            testCase.description,
-            testCase.group,
-            validTestCaseJson,
-            true
-        )
+        TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, true)
         TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
         TestCasesPage.clickEditforCreatedTestCase()
@@ -124,7 +127,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceCqlDocument('cypress/fixtures/CQLForTestCaseExecution.txt')
+        replaceCqlFixture()
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -185,7 +188,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceCqlDocument('cypress/fixtures/CQLForTestCaseExecution.txt')
+        replaceCqlFixture()
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -257,12 +260,13 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         )
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, validTestCaseJson)
         OktaLogin.Login()
+        MeasuresPage.searchForMeasureByName(measureName)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
@@ -360,12 +364,13 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne')
         OktaLogin.Login()
+        MeasuresPage.searchForMeasureByName(measureName)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Can "Run Test Case" and "Execute Test Case" when a test case has only a warning', () => {
@@ -493,15 +498,16 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             'boolean'
         )
         OktaLogin.Login()
+        MeasuresPage.searchForMeasureByName(measureName)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 20700
         })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Can "Run Test Cases" on test case list page after when created after pristine groups', () => {

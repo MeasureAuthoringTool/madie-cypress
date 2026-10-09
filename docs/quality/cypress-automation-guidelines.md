@@ -88,7 +88,6 @@ Reuse these established paths before adding request code:
 - Use `openExpectedActualTab(...)`, `checkExpectedActualCheckbox(...)`, `uncheckExpectedActualCheckbox(...)`, and `typeExpectedActualValue(...)` instead of raw split-panel interactions.
 - Do not pre-assert visibility on clipped Expected/Actual inputs when the shared helper already normalizes the panel.
 - Toggle Highlighting Results through the shared Results-header helper; the split-view sash can cover the right-edge icon.
-- Treat Ace's transparent keyboard textarea as intentionally hidden. Prove readiness on the visible editor and use the shared JSON editor helper.
 - Keep clear and type contiguous for controlled React inputs that restore prior values between events; assert the final value after re-querying.
 - Use `typeExpectedActualValue(...)` for every Expected/Actual text or numeric field. Pass `{ clearFirst: true }` only when replacing an existing value; initially empty controlled inputs must use the helper's default type-only mode to avoid a clearing rerender.
 - Use `checkExpectedActualCheckbox(...)` and `uncheckExpectedActualCheckbox(...)` for every Expected/Actual checkbox; do not use raw checkbox commands in the split panel.
@@ -99,7 +98,7 @@ Reuse these established paths before adding request code:
 
 ## CQL and Population Criteria
 
-- Reuse `CQLEditorPage.saveCql(...)` and wait for the Save button to become disabled when later setup depends on compiled CQL.
+- Reuse `CQLEditorPage.saveCql(...)` for legacy Ace measure CQL and `CQLEditorPage.saveMonacoCql(...)` for Monaco measure CQL. Both wait for the normal UI Save settlement when later setup depends on compiled CQL. Use `replaceMonacoCqlDocument(...)` or `replaceMonacoCqlDocumentFromFile(...)` rather than duplicating the measure editor selector in specs.
 - Keep CQL fixtures as raw valid CQL; never embed Cypress key commands such as `{home}` or `{del}` in fixture content. For full-document replacement in the Ace editor, use `CQLEditorPage.replaceCqlDocumentText(...)`, which verifies the exact editor value and triggers MADiE's dirty-state handling before the normal UI Save.
 - For basic Monaco CQL keyboard entry, use `MonacoEditor.type(...)` and `MonacoEditor.replace(...)`. They use `cypress-real-events` native click/key events. For a full CQL fixture where Monaco formatting is the accepted contract, use `MonacoEditor.insertTextFromFile(...)` for a blank document or `MonacoEditor.replaceDocumentFromFile(...)` for existing CQL; both use CDP `Input.insertText` after native focus. Use `MonacoEditor.appendDocumentText(...)` for CQL containing characters unsupported by `realType()`, such as braces. Assert validation message text through the generic-errors test id. Monaco virtualizes off-screen lines, so assert `.squiggly-error` only in a scenario where the marker is rendered; do not require it for every diagnostic. Keep fixtures raw—remove Cypress key commands such as `{home}` rather than inserting them through CDP. Do not use the browser clipboard as a CI contract until a focused test proves exact content and persistence in both headless and headed Chrome. The first headless CDP-granted paste attempt did not insert content; the headed attempt was invalid because manual editor interaction changed its contents.
 - Create or update Population Criteria only after valid CQL has settled.

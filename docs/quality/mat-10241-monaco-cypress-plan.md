@@ -145,9 +145,13 @@ The initial remaining-scope search was intentionally limited to `Utilities.typeF
 | Direct typing into CQL editor selectors | 62 specs | Triage individually. Short editing flows can use native Monaco typing; full-document flows need CDP insertion/replacement. |
 | Ace-specific DOM or instance assumptions | 22 specs | In scope where the test validates editor behavior; replace with Monaco-supported selectors or MADiE validation surfaces. |
 | Test Case JSON data consumers | 79 files | Not editor migration work by itself; most consume JSON constants only. |
-| Test Case JSON editor interactions | `TestCasesPage.editTestCaseJson(...)` and targeted UI consumers | Out of scope for MAT-10241. This remains an Ace-specific JSON-editor migration and requires its own proof and story. |
+| Test Case JSON editor interactions | `TestCasesPage.editTestCaseJson(...)` and targeted UI consumers | In scope under the reviewed `madie-measure#1706` implementation. The shared Monaco edit path is in progress; full DEV regression found invalid-JSON failures that require focused follow-up. |
 
 The 32 direct CQL writers include the original targets plus `DraftAndVersionValidations.cy.ts`, `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, `MeasureSharing.cy.ts`, `MeasureExportValidations.cy.ts`, `QDMMeasureExportValidations.cy.ts`, `QDMSDESubTabValidations.cy.ts`, and `QDMTestCaseRelevantElementWarning.cy.ts`. The original search undercounted `QDMCQLEditorValidations.cy.ts` because it found only file helper calls and not its direct whole-document `.type(...)` calls. Do not change the shared `CQLEditorPage.replaceCqlDocument*` implementation globally: it is still an Ace bridge with many unproven measure and test-case consumers. Migrate and prove consumers individually through `MonacoEditor`.
+
+### Test Case JSON Migration: `TestCasesPage.editTestCaseJson(...)` (in progress)
+
+The shared Test Case JSON edit path now uses `MonacoEditor.replaceDocument()` against the active `[data-testid="split-view-view"] div.view-lines` surface. It no longer relies on the removed JSON-editor test id, a hidden Ace input, forced synthetic select-all, or a synthetic paste event. The existing UI save flow remains unchanged. A full DEV Run/Execute regression exposed four `JSON Failing` / `Invalid` scenarios, so the next migration session must verify that the requested JSON reaches the editable Monaco model and is present in the UI Save payload before this conversion can be marked complete.
 
 ### Completed Measure Editor Migration: `MeasureLibraryMismatch.cy.ts`
 

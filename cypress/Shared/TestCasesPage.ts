@@ -7,6 +7,7 @@ import { MeasuresPage } from './MeasuresPage'
 import { step } from '../utils/step'
 import { FixtureOwner, TestData } from './TestData'
 import { LockedEntityValidation } from './LockedEntityValidation'
+import { MonacoEditor } from './MonacoEditor'
 
 export type TestCase = {
   title: string
@@ -212,6 +213,7 @@ export class TestCasesPage {
   public static readonly errorToastMsg = '[data-testid="error-toast"]'
   public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
   public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
+  public static readonly monacoJsonEditorSurface = '[data-testid="split-view-view"] div.view-lines'
   public static readonly testCaseTitle = '[data-testid="test-case-title"]'
   public static readonly roTestCaseTitle = '[id="test-case-title"]'
   public static readonly reportsButton = '[data-testid="reports-button"]'
@@ -799,40 +801,11 @@ export class TestCasesPage {
 
     this.waitForJsonEditorReady()
 
-    const parsedJson = JSON.parse(testCaseJson) as {
-      id?: string
-      entry?: Array<{ resource?: { id?: string } }>
-    }
-    const editorMarker = parsedJson.id ?? parsedJson.entry?.[0]?.resource?.id
-    expect(editorMarker, 'test-case JSON requires a Bundle or first-resource ID').to.be.a('string').and.not.be.empty
-
-    cy.get(TestCasesPage.aceEditorJsonInput)
-      .click({ force: true })
-      // Ace keeps its document separate from the hidden text input. Select the
-      // existing document, then paste the complete JSON in one event. Separate
-      // clear/type commands let the editor restore its generated default JSON
-      // between commands, which appends a second Bundle and makes it invalid.
-      .type('{selectall}', { force: true })
-
-    cy.get(TestCasesPage.aceEditorJsonInput).then(($input) => {
-      const clipboardData = new DataTransfer()
-      clipboardData.setData('text/plain', testCaseJson)
-      $input[0].dispatchEvent(new ClipboardEvent('paste', {
-        bubbles: true,
-        cancelable: true,
-        clipboardData,
-      }))
-    })
-
-    cy.get(TestCasesPage.aceEditor).should('contain.text', editorMarker)
+    MonacoEditor.replaceDocument(TestCasesPage.monacoJsonEditorSurface, testCaseJson)
   }
 
   public static waitForJsonEditorReady(): void {
-    Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-    Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-    cy.get(TestCasesPage.aceEditor).should('exist')
-    cy.get(TestCasesPage.aceEditor).should('be.visible')
-    cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+    cy.get(TestCasesPage.monacoJsonEditorSurface).should('be.visible')
   }
 
   public static saveTestCaseAndWait(options: {
