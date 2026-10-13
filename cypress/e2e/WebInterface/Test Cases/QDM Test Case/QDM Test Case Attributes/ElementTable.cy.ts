@@ -132,7 +132,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //asserting value that appears in the element table
-        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  http://snomed.info/sct : 112648003')
+        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  SNOMEDCT : 112648003')
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
