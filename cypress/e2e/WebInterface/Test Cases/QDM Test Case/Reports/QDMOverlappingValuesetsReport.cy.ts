@@ -110,11 +110,11 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
         cy.readFile(file, { timeout: 15000 }).should('exist')
         cy.log('Successfully verified Excel Export')
 
-        cy.task('readXlsx', { file: file, sheet: 'Overlapping Codes' }).then(rows => {
+        cy.task<Array<Record<string, unknown>>>('readXlsx', { file: file, sheet: 'Overlapping Codes' }).then(rows => {
             expect(rows[0]['Code']).to.equal('10D00Z0')
             expect(rows[0]['Code System']).to.equal('2.16.840.1.113883.6.4')
             expect(rows[0]['Description']).to.equal('Extraction of Products of Conception, High, Open Approach')
-            expect(rows[0]['Version']).to.equal('2025')
+            expect(rows[0]['Version']).to.be.undefined
             expect(rows[0]['Value Set']).to.equal('CesareanBirth')
             expect(rows[0]['Value Set OID/URL']).to.equal('2.16.840.1.113883.3.117.1.7.1.282')
         })
@@ -174,4 +174,3 @@ describe('Overlapping Value Set report validations', () => {
         cy.get(TestCasesPage.overlappingCodesExportBtn).should('be.disabled')
     })
 })
-

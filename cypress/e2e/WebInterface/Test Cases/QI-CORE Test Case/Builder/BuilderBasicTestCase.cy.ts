@@ -17,9 +17,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { Profile, TestCaseBuilder } from '../../../../../Shared/TestCaseBuilder'
 
-const timestamp = Date.now()
-let measureName = 'BuilderBasicTC' + timestamp
-let CqlLibraryName = 'BuilderBasicTCLib' + timestamp
+let measureName = ''
+let CqlLibraryName = ''
 const cql = QiCore6Cql.cqlCMS125
 // TestCase #1 from the real measure
 const testCase1: TestCase = {
@@ -62,6 +61,10 @@ const strats: Array<Stratification> = [
 
 describe('Test Case Builder Basics', () => {
     beforeEach('Create measure and login', () => {
+        const timestamp = Date.now()
+        measureName = 'BuilderBasicTC' + timestamp
+        CqlLibraryName = 'BuilderBasicTCLib' + timestamp
+
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: cql })
         MeasureGroupPage.CreateMeasureGroupAPI(
             MeasureType.process,
@@ -78,7 +81,7 @@ describe('Test Case Builder Basics', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Create a QiCore6 test case using the UI Builder', () => {
@@ -91,6 +94,7 @@ describe('Test Case Builder Basics', () => {
         TestCaseBuilder.addEditNewResource(Profile.Patient)
 
         Utilities.dropdownSelect('[data-testid="code-selector-Patient.gender"]', 'female')
+        cy.get('[data-testid="code-selector-Patient.gender"]').should('contain.text', 'Female')
 
         TestCaseBuilder.applyAndWait()
         TestCaseBuilder.selectLeftMenu(' *Identifier')
@@ -177,13 +181,9 @@ describe('Test Case Builder Basics', () => {
         cy.get('#time').eq(0).type('080000AM')
         TestCaseBuilder.applyAndWait()
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
-
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get('[data-testid="test-case-title-0_testCaseValidationStatus"]').should('contain.text', 'Pending')
+        TestCasesPage.saveTestCaseAndWait()
+        TestCasesPage.openTestCasesTabAndWaitForList()
+        cy.contains(`${TestCasesPage.testCaseListTable} tr`, testCase1.title).should('contain.text', 'Pending')
 
         TestCasesPage.clickEditforCreatedTestCase()
 
