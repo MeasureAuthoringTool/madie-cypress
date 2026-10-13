@@ -118,14 +118,14 @@ describe('Practitioner Attribute', () => {
         ).click()
         Utilities.waitForElementVisible('[data-testid="option-2.16.840.1.114222.4.11.837"]', 734000)
         cy.get('[data-testid="option-2.16.840.1.114222.4.11.837"]').click() //Select Ethnicity
-        cy.get(TestCasesPage.codeSystemSelector).eq(2).click()
-        QDMElements.selectCodeSystemOption('urn:oid:2.16.840.1.113883.6.238')
+        cy.get(TestCasesPage.codeSystemSelector).eq(2).should('be.visible').click()
+        QDMElements.selectCodeSystemOption('CDCREC')
         cy.get(TestCasesPage.codeSelector).eq(2).click()
         cy.get('[data-testid=option-2135-2]').click() //Select Hispanic or Latino
         cy.get(TestCasesPage.addAttribute).click()
         cy.get(TestCasesPage.attributeChip).should(
             'contain.text',
-            'Performer - Practitioner Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: urn:oid:2.16.840.1.113883.6.238 : 2135-2',
+            'Performer - Practitioner Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: CDCREC : 2135-2',
         )
     })
 })
