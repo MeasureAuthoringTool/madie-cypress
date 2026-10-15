@@ -543,7 +543,7 @@ export class TestCasesPage {
   public static grabElementId(eleTableEntry?: number): void {
     let attrData = ''
     let elemid = ''
-    let elementId = []
+    let elementId: string[] = []
     if (eleTableEntry === null || eleTableEntry === undefined) {
       eleTableEntry = 1
     }
@@ -627,7 +627,7 @@ export class TestCasesPage {
   public static clickCreateTestCaseButton(): void {
     step('Click Create Test Case Button')
     //setup for grabbing the measure create call
-    let measureID = null
+    let measureID: string | null = null
     TestData.readMeasureId()
       .then((id) => {
         measureID = id
@@ -726,6 +726,7 @@ export class TestCasesPage {
     testCaseSeries: string,
     testCaseJson?: string,
     handleElementsTab?: boolean,
+    useNativeJsonClear = false,
   ): void {
     step(
       'Create a Test Case with Title: ' +
@@ -777,7 +778,7 @@ export class TestCasesPage {
           .should('eq', 200)
       }
 
-      this.editTestCaseJson(testCaseJson, handleElementsTab)
+      this.editTestCaseJson(testCaseJson, handleElementsTab, useNativeJsonClear)
 
       this.activateTab(this.detailsTab, 30000)
 
@@ -790,7 +791,7 @@ export class TestCasesPage {
     }
   }
 
-  public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false): void {
+  public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false, useNativeClear = false): void {
     if (navigateToJsonTab) {
       cy.get(TestCasesPage.topJsonTab, { timeout: 30000 })
         .should('not.have.attr', 'aria-disabled', 'true')
@@ -800,6 +801,11 @@ export class TestCasesPage {
     }
 
     this.waitForJsonEditorReady()
+
+    if (useNativeClear) {
+      MonacoEditor.replaceDocumentAfterNativeClear(TestCasesPage.monacoJsonEditorSurface, testCaseJson)
+      return
+    }
 
     MonacoEditor.replaceDocument(TestCasesPage.monacoJsonEditorSurface, testCaseJson)
   }

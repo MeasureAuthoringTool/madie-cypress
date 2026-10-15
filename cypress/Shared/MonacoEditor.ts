@@ -79,6 +79,28 @@ export class MonacoEditor {
         this.insertTextViaCdp(value)
     }
 
+    public static replaceDocumentAfterNativeClear(editorSurfaceSelector: string, value: string): void {
+        if (!Cypress.isBrowser({ family: 'chromium' })) {
+            throw new Error('MonacoEditor.replaceDocumentAfterNativeClear requires a Chromium browser because it uses CDP Input.insertText.')
+        }
+
+        cy.get(editorSurfaceSelector)
+            .should('be.visible')
+            .realClick()
+
+        cy.realPress('F1')
+        cy.realType('Select to Bracket')
+        cy.realPress('Enter')
+        cy.realPress('Delete')
+
+        // CDP inserts at the current cursor position. Confirm the native selection
+        // was actually cleared so an editor-focus regression cannot append a second
+        // JSON document and surface misleading validation errors.
+        cy.get(editorSurfaceSelector).should('not.contain.text', 'resourceType')
+
+        this.insertTextViaCdp(value)
+    }
+
     private static insertTextViaCdp(value: string): void {
 
         cy.then(() => {

@@ -35,6 +35,7 @@ Do not sacrifice a higher priority for a lower one.
 - Reuse `TestData` helpers before creating new request, fixture, or token logic.
 - Reuse existing page-object and domain-helper patterns.
 - Do not invent new abstractions unless they remove real duplication.
+- When touching a Cypress spec, support file, or helper with `before`, `beforeEach`, `afterEach`, or `after`, inspect each changed lifecycle path. Hooks and commands that enqueue Cypress work must return their terminal `Cypress.Chainable`; cleanup helpers must return the chain that completes their cleanup.
 
 ## Cypress Rules
 

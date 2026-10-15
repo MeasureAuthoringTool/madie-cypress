@@ -149,9 +149,9 @@ The initial remaining-scope search was intentionally limited to `Utilities.typeF
 
 The 32 direct CQL writers include the original targets plus `DraftAndVersionValidations.cy.ts`, `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, `MeasureSharing.cy.ts`, `MeasureExportValidations.cy.ts`, `QDMMeasureExportValidations.cy.ts`, `QDMSDESubTabValidations.cy.ts`, and `QDMTestCaseRelevantElementWarning.cy.ts`. The original search undercounted `QDMCQLEditorValidations.cy.ts` because it found only file helper calls and not its direct whole-document `.type(...)` calls. Do not change the shared `CQLEditorPage.replaceCqlDocument*` implementation globally: it is still an Ace bridge with many unproven measure and test-case consumers. Migrate and prove consumers individually through `MonacoEditor`.
 
-### Test Case JSON Migration: `TestCasesPage.editTestCaseJson(...)` (in progress)
+### Test Case JSON Migration: `TestCasesPage.editTestCaseJson(...)` (completed)
 
-The shared Test Case JSON edit path now uses `MonacoEditor.replaceDocument()` against the active `[data-testid="split-view-view"] div.view-lines` surface. It no longer relies on the removed JSON-editor test id, a hidden Ace input, forced synthetic select-all, or a synthetic paste event. The existing UI save flow remains unchanged. A full DEV Run/Execute regression exposed four `JSON Failing` / `Invalid` scenarios, so the next migration session must verify that the requested JSON reaches the editable Monaco model and is present in the UI Save payload before this conversion can be marked complete.
+The shared Test Case JSON edit path uses `MonacoEditor.replaceDocumentAfterNativeClear()` against the active `[data-testid="split-view-view"] div.view-lines` surface when a default Bundle must be replaced. It invokes Monaco's `Select to Bracket` command, native Delete, and CDP insertion so Chrome does not append a second JSON document after a failed `Control+A` selection. The existing UI save flow remains unchanged. The full DEV headed and headless `RunAndExecuteTestCaseButtonValidations.cy.ts` regression passed all 9 tests after proving valid, invalid, warning, missing, and multi-population JSON scenarios.
 
 ### Completed Measure Editor Migration: `MeasureLibraryMismatch.cy.ts`
 
@@ -163,9 +163,17 @@ All 12 CQL documents in this spec now use `MonacoEditor.replaceDocument()` or `r
 
 ### Remaining MAT-10241 Migration Scope
 
-The remaining direct full-document CQL scope contains 20 call sites across 10 specs. The next focused original target is:
+The proven regression batch is complete:
 
-1. `RunAndExecuteTestCaseButtonValidations.cy.ts`
+- `RunAndExecuteTestCaseButtonValidations.cy.ts` now uses the shared Monaco CQL and Test Case JSON paths. Its complete DEV regression passed all nine scenarios in headed and headless Chrome.
+- `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, and `MeasureSharing.cy.ts` use the Monaco helpers rather than Ace document-writing paths. The migrated Measure Buttons regression passed all 11 DEV headless scenarios. Measure Sharing's remaining DEV failure is an application authorization regression: a non-owner's visible `View` action exposes an enabled share action; the Cypress assertion remains intentionally strict.
+- The shared JSON replacement path clears the generated Bundle through Monaco's `Select to Bracket` command followed by native Delete before CDP insertion. This prevents the extra closing-brace/document-append behavior seen with synthetic select-all input.
+
+The remaining direct full-document CQL scope contains seven calls across four specs: the paired QI Core and QDM measure-export validation specs, `DraftAndVersionValidations.cy.ts`, `QDMSDESubTabValidations.cy.ts`, and `QDMTestCaseRelevantElementWarning.cy.ts`.
+
+### Next Migration Batch: Paired Measure Export Validations
+
+Migrate `QI Core Measure Export/MeasureExportValidations.cy.ts` and `QDMMeasureExport/QDMMeasureExportValidations.cy.ts` together. They are parallel export regressions and contain four of the seven remaining direct whole-document replacements: one blank-CQL validation and one mismatched-CQL validation per measure model. Use the existing Monaco CQL helpers, preserve the API setup and export assertions, verify lifecycle cleanup returns its terminal chain where touched, and prove each complete spec in headless Chrome.
 
 Migrate one spec at a time. First classify every interaction as blank-document insertion, full replacement, or short append; remove fixture key commands; replace Ace-only assertions with MADiE validation test ids and one representative visible marker test; add/verify cleanup; and run the full changed spec in headless Chrome before taking the next spec. Make small behavior-preserving refactors during each migration when they eliminate duplicate mechanics or obsolete editor code; keep unrelated redesign out of the migration.
 

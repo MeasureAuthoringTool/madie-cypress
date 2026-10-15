@@ -85,6 +85,7 @@ Reuse these established paths before adding request code:
 
 ## Test Case Split Views
 
+- For full-document replacement in the Test Case JSON Monaco editor when its default Bundle is present, use `MonacoEditor.replaceDocumentAfterNativeClear(...)` through the native-clear option in `TestCasesPage.createTestCase(...)` or `editTestCaseJson(...)`. It uses Monaco's Command Palette `Select to Bracket`, native Delete, and CDP insertion; `Control+A` followed by CDP insertion can append a second JSON document in Chrome.
 - Use `openExpectedActualTab(...)`, `checkExpectedActualCheckbox(...)`, `uncheckExpectedActualCheckbox(...)`, and `typeExpectedActualValue(...)` instead of raw split-panel interactions.
 - Do not pre-assert visibility on clipped Expected/Actual inputs when the shared helper already normalizes the panel.
 - Toggle Highlighting Results through the shared Results-header helper; the split-view sash can cover the right-edge icon.

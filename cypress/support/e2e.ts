@@ -28,6 +28,9 @@ export { }
 
 require('cypress-commands')
 
+let allocatedUser: string | null = null
+let allocatedAltUser: string | null = null
+
 
 Cypress.on('uncaught:exception', (err, runnable) => {
     // returning false here prevents Cypress from
@@ -39,7 +42,7 @@ Cypress.on('test:after:run', (test, runnable) => {
     if (test.state === 'failed') {
         addContext({ test }, {
             title: 'Screenshot',
-            value: `assets/${Cypress.spec.name}/${runnable.parent.title} -- ${test.title} (failed).png`
+            value: `assets/${Cypress.spec.name}/${runnable.parent?.title ?? runnable.title} -- ${test.title} (failed).png`
         })
     }
 })
@@ -49,19 +52,35 @@ before(() => {
     return Environment.initialize().then(() => {
         return cy.task('getAvailableUser').then((user) => {
             expect(user, 'No users available').to.not.be.null;
+            allocatedUser = user as string
             Cypress.expose('selectedUser', user)
         }).then(() => {
             return cy.task('getAvailableAltUser').then((altUser) => {
+                if (!altUser) {
+                    const user = allocatedUser
+                    allocatedUser = null
+                    Cypress.expose('selectedUser', null)
+                    return cy.then(() => {
+                        return user ? cy.task('releaseUser', user) : undefined
+                    }).then(() => {
+                        expect(altUser, 'No altUsers available').to.not.be.null;
+                        return undefined
+                    })
+                }
                 expect(altUser, 'No altUsers available').to.not.be.null;
+                allocatedAltUser = altUser as string
                 Cypress.expose('selectedAltUser', altUser)
+                return undefined
             })
         })
     })
 })
 
 after(() => {
-    const user = Cypress.expose('selectedUser')
-    const altUser = Cypress.expose('selectedAltUser')
+    const user = allocatedUser
+    const altUser = allocatedAltUser
+    allocatedUser = null
+    allocatedAltUser = null
     return cy.then(() => {
         return user ? cy.task('releaseUser', user) : undefined
     }).then(() => {
