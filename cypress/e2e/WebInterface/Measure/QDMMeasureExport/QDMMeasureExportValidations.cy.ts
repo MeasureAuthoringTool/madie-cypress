@@ -7,10 +7,11 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Header } from '../../../../Shared/Header'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'QDMExportValidations' + Date.now()
 let CqlLibraryName = 'QDMExportValidationsLib' + Date.now()
-let randValue = Math.floor(Math.random() * 1000 + 1)
+let setupSequence = 0
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
@@ -50,10 +51,20 @@ const measureData: CreateMeasureOptions = {
 
 const invalidCqlDefinition = '\ndefine "Invalid CQL":\n'
 
+const nextSetupSuffix = () => `${Date.now()}${++setupSequence}`
+
+const openMeasuresList = (refreshAlias: `@${string}`): void => {
+    cy.get(Header.measures).then(($measuresTab) => {
+        $measuresTab[0].click()
+    })
+    MeasuresPage.waitForMeasureListRefresh(refreshAlias)
+}
+
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
     before('Create New Measure and Login', () => {
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        const suffix = nextSetupSuffix()
+        newMeasureName = `${measureName}${suffix}`
+        newCqlLibraryName = `${CqlLibraryName}${suffix}`
 
         const measureOptions: CreateMeasureOptions = {
             measureCql: qdmMeasureCQL,
@@ -63,17 +74,18 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         }
         CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.QDM, measureOptions)
         MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population', 'Encounter')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        TestData.saveMeasureCql(qdmMeasureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
     after('Cleanup', () => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        return Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward, Developers, and Type', () => {
-        cy.get(Header.measures).click()
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForMetadataExport')
+        openMeasuresList('@measureListRefreshForMetadataExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
 
         cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
@@ -86,43 +98,46 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
 describe('Error Message on Measure Export when the Measure has missing/invalid CQL', () => {
     beforeEach('Create New Measure and Login', () => {
-        measureData.ecqmTitle = measureName + randValue
-        measureData.cqlLibraryName = CqlLibraryName + randValue
+        const suffix = nextSetupSuffix()
+        measureData.ecqmTitle = `${measureName}${suffix}`
+        measureData.cqlLibraryName = `${CqlLibraryName}${suffix}`
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(qdmMeasureCQL).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
     afterEach('Cleanup', () => {
-        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
+        return Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceCqlDocumentText('', EditMeasurePage.cqlEditorTextBox)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.clearMonacoCqlDocument()
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
-        cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForExport')
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForExport')
         cy.get(Header.measures).click()
-        MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForExport')
+        MeasuresPage.waitForMeasureListRefresh('@measureListRefreshForExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
         cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
-            appendCommand: invalidCqlDefinition,
-            parseSpecialCharSequences: false,
+        CQLEditorPage.saveMonacoCql({
+            appendText: invalidCqlDefinition.trimStart(),
             waitForDisabled: true
         })
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Error')
 
-        cy.get(Header.measures).click()
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForInvalidCqlExport')
+        openMeasuresList('@measureListRefreshForInvalidCqlExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
         cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure')
         cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
@@ -131,22 +146,24 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
 describe('Error Message on Measure Export when the Measure does not have Population Criteria', () => {
     before('Create New Measure and Login', () => {
-        measureData.ecqmTitle = measureName + randValue
-        measureData.cqlLibraryName = CqlLibraryName + randValue
+        const suffix = nextSetupSuffix()
+        measureData.ecqmTitle = `${measureName}${suffix}`
+        measureData.cqlLibraryName = `${CqlLibraryName}${suffix}`
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(qdmMeasureCQL).then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
     after('Cleanup', () => {
-        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
+        return Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
-        cy.get(Header.measures).click()
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForMissingPopulationCriteriaExport')
+        openMeasuresList('@measureListRefreshForMissingPopulationCriteriaExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
 
         cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
@@ -156,34 +173,38 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
 describe('Error Message on Measure Export when the Population Criteria does not match', () => {
     before('Create New Measure and Login', () => {
-        measureData.ecqmTitle = measureName + randValue
-        measureData.cqlLibraryName = CqlLibraryName + randValue
+        const suffix = nextSetupSuffix()
+        measureData.ecqmTitle = `${measureName}${suffix}`
+        measureData.cqlLibraryName = `${CqlLibraryName}${suffix}`
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(qdmMeasureCQL).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Numerator')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
     after('Cleanup', () => {
-        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
+        return Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Population Criteria does not match with CQL', () => {
-        cy.get(Header.measures).click()
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForMismatchedCqlEdit')
+        openMeasuresList('@measureListRefreshForMismatchedCqlEdit')
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.openCqlEditor()
-        CQLEditorPage.replaceCqlDocumentText(updatedMeasureCQL, EditMeasurePage.cqlEditorTextBox)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.replaceMonacoCqlDocument(updatedMeasureCQL)
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.libWarningTopMsg).should(
             'contain.text',
             'Library statement was incorrect. MADiE has overwritten it.'
         )
 
-        cy.get(Header.measures).click()
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForMismatchedCqlExport')
+        openMeasuresList('@measureListRefreshForMismatchedCqlExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
         cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
         cy.get('[class="error-message"] > ul > :nth-child(1)').should(
@@ -203,7 +224,7 @@ describe('Error Message on Measure Export for Publish when measure was versioned
     */
 
     it('Verify error message when not able to perform Export for Publish', () => {
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         cy.visit('/measures/64f0d9e456d636294b157ea0/edit/details/')
 

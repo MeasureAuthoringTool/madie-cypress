@@ -1,7 +1,6 @@
-import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
 import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
-import { v4 as uuidv4 } from 'uuid'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
@@ -9,6 +8,7 @@ import { Header } from '../../../../Shared/Header'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { LandingPage } from '../../../../Shared/LandingPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const timestamp = Date.now()
 let measureName = 'QiCoreExportValidations' + timestamp
@@ -33,80 +33,36 @@ const invalidCqlDefinition = '\ndefine "Invalid CQL":\n'
 
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
     before('Create New Measure and Login', () => {
-        OktaLogin.setupUserSession(false)
-
-        //Create Measure with out Steward and Developer
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measure?addDefaultCQL=false',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + accessToken?.value
-                },
-                body: {
-                    measureName: measureName,
-                    cqlLibraryName: CqlLibraryName,
-                    model: 'QI-Core v4.1.1',
-                    versionId: uuidv4(),
-                    measureSetId: uuidv4(),
-                    cql: measureCQL,
-                    ecqmTitle: 'eCQMTitle',
-                    measurementPeriodStart: mpStartDate + 'T00:00:00.000Z',
-                    measurementPeriodEnd: mpEndDate + 'T00:00:00.000Z'
-                }
-            }).then((response) => {
-                let currentUser = Cypress.expose('selectedUser')
-                expect(response.status).to.eql(201)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/versionId', response.body.versionId)
-                cy.writeFile('cypress/fixtures/' + currentUser + '/measureSetId', response.body.measureSetId)
-            })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, {
+            measureCql: measureCQL,
+            blankMetadata: true,
+            ecqmTitle: 'eCQMTitle',
+            mpStartDate,
+            mpEndDate
         })
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
     after('Cleanup', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
-        let currentUser = Cypress.expose('selectedUser')
-
         cy.get(Header.mainMadiePageButton).click()
+        MeasuresPage.selectMeasure()
+        cy.get('[data-testid="export-action-btn"]').should('be.visible').and('be.enabled').click()
+        cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
-
-                cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
-                cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
-                    'contain.text',
-                    'Missing Measure Developers'
-                )
-                cy.get('[data-testid="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
-                cy.get('[data-testid="error-message"] > ul > :nth-child(3)').should(
-                    'contain.text',
-                    'Missing Description'
-                )
-            })
+        cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
+        cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
+            'contain.text',
+            'Missing Measure Developers'
+        )
+        cy.get('[data-testid="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
+        cy.get('[data-testid="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
     })
 })
 
@@ -115,24 +71,26 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
     afterEach('Log out and Cleanup', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceCqlDocumentText('', EditMeasurePage.cqlEditorTextBox)
+        CQLEditorPage.clearMonacoCqlDocument()
         cy.intercept('PUT', '/api/measures/**').as('saveEmptyCql')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
         cy.wait('@saveEmptyCql').its('response.statusCode').should('eq', 200)
 
-        cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForExport')
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForExport')
         cy.get(Header.measures).click()
-        MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForExport')
+        MeasuresPage.waitForMeasureListRefresh('@measureListRefreshForExport')
         MeasuresPage.selectMeasure()
         cy.get('[data-testid="export-action-btn"]').should('be.visible').and('be.enabled').click()
         cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
@@ -141,9 +99,8 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
-            appendCommand: invalidCqlDefinition,
-            parseSpecialCharSequences: false,
+        CQLEditorPage.saveMonacoCql({
+            appendText: invalidCqlDefinition.trimStart(),
             waitForDisabled: true
         })
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Error')
@@ -158,43 +115,30 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 describe('Error Message on Measure Export when the Measure does not have Population Criteria', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, waitForDisabled: true })
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        return cy.then(() => undefined)
     })
 
-    after('Log out and Cleanup', () => {
-        Utilities.deleteMeasure()
+    after('Cleanup', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
-        let currentUser = Cypress.expose('selectedUser')
         cy.get(Header.measures).click()
+        MeasuresPage.selectMeasure()
+        cy.get('[data-testid="export-action-btn"]').should('be.visible').and('be.enabled').click()
+        cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
-
-                cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
-                cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
-                    'contain.text',
-                    'Missing Population Criteria'
-                )
-            })
+        cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
+        cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
+            'contain.text',
+            'Missing Population Criteria'
+        )
     })
 })
 
@@ -203,29 +147,27 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
-    after('Log out and Cleanup', () => {
-        Utilities.deleteMeasure()
+    after('Cleanup', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
         cy.get(Header.measures).click()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.openCqlEditor()
-        CQLEditorPage.replaceCqlDocumentText(
-            updatedMeasureCQL.replace('SimpleFhirLibrary', CqlLibraryName),
-            EditMeasurePage.cqlEditorTextBox
-        )
+        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.replaceMonacoCqlDocument(updatedMeasureCQL.replace('SimpleFhirLibrary', CqlLibraryName))
         cy.intercept('PUT', '/api/measures/**').as('saveMismatchedCql')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, waitForDisabled: true })
         cy.wait('@saveMismatchedCql').its('response.statusCode').should('eq', 200)
 
-        cy.intercept('PUT', '/api/measures/searches?*').as('reloadMeasuresForMismatchedExport')
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForMismatchedExport')
         cy.get(Header.measures).click()
-        MeasuresPage.waitForMeasureListRefresh('@reloadMeasuresForMismatchedExport')
+        MeasuresPage.waitForMeasureListRefresh('@measureListRefreshForMismatchedExport')
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
         cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
         cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should(
@@ -238,97 +180,30 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 describe('Error Message on Measure Export when the PC does not have Improvement Notation set', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
-    after('Log out and Cleanup', () => {
-        Utilities.deleteMeasure()
+    after('Cleanup', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Error Message on Measure Export when Population Criteria does not have IN set', () => {
-        let currentUser = Cypress.expose('selectedUser')
-        // based on CreateProportionMeasureGroupAPI, but hardcoded values for this test
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-                .should('exist')
-                .then((fileContents) => {
-                    cy.request({
-                        url: '/api/measures/' + fileContents + '/groups',
-                        method: 'POST',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken?.value
-                        },
-                        body: {
-                            id: fileContents,
-                            scoring: 'Proportion',
-                            populationBasis: 'boolean',
-                            populations: [
-                                {
-                                    id: uuidv4(),
-                                    name: 'initialPopulation',
-                                    definition: 'ipp'
-                                },
-                                {
-                                    id: uuidv4(),
-                                    name: 'denominator',
-                                    definition: 'denom'
-                                },
-                                {
-                                    id: uuidv4(),
-                                    name: 'numerator',
-                                    definition: 'num'
-                                }
-                            ],
-                            scoringUnit: {
-                                label: 'ml milliLiters',
-                                value: {
-                                    code: 'ml',
-                                    name: 'milliLiters',
-                                    guidance: '',
-                                    system: 'https://clinicaltables.nlm.nih.gov/'
-                                }
-                            },
-                            measureGroupTypes: ['Outcome'],
-                            stratifications: []
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        cy.writeFile('cypress/fixtures/measureGroupId', response.body.id)
-                    })
-                })
-        })
+        MeasureGroupPage.CreateProportionMeasureGroupWithoutImprovementNotationAPI()
 
-        OktaLogin.Login()
+        cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForImprovementNotationExport')
+        cy.get(Header.measures).click()
+        MeasuresPage.waitForMeasureListRefresh('@measureListRefreshForImprovementNotationExport')
+        MeasuresPage.selectMeasure()
+        cy.get('[data-testid="export-action-btn"]').should('be.visible').and('be.enabled').click()
+        cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
 
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[class="px-1"]')
-                    .find('[class=" cursor-pointer"]')
-                    .scrollIntoView()
-                    .click()
-                cy.get('[data-testid="export-action-btn"]').should('be.visible')
-                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="export-action-btn"]').click()
-                cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Executable Export').click()
-
-                cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-                cy.get('[class="error-message"] > ul > :nth-child(1)').should(
-                    'contain.text',
-                    'At least one Population Criteria is missing Improvement Notation'
-                )
-            })
+        cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+        cy.get('[class="error-message"] > ul > :nth-child(1)').should(
+            'contain.text',
+            'At least one Population Criteria is missing Improvement Notation'
+        )
     })
 })
 
@@ -339,7 +214,7 @@ describe('Error Message on Measure Export for Publish when measure was versioned
         'Screening for Abnormal Glucose Metabolism in Patients at Risk of Developing Diabetes: FHIR'
 
     it('Verify error message when not able to perform Export for Publish', () => {
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         // navigate to the all measures tab
         Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)

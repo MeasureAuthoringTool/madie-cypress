@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-10-06
+Last updated: 2026-10-15
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -57,8 +57,10 @@ Current focus order:
 3. Complete remaining Test Case Details, JSON, Test Cases, and Expected/Actual migrations by repeated interaction pattern.
 4. Verify CI collection for specs that produce no runner output before treating them as test failures.
 5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
-6. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
-7. Establish an incremental `strictNullChecks` migration. The baseline command reports existing nullability and Cypress chain-subject errors across shared helpers and legacy specs, so do not enable it as a blocking suite-wide gate yet. Fix strict diagnostics in touched files, measure the baseline, and introduce a non-blocking report before defining a ratcheted CI gate.
+6. Replace unconditional alternate-user allocation in `cypress/support/e2e.ts` with an explicit, compatible alt-user requirement contract. The support hook currently claims both a primary and alternate account for every spec run, although the audited export specs do not use an alternate account and 92 files do. This creates avoidable pool contention and makes headed reruns more likely to receive a different available account after a failed run releases its locks.
+7. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
+8. Establish an incremental `strictNullChecks` migration. The baseline command reports existing nullability and Cypress chain-subject errors across shared helpers and legacy specs, so do not enable it as a blocking suite-wide gate yet. Fix strict diagnostics in touched files, measure the baseline, and introduce a non-blocking report before defining a ratcheted CI gate.
+9. Audit direct Save clicks after `replaceMonacoCqlDocument(...)` or `replaceMonacoCqlDocumentFromFile(...)`. QI-Core and QDM export mismatch paths now prove that appending a newline after replacement is needed before valid-CQL save/validation; start with `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, and `RunAndExecuteTestCaseButtonValidations.cy.ts`, preserving explicit invalid-CQL assertions.
 
 Work boundaries:
 
@@ -67,6 +69,7 @@ Work boundaries:
 - Do not combine unrelated export, transfer, highlighting, and editor refactors.
 - Do not add retries or weaker assertions for known product defects.
 - Do not perform a suite-wide mechanical conversion. Migrate one repeated interaction bucket at a time, starting with consumers already covered by a shared helper.
+- Do not change the allocation default globally until alt-user consumers have an explicit opt-in path and representative multi-user, reviewer, and primary-only specs prove their allocation and release behavior.
 
 ## Recently Completed
 
@@ -82,7 +85,7 @@ The Cypress 16.1.0 compatibility baseline is complete: clean installation, binar
 | B — Test Case readiness | Specs bypassing `TestCasesPage` save, execution, list, Expected/Actual, and status helpers. | Focused save/run/list flow proves response completion and named-row status. | Product-result expectation changes. |
 | C — UI interaction debt | Repeated forced interactions and fixed waits in shared helpers, import, highlighting, and editor clusters. | Replace one repeated reason with a selector/readiness helper and validate a consumer. | One-off force-clicks intentionally targeting native controls. |
 | D — Service setup tail | Repeated fixture-path and access-token plumbing in service/admin specs. | Existing `TestData` or request helper replaces a repeated pattern; service test remains API-focused. | Moving UI rendering assertions into service tests. |
-| E — Account/session efficiency | UI specs that repeatedly perform full login but do not validate authentication or switch users. | Explicit `SessionLogin()` eligibility review and focused role/ownership coverage. | Reviewer, permission, multi-user, and logout scenarios. |
+| E — Account/session efficiency | UI specs that repeatedly perform full login but do not validate authentication or switch users; unconditional alt-account allocation in global support. | Explicit `SessionLogin()` eligibility review; an opt-in alternate-account contract; focused primary-only, multi-user, reviewer, and parallel-lock coverage. | Reviewer, permission, multi-user, and logout scenarios; a global default flip before consumer migration. |
 
 Sequence batches by independent CI failures and shared-helper consumer count. Commit and validate each batch separately; do not treat a passing manual run as proof for unrelated specs.
 

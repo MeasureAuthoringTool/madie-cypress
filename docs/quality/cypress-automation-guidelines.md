@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-09-01
+Last updated: 2026-10-15
 
 This document contains stable automation rules. Current priorities, audit counts, proof status, and blockers belong in `docs/quality/test-refactor-backlog.md`.
 
@@ -44,6 +44,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 - Prefer `withAccessToken`, `requestWithAccessToken`, and domain request helpers over inline cookie or token plumbing.
 - Custom Cypress commands that enqueue authentication or API work must return their final Cypress chain. Returning `void` allows later setup requests to run before authentication has completed.
 - `before`, `beforeEach`, `afterEach`, and `after` hooks that invoke Cypress commands must return the final Cypress chain. This is especially important for login, logout, navigation retries, cleanup, and user-release tasks; otherwise Cypress can close the hook while queued work continues into the next test or after global teardown.
+- Default ordinary same-user UI scenarios to `OktaLogin.SessionLogin()`. It caches the browser session and removes repeated external Okta transitions. Use full `OktaLogin.Login()` only when the scenario tests authentication, switches users or roles, uses reviewer login, or invokes `UILogout()` in its teardown.
 - Every suite that creates mutable data must have an explicit cleanup owner and lifecycle path. Pair API or UI creation with the existing owner-aware cleanup helper in `afterEach` or `after`; do not leave an empty cleanup hook. Cleanup must return its final Cypress chain and log a non-success response rather than silently ignoring orphaned test data. A temporary debugging run may intentionally retain data, but that exception must stay local and must not be committed.
 - For test-case execution UI coverage, wait for the save or execution response before asserting highlighting or status. When returning to the list, wait for `GET /api/measures/{measureId}/test-cases` and assert the named test-case row instead of a generic visual-status selector. When updating several controlled Expected/Actual inputs, reassert previously entered values after each update and validate the save payload before execution.
 - Use `TestData.getAccountDisplayName(harpId)` for UI text that includes a display name and HARP ID.
@@ -80,6 +81,7 @@ Reuse these established paths before adding request code:
 - When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content.
 - After route-changing actions, verify the intended page content, not only the URL. MADiE can update the route before React remounts the destination.
 - After saves, wait for a settled condition such as a disabled Save button or completed request. A success toast alone may precede the final rerender.
+- Name route aliases for the domain transition or rendered state they synchronize (for example, `measureListRefreshForExport`), not an implementation assumption such as `reload`. Pair measure-list aliases with `MeasuresPage.waitForMeasureListRefresh(...)`.
 - After editing test-case elements, use `TestCasesPage.saveTestCaseAndWait()` before opening Expected/Actual or another panel that depends on the saved test-case state.
 - When a transient success toast can obstruct the next UI action, use `Toasts.clearToast(selector, expectedText)` to verify its message and settle the toast; automatic dismissal is also a settled state.
 
@@ -99,7 +101,8 @@ Reuse these established paths before adding request code:
 
 ## CQL and Population Criteria
 
-- Reuse `CQLEditorPage.saveCql(...)` for legacy Ace measure CQL and `CQLEditorPage.saveMonacoCql(...)` for Monaco measure CQL. Both wait for the normal UI Save settlement when later setup depends on compiled CQL. Use `replaceMonacoCqlDocument(...)` or `replaceMonacoCqlDocumentFromFile(...)` rather than duplicating the measure editor selector in specs.
+- Reuse `CQLEditorPage.saveCql(...)` for legacy Ace measure CQL and `CQLEditorPage.saveMonacoCql(...)` for Monaco measure CQL. Both wait for the normal UI Save settlement when later setup depends on compiled CQL. Use `saveMonacoCql({ appendText })` to append literal CQL before saving, and `replaceMonacoCqlDocument(...)` or `replaceMonacoCqlDocumentFromFile(...)` rather than duplicating the measure editor selector in specs.
+- After replacing valid Monaco CQL, use `saveMonacoCql({ appendNewLine: true, waitForDisabled: true })` rather than clicking Save directly. The newline is appended after the replacement, making the editor dirty before the normal save and validation settlement. Keep invalid-CQL scenarios explicit so they can assert their intended error state.
 - Keep CQL fixtures as raw valid CQL; never embed Cypress key commands such as `{home}` or `{del}` in fixture content. For full-document replacement in the Ace editor, use `CQLEditorPage.replaceCqlDocumentText(...)`, which verifies the exact editor value and triggers MADiE's dirty-state handling before the normal UI Save.
 - For basic Monaco CQL keyboard entry, use `MonacoEditor.type(...)` and `MonacoEditor.replace(...)`. They use `cypress-real-events` native click/key events. For a full CQL fixture where Monaco formatting is the accepted contract, use `MonacoEditor.insertTextFromFile(...)` for a blank document or `MonacoEditor.replaceDocumentFromFile(...)` for existing CQL; both use CDP `Input.insertText` after native focus. Use `MonacoEditor.appendDocumentText(...)` for CQL containing characters unsupported by `realType()`, such as braces. Assert validation message text through the generic-errors test id. Monaco virtualizes off-screen lines, so assert `.squiggly-error` only in a scenario where the marker is rendered; do not require it for every diagnostic. Keep fixtures raw—remove Cypress key commands such as `{home}` rather than inserting them through CDP. Do not use the browser clipboard as a CI contract until a focused test proves exact content and persistence in both headless and headed Chrome. The first headless CDP-granted paste attempt did not insert content; the headed attempt was invalid because manual editor interaction changed its contents.
 - Create or update Population Criteria only after valid CQL has settled.

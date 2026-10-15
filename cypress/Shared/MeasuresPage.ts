@@ -544,11 +544,10 @@ export class MeasuresPage {
 
                         this.selectMeasureRow(selectedMeasureNumber, options)
                         Utilities.waitForElementVisible(actionSelector, 60000)
-                        cy.get(actionSelector)
-                            .should('be.visible')
-                            .should('be.enabled')
-                            .scrollIntoView()
-                            .click()
+                        cy.get(actionSelector).should('be.visible').should('be.enabled').scrollIntoView({
+                            offset: { top: -100, left: 0 }
+                        })
+                        cy.get(actionSelector).should('be.visible').should('be.enabled').click()
 
                         if (expectCqlEditor) {
                             cy.location('pathname', { timeout: 60000 }).should('contain', `/measures/${measureId}/edit`)

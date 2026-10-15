@@ -14,6 +14,7 @@ type SaveCqlOptions = {
 
 type MonacoSaveCqlOptions = {
     appendNewLine?: boolean
+    appendText?: string
     collapseEditor?: boolean
     successTimeout?: number
     waitForDisabled?: boolean
@@ -199,6 +200,16 @@ export class CQLEditorPage {
         Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, timeout)
     }
 
+    public static openMonacoCqlEditor(timeout = 30000): void {
+        cy.get(EditMeasurePage.cqlEditorTab, { timeout })
+            .should('not.have.attr', 'aria-disabled', 'true')
+            .then(($tab) => {
+                $tab[0].click()
+            })
+
+        cy.get(EditMeasurePage.monacoCqlEditor, { timeout }).should('be.visible')
+    }
+
     public static validateSuccessfulCQLUpdate(library?: boolean): void {
 
         if (!library || library == null) {
@@ -267,6 +278,10 @@ export class CQLEditorPage {
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, cql)
     }
 
+    public static clearMonacoCqlDocument(): void {
+        MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+    }
+
     public static replaceMonacoCqlDocumentFromFile(filePath: string): void {
         MonacoEditor.replaceDocumentFromFile(filePath, EditMeasurePage.monacoCqlEditor)
     }
@@ -274,6 +289,7 @@ export class CQLEditorPage {
     public static saveMonacoCql(options: MonacoSaveCqlOptions = {}): void {
         const {
             appendNewLine = true,
+            appendText,
             collapseEditor = false,
             successTimeout = 50000,
             waitForDisabled = false
@@ -281,8 +297,11 @@ export class CQLEditorPage {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        if (appendNewLine) {
-            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, '')
+        if (appendText !== undefined) {
+            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, appendText)
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+        } else if (appendNewLine) {
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
         }
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()

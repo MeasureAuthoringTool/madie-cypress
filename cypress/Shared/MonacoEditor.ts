@@ -16,39 +16,37 @@ export class MonacoEditor {
     }
 
     public static type(editorSurfaceSelector: string, value: string): void {
-        cy.get(editorSurfaceSelector)
-            .should('be.visible')
-            .realClick()
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
 
         cy.realType(value)
     }
 
     public static replace(editorSurfaceSelector: string, value: string): void {
-        cy.get(editorSurfaceSelector)
-            .should('be.visible')
-            .realClick()
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
 
         cy.realPress(['Control', 'A'])
         cy.realType(value)
     }
 
     public static append(editorSurfaceSelector: string, value: string): void {
-        cy.get(editorSurfaceSelector)
-            .should('be.visible')
-            .realClick()
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
 
         cy.realPress(['Control', 'End'])
-        cy.realType(`\n${value}`)
+        cy.realPress('Enter')
+
+        if (value) {
+            cy.realType(value)
+        }
     }
 
     public static appendDocumentText(editorSurfaceSelector: string, value: string): void {
         if (!Cypress.isBrowser({ family: 'chromium' })) {
-            throw new Error('MonacoEditor.appendDocumentText requires a Chromium browser because it uses CDP Input.insertText.')
+            throw new Error(
+                'MonacoEditor.appendDocumentText requires a Chromium browser because it uses CDP Input.insertText.'
+            )
         }
 
-        cy.get(editorSurfaceSelector)
-            .should('be.visible')
-            .realClick()
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
 
         cy.realPress(['Control', 'End'])
         this.insertTextViaCdp(`\n${value}`)
@@ -59,34 +57,39 @@ export class MonacoEditor {
             throw new Error('MonacoEditor.insertText requires a Chromium browser because it uses CDP Input.insertText.')
         }
 
-        cy.get(editorSurfaceSelector)
-            .should('be.visible')
-            .realClick()
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
 
         this.insertTextViaCdp(value)
     }
 
     public static replaceDocument(editorSurfaceSelector: string, value: string): void {
         if (!Cypress.isBrowser({ family: 'chromium' })) {
-            throw new Error('MonacoEditor.replaceDocument requires a Chromium browser because it uses CDP Input.insertText.')
+            throw new Error(
+                'MonacoEditor.replaceDocument requires a Chromium browser because it uses CDP Input.insertText.'
+            )
         }
 
-        cy.get(editorSurfaceSelector)
-            .should('be.visible')
-            .realClick()
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
 
         cy.realPress(['Control', 'A'])
         this.insertTextViaCdp(value)
     }
 
-    public static replaceDocumentAfterNativeClear(editorSurfaceSelector: string, value: string): void {
-        if (!Cypress.isBrowser({ family: 'chromium' })) {
-            throw new Error('MonacoEditor.replaceDocumentAfterNativeClear requires a Chromium browser because it uses CDP Input.insertText.')
-        }
-
+    public static clearDocument(editorSurfaceSelector: string): void {
         cy.get(editorSurfaceSelector)
             .should('be.visible')
-            .realClick()
+            .realClick({ position: 'topLeft', clickCount: 4 })
+        cy.realPress('Delete')
+    }
+
+    public static replaceDocumentAfterNativeClear(editorSurfaceSelector: string, value: string): void {
+        if (!Cypress.isBrowser({ family: 'chromium' })) {
+            throw new Error(
+                'MonacoEditor.replaceDocumentAfterNativeClear requires a Chromium browser because it uses CDP Input.insertText.'
+            )
+        }
+
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
 
         cy.realPress('F1')
         cy.realType('Select to Bracket')
@@ -102,15 +105,11 @@ export class MonacoEditor {
     }
 
     private static insertTextViaCdp(value: string): void {
-
         cy.then(() => {
-            return Cypress.automation(
-                'remote:debugger:protocol',
-                {
-                    command: 'Input.insertText',
-                    params: { text: value }
-                }
-            ).catch((error: Error) => {
+            return Cypress.automation('remote:debugger:protocol', {
+                command: 'Input.insertText',
+                params: { text: value }
+            }).catch((error: Error) => {
                 throw new Error(`MonacoEditor.insertText could not send CDP Input.insertText: ${error.message}`)
             })
         })
@@ -127,5 +126,4 @@ export class MonacoEditor {
             this.replaceDocument(editorSurfaceSelector, contents)
         })
     }
-
 }

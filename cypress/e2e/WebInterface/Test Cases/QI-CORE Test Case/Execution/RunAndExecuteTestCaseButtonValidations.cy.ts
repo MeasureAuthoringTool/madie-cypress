@@ -9,6 +9,7 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { QiCore6Cql } from '../../../../../Shared/FHIRMeasuresCQL'
 import { MonacoEditor } from '../../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../../Shared/TestData'
 
 const now = Date.now()
 const measureName = 'RunExecuteTCButtonValidations' + now
@@ -52,6 +53,7 @@ const setInitialPopulationExpected = (): void => {
 describe('Run / Execute Test Case button validations', () => {
     beforeEach('Login and Create Measure', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         MeasuresPage.searchForMeasureByName(measureName)
         return cy.then(() => undefined)
@@ -458,10 +460,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).scrollIntoView().should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 7500)
+        TestCasesPage.saveTestCaseAndWait()
 
         TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
