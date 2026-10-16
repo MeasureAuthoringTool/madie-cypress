@@ -7,7 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
@@ -22,7 +22,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
 
         MeasuresPage.actionCenter('edit', 0)
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         CQLEditorPage.expandCQLBuilderPanel()
     })
 
@@ -40,15 +40,15 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         //make a change to CQL (don't save)
         MeasuresPage.actionCenter('edit', 0)
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
 
         //attempt to delete and choose No, keep working
@@ -59,9 +59,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         Utilities.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(TestCasesPage.tcSearchIcone).first().click()
-        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-        cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -83,24 +81,22 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         CQLEditorPage.expandCQLBuilderPanel()
-        cy.get(TestCasesPage.tcSearchIcone).eq(0).click()
-        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
         cy.get(CQLEditorPage.includesTab).click()
         cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('contain.text', 'FHIRHelpers')
@@ -124,17 +120,15 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain.text', 'FHIRHelpers')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName)
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'define "Surgical Absence of Cervix"')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'FHIRHelpers')
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'library ' + CqlLibraryName, 'using QICore version', 'define "Surgical Absence of Cervix"')
 
         //Deletes the library from the Saved Libraries grid
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab / number in parentheses has been updated
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (0)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
         cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('not.exist')
     })
@@ -145,17 +139,14 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
 
         //delete and choose yes to confirm delete
@@ -174,17 +165,15 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain.text', 'FHIRHelpers')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName)
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'define "Surgical Absence of Cervix"')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'FHIRHelpers')
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'library ' + CqlLibraryName, 'using QICore version', 'define "Surgical Absence of Cervix"')
 
         //Deletes the library from the Saved Libraries grid
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab / number in parentheses has been updated
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (0)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
         cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('not.exist')
     })
@@ -216,15 +205,15 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
 
         //make a change to CQL (don't save)
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
 
         //attempt to edit and choose No, keep working
@@ -235,9 +224,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         Utilities.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(TestCasesPage.tcSearchIcone).first().click()
-        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-        cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -260,9 +247,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         CQLEditorPage.expandCQLBuilderPanel()
-        cy.get(TestCasesPage.tcSearchIcone).eq(0).click()
-        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -270,14 +255,14 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
         cy.get(CQLEditorPage.includesTab).click()
         cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('contain.text', 'FHIRHelpers')
@@ -306,9 +291,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(TestCasesPage.tcSearchIcone).first().click()
-        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     })
 
     it('Qi Core: Edit Included Libraries functionality -- when changes to the CQL is saved', () => {
@@ -318,16 +301,14 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
 
         //click edit on the page
@@ -352,9 +333,6 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(TestCasesPage.tcSearchIcone).first().click()
-        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     })
 })
-

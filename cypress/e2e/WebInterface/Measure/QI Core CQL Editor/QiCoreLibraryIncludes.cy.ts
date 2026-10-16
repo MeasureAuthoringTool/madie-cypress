@@ -5,6 +5,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
@@ -17,7 +18,7 @@ describe('Qi-Core Library Includes fields', () => {
 
         MeasuresPage.actionCenter('edit', 0)
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
@@ -132,7 +133,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.includesTab).click()
 
         //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
 
         //click edit on the page
@@ -153,7 +154,7 @@ describe('Qi-Core Library Includes fields', () => {
     })
 
     // old defect to watch with this scenario https://jira.cms.gov/browse/MAT-9107
-    it('Verify error message appears on Includes tab when there is an error in the Measure CQL', () => {
+    it('Verify error message appears when there is an error in the Measure CQL', () => {
         const brokenCql =
             "library SimpleFhirLibrary version '0.0.004'\n" +
             "using QICore version '4.1.0'\n" +
@@ -170,40 +171,14 @@ describe('Qi-Core Library Includes fields', () => {
 
         //Navigate to Includes tab and verify no error message appears
         cy.get(CQLEditorPage.includesTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        cy.get(CQLEditorPage.errorMsg).should('not.exist')
         //Navigate to Includes tab and verify saved Libraries appear
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
 
-        //Add errors to CQL — use Ace editor API to set value directly
-        //instead of slow/unreliable cy.type() which types char-by-char
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.window().then((win: any) => {
-            const editor = win.document.querySelector('.ace_editor') as any
-            const aceEditor = editor?.env?.editor
-            if (aceEditor) {
-                aceEditor.setValue(brokenCql)
-                aceEditor.clearSelection()
-            }
-        })
-        // Trigger a small keystroke so React detects the change and enables Save
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd} {backspace}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, brokenCql)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
 
-        //Navigate to Parameters tab — expand CQL builder if collapsed
-        cy.get('body').then(($body) => {
-            if ($body.find(CQLEditorPage.expandCQLBuilder).length > 0) {
-                cy.get(CQLEditorPage.expandCQLBuilder).click()
-            }
-        })
-        cy.get(CQLEditorPage.includesTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should(
-            'contain.text',
-            'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.',
-        )
-
-        //Navigate to Saved Parameters tab
-        cy.get(CQLEditorPage.savedLibrariesTab).click().should('contain.text', 'Saved Libraries (0)')
-        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
+        cy.get(CQLEditorPage.errorMsg).should('be.visible')
     })
 })

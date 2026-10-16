@@ -6,6 +6,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 // ToDo: replace the 4.1.1 CQLs for 6.0.0
 const measureName = 'CqlEditorComponent' + Date.now()
@@ -68,9 +69,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLValid)
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLValid)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
@@ -82,9 +82,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLErrors)
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
@@ -101,9 +100,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLWarnings)
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')

@@ -1,6 +1,29 @@
 export class MonacoEditor {
     private static readonly errorMarker = '.monaco-editor .squiggly-error'
 
+    public static assertRenderedText(editorSurfaceSelector: string, ...expectedText: string[]): void {
+        cy.get(editorSurfaceSelector).should(($editorSurfaces) => {
+            const renderedText = this.getRenderedText($editorSurfaces)
+
+            expectedText.forEach((text) => expect(renderedText).to.contain(this.normalizeText(text)))
+        })
+    }
+
+    public static assertRenderedTextDoesNotContain(editorSurfaceSelector: string, text: string): void {
+        cy.get(editorSurfaceSelector).should(($editorSurfaces) => {
+            expect(this.getRenderedText($editorSurfaces)).not.to.contain(this.normalizeText(text))
+        })
+    }
+
+    public static assertRenderedTextOccurrences(editorSurfaceSelector: string, text: string, count: number): void {
+        cy.get(editorSurfaceSelector).should(($editorSurfaces) => {
+            const renderedText = this.getRenderedText($editorSurfaces)
+            const occurrences = renderedText.split(text).length - 1
+
+            expect(occurrences, `occurrences of ${text}`).to.equal(count)
+        })
+    }
+
     public static assertErrors(errorMessageSelector: string, ...messages: string[]): void {
         cy.get(errorMessageSelector).should(($errors) => {
             messages.forEach((message) => expect($errors).to.contain.text(message))
@@ -37,6 +60,35 @@ export class MonacoEditor {
         if (value) {
             cy.realType(value)
         }
+    }
+
+    public static scrollToEnd(editorSurfaceSelector: string): void {
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
+        cy.realPress(['Control', 'End'])
+    }
+
+    public static appendToLineContaining(editorSurfaceSelector: string, lineText: string, value: string): void {
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
+        cy.realPress(['Control', 'F'])
+        cy.realType(lineText)
+        cy.realPress('Escape')
+        cy.realPress('End')
+        cy.realType(value)
+    }
+
+    public static insertBeforeLineContaining(editorSurfaceSelector: string, lineText: string, value: string): void {
+        if (!Cypress.isBrowser({ family: 'chromium' })) {
+            throw new Error(
+                'MonacoEditor.insertBeforeLineContaining requires a Chromium browser because it uses CDP Input.insertText.'
+            )
+        }
+
+        cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
+        cy.realPress(['Control', 'F'])
+        cy.realType(lineText)
+        cy.realPress('Escape')
+        cy.realPress('Home')
+        this.insertTextViaCdp(`${value}\n`)
     }
 
     public static appendDocumentText(editorSurfaceSelector: string, value: string): void {
@@ -113,6 +165,18 @@ export class MonacoEditor {
                 throw new Error(`MonacoEditor.insertText could not send CDP Input.insertText: ${error.message}`)
             })
         })
+    }
+
+    private static getRenderedText($editorSurfaces: JQuery<HTMLElement>): string {
+        return this.normalizeText($editorSurfaces
+            .toArray()
+            .map((editorSurface) => editorSurface.innerText)
+            .join('\n')
+        )
+    }
+
+    private static normalizeText(text: string): string {
+        return text.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim()
     }
 
     public static insertTextFromFile(file: string, editorSurfaceSelector: string): void {

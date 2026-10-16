@@ -54,7 +54,26 @@ Current focus order:
 
 1. Run the Cypress 16.1.0 smoke collection in CI at the existing three-worker parallelism; retain runner artifacts for every worker.
 2. Audit custom Cypress commands and lifecycle hooks that queue login, retry, cleanup, or release work. Return the final chain before migrating more consumers.
-3. Complete remaining Test Case Details, JSON, Test Cases, and Expected/Actual migrations by repeated interaction pattern.
+3. Complete MAT-10241 Monaco migration by repeated behavior, not by individual
+   failure. The 2026-10-15 audit found 185 legacy `CQLEditorPage.saveCql()`
+   calls in 97 UI specs: 77 calls in 31 Measure specs, 78 in 38 Test Case
+   specs, and 30 in 28 Smoke specs. CQL Library has no `saveCql()` consumer,
+   but it retains one direct Ace diagnostic spec. The work must cover all of
+   the following before removing the legacy helpers:
+   - Migrate ordinary dirty/save/collapse calls to the existing Monaco save
+     helper in model-aligned batches; retain the two callers that pass
+     Ace-specific `appendCommand` or `parseSpecialCharSequences` for a
+     dedicated replacement path.
+   - Migrate direct CQL-builder output assertions in the matched Qi-Core and
+     QDM Definition, Parameter, Code Search, and Library Include suites.
+   - Migrate direct CQL diagnostics, ownership/read-only, and CQL Library
+     error-rendering assertions to Monaco-visible contracts.
+   - Migrate Test Case JSON search consumers separately from measure-CQL
+     editor flows.
+   - Retire Ace selectors and methods from `CQLEditorPage`, `EditMeasurePage`,
+     `CQLLibraryPage`, and `TestCasesPage` only after no consumer remains;
+     include `MeasureGroupPage.loadTestCaseExecutionCql()` in that final
+     shared-helper sweep.
 4. Verify CI collection for specs that produce no runner output before treating them as test failures.
 5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
 6. Replace unconditional alternate-user allocation in `cypress/support/e2e.ts` with an explicit, compatible alt-user requirement contract. The support hook currently claims both a primary and alternate account for every spec run, although the audited export specs do not use an alternate account and 92 files do. This creates avoidable pool contention and makes headed reruns more likely to receive a different available account after a failed run releases its locks.

@@ -98,6 +98,14 @@ export class CQLEditorPage {
     public static readonly viewValueSetDetails = '[data-testid="action-center-0_View"]'
     public static readonly editValueSet = '[data-testid="action-center-0_Edit"]'
 
+    public static assertValueSetDetails(...expectedText: string[]): void {
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should(($details) => {
+            const detailText = $details.text().replace(/\s+/g, ' ')
+
+            expectedText.forEach((text) => expect(detailText).to.contain(text))
+        })
+    }
+
     //CQL Builder Sub tabs
     public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
     public static readonly collapseCQLBuilder = '[data-testid="collapsed-button"]'
@@ -152,6 +160,7 @@ export class CQLEditorPage {
     public static readonly clearParametersExpressionButton = '[data-testid="clear-parameter-btn"]'
     public static readonly applyParametersExpressionButton = '[data-testid="apply-parameter-btn"]'
     public static readonly parameterExpressionEditor = '[data-testid="terminology-section-sub-header-content-Expression Editor"]'
+    public static readonly parameterExpressionMonacoEditor = `${CQLEditorPage.parameterExpressionEditor} .monaco-editor`
     public static readonly editParameterNameTextBox = '[data-testid="parameter-name-text-input"]'
     public static readonly saveParameterBtn = '[data-testid="parameter-save-btn"]'
     public static readonly editSavedCQLParameters = '[data-testid="edit-button-0"]'
@@ -315,6 +324,13 @@ export class CQLEditorPage {
         if (collapseEditor) {
             CQLEditorPage.collapseEditor()
         }
+    }
+
+    public static applyParameter(parameterName: string, parameterType: string): void {
+        const parameterDeclaration = `parameter "${parameterName}"`
+
+        cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.enabled').click()
+        MonacoEditor.appendToLineContaining(EditMeasurePage.monacoCqlEditor, parameterDeclaration, ` ${parameterType}`)
     }
 
     public static minimizeAlerts(hiddenAlertSelector: string): void {

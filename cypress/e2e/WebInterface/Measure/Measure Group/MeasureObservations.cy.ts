@@ -8,11 +8,19 @@ import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { LandingPage } from '../../../../Shared/LandingPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'MeasureObservations' + Date.now()
 let CqlLibraryName = 'MeasureObservationsLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
+
+const replaceCqlFixture = (): void => {
+    cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((fileContents) => {
+        MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fileContents.replace(/\{home\}/gi, ''))
+    })
+}
 
 describe('Measure Observations', () => {
     beforeEach('Create New Measure and Login', () => {
@@ -21,9 +29,9 @@ describe('Measure Observations', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -95,13 +103,8 @@ describe('Measure Observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        CQLEditorPage.openMonacoCqlEditor()
+        replaceCqlFixture()
 
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 28500)
@@ -248,13 +251,8 @@ describe('Measure Observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        CQLEditorPage.openMonacoCqlEditor()
+        replaceCqlFixture()
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -288,9 +286,9 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -399,13 +397,8 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        CQLEditorPage.openMonacoCqlEditor()
+        replaceCqlFixture()
 
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
@@ -529,9 +522,9 @@ describe('Measure Observation - Expected Values', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -545,13 +538,8 @@ describe('Measure Observation - Expected Values', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        CQLEditorPage.openMonacoCqlEditor()
+        replaceCqlFixture()
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 26500)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -750,9 +738,9 @@ describe('Validate Measure Observation Parameters', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -766,13 +754,8 @@ describe('Validate Measure Observation Parameters', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        CQLEditorPage.openMonacoCqlEditor()
+        replaceCqlFixture()
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)

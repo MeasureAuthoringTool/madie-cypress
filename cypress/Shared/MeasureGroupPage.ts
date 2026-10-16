@@ -8,6 +8,7 @@ import { Stratification } from '@madie/madie-models'
 import { OktaLogin } from './OktaLogin'
 import { FixtureOwner, MeasureGroupBody, TestData } from './TestData'
 import { Toasts } from './Toasts'
+import { MonacoEditor } from './MonacoEditor'
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -886,14 +887,12 @@ export class MeasureGroupPage {
     }
 
     private static loadTestCaseExecutionCql(): void {
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
-        cy.readFile(MeasureGroupPage.testCaseExecutionCqlFixture)
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.openMonacoCqlEditor()
+        cy.readFile(MeasureGroupPage.testCaseExecutionCqlFixture).then((fileContents) => {
+            MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+            MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fileContents.replace(/\{home\}/gi, ''))
+        })
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get('body').then(($body) => {
             if ($body.find(EditMeasurePage.cqlEditorExpandCollapseBtn).length > 0) {
@@ -915,11 +914,7 @@ export class MeasureGroupPage {
                 }
             })
 
-            cy.contains(
-                `${this.supplementalDataDefinitionDropdown} li[role="option"]`,
-                definition,
-                { timeout: 50000 },
-            )
+            cy.contains(`${this.supplementalDataDefinitionDropdown} li[role="option"]`, definition, { timeout: 50000 })
                 .scrollIntoView()
                 .should('be.visible')
                 .click()
@@ -932,10 +927,7 @@ export class MeasureGroupPage {
 
         //Save Supplemental data
         cy.get(this.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
-        Toasts.clearToast(
-            EditMeasurePage.successMessage,
-            'Measure Supplemental Data have been Saved Successfully',
-        )
+        Toasts.clearToast(EditMeasurePage.successMessage, 'Measure Supplemental Data have been Saved Successfully')
         Utilities.waitForElementDisabled(this.saveSupplementalDataElements, 60000)
     }
 
