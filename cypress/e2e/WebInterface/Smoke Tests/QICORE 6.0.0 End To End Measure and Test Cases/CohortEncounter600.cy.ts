@@ -35,7 +35,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })

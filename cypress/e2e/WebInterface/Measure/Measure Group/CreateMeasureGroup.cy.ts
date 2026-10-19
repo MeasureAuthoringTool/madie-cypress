@@ -1,19 +1,21 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { Header } from '../../../../Shared/Header'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'CreateMeasureGroup' + Date.now()
 let CqlLibraryName = 'CreateMeasureGroupLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
-    'using FHIR version \'4.0.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+let measureCQL =
+    "library CQLLibrary5170 version '0.0.000'\n\n" +
+    "using FHIR version '4.0.1'\n\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n\n" +
     'parameter "Measurement Period" Interval<DateTime>\n\n' +
     'context Patient\n\n' +
     'define "Initial Population":\n' +
@@ -27,14 +29,14 @@ let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
     'define "Numerator":\n' +
     '\ttrue'
 
-describe('Validate Measure Group -- scoring and populations', () => {
+const invalidMeasureCql = measureCQL.replace('define "Numerator":\n\ttrue', 'define "Numerator":')
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
+describe('Validate Measure Group -- scoring and populations', () => {
+    let randValue = Math.floor(Math.random() * 1000 + 1)
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
 
     beforeEach('Create Measure and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
     })
@@ -44,22 +46,18 @@ describe('Validate Measure Group -- scoring and populations', () => {
     })
 
     it('"Please complete the CQL Editor process before continuing" appears when there are issues with entered CQL', () => {
-
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
-        //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}')
+        //Replace the valid Numerator definition with the intended invalid CQL.
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, invalidMeasureCql)
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1500)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
 
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
@@ -74,11 +72,13 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.CQLHasErrorMsg, 20700)
         cy.get(MeasureGroupPage.CQLHasErrorMsg).should('exist')
         cy.get(MeasureGroupPage.CQLHasErrorMsg).should('be.visible')
-        cy.get(MeasureGroupPage.CQLHasErrorMsg).should('contain.text', 'Please complete the CQL Editor process before continuing')
+        cy.get(MeasureGroupPage.CQLHasErrorMsg).should(
+            'contain.text',
+            'Please complete the CQL Editor process before continuing'
+        )
     })
 
     it('Scoring unit, UCUM, population association, population basis, measure group type and description saves and persists', () => {
-
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
 
@@ -118,7 +118,10 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -132,9 +135,12 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify All data persists
-        cy.get(MeasureGroupPage.popBasis).find('input').invoke('val').then(val => {
-            expect(val).to.eq('boolean')
-        })
+        cy.get(MeasureGroupPage.popBasis)
+            .find('input')
+            .invoke('val')
+            .then((val) => {
+                expect(val).to.eq('boolean')
+            })
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Initial Population')
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).should('contain.text', 'MeasureGroup Description value')
@@ -143,7 +149,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
     })
 
     it('Add second initial population for Ratio Measure', () => {
-
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
 
@@ -179,7 +184,10 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //fill in a description value
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
@@ -194,7 +202,10 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group updated successfully.'
+        )
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -213,7 +224,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
     })
 
     it('Verify warning modal when Measure Group has unsaved changes', () => {
-
         cy.log('Create Ratio Measure')
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
@@ -250,7 +260,10 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -299,7 +312,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
     })
 
     it('Add Scoring Precision to the Measure Group', () => {
-
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
 
@@ -338,11 +350,13 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
     })
 
     it('Verify Qi Core Cohort Measure Group can be created without Improvement Notation', () => {
-
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
 
@@ -378,17 +392,19 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
     })
 })
 
 describe('Validate Population Basis', () => {
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let randValue = Math.floor(Math.random() * 1000 + 1)
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
 
     beforeEach('Create Measure and login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
     })
@@ -413,9 +429,12 @@ describe('Validate Population Basis', () => {
 
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).find('input').invoke('val').then(val => {
-            expect(val).to.eq('boolean')
-        })
+        cy.get(MeasureGroupPage.popBasis)
+            .find('input')
+            .invoke('val')
+            .then((val) => {
+                expect(val).to.eq('boolean')
+            })
 
         cy.get(MeasureGroupPage.popBasis).type('{del}').type('{esc}')
 
@@ -436,7 +455,6 @@ describe('Validate Population Basis', () => {
     })
 
     it('Verify error message if Negative Integer is Added to the Scoring Precision on a Measure Group', () => {
-
         //click on Edit button to edit measure
         MeasuresPage.actionCenter('edit')
 
@@ -465,7 +483,10 @@ describe('Validate Population Basis', () => {
         cy.get('[data-testid="scoring-precision-input"]').type('-2')
 
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
-        cy.get('[data-testid="integer-field-scoring-precision-helper-text"]').should('contain.text', 'Scoring Precision must be a positive integer')
+        cy.get('[data-testid="integer-field-scoring-precision-helper-text"]').should(
+            'contain.text',
+            'Scoring Precision must be a positive integer'
+        )
 
         cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.improvementNotationSelect).click()

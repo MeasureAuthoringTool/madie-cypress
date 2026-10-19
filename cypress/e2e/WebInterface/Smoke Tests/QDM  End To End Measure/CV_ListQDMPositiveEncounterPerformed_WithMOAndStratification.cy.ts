@@ -162,7 +162,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Group Creation
 

@@ -27,7 +27,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.CreateTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription, testCaseJsonFile)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Log out and Clean up', () => {

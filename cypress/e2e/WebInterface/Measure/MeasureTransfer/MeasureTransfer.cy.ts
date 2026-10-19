@@ -31,14 +31,9 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         let now = Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are Transferred to the new owner', () => {
@@ -136,7 +131,7 @@ describe('Delete Test Case with Transferred user', () => {
         let now = Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         MeasuresPage.actionCenter('edit')

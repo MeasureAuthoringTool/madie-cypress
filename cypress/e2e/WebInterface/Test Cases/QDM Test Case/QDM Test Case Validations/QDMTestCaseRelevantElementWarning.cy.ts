@@ -59,7 +59,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
     it('Present Relevant Elements warning & SDE changed warning after major CQL changes that affect test cases', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             appendNewLine: true,
             collapseEditor: true,
             waitForDisabled: true
@@ -122,11 +122,9 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         // change cql to randomly chosen valid QDM cql
-        CQLEditorPage.openCqlEditor()
-        cy.readFile('cypress/fixtures/QDMSDEMeasureAfterChanges.txt').then((cql) => {
-            CQLEditorPage.replaceCqlDocumentText(cql)
-        })
-        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/QDMSDEMeasureAfterChanges.txt')
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
 
         // set up intercept - this API has the data needed for this specific check
         cy.intercept('/api/qdm/cql/relevant-elements').as('relevantElements')

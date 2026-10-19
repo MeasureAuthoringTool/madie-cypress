@@ -583,7 +583,10 @@ export class Utilities {
         }
     }
 
-    public static releaseAllLocksForCleanup(type: MadieObject, altUser?: boolean) {
+    public static releaseAllLocksForCleanup(
+        type: MadieObject,
+        altUser?: boolean
+    ): Cypress.Chainable<Cypress.Response<any>> {
         if (!altUser) {
             altUser = false
         }
@@ -592,15 +595,17 @@ export class Utilities {
 
         const unlockTarget = type === MadieObject.Library ? 'cql-libraries' : 'measures'
 
-        TestData.requestUnlockAll(unlockTarget, { failOnStatusCode: false }).then((response) => {
-            if (response.status === 200) {
-                cy.log(`Released ${type} locks during cleanup`)
-                return
-            }
+        return TestData.requestUnlockAll(unlockTarget, { failOnStatusCode: false })
+            .then((response) => {
+                if (response.status === 200) {
+                    cy.log(`Released ${type} locks during cleanup`)
+                    return response
+                }
 
-            cy.log(
-                `⚠️ Lock cleanup for ${type} returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
-            )
-        })
+                cy.log(
+                    `⚠️ Lock cleanup for ${type} returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                )
+                return response
+            })
     }
 }

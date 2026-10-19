@@ -48,10 +48,10 @@ describe('Changes to groups are not allowed when a test case is locked by anothe
     })
 
     it('Population Criteria tab is read-only & shows a message when users are prevented from making group changes', () => {
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()

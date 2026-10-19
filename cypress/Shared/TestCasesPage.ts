@@ -7,6 +7,7 @@ import { MeasuresPage } from './MeasuresPage'
 import { step } from '../utils/step'
 import { FixtureOwner, TestData } from './TestData'
 import { LockedEntityValidation } from './LockedEntityValidation'
+import { MonacoEditor } from './MonacoEditor'
 
 export type TestCase = {
   title: string
@@ -204,14 +205,15 @@ export class TestCasesPage {
   public static readonly newTestCaseButton = '[data-testid="create-new-test-case-button"]'
   public static readonly testCaseDescriptionTextBox = '[data-testid=test-case-description]'
   public static readonly meassureCQLVOTab = '[data-testid="measurecql-tab"]'
-  public static readonly voTCCQLobject = '[id="ace-editor-wrapper"]'
-  public static readonly voTCCQLEditor = '[class="ace_text-input"]'
+  public static readonly voTCCQLobject = '[data-testid="split-view-view"] div.view-lines'
+  public static readonly voTCCQLEditor = '[data-testid="split-view-view"] [contenteditable="true"]'
   public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
   public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
   public static readonly editTCSaveTooltip = '[data-testid="save-button-tooltip"]'
   public static readonly errorToastMsg = '[data-testid="error-toast"]'
   public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
   public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
+  public static readonly monacoJsonEditorSurface = '[data-testid="split-view-view"] div.view-lines'
   public static readonly testCaseTitle = '[data-testid="test-case-title"]'
   public static readonly roTestCaseTitle = '[id="test-case-title"]'
   public static readonly reportsButton = '[data-testid="reports-button"]'
@@ -541,7 +543,7 @@ export class TestCasesPage {
   public static grabElementId(eleTableEntry?: number): void {
     let attrData = ''
     let elemid = ''
-    let elementId = []
+    let elementId: string[] = []
     if (eleTableEntry === null || eleTableEntry === undefined) {
       eleTableEntry = 1
     }
@@ -625,7 +627,7 @@ export class TestCasesPage {
   public static clickCreateTestCaseButton(): void {
     step('Click Create Test Case Button')
     //setup for grabbing the measure create call
-    let measureID = null
+    let measureID: string | null = null
     TestData.readMeasureId()
       .then((id) => {
         measureID = id
@@ -672,17 +674,17 @@ export class TestCasesPage {
         switch (action.valueOf().toString().toLowerCase()) {
           case 'edit': {
             this.openQdmElementActionMenu(actionCenterSelector)
-            this.clickVisibleEnabled(`[data-testid="edit-element-${fileContents}"]`, 55000)
+            this.clickQdmElementAction(`[data-testid="edit-element-${fileContents}"]`)
             break
           }
           case 'clone': {
             this.openQdmElementActionMenu(actionCenterSelector)
-            this.clickVisibleEnabled(`[data-testid="clone-element-${fileContents}"]`, 55000)
+            this.clickQdmElementAction(`[data-testid="clone-element-${fileContents}"]`)
             break
           }
           case 'delete': {
             this.openQdmElementActionMenu(actionCenterSelector)
-            this.clickVisibleEnabled(`[data-testid="delete-element-${fileContents}"]`, 55000)
+            this.clickQdmElementAction(`[data-testid="delete-element-${fileContents}"]`)
             break
           }
           default: {
@@ -724,6 +726,7 @@ export class TestCasesPage {
     testCaseSeries: string,
     testCaseJson?: string,
     handleElementsTab?: boolean,
+    useNativeJsonClear = false,
   ): void {
     step(
       'Create a Test Case with Title: ' +
@@ -775,7 +778,7 @@ export class TestCasesPage {
           .should('eq', 200)
       }
 
-      this.editTestCaseJson(testCaseJson, handleElementsTab)
+      this.editTestCaseJson(testCaseJson, handleElementsTab, useNativeJsonClear)
 
       this.activateTab(this.detailsTab, 30000)
 
@@ -788,7 +791,7 @@ export class TestCasesPage {
     }
   }
 
-  public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false): void {
+  public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false, useNativeClear = false): void {
     if (navigateToJsonTab) {
       cy.get(TestCasesPage.topJsonTab, { timeout: 30000 })
         .should('not.have.attr', 'aria-disabled', 'true')
@@ -799,40 +802,16 @@ export class TestCasesPage {
 
     this.waitForJsonEditorReady()
 
-    const parsedJson = JSON.parse(testCaseJson) as {
-      id?: string
-      entry?: Array<{ resource?: { id?: string } }>
+    if (useNativeClear) {
+      MonacoEditor.replaceDocumentAfterNativeClear(TestCasesPage.monacoJsonEditorSurface, testCaseJson)
+      return
     }
-    const editorMarker = parsedJson.id ?? parsedJson.entry?.[0]?.resource?.id
-    expect(editorMarker, 'test-case JSON requires a Bundle or first-resource ID').to.be.a('string').and.not.be.empty
 
-    cy.get(TestCasesPage.aceEditorJsonInput)
-      .click({ force: true })
-      // Ace keeps its document separate from the hidden text input. Select the
-      // existing document, then paste the complete JSON in one event. Separate
-      // clear/type commands let the editor restore its generated default JSON
-      // between commands, which appends a second Bundle and makes it invalid.
-      .type('{selectall}', { force: true })
-
-    cy.get(TestCasesPage.aceEditorJsonInput).then(($input) => {
-      const clipboardData = new DataTransfer()
-      clipboardData.setData('text/plain', testCaseJson)
-      $input[0].dispatchEvent(new ClipboardEvent('paste', {
-        bubbles: true,
-        cancelable: true,
-        clipboardData,
-      }))
-    })
-
-    cy.get(TestCasesPage.aceEditor).should('contain.text', editorMarker)
+    MonacoEditor.replaceDocument(TestCasesPage.monacoJsonEditorSurface, testCaseJson)
   }
 
   public static waitForJsonEditorReady(): void {
-    Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-    Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-    cy.get(TestCasesPage.aceEditor).should('exist')
-    cy.get(TestCasesPage.aceEditor).should('be.visible')
-    cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+    cy.get(TestCasesPage.monacoJsonEditorSurface).should('be.visible')
   }
 
   public static saveTestCaseAndWait(options: {
@@ -1434,6 +1413,15 @@ export class TestCasesPage {
       .first()
       .should('be.visible')
       .and('be.enabled')
+      .then(($button) => {
+        $button[0].click()
+      })
+  }
+
+  private static clickQdmElementAction(selector: string): void {
+    cy.get(selector, { timeout: 55000 })
+      .should('be.visible')
+      .should('be.enabled')
       .then(($button) => {
         $button[0].click()
       })

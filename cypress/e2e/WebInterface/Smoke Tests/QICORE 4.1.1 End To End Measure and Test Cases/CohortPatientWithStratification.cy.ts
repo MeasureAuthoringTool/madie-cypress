@@ -60,10 +60,7 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.saveMonacoCql()
         CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 

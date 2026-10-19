@@ -26,7 +26,7 @@ describe('Success Scenario - Make Test Case Json match UI', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -85,7 +85,7 @@ describe('Error message when making Test case match', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {

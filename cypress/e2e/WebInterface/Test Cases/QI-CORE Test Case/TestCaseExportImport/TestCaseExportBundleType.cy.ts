@@ -81,7 +81,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

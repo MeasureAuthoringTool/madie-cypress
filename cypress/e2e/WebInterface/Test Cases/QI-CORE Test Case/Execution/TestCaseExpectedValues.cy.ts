@@ -181,18 +181,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Create Ratio Measure group
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.wait(3000)
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
+            CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
+        })
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -361,18 +352,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Create Ratio Measure group with 2 IP's
         MeasuresPage.actionCenter('edit')
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
+            CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
+        })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

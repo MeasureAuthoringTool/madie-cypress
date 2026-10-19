@@ -20,14 +20,9 @@ describe('View Human Readable for Qi Core Measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
     })
 
     after(() => {
@@ -62,7 +57,7 @@ describe('View Human Readable for Qi Core Measure', () => {
 
     it('Export measure from View HR modal', () => {
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('viewhr')
 

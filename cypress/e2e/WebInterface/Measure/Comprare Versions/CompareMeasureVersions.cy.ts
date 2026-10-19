@@ -37,9 +37,9 @@ describe('Compare Measure Versions', () => {
             'Surgical Absence of Cervix',
             'Procedure'
         )
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     // afterEach('Log out and Clean up', () => {

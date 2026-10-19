@@ -75,7 +75,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

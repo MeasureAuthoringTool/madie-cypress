@@ -69,7 +69,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).click()
     })
@@ -159,7 +159,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         TestData.versionMeasure().its('status').should('eq', 200)
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
@@ -230,10 +230,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()

@@ -44,7 +44,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         // add SDE to test case coverage
         cy.wait(2000)

@@ -21,7 +21,7 @@ const measureData: CreateMeasureOptions = {}
 const completeQDMExecutionSetup = () => {
     OktaLogin.Login()
     MeasuresPage.actionCenter('edit')
-    CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+    CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
     cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
     cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -254,7 +254,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).scrollIntoView()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -277,7 +277,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'N/A')
     })
@@ -300,7 +300,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -357,7 +357,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up', () => {

@@ -3,7 +3,6 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasureActionOptions, MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
@@ -37,15 +36,11 @@ describe('QI-Core Measure Export with Info', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: expCql })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'IP', 'boolean')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter("edit")
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -103,15 +98,11 @@ describe('QI-Core Measure Export for Publish', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: expCql })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'IP', 'boolean')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter("edit")
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 

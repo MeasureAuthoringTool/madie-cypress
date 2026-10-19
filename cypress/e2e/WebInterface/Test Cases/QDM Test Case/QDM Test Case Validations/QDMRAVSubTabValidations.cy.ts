@@ -43,11 +43,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -175,11 +171,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -239,11 +231,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)

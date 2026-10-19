@@ -70,7 +70,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // Group Creation
         EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.leftPanelBaseConfigTab)

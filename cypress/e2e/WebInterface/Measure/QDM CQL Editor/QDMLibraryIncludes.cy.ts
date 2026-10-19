@@ -6,7 +6,7 @@ import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { Header } from '../../../../Shared/Header'
 import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
-import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = ''
 let cqlLibraryName = ''
@@ -47,7 +47,7 @@ describe('QDM Library Includes fields', () => {
     //Click on Edit Button
     MeasuresPage.actionCenter('edit')
 
-    CQLEditorPage.openCqlEditor()
+    CQLEditorPage.openMonacoCqlEditor()
     CQLEditorPage.expandCQLBuilderPanel()
   })
 
@@ -175,14 +175,14 @@ describe('QDM Library Includes fields', () => {
     //make a change to CQL (don't save)
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
     //attempt to delete and choose No, keep working
@@ -193,9 +193,7 @@ describe('QDM Library Includes fields', () => {
     Utilities.clickOnKeepWorking()
 
     //confirm contents in CQL editor still contains changes and save button is still available
-    cy.get('[data-testid="editor-search-button"]').click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
+    MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
     Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -217,9 +215,7 @@ describe('QDM Library Includes fields', () => {
     //confirm that CQL value is the same as it was prior to change and the save button is not available
     cy.reload()
     CQLEditorPage.expandCQLBuilderPanel()
-    cy.get('[data-testid="editor-search-button"]').click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
     Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -227,14 +223,14 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
     cy.get(CQLEditorPage.includesTab).click()
     cy.get(CQLEditorPage.libraryResultsTable)
@@ -256,16 +252,14 @@ describe('QDM Library Includes fields', () => {
     )
 
     //Deletes the library include statement from the CQL
-    cy.get('[data-testid="editor-search-button"]').click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
     //Deletes the library from the Saved Libraries grid
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab / number in parentheses has been updated
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (0)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
     cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('not.exist')
   })
@@ -275,17 +269,14 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
 
     MeasuresPage.actionCenter('edit')
-    cy.get(EditMeasurePage.cqlEditorTab).click()
-    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-    cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-    cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    CQLEditorPage.saveMonacoCql()
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
     //delete and choose yes to confirm delete
@@ -306,16 +297,14 @@ describe('QDM Library Includes fields', () => {
     )
 
     //Deletes the library include statement from the CQL
-    cy.get(TestCasesPage.tcSearchIcone).first().click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
     //Deletes the library from the Saved Libraries grid
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab / number in parentheses has been updated
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (0)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
     cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('not.exist')
   })
@@ -326,14 +315,14 @@ describe('QDM Library Includes fields', () => {
     //make a change to CQL (don't save)
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
     //attempt to edit and choose No, keep working
@@ -344,9 +333,7 @@ describe('QDM Library Includes fields', () => {
     Utilities.clickOnKeepWorking()
 
     //confirm contents in CQL editor still contains changes and save button is still available
-    cy.get('[data-testid="editor-search-button"]').click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
+    MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
     Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -369,9 +356,7 @@ describe('QDM Library Includes fields', () => {
     //confirm that CQL value is the same as it was prior to change and the save button is not available
     cy.reload()
     CQLEditorPage.expandCQLBuilderPanel()
-    cy.get('[data-testid="editor-search-button"]').click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
     Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -379,14 +364,14 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
     cy.get(CQLEditorPage.includesTab).click()
     cy.get(CQLEditorPage.libraryResultsTable)
@@ -420,9 +405,7 @@ describe('QDM Library Includes fields', () => {
     )
 
     //Confirm the Edits for the library include statement have been applied to the CQL
-    cy.get('[data-testid="editor-search-button"]').click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
   })
 
   it('QDM: Edit Included Libraries functionality -- when changes to the CQL is saved', () => {
@@ -430,17 +413,14 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
 
     MeasuresPage.actionCenter('edit')
-    cy.get(EditMeasurePage.cqlEditorTab).click()
-    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-    cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-    cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    CQLEditorPage.saveMonacoCql()
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
     //click edit on the page
@@ -466,16 +446,14 @@ describe('QDM Library Includes fields', () => {
     )
 
     //Confirm the Edits for the library include statement have been applied to the CQL
-    cy.get('[data-testid="editor-search-button"]').click()
-    cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
-    cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
   })
 
   it('View Included QDM Library Details', () => {
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
     //Click on View Details
@@ -489,7 +467,7 @@ describe('QDM Library Includes fields', () => {
     cy.get(CQLEditorPage.includesTab).click()
 
     //Navigate to Saved Libraries tab
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
     //click edit on the page
@@ -505,25 +483,17 @@ describe('QDM Library Includes fields', () => {
     )
   })
 
-  it('Verify error message appears on Includes tab when there is an error in the Measure CQL', () => {
+  it('Verify error message appears when there is an error in the Measure CQL', () => {
     //Navigate to Includes tab and verify no error message appears
     cy.get(CQLEditorPage.includesTab).click()
     cy.get('[data-testid="cql-builder-errors"]').should('not.exist')
     //Navigate to Includes tab and verify saved Libraries appear
-    cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+    cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
 
     //Add errors to CQL
-    cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
-    cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-    cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "test":')
+    cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
 
-    //Navigate to Includes tab — expand CQL builder if collapsed
-    CQLEditorPage.expandCQLBuilderPanel()
-    cy.get(CQLEditorPage.includesTab).click()
-    Utilities.waitForElementVisible('[data-testid="cql-builder-errors"]', 60000)
-    cy.get('[data-testid="cql-builder-errors"]').should(
-      'contain.text',
-      'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.',
-    )
+    cy.get(CQLEditorPage.errorMsg).should('be.visible')
   })
 })

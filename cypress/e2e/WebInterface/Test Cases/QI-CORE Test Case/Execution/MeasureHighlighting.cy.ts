@@ -1072,7 +1072,7 @@ describe('Measure Highlighting', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             waitForDisabled: false
         })
@@ -1181,7 +1181,7 @@ describe('Highlighting accurately appears for a single PC measure', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 27700
         })
@@ -1275,7 +1275,7 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1464,7 +1464,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1543,7 +1543,7 @@ describe('Highlighting tab shows Results, Definitions, Functions, and Unused sec
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcDFNJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1657,7 +1657,7 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1825,7 +1825,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -1888,7 +1888,7 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {

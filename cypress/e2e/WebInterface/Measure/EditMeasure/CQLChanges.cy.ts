@@ -20,6 +20,10 @@ let testCaseJsonIppPass = TestCaseJson.RatioEpisodeSingleIPNoMO_IPP_PASS
 let newMeasureName = measureName + randValue
 let newCqlLibraryName = CqlLibraryName + randValue
 let measureCQL = MeasureCQL.measureCQL_5138_test
+const measureCQLWithoutDaysObs = measureCQL.replace(
+    'define function daysObs(e Encounter):\n  duration in days of e.period\n',
+    ''
+)
 
 describe('CQL Changes and how that impacts test cases, observations and population criteria', () => {
     beforeEach('Create Measure, Test Case and login', () => {
@@ -30,10 +34,11 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.SessionLogin()
+        return cy.then(() => undefined)
     })
 
     afterEach('Clean up Measure', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it(
@@ -44,7 +49,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
 
-            CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+            CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
             //Click on the measure group tab
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -123,17 +128,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 }
             })
 
-            cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
-            //remove the dayObs line(s) from CQL
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(
-                '{end}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{end}{backspace}' +
-                    '{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}'
-            )
+            CQLEditorPage.replaceMonacoCqlDocument(measureCQLWithoutDaysObs)
             //save changes to CQL
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -191,9 +186,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
             cy.get(EditMeasurePage.cqlEditorTab).click()
 
-            cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
-
-            CQLEditorPage.replaceCqlDocumentText(measureCQL)
+            CQLEditorPage.replaceMonacoCqlDocument(measureCQL)
 
             //save changes to CQL
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -216,7 +209,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
 
-            CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+            CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
             //Click on the measure group tab
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -284,17 +277,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
             cy.get(EditMeasurePage.cqlEditorTab).click()
 
-            cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
-            //remove the dayObs line(s) from CQL
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(
-                '{end}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{end}{backspace}' +
-                    '{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-                    '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}'
-            )
+            CQLEditorPage.replaceMonacoCqlDocument(measureCQLWithoutDaysObs)
             //save changes to CQL
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 

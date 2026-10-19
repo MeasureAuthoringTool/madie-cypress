@@ -38,7 +38,7 @@ describe('Delete Test Case', () => {
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,

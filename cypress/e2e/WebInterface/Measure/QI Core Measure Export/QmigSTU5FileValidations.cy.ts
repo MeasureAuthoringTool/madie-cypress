@@ -56,9 +56,9 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
             'Qualifying Encounters',
             'Encounter'
         )
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -136,11 +136,11 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Encounter')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -223,9 +223,9 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
             undefined,
             cvPops
         )
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -277,9 +277,9 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
             'Qualifying Encounters',
             'Encounter'
         )
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)

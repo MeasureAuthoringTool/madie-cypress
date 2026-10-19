@@ -138,7 +138,7 @@ export class CQLLibraryPage {
     }
 
     //CQL Editor
-    public static readonly cqlLibraryEditorTextBox = '.ace_content'
+    public static readonly cqlLibraryEditorTextBox = '[data-testid="split-view-view"] div.view-lines'
 
     //UMLS Not Logged in Error
     public static readonly umlsErrorMessage = '[data-testid="valueset-error"]'

@@ -38,7 +38,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -289,7 +289,7 @@ describe('Boolean Population Basis Expected Values', () => {
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -470,7 +470,7 @@ describe('Expected values for second initial population', () => {
         )
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {

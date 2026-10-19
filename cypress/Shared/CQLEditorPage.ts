@@ -1,12 +1,21 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Utilities } from "./Utilities"
 import { CQLLibraryPage } from "./CQLLibraryPage"
+import { MonacoEditor } from "./MonacoEditor"
 
 type SaveCqlOptions = {
     appendNewLine?: boolean
     appendCommand?: string
     collapseEditor?: boolean
     parseSpecialCharSequences?: boolean
+    successTimeout?: number
+    waitForDisabled?: boolean
+}
+
+type MonacoSaveCqlOptions = {
+    appendNewLine?: boolean
+    appendText?: string
+    collapseEditor?: boolean
     successTimeout?: number
     waitForDisabled?: boolean
 }
@@ -89,6 +98,14 @@ export class CQLEditorPage {
     public static readonly viewValueSetDetails = '[data-testid="action-center-0_View"]'
     public static readonly editValueSet = '[data-testid="action-center-0_Edit"]'
 
+    public static assertValueSetDetails(...expectedText: string[]): void {
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should(($details) => {
+            const detailText = $details.text().replace(/\s+/g, ' ')
+
+            expectedText.forEach((text) => expect(detailText).to.contain(text))
+        })
+    }
+
     //CQL Builder Sub tabs
     public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
     public static readonly collapseCQLBuilder = '[data-testid="collapsed-button"]'
@@ -143,6 +160,7 @@ export class CQLEditorPage {
     public static readonly clearParametersExpressionButton = '[data-testid="clear-parameter-btn"]'
     public static readonly applyParametersExpressionButton = '[data-testid="apply-parameter-btn"]'
     public static readonly parameterExpressionEditor = '[data-testid="terminology-section-sub-header-content-Expression Editor"]'
+    public static readonly parameterExpressionMonacoEditor = `${CQLEditorPage.parameterExpressionEditor} .monaco-editor`
     public static readonly editParameterNameTextBox = '[data-testid="parameter-name-text-input"]'
     public static readonly saveParameterBtn = '[data-testid="parameter-save-btn"]'
     public static readonly editSavedCQLParameters = '[data-testid="edit-button-0"]'
@@ -189,6 +207,16 @@ export class CQLEditorPage {
             })
 
         Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, timeout)
+    }
+
+    public static openMonacoCqlEditor(timeout = 30000): void {
+        cy.get(EditMeasurePage.cqlEditorTab, { timeout })
+            .should('not.have.attr', 'aria-disabled', 'true')
+            .then(($tab) => {
+                $tab[0].click()
+            })
+
+        cy.get(EditMeasurePage.monacoCqlEditor, { timeout }).should('be.visible')
     }
 
     public static validateSuccessfulCQLUpdate(library?: boolean): void {
@@ -253,6 +281,56 @@ export class CQLEditorPage {
         if (collapseEditor) {
             CQLEditorPage.collapseEditor()
         }
+    }
+
+    public static replaceMonacoCqlDocument(cql: string): void {
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, cql)
+    }
+
+    public static clearMonacoCqlDocument(): void {
+        MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+    }
+
+    public static replaceMonacoCqlDocumentFromFile(filePath: string): void {
+        MonacoEditor.replaceDocumentFromFile(filePath, EditMeasurePage.monacoCqlEditor)
+    }
+
+    public static saveMonacoCql(options: MonacoSaveCqlOptions = {}): void {
+        const {
+            appendNewLine = true,
+            appendText,
+            collapseEditor = false,
+            successTimeout = 50000,
+            waitForDisabled = false
+        } = options
+
+        CQLEditorPage.openMonacoCqlEditor()
+
+        if (appendText !== undefined) {
+            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, appendText)
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+        } else if (appendNewLine) {
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+        }
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, successTimeout)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        if (waitForDisabled) {
+            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        }
+
+        if (collapseEditor) {
+            CQLEditorPage.collapseEditor()
+        }
+    }
+
+    public static applyParameter(parameterName: string, parameterType: string): void {
+        const parameterDeclaration = `parameter "${parameterName}"`
+
+        cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.enabled').click()
+        MonacoEditor.appendToLineContaining(EditMeasurePage.monacoCqlEditor, parameterDeclaration, ` ${parameterType}`)
     }
 
     public static minimizeAlerts(hiddenAlertSelector: string): void {

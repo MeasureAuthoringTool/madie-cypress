@@ -36,10 +36,10 @@ describe('Check extensions data in QiCore 6.0.0 export', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: cqlQiCore6 })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'X', 'Observation')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 

@@ -33,18 +33,9 @@ describe('Test Case Execution with codes', () => {
     it('Verify Test Case Execution for the CQL that uses codes', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLWithCodes.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5500)
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLWithCodes.txt')
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

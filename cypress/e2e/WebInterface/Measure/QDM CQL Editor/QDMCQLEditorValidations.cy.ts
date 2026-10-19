@@ -5,6 +5,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'QDMTestMeasure' + Date.now() + 1
 let CqlLibraryName = 'QDMTestLibrary' + Date.now() + 1
@@ -186,10 +187,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        return Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify success message on CQL editor component, on save and on tab / page load', () => {
@@ -200,9 +198,9 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, `${measureCQL}\n`)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
@@ -214,8 +212,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQDMCQL_without_using)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_without_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -230,8 +227,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQDMCQL_with_incorrect_using)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_incorrect_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -249,8 +245,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQDMCQL_with_different_Lib_name)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_different_Lib_name)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
@@ -266,12 +261,11 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_withSameLibraryVersionAndDifferentAlias)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_withSameLibraryVersionAndDifferentAlias)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
 
     })
 
@@ -283,13 +277,12 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_withDifferentLibraryVersionAndDifferentAlias)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_withDifferentLibraryVersionAndDifferentAlias)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM is already in use in this library.')
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'Library MATGlobalCommonFunctionsQDM is already in use in this library.')
 
     })
 
@@ -301,13 +294,12 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_without_CodeSystem_Name)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_without_CodeSystem_Name)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 10, Col:29: Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, "code statement requires a codesystem reference. Please add a 'from' clause to your statement.")
 
     })
 
@@ -319,13 +311,12 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        Utilities.typeFileContents('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', EditMeasurePage.cqlEditorTextBox)
+        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', EditMeasurePage.monacoCqlEditor)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 20, Col:2: ELM: 2:25 | Retrieves must contain a code or value set filter')
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'Retrieves must contain a code or value set filter')
     })
 
     it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
@@ -336,13 +327,12 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        Utilities.typeFileContents('cypress/fixtures/QDMCQLWithoutIncludedLibraryVersion.txt', EditMeasurePage.cqlEditorTextBox)
+        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QDMCQLWithoutIncludedLibraryVersion.txt', EditMeasurePage.monacoCqlEditor)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 4, Col:1: ELM: 1:46 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.')
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.')
     })
 
     it('Verify error message if CQL contains access modifiers like private or public', () => {
@@ -351,15 +341,13 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     
         CQLEditorPage.clickCQLEditorTab()
     
-        cy.readFile('cypress/fixtures/QCMCQLWithPrivateAccessModifier.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QCMCQLWithPrivateAccessModifier.txt', EditMeasurePage.monacoCqlEditor)
     
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Access modifiers like Public and Private can not be used in MADiE.')
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'Access modifiers like Public and Private can not be used in MADiE.')
     })
 
     it('Verify error message when Context is anything except Patient', () => {
@@ -368,15 +356,13 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     
         CQLEditorPage.clickCQLEditorTab()
     
-        cy.readFile('cypress/fixtures/QDMPractitionerContext.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
+        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QDMPractitionerContext.txt', EditMeasurePage.monacoCqlEditor)
     
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', "Parse: 0:19 | Measure Context must be 'Patient'.")
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, "Measure Context must be 'Patient'.")
     })
 
     it('When Concept constructor is used in the QDM Measure CQL, the constructor was removed and a success message is displayed while saving CQL', () => {
@@ -387,13 +373,12 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_with_Concept_Constructor)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_with_Concept_Constructor)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible('#content', 60000)
 
         cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
+        cy.get(EditMeasurePage.monacoCqlEditor).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
     })
 })

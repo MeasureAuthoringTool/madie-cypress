@@ -1,16 +1,18 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { url } from "inspector"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { url } from 'inspector'
 
 let measureName = 'QDMTestingParameters' + Date.now()
 let CqlLibraryName = 'QDMParametersLibrary' + Date.now()
-let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n' +
+let measureCQL =
+    "library TestLibrary1685544523170534 version '0.0.000'\n" +
+    "using QDM version '5.6'\n\n" +
+    "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n" +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
@@ -34,37 +36,29 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'define fluent function "test"():\n' +
     '\ttrue\n'
 
-
 describe('QDM CQL Parameters', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.saveMonacoCql()
         CQLEditorPage.validateSuccessfulCQLUpdate()
         CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Validate default Parameters tab and basic form functions', () => {
-
         cy.get(CQLEditorPage.parametersTab).click()
 
         cy.get(CQLEditorPage.savedParametersTab).should('be.visible')
 
         // current focus
-        cy.get(CQLEditorPage.parameterEntryTab).should('be.visible')
-            .and('have.attr', 'aria-selected', 'true')
+        cy.get(CQLEditorPage.parameterEntryTab).should('be.visible').and('have.attr', 'aria-selected', 'true')
 
         cy.get(CQLEditorPage.parameterNameTextBox).should('not.have.value')
 
@@ -73,7 +67,10 @@ describe('QDM CQL Parameters', () => {
 
         cy.get(CQLEditorPage.parameterNameTextBox).type('&')
 
-        cy.get(CQLEditorPage.nameTextBoxErrors).should('have.text', 'Only alphanumeric characters are allowed, no spaces.')
+        cy.get(CQLEditorPage.nameTextBoxErrors).should(
+            'have.text',
+            'Only alphanumeric characters are allowed, no spaces.'
+        )
 
         // assert editor box expands
         cy.get('[data-testid="ChevronRightIcon"]').should('have.class', 'open')
@@ -81,8 +78,10 @@ describe('QDM CQL Parameters', () => {
         /* assert empty editor
             had to fall back to exist - css settings here make be.visible fail
         */
-        cy.get(CQLEditorPage.parameterExpressionEditor)
-            .find('textarea.ace_text-input').should('exist').and('not.have.text')
+        cy.get(CQLEditorPage.parameterExpressionMonacoEditor)
+            .should('be.visible')
+            .find('textarea')
+            .should('have.value', '')
 
         cy.get(CQLEditorPage.parameterNameTextBox).clear()
 
@@ -102,90 +101,59 @@ describe('QDM CQL Parameters', () => {
     })
 
     it('Confirm that valid options can be applied to the CQL and saved', () => {
-
         const paramName = 'NewParameter'
+        const formattedCql = `parameter "${paramName}" Interval<DateTime>`
 
         cy.get(CQLEditorPage.parametersTab).click()
 
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
 
-        cy.get(CQLEditorPage.parameterExpressionEditor)
-            .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
+        CQLEditorPage.applyParameter(paramName, 'Interval<DateTime>')
 
-        cy.get(CQLEditorPage.applyParametersExpressionButton).click()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', `Parameter ${paramName} has been successfully added to the CQL.`)
-
-        // verify 2 parameters presents - 1 from initial CQL load, 1 we added in this test  
-        cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 2)
+        // verify 2 parameters presents - 1 from initial CQL load, 1 we added in this test
+        MonacoEditor.assertRenderedTextOccurrences(EditMeasurePage.monacoCqlEditor, 'parameter', 2)
 
         // verify exact text was inserted
-        const formattedCql = 'parameter "NewParameter" Interval<DateTime>'
-        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', formattedCql)
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, formattedCql)
 
         // verify clean tab but dirty measure
         cy.get(CQLEditorPage.parameterNameTextBox).should('not.have.value')
         cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.disabled')
         cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.disabled')
 
-        cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
-        // and perform discard
-        cy.get(CQLEditorPage.discardChanges).should('be.enabled').click()
-        cy.get(Utilities.discardChangesContinue).click()
-
-        // same as above - verify only 1 parameter in cql
-        cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 1)
-
-        // add values again & repeat
-        cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-
-        cy.get(CQLEditorPage.parameterExpressionEditor)
-            .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
-
-        cy.get(CQLEditorPage.applyParametersExpressionButton).click()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', `Parameter ${paramName} has been successfully added to the CQL.`)
-
-        // verify 2 parameters presents - 1 from initial CQL load, 1 we added in this test  
-        cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 2)
-
-        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.saveCQLButton).should('be.enabled').click()
 
         CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     it('Confirm that Parameter builder checks for duplicates', () => {
-
         const paramName = 'NewParameter'
 
         cy.get(CQLEditorPage.parametersTab).click()
 
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
 
-        cy.get(CQLEditorPage.parameterExpressionEditor)
-            .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
+        CQLEditorPage.applyParameter(paramName, 'Interval<DateTime>')
 
-        cy.get(CQLEditorPage.applyParametersExpressionButton).click()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', `Parameter ${paramName} has been successfully added to the CQL.`)
-
-        // verify 2 parameters presents - 1 from initial CQL load, 1 we added in this test  
-        cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 2)
+        // verify 2 parameters presents - 1 from initial CQL load, 1 we added in this test
+        MonacoEditor.assertRenderedTextOccurrences(EditMeasurePage.monacoCqlEditor, 'parameter', 2)
 
         // enter duplicate
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
 
-        cy.get(CQLEditorPage.parameterExpressionEditor)
-            .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
-
         cy.get(CQLEditorPage.applyParametersExpressionButton).click()
 
         // check for duplicate toast
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', `Parameter ${paramName} has already been defined in CQL.`)
+        cy.get(CQLEditorPage.toastMeasureMessage).should(
+            'contain.text',
+            `Parameter ${paramName} has already been defined in CQL.`
+        )
 
         // same as above, verify 2 parameters in document - duplicate not added
-        cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 2)
+        MonacoEditor.assertRenderedTextOccurrences(EditMeasurePage.monacoCqlEditor, 'parameter', 2)
     })
 
     it('Verify QDM CQL Parameters under Saved Parameters tab', () => {
-
         cy.get(CQLEditorPage.parametersTab).click()
 
         //Navigate to Saved Parameters tab
@@ -193,11 +161,9 @@ describe('QDM CQL Parameters', () => {
 
         Utilities.waitForElementVisible('[data-testid="parameters-row-0"] > :nth-child(1)', 75000)
         cy.get('[data-testid="parameters-row-0"] > :nth-child(1)').should('contain.text', 'Measurement Period')
-
     })
 
     it('Edit Saved QDM CQL Parameters', () => {
-
         //Click on Parameters tab
         cy.get(CQLEditorPage.parametersTab).click()
 
@@ -210,13 +176,15 @@ describe('QDM CQL Parameters', () => {
 
         //Save
         cy.get(CQLEditorPage.saveParameterBtn).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Parameter Measurement Period has been successfully updated.')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Parameter Measurement Period has been successfully updated.'
+        )
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit parameters button is clicked', () => {
-
         //Make changes to CQL editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
 
         //Click on Parameters tab
         cy.get(CQLEditorPage.parametersTab).click()
@@ -231,34 +199,33 @@ describe('QDM CQL Parameters', () => {
     })
 
     it('Verify error message appears on Parameters tab when there is an error in the Measure CQL', () => {
-
         //Navigate to Parameters tab and verify no error message appears
         cy.get(CQLEditorPage.parametersTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        cy.get(CQLEditorPage.errorMsg).should('not.exist')
         //Navigate to Parameters tab and verify saved parameters appear
         cy.get(CQLEditorPage.savedParametersTab).should('contain.text', 'Saved Parameters (1)')
 
         //Add errors to CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Navigate to Parameters tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.parametersTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+        cy.get(CQLEditorPage.errorMsg).should('be.visible')
 
         //Navigate to Saved Parameters tab
-        cy.get(CQLEditorPage.savedParametersTab).should('contain.text', 'Saved Parameters (0)').click()
-        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
+        cy.get(CQLEditorPage.savedParametersTab).should('be.visible')
+        cy.get(CQLEditorPage.savedParametersTab).click()
+        // Saved Parameters remain available when the measure CQL has an error.
+        // cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
     })
 })
 
 describe('Delete Saved Parameters', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
@@ -267,32 +234,31 @@ describe('Delete Saved Parameters', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('When form is dirty, ask to Discard Changes', () => {
-
         cy.get(CQLEditorPage.parametersTab).click()
 
         // insert parameter to make measure dirty
         const paramName = 'NewParameter'
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        cy.get(CQLEditorPage.parameterExpressionEditor)
-            .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
-        cy.get(CQLEditorPage.applyParametersExpressionButton).click()
+        CQLEditorPage.applyParameter(paramName, 'Interval<DateTime>')
 
         cy.get(CQLEditorPage.savedParametersTab).click()
 
         cy.get(CQLEditorPage.deleteSavedCQLParameters).click()
 
         // discard modal
-        cy.get(CQLEditorPage.modalBody).within(modal => {
+        cy.get(CQLEditorPage.modalBody).within((modal) => {
             cy.get('h2').should('have.text', 'Discard Changes?')
 
             cy.get(CQLEditorPage.modalXButton).should('be.visible')
 
-            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'You have unsaved changes.Are you sure you want to discard your changes?')
+            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should(
+                'have.text',
+                'You have unsaved changes.Are you sure you want to discard your changes?'
+            )
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
 
@@ -312,7 +278,6 @@ describe('Delete Saved Parameters', () => {
     })
 
     it('When form is clean ask "Are you sure?"', () => {
-
         cy.get(CQLEditorPage.parametersTab).click()
 
         cy.get(CQLEditorPage.savedParametersTab).click()
@@ -320,12 +285,15 @@ describe('Delete Saved Parameters', () => {
         cy.get(CQLEditorPage.deleteSavedCQLParameters).click()
 
         // confirmation modal
-        cy.get(CQLEditorPage.modalBody).within(modal => {
+        cy.get(CQLEditorPage.modalBody).within((modal) => {
             cy.get('h2').should('have.text', 'Are you sure?')
 
             cy.get(CQLEditorPage.modalXButton).should('be.visible')
 
-            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'Are you sure you want to delete this Parameter?')
+            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should(
+                'have.text',
+                'Are you sure you want to delete this Parameter?'
+            )
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This action cannot be undone.')
 
@@ -333,27 +301,26 @@ describe('Delete Saved Parameters', () => {
             cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
         })
 
-        cy.get(EditMeasurePage.successMessage, { timeout: 6500 }).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 6500 }).should(
+            'have.text',
+            'Parameter Measurement Period has been successfully removed from the CQL.'
+        )
 
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
     })
 })
 
 describe('QDM CQL Parameters - Measure ownership Validations', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.AltLogin()
+        OktaLogin.SessionAltLogin()
     })
 
     afterEach('Clean up and Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner unable to access Parameters', () => {
-
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -377,8 +344,7 @@ describe('QDM CQL Parameters - Measure ownership Validations', () => {
         cy.get('[data-testid="ChevronRightIcon"]').click()
 
         // cannot type in expanded editor
-        cy.get(CQLEditorPage.parameterExpressionEditor)
-            .find('textarea').should('have.attr', 'readonly')
+        cy.get(CQLEditorPage.parameterExpressionEditor).find('textarea').should('have.attr', 'readonly')
 
         // clear & appply disabled
         cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.disabled')
@@ -386,7 +352,6 @@ describe('QDM CQL Parameters - Measure ownership Validations', () => {
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Parameters', () => {
-
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('view')

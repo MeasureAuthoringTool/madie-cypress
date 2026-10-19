@@ -38,15 +38,9 @@ describe('Fluent Function Capability', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
-            cy.wait(3500)
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForFluentFunction.txt')
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

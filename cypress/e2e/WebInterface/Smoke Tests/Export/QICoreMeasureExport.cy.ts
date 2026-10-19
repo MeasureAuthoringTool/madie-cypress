@@ -59,11 +59,7 @@ describe('QI-Core Measure Export', () => {
         //Add RAV to the Measure
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql()
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on Measure Group tab
@@ -212,11 +208,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql()
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(Header.mainMadiePageButton).click()
@@ -465,11 +457,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         Utilities.waitForElementDisabled(EditMeasurePage.measurementInformationSaveButton, 12500)
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{end}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql()
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(Header.mainMadiePageButton).click()

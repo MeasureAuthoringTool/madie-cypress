@@ -8,6 +8,7 @@ import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeas
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Toasts } from "../../../../Shared/Toasts"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 let updatedMeasuresPageName = ''
 let updatedMeasuresPageNameSecond = ''
@@ -28,10 +29,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     it('Add Draft to the versioned measure', () => {
@@ -228,14 +229,13 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'6.0.0\'')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers')
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'library ' + newCqlLibraryName)
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, "using QICore version '6.0.0'")
+        MonacoEditor.assertRenderedText(
+            EditMeasurePage.monacoCqlEditor,
+            "include FHIRHelpers version '4.1.000' called FHIRHelpers"
+        )
 
         //navigate to main measure list page and version and draft to put measure back on 4.1.1 modal version
         cy.get(Header.mainMadiePageButton).click()

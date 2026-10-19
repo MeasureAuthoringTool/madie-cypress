@@ -8,7 +8,7 @@ parameter "Measurement Period" Interval<DateTime>
 
 context Patient
 
-{home}define "Palliative Care in the Measurement Period":
+define "Palliative Care in the Measurement Period":
   exists ( [Observation: "Functional Assessment of Chronic Illness Therapy - Palliative Care Questionnaire (FACIT-Pal)"] PalliativeAssessment
     where PalliativeAssessment.status ~ 'final'
     )
@@ -17,12 +17,12 @@ context Patient
     and PalliativeEncounter.status ~ 'finished'
   )
 
-{home}define "Procedure DRC Example":
+define "Procedure DRC Example":
   exists [Procedure] Py
     //DRC is determined based on the code of the procedure in the data
     return resultsForFirstProcedureOnDate(Py.code, date from Today())
 
-{home}define function resultsForFirstProcedureOnDate(procedureCode Concept, onDate Date):
+define function resultsForFirstProcedureOnDate(procedureCode Concept, onDate Date):
   (First ( [Procedure: "procedureCode"] proc
   where proc.status ~ 'completed' ) ) Px
   return flatten ( Px.partOf po

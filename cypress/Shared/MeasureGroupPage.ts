@@ -3,11 +3,12 @@ import { EditMeasurePage } from './EditMeasurePage'
 import { CQLEditorPage } from './CQLEditorPage'
 import { Utilities } from './Utilities'
 import { TestCasesPage } from './TestCasesPage'
-import { UUIDTypes, v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { Stratification } from '@madie/madie-models'
 import { OktaLogin } from './OktaLogin'
 import { FixtureOwner, MeasureGroupBody, TestData } from './TestData'
 import { Toasts } from './Toasts'
+import { MonacoEditor } from './MonacoEditor'
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -47,9 +48,9 @@ export type CVGroups = {
 }
 export type MeasureObservations = {
     aggregateMethod: string
-    criteriaReference?: UUIDTypes
+    criteriaReference?: string
     definition: string
-    id?: UUIDTypes
+    id?: string
     description?: string
 }
 
@@ -324,13 +325,17 @@ export class MeasureGroupPage {
 
         TestData.requestMeasureGroup('POST', body, measureNumber, {}, owner).then((response) => {
             expect(response.status).to.eql(201)
-            expect(response.body.id).to.be.exist
+            const measureGroupId = response.body.id
+            expect(measureGroupId).to.be.a('string').and.not.be.empty
+            if (typeof measureGroupId !== 'string' || !measureGroupId) {
+                throw new Error('Created measure group response did not include an id.')
+            }
             if (fixtureName) {
-                TestData.writeFixture(fixtureName, response.body.id, owner)
+                TestData.writeFixture(fixtureName, measureGroupId, owner)
                 return
             }
 
-            TestData.writeMeasureGroupId(response.body.id, groupNumber, owner)
+            TestData.writeMeasureGroupId(measureGroupId, groupNumber, owner)
         })
 
         return user
@@ -442,7 +447,8 @@ export class MeasureGroupPage {
         NumerExcl?: string,
         PopDenomP?: string,
         popBasis?: string,
-        groupNumber = 0
+        groupNumber = 0,
+        improvementNotation: string | null = 'Increased score indicates improvement'
     ): string {
         if (altUser === undefined || altUser === null) {
             altUser = false
@@ -461,6 +467,15 @@ export class MeasureGroupPage {
         }
         if (PopDenomP == undefined || PopDenomP === null) {
             PopDenomP = 'Surgical Absence of Cervix'
+        }
+        if (DenomExcl === undefined || DenomExcl === null) {
+            DenomExcl = ''
+        }
+        if (DenomExcep === undefined || DenomExcep === null) {
+            DenomExcep = ''
+        }
+        if (NumerExcl === undefined || NumerExcl === null) {
+            NumerExcl = ''
         }
 
         if (measureNumber === undefined || measureNumber === null || measureNumber === 0) {
@@ -522,12 +537,34 @@ export class MeasureGroupPage {
                 },
                 measureGroupTypes: ['Outcome'],
                 stratifications: [],
-                improvementNotation: 'Increased score indicates improvement'
+                ...(improvementNotation === null ? {} : { improvementNotation })
             },
             owner,
             groupNumber,
             measureNumber,
             `measureGroupId${groupNumber > 0 ? groupNumber : ''}`
+        )
+    }
+
+    public static CreateProportionMeasureGroupWithoutImprovementNotationAPI(
+        measureNumber = 0,
+        altUser = false,
+        initialPopulation = 'ipp',
+        numerator = 'num',
+        denominator = 'denom'
+    ): string {
+        return this.CreateProportionMeasureGroupAPI(
+            measureNumber,
+            altUser,
+            initialPopulation,
+            '',
+            '',
+            numerator,
+            '',
+            denominator,
+            undefined,
+            0,
+            null
         )
     }
 
@@ -713,7 +750,7 @@ export class MeasureGroupPage {
             altUser = false
         }
         const owner = this.fixtureOwner(altUser)
-        let observations = []
+        let observations: MeasureObservations[] = []
         const numUuid = uuidv4()
         const denomUuid = uuidv4()
         if (denominatorObservation) {
@@ -812,7 +849,10 @@ export class MeasureGroupPage {
                 measureGroupTypes: [measureType],
                 stratifications: [],
                 improvementNotation: 'Increased score indicates improvement',
-                measureObservations: observations
+                measureObservations: observations.map((observation) => ({
+                    ...observation,
+                    criteriaReference: observation.criteriaReference ?? null
+                }))
             },
             owner
         )
@@ -847,14 +887,12 @@ export class MeasureGroupPage {
     }
 
     private static loadTestCaseExecutionCql(): void {
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
-        cy.readFile(MeasureGroupPage.testCaseExecutionCqlFixture)
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.openMonacoCqlEditor()
+        cy.readFile(MeasureGroupPage.testCaseExecutionCqlFixture).then((fileContents) => {
+            MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+            MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fileContents.replace(/\{home\}/gi, ''))
+        })
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get('body').then(($body) => {
             if ($body.find(EditMeasurePage.cqlEditorExpandCollapseBtn).length > 0) {
@@ -876,11 +914,7 @@ export class MeasureGroupPage {
                 }
             })
 
-            cy.contains(
-                `${this.supplementalDataDefinitionDropdown} li[role="option"]`,
-                definition,
-                { timeout: 50000 },
-            )
+            cy.contains(`${this.supplementalDataDefinitionDropdown} li[role="option"]`, definition, { timeout: 50000 })
                 .scrollIntoView()
                 .should('be.visible')
                 .click()
@@ -893,10 +927,7 @@ export class MeasureGroupPage {
 
         //Save Supplemental data
         cy.get(this.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
-        Toasts.clearToast(
-            EditMeasurePage.successMessage,
-            'Measure Supplemental Data have been Saved Successfully',
-        )
+        Toasts.clearToast(EditMeasurePage.successMessage, 'Measure Supplemental Data have been Saved Successfully')
         Utilities.waitForElementDisabled(this.saveSupplementalDataElements, 60000)
     }
 

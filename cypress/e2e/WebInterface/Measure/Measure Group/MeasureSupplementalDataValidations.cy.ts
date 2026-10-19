@@ -1,14 +1,15 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../Shared/Header'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'MeasureSDEValidations' + Date.now()
 let CqlLibraryName = 'MeasureSDEValidationsLib' + Date.now()
@@ -18,10 +19,20 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
+const cqlWithoutDenomDefinition = measureCQL.replace('\ndefine "denom":\ntrue', '')
+
+const removeDenomDefinition = (): void => {
+    CQLEditorPage.openMonacoCqlEditor()
+    MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+    MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, cqlWithoutDenomDefinition)
+}
+
+const restoreDenomDefinition = (): void => {
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "denom":\n true')
+}
+
 describe('Validations between Supplemental Data Elements with the CQL definitions', () => {
-
     beforeEach('Create New Measure and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'ipp', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -29,12 +40,10 @@ describe('Validations between Supplemental Data Elements with the CQL definition
     })
 
     afterEach('Log out', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Removing definition related to the SD alerts user.', () => {
-
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
@@ -52,44 +61,51 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
 
-        //navigate to the CQL tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //click into CQL Editor and remove Denom definition
-        cy.get(EditMeasurePage.cqlEditorTextBox).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}')
+        //navigate to the CQL tab and remove the valid denom definition
+        removeDenomDefinition()
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //confirm error toast related to SD and/or RA
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(MeasureGroupPage.pcErrorAlertToast).should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get('[data-testid="test-case-list-error"]').should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //Verify that the Run Test button is disabled
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         //navigate to the edit test case age and make sure alert concerning SA appears
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get('[data-testid="test-case-alerts"]').should('contain.text', '2 errors were foundSupplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.')
+        cy.get('[data-testid="test-case-alerts"]').should(
+            'contain.text',
+            '2 errors were foundSupplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values.Test Cases cannot be executed and Valuesets from the measure CQL cannot be expanded until this is resolved.'
+        )
 
         //Verify that the Run Test button is disabled
         cy.get(TestCasesPage.runTestButton).should('be.disabled')
     })
 
     it('Fixing SD to point to something that is, now, in CQL, resolves alert.', () => {
-
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
@@ -107,31 +123,36 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
 
-        //navigate to the CQL tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //click into CQL Editor and remove Denom definition
-        cy.get(EditMeasurePage.cqlEditorTextBox).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}')
+        //navigate to the CQL tab and remove the valid denom definition
+        removeDenomDefinition()
 
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //confirm error toast related to SD and/or RA
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(MeasureGroupPage.pcErrorAlertToast).should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get('[data-testid="test-case-list-error"]').should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //navigate back to the group page
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -141,7 +162,10 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         cy.get(MeasureGroupPage.removeCloseDefinitionSelection).eq(0).click()
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
 
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
 
         cy.get(EditMeasurePage.successMessage, { timeout: 25000 }).should('not.be.visible')
 
@@ -155,7 +179,10 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
@@ -166,7 +193,6 @@ describe('Validations between Supplemental Data Elements with the CQL definition
     })
 
     it('Placing definition back into CQL and saving resolves the alert.', () => {
-
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
@@ -184,42 +210,39 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should(
+            'contain.text',
+            'Measure Supplemental Data have been Saved Successfully'
+        )
 
-        //navigate to the CQL tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //click into CQL Editor and remove Denom definition
-        cy.get(EditMeasurePage.cqlEditorTextBox).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
-            '{backspace}{backspace}{backspace}{backspace}')
+        //navigate to the CQL tab and remove the valid denom definition
+        removeDenomDefinition()
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //confirm error toast related to SD and/or RA
-        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.errorMessage).should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(MeasureGroupPage.pcErrorAlertToast).should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get('[data-testid="test-case-list-error"]').should(
+            'contain.text',
+            'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.'
+        )
 
-        //navigate to the CQL tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //click into CQL Editor and remove Denom definition
-        cy.get(EditMeasurePage.cqlEditorTextBox).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
-            '\n' +
-            '\n' +
-            'define "denom":\n' +
-            ' true')
+        //navigate to the CQL tab and restore the definition
+        CQLEditorPage.openMonacoCqlEditor()
+        restoreDenomDefinition()
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('exist')

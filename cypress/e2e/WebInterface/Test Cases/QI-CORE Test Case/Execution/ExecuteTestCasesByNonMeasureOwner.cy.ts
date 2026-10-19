@@ -38,7 +38,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         TestCasesPage.clickEditforCreatedTestCase()
     })

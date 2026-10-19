@@ -3,7 +3,6 @@ import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
-import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Utilities } from '../../../../Shared/Utilities'
 
@@ -21,13 +20,9 @@ describe('FHIR Measure Export, Not the Owner', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom', 'boolean')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{end}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
         OktaLogin.UILogout()
 
         OktaLogin.AltLogin()

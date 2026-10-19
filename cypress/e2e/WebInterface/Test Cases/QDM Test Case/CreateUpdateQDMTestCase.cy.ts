@@ -147,7 +147,7 @@ describe('Create and Update QDM Test Case', () => {
     it('Create and Update Test Case for QDM Measure', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -208,11 +208,8 @@ describe('Create and Update QDM Test Case', () => {
         Utilities.waitForElementVisible(TestCasesPage.meassureCQLVOTab, 3000)
         cy.get(TestCasesPage.meassureCQLVOTab).click()
 
-        cy.get(TestCasesPage.voTCCQLobject).scrollIntoView()
-        Utilities.waitForElementVisible(TestCasesPage.voTCCQLobject, 3000)
-        cy.get(TestCasesPage.voTCCQLobject).click()
-
-        cy.get(TestCasesPage.voTCCQLEditor).should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.voTCCQLobject).should('be.visible')
+        cy.get(TestCasesPage.voTCCQLEditor).should('not.exist')
     })
 
     it('Add Test Case Expected values for Boolean Measure', () => {

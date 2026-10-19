@@ -16,13 +16,12 @@ code "Acute Pharyngitis Code":
 
 parameter "Measurement Period" Interval<DateTime>
 context Patient
-{home}define "Retrieve with no filter":
+define "Retrieve with no filter":
  ["Encounter, Performed"] ValidEncounter
     where ValidEncounter.relevantPeriod during "Measurement Period"
-{home}define "SDE Sex":
+define "SDE Sex":
   ["Patient Characteristic Sex": "ONC Administrative Sex"]
-{home}define "SDE Payer":
+define "SDE Payer":
   ["Patient Characteristic Payer": "Payer Type"]
-{home}define "SDE Race":
+define "SDE Race":
   ["Patient Characteristic Race": "Race"]
-

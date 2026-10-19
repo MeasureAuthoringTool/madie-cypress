@@ -59,8 +59,8 @@ export class EditMeasurePage {
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
     public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
     public static readonly editMeasureExportActionBtn = '[data-testid="ExportMeasure"]'
-    public static readonly viewHRActionBtn = '[data-testid="Viewhumanreadable"]'
-    public static readonly shareMeasureActionBtn = '[data-testid="Share/Unshare"]'
+    public static readonly viewHRActionBtn = '[data-testid="ViewHumanReadable"]'
+    public static readonly shareMeasureActionBtn = '[data-testid="ShareorUnshareMeasure"]'
     public static readonly transferMeasureActionBtn = '[data-testid="transfer-action-btn"]'
     public static readonly viewHistoryActionBtn = '[data-testid="ViewHistory"]'
     public static readonly reviewMeasureActionBtn = '[data-testid="Review"]'
@@ -190,6 +190,7 @@ export class EditMeasurePage {
 
     //cql editor box on page
     public static readonly cqlEditorTextBox = '.ace_content'
+    public static readonly monacoCqlEditor = '[data-testid="split-view-view"] div.view-lines'
     //save button on page
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
     //discard changes

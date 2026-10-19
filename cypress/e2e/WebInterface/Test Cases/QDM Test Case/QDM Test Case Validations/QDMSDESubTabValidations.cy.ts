@@ -40,7 +40,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
@@ -141,7 +141,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
@@ -184,7 +184,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
@@ -292,7 +292,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     it('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
@@ -333,11 +333,11 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         // back to cql, edit for new valuesets & update definition
-        CQLEditorPage.openCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.readFile('cypress/fixtures/QDMSDEMeasureAfterChanges.txt').then((cql) => {
-            CQLEditorPage.replaceCqlDocumentText(cql)
+            CQLEditorPage.replaceMonacoCqlDocument(cql)
         })
-        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // back to test case, edit same one, update affected fields
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

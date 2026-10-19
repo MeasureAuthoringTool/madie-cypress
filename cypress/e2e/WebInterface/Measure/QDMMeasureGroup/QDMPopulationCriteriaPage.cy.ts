@@ -30,10 +30,10 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         measureData.measureCql = simpleQDMMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
@@ -324,7 +324,7 @@ describe('No values in QDM PC fields, when no CQL', () => {
         measureData.patientBasis = 'false'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -367,9 +367,9 @@ describe('Save Population Criteria on QDM measure', () => {
         measureData.measureCql = simpleQDMMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
@@ -423,9 +423,9 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         measureData.measureCql = booleanPatientBasisQDM_CQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
@@ -482,9 +482,9 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         measureData.measureCql = booleanPatientBasisQDM_CQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {

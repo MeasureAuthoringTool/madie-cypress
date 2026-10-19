@@ -91,7 +91,7 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -133,10 +133,7 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(EditMeasurePage.testCasesTab).click()

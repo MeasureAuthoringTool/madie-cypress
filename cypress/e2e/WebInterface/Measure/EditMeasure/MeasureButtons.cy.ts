@@ -69,6 +69,7 @@ describe('Delete measure on the measure edit page', () => {
         )
 
         OktaLogin.Login()
+        return cy.then(() => undefined)
     })
 
     it('Delete measure on the edit page for a measure', () => {
@@ -140,13 +141,14 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
+        return cy.then(() => undefined)
     })
 
     afterEach('Log Out and Clean up', () => {
-        Utilities.deleteVersionedMeasure(measureQDM, qdmCQLLibrary)
+        return Utilities.deleteVersionedMeasure(measureQDM, qdmCQLLibrary)
     })
 
     it('Version and Draft QDM Measure on the edit page for a measure', () => {
@@ -203,13 +205,14 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
+        return cy.then(() => undefined)
     })
 
     afterEach('Log Out and Clean up', () => {
-        Utilities.deleteVersionedMeasure(measureQICore, qiCoreCQLLibrary)
+        return Utilities.deleteVersionedMeasure(measureQICore, qiCoreCQLLibrary)
     })
 
     it('Version and Draft Qi Core measure on the edit page for a measure', () => {
@@ -288,11 +291,13 @@ describe('Export measure on the Edit Measure page', () => {
             'Initial Population',
             'boolean'
         )
+        return cy.then(() => undefined)
     })
 
     after(() => {
-        Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
-        Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+        return Utilities.deleteMeasure(measureQDM, qdmCQLLibrary).then(() =>
+            Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+        )
     })
 
     it('Export QDM 5.6 measure', () => {
@@ -303,14 +308,7 @@ describe('Export measure on the Edit Measure page', () => {
 
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 22500)
+        CQLEditorPage.saveMonacoCql({ successTimeout: 20700, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
@@ -326,14 +324,7 @@ describe('Export measure on the Edit Measure page', () => {
 
         MeasuresPage.actionCenter('edit', 1)
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 22500)
+        CQLEditorPage.saveMonacoCql({ successTimeout: 20700, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
@@ -364,12 +355,13 @@ describe('Share measure from the Edit Measure page', () => {
         measureQICore = 'QICoreShareMeasure' + date
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests, 1)
+        return cy.then(() => undefined)
     })
 
     after(() => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
-        Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+        return OktaLogin.UILogout()
+            .then(() => Utilities.deleteMeasure(measureQDM, qdmCQLLibrary))
+            .then(() => Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1))
     })
 
     it('Verify Measure owner can share QDM 5.6 Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
@@ -424,8 +416,7 @@ describe('Share measure from the Edit Measure page', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(qdmMeasureCQL)
+        CQLEditorPage.replaceMonacoCqlDocument(qdmMeasureCQL)
 
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
@@ -500,10 +491,8 @@ describe('Share measure from the Edit Measure page', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
-            CQLEditorPage.replaceCqlDocumentText(cql)
-        })
-        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
         //Navigate to the existing measure group form.
         EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.measureGroupTypeSelect)
@@ -569,11 +558,13 @@ describe('Dirty Check Validations', () => {
             'Initial Population',
             'boolean'
         )
+        return cy.then(() => undefined)
     })
 
     after('Log Out', () => {
-        Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
-        Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+        return Utilities.deleteMeasure(measureQDM, qdmCQLLibrary).then(() =>
+            Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+        )
     })
 
     it('Dirty check pops up when QDM Measure has unsaved changes and user try to Version', () => {
@@ -651,11 +642,13 @@ describe('View measure Human Readable on the Edit Measure page', () => {
             'Initial Population',
             'boolean'
         )
+        return cy.then(() => undefined)
     })
 
     after(() => {
-        Utilities.deleteMeasure(measureQDM, qdmCQLLibrary)
-        Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+        return Utilities.deleteMeasure(measureQDM, qdmCQLLibrary).then(() =>
+            Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+        )
     })
 
     it('View Human Readable for QDM 5.6 measure', () => {

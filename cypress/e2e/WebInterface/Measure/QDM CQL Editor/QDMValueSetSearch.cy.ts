@@ -146,7 +146,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Value Set tab
@@ -189,9 +189,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false, waitForDisabled: true })
     })
 
     it('Verify that Definition Version is disabled until OID/URL field is selected', () => {
@@ -200,7 +198,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Verify that the Search Definition Version field is disabled before selecting OID/URL field
@@ -234,7 +232,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Value Set tab
@@ -257,9 +255,11 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(CQLEditorPage.valueSetActionCentreBtn).click()
         cy.get(CQLEditorPage.viewValueSetDetails).click()
 
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"resourceType": "ValueSet"')
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-valueset-cqfm"')
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology"')
+        CQLEditorPage.assertValueSetDetails(
+            '"resourceType": "ValueSet"',
+            '"http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-valueset-cqfm"',
+            '"name": "American Society of Clinical Oncology"'
+        )
     })
 
     it('Edit Value Set with suffix and apply to CQL', () => {
@@ -268,7 +268,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Value Set tab
@@ -301,7 +301,6 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false, waitForDisabled: true })
     })
 })

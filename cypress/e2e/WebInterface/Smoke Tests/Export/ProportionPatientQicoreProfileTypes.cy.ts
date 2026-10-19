@@ -43,13 +43,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 30000)
+        CQLEditorPage.saveMonacoCql({ successTimeout: 20000, waitForDisabled: true })
     })
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {

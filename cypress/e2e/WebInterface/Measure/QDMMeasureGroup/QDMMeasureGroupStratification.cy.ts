@@ -118,9 +118,9 @@ describe('Validating Stratification tabs', () => {
             '2024-01-01'
         )
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up', () => {
@@ -283,14 +283,15 @@ describe('Validating Stratification tabs', () => {
         //Add Stratification 4
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'Initial Population')
-        cy.get(MeasureGroupPage.stratDescFour).type('Stratification Four Description')
+        cy.get(MeasureGroupPage.stratFour).should('contain.text', 'Initial Population')
+        cy.get(MeasureGroupPage.stratDescFour).type('Stratification Four Description').blur()
 
         Utilities.waitForElementEnabled(MeasureGroupPage.ucumScoringUnitSelect, 30700)
         Utilities.waitForElementVisible(MeasureGroupPage.ucumScoringUnitSelect, 30700)
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
 
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled').click()
 
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',
