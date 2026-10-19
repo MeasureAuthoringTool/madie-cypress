@@ -36,7 +36,7 @@ describe('Check all variations of calculated dates', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()

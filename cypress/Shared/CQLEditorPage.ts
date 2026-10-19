@@ -304,7 +304,7 @@ export class CQLEditorPage {
             waitForDisabled = false
         } = options
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
 
         if (appendText !== undefined) {
             MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, appendText)

@@ -8,6 +8,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const measureName = 'EMOwnershipValidations' + Date.now()
@@ -28,12 +29,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
         MeasuresPage.actionCenter('edit', undefined, { altUser: true })
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
 
         OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -102,11 +98,10 @@ describe('Read only for measure, measure group, and test cases that user does no
         MeasuresPage.actionCenter('edit', undefined, { altUser: true })
 
         //confirm that the CQL Editor tab is available and click on it
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('Test for ownership')
-
-        cy.get('[class="ace_tooltip ace_dark ace-monokai"]').should('have.text', 'Editing is disabled')
+        CQLEditorPage.openMonacoCqlEditor()
+        cy.get(EditMeasurePage.monacoCqlEditor).realClick({ position: 'topLeft' })
+        cy.realType('Test for ownership')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'Test for ownership')
         cy.get(EditMeasurePage.saveButton).should('not.exist')
     })
 

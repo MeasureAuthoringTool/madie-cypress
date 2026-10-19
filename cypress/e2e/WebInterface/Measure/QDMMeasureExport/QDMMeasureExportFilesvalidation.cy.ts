@@ -39,10 +39,10 @@ describe('Verify QDM Measure Export file contents', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
@@ -83,10 +83,10 @@ describe('QDM Measure Export, Not the Owner', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
         OktaLogin.UILogout()
 
         OktaLogin.AltLogin()
@@ -116,10 +116,10 @@ describe('Successful QDM Measure Export with versioned measure', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.version)
         cy.get(Header.mainMadiePageButton).click()

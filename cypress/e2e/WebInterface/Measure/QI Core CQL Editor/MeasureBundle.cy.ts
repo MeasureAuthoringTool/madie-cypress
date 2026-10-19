@@ -6,6 +6,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 const measureName = 'MeasureBundle ' + Date.now()
 const CqlLibraryName = 'MeasureBundleLib' + Date.now()
@@ -31,7 +32,7 @@ describe('Measure Bundle end points', () => {
 
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up', () => {
@@ -43,21 +44,8 @@ describe('Measure Bundle end points', () => {
         let currentUser = Cypress.expose('selectedUser')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.clickCQLEditorTab()
-
-        //making some minor and invalid change to the Measure CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}{home}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('#)*&Y)_8)#&$*#$')
-
-
-        //save the value in the CQL Editor
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.saveMonacoCql({ appendText: '#)*&Y)_8)#&$*#$' })
 
         //log out of UI
         
@@ -84,19 +72,7 @@ describe('Measure Bundle end points', () => {
         let currentUser = Cypress.expose('selectedUser')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.clickCQLEditorTab()
-
-        //make some insignificant change
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-
-        //save CQL from UI
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
 
         //log out of UI
         
@@ -199,7 +175,7 @@ describe('Measure bundle end point returns stratifications', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLWithPopulationDefinitions)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up', () => {
@@ -501,17 +477,9 @@ describe('Verify the criteria reference for measure observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //Clear the text in CQL Library Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.monacoCqlEditor)
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -592,17 +560,9 @@ describe('Verify the criteria reference for measure observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //Clear the text in CQL Library Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.monacoCqlEditor)
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

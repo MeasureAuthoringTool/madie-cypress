@@ -35,7 +35,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -152,6 +152,13 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         TestCasesPage.qdmTestCaseElementAction('edit')
 
         //Add Code to the Element
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes)
+            .should('be.visible')
+            .then(($tab) => {
+                if ($tab.attr('aria-selected') !== 'true') {
+                    $tab[0].click()
+                }
+            })
         cy.get(TestCasesPage.codeSystemSelector).click()
         cy.get(TestCasesPage.codeLOINCValue).click()
         cy.get(TestCasesPage.codeSelector).click()

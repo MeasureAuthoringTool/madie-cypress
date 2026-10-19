@@ -66,12 +66,12 @@ describe('Copy QDM Test Cases', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 1)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -134,11 +134,11 @@ describe('Copy Qi Core Test Cases', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 1)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })

@@ -29,7 +29,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendText: '', collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -388,7 +388,7 @@ describe('Updates on Base Configuration page', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {

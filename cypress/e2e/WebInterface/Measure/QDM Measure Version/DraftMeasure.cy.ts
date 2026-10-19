@@ -9,6 +9,7 @@ import { Header } from '../../../../Shared/Header'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let updatedMeasuresPageName = ''
 let randValue = Math.floor(Math.random() * 1000 + 1)
@@ -35,9 +36,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         cy.get(Header.mainMadiePageButton).click()
     })
 
@@ -140,9 +141,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -212,9 +213,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         MeasuresPage.waitForMeasureListRefresh('@searchDraftMeasure')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'library ' + newCqlLibraryName)
     })
 })

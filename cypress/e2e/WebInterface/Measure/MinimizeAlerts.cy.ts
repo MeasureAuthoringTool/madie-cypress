@@ -15,9 +15,9 @@ const errorCql = QiCore6Cql.intentionalErrorCql
 describe('Minimize Alerts - Measure with a CQL error', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up and Logout', () => {
@@ -45,8 +45,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.visible')
 
         // come back to cql editor
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('be.visible')
+        CQLEditorPage.openMonacoCqlEditor()
 
         // Alerts tab is gone, main box now shows as red
         cy.get(CQLEditorPage.errorMsg).should('be.visible')
@@ -73,14 +72,14 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
 describe('Minimize Alerts - Non-owner can also minimize to review the measure', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
     })
 
     afterEach('Clean up and Logout', () => {

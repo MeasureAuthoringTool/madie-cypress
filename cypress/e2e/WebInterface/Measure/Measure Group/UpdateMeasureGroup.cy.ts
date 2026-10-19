@@ -6,12 +6,21 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
+
+const replaceCqlFixture = (fileName: string): void => {
+    cy.readFile(`cypress/fixtures/${fileName}`).then((fileContents) => {
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fileContents.replace(/\{home\}/gi, ''))
+    })
+}
 
 describe('Validate Measure Group', () => {
     beforeEach('Create measure and login', () => {
@@ -31,15 +40,10 @@ describe('Validate Measure Group', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
         //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
-        cy.readFile('cypress/fixtures/GenericCQLBoolean.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        replaceCqlFixture('GenericCQLBoolean.txt')
         //save CQL on measure
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -114,15 +118,10 @@ describe('Validate Measure Group', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
         //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
-        cy.readFile('cypress/fixtures/GenericCQLBoolean.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        replaceCqlFixture('GenericCQLBoolean.txt')
         //save CQL on measure
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -180,15 +179,10 @@ describe('Validate Measure Group', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
         //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
-        cy.readFile('cypress/fixtures/GenericCQLBoolean.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
+        replaceCqlFixture('GenericCQLBoolean.txt')
         //save CQL on measure
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -274,7 +268,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         )
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -463,7 +457,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         )
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {

@@ -102,25 +102,25 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
             'boolean'
         )
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 3)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 4)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
@@ -256,13 +256,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
         OktaLogin.AltLogin()
         MeasuresPage.actionCenter('edit', 5, { altUser: true })
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 

@@ -77,6 +77,7 @@ Reuse these established paths before adding request code:
 - Use the Measure and Library list Filter By helpers instead of raw dropdown interactions. The Measure helper scrolls and re-queries the control because a fixed ancestor can otherwise cover it.
 - When a library scenario does not validate header navigation, enter the Libraries workspace through `CQLLibrariesPage.openLibrariesList()`; it visits `/cql-libraries` and waits for the library list to render.
 - Use the shared native activation paths for Test Cases, Details, JSON, Expected/Actual, and return navigation. Cypress actionability scrolling can shift split views or leave stale content mounted.
+- When a tab can already be selected, make activation idempotent: assert it is available, then native-click only when `aria-selected` is not `true`. Clicking an active tab can remount its panel and detach Cypress's subject.
 - Use `EditMeasurePage.openPopulationCriteriaTab(...)` after CQL saves or route updates, with a concrete Population Criteria control as readiness.
 - When opening a versioned measure in View mode, configure action helpers not to expect edit-only CQL content.
 - After route-changing actions, verify the intended page content, not only the URL. MADiE can update the route before React remounts the destination.

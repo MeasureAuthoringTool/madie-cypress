@@ -53,13 +53,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.wait(4500)
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')

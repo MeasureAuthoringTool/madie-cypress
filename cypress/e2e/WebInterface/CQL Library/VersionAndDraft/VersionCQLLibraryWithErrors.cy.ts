@@ -3,9 +3,9 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 let CqlLibraryOther = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -34,9 +34,7 @@ describe('Version CQL Library with errors', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Verify CQL ELM translation errors
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.empty')
+        MonacoEditor.assertErrorMarker()
 
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('version')
@@ -55,7 +53,7 @@ describe('Version CQL Library with errors', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Add parsing error to the valid CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}').focused().type('tdysfdfjch')
+        MonacoEditor.appendDocumentText(CQLLibraryPage.cqlLibraryEditorTextBox, 'tdysfdfjch')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
@@ -64,14 +62,7 @@ describe('Version CQL Library with errors', () => {
 
         //Verify CQL parsing errors
         cy.scrollTo('top')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.empty')
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.null')
+        MonacoEditor.assertErrorMarker()
 
         //Navigate to CQL Library tab
         cy.get(Header.cqlLibraryTab).click()

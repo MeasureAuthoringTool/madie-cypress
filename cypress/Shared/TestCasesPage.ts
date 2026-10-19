@@ -205,8 +205,8 @@ export class TestCasesPage {
   public static readonly newTestCaseButton = '[data-testid="create-new-test-case-button"]'
   public static readonly testCaseDescriptionTextBox = '[data-testid=test-case-description]'
   public static readonly meassureCQLVOTab = '[data-testid="measurecql-tab"]'
-  public static readonly voTCCQLobject = '[id="ace-editor-wrapper"]'
-  public static readonly voTCCQLEditor = '[class="ace_text-input"]'
+  public static readonly voTCCQLobject = '[data-testid="split-view-view"] div.view-lines'
+  public static readonly voTCCQLEditor = '[data-testid="split-view-view"] [contenteditable="true"]'
   public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
   public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
   public static readonly editTCSaveTooltip = '[data-testid="save-button-tooltip"]'
@@ -674,17 +674,17 @@ export class TestCasesPage {
         switch (action.valueOf().toString().toLowerCase()) {
           case 'edit': {
             this.openQdmElementActionMenu(actionCenterSelector)
-            this.clickVisibleEnabled(`[data-testid="edit-element-${fileContents}"]`, 55000)
+            this.clickQdmElementAction(`[data-testid="edit-element-${fileContents}"]`)
             break
           }
           case 'clone': {
             this.openQdmElementActionMenu(actionCenterSelector)
-            this.clickVisibleEnabled(`[data-testid="clone-element-${fileContents}"]`, 55000)
+            this.clickQdmElementAction(`[data-testid="clone-element-${fileContents}"]`)
             break
           }
           case 'delete': {
             this.openQdmElementActionMenu(actionCenterSelector)
-            this.clickVisibleEnabled(`[data-testid="delete-element-${fileContents}"]`, 55000)
+            this.clickQdmElementAction(`[data-testid="delete-element-${fileContents}"]`)
             break
           }
           default: {
@@ -1413,6 +1413,15 @@ export class TestCasesPage {
       .first()
       .should('be.visible')
       .and('be.enabled')
+      .then(($button) => {
+        $button[0].click()
+      })
+  }
+
+  private static clickQdmElementAction(selector: string): void {
+    cy.get(selector, { timeout: 55000 })
+      .should('be.visible')
+      .should('be.enabled')
       .then(($button) => {
         $button[0].click()
       })

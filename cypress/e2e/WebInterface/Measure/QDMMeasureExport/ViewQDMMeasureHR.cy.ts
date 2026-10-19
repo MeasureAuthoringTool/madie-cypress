@@ -41,9 +41,9 @@ describe('View Human Readable for QDM Measure', () => {
             'Denominator'
         )
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })
