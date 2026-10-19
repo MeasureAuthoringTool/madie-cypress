@@ -72,7 +72,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 20700,
             waitForDisabled: true,

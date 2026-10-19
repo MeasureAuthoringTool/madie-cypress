@@ -49,7 +49,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // Add measure observations to the API-created group.
         EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.addDenominatorObservationLink)

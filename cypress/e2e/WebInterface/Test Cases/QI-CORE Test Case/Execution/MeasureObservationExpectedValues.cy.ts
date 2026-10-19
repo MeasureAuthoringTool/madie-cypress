@@ -191,18 +191,9 @@ describe('Measure observation expected result', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').then((cql) => {
+            CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
+        })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -255,18 +246,9 @@ describe('Measure observation expected result', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').then((cql) => {
+            CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
+        })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

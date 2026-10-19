@@ -160,7 +160,7 @@ describe('Measure with Negation Rationale', () => {
         MeasuresPage.actionCenter('edit')
 
         //save CQL
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Group Creation
 

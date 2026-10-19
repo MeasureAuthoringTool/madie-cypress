@@ -60,10 +60,7 @@ describe('QDM Test Cases : Export Test Case', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should(
             'contain.text',
             'CQL updated successfully ' + 'but the following issues were found',
@@ -123,10 +120,7 @@ describe('QDM Test Cases : Export Test Case', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should(
             'contain.text',
             'CQL updated successfully ' + 'but the following issues were found',
@@ -172,10 +166,7 @@ describe('Export Test cases by Non Measure Owner', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should(
             'contain.text',
             'CQL updated successfully ' + 'but the following issues were found',

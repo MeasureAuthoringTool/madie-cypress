@@ -157,11 +157,7 @@ describe('Overlapping Value Set report validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         //Navigate to Test Cases Tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

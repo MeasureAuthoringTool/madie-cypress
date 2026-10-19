@@ -97,7 +97,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         TestCasesPage.openTestCasesTabAndWaitForList()
 

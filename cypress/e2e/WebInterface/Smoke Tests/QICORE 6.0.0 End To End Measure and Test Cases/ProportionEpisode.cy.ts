@@ -80,7 +80,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and add Test Case details
         TestCasesPage.openTestCasesTabAndWaitForList()

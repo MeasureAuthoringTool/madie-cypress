@@ -245,7 +245,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit', 0, measureData)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -338,7 +338,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit', 0, measureData)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -452,7 +452,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit', 0, measureData)
-       CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+       CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Clean up', () => {

@@ -68,7 +68,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 20700
         })

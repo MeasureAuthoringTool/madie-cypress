@@ -47,7 +47,7 @@ describe('QDM Measure Versioning', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 20700,
         })
@@ -94,7 +94,7 @@ describe('QDM Measure Versioning', () => {
 
         //Navigate to CQL Editor page
         CQLEditorPage.clickCQLEditorTab()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.be.enabled')
+        cy.get(EditMeasurePage.monacoCqlEditor).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('not.exist')
 
         //Navigate to Population Criteria page
@@ -127,7 +127,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 20700,
         })
@@ -174,7 +174,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
 
         //Navigate to CQL Editor page
         CQLEditorPage.clickCQLEditorTab()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.be.enabled')
+        cy.get(EditMeasurePage.monacoCqlEditor).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('not.exist')
 
         //Navigate to Population Criteria page
@@ -210,7 +210,7 @@ describe('QI-Core Measure Versioning', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QiCoreTestCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 20700,
         })
@@ -262,7 +262,7 @@ describe('QI-Core Measure Versioning', () => {
 
         //Navigate to CQL Editor page
         CQLEditorPage.clickCQLEditorTab()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.be.enabled')
+        cy.get(EditMeasurePage.monacoCqlEditor).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('not.exist')
 
         //Navigate to Population Criteria page

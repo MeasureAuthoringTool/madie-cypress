@@ -138,7 +138,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Group Creation
         //Click on Measure Group tab

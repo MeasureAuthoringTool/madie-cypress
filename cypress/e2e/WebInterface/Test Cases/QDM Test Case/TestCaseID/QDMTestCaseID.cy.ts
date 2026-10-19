@@ -30,7 +30,7 @@ const newMeasureName = 'Updated' + measureName
 const versionNumber = '1.0.000'
 
 const saveCqlForTestCaseCoverage = (): void => {
-    CQLEditorPage.saveCql({
+    CQLEditorPage.saveMonacoCql({
         appendNewLine: true,
         collapseEditor: true,
         successTimeout: 50000,

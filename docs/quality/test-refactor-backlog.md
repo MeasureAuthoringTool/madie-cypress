@@ -55,10 +55,15 @@ Current focus order:
 1. Run the Cypress 16.1.0 smoke collection in CI at the existing three-worker parallelism; retain runner artifacts for every worker.
 2. Audit custom Cypress commands and lifecycle hooks that queue login, retry, cleanup, or release work. Return the final chain before migrating more consumers.
 3. Complete MAT-10241 Monaco migration by repeated behavior, not by individual
-   failure. The 2026-10-15 audit found 185 legacy `CQLEditorPage.saveCql()`
-   calls in 97 UI specs: 77 calls in 31 Measure specs, 78 in 38 Test Case
-   specs, and 30 in 28 Smoke specs. CQL Library has no `saveCql()` consumer,
-   but it retains one direct Ace diagnostic spec. The work must cover all of
+   failure. The 2026-10-19 audit finds no legacy `CQLEditorPage.saveCql()`
+   consumers and 18 source files with any remaining legacy-editor reference.
+   Smoke Tests and ordinary Test Case save flows are complete, including custom
+   QDM invalid-CQL and full-document replacement flows. QDM, Qi-Core 4.1.1,
+   Qi-Core 6, template rendering, full-document save, versioned read-only,
+   execution, and warning consumers pass headlessly. One Qi-Core 6 run stopped
+   at transient imported-test validation of 80%; its immediate clean rerun
+   passed. CQL Library retains one direct Ace diagnostic spec. The remaining
+   work must cover all of
    the following before removing the legacy helpers:
    - Migrate ordinary dirty/save/collapse calls to the existing Monaco save
      helper in model-aligned batches; retain the two callers that pass

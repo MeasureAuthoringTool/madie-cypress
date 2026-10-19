@@ -95,7 +95,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
     })
 
     afterEach('Clean up', () => {

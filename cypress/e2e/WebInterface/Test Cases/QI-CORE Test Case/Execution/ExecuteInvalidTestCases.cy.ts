@@ -144,7 +144,7 @@ describe('Run / Execute Invalid Test Cases', () => {
     it('Run / Execute Invalid Test case on Test Case list page when the Execute Invalid Test case option is enabled', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and enable Execute invalid Test cases option
         TestCasesPage.openTestCasesTab(TestCasesPage.executionOptionsSubTab)
@@ -174,7 +174,7 @@ describe('Run / Execute Invalid Test Cases', () => {
     it('Run / Execute Invalid Test case on Edit Test Case page when the Execute Invalid Test case option is enabled', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and enable Execute invalid Test cases option
         TestCasesPage.openTestCasesTab(TestCasesPage.executionOptionsSubTab)

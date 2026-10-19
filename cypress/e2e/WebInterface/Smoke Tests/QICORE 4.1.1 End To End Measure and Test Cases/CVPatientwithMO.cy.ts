@@ -72,7 +72,7 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
     it('End to End CV Patient with MO, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

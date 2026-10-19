@@ -58,7 +58,7 @@ describe('Successful QDM Measure Export', () => {
 
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             successTimeout: 20700,
         })
@@ -155,10 +155,7 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
 
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.saveMonacoCql()
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(Header.mainMadiePageButton).click()

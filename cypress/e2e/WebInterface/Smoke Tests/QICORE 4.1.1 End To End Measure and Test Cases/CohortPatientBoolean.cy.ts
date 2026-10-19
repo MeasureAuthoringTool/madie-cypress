@@ -40,7 +40,7 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         TestCasesPage.openTestCasesTabAndWaitForList()
 

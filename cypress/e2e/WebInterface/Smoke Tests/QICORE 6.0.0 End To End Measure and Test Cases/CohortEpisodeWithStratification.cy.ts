@@ -37,7 +37,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         // add stratification data to group
         cy.get(EditMeasurePage.measureGroupsTab).click()

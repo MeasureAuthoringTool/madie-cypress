@@ -5,6 +5,7 @@ import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { Header } from "../../../Shared/Header"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { Utilities } from "../../../Shared/Utilities"
+import { MonacoEditor } from "../../../Shared/MonacoEditor"
 
 const measureName = 'SaveCQL' + Date.now()
 const CqlLibraryName = 'SaveCQLLib' + Date.now()
@@ -41,12 +42,8 @@ describe('Save CQL on CQL Editor Page', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        // necessary evil of a static wait - editor needs to be "ready" for input otherwise navigation off this page breaks
-        cy.wait(3500)
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_valid)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.replaceMonacoCqlDocument(measureCQL_valid)
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         //Navigate to Measures page and verify the saved CQL
         cy.get(Header.measures).click()
@@ -55,8 +52,6 @@ describe('Save CQL on CQL Editor Page', () => {
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.be.empty')
-        // checks for randomly chosen text from the typed-in CQL, that is not present on the default CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', '["Encounter": "Office Visit"]')
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, '["Encounter": "Office Visit"]')
     })
 })
