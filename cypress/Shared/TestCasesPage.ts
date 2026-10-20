@@ -814,6 +814,10 @@ export class TestCasesPage {
     cy.get(TestCasesPage.monacoJsonEditorSurface).should('be.visible')
   }
 
+  public static assertJsonEditorText(...expectedText: string[]): void {
+    MonacoEditor.assertRenderedText(TestCasesPage.monacoJsonEditorSurface, ...expectedText)
+  }
+
   public static saveTestCaseAndWait(options: {
     expectedPopulationValues?: Record<string, string>
   } = {}): void {
@@ -1659,14 +1663,7 @@ export class TestCasesPage {
   }
 
   public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string): void {
-    cy.get(this.tcSearchIcone).click()
-    cy.get('input.ace_search_field').first().type(ValueToBeAdded)
-
-    cy.get(this.aceEditor)
-      .invoke('text')
-      .then((text) => {
-        expect(text).to.contain(ValueToBeAdded)
-      })
+    this.assertJsonEditorText(ValueToBeAdded)
   }
 
   public static enterPatientDemographics(
