@@ -188,8 +188,6 @@ export class EditMeasurePage {
     public static readonly libWarningTopMsg = '[data-testid="library-warning"]'
     public static readonly CQLMessageSuccess = '[data-testid="generic-success-text-header"]'
 
-    //cql editor box on page
-    public static readonly cqlEditorTextBox = '.ace_content'
     public static readonly monacoCqlEditor = '[data-testid="split-view-view"] div.view-lines'
     //save button on page
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
