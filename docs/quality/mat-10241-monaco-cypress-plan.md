@@ -177,6 +177,64 @@ Migrate `QI Core Measure Export/MeasureExportValidations.cy.ts` and `QDMMeasureE
 
 Migrate one spec at a time. First classify every interaction as blank-document insertion, full replacement, or short append; remove fixture key commands; replace Ace-only assertions with MADiE validation test ids and one representative visible marker test; add/verify cleanup; and run the full changed spec in headless Chrome before taking the next spec. Make small behavior-preserving refactors during each migration when they eliminate duplicate mechanics or obsolete editor code; keep unrelated redesign out of the migration.
 
+## Post-Merge Follow-Up Scope (2026-10-19)
+
+The broad MAT-10241 migration merged through PR #3123. The follow-up branch
+`mat-10241-monaco-followup` is intentionally limited to the residual legacy
+editor surface found after that merge. It is not a new full-suite conversion.
+
+### Work Packages
+
+1. **Measure CQL legacy surface**
+   - Migrate `TestCasePageCQL_PageObject.cy.ts` and the invalid-CQL path in
+     `QDMRunExecuteTC.cy.ts` from `EditMeasurePage.cqlEditorTextBox` and
+     `CQLEditorPage.openCqlEditor()` to the existing Monaco editor and save
+     helpers.
+   - Replace the remaining Ace tooltip/gutter assertions in the Qi-Core CQL
+     editor specs with the generic error-list contract and, only where needed,
+     the shared Monaco marker assertion.
+   - Convert the CQL Library empty-document validation in
+     `DraftAndVersionValidations.cy.ts` to the established CQL Library Monaco
+     replacement path.
+
+2. **Test Case JSON semantic cleanup**
+   - Rename `TestCasesPage` members that describe a Monaco JSON editor as
+     `aceEditor`, `aceEditorJsonInput`, or `testCaseJson`; retain the app-owned
+     `data-testid` values while removing the implementation-specific API.
+   - Replace direct `.ace_content`, `.ace_search_form`, and
+     `input.ace_search_field` use in JSON search, import/export, reference,
+     highlighting, and non-owner scenarios with named page-object helpers and
+     `MonacoEditor.assertRenderedText(...)`.
+   - Replace the composite read-only `ace_read-only` class assertion with an
+     observable read-only contract: the JSON viewer renders and no edit/save
+     affordance is available.
+
+3. **Legacy helper retirement**
+   - After the direct consumers above are migrated and proven, remove unused
+     Ace-only measure CQL helpers/selectors from `CQLEditorPage` and
+     `EditMeasurePage`.
+   - Do not remove `MeasureGroupPage.loadTestCaseExecutionCql()` or the shared
+     Test Case JSON replacement helper: both already use the Monaco path and
+     need consumer regression coverage, not redesign.
+
+### Sequencing and Proof
+
+Complete one work package at a time. For each changed package:
+
+1. Run `npm run compile`, `npm run quality:no-focused-tests`, `git diff --check`,
+   and `npm run typecheck:touched -- <changed files>`.
+2. Run the complete focused spec set in headless Chrome with
+   `--env configFile=test`; do not rely on a focused `it.only` run.
+3. Keep the JSON and CQL packages separate because they exercise different
+   editor contracts and failure modes.
+4. Remove a legacy selector or helper only in the same slice that proves it has
+   no remaining consumers.
+
+The previously deferred broader reliability work remains separate: alternate
+account allocation, authentication startup latency, global exception
+suppression, and unrelated fixed-wait reduction must not be folded into this
+editor follow-up.
+
 ## Minimal CQL Library Bridge Proposal
 
 Implement this in the editor and CQL-library applications, not Cypress:
