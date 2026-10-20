@@ -6,6 +6,7 @@ import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 import { Utilities } from '../../../../Shared/Utilities'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 const now = Date.now()
 const measureName = 'CQLPageObject' + now
@@ -38,20 +39,12 @@ describe('Test Case Page CQL page object', () => {
     it('persists updates applied and saved in the Measure CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.openCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.append(EditMeasurePage.monacoCqlEditor, 'define "ipp": true')
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false, waitForDisabled: true })
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('define "ipp": true')
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-
-        CQLEditorPage.openCqlEditor()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'define "ipp": true')
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'define "ipp": true')
     })
 })
 

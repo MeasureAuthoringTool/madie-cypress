@@ -224,17 +224,12 @@ describe('Run / Execute QDM Test Case button validations', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible').click()
-        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, 8500)
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{home}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('adjfajsdsdjf{}')
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.saveMonacoCql({
+            appendText: 'adjfajsdsdjf{}',
+            collapseEditor: true,
+            waitForDisabled: true
+        })
+        cy.get('[data-testid="generic-errors-text-list"]').should('be.visible')
 
         cy.intercept('GET', /\/api\/measures\/[^/]+\/test-cases(?:\?.*)?$/).as('testCaseList')
         TestCasesPage.openTestCasesTab()
