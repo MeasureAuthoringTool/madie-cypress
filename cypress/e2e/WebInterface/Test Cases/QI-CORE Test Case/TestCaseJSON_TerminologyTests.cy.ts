@@ -88,10 +88,10 @@ describe('Warning modal on Test Case JSON Editor', () => {
         openApiCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 27700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type('Warning Modal Test')
+        Utilities.waitForElementVisible(TestCasesPage.testCaseJsonEditor, 27700)
+        cy.get(TestCasesPage.testCaseJsonEditor).should('exist')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('be.visible')
+        cy.get(TestCasesPage.testCaseJsonEditor).type('Warning Modal Test')
 
         //Warning Modal displayed when user navigated to Measure Group tab without saving changes
         cy.get(EditMeasurePage.measureGroupsTab).click()

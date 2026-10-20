@@ -52,10 +52,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             ' -- Run button is available and correct results are provided',
         () => {
             //Add json to the test case
-            Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-            cy.get(TestCasesPage.aceEditor).should('exist')
-            cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+            Utilities.waitForElementWriteEnabled(TestCasesPage.testCaseJsonEditor, 37700)
+            cy.get(TestCasesPage.testCaseJsonEditor).should('exist')
+            cy.get(TestCasesPage.testCaseJsonEditor).should('be.visible')
+            cy.get(TestCasesPage.testCaseJsonEditorInput).should('exist').wait(2000)
             cy.editTestCaseJSON(validTestCaseJson)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
@@ -119,10 +119,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             ' -- Run button is available and correct results are provided',
         () => {
             //Add json to the test case
-            Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-            cy.get(TestCasesPage.aceEditor).should('exist')
-            cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+            Utilities.waitForElementWriteEnabled(TestCasesPage.testCaseJsonEditor, 37700)
+            cy.get(TestCasesPage.testCaseJsonEditor).should('exist')
+            cy.get(TestCasesPage.testCaseJsonEditor).should('be.visible')
+            cy.get(TestCasesPage.testCaseJsonEditorInput).should('exist').wait(2000)
             cy.editTestCaseJSON(validTestCaseJson)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)

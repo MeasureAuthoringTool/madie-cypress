@@ -1498,11 +1498,11 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+        Utilities.waitForElementVisible(TestCasesPage.testCaseJsonEditor, 37700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.testCaseJsonEditor, 37700)
+        cy.get(TestCasesPage.testCaseJsonEditor).should('exist')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('be.visible')
+        cy.get(TestCasesPage.testCaseJsonEditorInput).should('exist').wait(2000)
         cy.editTestCaseJSON(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')

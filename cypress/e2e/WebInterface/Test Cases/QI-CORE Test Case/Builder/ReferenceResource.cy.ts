@@ -140,7 +140,7 @@ describe('Reference(Resource) test-case builder', () => {
             TestCaseBuilder.applyAndWait()
 
             showBuilderJson()
-            cy.get(TestCasesPage.aceEditor).should('contain.text', `Patient/${patientId}`)
+            cy.get(TestCasesPage.testCaseJsonEditor).should('contain.text', `Patient/${patientId}`)
         })
 
         it('shows only Add New when the selected profile has no resource in the test case', () => {
@@ -157,7 +157,7 @@ describe('Reference(Resource) test-case builder', () => {
             TestCaseBuilder.applyAndWait()
 
             showBuilderJson()
-            cy.get(TestCasesPage.aceEditor)
+            cy.get(TestCasesPage.testCaseJsonEditor)
                 .should('contain.text', 'Organization/')
                 .and('contain.text', qiCoreOrganizationProfile)
         })

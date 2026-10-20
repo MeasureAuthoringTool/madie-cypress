@@ -133,7 +133,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('include.text', '"type": "collection"')
     })
 
     it('Export single QI-Core Test case Collection bundle and Import to the same Measure', () => {
@@ -177,7 +177,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('include.text', '"type": "collection"')
     })
 })
 
@@ -249,7 +249,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('include.text', '"type": "collection"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -257,7 +257,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('include.text', '"type": "collection"')
     })
 
     it('Export multiple QI-Core Test cases Collection bundle and Import to the same Measure', () => {
@@ -304,7 +304,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('include.text', '"type": "collection"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -312,6 +312,6 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('include.text', '"type": "collection"')
     })
 })
