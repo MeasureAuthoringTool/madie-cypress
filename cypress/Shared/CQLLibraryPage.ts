@@ -143,9 +143,6 @@ export class CQLLibraryPage {
     //UMLS Not Logged in Error
     public static readonly umlsErrorMessage = '[data-testid="valueset-error"]'
 
-    //Error marker inside of the CQL Editor window
-    public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
-
     public static selectCQLLibraryModel(model: SupportedModels): void {
         cy.get(this.cqlLibraryModelDropdown)
             .filter(':visible')
