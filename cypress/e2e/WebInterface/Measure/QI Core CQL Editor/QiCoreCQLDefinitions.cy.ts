@@ -480,9 +480,9 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(
-            CQLEditorPage.errorInCQLEditorWindow,
-            CQLEditorPage.errorContainer,
+        MonacoEditor.assertErrorMarker()
+        cy.get(CQLEditorPage.errorMsg).should(
+            'contain.text',
             'Parse: 7:13 | Definition names must not be a reserved word.'
         )
     })

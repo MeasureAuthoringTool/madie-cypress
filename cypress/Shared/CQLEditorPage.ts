@@ -24,8 +24,6 @@ export class CQLEditorPage {
     //message that appears for various alerts that occur at successful saving
     public static readonly saveAlertMessage = '[id="status-handler"]'
 
-    //error tooltip container
-    public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'
     public static readonly errorMsg = '[data-testid="generic-errors-text-list"]'
     public static readonly warningMsg = '[data-testid="generic-warnings-text-list"]'
     public static readonly minimizeButton = '[data-testid="minimize-button-0"]'
@@ -37,10 +35,6 @@ export class CQLEditorPage {
 
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '.madie-alert'
-
-    //Error/warning marker in side of the CQL Editor window
-    public static readonly errorInCQLEditorWindow = '#ace-editor-wrapper > div.ace_gutter > div > div.ace_gutter-cell.ace_error'
-    public static readonly warningInCQLEditorWindow = '.ace_warning'
 
     //UMLS Not Logged in Error
     public static readonly umlsMessage = '[data-testid="valueset-success"]'
