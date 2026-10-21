@@ -254,7 +254,11 @@ export class CQLEditorPage {
             waitForDisabled = false
         } = options
 
-        CQLEditorPage.openMonacoCqlEditor()
+        cy.get('body').then(($body) => {
+            if (!$body.find(EditMeasurePage.monacoCqlEditor).filter(':visible').length) {
+                CQLEditorPage.openMonacoCqlEditor()
+            }
+        })
 
         if (appendText !== undefined) {
             MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, appendText)
@@ -263,7 +267,9 @@ export class CQLEditorPage {
             MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
         }
 
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('saveMeasureCql')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
+        cy.wait('@saveMeasureCql', { timeout: successTimeout }).its('response.statusCode').should('eq', 200)
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, successTimeout)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 

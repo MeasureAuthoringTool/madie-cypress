@@ -2809,7 +2809,7 @@ export class TestCaseJson {
         '6b0a16d79fc6" }, "period": { "start": "2012-01-16T08:00:00+00:00", "end": "2012-02-15T09:00:00+00:00" } } } ] }'
 
     public static readonly ProportionEpisode_PASS = '{ "resourceType": "Bundle", "id": "IPP-Pass-ProportionEpisode", "meta": { "versionId": "1", ' +
-        '"lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collection", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": {' +
+        '"lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collection", "entry": [ { "fullUrl": "https://madie.cms.gov/Patient/609bde3598086b0a16d79fc6", "resource": {' +
         ' "resourceType": "Patient", "id": "609bde3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/q' +
         'icore-patient" ] }, "extension": [ { "extension": [ { "url": "ombCategory", "valueCoding": { "system": "urn:oid:2.16.840.1.113883.6.238",' +
         ' "code": "2106-3", "display": "White" } }, { "url": "ombCategory", "valueCoding": { "system": "urn:oid:2.16.840.1.113883.6.238", "code": "' +
@@ -2826,7 +2826,7 @@ export class TestCaseJson {
         'or", "code": "ASKU", "display": "asked but unknown" } ], "text": "asked but unknown" } } ], "identifier": [ { "type": { "coding": [ { "system' +
         '": "http://terminology.hl7.org/CodeSystem/v2-0203", "code": "MR" } ] }, "system": "http://MyGoodHealthare.com/MedicalRecord", "value": "8065d' +
         'c8d26797064d8766be71f2bf020" } ], "active": true, "name": [ { "use": "usual", "family": "IPP", "given": [ "IPPPass" ] } ], "gender": "male", ' +
-        '"birthDate": "1954-02-10" } }, { "fullUrl": "5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Encounter", "id": "5c6c61ceb84846536a9' +
+        '"birthDate": "1954-02-10" } }, { "fullUrl": "https://madie.cms.gov/Encounter/5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Encounter", "id": "5c6c61ceb84846536a9' +
         'a98f9", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter" ] }, "status": "finished", "class": { "sy' +
         'stem": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "IMP", "display": "inpatient encounter" }, "type": [ { "coding": [ { "syst' +
         'em": "http://snomed.info/sct", "code": "183452005" } ] } ], "priority": { "coding": [ { "system": "http://snomed.info/sct", "code": "10339000' +
@@ -3642,10 +3642,6 @@ export class TestCaseJson {
                 "valueString": "Hispanic or Latino"
               }
             ]
-          },
-          {
-            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex",
-            "valueCode": "248153007"
           }
         ],
         "identifier": [
@@ -4218,10 +4214,6 @@ export class TestCaseJson {
                 "valueString": "Hispanic or Latino"
               }
             ]
-          },
-          {
-            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex",
-            "valueCode": "248153007"
           }
         ],
         "identifier": [
