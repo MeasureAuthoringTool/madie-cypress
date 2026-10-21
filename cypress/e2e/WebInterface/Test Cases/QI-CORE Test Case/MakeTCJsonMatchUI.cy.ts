@@ -8,6 +8,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { TestData } from '../../../../Shared/TestData'
 
 const now = Date.now()
 const measureName = 'JSONMatchUI' + now
@@ -40,15 +41,12 @@ describe('Success Scenario - Make Test Case Json match UI', () => {
 
         //Navigate to Edit Test case page and verify family and given name on Json before match
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.tcSearchIcone).click()
-        cy.get('.ace_search_form > .ace_search_field').type('family').type('{enter}')
-        cy.get(TestCasesPage.testCaseJson).should('contain.text', '"family": "Health"')
-        cy.get(TestCasesPage.testCaseJson)
-            .invoke('text')
-            .then((text: string) => {
-                const jsonText = text.replace(/\s+/g, ' ').trim()
-                expect(jsonText).to.contain('"given": [ "Lizzy" ]')
-            })
+        TestData.requestMeasureTestCase<{ json: string }>('GET').then(({ body, status }) => {
+            expect(status).to.eq(200)
+            const json = body.json.replace(/\s/g, '')
+            expect(json).to.contain('"family":"Health"')
+            expect(json).to.contain('"given":["Lizzy"]')
+        })
 
         //Navigate to Test case List page and make Json match the UI
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -65,15 +63,12 @@ describe('Success Scenario - Make Test Case Json match UI', () => {
 
         //Navigate to Edit Test case page and verify family and given name on Json after match
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.tcSearchIcone).click()
-        cy.get('.ace_search_form > .ace_search_field').type('family').type('{enter}')
-        cy.get(TestCasesPage.testCaseJson).should('contain.text', '"family": "SBTestSeries"')
-        cy.get(TestCasesPage.testCaseJson)
-            .invoke('text')
-            .then((text: string) => {
-                const jsonText = text.replace(/\s+/g, ' ').trim()
-                expect(jsonText).to.contain('"given": [ "test case title" ]')
-            })
+        TestData.requestMeasureTestCase<{ json: string }>('GET').then(({ body, status }) => {
+            expect(status).to.eq(200)
+            const json = body.json.replace(/\s/g, '')
+            expect(json).to.contain('"family":"SBTestSeries"')
+            expect(json).to.contain('"given":["testcasetitle"]')
+        })
     })
 })
 

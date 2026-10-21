@@ -1,11 +1,11 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { QiCore6Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let CqlLibraryOne = ''
 let CqlLibraryOther = ''
@@ -90,10 +90,8 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
-        // Clear the complete Ace document so version validation exercises an empty library.
-        CQLEditorPage.replaceCqlDocumentText('', CQLLibraryPage.cqlLibraryEditorTextBox)
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('be.visible')
+        // Clear the complete Monaco document so version validation exercises an empty library.
+        MonacoEditor.clearDocument(CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')

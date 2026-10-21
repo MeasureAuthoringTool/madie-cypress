@@ -51,11 +51,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         'Run / Execute single passing Test Case, on the Test Case list page, where the user is not the owner nor shared' +
             ' -- Run button is available and correct results are provided',
         () => {
-            //Add json to the test case
-            Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-            cy.get(TestCasesPage.aceEditor).should('exist')
-            cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+            // Add JSON to the test case.
+            TestCasesPage.waitForJsonEditorReady()
             cy.editTestCaseJSON(validTestCaseJson)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
@@ -118,11 +115,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         'Run / Execute single passing Test Case, on the Test Case details page, where the user is not the owner nor shared' +
             ' -- Run button is available and correct results are provided',
         () => {
-            //Add json to the test case
-            Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-            cy.get(TestCasesPage.aceEditor).should('exist')
-            cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+            // Add JSON to the test case.
+            TestCasesPage.waitForJsonEditorReady()
             cy.editTestCaseJSON(validTestCaseJson)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)

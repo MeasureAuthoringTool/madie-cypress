@@ -211,8 +211,8 @@ export class TestCasesPage {
   public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
   public static readonly editTCSaveTooltip = '[data-testid="save-button-tooltip"]'
   public static readonly errorToastMsg = '[data-testid="error-toast"]'
-  public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
-  public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
+  public static readonly testCaseJsonEditor = '[data-testid="test-case-json-editor"]'
+  public static readonly testCaseJsonEditorInput = '[data-testid="test-case-json-editor-input"]'
   public static readonly monacoJsonEditorSurface = '[data-testid="split-view-view"] div.view-lines'
   public static readonly testCaseTitle = '[data-testid="test-case-title"]'
   public static readonly roTestCaseTitle = '[id="test-case-title"]'
@@ -231,8 +231,6 @@ export class TestCasesPage {
   public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
   public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
   public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
-  public static readonly testCaseJson = '[class="ace_content"]'
-
   public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
   public static readonly testCaseGroupInlineError = '[data-testid="test-case-series-helper-text"]'
   public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
@@ -812,6 +810,10 @@ export class TestCasesPage {
 
   public static waitForJsonEditorReady(): void {
     cy.get(TestCasesPage.monacoJsonEditorSurface).should('be.visible')
+  }
+
+  public static assertJsonEditorText(...expectedText: string[]): void {
+    MonacoEditor.assertRenderedText(TestCasesPage.monacoJsonEditorSurface, ...expectedText)
   }
 
   public static saveTestCaseAndWait(options: {
@@ -1659,14 +1661,7 @@ export class TestCasesPage {
   }
 
   public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string): void {
-    cy.get(this.tcSearchIcone).click()
-    cy.get('input.ace_search_field').first().type(ValueToBeAdded)
-
-    cy.get(this.aceEditor)
-      .invoke('text')
-      .then((text) => {
-        expect(text).to.contain(ValueToBeAdded)
-      })
+    this.assertJsonEditorText(ValueToBeAdded)
   }
 
   public static enterPatientDemographics(

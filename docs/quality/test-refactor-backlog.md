@@ -54,31 +54,25 @@ Current focus order:
 
 1. Run the Cypress 16.1.0 smoke collection in CI at the existing three-worker parallelism; retain runner artifacts for every worker.
 2. Audit custom Cypress commands and lifecycle hooks that queue login, retry, cleanup, or release work. Return the final chain before migrating more consumers.
-3. Complete MAT-10241 Monaco migration by repeated behavior, not by individual
-   failure. The 2026-10-19 audit finds no legacy `CQLEditorPage.saveCql()`
-   consumers and 18 source files with any remaining legacy-editor reference.
-   Smoke Tests and ordinary Test Case save flows are complete, including custom
-   QDM invalid-CQL and full-document replacement flows. QDM, Qi-Core 4.1.1,
-   Qi-Core 6, template rendering, full-document save, versioned read-only,
-   execution, and warning consumers pass headlessly. One Qi-Core 6 run stopped
-   at transient imported-test validation of 80%; its immediate clean rerun
-   passed. CQL Library retains one direct Ace diagnostic spec. The remaining
-   work must cover all of
-   the following before removing the legacy helpers:
-   - Migrate ordinary dirty/save/collapse calls to the existing Monaco save
-     helper in model-aligned batches; retain the two callers that pass
-     Ace-specific `appendCommand` or `parseSpecialCharSequences` for a
-     dedicated replacement path.
-   - Migrate direct CQL-builder output assertions in the matched Qi-Core and
-     QDM Definition, Parameter, Code Search, and Library Include suites.
-   - Migrate direct CQL diagnostics, ownership/read-only, and CQL Library
-     error-rendering assertions to Monaco-visible contracts.
-   - Migrate Test Case JSON search consumers separately from measure-CQL
-     editor flows.
-   - Retire Ace selectors and methods from `CQLEditorPage`, `EditMeasurePage`,
-     `CQLLibraryPage`, and `TestCasesPage` only after no consumer remains;
-     include `MeasureGroupPage.loadTestCaseExecutionCql()` in that final
-     shared-helper sweep.
+3. Complete the MAT-10241 Monaco follow-up by repeated behavior, not by
+   individual failure. The merged migration has no active
+   `CQLEditorPage.saveCql()` consumers, and Smoke Tests plus ordinary Test
+   Case save flows already use the shared Monaco save and JSON-replacement
+   paths. The follow-up scope is recorded in
+   `docs/quality/mat-10241-monaco-cypress-plan.md` and must complete these
+   behavior buckets before retiring legacy editor support:
+   - Replace remaining direct Measure CQL typing and Ace diagnostic assertions
+     with `MonacoEditor` and MADiE validation contracts.
+   - Rename and migrate Test Case JSON page-object members and consumers that
+     still expose Ace names, classes, or Find UI mechanics; preserve the
+     existing semantic test ids and shared JSON replacement path.
+   - Convert read-only Test Case JSON checks to a user-visible read-only
+     contract, rather than an Ace implementation class.
+   - Migrate the remaining CQL Library empty-document version-validation path
+     and then remove dead legacy CQL helper methods and selectors only after
+     direct consumers are gone.
+   - Keep `MeasureGroupPage.loadTestCaseExecutionCql()` on its proven Monaco
+     path; it is a regression consumer, not a candidate for legacy cleanup.
 4. Verify CI collection for specs that produce no runner output before treating them as test failures.
 5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
 6. Replace unconditional alternate-user allocation in `cypress/support/e2e.ts` with an explicit, compatible alt-user requirement contract. The support hook currently claims both a primary and alternate account for every spec run, although the audited export specs do not use an alternate account and 92 files do. This creates avoidable pool contention and makes headed reruns more likely to receive a different available account after a failed run releases its locks.

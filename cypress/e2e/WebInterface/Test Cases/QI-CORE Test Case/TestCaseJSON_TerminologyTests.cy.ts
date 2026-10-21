@@ -8,6 +8,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureGroupPage, MeasureScoring, MeasureType, PopulationBasis } from '../../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { Toasts } from '../../../../Shared/Toasts'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 const measureName = 'JSONTerminology'
 const CqlLibraryName = 'JSONTerminologyLib'
@@ -87,11 +88,9 @@ describe('Warning modal on Test Case JSON Editor', () => {
     it('Verify warning modal when the Test Case JSON has unsaved changes', () => {
         openApiCreatedTestCase()
 
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 27700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type('Warning Modal Test')
+        // Add unsaved text to the test case JSON editor.
+        TestCasesPage.waitForJsonEditorReady()
+        MonacoEditor.append(TestCasesPage.monacoJsonEditorSurface, 'Warning Modal Test')
 
         //Warning Modal displayed when user navigated to Measure Group tab without saving changes
         cy.get(EditMeasurePage.measureGroupsTab).click()

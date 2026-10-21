@@ -1448,11 +1448,6 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
 
 describe('Verify multiple IPs on the highlighting tab', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(
             false,
@@ -1462,7 +1457,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
             'Initial Population',
             'boolean'
         )
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
@@ -1497,12 +1492,8 @@ describe('Verify multiple IPs on the highlighting tab', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+        // Add JSON to the test case.
+        TestCasesPage.waitForJsonEditorReady()
         cy.editTestCaseJSON(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
