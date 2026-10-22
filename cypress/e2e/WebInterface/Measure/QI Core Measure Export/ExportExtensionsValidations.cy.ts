@@ -4,7 +4,7 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { Header } from '../../../../Shared/Header'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -35,11 +35,9 @@ describe('Check extensions data in QiCore 6.0.0 export', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: cqlQiCore6 })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'X', 'Observation')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.SessionLogin()
-
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 

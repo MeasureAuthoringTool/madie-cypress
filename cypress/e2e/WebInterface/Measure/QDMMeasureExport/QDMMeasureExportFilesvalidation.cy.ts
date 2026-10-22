@@ -4,9 +4,9 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { Utilities } from '../../../../Shared/Utilities'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 const qdmMeasureName = 'QDMExportFiles' + Date.now()
 const qdmCqlLibraryName = 'QDMExportFilesLib' + Date.now()
@@ -39,12 +39,10 @@ describe('Verify QDM Measure Export file contents', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        EditMeasurePage.actionCenter(EditMeasureActions.export)
+        MeasuresPage.actionCenter('export', undefined, { targetVersion: '0.0.000' })
 
         //verify zip file exists
         cy.verifyDownload('eCQMTitle4QDM-v0.0.000-QDM.zip', { timeout: 90000 })
@@ -83,10 +81,9 @@ describe('QDM Measure Export, Not the Owner', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
         OktaLogin.UILogout()
 
         OktaLogin.AltLogin()
@@ -116,10 +113,10 @@ describe('Successful QDM Measure Export with versioned measure', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.version)
         cy.get(Header.mainMadiePageButton).click()
@@ -128,7 +125,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
-        MeasuresPage.actionCenter('export')
+        MeasuresPage.actionCenter('export', undefined, { targetVersion: versionNumber })
 
         //verify zip file exists
         cy.verifyDownload('eCQMTitle4QDM-v1.0.000-QDM.zip', { timeout: 60000 })

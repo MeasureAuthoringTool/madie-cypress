@@ -5,8 +5,8 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
+import { TestData } from "../../../../Shared/TestData"
 
 const date = Date.now()
 const measureCQLPFTests = MeasureCQL.CQL_Populations
@@ -20,9 +20,8 @@ describe('View Human Readable for Qi Core Measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter("edit")
-        CQLEditorPage.saveMonacoCql()
     })
 
     after(() => {
