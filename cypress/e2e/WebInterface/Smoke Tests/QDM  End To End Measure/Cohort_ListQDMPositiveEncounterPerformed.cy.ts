@@ -3,7 +3,7 @@ import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { QDMElements } from '../../../../Shared/QDMElements'
@@ -30,6 +30,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
     })
 
@@ -40,9 +41,6 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
     it('End to End Cohort ListQDMPositiveEncounterPerformed', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //save CQL
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Group Creation
         //Click on Measure Group tab

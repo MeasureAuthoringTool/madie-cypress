@@ -1,6 +1,6 @@
 # MADiE Cypress Automation Guidelines
 
-Last updated: 2026-10-15
+Last updated: 2026-10-22
 
 This document contains stable automation rules. Current priorities, audit counts, proof status, and blockers belong in `docs/quality/test-refactor-backlog.md`.
 
@@ -22,6 +22,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 - Service specs under `cypress/e2e/Services/` should set up and verify service behavior through APIs.
 - UI specs under `cypress/e2e/WebInterface/` should reserve the browser for rendering, navigation, permissions, editor behavior, and user interaction.
 - Complete API-supported measure, group, library, and test-case setup before UI login. Prefer one login and one continuous UI session.
+- When a UI scenario needs valid, translated measure CQL only as setup, use `TestData.saveMeasureCql(...)` or `TestData.saveCurrentMeasureCql(...)` with `TestData.expectSavedMeasureCql(...)` before browser interaction. Visit and save through the CQL Editor only when the scenario verifies editor behavior or its visible validation.
 - Page objects own UI interaction. `TestData` and domain request helpers own tokens, fixture paths, IDs, and service setup.
 - Keep negative authorization, validation, and error assertions explicit when setup moves to APIs.
 - For feature-flagged contracts, keep current coverage active and add new coverage alongside it. Put persistence and payload checks in service specs first.
@@ -53,7 +54,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 Reuse these established paths before adding request code:
 
 - Measures: `requestMeasure`, `readMeasure`, `requestMeasureById`, `updateMeasure`, `updateCurrentMeasure`.
-- CQL: `saveMeasureCql`, `expectSavedMeasureCql`, `translateFhirCql`, `translateQdmCql`.
+- CQL: `saveMeasureCql`, `saveCurrentMeasureCql`, `expectSavedMeasureCql`, `translateFhirCql`, `translateQdmCql`.
 - Lifecycle: `requestMeasureBundle`, `requestMeasureExport`, `requestMeasureDraft`, `requestDraftStatus`, `versionMeasure`, `requestAdminMeasureDelete`, `requestMeasureDeleteAction`.
 - Groups and test cases: `requestMeasureGroup`, `requestMeasureGroupById`, `requestMeasureGroupStratification`, `requestMeasureTestCase`, `requestMeasureTestCaseList`, `requestTestCaseImports`.
 - CQL libraries: `requestCqlLibrary`, `readCqlLibrary`, `requestCqlLibraryById`, `updateCqlLibrary`, `updateCurrentCqlLibrary`, `searchCqlLibraries`, `versionCqlLibrary`, `draftCqlLibrary`, `requestVersionedCqlLibrary`.

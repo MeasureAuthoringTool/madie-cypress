@@ -5,7 +5,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
 import { Utilities } from '../../../Shared/Utilities'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { TestData } from '../../../Shared/TestData'
 
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
@@ -65,13 +65,10 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
             measureCql: qiCore6MeasureCQL
         })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
+        TestData.saveMeasureCql(qiCore6MeasureCQL).then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({
-            collapseEditor: true,
-            successTimeout: 20700
-        })
     })
 
     afterEach('Logout and delete measure', () => {

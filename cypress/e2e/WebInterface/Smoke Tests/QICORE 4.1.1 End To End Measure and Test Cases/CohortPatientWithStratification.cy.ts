@@ -6,7 +6,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'CohortPatientWithStrat' + Date.now()
 let CqlLibraryName = 'CohortPatientWithStrat' + Date.now()
@@ -48,6 +48,7 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         )
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
     })
 
     after('Clean up', () => {
@@ -59,10 +60,6 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         // add stratification data to group
         cy.get(EditMeasurePage.measureGroupsTab).click()

@@ -6,7 +6,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'CohortEpisodeEncounter' + Date.now()
 let CqlLibraryName = 'CohortEpisodeEncounter' + Date.now()
@@ -38,6 +38,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         )
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
@@ -49,8 +50,6 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
     it('End to End Cohort Episode Encounter, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         TestCasesPage.openTestCasesTabAndWaitForList()
 

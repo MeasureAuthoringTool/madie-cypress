@@ -3,7 +3,7 @@ import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { QDMElements } from '../../../../Shared/QDMElements'
@@ -148,6 +148,7 @@ describe('Measure with Negation Rationale', () => {
             '2012-12-31'
         )
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
     })
 
@@ -158,9 +159,6 @@ describe('Measure with Negation Rationale', () => {
     it('End to End Measure with Negation Rationale', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //save CQL
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Group Creation
 

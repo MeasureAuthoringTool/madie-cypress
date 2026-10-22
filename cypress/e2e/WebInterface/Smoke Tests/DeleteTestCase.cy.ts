@@ -8,6 +8,7 @@ import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
 import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../Shared/MeasureCQL'
 import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { TestData } from '../../../Shared/TestData'
 
 const now = Date.now()
 let measureName = 'DeleteTC' + now
@@ -53,10 +54,9 @@ describe('Delete Test Case', () => {
             'Procedure',
         )
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 27700 })
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         TestCasesPage.openTestCasesTabAndWaitForList()
     })

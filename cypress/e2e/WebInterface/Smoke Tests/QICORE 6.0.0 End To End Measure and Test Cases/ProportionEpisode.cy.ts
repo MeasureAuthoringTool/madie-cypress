@@ -5,7 +5,7 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import {
     MeasureGroupPage,
     MeasureGroups,
@@ -68,6 +68,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
             pops,
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
@@ -79,8 +80,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
     it('End to End Proportion Episode Measure, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and add Test Case details
         TestCasesPage.openTestCasesTabAndWaitForList()

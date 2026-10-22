@@ -6,7 +6,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Header } from '../../../../Shared/Header'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const now = require('dayjs')
 const url = Cypress.config('baseUrl')
@@ -51,6 +51,7 @@ describe('QI-Core Measure Export', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
     })
@@ -58,9 +59,6 @@ describe('QI-Core Measure Export', () => {
     it('Validate the zip file Export is downloaded for QI-Core Measure', () => {
         //Add RAV to the Measure
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -203,13 +201,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             'Qualifying Encounters',
             'Encounter'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -441,6 +437,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
             'Qualifying Encounters',
             'Encounter'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
@@ -456,9 +453,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         Utilities.waitForElementDisabled(EditMeasurePage.measurementInformationSaveButton, 12500)
-
-        CQLEditorPage.saveMonacoCql()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(Header.mainMadiePageButton).click()
 

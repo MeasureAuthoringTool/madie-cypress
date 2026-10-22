@@ -5,7 +5,7 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Toasts } from '../../../../Shared/Toasts'
 
@@ -63,6 +63,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         })
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
     })
@@ -74,8 +75,6 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
     it('End to End CV Patient Measure with Stratification, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

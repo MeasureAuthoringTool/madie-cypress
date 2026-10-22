@@ -1,4 +1,3 @@
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { CreateMeasureOptions, CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
 import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
@@ -7,6 +6,7 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 const url = Cypress.config('baseUrl')
 let qdmMeasureName = 'QDMTestMeasure' + Date.now()
@@ -53,15 +53,11 @@ describe('Successful QDM Measure Export', () => {
             '',
             'SDE Payer',
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({
-            collapseEditor: true,
-            successTimeout: 20700,
-        })
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -150,13 +146,11 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
             '',
             'Qualifying Encounters',
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(Header.mainMadiePageButton).click()
     })

@@ -11,7 +11,7 @@ import {
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { Toasts } from '../../../../Shared/Toasts'
 import { Utilities } from '../../../../Shared/Utilities'
 
@@ -80,6 +80,7 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         })
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Ratio, pops)
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
     })
 
@@ -90,8 +91,6 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, IPP Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -132,9 +131,6 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

@@ -333,13 +333,12 @@ export class TestData {
     }
 
     public static withAccessToken(callback: (accessToken: string) => Cypress.Chainable | void): Cypress.Chainable {
-        return cy.getCookie('accessToken').should((cookie) => {
+        return cy.getCookie('accessToken').then((cookie) => {
             expect(
                 typeof cookie?.value === 'string' && cookie.value.length > 0 && cookie.value !== 'undefined',
                 'accessToken cookie is present'
             ).to.eq(true)
-        }).then((cookie) => {
-            return callback(cookie.value)
+            return callback(cookie?.value as string)
         })
     }
 
@@ -836,6 +835,21 @@ export class TestData {
         return this.saveMeasureCqlFor(cql, options)
     }
 
+    public static saveCurrentMeasureCql(
+        measureNumberOrOptions: number | MeasureCqlSaveOptions = 0
+    ): Cypress.Chainable<Cypress.Response<MeasureBody>> {
+        const options =
+            typeof measureNumberOrOptions === 'number'
+                ? { measureNumber: measureNumberOrOptions }
+                : measureNumberOrOptions
+        const { measureNumber = 0, owner = 'selectedUser' } = options
+
+        return this.readMeasure<MeasureBody>(measureNumber, {}, owner).then((response) => {
+            expect(response.status).to.eql(200)
+            return this.saveMeasureCql(response.body.cql, options)
+        })
+    }
+
     public static expectSavedMeasureCql(
         response: Cypress.Response<MeasureBody>,
         { elmXml = false }: SavedMeasureCqlExpectation = {}
@@ -1103,7 +1117,11 @@ export class TestData {
                 return requestTestCase()
             }
 
-            if (method === 'GET' && testCaseNumber === null) {
+            if (testCaseNumber === null) {
+                if (method !== 'GET') {
+                    throw new Error(`${method} test-case requests require a test-case number`)
+                }
+
                 return requestTestCase()
             }
 

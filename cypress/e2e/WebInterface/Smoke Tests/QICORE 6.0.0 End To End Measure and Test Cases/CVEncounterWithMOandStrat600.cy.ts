@@ -5,7 +5,7 @@ import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import {
     CVGroups,
     MeasureGroupPage,
@@ -82,6 +82,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         )
         MeasureGroupPage.addStratificationDataAPI(strats)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
     })
@@ -94,8 +95,6 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
     it('End to End CV Encounter Measure with MO and Stratification, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
