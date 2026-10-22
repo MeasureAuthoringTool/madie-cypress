@@ -23,6 +23,12 @@ const qrdaArchiveName = 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
+
+const assertExportedFileExists = (relativePath: string) => {
+    return cy.task('readFileSafe', path.join(downloadsFolder, relativePath))
+        .should('be.a', 'string')
+        .and('not.be.empty')
+}
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const measureData: CreateMeasureOptions = {}
@@ -87,16 +93,16 @@ describe('QDM Test Cases : Export Test Case', () => {
         })
 
         cy.fixture('baseQRDAHTMLfile.txt', 'utf8').then((expectedQrdaHtml) => {
-            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'), 'utf8')
-                .should('exist')
+            cy.task('readFileSafe', path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'))
+                .should('be.a', 'string')
                 .and('include', expectedQrdaHtml)
         })
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'html/SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'html/SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'qrda/SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'qrda/SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')).should('exist')
+        assertExportedFileExists('eCQMTitle4QDM_patients_results.html')
+        assertExportedFileExists('html/SBTestSeries_PDxNotPsych60MinsDepart.html')
+        assertExportedFileExists('html/SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')
+        assertExportedFileExists('qrda/SBTestSeries_PDxNotPsych60MinsDepart.xml')
+        assertExportedFileExists('qrda/SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')
     })
 
     it('Export Test Case button is disabled until Test cases are executed', () => {
