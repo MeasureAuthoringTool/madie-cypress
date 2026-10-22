@@ -18,10 +18,6 @@ let anotherTestCaseTitle = 'PDxNotPsych60MinsDepart2nd'
 let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let anotherTestCaseSeries = 'SBTestSeries2nd'
-let baseHTMLFile = 'cypress/fixtures/baseQRDAHTMLfile.txt'
-
-let exported = ''
-let expected = ''
 const qdmTestCaseJson = TestCaseJson.QDMTestCaseJson
 const qrdaArchiveName = 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'
 
@@ -90,15 +86,11 @@ describe('QDM Test Cases : Export Test Case', () => {
             cy.log('unzipFile Task finished')
         })
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'))
-            .should('exist')
-            .then((exportedFile) => {
-                exported = exportedFile.toString()
-                cy.readFile(baseHTMLFile).then((dataCompared) => {
-                    expected = dataCompared.toString()
-                    expect(exported).to.include(expected)
-                })
-            })
+        cy.fixture('baseQRDAHTMLfile.txt', 'utf8').then((expectedQrdaHtml) => {
+            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'), 'utf8')
+                .should('exist')
+                .and('include', expectedQrdaHtml)
+        })
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'html/SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
