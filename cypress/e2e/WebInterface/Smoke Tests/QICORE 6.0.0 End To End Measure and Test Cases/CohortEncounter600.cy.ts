@@ -1,4 +1,4 @@
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { CreateMeasureOptions, CreateMeasurePage, SupportedModels } from '../../../../Shared/CreateMeasurePage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
@@ -32,10 +32,10 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })

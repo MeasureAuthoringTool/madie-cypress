@@ -12,7 +12,7 @@ import {
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'RatioEpisodeSingleIPNoMO' + Date.now()
 let CqlLibraryName = 'RatioEpisodeSingleIPNoMO' + Date.now()
@@ -88,6 +88,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
             pops,
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
@@ -95,7 +96,6 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
     })
 
     afterEach('Clean up', () => {

@@ -6,7 +6,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const now = Date.now()
 const measureName = 'RatioPatientTwoIPsWithMOsUsingSameFunction' + now
@@ -65,16 +65,12 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
         )
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIpp1Pass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({
-            collapseEditor: true,
-            waitForDisabled: true,
-        })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

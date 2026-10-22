@@ -262,9 +262,9 @@ export class CQLEditorPage {
 
         if (appendText !== undefined) {
             MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, appendText)
-            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, '')
         } else if (appendNewLine) {
-            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, '')
         }
 
         cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('saveMeasureCql')

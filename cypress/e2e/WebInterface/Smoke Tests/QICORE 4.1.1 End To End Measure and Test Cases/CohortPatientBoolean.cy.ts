@@ -5,7 +5,7 @@ import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 
 let measureName = 'CohortPatientBoolean' + Date.now()
@@ -29,6 +29,7 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
         )
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
     })
 
@@ -39,8 +40,6 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
     it('End to End Cohort Patient Boolean, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         TestCasesPage.openTestCasesTabAndWaitForList()
 

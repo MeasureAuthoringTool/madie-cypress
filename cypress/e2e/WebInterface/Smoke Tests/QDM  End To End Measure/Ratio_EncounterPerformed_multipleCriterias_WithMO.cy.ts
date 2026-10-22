@@ -3,7 +3,7 @@ import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { QDMElements } from '../../../../Shared/QDMElements'
@@ -75,6 +75,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
             '2024-12-31',
         )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
     })
 
@@ -85,8 +86,6 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
     it('End to End Ratio EncounterPerformed, Multiple Criterias With MO', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Base Config Creation
         //Click on Measure Group tab

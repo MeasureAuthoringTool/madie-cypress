@@ -5,7 +5,7 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 
 let measureName = 'CVEpisodeWithStratification' + Date.now()
@@ -68,6 +68,7 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
         )
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
     })
 
     after('Clean up', () => {
@@ -80,8 +81,6 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

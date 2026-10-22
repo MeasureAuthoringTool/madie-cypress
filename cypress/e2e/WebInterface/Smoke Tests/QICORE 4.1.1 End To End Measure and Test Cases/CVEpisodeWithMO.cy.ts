@@ -4,7 +4,7 @@ import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import {
     CVGroups,
     MeasureGroupPage,
@@ -85,6 +85,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
             cvPops,
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
@@ -96,8 +97,6 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
     it('End to End CV Episode Measure with MO, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         TestCasesPage.openTestCasesTabAndWaitForList()
 

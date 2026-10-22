@@ -6,7 +6,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { QiCore4Cql } from '../../../../Shared/FHIRMeasuresCQL'
 import { Toasts } from '../../../../Shared/Toasts'
 
@@ -32,14 +32,13 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         )
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitlePass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Create Measure Group
         EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.measureGroupTypeSelect)

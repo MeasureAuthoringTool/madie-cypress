@@ -6,7 +6,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
 
 const measureName = 'CohortEpisodeWithStrat' + Date.now()
@@ -26,6 +26,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
     })
 
@@ -36,8 +37,6 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
     it('End to End Cohort Episode w/ Stratification, Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true })
 
         // add stratification data to group
         cy.get(EditMeasurePage.measureGroupsTab).click()

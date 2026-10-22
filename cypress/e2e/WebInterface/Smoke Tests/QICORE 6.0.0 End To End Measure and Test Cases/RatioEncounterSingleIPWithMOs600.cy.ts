@@ -6,7 +6,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
 
 const now = Date.now()
@@ -37,6 +37,7 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
             'Encounter',
         )
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
     })
@@ -48,8 +49,6 @@ describe('Measure Creation and Testing: Ratio Encounter Single IP w/ MOs', () =>
     it('End to End - Numerator Pass Result', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // Add measure observations to the API-created group.
         EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.addDenominatorObservationLink)

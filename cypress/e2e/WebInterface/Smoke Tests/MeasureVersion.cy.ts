@@ -15,6 +15,7 @@ import {
 import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { Utilities } from '../../../Shared/Utilities'
 import { Header } from '../../../Shared/Header'
+import { TestData } from '../../../Shared/TestData'
 
 let measureName = 'SmokeMeasureVersion' + Date.now()
 let cqlLibraryName = 'SmokeMeasureVersionLib' + Date.now()
@@ -45,12 +46,8 @@ describe('QDM Measure Versioning', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureOpts)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveMeasureCql(QDMMeasureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({
-            collapseEditor: true,
-            successTimeout: 20700,
-        })
     })
 
     afterEach('Logout and delete Measure', () => {
@@ -125,12 +122,8 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureOpts)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveMeasureCql(qdmCMSMeasureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({
-            collapseEditor: true,
-            successTimeout: 20700,
-        })
     })
 
     afterEach('Logout and delete Measure', () => {
@@ -208,12 +201,8 @@ describe('QI-Core Measure Versioning', () => {
             populations,
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QiCoreTestCaseJson)
+        TestData.saveMeasureCql(QiCoreMeasureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({
-            collapseEditor: true,
-            successTimeout: 20700,
-        })
     })
 
     after('Logout and cleanup', () => {
