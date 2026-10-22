@@ -23,10 +23,11 @@ const qrdaArchiveName = 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
-const baseQrdaHtmlFixturePath = path.join('cypress', 'fixtures', 'baseQRDAHTMLfile.txt')
 
 const assertExportedFileExists = (relativePath: string) => {
-    return cy.task('fileExists', path.join(downloadsFolder, relativePath)).should('eq', true)
+    return cy.task('readFileSafe', path.join(downloadsFolder, relativePath))
+        .should('be.a', 'string')
+        .and('not.be.empty')
 }
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
@@ -82,17 +83,18 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
         //verify zip file exists
-        cy.task('fileExists', path.join(downloadsFolder, qrdaArchiveName), { timeout: 60000 }).should('eq', true)
+        cy.readFile(path.join(downloadsFolder, qrdaArchiveName), { timeout: 60000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.task('unzipFile', { zipFile: qrdaArchiveName, path: downloadsFolder }).then(() => {
             cy.log('unzipFile Task finished')
         })
 
-        cy.task('fileContains', {
-            filePath: path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'),
-            expectedFilePath: baseQrdaHtmlFixturePath,
-        }).should('eq', true)
+        cy.fixture('baseQRDAHTMLfile.txt', 'utf8').then((expectedQrdaHtml) => {
+            cy.task('readFileSafe', path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'))
+                .should('be.a', 'string')
+                .and('include', expectedQrdaHtml)
+        })
 
         assertExportedFileExists('eCQMTitle4QDM_patients_results.html')
         assertExportedFileExists('html/SBTestSeries_PDxNotPsych60MinsDepart.html')
@@ -172,7 +174,7 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get('#export-menu').contains('QRDA').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
-        cy.task('fileExists', path.join(downloadsFolder, qrdaArchiveName), { timeout: 60000 }).should('eq', true)
+        cy.readFile(path.join(downloadsFolder, qrdaArchiveName), { timeout: 60000 }).should('exist')
         cy.log('Successfully verified zip file export')
     })
 })

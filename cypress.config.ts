@@ -63,16 +63,6 @@ export default defineConfig({
                   return null
               }
           },
-          fileExists(filePath: string) {
-              return fs.existsSync(filePath)
-          },
-          fileContains({ filePath, expectedFilePath }: { filePath: string; expectedFilePath: string }) {
-              try {
-                  return fs.readFileSync(filePath, 'utf8').includes(fs.readFileSync(expectedFilePath, 'utf8'))
-              } catch {
-                  return false
-              }
-          },
           parseXML(xmlContent: string) {
               return new Promise((resolve, reject) => {
                   const parser = new xml2js.Parser()
