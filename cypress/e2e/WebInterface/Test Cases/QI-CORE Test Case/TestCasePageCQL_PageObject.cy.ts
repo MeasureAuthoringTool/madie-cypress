@@ -12,9 +12,10 @@ const now = Date.now()
 const measureName = 'CQLPageObject' + now
 const CqlLibraryName = 'CQLPageObjectLib' + now
 const validMeasureCQL =
-    "library TestLibrary1736348266658 version '0.0.000'\n" +
+    `library ${measureName} version '0.0.000'\n` +
     "using QICore version '4.1.1'\n" +
     "include FHIRHelpers version '4.1.000' called FHIRHelpers\n\n" +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient'
 const measureCQL =
     "library SimpleFhirLibrary version '0.0.004'\n" +
@@ -40,7 +41,12 @@ describe('Test Case Page CQL page object', () => {
         MeasuresPage.actionCenter('edit')
 
         CQLEditorPage.openMonacoCqlEditor()
-        MonacoEditor.append(EditMeasurePage.monacoCqlEditor, 'define "ipp": true')
+        MonacoEditor.append(EditMeasurePage.monacoCqlEditor, 'define "ipp": true', 'center')
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'define "ipp": true')
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/, (request) => {
+            expect(request.body.cql).to.match(/^library /)
+            expect(request.body.cql).to.include('\ncontext Patient\ndefine "ipp": true')
+        })
         CQLEditorPage.saveMonacoCql({ appendNewLine: false, waitForDisabled: true })
 
         CQLEditorPage.openMonacoCqlEditor()

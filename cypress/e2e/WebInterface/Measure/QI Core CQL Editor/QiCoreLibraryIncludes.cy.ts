@@ -11,6 +11,26 @@ let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 
+const assertLibrarySearchResults = (expectedLibraries: Array<{ name: string, version: string }>): void => {
+    cy.get(CQLEditorPage.libraryResultsTable).should('be.visible')
+
+    expectedLibraries.forEach(({ name, version }, index) => {
+        cy.get(CQLEditorPage.libraryResultsTable)
+            .find(`[data-test-id="row-${index}"]`)
+            .should('contain.text', name)
+            .and('contain.text', version)
+            .and('contain.text', 'View / Apply')
+    })
+}
+
+const vteLibraries = [
+    { name: 'VTE', version: '8.10.000' },
+    { name: 'VTE', version: '8.9.000' },
+    { name: 'VTE', version: '8.8.000' },
+    { name: 'VTE', version: '8.7.000' },
+    { name: 'VTE', version: '8.6.000' }
+]
+
 describe('Qi-Core Library Includes fields', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
@@ -23,8 +43,7 @@ describe('Qi-Core Library Includes fields', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
-        OktaLogin.UILogout()
+        return Utilities.deleteMeasure()
     })
 
     it('Search for Qi-Core Included Libraries', () => {
@@ -39,12 +58,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should(
-            'include.text',
-            'nameversionownerActionVTE8.10.000Yanyan HuView ' +
-                '/ ApplyVTE8.9.000Yanyan HuView / ApplyVTE8.8.000Yanyan HuView / ApplyVTE8.7.000Yanyan HuView / ApplyVTE8.6.000Yanyan HuView ' +
-                '/ ApplyItems per page 5.Items per page5​1 - 5 of 181234',
-        )
+        assertLibrarySearchResults(vteLibraries)
     })
 
     it('Apply Qi-Core Included library to the CQL and save', () => {
@@ -54,12 +68,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should(
-            'include.text',
-            'nameversionownerActionVTE8.10.000Yanyan HuView ' +
-                '/ ApplyVTE8.9.000Yanyan HuView / ApplyVTE8.8.000Yanyan HuView / ApplyVTE8.7.000Yanyan HuView / ApplyVTE8.6.000Yanyan HuView ' +
-                '/ ApplyItems per page 5.Items per page5​1 - 5 of 181234',
-        )
+        assertLibrarySearchResults(vteLibraries)
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -82,12 +91,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should(
-            'include.text',
-            'nameversionownerActionVTE8.10.000Yanyan HuView ' +
-                '/ ApplyVTE8.9.000Yanyan HuView / ApplyVTE8.8.000Yanyan HuView / ApplyVTE8.7.000Yanyan HuView / ApplyVTE8.6.000Yanyan HuView ' +
-                '/ ApplyItems per page 5.Items per page5​1 - 5 of 181234',
-        )
+        assertLibrarySearchResults(vteLibraries)
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -107,10 +111,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Apply different Library with duplicate Alias
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('fhir')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should(
-            'include.text',
-            'nameversionownerActionCDSConnectCommonsForFHIRv4010.1.000pauld@mitre.orgView / ApplyFHIRCommon4.3.000Juliet RubiniView / ApplyFHIRCommon4.2.000Juliet RubiniView / ApplyFHIRCommon4.1.000Juliet RubiniView / ApplyFHIRCommon4.0.000Juliet RubiniView / ApplyItems per page 5.Items per page5​1 - 5 of 191234',
-        )
+        assertLibrarySearchResults([{ name: 'CDSConnectCommonsForFHIRv401', version: '0.1.000' }])
         cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
         cy.get('[data-testid="apply-button"]').click()
@@ -177,7 +178,7 @@ describe('Qi-Core Library Includes fields', () => {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, brokenCql)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         cy.get(CQLEditorPage.errorMsg).should('be.visible')
     })

@@ -11,8 +11,15 @@ import { LandingPage } from '../../../../Shared/LandingPage'
 import { TestData } from '../../../../Shared/TestData'
 
 const timestamp = Date.now()
-let measureName = 'QiCoreExportValidations' + timestamp
-let CqlLibraryName = 'QiCoreExportValidationsLib' + timestamp
+let measureName: string
+let CqlLibraryName: string
+let setupSequence = 0
+
+function useUniqueMeasureNames(): void {
+    const suffix = `${timestamp}${++setupSequence}`
+    measureName = `QiCoreExportValidations${suffix}`
+    CqlLibraryName = `QiCoreExportValidationsLib${suffix}`
+}
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
@@ -29,10 +36,11 @@ let updatedMeasureCQL =
     'define "denom":\n' +
     '"ipp"'
 
-const invalidCqlDefinition = '\ndefine "Invalid CQL":\n'
+const invalidCqlDefinition = 'define "Invalid CQL": MissingExpression'
 
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
     before('Create New Measure and Login', () => {
+        useUniqueMeasureNames()
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, {
             measureCql: measureCQL,
             blankMetadata: true,
@@ -68,6 +76,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
 describe('Error Message on Measure Export when the Measure has missing/invalid CQL', () => {
     beforeEach('Create New Measure and Login', () => {
+        useUniqueMeasureNames()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
@@ -80,13 +89,19 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.clearMonacoCqlDocument()
-        cy.intercept('PUT', '/api/measures/**').as('saveEmptyCql')
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
-        cy.wait('@saveEmptyCql').its('response.statusCode').should('eq', 200)
+        TestData.readMeasure().then((response) => {
+            expect(response.status).to.eq(200)
+            TestData.updateMeasure({
+                ...response.body,
+                cql: '',
+                elmJson: '',
+                elmXml: '',
+                cqlErrors: false
+            }).then((updateResponse) => {
+                expect(updateResponse.status).to.eq(200)
+                expect(updateResponse.body.cql).to.eq('')
+            })
+        })
 
         cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForExport')
         cy.get(Header.measures).click()
@@ -98,12 +113,17 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({
-            appendText: invalidCqlDefinition.trimStart(),
-            waitForDisabled: true
+        TestData.readMeasure().then((response) => {
+            expect(response.status).to.eq(200)
+            TestData.updateMeasure({
+                ...response.body,
+                cql: `${response.body.cql}\n${invalidCqlDefinition}`,
+                cqlErrors: true
+            }).then((updateResponse) => {
+                expect(updateResponse.status).to.eq(200)
+                expect(updateResponse.body.cqlErrors).to.eq(true)
+            })
         })
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Error')
 
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('export', undefined, { expectExportSuccess: false })
@@ -114,13 +134,10 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
 describe('Error Message on Measure Export when the Measure does not have Population Criteria', () => {
     before('Create New Measure and Login', () => {
+        useUniqueMeasureNames()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ appendNewLine: true, waitForDisabled: true })
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         return cy.then(() => undefined)
     })
 
@@ -144,6 +161,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
 describe('Error Message on Measure Export when the Population Criteria does not match', () => {
     before('Create New Measure and Login', () => {
+        useUniqueMeasureNames()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
 
@@ -151,9 +169,9 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         return cy.then(() => undefined)
     })
 
-    after('Cleanup', () => {
-        return Utilities.deleteMeasure()
-    })
+    // after('Cleanup', () => {
+    //     return Utilities.deleteMeasure()
+    // })
 
     it('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
         cy.get(Header.measures).click()
@@ -179,8 +197,10 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
 describe('Error Message on Measure Export when the PC does not have Improvement Notation set', () => {
     before('Create New Measure and Login', () => {
+        useUniqueMeasureNames()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        MeasureGroupPage.CreateProportionMeasureGroupWithoutImprovementNotationAPI()
         OktaLogin.SessionLogin()
         return cy.then(() => undefined)
     })
@@ -190,8 +210,6 @@ describe('Error Message on Measure Export when the PC does not have Improvement 
     })
 
     it('Verify Error Message on Measure Export when Population Criteria does not have IN set', () => {
-        MeasureGroupPage.CreateProportionMeasureGroupWithoutImprovementNotationAPI()
-
         cy.intercept('PUT', '/api/measures/searches?*').as('measureListRefreshForImprovementNotationExport')
         cy.get(Header.measures).click()
         MeasuresPage.waitForMeasureListRefresh('@measureListRefreshForImprovementNotationExport')

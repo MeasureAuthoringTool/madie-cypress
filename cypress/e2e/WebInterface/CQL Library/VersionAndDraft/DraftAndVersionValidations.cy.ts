@@ -91,7 +91,10 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         // Clear the complete Monaco document so version validation exercises an empty library.
-        MonacoEditor.clearDocument(CQLLibraryPage.cqlLibraryEditorTextBox)
+        MonacoEditor.clearDocument(CQLLibraryPage.cqlLibraryEditorTextBox, 'center')
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should(($editor) => {
+            expect($editor.text().trim(), 'rendered CQL after clearing').to.be.empty
+        })
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')

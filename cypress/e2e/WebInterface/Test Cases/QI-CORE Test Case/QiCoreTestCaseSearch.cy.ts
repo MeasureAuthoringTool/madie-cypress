@@ -61,7 +61,14 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd, testCaseJson2nd)
+        TestCasesPage.createTestCase(
+            testCaseTitle2nd,
+            testCaseDescription2nd,
+            testCaseSeries2nd,
+            testCaseJson2nd,
+            false,
+            true
+        )
         TestCasesPage.openTestCasesTab(TestCasesPage.tcSearchInput)
         const expectedTestCaseValue =
             '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd

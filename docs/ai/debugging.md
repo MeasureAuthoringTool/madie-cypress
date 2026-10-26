@@ -45,6 +45,8 @@ Parallel Cypress workers are terminated when they produce no output for 20 minut
 disable inactivity detection. The worker wrapper captures `scripts/ci-diagnostics.sh` output before
 terminating the process group so the console log retains the stuck process and latest-result state.
 
+For a grouped TEST CI run, choose Jenkins `TEST_SCRIPT=test:specific:files:parallel:headless` and put one spec path per line in `MANUAL_SPEC_LIST`. This uses the existing three-worker spec-list runner without headed Chrome. Keep service specs in a separate run when terminology or other shared endpoints are under load.
+
 For timeouts, check:
 
 1. Is the selector correct?

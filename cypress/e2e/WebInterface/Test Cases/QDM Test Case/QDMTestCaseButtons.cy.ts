@@ -4,12 +4,10 @@ import { CreateMeasureOptions, CreateMeasurePage } from '../../../../Shared/Crea
 import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
-import { Header } from '../../../../Shared/Header'
 import { TestData } from '../../../../Shared/TestData'
 
 let randValue = Math.floor(Math.random() * 1000 + 1)
@@ -44,6 +42,17 @@ describe('Test case list page - Action Center icons for measure owner', () => {
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(measure.cql).then((response) => TestData.expectSavedMeasureCql(response))
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Numerator',
+            '',
+            'Denominator'
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json)
         TestCasesPage.CreateQDMTestCaseAPI(
             testCase2.title,
@@ -55,30 +64,13 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
-
         cy.get(EditMeasurePage.testCasesTab).click()
-
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30500)
+        return cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
     })
 
     afterEach('Logout and Clean up Measures', () => {
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
+        return Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
     })
 
     it('Delete icon is present and enables correctly', () => {
@@ -152,6 +144,17 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         measureData.mpEndDate = '2025-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(measure.cql).then((response) => TestData.expectSavedMeasureCql(response))
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(
+            0,
+            false,
+            'Initial Population',
+            '',
+            '',
+            'Numerator',
+            '',
+            'Denominator'
+        )
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json)
         TestCasesPage.CreateQDMTestCaseAPI(
             testCase2.title,
@@ -163,28 +166,13 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
-
-        //Create Measure Group
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the criteria section of the PC
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
-
         EditMeasurePage.actionCenter(EditMeasureActions.version)
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
         OktaLogin.UILogout()
-        Utilities.deleteVersionedMeasure(measure.name, measure.cqlLibraryName)
+        return Utilities.deleteVersionedMeasure(measure.name, measure.cqlLibraryName)
     })
 
     it('Export icon is present and it enables correctly', () => {

@@ -10,14 +10,8 @@ const today = dayjs().format('M/D/YYYY')
 describe('Measure List Page Sort by Columns', () => {
 
     beforeEach('Login', () => {
-
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
-
-            afterEach('Logout', () => {
-
-                OktaLogin.UILogout()
-            })
 
     it('Measure sorting by columns on All Measures tab', () => {
 

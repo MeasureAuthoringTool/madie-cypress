@@ -8,9 +8,9 @@ import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
-const now = Date.now()
-const measureName = 'CQLCodeSystem' + now
-const CqlLibraryName = 'CQLCodeSystemLib' + now
+let measureName: string
+let CqlLibraryName: string
+let measureSequence = 0
 
 const expectSaveMessage = (expectedMessage: string) => {
     cy.get(CQLEditorPage.saveAlertMessage)
@@ -22,6 +22,9 @@ const replaceCqlFixture = (fileName: string) => {
     cy.readFile(`cypress/fixtures/${fileName}`).then((fixtureCql) => {
         MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
         MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fixtureCql.replace(/\{home\}/gi, ''))
+        cy.get(EditMeasurePage.monacoCqlEditor).should(($editor) => {
+            expect($editor.text().trim(), 'inserted CQL fixture').not.to.be.empty
+        })
     })
 }
 
@@ -43,15 +46,15 @@ const expectNoEditorErrorsAfterTabSwitch = () => {
 describe('Validations around code system in Measure CQL', () => {
 
     beforeEach('Create measure and login', () => {
-
+        const suffix = `${Date.now()}${++measureSequence}`
+        measureName = `CQLCodeSystem${suffix}`
+        CqlLibraryName = `CQLCodeSystemLib${suffix}`
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
+    afterEach('Clean up Measure', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Verify proper error(s) appear in CQL Editor, when codesystem URL is incorrect', () => {
@@ -60,7 +63,7 @@ describe('Validations around code system in Measure CQL', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('CQLCsURLIncorrect.txt')
@@ -81,7 +84,7 @@ describe('Validations around code system in Measure CQL', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('CQLCsVersionIncludedNoVSAC.txt')
@@ -102,7 +105,7 @@ describe('Validations around code system in Measure CQL', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('CQLCsVersionNotIncludedNoVSAC.txt')
@@ -123,7 +126,7 @@ describe('Validations around code system in Measure CQL', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('CQLCsNoVersionVSACExists.txt')
@@ -144,7 +147,7 @@ describe('Validations around code system in Measure CQL', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('CQLCsFHIRVersionProvided.txt')
@@ -165,7 +168,7 @@ describe('Validations around code system in Measure CQL', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('CQLCsFHIRVersionIncludedNoVSAC.txt')
@@ -186,7 +189,7 @@ describe('Validations around code system in Measure CQL', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('CQLFileWithInvalidValuesetURL.txt')

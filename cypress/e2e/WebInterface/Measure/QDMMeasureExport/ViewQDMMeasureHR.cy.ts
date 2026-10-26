@@ -5,8 +5,8 @@ import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 let randValue = Math.floor(Math.random() * 1000 + 1)
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
@@ -40,10 +40,9 @@ describe('View Human Readable for QDM Measure', () => {
             '',
             'Denominator'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })

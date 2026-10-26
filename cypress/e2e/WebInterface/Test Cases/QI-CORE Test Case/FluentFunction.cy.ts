@@ -38,7 +38,7 @@ describe('Fluent Function Capability', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForFluentFunction.txt')
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 

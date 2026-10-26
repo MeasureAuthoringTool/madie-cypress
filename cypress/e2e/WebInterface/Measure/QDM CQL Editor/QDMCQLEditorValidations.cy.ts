@@ -200,7 +200,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, `${measureCQL}\n`)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
@@ -214,7 +214,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_without_using)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Missing a using statement. Please add in a valid model and version.Library statement was incorrect. MADiE has overwritten it.')
 
@@ -229,7 +229,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_incorrect_using)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         cy.get(EditMeasurePage.libWarningTopMsg).should(
             'contain.text',
@@ -247,7 +247,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_different_Lib_name)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
@@ -263,7 +263,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_withSameLibraryVersionAndDifferentAlias)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
 
@@ -279,7 +279,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_withDifferentLibraryVersionAndDifferentAlias)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
         MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'Library MATGlobalCommonFunctionsQDM is already in use in this library.')
@@ -296,7 +296,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_without_CodeSystem_Name)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
         MonacoEditor.assertErrors(CQLEditorPage.errorMsg, "code statement requires a codesystem reference. Please add a 'from' clause to your statement.")
@@ -313,7 +313,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
         MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'Retrieves must contain a code or value set filter')
@@ -329,7 +329,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QDMCQLWithoutIncludedLibraryVersion.txt', EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
         MonacoEditor.assertErrors(CQLEditorPage.errorMsg, 'include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.')
@@ -343,7 +343,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     
         MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QCMCQLWithPrivateAccessModifier.txt', EditMeasurePage.monacoCqlEditor)
     
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -358,7 +358,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     
         MonacoEditor.replaceDocumentFromFile('cypress/fixtures/QDMPractitionerContext.txt', EditMeasurePage.monacoCqlEditor)
     
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -375,7 +375,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_with_Concept_Constructor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible('#content', 60000)
 
         cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')

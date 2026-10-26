@@ -287,8 +287,8 @@ export class EditMeasurePage {
             .trim()
     }
 
-    public static getLockedIndicatorChipSelector(measureName: string): string {
-        return `[data-testid="measure-${measureName}-inuse-chip"]`
+    public static getLockedIndicatorChipSelector(): string {
+        return '[data-testid$="-inuse-chip"]'
     }
 
     public static assertMeasureLockedModalMessage(expectedText: string): void {
@@ -334,8 +334,8 @@ export class EditMeasurePage {
         this.closeMeasureLockedModalByButton()
     }
 
-    public static assertLockedIndicatorTooltip(measureName: string, expectedTooltip: string): void {
-        const chipSelector = this.getLockedIndicatorChipSelector(measureName)
+    public static assertLockedIndicatorTooltip(expectedTooltip: string): void {
+        const chipSelector = this.getLockedIndicatorChipSelector()
 
         cy.get(chipSelector).should('be.visible').trigger('mouseover', { force: true })
         cy.get('.MuiTooltip-tooltip').should(($tooltip) => {

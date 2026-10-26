@@ -12,11 +12,15 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import * as path from 'path'
 import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const qiCoreCommonLib = 'resources/library-QICoreCommon-2.1.000.json'
+
+const expectExtension = (extensions: Array<{ url: string }>, expectedUrl: string) => {
+    expect(extensions.map(({ url }) => url)).to.include(expectedUrl)
+}
 
 const exportMeasureArchive = (fileName: string) => {
     EditMeasurePage.actionCenter(EditMeasureActions.export)
@@ -56,9 +60,9 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
             'Qualifying Encounters',
             'Encounter'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -83,10 +87,12 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
             expect(measureJson.entry[0].resource.resourceType).to.eq('Measure')
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)
-            expect(measureJson.entry[0].resource.contained[0].extension[0].url).to.eq(
+            expectExtension(
+                measureJson.entry[0].resource.contained[0].extension,
                 'http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition'
             )
-            expect(measureJson.entry[0].resource.extension[0].url).to.eq(
+            expectExtension(
+                measureJson.entry[0].resource.extension,
                 'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements'
             )
         })
@@ -105,17 +111,19 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
             expect(libJson.resourceType).to.eq('Library')
             expect(libJson.meta.profile).to.deep.contain.members(expectedLibraryProfile)
-            expect(libJson.extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
+            expectExtension(libJson.extension, 'http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
         })
 
         // read measure-
         cy.readFile(
             path.join(downloadsFolder, 'resources/measure-' + cqlLibraryName + '-Draft based on 0.0.000.json')
         ).then((measureJson) => {
-            expect(measureJson.contained[0].extension[0].url).to.eq(
+            expectExtension(
+                measureJson.contained[0].extension,
                 'http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition'
             )
-            expect(measureJson.extension[0].url).to.eq(
+            expectExtension(
+                measureJson.extension,
                 'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements'
             )
         })
@@ -136,11 +144,10 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Encounter')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -181,7 +188,7 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
 
             expect(libJson.resourceType).to.eq('Library')
             expect(libJson.meta.profile).to.deep.contain.members(expectedLibraryProfile)
-            expect(libJson.extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
+            expectExtension(libJson.extension, 'http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
         })
     })
 })
@@ -223,9 +230,9 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
             undefined,
             cvPops
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -277,9 +284,9 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
             'Qualifying Encounters',
             'Encounter'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)

@@ -6,6 +6,7 @@ import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
 
 let apiCQLLibraryName = ''
 const cqlLibraryPublisher = 'SemanticBits'
@@ -22,7 +23,8 @@ const openCreatedQdmLibrary = (): void => {
 }
 
 const replaceCqlWithFixture = (fixture: string): void => {
-    MonacoEditor.replaceDocumentFromFile(fixture, CQLLibraryPage.cqlLibraryEditorTextBox)
+    MonacoEditor.replaceDocumentFromFile(fixture, CQLLibraryPage.cqlLibraryEditorTextBox, 'center')
+    MonacoEditor.append(CQLLibraryPage.cqlLibraryEditorTextBox, '', 'center')
 }
 
 describe('Validate QDM CQL on CQL Library page', () => {
@@ -44,8 +46,11 @@ describe('Validate QDM CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains(apiCQLLibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains("version '0.0.000'")
+        TestData.readCqlLibrary().then(({ status, body }) => {
+            expect(status).to.eq(200)
+            expect(body.cql).to.include(apiCQLLibraryName)
+            expect(body.cql).to.include("version '0.0.000'")
+        })
         MonacoEditor.assertNoErrorMarker()
     })
 

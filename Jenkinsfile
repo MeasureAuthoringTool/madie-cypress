@@ -10,7 +10,7 @@ pipeline {
     choice(
       choices: [
         'cy:parallel:test','cy:parallel:test:ui:smoketests','cy:parallel:test:ui:smoketests:headless','cy:parallel:dev:ui:smoketests',
-        'cy:parallel:test:all:tests','test:specific:files:parallel','dev:all:ui:tests','dev:all:tests',
+        'cy:parallel:test:all:tests','test:specific:files:parallel','test:specific:files:parallel:headless','dev:all:ui:tests','dev:all:tests',
         'dev:ui:smoketests','dev:ui:cqllibrary:cqlEditor','dev:ui:cqllibrary','dev:ui:measure:cqlEditor',
         'dev:measure:editMeasure:ui:tests','dev:ui:testCases:testCasePopulationValues',
         'dev:ui:cqllibrary:versionAndDraft','dev:all:services:tests','dev:services:measureService:tests',
@@ -33,7 +33,7 @@ pipeline {
     text(
       name: 'MANUAL_SPEC_LIST',
       defaultValue: '',
-      description: 'Optional newline-separated Cypress spec files. Use with test:specific:files:parallel to create test-files.txt at runtime.'
+      description: 'Optional newline-separated Cypress spec files. Use with test:specific:files:parallel or test:specific:files:parallel:headless to create test-files.txt at runtime.'
     )
     choice(name: 'BUILD_CONTAINER', description: 'Rebuild Cypress Container?', choices: ['no','yes'])
   }

@@ -247,9 +247,11 @@ describe('CQL Library Validations', () => {
         createLibraryAndRegisterCleanup()
 
         searchForAndEditLibrary(LibraryName)
-        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/USQCTestLibrary.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        MonacoEditor.insertTextFromFile('cypress/fixtures/USQCTestLibrary.txt', CQLLibraryPage.cqlLibraryEditorTextBox, 'center')
+        MonacoEditor.append(CQLLibraryPage.cqlLibraryEditorTextBox, '', 'center')
+        MonacoEditor.assertRenderedText(CQLLibraryPage.cqlLibraryEditorTextBox, 'using USQualityCore')
 
-        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled').click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         searchForAndEditLibrary(LibraryName)

@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-10-15
+Last updated: 2026-10-26
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -24,16 +24,25 @@ Current focus order:
 1. Stabilize CQL Library list entry and render readiness. The current full
    regression shows the library table unavailable across creation, validation,
    version/draft, transfer, sharing, history, editor, and comparison specs.
-   Diagnose the shared list/search request and rendered table state with a
-   representative consumer before changing downstream specs.
+   Recent TEST reports cover creation, validation, version/draft, transfer,
+   sharing, editor, and list sorting; comparison (1/1) and a focused name
+   search (1/1) also passed headless on 2026-10-26. The broad failure is not
+   reproduced by these consumers. Run the remaining unverified list/history
+   specs as a targeted CI group before changing the shared helper.
 2. Replace response-dependent list assertions where Cypress 16 reports an
    intercepted request with no response object. Keep request-query assertions
    explicit, and use a destination or rendered-list condition for readiness.
-   Start with CQL Library and Measure list sort consumers, then prove one Admin
-   list consumer.
+   The representative CQL Library sort (3/3), Measure sort (4/4), and Admin
+   library search (2/2) specs passed headless in TEST on 2026-10-26; the
+   missing-response condition did not reproduce in this batch. Require a
+   failing artifact before changing their response assertions.
 3. Batch current Admin tooltip copy changes only after confirming their exact
    accessible labels. Keep action enablement and permission assertions
-   independent from label text.
+   independent from label text. The no-selection Measure actions (2/2),
+   selected/unselected Measure action transition (1/1), and active Library
+   delete action (1/1) passed headless in TEST on 2026-10-26. No copy change
+   is indicated by these representative runs; require a failing artifact for
+   any remaining tooltip variant.
 4. Triage uncaught service/setup errors before their downstream specs are
    changed; hook or setup failures can cascade into misleading UI failures.
 
