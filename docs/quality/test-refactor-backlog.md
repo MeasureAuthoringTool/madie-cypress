@@ -24,8 +24,11 @@ Current focus order:
 1. Stabilize CQL Library list entry and render readiness. The current full
    regression shows the library table unavailable across creation, validation,
    version/draft, transfer, sharing, history, editor, and comparison specs.
-   Diagnose the shared list/search request and rendered table state with a
-   representative consumer before changing downstream specs.
+   Recent TEST reports cover creation, validation, version/draft, transfer,
+   sharing, editor, and list sorting; comparison (1/1) and a focused name
+   search (1/1) also passed headless on 2026-10-26. The broad failure is not
+   reproduced by these consumers. Run the remaining unverified list/history
+   specs as a targeted CI group before changing the shared helper.
 2. Replace response-dependent list assertions where Cypress 16 reports an
    intercepted request with no response object. Keep request-query assertions
    explicit, and use a destination or rendered-list condition for readiness.
