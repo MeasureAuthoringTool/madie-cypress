@@ -53,7 +53,8 @@ describe('Version CQL Library with errors', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Add parsing error to the valid CQL
-        MonacoEditor.appendDocumentText(CQLLibraryPage.cqlLibraryEditorTextBox, 'tdysfdfjch')
+        MonacoEditor.appendDocumentText(CQLLibraryPage.cqlLibraryEditorTextBox, 'tdysfdfjch', 'center')
+        MonacoEditor.assertRenderedText(CQLLibraryPage.cqlLibraryEditorTextBox, 'tdysfdfjch')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()

@@ -59,11 +59,11 @@ describe('QDM Test Cases : Export Test Case', () => {
         )
         TestData.saveMeasureCql(`${qdmMeasureCQL}\n`).then(TestData.expectSavedMeasureCql)
 
-        return OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
-    afterEach('Log out and Clean up', () => {
-        return Utilities.deleteMeasure().then(() => OktaLogin.UILogout())
+    afterEach('Clean up measure', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Successful QRDA Export for QDM Test Cases', () => {
@@ -126,7 +126,7 @@ describe('QDM Test Cases : Export Test Case', () => {
 describe('Export Test cases by Non Measure Owner', () => {
     deleteDownloadsFolderBeforeAll()
 
-    beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
+    beforeEach('Create Measure, Measure Group, Test case and log in as non-owner', () => {
         let newTimestamp = Date.now()
         let newRandValue = Math.floor(Math.random() * 1000 + 1)
         measureName = 'QDMTestMeasure' + newTimestamp + newRandValue
@@ -143,17 +143,14 @@ describe('Export Test cases by Non Measure Owner', () => {
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription, qdmTestCaseJson)
         TestData.saveMeasureCql(`${qdmMeasureCQL}\n`).then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        return OktaLogin.UILogout()
+        return OktaLogin.SessionAltLogin()
     })
 
-    afterEach('Log out and Clean up', () => {
-        return Utilities.deleteMeasure().then(() => OktaLogin.UILogout())
+    afterEach('Clean up measure', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Non Measure Owner should be able to Export Test cases', () => {
-        OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
         cy.get(MeasuresPage.allMeasuresTab).click()

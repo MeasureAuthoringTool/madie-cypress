@@ -125,10 +125,10 @@ export class OktaLogin {
     // Logout() — NOT UILogout().
     // ------------------------------------------------------
 
-    public static SessionLogin(): void {
+    public static SessionLogin(): Cypress.Chainable {
         const who = Cypress.expose('selectedUser')
 
-        cy.session('login-' + who, () => {
+        return cy.session('login-' + who, () => {
             // Only acquire the access token via API — no browser navigation.
             // cy.session() resets the page to about:blank before running this
             // setup function, so browser navigation belongs after session restore.
@@ -150,17 +150,15 @@ export class OktaLogin {
             validate() {
                 cy.getCookie('accessToken').should('exist')
             },
+        }).then(() => {
+            return cy.visit('/').get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible').then(() => undefined)
         })
-
-        // After session restore/create, navigate to the app.
-        cy.visit('/')
-        cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
-    public static SessionAltLogin(): void {
+    public static SessionAltLogin(): Cypress.Chainable {
         const who = Cypress.expose('selectedAltUser')
 
-        cy.session('alt-login-' + who, () => {
+        return cy.session('alt-login-' + who, () => {
             const cookieSetters: Record<string, () => void> = {
                 altHarpUser:  () => cy.setAccessTokenCookieALT(),
                 altHarpUser2: () => cy.setAccessTokenCookieALT2(),
@@ -176,10 +174,9 @@ export class OktaLogin {
             validate() {
                 cy.getCookie('accessToken').should('exist')
             },
+        }).then(() => {
+            return cy.visit('/').get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible').then(() => undefined)
         })
-
-        cy.visit('/')
-        cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
     // ------------------------------------------------------

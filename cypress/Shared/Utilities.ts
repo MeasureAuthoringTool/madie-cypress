@@ -53,7 +53,7 @@ export class Utilities {
         deleteSecondMeasure?: boolean,
         altUser?: boolean,
         measureNumber?: number
-    ): Cypress.Chainable<void> {
+    ): Cypress.Chainable {
         const owner: FixtureOwner = altUser ? 'selectedAltUser' : 'selectedUser'
         const currentUser = Cypress.expose(owner)
 
@@ -367,7 +367,11 @@ export class Utilities {
     }
 
     // ToDo: add similar function to easily transfer ownership of measures or libraries
-    public static setSharePermissions(objectType: MadieObject, action: PermissionActions, user: string) {
+    public static setSharePermissions(
+        objectType: MadieObject,
+        action: PermissionActions,
+        user: string
+    ): Cypress.Chainable {
         let readId: () => Cypress.Chainable<string>
         let urlPath: string
 
@@ -388,8 +392,8 @@ export class Utilities {
             }
         }
 
-        readId().then((madieId) => {
-            TestData.requestSharePermissions(
+        return readId().then((madieId) => {
+            return TestData.requestSharePermissions(
                 objectType === MadieObject.Library ? 'library' : 'measure',
                 action,
                 madieId,
@@ -404,7 +408,7 @@ export class Utilities {
                     expect(response.body[madieId]).to.eql([])
                 }
             })
-        })
+        }).then(() => undefined)
     }
 
     public static checkAll() {
@@ -598,14 +602,14 @@ export class Utilities {
         return TestData.requestUnlockAll(unlockTarget, { failOnStatusCode: false })
             .then((response) => {
                 if (response.status === 200) {
-                    cy.log(`Released ${type} locks during cleanup`)
-                    return response
+                    return cy.log(`Released ${type} locks during cleanup`).then(() => response)
                 }
 
-                cy.log(
-                    `⚠️ Lock cleanup for ${type} returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
-                )
-                return response
+                return cy
+                    .log(
+                        `⚠️ Lock cleanup for ${type} returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                    )
+                    .then(() => response)
             })
     }
 }

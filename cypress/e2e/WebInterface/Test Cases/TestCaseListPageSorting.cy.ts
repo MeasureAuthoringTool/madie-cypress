@@ -7,11 +7,11 @@ import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { TestData } from "../../../Shared/TestData"
 
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = ''
+let CqlLibraryName = ''
 let testCaseTitle = 'A Test Case 1 Fails'
 let secondTestCaseTitle = 'Be Test Case 2 Passes'
 let testCaseDescription = 'A Description 1'
@@ -27,25 +27,20 @@ describe('Sort by each of the test case list page\'s columns', () => {
 
     beforeEach('Create Measure', () => {
 
+        measureName = 'TestMeasure' + Date.now()
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 27700 })
+        TestData.saveMeasureCql(measureCQLPFTests).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJson, false, true)
 
-        OktaLogin.SessionLogin()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up', () => {
-
-        
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        return Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Test case sorting functionality', () => {

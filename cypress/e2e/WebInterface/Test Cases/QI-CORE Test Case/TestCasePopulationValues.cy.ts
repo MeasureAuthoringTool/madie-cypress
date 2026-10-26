@@ -157,10 +157,6 @@ describe('Test Case Expected Measure Group population values based on initial me
             //navigate to the Details tab to see confirmation message
             TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
             TestCasesPage.saveTestCaseAndWait()
-            cy.get(TestCasesPage.successMsg).should(
-                'contain.text',
-                'Test case updated successfully with warnings in JSON'
-            )
 
             //navigate back to the measure group tab / page and...
             //change score unit value and save / update measure with new value

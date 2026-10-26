@@ -63,10 +63,32 @@ describe('Admin user profile library search and filtering', () => {
         ownershipType: LibraryOwnershipType,
         searchText: string
     ): void => {
-        interceptProfileLibraries('searchedProfileLibraries', profileUser, ownershipType)
+        const waitForCompletedSearch = (remaining = 3): Cypress.Chainable => {
+            return cy.wait('@searchedProfileLibraries').then(({ response }) => {
+                if (!response) {
+                    if (remaining === 1) {
+                        throw new Error(`Library search did not complete for ${searchText}`)
+                    }
+                    return waitForCompletedSearch(remaining - 1)
+                }
+
+                expect(response.statusCode).to.eq(200)
+                return cy.wrap(response)
+            })
+        }
+
+        cy.intercept({
+            method: 'PUT',
+            pathname: `/api/cql-libraries/admin/userProfile/${profileUser}/searches`,
+            query: { ownershipType }
+        }, (request) => {
+            if (request.body?.searchField === searchText) {
+                request.alias = 'searchedProfileLibraries'
+            }
+        })
 
         AdminUserProfilePage.submitLibrarySearch(searchText)
-        cy.wait('@searchedProfileLibraries').its('response.statusCode').should('eq', 200)
+        waitForCompletedSearch()
     }
 
     const selectFilter = (option: 'Library' | 'Version' | 'Model'): void => {

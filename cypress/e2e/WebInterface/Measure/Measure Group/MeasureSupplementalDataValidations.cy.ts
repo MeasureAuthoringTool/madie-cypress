@@ -28,7 +28,7 @@ const removeDenomDefinition = (): void => {
 }
 
 const restoreDenomDefinition = (): void => {
-    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "denom":\n true')
+    MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureCQL)
 }
 
 describe('Validations between Supplemental Data Elements with the CQL definitions', () => {
@@ -36,11 +36,11 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'ipp', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-        OktaLogin.SessionLogin()
+        return OktaLogin.SessionLogin()
     })
 
-    afterEach('Log out', () => {
-        Utilities.deleteMeasure()
+    afterEach('Delete measure', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Removing definition related to the SD alerts user.', () => {
@@ -244,7 +244,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         CQLEditorPage.openMonacoCqlEditor()
         restoreDenomDefinition()
         //save updated CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('restoreCql')
+        cy.get(CQLEditorPage.saveCQLButton).should('be.enabled').click()
+        cy.wait('@restoreCql').its('response.statusCode').should('eq', 200)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)

@@ -77,11 +77,15 @@ describe('Admin user profile library View and Edit navigation', () => {
 
     afterEach(() => {
         if (libraryLocked) {
-            Utilities.releaseAllLocksForCleanup(MadieObject.Library, true)
+            return Utilities.releaseAllLocksForCleanup(MadieObject.Library, true)
+                .then(() => libraryCreated ? Utilities.deleteLibrary() : cy.wrap(undefined))
         }
+
         if (libraryCreated) {
-            Utilities.deleteLibrary()
+            return Utilities.deleteLibrary()
         }
+
+        return cy.wrap(undefined)
     })
 
     it('opens an unshared draft from Owned Libraries in read-only View mode', () => {

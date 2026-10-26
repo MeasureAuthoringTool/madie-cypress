@@ -184,18 +184,20 @@ export class CQLEditorPage {
 
     }
 
-    public static openMonacoCqlEditor(timeout = 30000): void {
+    public static openMonacoCqlEditor(timeout = 30000, requireRenderedCql = true): void {
         cy.get(EditMeasurePage.cqlEditorTab, { timeout })
             .should('not.have.attr', 'aria-disabled', 'true')
             .then(($tab) => {
                 $tab[0].click()
             })
 
-        cy.get(EditMeasurePage.monacoCqlEditor, { timeout })
-            .should('be.visible')
-            .should(($editor) => {
+        const editor = cy.get(EditMeasurePage.monacoCqlEditor, { timeout }).should('be.visible')
+
+        if (requireRenderedCql) {
+            editor.should(($editor) => {
                 expect($editor.text().trim(), 'rendered CQL').not.to.be.empty
             })
+        }
     }
 
     public static validateSuccessfulCQLUpdate(library?: boolean): void {
@@ -262,9 +264,11 @@ export class CQLEditorPage {
 
         if (appendText !== undefined) {
             MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, appendText)
-            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, '')
+            // CDP insertion preserves CQL characters that realType cannot enter, but Monaco
+            // only enables Save after a native editing event updates its dirty state.
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
         } else if (appendNewLine) {
-            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, '')
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
         }
 
         cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('saveMeasureCql')
@@ -280,6 +284,15 @@ export class CQLEditorPage {
         if (collapseEditor) {
             CQLEditorPage.collapseEditor()
         }
+    }
+
+    /**
+     * Submits a full-document Monaco replacement when the scenario asserts
+     * validation errors rather than a successful CQL save.
+     */
+    public static submitMonacoCqlForValidation(): void {
+        MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
     }
 
     public static applyParameter(parameterName: string, parameterType: string): void {

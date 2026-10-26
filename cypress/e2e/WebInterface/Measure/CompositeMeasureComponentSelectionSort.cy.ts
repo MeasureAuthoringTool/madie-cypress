@@ -77,8 +77,8 @@ describe('[MAT-10316] Composite Measure component selection global sorting', () 
     })
 
     afterEach('Clean up the composite measure', () => {
-        Utilities.releaseAllLocksForCleanup(MadieObject.Measure)
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        return Utilities.releaseAllLocksForCleanup(MadieObject.Measure)
+            .then(() => Utilities.deleteMeasure(measureName, cqlLibraryName))
     })
 
     it('preserves global Measure Name sorting when navigating to page 2', () => {
