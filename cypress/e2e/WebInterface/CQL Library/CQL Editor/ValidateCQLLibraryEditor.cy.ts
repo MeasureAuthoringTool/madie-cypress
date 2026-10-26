@@ -85,6 +85,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
         MonacoEditor.assertErrors(CQLEditorPage.errorMsg,
             'ELM: 1:3 | Could not resolve identifier SDE in the current library.',
@@ -94,7 +95,8 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
         //Navigate away from the page
         cy.get(Header.mainMadiePageButton).click()
-        cy.get(Utilities.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).should('not.exist')
+        cy.get(MeasuresPage.measureListTitles).should('be.visible')
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
 
@@ -221,23 +223,14 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
         insertCqlFromFixture('cypress/fixtures/CQLWithConceptConstructor.txt')
 
-        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        MonacoEditor.appendDocumentText(
-            CQLLibraryPage.cqlLibraryEditorTextBox,
-            "Concept {Code '66071002' from \"SNOMED-CT\",Code 'B18.1' from \"ICD-10-CM\"} display 'Type B viral hepatitis",
-            'center'
-        )
-
-        //save the value in the CQL Editor
-        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        Utilities.waitForElementVisible('#content', 60000)
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled').click()
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
         cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should(
-            'not.contain',
-            "Concept {Code '66071002' from \"SNOMED-CT\",Code 'B18.1' from \"ICD-10-CM\"} display 'Type B viral hepatitis"
-        )
+        TestData.readCqlLibrary().then(({ status, body }) => {
+            expect(status).to.eq(200)
+            expect(body.cql).not.to.include('Concept {')
+        })
     })
 })
 
