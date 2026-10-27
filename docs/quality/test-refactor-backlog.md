@@ -87,7 +87,6 @@ Current focus order:
 6. Replace unconditional alternate-user allocation in `cypress/support/e2e.ts` with an explicit, compatible alt-user requirement contract. The support hook currently claims both a primary and alternate account for every spec run, although the audited export specs do not use an alternate account and 92 files do. This creates avoidable pool contention and makes headed reruns more likely to receive a different available account after a failed run releases its locks.
 7. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
 8. Establish an incremental `strictNullChecks` migration. The baseline command reports existing nullability and Cypress chain-subject errors across shared helpers and legacy specs, so do not enable it as a blocking suite-wide gate yet. Fix strict diagnostics in touched files, measure the baseline, and introduce a non-blocking report before defining a ratcheted CI gate.
-9. Audit direct Save clicks after `replaceMonacoCqlDocument(...)` or `replaceMonacoCqlDocumentFromFile(...)`. QI-Core and QDM export mismatch paths now prove that appending a newline after replacement is needed before valid-CQL save/validation; start with `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, and `RunAndExecuteTestCaseButtonValidations.cy.ts`, preserving explicit invalid-CQL assertions.
 
 Work boundaries:
 
@@ -156,6 +155,7 @@ Sequence batches by independent CI failures and shared-helper consumer count. Co
 - Centralized user-scoped fixture, token, ID, cleanup, lock, share, measure-group, test-case, and CQL-library request mechanics through `TestData` and domain helpers.
 - Added bounded Cypress worker inactivity handling and CI diagnostics.
 - Removed helper-level fixed waits from `CQLEditorPage`, `CQLLibraryPage`, and `MeasureGroupPage` paths covered by focused tests.
+- Audited WebInterface full-document Monaco CQL replacement consumers and removed the remaining direct Save clicks in `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, and `RunAndExecuteTestCaseButtonValidations.cy.ts`. Valid CQL uses the shared settled save path; intentional invalid-CQL flows use the validation-submit path. The changed scenarios passed headless in TEST (2/2 and 4/4 respectively).
 
 ### Test-case reliability
 

@@ -108,6 +108,8 @@ If native tab activation updates the URL but the previously selected tab remains
 
 For versioned measures, distinguish View mode from Edit mode when using measure action helpers. Do not wait for an edit-only CQL tab when the action opens a versioned measure for viewing; open the Test Cases tab and synchronize on its destination content instead.
 
+After changing a measure group's scoring or population basis, a test-case editor opened in the same SPA session may retain the previous expected-value control type even while its group label shows the new configuration. Once the group save succeeds, reload the measure before reopening the test case, then assert the expected control type and value. This is a different failure from a desynchronized tab shell: the route and tab can be correct while the input model is stale.
+
 ## Lifecycle and Teardown Failures
 
 When Cypress reports that `cy.task()` may only be called from a spec or support file, or an `afterEach`/`after` failure appears after the browser has returned to the landing page:

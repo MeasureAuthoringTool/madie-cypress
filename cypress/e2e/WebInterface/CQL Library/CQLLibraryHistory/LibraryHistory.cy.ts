@@ -23,7 +23,11 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
         harpUserALT = OktaLogin.getUser(true)
 
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4)
-        OktaLogin.Login()
+        return OktaLogin.Login()
+    })
+
+    afterEach('Clean up CQL library', () => {
+        return Utilities.deleteLibrary()
     })
 
     it('Verify that Library Create and Update actions are recorded in Library History', () => {
@@ -107,8 +111,10 @@ describe('Library History - Create, Update, Sharing and Unsharing Actions', () =
 })
 
 describe('Library History - Version and Draft actions', () => {
+    let createdLibraryIds: string[] = []
 
     beforeEach('Create Library and Set Access Token', () => {
+        createdLibraryIds = []
         CQLLibraryName = 'HistoryLibrary' + Date.now()
 
         harpUser = OktaLogin.getUser(false)
@@ -117,7 +123,28 @@ describe('Library History - Version and Draft actions', () => {
         updatedCQLLibraryName = CQLLibraryName + 'Updated'
 
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
-        OktaLogin.Login()
+        TestData.readCqlLibraryId().then((id) => createdLibraryIds.push(id))
+        return OktaLogin.Login()
+    })
+
+    afterEach('Clean up all created library instances', () => {
+        const libraryIds = [...new Set(createdLibraryIds)].reverse()
+        const deleteNext = (index = 0): Cypress.Chainable<void> => {
+            if (index === libraryIds.length) {
+                return cy.then(() => undefined)
+            }
+
+            return TestData.requestAdminCqlLibraryDeleteById(libraryIds[index], harpUser, {
+                failOnStatusCode: false
+            }).then((response) => {
+                expect([200, 404]).to.include(response.status)
+                return deleteNext(index + 1)
+            })
+        }
+
+        return cy.then(() => {
+            OktaLogin.setupAdminSession()
+        }).then(() => deleteNext())
     })
 
     it('Verify that Library Version and Draft actions are recorded in Library History', () => {
@@ -127,7 +154,13 @@ describe('Library History - Version and Draft actions', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Version CQL Library
+        cy.intercept('PUT', /\/api\/cql-libraries\/version\/[^?]+/).as('versionLibrary')
         CQLLibraryPage.actionCenter(EditLibraryActions.version)
+        cy.wait('@versionLibrary').then(({ response }) => {
+            expect(response?.statusCode).to.eq(200)
+            expect(response?.body.id).to.be.a('string')
+            createdLibraryIds.push(response!.body.id)
+        })
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'New version of CQL Library is Successfully created')
 
@@ -145,8 +178,14 @@ describe('Library History - Version and Draft actions', () => {
         cy.get(CQLLibraryPage.libraryHistoryDialog).should('not.exist')
 
         //Draft Library
+        cy.intercept('POST', /\/api\/cql-libraries\/draft\/[^?]+/).as('draftLibrary')
         cy.get(CQLLibraryPage.actionCenterButton).click()
         CQLLibraryPage.actionCenter(EditLibraryActions.draft)
+        cy.wait('@draftLibrary').then(({ response }) => {
+            expect(response?.statusCode).to.eq(201)
+            expect(response?.body.id).to.be.a('string')
+            createdLibraryIds.push(response!.body.id)
+        })
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'New Draft of CQL Library is Successfully created')
 
@@ -161,8 +200,10 @@ describe('Library History - Version and Draft actions', () => {
 })
 
 describe('Library History - Transfer action', () => {
+    let ownershipTransferred = false
 
     beforeEach('Create Library and Set Access Token', () => {
+        ownershipTransferred = false
         CQLLibraryName = 'HistoryLibrary' + Date.now()
 
         harpUser = OktaLogin.setupUserSession(false)
@@ -171,6 +212,15 @@ describe('Library History - Transfer action', () => {
         updatedCQLLibraryName = CQLLibraryName + 'Updated'
 
         CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { cql: validCql })
+        return cy.then(() => undefined)
+    })
+
+    afterEach('Clean up transferred CQL library', () => {
+        if (!ownershipTransferred) {
+            return Utilities.deleteLibrary()
+        }
+
+        return Utilities.deleteLibrary(undefined, true)
     })
 
     it('Verify that Transfer Library action is recorded in Library History', () => {
@@ -190,6 +240,7 @@ describe('Library History - Transfer action', () => {
                     body: [id],
                 }).then((response) => {
                     expect(response.status).to.eql(200)
+                    ownershipTransferred = true
                 })
             })
         })

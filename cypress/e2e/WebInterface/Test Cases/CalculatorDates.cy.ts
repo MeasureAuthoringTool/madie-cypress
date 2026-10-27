@@ -42,11 +42,11 @@ describe('Check all variations of calculated dates', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get(TestCasesPage.openDateCalculator).click()
+        return cy.get(TestCasesPage.openDateCalculator).click()
     })
 
     afterEach('Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Check all options in Duration/Difference tab', () => {
