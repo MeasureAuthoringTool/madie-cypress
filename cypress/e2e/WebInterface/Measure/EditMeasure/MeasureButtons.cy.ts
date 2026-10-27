@@ -291,6 +291,7 @@ describe('Export measure on the Edit Measure page', () => {
             'Initial Population',
             'boolean'
         )
+        TestData.saveMeasureCql(measureCQLPFTests, 1).then(TestData.expectSavedMeasureCql)
         return cy.then(() => undefined)
     })
 
@@ -323,8 +324,6 @@ describe('Export measure on the Edit Measure page', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit', 1)
-
-        CQLEditorPage.saveMonacoCql({ successTimeout: 20700, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
@@ -419,11 +418,7 @@ describe('Share measure from the Edit Measure page', () => {
         CQLEditorPage.replaceMonacoCqlDocument(qdmMeasureCQL)
 
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

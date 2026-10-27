@@ -130,7 +130,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
             CQLEditorPage.replaceMonacoCqlDocument(measureCQLWithoutDaysObs)
             //save changes to CQL
-            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+            CQLEditorPage.submitMonacoCqlForValidation()
 
             //wait until toast message appears
             Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 350000)
@@ -189,9 +189,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             CQLEditorPage.replaceMonacoCqlDocument(measureCQL)
 
             //save changes to CQL
-            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-            cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+            CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
             //verify that the errors flag contains no errors / has been cleared
 
             TestData.readMeasure().then((response) => {
@@ -279,7 +277,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
             CQLEditorPage.replaceMonacoCqlDocument(measureCQLWithoutDaysObs)
             //save changes to CQL
-            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+            CQLEditorPage.submitMonacoCqlForValidation()
 
             //wait until toast message appears
             Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 35000)
