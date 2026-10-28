@@ -16,7 +16,7 @@ let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
 
 const replaceCqlFixture = (fileName: string): void => {
     cy.readFile(`cypress/fixtures/${fileName}`).then((fileContents) => {
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
         MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fileContents.replace(/\{home\}/gi, ''))
     })

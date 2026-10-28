@@ -45,7 +45,8 @@ describe('Measure Bundle end points', () => {
 
         //Click on the CQL Editor tab
         CQLEditorPage.openMonacoCqlEditor()
-        CQLEditorPage.saveMonacoCql({ appendText: '#)*&Y)_8)#&$*#$' })
+        CQLEditorPage.replaceMonacoCqlDocument(`${measureCQL}\ndefine "Invalid Definition":\n  MissingIdentifier`)
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
         //log out of UI
         
@@ -463,12 +464,12 @@ describe('Verify the criteria reference for measure observations', () => {
     beforeEach('Create Measure', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-        OktaLogin.SessionLogin()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Measure bundle end point returns criteria reference for CV measure observations and is equal to measure population id', () => {
@@ -477,7 +478,7 @@ describe('Verify the criteria reference for measure observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //navigate to CQL Editor page / tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         MonacoEditor.replaceDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.monacoCqlEditor)
         CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
@@ -560,7 +561,7 @@ describe('Verify the criteria reference for measure observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         MonacoEditor.replaceDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.monacoCqlEditor)
         CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 

@@ -107,10 +107,10 @@ export class MeasureGroupPage {
     public static readonly stratAssociationThree = '[id="association-select-3"]'
     public static readonly stratAssociationFour = '[id="association-select-4"]'
 
-    public static readonly stratDescOne = '[id="stratifications[0].description"]'
-    public static readonly stratDescTwo = '[id="stratifications[1].description"]'
-    public static readonly stratDescThree = '[id="stratifications[2].description"]'
-    public static readonly stratDescFour = '[id="stratifications[3].description"]'
+    public static readonly stratDescOne = '[data-testid="stratifications[0].description-rich-text-editor-content"]'
+    public static readonly stratDescTwo = '[data-testid="stratifications[1].description-rich-text-editor-content"]'
+    public static readonly stratDescThree = '[data-testid="stratifications[2].description-rich-text-editor-content"]'
+    public static readonly stratDescFour = '[data-testid="stratifications[3].description-rich-text-editor-content"]'
 
     public static readonly addStratButton = '[data-testid="add-strat-button"]'
     public static readonly removeStratButton = '[data-testid="remove-strat-button"]'
@@ -887,7 +887,7 @@ export class MeasureGroupPage {
     }
 
     private static loadTestCaseExecutionCql(): void {
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         cy.readFile(MeasureGroupPage.testCaseExecutionCqlFixture).then((fileContents) => {
             MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
             MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fileContents.replace(/\{home\}/gi, ''))

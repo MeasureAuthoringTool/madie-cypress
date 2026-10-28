@@ -144,10 +144,13 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '2')
 
         // navigate to the test case's edit page
+        cy.intercept('GET', /\/api\/measures\/[^/]+\/test-cases\/[^/?]+(?:\?.*)?$/).as('loadTestCaseForSortEdit')
         TestCasesPage.clickEditforCreatedTestCase()
+        cy.wait('@loadTestCaseForSortEdit').its('response.statusCode').should('eq', 200)
 
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
         cy.get('[data-value="Other Race__2.16.840.1.114222.4.11.836"]').click()
+        cy.get(TestCasesPage.QDMRace).should('contain.text', 'Other Race')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 30000)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
@@ -183,12 +186,11 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.openTestCasesTabAndWaitForList()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 710000)
 
         TestCasesPage.checkTestCase(1)
-        cy.get(TestCasesPage.actionCenterClone).click()
+        cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)

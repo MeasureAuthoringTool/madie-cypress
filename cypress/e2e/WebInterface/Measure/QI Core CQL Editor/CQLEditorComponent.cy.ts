@@ -69,7 +69,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLValid)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -82,7 +82,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

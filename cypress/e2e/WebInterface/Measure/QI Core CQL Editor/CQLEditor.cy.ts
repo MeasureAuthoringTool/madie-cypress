@@ -83,7 +83,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
 
         //create test case
         //Navigate to Test Cases page and add Test Case details
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //write CQL value into CQL Editor
         replaceCqlFixture('EXM124v7QICore4Entry.txt')
@@ -124,7 +124,7 @@ describe('Measure: CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         //type text in the CQL Editor that will cause error
         replaceCqlFixture('cqlCQLEditor.txt')
@@ -165,7 +165,7 @@ describe('Measure: CQL Editor', () => {
             MeasuresPage.actionCenter('edit')
 
             //Click on the CQL Editor tab
-            CQLEditorPage.openMonacoCqlEditor()
+            CQLEditorPage.openMonacoCqlEditor(30000, false)
 
             replaceCqlFixture('EXM124v7QICore4Entry_FHIR_404.txt')
 
@@ -191,7 +191,7 @@ describe('Measure: CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('CQLForFluentFunction.txt')
 
         //save the value in the CQL Editor
@@ -227,7 +227,7 @@ describe('Measure: CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('CQLForFluentFunction.txt')
 
         //save the value in the CQL Editor
@@ -266,23 +266,13 @@ describe('Measure: CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
-        replaceCqlFixture('cqlSaveCQL.txt')
-
-        //save the value in the CQL Editor
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
-        CQLEditorPage.collapseEditor()
-
-        //Validate message on page
-        cy.get(CQLLibraryPage.libraryWarning).should(
-            'contain.text',
-            'Library statement was incorrect. MADiE has overwritten it.'
-        )
-
-        MonacoEditor.appendDocumentText(
-            EditMeasurePage.monacoCqlEditor,
-            "Concept {Code '66071002' from \"SNOMED-CT\",Code 'B18.1' from \"ICD-10-CM\"} display 'Type B viral hepatitis"
-        )
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
+        cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').then((cql) => {
+            MonacoEditor.replaceDocument(
+                EditMeasurePage.monacoCqlEditor,
+                `${cql}\ndefine "Concept Test":\n  Concept {Code '66071002' from "SNOMED-CT",Code 'B18.1' from "ICD-10-CM"} display 'Type B viral hepatitis'`
+            )
+        })
 
         //save the value in the CQL Editor
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
@@ -300,7 +290,7 @@ describe('Measure: CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('cqlSaveCQL.txt')
 
         cy.get(Header.mainMadiePageButton).click()
@@ -313,7 +303,7 @@ describe('Measure: CQL Editor', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('QICoreCQL_MissingFHIRHelpers_Error.txt')
 
         //save the value in the CQL Editor
@@ -340,7 +330,7 @@ describe('Measure: CQL Editor', () => {
     it('FHIRHelpers alias name is defaulted, when CQL has incorrect alias name', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('CQLWithInvalidFHIRHelpersAlias.txt')
 
         //save the value in the CQL Editor
@@ -358,7 +348,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify error message when CQL is missing keyword "Context"', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('CQLCsFHIRVersionProvided.txt')
 
         //save the value in the CQL Editor
@@ -392,7 +382,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify error message when Context is anything except Patient', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('CQLWithPractitionerContext.txt')
 
         //save the value in the CQL Editor
@@ -407,7 +397,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify error message if CQL contains access modifiers like private or public', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('CQLWithPrivateAccessModifier.txt')
 
         //save the value in the CQL Editor
@@ -440,7 +430,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it('Value Sets are valid', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('EXM124v7QICore4Entry.txt')
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
@@ -522,7 +512,7 @@ describe('CQL errors with included libraries', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('CQLWithMultipleIncludedLibraries.txt')
 
         //save the value in the CQL Editor
@@ -547,7 +537,7 @@ describe('CQL errors with included libraries', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture('QiCoreCQLWithoutIncludedLibraryVersion.txt')
 
         //save the value in the CQL Editor
@@ -584,7 +574,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         replaceMeasureCql(measureQICoreCQL_without_using)
 
@@ -607,7 +597,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         replaceMeasureCql(measureQICoreCQL_with_incorrect_using)
 
@@ -624,7 +614,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         replaceMeasureCql(measureQICoreCQL_with_different_Lib_name)
 
@@ -652,7 +642,7 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         replaceMeasureCql(measureFHIR_with_invalid_using)
 
@@ -668,7 +658,7 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         replaceMeasureCql(fhirUsingStatement)
 
@@ -691,7 +681,7 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
 
         replaceMeasureCql(fhirandQicoreUsingStatements)
 

@@ -57,4 +57,17 @@ export class CompositeMeasureComponentsDialogPage {
             return [...$cells].map((cell) => cell.textContent?.trim() ?? '')
         })
     }
+
+    public static assertMeasureNames(expectedMeasureNames: string[]): void {
+        cy.get(this.dialog).find(`${this.table} tbody tr td:nth-child(2)`).should(($cells) => {
+            expect($cells, 'rendered component measure count').to.have.length(expectedMeasureNames.length)
+
+            Array.from($cells).forEach((cell, index) => {
+                const renderedName = (cell.textContent ?? '').replace(/\s+/g, ' ').replace(/\s*Show more$/i, '').trim()
+                const expectedName = expectedMeasureNames[index].replace(/\s+/g, ' ').trim()
+
+                expect(expectedName, `rendered component measure at row ${index + 1}`).to.contain(renderedName)
+            })
+        })
+    }
 }

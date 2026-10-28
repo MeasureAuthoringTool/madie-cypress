@@ -4,8 +4,8 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Utilities } from '../../../../Shared/Utilities'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'QDMGroupStratification' + Date.now()
 let CqlLibraryName = 'QDMGroupStratificationLib' + Date.now()
@@ -118,13 +118,14 @@ describe('Validating Stratification tabs', () => {
             '2024-01-01'
         )
 
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Stratification tab includes new fields and those fields have expected values', () => {

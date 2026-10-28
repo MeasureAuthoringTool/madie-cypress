@@ -33,14 +33,14 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
-    afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
-        OktaLogin.UILogout()
+    afterEach('Clean up Measure', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Add Quantity attribute to the Test case and Edit from Elements table', () => {

@@ -28,4 +28,3 @@ define function resultsForFirstProcedureOnDate(procedureCode Concept, onDate Dat
   return flatten ( Px.partOf po
   where po.type = 'Observation'
   return ([Observation] Obs where Obs.id = po.id).value )
-{del}{del}{del}{del}{del}

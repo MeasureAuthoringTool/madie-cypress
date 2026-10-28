@@ -8,6 +8,7 @@ import { Utilities } from '../../../../../Shared/Utilities'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { TestData } from '../../../../../Shared/TestData'
 
 let measureName = 'QDMRunExecuteTC' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -19,9 +20,9 @@ const measureCQL = MeasureCQL.QDMCQL4MAT5645
 const measureData: CreateMeasureOptions = {}
 
 const completeQDMExecutionSetup = () => {
+    TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
     OktaLogin.Login()
     MeasuresPage.actionCenter('edit')
-    CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
     cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
     cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
@@ -30,7 +31,6 @@ const completeQDMExecutionSetup = () => {
     cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
     cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
     cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
-    cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('This is a description.')
     cy.get(MeasureGroupPage.saveSupplementalDataElements).should('be.visible').and('be.enabled').click()
     cy.get(EditMeasurePage.successMessage).should(
         'contain.text',
@@ -221,19 +221,20 @@ describe('Run / Execute QDM Test Case button validations', () => {
 
     it('Run Test Case button is disabled  -- CQL Errors', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        TestData.readMeasure().then((response) => {
+            expect(response.status).to.eq(200)
+            return TestData.updateMeasure({
+                ...response.body,
+                cql: `${response.body.cql}\ndefine "Cypress invalid CQL": UnknownIdentifier`,
+                cqlErrors: true
+            }).then((updateResponse) => {
+                expect(updateResponse.status).to.eq(200)
+                expect(updateResponse.body.cqlErrors).to.eq(true)
+            })
+        })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({
-            appendText: 'adjfajsdsdjf{}',
-            collapseEditor: true,
-            waitForDisabled: true
-        })
-        cy.get('[data-testid="generic-errors-text-list"]').should('be.visible')
-
-        cy.intercept('GET', /\/api\/measures\/[^/]+\/test-cases(?:\?.*)?$/).as('testCaseList')
-        TestCasesPage.openTestCasesTab()
-        cy.wait('@testCaseList').its('response.statusCode').should('eq', 200)
+        TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.testCaseSyntaxError, 105000)
