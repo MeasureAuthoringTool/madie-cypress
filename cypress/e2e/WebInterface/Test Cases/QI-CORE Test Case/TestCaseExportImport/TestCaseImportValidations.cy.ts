@@ -8,6 +8,7 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../../Shared
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { TestData } from "../../../../../Shared/TestData"
 import { Header } from "../../../../../Shared/Header"
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = require('dayjs')
@@ -100,6 +101,7 @@ describe('Test Case Import: functionality tests', () => {
 
         //Share Measure with ALT User
         OktaLogin.setupUserSession(false)
+        TestData.requestMeasureLock('DELETE').its('status').should('eq', 200)
 
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
@@ -196,9 +198,8 @@ describe('Test Case Import validations for versioned Measures', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+        TestData.saveMeasureCql(measureCQLPFTests).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 40700 })
 
         // Reset the SPA at the measure-list boundary before versioning.
         cy.visit('/measures')
@@ -219,6 +220,11 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
+        return cy.get(MeasuresPage.measureListTitles).should('be.visible')
+    })
+
+    afterEach('Clean up versioned measure', () => {
+        return Utilities.deleteVersionedMeasure()
     })
 
     it('Measure is in VERSIONED status: user is owner: import button is available', () => {
@@ -273,14 +279,15 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQLPFTests).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 40700 })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Importing: not a .zip file', () => {

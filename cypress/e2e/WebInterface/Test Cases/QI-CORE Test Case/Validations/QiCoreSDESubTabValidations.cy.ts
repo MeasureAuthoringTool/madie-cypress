@@ -1,4 +1,3 @@
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
@@ -7,6 +6,7 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestData } from "../../../../../Shared/TestData"
 import { Utilities } from "../../../../../Shared/Utilities"
 
 const now = Date.now()
@@ -25,15 +25,16 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, qiCoreMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patients Age 20 or Older at Start of Measurement Period')
         TestCasesPage.CreateTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription, testCaseJsonFile)
-        OktaLogin.Login()
+        TestData.saveMeasureCql(qiCoreMeasureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Log out and Clean up', () => {
 
         
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        return Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('SDE sub tab is visible on Edit Test case Highlighting page when SDE is included', () => {

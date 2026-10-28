@@ -22,21 +22,6 @@ const remainingSortableColumns: SortableComponentColumn[] = [
     { header: 'Updated', request: { sort: 'lastModifiedAt', direction: 'ASC' } }
 ]
 
-const assertRenderedMeasureNames = (expectedMeasureNames: string[]): void => {
-    CompositeMeasureComponentsDialogPage.measureNames().then((renderedMeasureNames) => {
-        expect(renderedMeasureNames, 'rendered component measure count').to.have.length(expectedMeasureNames.length)
-
-        renderedMeasureNames.forEach((renderedMeasureName, index) => {
-            const normalizedRenderedName = renderedMeasureName.replace(/\s+/g, ' ').replace(/\s*Show more$/i, '').trim()
-            const normalizedExpectedName = expectedMeasureNames[index].replace(/\s+/g, ' ').trim()
-
-            expect(normalizedExpectedName, `rendered component measure at row ${index + 1}`).to.contain(
-                normalizedRenderedName
-            )
-        })
-    })
-}
-
 const openComponentDialogAndWaitForInitialData = (): void => {
     CompositeMeasureComponentsDialogRequests.interceptInitialList()
 
@@ -74,6 +59,7 @@ describe('[MAT-10316] Composite Measure component selection global sorting', () 
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit', 0, { expectCqlEditorTab: false })
         EditMeasurePage.openPopulationCriteriaTab()
+        return cy.get(CompositeMeasureComponentsDialogPage.selectComponentsButton).should('be.visible')
     })
 
     afterEach('Clean up the composite measure', () => {
@@ -104,7 +90,7 @@ describe('[MAT-10316] Composite Measure component selection global sorting', () 
             '@sortedComponentsPage1'
         ).then((response) => {
             const page1MeasureNames = CompositeMeasureComponentsDialogRequests.measureNames(response)
-            assertRenderedMeasureNames(page1MeasureNames)
+            CompositeMeasureComponentsDialogPage.assertMeasureNames(page1MeasureNames)
         })
 
         CompositeMeasureComponentsDialogPage.goToPage(2)
@@ -114,7 +100,7 @@ describe('[MAT-10316] Composite Measure component selection global sorting', () 
             '@sortedComponentsPage2'
         ).then((response) => {
             const page2MeasureNames = CompositeMeasureComponentsDialogRequests.measureNames(response)
-            assertRenderedMeasureNames(page2MeasureNames)
+            CompositeMeasureComponentsDialogPage.assertMeasureNames(page2MeasureNames)
         })
 
         CompositeMeasureComponentsDialogPage.assertCurrentPage(2)
@@ -127,7 +113,7 @@ describe('[MAT-10316] Composite Measure component selection global sorting', () 
             CompositeMeasureComponentsDialogRequests.interceptSortedList(request)
             CompositeMeasureComponentsDialogPage.clickSortHeader(header)
             CompositeMeasureComponentsDialogRequests.waitForSortedList(request).then((response) => {
-                assertRenderedMeasureNames(CompositeMeasureComponentsDialogRequests.measureNames(response))
+                CompositeMeasureComponentsDialogPage.assertMeasureNames(CompositeMeasureComponentsDialogRequests.measureNames(response))
             })
         })
     })

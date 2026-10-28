@@ -7,8 +7,8 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { LandingPage } from '../../../../../Shared/LandingPage'
 import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { QiCore4Cql } from '../../../../../Shared/FHIRMeasuresCQL'
+import { TestData } from '../../../../../Shared/TestData'
 
 const measureName = 'ETCByNonOwner' + Date.now()
 const CqlLibraryName = 'ETCByNonOwnerLib' + Date.now()
@@ -34,17 +34,17 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             'boolean',
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveMeasureCql(measureCQLPFTests).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
         TestCasesPage.clickEditforCreatedTestCase()
+        return cy.get(TestCasesPage.monacoJsonEditorSurface).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it(
@@ -53,16 +53,18 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         () => {
             // Add JSON to the test case.
             TestCasesPage.waitForJsonEditorReady()
-            cy.editTestCaseJSON(validTestCaseJson)
+            TestCasesPage.editTestCaseJson(validTestCaseJson, false, true)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
             Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
             TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
-            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
-            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
+            TestCasesPage.checkExpectedActualCheckboxes([
+                { selector: TestCasesPage.testCaseIPPExpected },
+                { selector: TestCasesPage.testCaseDENOMExpected },
+                { selector: TestCasesPage.testCaseNUMERExpected },
+            ])
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -117,7 +119,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         () => {
             // Add JSON to the test case.
             TestCasesPage.waitForJsonEditorReady()
-            cy.editTestCaseJSON(validTestCaseJson)
+            TestCasesPage.editTestCaseJson(validTestCaseJson, false, true)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -128,9 +130,11 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
             TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
-            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
-            TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
+            TestCasesPage.checkExpectedActualCheckboxes([
+                { selector: TestCasesPage.testCaseIPPExpected },
+                { selector: TestCasesPage.testCaseDENOMExpected },
+                { selector: TestCasesPage.testCaseNUMERExpected },
+            ])
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -189,7 +193,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning -- when user is not the owner', () => {
         //Add json to the test case
-        cy.editTestCaseJSON(warningTestCaseJson)
+        TestCasesPage.editTestCaseJson(warningTestCaseJson, false, true)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -205,9 +209,11 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         //click on actual / expected sub-tab
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
-        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseDENOMExpected)
-        TestCasesPage.clickExpectedActualCheckbox(TestCasesPage.testCaseNUMERExpected)
+        TestCasesPage.checkExpectedActualCheckboxes([
+            { selector: TestCasesPage.testCaseIPPExpected },
+            { selector: TestCasesPage.testCaseDENOMExpected },
+            { selector: TestCasesPage.testCaseNUMERExpected },
+        ])
 
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

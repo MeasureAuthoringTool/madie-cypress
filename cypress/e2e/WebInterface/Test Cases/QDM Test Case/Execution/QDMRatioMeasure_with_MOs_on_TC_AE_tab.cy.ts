@@ -10,6 +10,7 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Toasts } from "../../../../../Shared/Toasts"
+import { TestData } from "../../../../../Shared/TestData"
 
 const measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 const CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -448,16 +449,16 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         measureData.altUser = false
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(measureCQL2RunObservations).then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJsonwMOElements, false, false)
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit', 0, measureData)
-       CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.then(() => undefined)
     })
 
     afterEach('Clean up', () => {
-
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {

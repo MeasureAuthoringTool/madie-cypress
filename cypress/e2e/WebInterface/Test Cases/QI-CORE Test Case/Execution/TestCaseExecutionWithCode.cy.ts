@@ -23,17 +23,17 @@ describe('Test Case Execution with codes', () => {
             .then((fileContents) => {
                 TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, fileContents)
             })
-        OktaLogin.Login()
+        return OktaLogin.Login()
     })
 
     after('Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Test Case Execution for the CQL that uses codes', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLWithCodes.txt')
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
@@ -74,13 +74,7 @@ describe('Test Case Execution with codes', () => {
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
 })

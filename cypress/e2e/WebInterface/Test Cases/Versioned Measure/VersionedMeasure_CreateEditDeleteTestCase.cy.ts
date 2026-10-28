@@ -44,6 +44,7 @@ let measureCQL =
 
 describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
     beforeEach('Create Measure, Test Case and Login', () => {
+        measureName = 'ProportionEpisode' + Date.now()
         CqlLibraryName = 'ProportionEpisode' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(
@@ -70,7 +71,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -82,7 +83,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         //version measure
         MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
@@ -92,17 +93,12 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        Utilities.waitForElementVisible(TestCasesPage.discardChangesConfirmationBody, 20000)
-
-        cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).click()
-        Utilities.waitForElementToNotExist(TestCasesPage.discardChangesConfirmationBody, 20000)
-
         MeasuresPage.validateVersionNumber(versionNumber)
-        cy.log('Version Created Successfully')
+        return cy.log('Version Created Successfully')
     })
 
-    after('Clean up', () => {
-        Utilities.deleteMeasure()
+    afterEach('Clean up', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Versioned Measure: Create New Test Case, delete is enabled', () => {
@@ -119,7 +115,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         testCaseDescription = 'NewTestAfterVersioning' + Date.now()
         testCaseSeries = 'NewTestAfterVersioning'
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 

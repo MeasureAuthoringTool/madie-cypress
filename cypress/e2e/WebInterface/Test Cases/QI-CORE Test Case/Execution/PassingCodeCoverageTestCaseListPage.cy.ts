@@ -6,8 +6,8 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { Utilities } from '../../../../../Shared/Utilities'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { QiCore4Cql } from '../../../../../Shared/FHIRMeasuresCQL'
+import { TestData } from '../../../../../Shared/TestData'
 
 const measureName = 'PCCTCList' + Date.now()
 const CqlLibraryName = 'PCCTCListLib' + Date.now()
@@ -71,13 +71,14 @@ describe('Code Coverage Highlighting', () => {
             true
         )
 
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Validate Passing and Code Coverage tabs contain the initial "-" value, and displays a percentage when Test Case is ran', () => {

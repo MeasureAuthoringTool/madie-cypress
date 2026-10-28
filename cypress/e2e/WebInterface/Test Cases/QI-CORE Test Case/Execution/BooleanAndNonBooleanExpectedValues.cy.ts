@@ -6,8 +6,8 @@ import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
+import { TestData } from '../../../../../Shared/TestData'
 
 const now = Date.now()
 const measureName = 'BooleanNonBooleanEV' + now
@@ -36,13 +36,14 @@ describe('Non Boolean Population Basis Expected values', () => {
             'Qualifying Encounters',
             'Encounter'
         )
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Expected values for non boolean population basis', () => {
@@ -50,7 +51,13 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        cy.intercept('PUT', /\/api\/measures\/[^/]+\/test-cases\/[^/?]+(?:\?.*)?$/).as('createTestCaseJson')
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
+        cy.wait('@createTestCaseJson').then(({ request }) => {
+            const submittedJson = request.body.json
+            expect(submittedJson, 'submitted test-case JSON').to.be.a('string')
+            expect(() => JSON.parse(submittedJson), 'submitted JSON syntax').not.to.throw()
+        })
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -130,7 +137,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -175,7 +182,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -211,7 +218,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -287,13 +294,14 @@ describe('Boolean Population Basis Expected Values', () => {
             'Initial Population',
             'Boolean'
         )
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Boolean Expected values are saved to the database upon clicking save button for multiple Measure groups', () => {
@@ -344,7 +352,7 @@ describe('Boolean Population Basis Expected Values', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -430,7 +438,7 @@ describe('Boolean Population Basis Expected Values', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -468,13 +476,14 @@ describe('Expected values for second initial population', () => {
             'Initial Population',
             'Boolean'
         )
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify that the Expected value for second initial population can be selected', () => {
@@ -520,7 +529,7 @@ describe('Expected values for second initial population', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
