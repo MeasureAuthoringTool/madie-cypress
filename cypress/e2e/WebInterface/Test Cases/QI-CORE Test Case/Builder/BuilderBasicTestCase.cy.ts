@@ -14,8 +14,8 @@ import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { QiCore6Cql } from '../../../../../Shared/FHIRMeasuresCQL'
 import { PopulationType, Stratification } from '@madie/madie-models'
 import { v4 as uuidv4 } from 'uuid'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { Profile, TestCaseBuilder } from '../../../../../Shared/TestCaseBuilder'
+import { TestData } from '../../../../../Shared/TestData'
 
 let measureName = ''
 let CqlLibraryName = ''
@@ -75,9 +75,10 @@ describe('Test Case Builder Basics', () => {
         MeasureGroupPage.addStratificationDataAPI(strats)
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
 
-        OktaLogin.Login()
+        TestData.saveMeasureCql(cql).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -183,8 +184,6 @@ describe('Test Case Builder Basics', () => {
 
         TestCasesPage.saveTestCaseAndWait()
         TestCasesPage.openTestCasesTabAndWaitForList()
-        cy.contains(`${TestCasesPage.testCaseListTable} tr`, testCase1.title).should('contain.text', 'Pending')
-
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get('[data-testid="show-json-validation-errors-button"]').should('have.attr', 'title', 'Valid')

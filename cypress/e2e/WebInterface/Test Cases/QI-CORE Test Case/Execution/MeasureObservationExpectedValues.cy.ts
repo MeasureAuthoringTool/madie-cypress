@@ -191,6 +191,7 @@ describe('Measure observation expected result', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').then((cql) => {
             CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
         })
@@ -246,6 +247,7 @@ describe('Measure observation expected result', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').then((cql) => {
             CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
         })

@@ -1176,19 +1176,17 @@ describe('Highlighting accurately appears for a single PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        TestData.saveMeasureCql(measureCQLPFTests).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({
-            collapseEditor: true,
-            successTimeout: 27700
-        })
+        return cy.then(() => undefined)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify highlighting for a measure with a single PC', () => {

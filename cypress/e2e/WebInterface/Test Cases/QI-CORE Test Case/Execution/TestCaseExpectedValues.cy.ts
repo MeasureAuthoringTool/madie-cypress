@@ -6,7 +6,7 @@ import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { Utilities } from '../../../../../Shared/Utilities'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../../Shared/TestData'
 
 const now = Date.now()
 const measureName = 'MeasureForTCExpectedValues' + now
@@ -20,11 +20,11 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
     beforeEach('Create measure, measure group, test case and login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify if the scoring type is changed, Test Case Expected values are cleared for that group', () => {
@@ -179,11 +179,11 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
     it('Verify if group populations are added/deleted, test case expected values will be updated', () => {
         //Create Ratio Measure group
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) =>
+            TestData.saveMeasureCql(cql).then(TestData.expectSavedMeasureCql)
+        )
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
-            CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
-        })
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -350,11 +350,11 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
     it('Verify if the correct Population check boxes are checked on test case expected values for Ratio measure with two IPs', () => {
         //Create Ratio Measure group with 2 IP's
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) =>
+            TestData.saveMeasureCql(cql).then(TestData.expectSavedMeasureCql)
+        )
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
-            CQLEditorPage.saveMonacoCql({ appendText: cql, collapseEditor: true, waitForDisabled: true })
-        })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
