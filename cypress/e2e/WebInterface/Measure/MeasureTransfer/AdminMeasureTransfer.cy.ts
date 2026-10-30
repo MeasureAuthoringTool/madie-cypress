@@ -1,30 +1,32 @@
 import { OktaLogin } from '../../../../Shared/OktaLogin'
-import { Header } from '../../../../Shared/Header'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
 import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 
-const now = Date.now()
-const measureName = 'MeasureTransfer' + now
-const cqlLibraryName = 'MeasureTransferLib' + now
 const measureCQL = MeasureCQL.SBTEST_CQL
+let measureName = ''
+let cqlLibraryName = ''
 let harpUserALT = ''
+let transferred = false
 
 describe('Measure Transfer performed by Admin user', () => {
     beforeEach('Create Measure', () => {
+        const now = Date.now()
+        measureName = 'MeasureTransfer' + now
+        cqlLibraryName = 'MeasureTransferLib' + now
         harpUserALT = OktaLogin.getUser(true)
+        transferred = false
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.wrap(null)
+    })
 
-        cy.get(Header.mainMadiePageButton).click()
+    afterEach('Clean up transferred measure', () => {
+        return Utilities.deleteVersionedMeasure(measureName, cqlLibraryName, false, transferred)
     })
 
     it('Admin user can transfer a Measure owned by other users', () => {
@@ -53,6 +55,9 @@ describe('Measure Transfer performed by Admin user', () => {
             'contain.text',
             'The measure(s) were successfully transferred. If you chose to retain share access, you will still be able to edit the measures.'
         )
+        cy.then(() => {
+            transferred = true
+        })
 
         OktaLogin.AltLogin()
 

@@ -79,7 +79,7 @@ describe('Measure Sharing', () => {
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-        CQLEditorPage.saveMonacoCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -158,7 +158,7 @@ describe('Measure Sharing', () => {
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-        CQLEditorPage.saveMonacoCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

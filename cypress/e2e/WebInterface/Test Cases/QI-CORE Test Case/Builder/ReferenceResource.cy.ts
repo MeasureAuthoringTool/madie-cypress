@@ -9,7 +9,7 @@ import {
 } from '../../../../../Shared/MeasureGroupPage'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../../../Shared/OktaLogin'
-import { TestCaseBuilder, Profile } from '../../../../../Shared/TestCaseBuilder'
+import { TestCaseBuilder } from '../../../../../Shared/TestCaseBuilder'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { TestData } from '../../../../../Shared/TestData'
 import { Utilities } from '../../../../../Shared/Utilities'
@@ -31,17 +31,27 @@ const populations: MeasureGroups = {
     numerator: 'Numerator'
 }
 
-const patientBundle = (id: string, profile: string) =>
+const referenceBundle = (patientId: string, patientProfile: string, taskId: string) =>
     JSON.stringify({
         resourceType: 'Bundle',
         type: 'collection',
         entry: [
             {
-                fullUrl: `https://madie.cms.gov/Patient/${id}`,
+                fullUrl: `https://madie.cms.gov/Patient/${patientId}`,
                 resource: {
                     resourceType: 'Patient',
-                    id,
-                    meta: { profile: [profile] }
+                    id: patientId,
+                    meta: { profile: [patientProfile] }
+                }
+            },
+            {
+                fullUrl: `https://madie.cms.gov/Task/${taskId}`,
+                resource: {
+                    resourceType: 'Task',
+                    id: taskId,
+                    status: 'requested',
+                    intent: 'order',
+                    focus: { display: 'Select reference' }
                 }
             }
         ]
@@ -60,6 +70,7 @@ describe('Reference(Resource) test-case builder', () => {
     ) => {
         const timestamp = Date.now()
         patientId = `reference-resource-patient-${suffix}-${timestamp}`
+        const taskId = `reference-resource-task-${suffix}-${timestamp}`
         measureName = `ReferenceResource${suffix}${timestamp}`
         cqlLibraryName = `ReferenceResourceLibrary${suffix}${timestamp}`
         const testCaseTitle = `ReferenceResource${suffix}${timestamp}`
@@ -83,26 +94,19 @@ describe('Reference(Resource) test-case builder', () => {
                     testCaseTitle,
                     'Reference Resource',
                     'Verifies generic FHIR reference selection',
-                    patientBundle(patientId, patientProfile)
+                    referenceBundle(patientId, patientProfile, taskId)
                 )
             })
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.searchForMeasureByName(measureName)
         MeasuresPage.assertMeasureSearchRowContains(0, measureName)
         MeasuresPage.openMeasureDetailsFromCurrentList()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible').click()
         TestCasesPage.clickEditforCreatedTestCase()
-        TestCaseBuilder.addEditNewResource(Profile.Task, 1)
-        cy.get(TestCaseBuilder.addAttribute).should('be.visible').click()
-        cy.get('#resource-element-selector-autocomplete').should('be.visible').type('focus')
-        cy.get('[role="option"]').contains('focus').should('be.visible').click()
-        cy.get('[role="dialog"]')
-            .find('[data-testid="add-element-button-2"]')
-            .should('be.enabled')
-            .click()
-        cy.get('[role="dialog"]').should('not.exist')
+        TestCaseBuilder.editAddedResource(taskId)
         TestCaseBuilder.selectLeftMenu('Focus')
+        return cy.get(TestCaseBuilder.referenceTypeSelect()).should('be.visible')
     }
 
     const openReferenceTypeOptions = () => {
@@ -123,7 +127,7 @@ describe('Reference(Resource) test-case builder', () => {
 
     describe('QI-Core', () => {
         beforeEach('Create a saved QI-Core measure and open Task Focus in the Builder', () => {
-            createMeasureAndOpenBuilder(SupportedModels.qiCore6, qiCoreCqlFixture, qiCorePatientProfile, 'QICore')
+            return createMeasureAndOpenBuilder(SupportedModels.qiCore6, qiCoreCqlFixture, qiCorePatientProfile, 'QICore')
         })
 
         it('lists QI-Core, US-Core, and FHIR profiles for Reference(Resource), without Cross Profile options', () => {
@@ -157,13 +161,28 @@ describe('Reference(Resource) test-case builder', () => {
             TestCaseBuilder.applyAndWait()
 
             showBuilderJson()
-            TestCasesPage.assertJsonEditorText('Organization/', qiCoreOrganizationProfile)
+            TestCasesPage.assertJsonEditorText('Organization/')
+            TestCasesPage.saveTestCaseAndWait()
+            cy.get('@saveTestCase')
+                .its('request.body.json')
+                .should((json: string) => {
+                    const bundle = JSON.parse(json)
+                    const organization = bundle.entry.find(
+                        (entry: { resource: { resourceType: string } }) =>
+                            entry.resource.resourceType === 'Organization'
+                    )
+
+                    expect(organization, 'saved Organization resource').to.exist
+                    expect(organization.resource.meta.profile, 'saved Organization profile').to.include(
+                        qiCoreOrganizationProfile
+                    )
+                })
         })
     })
 
     describe('USQC', () => {
         beforeEach('Create a saved USQC measure and open Task Focus in the Builder', () => {
-            createMeasureAndOpenBuilder(SupportedModels.USQC, usqcCqlFixture, usCorePatientProfile, 'USQC')
+            return createMeasureAndOpenBuilder(SupportedModels.USQC, usqcCqlFixture, usCorePatientProfile, 'USQC')
         })
 
         it('lists USQC, US-Core, and FHIR profiles for Reference(Resource), without Cross Profile options', () => {

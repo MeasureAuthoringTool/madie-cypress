@@ -29,15 +29,11 @@ describe('Measure Observations', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.mainMadiePageButton).click()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach(' Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Add Measure Observations for Ratio Measure', () => {
@@ -103,7 +99,7 @@ describe('Measure Observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture()
 
         //save CQL on measure
@@ -251,7 +247,7 @@ describe('Measure Observations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture()
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
@@ -286,15 +282,11 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.mainMadiePageButton).click()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach(' Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Non-owner of measure cannot change measure observation', () => {
@@ -397,7 +389,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture()
 
         //save CQL on measure
@@ -522,15 +514,11 @@ describe('Measure Observation - Expected Values', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.mainMadiePageButton).click()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach(' Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Expected values for Boolean Type Continuous Variable Measure Observations', () => {
@@ -538,7 +526,7 @@ describe('Measure Observation - Expected Values', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture()
         //save CQL on measure
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 26500)
@@ -738,15 +726,11 @@ describe('Validate Measure Observation Parameters', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.mainMadiePageButton).click()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach(' Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
@@ -754,7 +738,7 @@ describe('Validate Measure Observation Parameters', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         replaceCqlFixture()
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)

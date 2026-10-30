@@ -264,6 +264,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
             '',
             'Denominator'
         )
+        TestData.saveCurrentMeasureCql(0).then(TestData.expectSavedMeasureCql)
 
         //Create new QI Core measure
         //1
@@ -282,17 +283,15 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
 
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         MeasuresPage.actionCenter('edit', 1)
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-        cy.get(Header.mainMadiePageButton).click()
+        return cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Log out and Clean up', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
-        Utilities.deleteMeasure(undefined, undefined, false, false, 1)
+        return OktaLogin.UILogout()
+            .then(() => Utilities.deleteMeasure())
+            .then(() => Utilities.deleteMeasure(undefined, undefined, false, false, 1))
     })
 
     it('Verify that Associate Measure actions are recorded in Measure History', () => {

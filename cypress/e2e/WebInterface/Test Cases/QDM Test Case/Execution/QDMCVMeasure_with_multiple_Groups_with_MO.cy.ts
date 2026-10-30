@@ -3,11 +3,11 @@ import { OktaLogin } from '../../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../../Shared/Utilities'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { QDMElements } from '../../../../../Shared/QDMElements'
+import { TestData } from '../../../../../Shared/TestData'
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -32,9 +32,9 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //adding supplemental data
         // add SDE to test case coverage
@@ -155,9 +155,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         QDMElements.closeElement()
 
         //save changes
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //Add Expected value for Test case
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
@@ -173,15 +171,10 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         })
 
         //save changes
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //run test cases
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible').and('be.enabled').click()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
         cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
@@ -201,9 +194,9 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //adding supplemental data
         // add SDE to test case coverage
@@ -324,9 +317,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         QDMElements.closeElement()
 
         //save changes
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //Add Expected value for Test case
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
@@ -356,15 +347,10 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         })
 
         //save changes
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        TestCasesPage.saveTestCaseAndWait()
 
         //run test cases
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible').and('be.enabled').click()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
         cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')

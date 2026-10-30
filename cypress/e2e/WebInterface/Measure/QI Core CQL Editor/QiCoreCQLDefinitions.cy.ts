@@ -7,8 +7,8 @@ import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 const now = Date.now()
-const measureName = 'QiCoreDefinitions' + now
-const CqlLibraryName = 'QiCoreDefinitionsLib' + now
+let measureName = 'QiCoreDefinitions' + now
+let CqlLibraryName = 'QiCoreDefinitionsLib' + now
 const measureCQL =
     "library QiCoreLibrary1723824228401 version '0.0.000'\n" +
     "using QICore version '4.1.1'\n" +
@@ -127,12 +127,15 @@ const cqlDefinitionNameKeyword =
 
 describe('Qi-Core CQL Definitions Builder', () => {
     beforeEach('Create Measure and Login', () => {
+        const testId = Date.now()
+        measureName = 'QiCoreDefinitions' + testId
+        CqlLibraryName = 'QiCoreDefinitionsLib' + testId
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.SessionLogin()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
+        return Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Search for Qi-Core CQL Definitions Expression Editor Name Options', () => {
@@ -242,7 +245,14 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.expressionInsertBtn).click()
 
         CQLEditorPage.applyDefinition()
-        MonacoEditor.scrollToEnd(EditMeasurePage.monacoCqlEditor)
+        cy.get(EditMeasurePage.monacoCqlEditor).first().should('be.visible').realClick({ position: 'center' })
+        if (Cypress.platform === 'darwin') {
+            cy.realPress(['Meta', 'F'])
+        } else {
+            cy.realPress(['Control', 'F'])
+        }
+        cy.realType('define "Test":')
+        cy.realPress('Escape')
 
         MonacoEditor.assertRenderedText(
             EditMeasurePage.monacoCqlEditor,
@@ -305,7 +315,9 @@ describe('Qi-Core CQL Definitions Builder', () => {
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Make changes to CQL editor
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, '// dirty change')
         MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
 
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
@@ -406,7 +418,6 @@ describe('Qi-Core CQL Definitions Builder', () => {
         //Add errors to CQL
         MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
 
         //Navigate to Definitions tab
         CQLEditorPage.expandCQLBuilderPanel()
@@ -423,7 +434,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
 
 describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
+        return Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
@@ -492,11 +503,11 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionAltLogin()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        return cy.get(MeasuresPage.measureListTitles, { timeout: 60000 }).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
+        return Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {

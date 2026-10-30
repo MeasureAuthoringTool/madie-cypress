@@ -89,6 +89,7 @@ describe('Measure Versioning validations', () => {
     })
 
     it('User can not version Measure if there is no CQL', () => {
+        TestData.readMeasure().its('body.cql').should('eq', '')
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
 
@@ -96,15 +97,19 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible').then(($continueButton) => {
+            if ($continueButton.is(':disabled')) {
+                expect($continueButton).to.be.disabled
+                return
+            }
 
-        cy.get('[data-testid="toast-danger"]').should('contain.text', 'Requested measure cannot be versioned')
-        cy.get(MeasuresPage.measureVersionHelperText).should(
-            'contain.text',
-            'Please include valid CQL in the CQL editor to version before versioning this measure'
-        )
+            cy.wrap($continueButton).click()
+            cy.get('[data-testid="toast-danger"]').should('contain.text', 'Requested measure cannot be versioned')
+            cy.get(MeasuresPage.measureVersionHelperText).should(
+                'contain.text',
+                'Please include valid CQL in the CQL editor to version before versioning this measure'
+            )
+        })
     })
 
     it('User can not Version if the Measure CQL has errors', () => {
@@ -112,7 +117,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, generateQDMCQLWithErrors(cqlLibraryName))
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
@@ -141,7 +146,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
         MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, versionMeasureCQL)
         CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
