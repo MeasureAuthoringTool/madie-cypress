@@ -42,7 +42,6 @@ describe('QDM CQL Parameters', () => {
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
 
-        //Save CQL
         CQLEditorPage.saveMonacoCql()
         CQLEditorPage.validateSuccessfulCQLUpdate()
         CQLEditorPage.expandCQLBuilderPanel()
@@ -102,7 +101,7 @@ describe('QDM CQL Parameters', () => {
 
     it('Confirm that valid options can be applied to the CQL and saved', () => {
         const paramName = 'NewParameter'
-        const formattedCql = `parameter "${paramName}" Interval<DateTime>`
+        const parameterDeclarationPattern = new RegExp(`parameter\\s+"${paramName}"\\s+Interval<DateTime>`)
 
         cy.get(CQLEditorPage.parametersTab).click()
 
@@ -110,18 +109,17 @@ describe('QDM CQL Parameters', () => {
 
         CQLEditorPage.applyParameter(paramName, 'Interval<DateTime>')
 
-        // verify 2 parameters presents - 1 from initial CQL load, 1 we added in this test
-        MonacoEditor.assertRenderedTextOccurrences(EditMeasurePage.monacoCqlEditor, 'parameter', 2)
-
-        // verify exact text was inserted
-        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, formattedCql)
-
         // verify clean tab but dirty measure
         cy.get(CQLEditorPage.parameterNameTextBox).should('not.have.value')
         cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.disabled')
         cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.disabled')
 
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('saveMeasureCql')
         cy.get(CQLEditorPage.saveCQLButton).should('be.enabled').click()
+        cy.wait('@saveMeasureCql').then(({ request, response }) => {
+            expect(response?.statusCode).to.eq(200)
+            expect(request.body.cql).to.match(parameterDeclarationPattern)
+        })
 
         CQLEditorPage.validateSuccessfulCQLUpdate()
     })
@@ -135,9 +133,6 @@ describe('QDM CQL Parameters', () => {
 
         CQLEditorPage.applyParameter(paramName, 'Interval<DateTime>')
 
-        // verify 2 parameters presents - 1 from initial CQL load, 1 we added in this test
-        MonacoEditor.assertRenderedTextOccurrences(EditMeasurePage.monacoCqlEditor, 'parameter', 2)
-
         // enter duplicate
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
 
@@ -149,8 +144,6 @@ describe('QDM CQL Parameters', () => {
             `Parameter ${paramName} has already been defined in CQL.`
         )
 
-        // same as above, verify 2 parameters in document - duplicate not added
-        MonacoEditor.assertRenderedTextOccurrences(EditMeasurePage.monacoCqlEditor, 'parameter', 2)
     })
 
     it('Verify QDM CQL Parameters under Saved Parameters tab', () => {

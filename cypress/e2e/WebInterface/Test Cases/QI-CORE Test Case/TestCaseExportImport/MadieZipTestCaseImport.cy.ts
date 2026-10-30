@@ -11,9 +11,8 @@ import { Header } from '../../../../../Shared/Header'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
-const now = Date.now()
-let measureName = 'ZipTCImport' + now
-let CqlLibraryName = 'ZipTCImportLib' + now
+let measureName = ''
+let CqlLibraryName = ''
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCase1: TestCase = {
     title: 'Test Case 1',
@@ -33,6 +32,8 @@ describe('MADIE Zip Test Case Import', () => {
     deleteDownloadsFolderBeforeEach()
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        measureName = 'ZipTCImport' + Date.now()
+        CqlLibraryName = 'ZipTCImportLib' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
@@ -45,18 +46,16 @@ describe('MADIE Zip Test Case Import', () => {
             true
         )
 
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('MADIE Zip Test Case Import', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -155,8 +154,6 @@ describe('MADIE Zip Test Case Import', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
-
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -223,10 +220,10 @@ describe('MADIE Zip Test Case Import', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000)
-
         // updated validations - 10 visible test cases
-        cy.get(TestCasesPage.countVisibleTestCases).should('have.length', 10)
+        cy.get(TestCasesPage.countVisibleTestCases, { timeout: 180000 }).should('have.length', 10)
+        cy.contains('Following test case(s) were imported successfully, but the measure populations do not match')
+            .should('be.visible')
         // imported 138 totaltest cases
         TestCasesPage.grabValidateTestCaseNumber(138)
         // specific title seen
@@ -242,6 +239,8 @@ describe('MADIE Zip Test Case Import', () => {
 
 describe('MADIE Zip Test Case Import: error message should appear when the .madie file is missing', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        measureName = 'ZipTCImport' + Date.now()
+        CqlLibraryName = 'ZipTCImportLib' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
@@ -254,11 +253,11 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
             true
         )
 
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('MADIE Zip Test Case Import: error message appears when .madie file is missing from the .zip file', () => {

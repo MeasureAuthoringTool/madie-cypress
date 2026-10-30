@@ -296,10 +296,8 @@ export class CQLEditorPage {
     }
 
     public static applyParameter(parameterName: string, parameterType: string): void {
-        const parameterDeclaration = `parameter "${parameterName}"`
-
         cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.enabled').click()
-        MonacoEditor.appendToLineContaining(EditMeasurePage.monacoCqlEditor, parameterDeclaration, ` ${parameterType}`)
+        MonacoEditor.appendToLineContaining(EditMeasurePage.monacoCqlEditor, `parameter "${parameterName}"`, ` ${parameterType}`)
     }
 
     public static minimizeAlerts(hiddenAlertSelector: string): void {

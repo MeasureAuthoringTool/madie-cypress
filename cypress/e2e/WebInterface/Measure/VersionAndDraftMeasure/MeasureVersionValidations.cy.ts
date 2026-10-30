@@ -126,10 +126,11 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         newCqlLibraryName = 'VersionValidationsLibB' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
+        TestData.saveMeasureCql(cohortMeasureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.then(() => undefined)
     })
 
     afterEach('Logout', () => {
@@ -213,9 +214,9 @@ describe('Create Test case for Qi Core Versioned Measure', () => {
         newCqlLibraryName = 'VersionValidationsLibC' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestData.saveMeasureCql(cohortMeasureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         return cy.then(() => undefined)
     })
 
@@ -353,7 +354,6 @@ describe('Non Measure owner unable to create Version', () => {
 
                 //Verify version button is not visible
                 cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
-                cy.get('[data-testid=measure-action-' + fileContents + ']').click()
             })
     })
 })

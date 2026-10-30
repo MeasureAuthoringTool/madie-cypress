@@ -270,10 +270,10 @@ describe('Run / Execute QDM Test Case button validations', () => {
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         TestCasesPage.openTestCasesTab(TestCasesPage.newTestCaseButton)
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'N/A')
     })

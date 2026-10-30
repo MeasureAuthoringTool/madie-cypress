@@ -118,7 +118,12 @@ if (failedTestTitles.size) {
           return itFn.only(title, fn)
         }
       : undefined
-    wrapped.skip = itFn.skip ? itFn.skip.bind(itFn) : undefined
+    wrapped.skip = function (title: string, fn?: Mocha.Func) {
+      if (!failedTestTitles.has(fullTitle(title))) {
+        return undefined
+      }
+      return itFn.skip(title, fn)
+    }
 
     return wrapped
   }

@@ -69,7 +69,7 @@ export class MonacoEditor {
 
     public static appendToLineContaining(editorSurfaceSelector: string, lineText: string, value: string): void {
         cy.get(editorSurfaceSelector).should('be.visible').realClick({ position: 'topLeft' })
-        cy.realPress(['Control', 'F'])
+        cy.realPress(Cypress.platform === 'darwin' ? ['Meta', 'F'] : ['Control', 'F'])
         cy.realType(lineText)
         cy.realPress('Escape')
         cy.realPress('End')
