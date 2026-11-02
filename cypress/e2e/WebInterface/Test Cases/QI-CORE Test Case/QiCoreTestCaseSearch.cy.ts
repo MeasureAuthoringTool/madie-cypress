@@ -7,7 +7,7 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'QiCoreTCSearch' + Date.now()
 let CqlLibraryName = 'QiCoreTCSearchLib' + Date.now()
@@ -32,6 +32,7 @@ describe('Non Boolean Population Basis Expected values', () => {
             '2012-01-02',
             '2013-01-01'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
@@ -44,18 +45,16 @@ describe('Non Boolean Population Basis Expected values', () => {
             'Encounter'
         )
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Qi Core Test Case search and filter functionality', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

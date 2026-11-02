@@ -1,12 +1,12 @@
-import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { QiCore6Cql } from "../../../Shared/FHIRMeasuresCQL"
-import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { CreateMeasurePage, SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../Shared/OktaLogin'
+import { Utilities } from '../../../Shared/Utilities'
+import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
+import { MeasuresPage } from '../../../Shared/MeasuresPage'
+import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { QiCore6Cql } from '../../../Shared/FHIRMeasuresCQL'
+import { TestCasesPage } from '../../../Shared/TestCasesPage'
+import { TestCaseJson } from '../../../Shared/TestCaseJson'
 
 const now = Date.now()
 const measureName = 'MinimizeAlerts' + now
@@ -15,30 +15,38 @@ const errorCql = QiCore6Cql.intentionalErrorCql
 const tc = TestCaseJson.fromCMS1272Strata1
 
 describe('Minimize Alerts - Measure with a CQL error', () => {
-
     beforeEach('Create Measure and Login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: errorCql
+        })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
-        
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Minimize alert when Test Case list throws error for no population criteria', () => {
-
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // Red error box shows with these 2 error messages
         cy.get(TestCasesPage.testCaseExecutionError).should('be.visible')
-        cy.get('[data-testid="generic-fail-text-list"]').children().eq(0).should('have.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
-        cy.get('[data-testid="generic-fail-text-list"]').children().eq(1).should('have.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
+        cy.get('[data-testid="generic-fail-text-list"]')
+            .children()
+            .eq(0)
+            .should('have.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
+        cy.get('[data-testid="generic-fail-text-list"]')
+            .children()
+            .eq(1)
+            .should(
+                'have.text',
+                'No Population Criteria is associated with this measure. Please review the Population Criteria tab.'
+            )
 
         cy.get(CQLEditorPage.minimizeButton).click()
 
@@ -55,15 +63,23 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
     })
 
     it('Minimize alert when Test Case shift dates failure shows error', () => {
-
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // Red error box shows with these 2 error messages
         cy.get(TestCasesPage.testCaseExecutionError).should('be.visible')
-        cy.get('[data-testid="generic-fail-text-list"]').children().eq(0).should('have.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
-        cy.get('[data-testid="generic-fail-text-list"]').children().eq(1).should('have.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
+        cy.get('[data-testid="generic-fail-text-list"]')
+            .children()
+            .eq(0)
+            .should('have.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
+        cy.get('[data-testid="generic-fail-text-list"]')
+            .children()
+            .eq(1)
+            .should(
+                'have.text',
+                'No Population Criteria is associated with this measure. Please review the Population Criteria tab.'
+            )
 
         // create empty test case
         TestCasesPage.createTestCase('empty testcase', 'nothing', 'abc')
@@ -97,34 +113,42 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
 })
 
 describe('Minimize Alerts - Non-owner can also minimize to review the test cases', () => {
-
     beforeEach('Create Measure and Login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {
+            measureCql: errorCql
+        })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-        
+
         OktaLogin.SessionAltLogin()
-        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').and('be.enabled').click()
         MeasuresPage.actionCenter('edit')
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
-        
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner can perform minimize action', () => {
-
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // Red error box shows with these 2 error messages
         cy.get(TestCasesPage.testCaseExecutionError).should('be.visible')
-        cy.get('[data-testid="generic-fail-text-list"]').children().eq(0).should('have.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
-        cy.get('[data-testid="generic-fail-text-list"]').children().eq(1).should('have.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
+        cy.get('[data-testid="generic-fail-text-list"]')
+            .children()
+            .eq(0)
+            .should('have.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
+        cy.get('[data-testid="generic-fail-text-list"]')
+            .children()
+            .eq(1)
+            .should(
+                'have.text',
+                'No Population Criteria is associated with this measure. Please review the Population Criteria tab.'
+            )
 
         cy.get(CQLEditorPage.minimizeButton).click()
 
