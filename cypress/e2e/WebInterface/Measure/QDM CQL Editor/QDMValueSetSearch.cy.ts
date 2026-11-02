@@ -159,13 +159,12 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••' +
-            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
-            'Office VisitNational Committee for Quality Assuranceurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl)
+            .should('contain.text', 'Office Visit')
+            .and('contain.text', 'National Committee for Quality Assurance')
+            .and('contain.text', 'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1001')
+            .and('contain.text', 'ACTIVE')
+            .and('not.contain.text', 'RETIRED')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()

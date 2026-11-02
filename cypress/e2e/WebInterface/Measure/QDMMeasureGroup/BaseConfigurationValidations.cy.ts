@@ -7,6 +7,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'BaseConfig'
 let CqlLibraryName = 'BaseConfigLib'
@@ -27,14 +28,15 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         newCqlLibraryName = CqlLibraryName + Date.now()
 
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ appendText: '', collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +

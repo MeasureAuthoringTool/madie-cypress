@@ -21,7 +21,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendText: '\n', collapseEditor: true, waitForDisabled: true })
         return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
@@ -119,7 +119,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the test cases
         })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendText: '\n', collapseEditor: true, waitForDisabled: true })
 
         OktaLogin.SessionAltLogin()
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible').and('be.enabled').click()

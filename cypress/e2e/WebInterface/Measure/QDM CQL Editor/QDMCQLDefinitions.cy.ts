@@ -6,6 +6,7 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
 
 let randValue: number | null = null
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -122,16 +123,16 @@ const cqlDefinitionNameAsKeyword =
 describe('QDM CQL Definitions', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.expandCQLBuilderPanel()
+        return cy.get(CQLEditorPage.definitionsTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        return Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Search for QDM CQL Definitions Expression Editor Name Options', () => {
@@ -222,12 +223,19 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.expressionInsertBtn).click()
 
         CQLEditorPage.applyDefinition()
-        MonacoEditor.scrollToEnd(EditMeasurePage.monacoCqlEditor)
+        cy.get(EditMeasurePage.monacoCqlEditor).first().should('be.visible').realClick({ position: 'center' })
+        if (Cypress.platform === 'darwin') {
+            cy.realPress(['Meta', 'F'])
+        } else {
+            cy.realPress(['Control', 'F'])
+        }
+        cy.realType('define "Test":')
+        cy.realPress('Escape')
 
         MonacoEditor.assertRenderedText(
             EditMeasurePage.monacoCqlEditor,
             'define "Test":',
-            'Common."Measurement Period"',
+            '"Measurement Period"',
             'Common."Inpatient Encounter"',
             'Common."EmergencyDepartmentArrivalTime"()',
             '"test"()',

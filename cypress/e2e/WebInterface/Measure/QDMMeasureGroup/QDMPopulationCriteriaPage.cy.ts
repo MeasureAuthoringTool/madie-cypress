@@ -7,6 +7,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { Header } from '../../../../Shared/Header'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { TestData } from '../../../../Shared/TestData'
 
 let newMeasureName = ''
 let newCqlLibraryName = ''
@@ -30,10 +31,11 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         measureData.measureCql = simpleQDMMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(simpleQDMMeasureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
@@ -367,9 +369,10 @@ describe('Save Population Criteria on QDM measure', () => {
         measureData.measureCql = simpleQDMMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(simpleQDMMeasureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
@@ -423,9 +426,10 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         measureData.measureCql = booleanPatientBasisQDM_CQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(booleanPatientBasisQDM_CQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
@@ -482,9 +486,10 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         measureData.measureCql = booleanPatientBasisQDM_CQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(booleanPatientBasisQDM_CQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {

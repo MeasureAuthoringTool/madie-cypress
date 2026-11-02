@@ -7,6 +7,7 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MonacoEditor } from "../../../../Shared/MonacoEditor"
+import { TestData } from '../../../../Shared/TestData'
 
 const measureName = 'MeasureBundle ' + Date.now()
 const CqlLibraryName = 'MeasureBundleLib' + Date.now()
@@ -28,16 +29,17 @@ describe('Measure Bundle end points', () => {
     beforeEach('Create Measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
 
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Log into the UI and save Measure CQL so the cqlErrors flag will update to true', () => {
