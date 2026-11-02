@@ -137,11 +137,11 @@ describe('Create and Update QDM Test Case', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Create and Update Test Case for QDM Measure', () => {
@@ -252,11 +252,11 @@ describe('Non Boolean Test case Expected Values', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'SDE Ethnicity')
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Add Test Case Expected values for Non Boolean Measure', () => {
@@ -292,11 +292,11 @@ describe('Create and update QDM Test case validations', () => {
 
     beforeEach('Create measure and login', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName)
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Create Test case Validation: Test case Title has special characters', () => {

@@ -27,11 +27,11 @@ const measureCQL_valid =
 describe('Save CQL on CQL Editor Page', () => {
     beforeEach('Login', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
-        OktaLogin.SessionLogin()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Create New Measure and Add CQL to the Measure', () => {

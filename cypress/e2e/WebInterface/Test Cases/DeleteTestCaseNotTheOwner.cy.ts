@@ -1,44 +1,39 @@
-import { TestCaseJson } from '../../../Shared/TestCaseJson'
 import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
 import { Utilities } from '../../../Shared/Utilities'
 import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { TestCase, TestCasesPage } from '../../../Shared/TestCasesPage'
+import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
 import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../Shared/MeasureCQL'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { LandingPage } from '../../../Shared/LandingPage'
+import { TestData } from '../../../Shared/TestData'
 
-const now = Date.now()
-let measureName = 'DeleteTC' + now
-let CqlLibraryName = 'DeleteTCLib' + now
-let measureCQL = MeasureCQL.ICFCleanTest_CQL.replace('SimpleFhirLibrary', CqlLibraryName)
-const testCase1: TestCase = {
-    title: 'Title for Auto Test',
-    description: 'DENOMFail test case',
-    group: 'SBTestSeries',
-    json: TestCaseJson.TestCaseJson_Valid_w_All_Encounter
-}
-const testCase2: TestCase = {
-    title: 'Another Title',
-    description: 'Successful test case',
-    group: 'SBTestSeries'
-}
+let measureName: string
+let cqlLibraryName: string
+let measureCQL: string
+let testCaseTitle: string
+const testCaseDescription = 'DENOMFail test case'
+const testCaseGroup = 'SBTestSeries'
 
 describe('Delete Test Case', () => {
-    beforeEach('Create measure and login', () => {
+    beforeEach('Create test data and log in as non-owner', () => {
+        const scenarioId = Date.now()
+        measureName = `DeleteTC${scenarioId}`
+        cqlLibraryName = `DeleteTCLib${scenarioId}`
+        measureCQL = MeasureCQL.ICFCleanTest_CQL.replace('SimpleFhirLibrary', cqlLibraryName)
+        testCaseTitle = `Title for Auto Test ${scenarioId}`
+
         CreateMeasurePage.CreateQICoreMeasureAPI(
             measureName,
-            CqlLibraryName,
+            cqlLibraryName,
             measureCQL,
             0,
             false,
             '2012-01-02',
             '2013-01-01'
         )
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
@@ -51,30 +46,23 @@ describe('Delete Test Case', () => {
             undefined,
             'Procedure'
         )
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseGroup, testCaseDescription)
+        return OktaLogin.AltLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Non owner of the Measure unable to delete Test Case', () => {
-        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
-
-        OktaLogin.UILogout()
-
-        //Login as Alt User
-        OktaLogin.AltLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-        cy.get(MeasuresPage.allMeasuresTab).click({ force: true })
+        cy.get(LandingPage.allMeasuresTab).should('be.visible').and('be.enabled').click()
 
         MeasuresPage.actionCenter('edit')
+        TestCasesPage.openTestCasesTabAndWaitForList()
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.checkTestCase(1)
-        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        TestCasesPage.checkTestCaseByTitle(testCaseTitle)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).should('be.visible').click()
         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
         cy.get(TestCasesPage.importTestCaseBtn).should('not.exist')
         cy.get(TestCasesPage.newTestCaseButton).should('not.exist')
@@ -84,8 +72,8 @@ describe('Delete Test Case', () => {
 
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.reportsButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-
-        cy.contains('View').should('be.visible')
+        TestData.readTestCaseId().then((testCaseId) => {
+            cy.get(TestCasesPage.getViewEditTestCaseButtonSelector(testCaseId)).should('have.text', 'View')
+        })
     })
 })

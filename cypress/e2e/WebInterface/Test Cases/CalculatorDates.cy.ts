@@ -6,8 +6,8 @@ import { Utilities } from '../../../Shared/Utilities'
 import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
 import { TestCaseJson } from '../../../Shared/TestCaseJson'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 import { QiCore6Cql } from '../../../Shared/FHIRMeasuresCQL'
+import { TestData } from '../../../Shared/TestData'
 const dayjs = require('dayjs')
 
 const now = Date.now()
@@ -30,13 +30,12 @@ const today = dayjs().format('MM/DD/YYYY')
 describe('Check all variations of calculated dates', () => {
     beforeEach('Create Measure and Test Case', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6, opts)
+        TestData.saveMeasureCql(opts.measureCql!).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
