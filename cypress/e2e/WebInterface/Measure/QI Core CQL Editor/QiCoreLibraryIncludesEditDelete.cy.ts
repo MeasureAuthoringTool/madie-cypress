@@ -1,22 +1,20 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Header } from "../../../../Shared/Header"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { MonacoEditor } from "../../../../Shared/MonacoEditor"
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Header } from '../../../../Shared/Header'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 
 describe('Qi-Core Library Includes - Delete functionality', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
 
@@ -27,14 +25,11 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure()
         OktaLogin.UILogout()
     })
 
     it('Qi Core: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {
-
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
@@ -51,34 +46,23 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
 
-        //attempt to delete and choose No, keep working
+        // Attempt to delete, then cancel the delete confirmation.
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-
-        Utilities.clickOnKeepWorking()
-
-        //confirm contents in CQL editor still contains changes and save button is still available
-        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
-        Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
-
-        //attempt to delete and choose yes to discard changes
-        Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
-        cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Utilities.discardChangesContinue).click()
-
-        //confirm "are you sure" pop up
-        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
-
-        //choose cancel
-        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn, 5000)
+        cy.get('[data-testid="delete-dialog"]', { timeout: 5000 })
+            .should('be.visible')
+            .should('contain.text', 'Are you sure?')
+            .and('contain.text', 'Are you sure you want to delete this Library?')
+            .and('contain.text', 'This action cannot be undone.')
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn).click()
 
-        //confirm that CQL value is the same as it was prior to change and the save button is not available
+        // The delete flow discards unsaved CQL before opening its confirmation dialog.
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+        Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
+
+        // Confirm the discarded state persists after reloading.
         cy.reload()
         CQLEditorPage.expandCQLBuilderPanel()
         MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
@@ -101,27 +85,33 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.includesTab).click()
         cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('contain.text', 'FHIRHelpers')
 
-        //attempt to delete and choose yes to discard changes
+        // The delete flow discards unsaved CQL before opening its confirmation dialog.
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Utilities.discardChangesContinue).click()
-
-        //confirm "are you sure" pop up
-        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
+        cy.get('[data-testid="delete-dialog"]', { timeout: 5000 })
+            .should('be.visible')
+            .and('contain.text', 'Are you sure?')
+            .and('contain.text', 'Are you sure you want to delete this Library?')
+            .and('contain.text', 'This action cannot be undone.')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
         Utilities.waitForElementEnabled(CQLEditorPage.deleteContinueButton, 5000)
         cy.get(CQLEditorPage.deleteContinueButton).click()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
+        cy.get(CQLEditorPage.toastMeasureMessage).should(
+            'contain.text',
+            'Library FHIRHelpers has been successfully removed from the CQL'
+        )
 
         //Deletes the library include statement from the CQL
         MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'FHIRHelpers')
-        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'library ' + CqlLibraryName, 'using QICore version', 'define "Surgical Absence of Cervix"')
+        MonacoEditor.assertRenderedText(
+            EditMeasurePage.monacoCqlEditor,
+            'library ' + CqlLibraryName,
+            'using QICore version',
+            'define "Surgical Absence of Cervix"'
+        )
 
         //Deletes the library from the Saved Libraries grid
         CQLEditorPage.expandCQLBuilderPanel()
@@ -134,7 +124,6 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
     })
 
     it('Qi Core: Delete Included Libraries functionality -- when changes to the CQL is saved', () => {
-
         //make a change and save changes
         cy.get(Header.mainMadiePageButton).click()
 
@@ -162,11 +151,19 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
         Utilities.waitForElementEnabled(CQLEditorPage.deleteContinueButton, 5000)
         cy.get(CQLEditorPage.deleteContinueButton).click()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
+        cy.get(CQLEditorPage.toastMeasureMessage).should(
+            'contain.text',
+            'Library FHIRHelpers has been successfully removed from the CQL'
+        )
 
         //Deletes the library include statement from the CQL
         MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'FHIRHelpers')
-        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'library ' + CqlLibraryName, 'using QICore version', 'define "Surgical Absence of Cervix"')
+        MonacoEditor.assertRenderedText(
+            EditMeasurePage.monacoCqlEditor,
+            'library ' + CqlLibraryName,
+            'using QICore version',
+            'define "Surgical Absence of Cervix"'
+        )
 
         //Deletes the library from the Saved Libraries grid
         CQLEditorPage.expandCQLBuilderPanel()
@@ -180,9 +177,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
 })
 
 describe('Qi-Core Library Includes - Edit functionality', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
 
@@ -193,14 +188,11 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
     })
 
     afterEach('Clean up and Logout', () => {
-
-        
         Utilities.deleteMeasure()
         OktaLogin.UILogout()
     })
 
     it('Qi Core: Edit Included Libraries functionality -- when changes to the CQL is not saved', () => {
-
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
@@ -288,14 +280,16 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         Utilities.waitForElementEnabled(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         cy.get(CQLLibraryPage.applyEditsSavedLibraryBtn).click()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
+        cy.get(CQLEditorPage.toastMeasureMessage).should(
+            'contain.text',
+            'Library FHIRHelpers has been successfully edited in the CQL'
+        )
 
         //Deletes the library include statement from the CQL
         MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     })
 
     it('Qi Core: Edit Included Libraries functionality -- when changes to the CQL is saved', () => {
-
         //make a change and save changes
         cy.get(Header.mainMadiePageButton).click()
 
@@ -330,7 +324,10 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         Utilities.waitForElementEnabled(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         cy.get(CQLLibraryPage.applyEditsSavedLibraryBtn).click()
 
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
+        cy.get(CQLEditorPage.toastMeasureMessage).should(
+            'contain.text',
+            'Library FHIRHelpers has been successfully edited in the CQL'
+        )
 
         //Deletes the library include statement from the CQL
         MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')

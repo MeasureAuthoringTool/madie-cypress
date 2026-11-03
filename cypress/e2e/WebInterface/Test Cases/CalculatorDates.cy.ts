@@ -41,7 +41,8 @@ describe('Check all variations of calculated dates', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        return cy.get(TestCasesPage.openDateCalculator).click()
+        cy.get(TestCasesPage.openDateCalculator).should('be.visible').and('be.enabled').click()
+        return cy.get(TestCasesPage.calculatorTool.durDiffTab).should('be.visible').and('have.attr', 'aria-selected', 'true')
     })
 
     afterEach('Clean up', () => {

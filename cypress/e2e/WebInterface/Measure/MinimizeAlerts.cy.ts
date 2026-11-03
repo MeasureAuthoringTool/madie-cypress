@@ -17,11 +17,12 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendText: '\n', collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('On CQL Editor, user can minimize and then maximize the error list', () => {
@@ -74,16 +75,17 @@ describe('Minimize Alerts - Non-owner can also minimize to review the measure', 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: errorCql })
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendText: '\n', collapseEditor: true, waitForDisabled: true })
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.openMonacoCqlEditor()
+        return cy.get(CQLEditorPage.errorMsg).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Non Measure owner can perform minimize action', () => {

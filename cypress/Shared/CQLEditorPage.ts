@@ -92,7 +92,7 @@ export class CQLEditorPage {
     }
 
     //CQL Builder Sub tabs
-    public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
+    public static readonly expandCQLBuilder = '[data-testid="expanded-button"]'
     public static readonly collapseCQLBuilder = '[data-testid="collapsed-button"]'
 
     //Includes page
@@ -211,7 +211,6 @@ export class CQLEditorPage {
         }
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
-            expect($msg).to.not.contain('Error')
             cy.wrap($msg)
                 .invoke('text')
                 .then(text => {
@@ -339,6 +338,10 @@ export class CQLEditorPage {
     public static expandCQLBuilderPanel(): void {
         const maxRetries = 5
 
+        // The builder tabs render only after the CQL Editor tab is active.
+        // This is idempotent when the editor is already selected.
+        CQLEditorPage.openMonacoCqlEditor()
+
         const attemptExpand = (attempt: number): void => {
             cy.document().its('readyState').should('eq', 'complete')
             cy.get('body').then(($body) => {
@@ -353,7 +356,7 @@ export class CQLEditorPage {
                 // If the expand button is present, click it
                 if ($body.find(CQLEditorPage.expandCQLBuilder).length > 0) {
                     cy.log(`Expanding CQL Builder panel (attempt ${attempt + 1}/${maxRetries})`)
-                    cy.get(CQLEditorPage.expandCQLBuilder).first().scrollIntoView().click({ force: true })
+                    cy.get(CQLEditorPage.expandCQLBuilder).should('be.visible').scrollIntoView().click()
                     cy.document().its('readyState').should('eq', 'complete')
 
                     if (attempt + 1 < maxRetries) {

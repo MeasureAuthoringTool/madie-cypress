@@ -9,6 +9,7 @@ import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Toasts } from "../../../../Shared/Toasts"
 import { MonacoEditor } from "../../../../Shared/MonacoEditor"
+import { TestData } from '../../../../Shared/TestData'
 
 let updatedMeasuresPageName = ''
 let updatedMeasuresPageNameSecond = ''
@@ -27,12 +28,13 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         newCqlLibraryName = 'DraftVersionValidationsLib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        TestData.saveMeasureCql(cohortMeasureCQL).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
 
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     it('Add Draft to the versioned measure', () => {

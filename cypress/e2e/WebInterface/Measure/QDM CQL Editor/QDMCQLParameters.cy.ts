@@ -5,6 +5,7 @@ import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
 import { url } from 'inspector'
 
 let measureName = 'QDMTestingParameters' + Date.now()
@@ -39,16 +40,16 @@ let measureCQL =
 describe('QDM CQL Parameters', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveMonacoCql()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
         CQLEditorPage.expandCQLBuilderPanel()
+        return cy.get(CQLEditorPage.parametersTab).should('be.visible')
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Validate default Parameters tab and basic form functions', () => {

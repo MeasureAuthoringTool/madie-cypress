@@ -325,26 +325,21 @@ describe('QDM Library Includes fields', () => {
     cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
-    //attempt to edit and choose No, keep working
+    // Attempt to edit and keep the unsaved CQL changes.
     cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
     Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
     cy.get(CQLEditorPage.editSavedLibrary).click()
-
     Utilities.clickOnKeepWorking()
 
-    //confirm contents in CQL editor still contains changes and save button is still available
+    // Confirm the unsaved CQL remains after declining to discard it.
     MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
     Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
     Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
-    //attempt to edit and choose yes to discard changes
+    // Discard unsaved CQL changes, then open the library Details dialog.
     Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
     cy.get(CQLEditorPage.editSavedLibrary).click()
-    Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-    cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-    cy.get(Utilities.discardChangesContinue).click()
-
-    //confirm "Details" pop up --
+    Utilities.clickOnDiscardChanges()
     Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
     cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
@@ -353,7 +348,7 @@ describe('QDM Library Includes fields', () => {
     Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 5000)
     cy.get(Utilities.DiscardCancelBtn).click()
 
-    //confirm that CQL value is the same as it was prior to change and the save button is not available
+    // Confirm the discarded state persists after closing Details and reloading.
     cy.reload()
     CQLEditorPage.expandCQLBuilderPanel()
     MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
@@ -378,15 +373,12 @@ describe('QDM Library Includes fields', () => {
       .find('[data-test-id="row-0"]')
       .should('contain.text', 'MATGlobalCommonFunctionsQDM')
 
-    //attempt to edit and choose yes to discard changes
+    // Discard unsaved CQL changes, then edit the library.
     cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
     Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
     cy.get(CQLEditorPage.editSavedLibrary).click()
-    Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-    cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-    cy.get(Utilities.discardChangesContinue).click()
+    Utilities.clickOnDiscardChanges()
 
-    //confirm "Details" pop up
     Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
     cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
