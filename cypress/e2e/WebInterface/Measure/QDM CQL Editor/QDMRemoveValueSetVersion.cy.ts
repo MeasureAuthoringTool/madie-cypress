@@ -7,6 +7,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
+import { TestData } from "../../../../Shared/TestData"
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let measureName = 'ProportionPatient' + Date.now()
@@ -30,32 +32,46 @@ describe('Validating that the valueset version is removed and message appears, o
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
-        OktaLogin.Login()
+        TestData.saveMeasureCql(qdmManifestTestCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Valueset version removed and user is informed', () => {
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        //add new value set and also specify a version
-        cy.get(EditMeasurePage.cqlEditorTextBox)
-            .type('{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{moveToEnd}{enter}valueset \"Adolescent depression screening assessment with version\":  \'urn:oid:2.16.840.1.113762.1.4.1260.162\' version \'urn:hl7:version:20240307\'')
+        CQLEditorPage.openMonacoCqlEditor()
+        const versionedValueSet = 'valueset "Adolescent depression screening assessment with version":  \'urn:oid:2.16.840.1.113762.1.4.1260.162\' version \'urn:hl7:version:20240307\''
+        TestData.readMeasure().then(({ status, body }) => {
+            expect(status).to.eq(200)
+            expect(body.cql.trimStart(), 'saved CQL begins with a library declaration').to.match(/^library /)
+            expect(body.cql.match(/^context Patient\r?$/gm) ?? [], 'Patient context declarations').to.have.length(1)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+            const updatedCql = body.cql.replace(/^context Patient\r?$/m, `${versionedValueSet}\ncontext Patient`)
+            MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, updatedCql)
+        })
+
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('saveVersionedValueSet')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
+        cy.wait('@saveVersionedValueSet').its('response.statusCode').should('eq', 200)
         Utilities.waitForElementVisible(CQLEditorPage.saveAlertMessage, 35000)
-        cy.get(CQLEditorPage.saveAlertMessage).find('[class="madie-alert success"]').find(TestCasesPage.importTestCaseSuccessInfo).find('[data-testid="library-warning"]').should('contain.text', 'MADiE does not currently support use of value set version directly in measures at this time. Your value set versions have been removed. Please use the relevant manifest for value set expansion for testing.')
+        cy.get(CQLEditorPage.saveAlertMessage)
+            .find('[class="madie-alert success"]')
+            .find(TestCasesPage.importTestCaseSuccessInfo)
+            .find('[data-testid="library-warning"]')
+            .should(($warning) => {
+                expect($warning.text().replace(/\s+/g, ' ').trim()).to.match(
+                    /^MADiE does not currently support use of value set version directly in (?:CQL|measures) at this time\. Your value set versions have been removed\. Please use the relevant manifest for value set expansion for testing\.$/
+                )
+            })
 
         //confirm that the CQL does not include the version
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'Adolescent depression screening assessment with version')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.include.text',  'version \'urn:hl7:version:20240307\'')
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'Adolescent depression screening assessment with version')
+        MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'version \'urn:hl7:version:20240307\'')
     })
 })

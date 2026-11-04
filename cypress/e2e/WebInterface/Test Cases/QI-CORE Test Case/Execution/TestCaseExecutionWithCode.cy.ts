@@ -23,28 +23,19 @@ describe('Test Case Execution with codes', () => {
             .then((fileContents) => {
                 TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, fileContents)
             })
-        OktaLogin.Login()
+        return OktaLogin.Login()
     })
 
     after('Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Test Case Execution for the CQL that uses codes', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLWithCodes.txt')
-            .should('exist')
-            .then((fileContents) => {
-                cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-            })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5500)
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
+        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLWithCodes.txt')
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -83,13 +74,7 @@ describe('Test Case Execution with codes', () => {
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
 })

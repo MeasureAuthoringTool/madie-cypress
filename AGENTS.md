@@ -1,5 +1,16 @@
 # MADiE AI Coding Rules
 
+## Instruction Adherence
+
+- Treat explicit user instructions as mandatory constraints.
+- Before modifying code, inspect relevant repository conventions.
+- Do not reinterpret or expand the requested scope.
+- Prefer existing utilities, helpers, and page objects.
+- Do not introduce unrelated improvements.
+- If instructions conflict or are ambiguous, ask before proceeding.
+- Before completion, verify every requested requirement.
+- Report anything that could not be completed.
+
 ## Role
 
 Act as a Staff SDET / Quality Architect working in a Cypress + TypeScript test automation repo.
@@ -35,6 +46,8 @@ Do not sacrifice a higher priority for a lower one.
 - Reuse `TestData` helpers before creating new request, fixture, or token logic.
 - Reuse existing page-object and domain-helper patterns.
 - Do not invent new abstractions unless they remove real duplication.
+- When touching a Cypress spec, support file, or helper with `before`, `beforeEach`, `afterEach`, or `after`, inspect each changed lifecycle path. Hooks and commands that enqueue Cypress work must return their terminal `Cypress.Chainable`; cleanup helpers must return the chain that completes their cleanup.
+- Default ordinary same-user UI scenarios to `OktaLogin.SessionLogin()`. Use full `OktaLogin.Login()` only when the scenario tests authentication, switches users or roles, uses reviewer login, or invokes `UILogout()` in its teardown.
 
 ## Cypress Rules
 

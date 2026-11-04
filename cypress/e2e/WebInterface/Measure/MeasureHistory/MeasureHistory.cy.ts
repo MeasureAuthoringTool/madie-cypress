@@ -45,7 +45,7 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
         })
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Log out and Clean up', () => {
@@ -56,7 +56,7 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
     it('Verify that Measure Create and Update actions are recorded in Measure History', () => {
         //Update Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Go to Measure History and verify that Create and Update actions are recorded
         EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)
@@ -115,7 +115,7 @@ describe('Measure History - Create, Update, CMS ID, Sharing and Unsharing Action
         })
 
         OktaLogin.setupUserSession(false)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
@@ -185,9 +185,9 @@ describe('Measure History - Version and Draft actions', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Log out and Clean up', () => {
@@ -264,6 +264,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
             '',
             'Denominator'
         )
+        TestData.saveCurrentMeasureCql(0).then(TestData.expectSavedMeasureCql)
 
         //Create new QI Core measure
         //1
@@ -280,19 +281,17 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
             'boolean'
         )
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         MeasuresPage.actionCenter('edit', 1)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-        cy.get(Header.mainMadiePageButton).click()
+        return cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Log out and Clean up', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure()
-        Utilities.deleteMeasure(undefined, undefined, false, false, 1)
+        return OktaLogin.UILogout()
+            .then(() => Utilities.deleteMeasure())
+            .then(() => Utilities.deleteMeasure(undefined, undefined, false, false, 1))
     })
 
     it('Verify that Associate Measure actions are recorded in Measure History', () => {
@@ -323,7 +322,7 @@ describe('Measure History - Associate Measure and Export Measure actions', () =>
             })
         })
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit', 1)
         //Go to Measure History and verify that Associate Measure action is recorded
         EditMeasurePage.actionCenter(EditMeasureActions.viewHistory)
@@ -362,7 +361,7 @@ describe('Measure History - Qi Core Export Test case Action', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(qiCoreMeasureName, qiCoreCqlLibraryName, qiCoreMeasureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Log out and Clean up', () => {
@@ -434,7 +433,7 @@ describe('Measure History - QDM Export Test case Action', () => {
         )
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1')
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
     })
 
@@ -445,7 +444,7 @@ describe('Measure History - QDM Export Test case Action', () => {
 
     it('Verify that Export QDM Test case Action is recorded in Measure History', () => {
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Case page
         TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)

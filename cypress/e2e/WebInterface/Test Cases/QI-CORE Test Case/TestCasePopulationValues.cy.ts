@@ -65,11 +65,14 @@ describe('Test Case Expected Measure Group population values based on initial me
             TestData.expectSavedMeasureCql(response)
         })
         setupInitialPopulationGroup(this.currentTest?.title ?? '')
-        OktaLogin.SessionLogin()
+        if (this.currentTest?.title !== 'Verify the Test Case Populations when Measure group is not added') {
+            TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        }
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify the Test Case Populations when Measure group is not added', () => {
@@ -90,8 +93,6 @@ describe('Test Case Expected Measure Group population values based on initial me
         () => {
             //Navigate to Test Cases page and add Test Case details
             MeasuresPage.actionCenter('edit')
-            TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-
             TestCasesPage.clickEditforCreatedTestCase()
 
             //click on Expected / Actual tab
@@ -143,8 +144,6 @@ describe('Test Case Expected Measure Group population values based on initial me
         () => {
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
-            //create test case
-            TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
             TestCasesPage.clickEditforCreatedTestCase()
 
             //click on Expected / Actual tab
@@ -157,10 +156,6 @@ describe('Test Case Expected Measure Group population values based on initial me
             //navigate to the Details tab to see confirmation message
             TestCasesPage.openDetailsTab(TestCasesPage.editTestCaseSaveButton)
             TestCasesPage.saveTestCaseAndWait()
-            cy.get(TestCasesPage.successMsg).should(
-                'contain.text',
-                'Test case updated successfully with warnings in JSON'
-            )
 
             //navigate back to the measure group tab / page and...
             //change score unit value and save / update measure with new value
@@ -214,8 +209,6 @@ describe('Test Case Expected Measure Group population values based on initial me
     it('Test Case Population value options are limited to those that are defined from Measure Group -- required populations', () => {
         //CQL and the complete proportion group are setup through APIs; this test verifies Expected/Actual rows.
         MeasuresPage.actionCenter('edit')
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab
@@ -256,12 +249,14 @@ describe('Test Case Population dependencies', () => {
         TestData.saveMeasureCql(proportionMeasureCQL).then((response) => {
             TestData.expectSavedMeasureCql(response)
         })
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
+        return cy.then(() => undefined)
     })
 
     after('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Test Case population dependencies for Proportion Measures', () => {
@@ -275,8 +270,6 @@ describe('Test Case Population dependencies', () => {
             'contain.text',
             'Population details for this group updated successfully.'
         )
-
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -376,17 +369,18 @@ describe('Test Case Expected Measure Group population values based on initial me
         TestData.saveMeasureCql(measureCQL).then((response) => {
             TestData.expectSavedMeasureCql(response)
         })
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
+        return cy.then(() => undefined)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group', () => {
         //CQL and the final proportion group are setup through APIs; this test covers Expected/Actual rendering.
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab

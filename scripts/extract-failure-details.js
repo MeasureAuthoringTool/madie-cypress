@@ -6,8 +6,9 @@
  *
  * The spec output keeps the existing pipeline contract: one failed spec path
  * per line, suitable for rerunning whole files. The details output is for
- * people: it groups failures by spec and includes the failing test or hook
- * title plus the first captured error line.
+ * people: it creates a one-column HTML table, grouped by spec, that can be
+ * copied directly into Confluence. Each row includes failing test or hook
+ * titles plus their first captured error line.
  */
 
 const fs = require('fs')
@@ -87,6 +88,68 @@ function ensureParentDir(filePath) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true })
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function renderFailureDetails() {
+  const groupedFailures = new Map()
+
+  for (const failure of failures) {
+    const fileFailures = groupedFailures.get(failure.file) || []
+    fileFailures.push(failure)
+    groupedFailures.set(failure.file, fileFailures)
+  }
+
+  const rows = failures.length
+    ? Array.from(groupedFailures, ([file, fileFailures]) => `
+      <tr>
+        <td>
+          <p class="file">${escapeHtml(file)}</p>
+          <ul>
+            ${fileFailures.map(failure => `
+              <li>
+                <div>${escapeHtml(failure.title)}</div>
+                ${failure.error ? `<div class="error">${escapeHtml(failure.error)}</div>` : ''}
+              </li>`).join('')}
+          </ul>
+        </td>
+      </tr>`).join('')
+    : `
+      <tr>
+        <td>No failing tests found.</td>
+      </tr>`
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>${escapeHtml(runLabel)}</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    td { border: 1px solid #ccc; padding: 12px; vertical-align: top; }
+    .file { font-family: monospace; font-weight: bold; margin: 0 0 8px; }
+    ul { margin: 0; padding-left: 20px; }
+    li + li { margin-top: 8px; }
+    .error { margin-top: 4px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>${escapeHtml(runLabel)}</h1>
+  <table>
+    <tbody>${rows}
+    </tbody>
+  </table>
+</body>
+</html>
+`
+}
+
 function writeOutputs() {
   ensureParentDir(resolvedSpecOutputFile)
   ensureParentDir(resolvedDetailsOutputFile)
@@ -97,29 +160,7 @@ function writeOutputs() {
   const specs = Array.from(failedSpecs)
   fs.writeFileSync(resolvedSpecOutputFile, specs.join('\n') + (specs.length ? '\n' : ''))
 
-  if (!failures.length) {
-    fs.writeFileSync(resolvedDetailsOutputFile, `${runLabel}\n\nNo failing tests found.\n`)
-    writeSummaryOutputs(specs)
-    return
-  }
-
-  const lines = [runLabel, '']
-  let currentFile = null
-
-  for (const failure of failures) {
-    if (failure.file !== currentFile) {
-      currentFile = failure.file
-      lines.push(failure.file)
-    }
-
-    lines.push(`  - ${failure.title}`)
-    if (failure.error) {
-      lines.push(`    ${failure.error}`)
-    }
-    lines.push('')
-  }
-
-  fs.writeFileSync(resolvedDetailsOutputFile, lines.join('\n'))
+  fs.writeFileSync(resolvedDetailsOutputFile, renderFailureDetails())
   writeSummaryOutputs(specs)
 }
 

@@ -8,6 +8,7 @@ import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../../Shared/Header'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { QDMElements } from '../../../../../Shared/QDMElements'
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -32,14 +33,14 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
-    afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
-        OktaLogin.UILogout()
+    afterEach('Clean up Measure', () => {
+        return Utilities.deleteMeasure()
     })
 
     it('Add Quantity attribute to the Test case and Edit from Elements table', () => {
@@ -122,7 +123,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //select the SNOMED code system
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
 
         //select a value for the code
         cy.get(TestCasesPage.codeSystemValueSelector).click()
@@ -151,6 +152,13 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         TestCasesPage.qdmTestCaseElementAction('edit')
 
         //Add Code to the Element
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes)
+            .should('be.visible')
+            .then(($tab) => {
+                if ($tab.attr('aria-selected') !== 'true') {
+                    $tab[0].click()
+                }
+            })
         cy.get(TestCasesPage.codeSystemSelector).click()
         cy.get(TestCasesPage.codeLOINCValue).click()
         cy.get(TestCasesPage.codeSelector).click()

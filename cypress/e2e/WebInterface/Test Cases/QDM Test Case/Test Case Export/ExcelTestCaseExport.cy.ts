@@ -45,7 +45,7 @@ describe('QDM Test Case Excel Export', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Group Creation
         //Click on Measure Group tab

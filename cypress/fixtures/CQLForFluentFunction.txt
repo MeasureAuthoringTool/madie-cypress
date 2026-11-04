@@ -21,6 +21,5 @@ define "Qualifying Encounters":
  ) ValidEncounter
 		where ValidEncounter.isFinishedEncounter()
 
-{home}define fluent function "isFinishedEncounter"(Enc Encounter):
-  (Enc E where E.status = 'finished') is not null {del}{del}{del}{del}
-{home}
+define fluent function "isFinishedEncounter"(Enc Encounter):
+  (Enc E where E.status = 'finished') is not null

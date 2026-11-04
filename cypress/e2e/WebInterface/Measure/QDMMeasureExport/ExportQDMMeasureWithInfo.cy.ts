@@ -1,12 +1,11 @@
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { CreateMeasureOptions, CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { QdmCql } from '../../../../Shared/QDMMeasuresCQL'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { MeasureActionOptions, MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -58,12 +57,9 @@ describe('Successful QDM Measure Export with Info', () => {
             '',
             'Denominator'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        OktaLogin.SessionLogin()
 
         cy.get(Header.mainMadiePageButton).click()
         exportAndUnzipMeasure(exportOptions)
@@ -105,12 +101,9 @@ describe('Successful QDM Measure Export for Publish', () => {
             '',
             'Denominator'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        OktaLogin.SessionLogin()
 
         cy.get(Header.mainMadiePageButton).click()
         exportAndUnzipMeasure(exportOptions)

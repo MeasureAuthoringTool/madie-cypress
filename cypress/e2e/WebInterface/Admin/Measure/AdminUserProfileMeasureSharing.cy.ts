@@ -1,11 +1,11 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { MeasureCQL } from '../../../Shared/MeasureCQL'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { Utilities } from '../../../Shared/Utilities'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { Utilities } from '../../../../Shared/Utilities'
 
 const assertShareDialogControls = (title: string, instructions: string[]): void => {
     cy.get('[role="dialog"]')
@@ -103,7 +103,7 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
             AdminUserProfilePage.shareTooltip,
             'Share/unshare'
         )
-        cy.get(AdminUserProfilePage.shareButton).click()
+        AdminUserProfilePage.openShareMenu()
         cy.get(EditMeasurePage.shareOption).should('be.visible').and('have.text', 'Share With')
         cy.get(EditMeasurePage.unshareOption).should('be.visible').and('have.text', 'Unshare')
 
@@ -132,7 +132,7 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
         shareMeasuresWithProfileUser()
         AdminUserProfilePage.openUserProfile(measureOwner)
         selectBothMeasures()
-        cy.get(AdminUserProfilePage.shareButton).click()
+        AdminUserProfilePage.openShareMenu()
         cy.get(EditMeasurePage.unshareOption).should('be.visible').click()
         assertShareDialogControls('Unshare From', [
             'Please note: When sharing a measure, all versions and drafts are shared, but only the most recent measure name appears below.',
@@ -152,8 +152,11 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(measureOwner)
         selectBothMeasures()
-        cy.get(AdminUserProfilePage.shareButton).should('be.enabled').click()
-        cy.get(EditMeasurePage.shareOption).should('be.visible').click()
+        AdminUserProfilePage.openShareMenu()
+        cy.get(EditMeasurePage.shareOption)
+            .should('be.visible')
+            .then(($option) => $option[0].click())
+        cy.get('[role="dialog"]').should('be.visible')
 
         cy.get(EditMeasurePage.harpIdInputTextBox).type(sharedProfileUser)
         cy.get(EditMeasurePage.addBtn).should('be.enabled').click()
@@ -181,7 +184,7 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
         OktaLogin.AdminLogin()
         AdminUserProfilePage.openUserProfile(measureOwner)
         selectBothMeasures()
-        cy.get(AdminUserProfilePage.shareButton).should('be.enabled').click()
+        AdminUserProfilePage.openShareMenu()
         cy.get(EditMeasurePage.unshareOption).should('be.visible').click()
 
         cy.get('[role="dialog"]').within(() => {
@@ -223,13 +226,22 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
             AdminUserProfilePage.shareTooltip,
             'Unshare'
         )
-        cy.get(AdminUserProfilePage.shareButton).click()
+        AdminUserProfilePage.openShareMenu()
         cy.get(EditMeasurePage.unshareOption).should('be.visible').and('have.text', 'Unshare')
         cy.get(EditMeasurePage.shareOption).should('not.exist')
         cy.get(EditMeasurePage.unshareOption).then(($option) => {
             $option[0].click()
         })
 
+        cy.get('[role="dialog"]').within(() => {
+            cy.contains(qicoreMeasureName).should('be.visible')
+            cy.contains(qdmMeasureName).should('be.visible')
+            cy.contains(sharedProfileUser).should('be.visible')
+            cy.get('input[type="checkbox"]:checked').uncheck()
+        })
+
+        cy.intercept('PUT', '**/api/measures/unshared').as('unshareSharedMeasures')
+        cy.get(EditMeasurePage.saveUserBtn).should('be.enabled').click()
         cy.get(EditMeasurePage.acceptBtn)
             .should('be.visible')
             .closest('.MuiDialog-paper')
@@ -243,7 +255,6 @@ describe('Admin user profile Measure Sharing and Unsharing', () => {
                 cy.get(EditMeasurePage.acceptBtn).should('be.enabled')
             })
 
-        cy.intercept('PUT', '**/api/measures/unshared').as('unshareSharedMeasures')
         cy.get(EditMeasurePage.acceptBtn).click()
         cy.wait('@unshareSharedMeasures').then(({ request, response }) => {
             expect(response?.statusCode).to.eq(200)

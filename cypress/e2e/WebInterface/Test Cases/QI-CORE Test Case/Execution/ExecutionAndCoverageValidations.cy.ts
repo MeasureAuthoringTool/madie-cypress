@@ -7,6 +7,7 @@ import { TestData } from '../../../../../Shared/TestData'
 import { Utilities } from '../../../../../Shared/Utilities'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { QiCore4Cql } from '../../../../../Shared/FHIRMeasuresCQL'
+import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 
 const now = Date.now()
 const measureName = 'ExecCoverageValidations' + now
@@ -28,16 +29,17 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestData.saveMeasureCql(`${measureCQL}\n`).then((response) => {
             TestData.expectSavedMeasureCql(response)
         })
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Run / Execute single passing Test Case', () => {
-        TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, false)
+        TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -73,7 +75,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
     it('Run / Execute one passing and one failing Test Cases', () => {
         //Navigate to Test Cases page and add Test Case details
-        TestCasesPage.createTestCase('PassingTestCase', testCase.description, testCase.group, validTestCaseJson, false)
+        TestCasesPage.createTestCase('PassingTestCase', testCase.description, testCase.group, validTestCaseJson, false, true)
 
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
@@ -91,8 +93,19 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         //create a test case that will fail:
 
         TestCasesPage.returnToTestCasesList(TestCasesPage.newTestCaseButton)
-        TestCasesPage.createTestCase('FailingTestCase', testCase.description, testCase.group, validTestCaseJson, false)
-
+        MeasuresPage.openMeasureDetailsById()
+        TestCasesPage.createTestCase('FailingTestCase', testCase.description, testCase.group)
+        TestData.requestMeasureTestCase('GET').then((response) => {
+            expect(response.status).to.eq(200)
+            expect(response.body.title).to.eq('FailingTestCase')
+            return TestData.requestMeasureTestCase('PUT', { ...response.body, json: validTestCaseJson }).then(
+                (updatedResponse) => {
+                    expect(updatedResponse.status).to.eq(200)
+                    expect(updatedResponse.body.json).to.be.a('string').and.not.be.empty
+                }
+            )
+        })
+        MeasuresPage.openMeasureDetailsById()
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
@@ -128,7 +141,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
             testCase.description,
             testCase.group,
             validTestCaseJson,
-            undefined
+            false,
+            true
         )
 
         TestCasesPage.clickEditforCreatedTestCase()

@@ -177,7 +177,7 @@ describe('Test Case population values based on Measure Group population definiti
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
-        TestData.requestMeasureGroup('POST', measureGroupRequestBody()).then((response) => {
+        return TestData.requestMeasureGroup('POST', measureGroupRequestBody()).then((response) => {
             expect(response.status).to.eql(201)
             expect(response.body.id).to.be.exist
             TestData.writeFixture('groupId', response.body.id)
@@ -632,7 +632,7 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
     })
 })
 
-describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
+describe('Measure Service: Removed test case import endpoint', () => {
 
     beforeEach('Create Measure and measure group', () => {
 
@@ -652,14 +652,10 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     })
 
     afterEach('Clean up', () => {
-
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
-    it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
-
-        OktaLogin.setupUserSession(true)
-
+    it('Returns Method Not Allowed when adding test cases through the removed endpoint', () => {
         TestData.requestMeasureTestCaseList([{
             "name": TCName + '1',
             "title": TCTitle + '1',
@@ -681,7 +677,7 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
             "description": TCDescription,
             "json": TCJson,
         }], { failOnStatusCode: false }).then((response) => {
-            expect(response.status).to.eql(403)
+            expect(response.status).to.eql(405)
         })
     })
 })

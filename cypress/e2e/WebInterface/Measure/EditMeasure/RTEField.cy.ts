@@ -6,10 +6,14 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 const assertMeaningfulRteHtml = (expectedHtml: string): void => {
+    const normalizeDefaultTableSpans = (html: string): string =>
+        html.replace(/\s(?:colspan|rowspan)="1"/g, '')
+
     cy.get(EditMeasurePage.measureGenericFieldRTETextBox)
         .invoke('html')
         .then((html) => {
-            expect((html ?? '').replace(/<p><br class="ProseMirror-trailingBreak"><\/p>$/, '')).to.eq(expectedHtml)
+            const actualHtml = (html ?? '').replace(/<p><br class="ProseMirror-trailingBreak"><\/p>$/, '')
+            expect(normalizeDefaultTableSpans(actualHtml)).to.eq(normalizeDefaultTableSpans(expectedHtml))
         })
 }
 

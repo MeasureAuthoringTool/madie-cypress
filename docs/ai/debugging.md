@@ -26,10 +26,26 @@ Find the cause before changing code.
 
 ## Timeout Debugging
 
+## Focused Local Reproduction
+
+Run one Cypress spec through the repository script before using CI timeout wrappers,
+parallel runners, or a broader collection:
+
+```bash
+env -u ELECTRON_RUN_AS_NODE CI=1 NO_COLOR=1 ./node_modules/.bin/cypress run \
+  --headless --browser chrome --env configFile=test \
+  --spec 'cypress/e2e/<path-to-spec>.cy.ts'
+```
+
+Use the exact spec path. This keeps the CI-style TEST configuration and browser
+selection while limiting failures to the scenario being debugged.
+
 Parallel Cypress workers are terminated when they produce no output for 20 minutes. Use
 `CYPRESS_WORKER_INACTIVITY_TIMEOUT_SECONDS` to tune this threshold for a run, or set it to `0` to
 disable inactivity detection. The worker wrapper captures `scripts/ci-diagnostics.sh` output before
 terminating the process group so the console log retains the stuck process and latest-result state.
+
+For a grouped TEST CI run, choose Jenkins `TEST_SCRIPT=test:specific:files:parallel:headless` and put one spec path per line in `MANUAL_SPEC_LIST`. This uses the existing three-worker spec-list runner without headed Chrome. Keep service specs in a separate run when terminology or other shared endpoints are under load.
 
 For timeouts, check:
 
@@ -91,6 +107,8 @@ This pattern was confirmed in `QDMCVMeasure_with_multiple_Groups_with_MO.cy.ts`:
 If native tab activation updates the URL but the previously selected tab remains rendered, the edit shell is already desynchronized. First verify the preceding save has settled. If the mismatch persists, reset at the measure-list boundary, wait for the list to render, reopen the correct fixture index, and then activate the destination tab. A same-route reload may rehydrate the stale tab state and is not sufficient evidence of recovery.
 
 For versioned measures, distinguish View mode from Edit mode when using measure action helpers. Do not wait for an edit-only CQL tab when the action opens a versioned measure for viewing; open the Test Cases tab and synchronize on its destination content instead.
+
+After changing a measure group's scoring or population basis, a test-case editor opened in the same SPA session may retain the previous expected-value control type even while its group label shows the new configuration. Once the group save succeeds, reload the measure before reopening the test case, then assert the expected control type and value. This is a different failure from a desynchronized tab shell: the route and tab can be correct while the input model is stale.
 
 ## Lifecycle and Teardown Failures
 

@@ -137,17 +137,17 @@ describe('Create and Update QDM Test Case', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Create and Update Test Case for QDM Measure', () => {
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -208,11 +208,8 @@ describe('Create and Update QDM Test Case', () => {
         Utilities.waitForElementVisible(TestCasesPage.meassureCQLVOTab, 3000)
         cy.get(TestCasesPage.meassureCQLVOTab).click()
 
-        cy.get(TestCasesPage.voTCCQLobject).scrollIntoView()
-        Utilities.waitForElementVisible(TestCasesPage.voTCCQLobject, 3000)
-        cy.get(TestCasesPage.voTCCQLobject).click()
-
-        cy.get(TestCasesPage.voTCCQLEditor).should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.voTCCQLobject).should('be.visible')
+        cy.get(TestCasesPage.voTCCQLEditor).should('not.exist')
     })
 
     it('Add Test Case Expected values for Boolean Measure', () => {
@@ -255,11 +252,11 @@ describe('Non Boolean Test case Expected Values', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'SDE Ethnicity')
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Add Test Case Expected values for Non Boolean Measure', () => {
@@ -295,11 +292,11 @@ describe('Create and update QDM Test case validations', () => {
 
     beforeEach('Create measure and login', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName)
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Create Test case Validation: Test case Title has special characters', () => {

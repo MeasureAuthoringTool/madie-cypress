@@ -5,7 +5,6 @@ import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { Header } from '../../../../Shared/Header'
 import { QiCore6Cql } from '../../../../Shared/FHIRMeasuresCQL'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestData } from '../../../../Shared/TestData'
 
@@ -51,7 +50,7 @@ describe('Measure List Page Searching', () => {
         CqlLibraryName = 'MeasureSearchLib1' + Date.now()
 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 39500)
     })
 
@@ -147,15 +146,10 @@ describe('Measure Filter on measure list page and searching with filters', () =>
         )
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 1)
 
-        OktaLogin.Login()
+        TestData.saveMeasureCql(qiCorev6Cql, 0).then(TestData.expectSavedMeasureCql)
+        TestData.saveMeasureCql(measureCQL, 1).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 39500)
-        MeasuresPage.actionCenter('edit', 0)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.actionCenter('edit', 1)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Button for Qi Core measure
         MeasuresPage.actionCenter('edit', 0)
@@ -183,12 +177,13 @@ describe('Measure Filter on measure list page and searching with filters', () =>
             TestData.writeFixture('cmsId4QDM', (request?.response?.body.cmsId).toString())
         })
         cy.get(EditMeasurePage.cmsIdInput).should('not.be.null')
-        cy.get(Header.mainMadiePageButton).click()
+        return cy.get(Header.mainMadiePageButton).click()
     })
 
     after('Logout', () => {
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0)
-        Utilities.deleteMeasure(QDMmeasureName, QDMCqlLibraryName, false, false, 1)
+        return Utilities.deleteMeasure(measureName, CqlLibraryName, false, false, 0).then(() =>
+            Utilities.deleteMeasure(QDMmeasureName, QDMCqlLibraryName, false, false, 1)
+        )
     })
 
     it('Measure search on My Measures and All Measures tab using the Measure filter', () => {
@@ -327,7 +322,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
 
     it('Measure search on My Measures and All Measures tab using the Version filter', () => {
         //Login
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //set filter to "Version"
         cy.get(MeasuresPage.filterByDropdown).click()
@@ -357,7 +352,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
 
     it('Measure search on My Measures and All Measures tab using the Model filter', () => {
         //Login
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //set filter to "Model"
         cy.get(MeasuresPage.filterByDropdown).click()
@@ -417,7 +412,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
 
     it('Measure search on My Measures and All Measures tab using the CMS ID filter', () => {
         //Login
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //set filter to "CMS ID"
         cy.get(MeasuresPage.filterByDropdown).click()
@@ -485,7 +480,7 @@ describe('Measure Filter on measure list page and searching with filters', () =>
 
     it('Measure search on My Measures and All Measures tab using no filter', () => {
         //Login
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //set filter to "-"
         cy.get(MeasuresPage.filterByDropdown).click()

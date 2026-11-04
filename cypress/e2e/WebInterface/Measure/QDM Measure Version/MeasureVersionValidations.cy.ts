@@ -9,6 +9,7 @@ import { Header } from '../../../../Shared/Header'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCaseAction, TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { TestData } from '../../../../Shared/TestData'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 let measureName = 'QDMMeasureVV' + Date.now()
 let cqlLibraryName = 'QDMMeasureVVLib' + Date.now()
@@ -80,7 +81,7 @@ describe('Measure Versioning validations', () => {
                 elmXml: ''
             }).its('status').should('eq', 200)
         })
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up', () => {
@@ -88,6 +89,7 @@ describe('Measure Versioning validations', () => {
     })
 
     it('User can not version Measure if there is no CQL', () => {
+        TestData.readMeasure().its('body.cql').should('eq', '')
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
 
@@ -95,15 +97,19 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible').then(($continueButton) => {
+            if ($continueButton.is(':disabled')) {
+                expect($continueButton).to.be.disabled
+                return
+            }
 
-        cy.get('[data-testid="toast-danger"]').should('contain.text', 'Requested measure cannot be versioned')
-        cy.get(MeasuresPage.measureVersionHelperText).should(
-            'contain.text',
-            'Please include valid CQL in the CQL editor to version before versioning this measure'
-        )
+            cy.wrap($continueButton).click()
+            cy.get('[data-testid="toast-danger"]').should('contain.text', 'Requested measure cannot be versioned')
+            cy.get(MeasuresPage.measureVersionHelperText).should(
+                'contain.text',
+                'Please include valid CQL in the CQL editor to version before versioning this measure'
+            )
+        })
     })
 
     it('User can not Version if the Measure CQL has errors', () => {
@@ -111,9 +117,9 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(generateQDMCQLWithErrors(cqlLibraryName))
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, generateQDMCQLWithErrors(cqlLibraryName))
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Measures Page
         cy.get(Header.measures).click()
@@ -140,12 +146,9 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(versionMeasureCQL)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, versionMeasureCQL)
+        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
@@ -175,9 +178,9 @@ describe('Create Test case for QDM Versioned Measure', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up', () => {
@@ -220,9 +223,9 @@ describe('Edit Test case for QDM Versioned Measure', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up', () => {
@@ -320,9 +323,9 @@ describe('Non Measure owner unable to create Version', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()

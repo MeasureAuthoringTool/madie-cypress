@@ -10,6 +10,7 @@ import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 const measureName = 'MeasureSharing' + Date.now()
 const cqlLibraryName = 'MeasureSharingLib' + Date.now()
@@ -37,14 +38,13 @@ describe('Measure Sharing', () => {
         harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-        OktaLogin.UILogout()
+        TestData.saveMeasureCql(`${measureCQL}\n`).then(TestData.expectSavedMeasureCql)
+
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Log out and Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify shared Measure is viewable under Shared Measure tab', () => {
@@ -78,10 +78,8 @@ describe('Measure Sharing', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
-            CQLEditorPage.replaceCqlDocumentText(cql)
-        })
-        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -159,10 +157,8 @@ describe('Measure Sharing', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
-            CQLEditorPage.replaceCqlDocumentText(cql)
-        })
-        CQLEditorPage.saveCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -193,28 +189,13 @@ describe('Measure Sharing', () => {
     })
 
     it('Action centre share button disabled for Non Measure Owner', () => {
-        let currentUser = Cypress.expose('selectedUser')
-
-        //Login
         OktaLogin.AltLogin()
 
-        //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', newMeasureName)
-        cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
-            .should('exist')
-            .then((fileContents) => {
-                Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 30000)
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[type="checkbox"]')
-                    .scrollIntoView()
-                cy.get('[data-testid="measure-name-' + fileContents + '_select"]')
-                    .find('[type="checkbox"]')
-                    .check()
-            })
-        cy.get('[data-testid="share-action-btn"]').should('be.visible')
-        cy.get('[data-testid="share-action-btn"]').should('be.disabled')
+        MeasuresPage.searchForMeasureByName(newMeasureName)
+        MeasuresPage.assertMeasureSearchRowContains(0, newMeasureName)
+        MeasuresPage.selectMeasure()
+        cy.get('[data-testid="share-action-btn"]').should('be.visible').and('be.disabled')
     })
 })
 
@@ -227,10 +208,10 @@ describe('Measure Sharing - Multiple instances', () => {
         harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        TestData.saveMeasureCql(`${measureCQL}\n`).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -256,10 +237,11 @@ describe('Measure Sharing - Multiple instances', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
         cy.get(Header.measures).click()
+        return cy.get(MeasuresPage.measureListTitles).should('be.visible').then(() => undefined)
     })
 
     afterEach('Log out and Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
@@ -314,10 +296,11 @@ describe('Delete Test Case with Shared user', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        return cy.then(() => undefined)
     })
 
     afterEach('Log out and Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify Test Case can be deleted by the shared user', () => {
@@ -345,50 +328,43 @@ describe('Delete Test Case with Shared user', () => {
 })
 
 describe("Remove user's share access from a measure", () => {
+    const removeShareMeasureName = `RemoveMeasureShare${Date.now()}`
+    const removeShareLibraryName = `RemoveMeasureShareLib${Date.now()}`
+
     beforeEach('Create Measure and Set Access Token', () => {
         harpUserALT = OktaLogin.getUser(true)
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(removeShareMeasureName, removeShareLibraryName, measureCQL)
 
         // initial share to harpUserAlt
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+        return cy.then(() => undefined)
     })
 
     afterEach('Log out and Clean up', () => {
-        Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
-        Utilities.deleteMeasure()
+        return Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true).then(() => Utilities.deleteMeasure())
     })
 
     it('After removing access, user can no longer edit on the measure', () => {
         OktaLogin.AltLogin()
         cy.get(LandingPage.sharedMeasures).click()
+        MeasuresPage.searchForMeasureByName(removeShareMeasureName)
+        MeasuresPage.assertMeasureSearchRowContains(0, removeShareMeasureName)
+        MeasuresPage.actionCenter('edit')
 
-        // captures name of measure in 2nd row
-        cy.get('[data-testid*="_measureName"]')
-            .eq(1)
-            .then((secondMeasure) => {
-                let capturedName = secondMeasure.text()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
-                MeasuresPage.actionCenter('edit')
+        // Add a test case to prove edit access.
+        TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS')
 
-                cy.get(EditMeasurePage.testCasesTab).click()
+        // Revoke the share as the owner, then verify this measure is no longer shared.
+        Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
+        OktaLogin.setupUserSession(false)
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
 
-                // add a test case to prove edit access
-                TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS')
-
-                // Log out ALT user and revoke share as the measure owner
-                OktaLogin.UILogout()
-                Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
-                OktaLogin.setupUserSession(false)
-                Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
-
-                // Log back in as ALT user and verify edit access was removed
-                OktaLogin.AltLogin()
-                cy.get(LandingPage.sharedMeasures).click()
-                Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
-
-                // proves that edit access was removed — measure that was 2nd is now 1st
-                MeasuresPage.checkFirstRow({ name: capturedName })
-            })
+        OktaLogin.AltLogin()
+        cy.get(LandingPage.sharedMeasures).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30000)
+        cy.get(MeasuresPage.measureListRows).should('not.contain.text', removeShareMeasureName)
     })
 })

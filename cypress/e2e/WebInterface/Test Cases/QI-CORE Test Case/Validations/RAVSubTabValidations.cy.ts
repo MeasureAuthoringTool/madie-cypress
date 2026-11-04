@@ -31,7 +31,7 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCaseLizzyHealth)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Log out and Clean up', () => {

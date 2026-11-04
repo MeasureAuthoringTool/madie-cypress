@@ -1,11 +1,11 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
-import { Environment } from '../../../Shared/Environment'
-import { LibraryCQL } from '../../../Shared/LibraryCQL'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { TestData } from '../../../Shared/TestData'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { Environment } from '../../../../Shared/Environment'
+import { LibraryCQL } from '../../../../Shared/LibraryCQL'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { TestData } from '../../../../Shared/TestData'
 
 const assertTransferDialog = (
     libraryName: string,

@@ -1,13 +1,13 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
-import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
-import { Environment } from '../../../Shared/Environment'
-import { MeasureCQL } from '../../../Shared/MeasureCQL'
-import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
-import { MadieObject, Utilities } from '../../../Shared/Utilities'
-import { MeasuresPage } from '../../../Shared/MeasuresPage'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Environment } from '../../../../Shared/Environment'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { MadieObject, Utilities } from '../../../../Shared/Utilities'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
 
 describe('Admin user profile measure View and Edit navigation', () => {
     let measureName = ''
@@ -84,13 +84,21 @@ describe('Admin user profile measure View and Edit navigation', () => {
 
     afterEach(() => {
         if (measureLocked) {
-            Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
+            return Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
+                .then(() => {
+                    if (measureVersioned) {
+                        return Utilities.deleteVersionedMeasure(measureName, libraryName)
+                    }
+
+                    return measureCreated ? Utilities.deleteMeasure() : cy.wrap(undefined)
+                })
         }
+
         if (measureVersioned) {
-            Utilities.deleteVersionedMeasure(measureName, libraryName)
-        } else if (measureCreated) {
-            Utilities.deleteMeasure()
+            return Utilities.deleteVersionedMeasure(measureName, libraryName)
         }
+
+        return measureCreated ? Utilities.deleteMeasure() : cy.wrap(undefined)
     })
 
     it('opens an unshared draft from Owned Measures in read-only View mode', () => {

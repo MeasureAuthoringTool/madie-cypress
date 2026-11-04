@@ -44,7 +44,7 @@ if (!scriptCommand) {
   process.exit(0)
 }
 
-if (scriptName === 'test:specific:files:parallel' || scriptName === 'dev:specific:files:parallel') {
+if (scriptName === 'test:specific:files:parallel' || scriptName === 'test:specific:files:parallel:headless' || scriptName === 'dev:specific:files:parallel') {
   writeSpecs(readSpecListFile(path.join(rootDir, 'test-files.txt')))
   process.exit(0)
 }

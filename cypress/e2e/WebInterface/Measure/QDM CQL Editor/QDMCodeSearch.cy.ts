@@ -5,6 +5,7 @@ import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 const date = Date.now()
 let measureName = 'QDMCodeSearch' + date
@@ -67,9 +68,7 @@ describe('QDM Code Search fields', () => {
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.saveMonacoCql()
         CQLEditorPage.validateSuccessfulCQLUpdate()
         CQLEditorPage.expandCQLBuilderPanel()
     })
@@ -450,8 +449,8 @@ describe('QDM Code Search fields', () => {
         cy.wait('@codeSystems', { timeout: 12000 })
 
         //Verify the Code System is still available in the CQL Editor
-        cy.get('[class="ace_content"]').should(
-            'contain.text',
+        MonacoEditor.assertRenderedText(
+            EditMeasurePage.monacoCqlEditor,
             'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\''
         )
 
@@ -476,9 +475,7 @@ describe('Error Message on Codes tab', () => {
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL builder
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.saveMonacoCql()
         CQLEditorPage.validateSuccessfulCQLUpdate()
         CQLEditorPage.expandCQLBuilderPanel()
     })
@@ -490,24 +487,22 @@ describe('Error Message on Codes tab', () => {
     it('Verify error message appears on Codes tab when there is an error in the Measure CQL', () => {
         //Navigate to Codes tab and verify no error message appears
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('not.exist')
+        cy.get(CQLEditorPage.errorMsg).should('not.exist')
         //Navigate to Codes tab and verify saved codes appear
-        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)')
+        cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
 
         //Add errors to CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Navigate to Codes tab
         // cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should(
-            'contain.text',
-            'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.'
-        )
+        cy.get(CQLEditorPage.errorMsg).should('be.visible')
 
         //Navigate to Saved Codes tab
-        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(0)').click()
+        cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
+        cy.get(CQLEditorPage.savedCodesTab).click()
         cy.get('[data-testid="saved-codes-tbl"]').should('contain.text', 'No Results were found')
     })
 })

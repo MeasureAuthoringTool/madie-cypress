@@ -88,15 +88,15 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
         // shares QiCore measure to harpUserALT - need this user to lock the measure later
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.get(EditMeasurePage.generateCmsIdButton).click()
@@ -115,7 +115,7 @@ describe('Measure Association is not allowed when QiCore measure is locked', () 
         Utilities.lockSharedMeasure(true)
 
         // this ensures we load the list with visibility of the lock & that we reset the tokens correctly
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         selectMeasureByName(qicoreMeasureName)
         selectMeasureByName(qdmMeasureName)

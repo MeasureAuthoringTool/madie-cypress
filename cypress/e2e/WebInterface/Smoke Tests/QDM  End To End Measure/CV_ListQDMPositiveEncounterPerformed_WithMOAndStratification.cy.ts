@@ -3,7 +3,7 @@ import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { QDMElements } from '../../../../Shared/QDMElements'
@@ -149,6 +149,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         )
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
     })
@@ -160,9 +161,6 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
     it('End to End CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        CQLEditorPage.saveCql({ collapseEditor: true })
 
         //Group Creation
 
@@ -259,7 +257,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[id="value-set-selector"]').click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click()
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('06/10/2025 05:00 AM')
@@ -344,7 +342,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[id="value-set-selector"]').click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click()
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('01/29/2025 08:30 AM')
@@ -377,7 +375,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[id="value-set-selector"]').click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click()
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('02/06/2025 08:00 AM')
@@ -406,7 +404,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[id="value-set-selector"]').click()
         cy.get('[data-testid="option-2.16.840.1.113762.1.4.1111.164"]').click()
         cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+        QDMElements.selectCodeSystemOption('SNOMEDCT')
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="option-434081000124108"]').click()
         cy.get(TestCasesPage.addAttribute).click()

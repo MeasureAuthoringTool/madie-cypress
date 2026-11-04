@@ -14,6 +14,13 @@ Verify:
 - No unnecessary refactoring
 - Documentation updated if needed
 
+## Creating a PR
+
+- Prefer the GitHub CLI when it is available and authenticated.
+- If the CLI is unavailable, use the GitHub REST API only with the workstation's existing Git credential helper. Keep the credential in a short-lived shell variable used solely for the `Authorization` request header.
+- Never print, log, write, commit, or include a credential in a command result, PR body, fixture, or configuration file.
+- Serialize the PR body as JSON, create or update the PR, then fetch its metadata to verify the title, base branch, head branch, and non-empty body.
+
 ## PR Structure
 
 ### Summary

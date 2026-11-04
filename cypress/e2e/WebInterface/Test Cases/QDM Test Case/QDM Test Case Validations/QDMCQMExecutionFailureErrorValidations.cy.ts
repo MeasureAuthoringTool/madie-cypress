@@ -86,10 +86,10 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
-            appendCommand: generateQDMCQLWithErrors(CqlLibraryName),
+        CQLEditorPage.openMonacoCqlEditor()
+        CQLEditorPage.replaceMonacoCqlDocument(generateQDMCQLWithErrors(CqlLibraryName))
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
-            parseSpecialCharSequences: false,
             waitForDisabled: true
         })
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').and('contain.text', 'Error')
@@ -119,7 +119,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         MeasuresPage.actionCenter('edit')
 
         //navigate to the CQL Editor tab, for the measure
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -203,7 +203,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
     it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

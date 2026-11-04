@@ -89,7 +89,9 @@ export class OktaLogin {
         }
 
         return cy.task<string | null>('getAvailableReviewer').then((reviewerUser) => {
-            expect(reviewerUser, 'Available reviewer user').to.be.a('string').and.not.be.empty
+            if (typeof reviewerUser !== 'string' || reviewerUser.trim().length === 0) {
+                throw new Error('No reviewer test account is currently available')
+            }
             Cypress.expose('reviewerUser', reviewerUser)
             return reviewerUser
         })
@@ -151,14 +153,13 @@ export class OktaLogin {
     // Logout() — NOT UILogout().
     // ------------------------------------------------------
 
-    public static SessionLogin(): void {
+    public static SessionLogin(): Cypress.Chainable {
         const who = Cypress.expose('selectedUser')
 
-        cy.session('login-' + who, () => {
+        return cy.session('login-' + who, () => {
             // Only acquire the access token via API — no browser navigation.
-            // This avoids the cy.intercept/cy.wait('@serviceConfig') race
-            // condition that occurs when cy.session() resets the page to
-            // about:blank before running the setup function.
+            // cy.session() resets the page to about:blank before running this
+            // setup function, so browser navigation belongs after session restore.
             //
             // The cookie-setter commands do pure HTTP requests to Okta
             // (authn → authorize → token) and set the accessToken cookie.
@@ -177,17 +178,15 @@ export class OktaLogin {
             validate() {
                 cy.getCookie('accessToken').should('exist')
             },
+        }).then(() => {
+            return cy.visit('/').get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible').then(() => undefined)
         })
-
-        // After session restore/create, navigate to the app.
-        cy.visit('/')
-        cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
-    public static SessionAltLogin(): void {
+    public static SessionAltLogin(): Cypress.Chainable {
         const who = Cypress.expose('selectedAltUser')
 
-        cy.session('alt-login-' + who, () => {
+        return cy.session('alt-login-' + who, () => {
             const cookieSetters: Record<string, () => void> = {
                 altHarpUser:  () => cy.setAccessTokenCookieALT(),
                 altHarpUser2: () => cy.setAccessTokenCookieALT2(),
@@ -203,10 +202,9 @@ export class OktaLogin {
             validate() {
                 cy.getCookie('accessToken').should('exist')
             },
+        }).then(() => {
+            return cy.visit('/').get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible').then(() => undefined)
         })
-
-        cy.visit('/')
-        cy.get(LandingPage.newMeasureButton, { timeout: 60000 }).should('be.visible')
     }
 
     // ------------------------------------------------------
@@ -226,17 +224,8 @@ export class OktaLogin {
         cy.clearLocalStorage();
         cy.clearAllSessionStorage?.({ log: true });
 
-        // Register the feature-config intercept before navigation.
-        cy.intercept('/env-config/serviceConfig.json').as('serviceConfig');
-
         // Visit login and ensure fresh sessionStorage (with retry on network errors)
         cy.visitWithRetry('/login', { onBeforeLoad: (win) => win.sessionStorage.clear() });
-
-        // Capture and write feature flags — use a generous timeout because
-        // retries inside visitWithRetry can delay when the request fires.
-        cy.wait('@serviceConfig', { timeout: 60000 }).then((config) => {
-            cy.writeFile('cypress/fixtures/featureFlags', config.response!.body.features);
-        });
 
         // Normalize the user key to a plain string (avoids TS index weirdness)
         const rawWho = Cypress.expose(args.selectedEnvVar);

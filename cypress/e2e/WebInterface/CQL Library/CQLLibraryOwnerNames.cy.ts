@@ -13,6 +13,11 @@ describe('Library Owner Names Display', () => {
     before('Login', () => {
 
         CQLLibraryPage.createLibraryAPI(CqlLibraryName, SupportedModels.qiCore6)
+        return cy.then(() => undefined)
+    })
+
+    after('Clean up created CQL library', () => {
+        return Utilities.deleteLibrary()
     })
 
     it('Making a new CQL Library shows the username on All Libraries tabs & on the Details screen', () => {

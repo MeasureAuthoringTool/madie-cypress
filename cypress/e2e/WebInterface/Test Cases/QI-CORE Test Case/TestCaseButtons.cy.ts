@@ -13,7 +13,6 @@ import {
     PopulationBasis
 } from '../../../../Shared/MeasureGroupPage'
 import { TestCase, TestCasesPage } from '../../../../Shared/TestCasesPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
 import { TestData } from '../../../../Shared/TestData'
 
@@ -51,6 +50,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, {
             measureCql: measure.cql
         })
+        TestData.saveMeasureCql(measure.cql).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateMeasureGroupAPI(
             MeasureType.outcome,
             PopulationBasis.procedure,
@@ -67,15 +67,14 @@ describe('Test case list page - Action Center icons for measure owner', () => {
             true
         )
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        return cy.get(EditMeasurePage.testCasesTab).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
+        return Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
     })
 
     it('Delete icon is present and enables correctly', () => {
@@ -103,7 +102,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
     it('Export icon is present and enables correctly', () => {
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
-        cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')
+        TestCasesPage.assertActionCenterExportTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
@@ -118,19 +117,11 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
     it('Shift dates icon is present and enables correctly', () => {
         cy.get(TestCasesPage.actionCenterShiftDates).should('be.disabled')
-        cy.get('[data-testid="shift-test-case-dates-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Select test cases to shift test case dates'
-        )
+        TestCasesPage.assertActionCenterShiftDatesTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
-        cy.get('[data-testid="shift-test-case-dates-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Shift test case dates'
-        )
+        TestCasesPage.assertActionCenterShiftDatesTooltip()
 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterShiftDates).should('be.enabled')
@@ -150,6 +141,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, {
             measureCql: measure.cql
         })
+        TestData.saveMeasureCql(measure.cql).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateMeasureGroupAPI(
             MeasureType.outcome,
             PopulationBasis.procedure,
@@ -165,17 +157,16 @@ describe('Test case list page - Action Center icons for versioned measure', () =
             false,
             true
         )
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
         TestData.versionMeasure().its('status').should('eq', 200)
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        return cy.get(EditMeasurePage.testCasesTab).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteVersionedMeasure(measure.name, measure.cqlLibraryName)
+        return Utilities.deleteVersionedMeasure(measure.name, measure.cqlLibraryName)
     })
 
     it('Export icon is present and it enables correctly', () => {
@@ -184,7 +175,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
-        cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')
+        TestCasesPage.assertActionCenterExportTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
@@ -199,11 +190,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 
     it('Copy To icon is present and it enables correctly', () => {
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.disabled')
-        cy.get('[data-testid="copy-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Select test cases to copy to another measure'
-        )
+        TestCasesPage.assertActionCenterCopyTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
@@ -225,6 +212,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, {
             measureCql: measure.cql
         })
+        TestData.saveMeasureCql(measure.cql).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateMeasureGroupAPI(
             MeasureType.outcome,
             PopulationBasis.procedure,
@@ -240,22 +228,14 @@ describe('Test case list page - Action Center icons for non-owner', () => {
             false,
             true
         )
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        return cy.get(EditMeasurePage.testCasesTab).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.Login()
-        Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
+        return OktaLogin.Login().then(() => Utilities.deleteMeasure(measure.name, measure.cqlLibraryName))
     })
 
     it('Non-owner sees Export icon; it enables correctly', () => {
@@ -264,7 +244,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
-        cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')
+        TestCasesPage.assertActionCenterExportTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
@@ -279,11 +259,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
 
     it('Non-owner sees Copy To icon; it enables correctly', () => {
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.disabled')
-        cy.get('[data-testid="copy-tooltip"]').should(
-            'have.attr',
-            'aria-label',
-            'Select test cases to copy to another measure'
-        )
+        TestCasesPage.assertActionCenterCopyTooltip()
 
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')

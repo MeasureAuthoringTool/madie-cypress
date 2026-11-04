@@ -148,7 +148,7 @@ describe.skip('Create Composite Measure', () => {
 
         openCompositeTestCaseAsSharedUser()
         cy.get(TestCasesPage.compositeJsonTab).should('be.visible').click()
-        cy.get(TestCasesPage.aceEditor).should('be.visible').and('have.class', 'ace_read-only')
+        cy.get(TestCasesPage.testCaseJsonEditor).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('not.exist')
     })
     it('Create Composite Measure and Verify Read Only Viewer Cannot Edit Test Case through Added Builder Tab', () => {

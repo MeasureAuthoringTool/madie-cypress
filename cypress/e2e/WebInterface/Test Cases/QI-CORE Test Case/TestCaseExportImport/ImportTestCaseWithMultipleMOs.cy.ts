@@ -30,7 +30,7 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
         OktaLogin.Login()
 
         MeasuresPage.actionCenter("edit")
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 

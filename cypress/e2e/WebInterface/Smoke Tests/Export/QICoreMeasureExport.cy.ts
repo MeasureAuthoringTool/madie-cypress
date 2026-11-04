@@ -6,7 +6,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Header } from '../../../../Shared/Header'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const now = require('dayjs')
 const url = Cypress.config('baseUrl')
@@ -45,12 +45,33 @@ const assertAbsentCopyrightAndDisclaimer = (bodyText: string) => {
     )
 }
 
+const assertMeasureGroupHumanReadableContent = (bodyText: string, cqlLibraryName: string) => {
+    expect(bodyText).to.include(
+        'Measure Rate (Group) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
+            'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
+            'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA'
+    )
+    expect(bodyText).to.include(
+        'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
+            '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters'
+    )
+    expect(bodyText).to.include(
+        'Denominator Exclusion\tNone\nDenominator Exception\tNone\nNumerator\tID: Numerator_1' +
+            '\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nNumerator Exclusion\tNone\nStratifier\tNone'
+    )
+    expect(bodyText).to.include(
+        'Supplemental Data Elements\nSupplemental Data Guidance\tNone\nRisk Adjustment Factor Guidance\tNone' +
+            '\nMeasure Logic\nPrimary Library\thttps://madie.cms.gov/Library/' + cqlLibraryName
+    )
+}
+
 describe('QI-Core Measure Export', () => {
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0, false)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'ipp', '', '', 'num', '', 'denom')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
     })
@@ -58,13 +79,6 @@ describe('QI-Core Measure Export', () => {
     it('Validate the zip file Export is downloaded for QI-Core Measure', () => {
         //Add RAV to the Measure
         MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -134,7 +148,7 @@ describe('QI-Core Measure Export', () => {
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
 
-        MeasuresPage.actionCenter('export')
+        MeasuresPage.actionCenter('export', undefined, { targetVersion: versionNumber })
 
         cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 15000 })
         cy.log('Successfully verified zip file export')
@@ -207,21 +221,15 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             'Qualifying Encounters',
             'Encounter'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
-
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.actionCenter('export')
+        MeasuresPage.actionCenter('export', undefined, { targetVersion: '0.0.000' })
 
         //verify zip file exists
         cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.zip', { timeout: 90000 })
@@ -266,16 +274,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
             //measure group meta data
             cy.log('made it to Measure Group (Rate)')
-            expect(bodyText).to.include(
-                'Measure Rate (Group) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
-                    'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
-                    'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
-                    'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
-                    '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
-                    'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nSupplemental Data Elements\nMeasure Logic\nPrimary Library\t' +
-                    'https://madie.cms.gov/Library/' +
-                    CqlLibraryNameFC
-            )
+            assertMeasureGroupHumanReadableContent(bodyText, CqlLibraryNameFC)
 
             //Population Criteria
             expect(bodyText).to.include(
@@ -301,6 +300,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
                     '    where ValidEncounter.period during "Measurement Period"\n' +
                     'Definition\n' +
+                    'Denominator Exclusion\tNone\n' +
+                    'Denominator Exception\tNone\n' +
                     'Numerator\n' +
                     '\n' +
                     'define "Qualifying Encounters":\n' +
@@ -309,7 +310,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                     '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
-                    '    where ValidEncounter.period during "Measurement Period"'
+                    '    where ValidEncounter.period during "Measurement Period"\n' +
+                    'Definition\n' +
+                    'Numerator Exclusion\tNone\n' +
+                    'Stratifier\tNone'
             )
 
             //logic definitions
@@ -449,6 +453,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
             'Qualifying Encounters',
             'Encounter'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
@@ -464,13 +469,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         Utilities.waitForElementDisabled(EditMeasurePage.measurementInformationSaveButton, 12500)
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{end}{enter}')
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -489,7 +487,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
-        MeasuresPage.actionCenter('export')
+        MeasuresPage.actionCenter('export', undefined, { targetVersion: versionNumber })
 
         //verify zip file exists
         cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.zip', { timeout: 900000 }).should('exist')
@@ -530,16 +528,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
             //measure group meta data
             cy.log('made it to Measure Group (Rate)')
-            expect(bodyText).to.include(
-                'Measure Rate (Group) (ID: Group_1)\nSummary\t\n\ntest gD\n\n\n' +
-                    'Basis\tEncounter\nScoring\tProportion\nScoring Unit\tml milliLiters\nImprovement Notation\t' +
-                    'Increased score indicates improvement\nType\tOutcome\nRate Aggregation\t\n\ntest rA\n\n\n' +
-                    'Initial Population\tID: InitialPopulation_1\nDescription:\n\ntest IP P\n\nCriteria: Qualifying Encounters' +
-                    '\nDenominator\tID: Denominator_1\nDescription:\n\ntest d P\n\nCriteria: Qualifying Encounters\nNumerator\t' +
-                    'ID: Numerator_1\nDescription:\n\ntest n P\n\nCriteria: Qualifying Encounters\nSupplemental Data Elements\nMeasure Logic\nPrimary Library\t' +
-                    'https://madie.cms.gov/Library/' +
-                    CqlLibraryNameFC
-            )
+            assertMeasureGroupHumanReadableContent(bodyText, CqlLibraryNameFC)
 
             //Population Criteria
             expect(bodyText).to.include(
@@ -565,6 +554,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
                     '    where ValidEncounter.period during "Measurement Period"\n' +
                     'Definition\n' +
+                    'Denominator Exclusion\tNone\n' +
+                    'Denominator Exception\tNone\n' +
                     'Numerator\n' +
                     '\n' +
                     'define "Qualifying Encounters":\n' +
@@ -573,7 +564,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                     '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
                     '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
-                    '    where ValidEncounter.period during "Measurement Period"'
+                    '    where ValidEncounter.period during "Measurement Period"\n' +
+                    'Definition\n' +
+                    'Numerator Exclusion\tNone\n' +
+                    'Stratifier\tNone'
             )
 
             //logic definitions

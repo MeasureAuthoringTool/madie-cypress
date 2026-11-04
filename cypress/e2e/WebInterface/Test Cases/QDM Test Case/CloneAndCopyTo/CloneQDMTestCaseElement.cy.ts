@@ -32,7 +32,7 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')

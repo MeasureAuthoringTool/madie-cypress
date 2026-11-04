@@ -3,9 +3,8 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasureActionOptions, MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestData } from "../../../../Shared/TestData"
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -36,16 +35,9 @@ describe('QI-Core Measure Export with Info', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: expCql })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'IP', 'boolean')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter("edit")
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+        OktaLogin.SessionLogin()
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -102,16 +94,9 @@ describe('QI-Core Measure Export for Publish', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: expCql })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'IP', 'boolean')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter("edit")
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+        OktaLogin.SessionLogin()
 
         cy.get(Header.mainMadiePageButton).click()
 

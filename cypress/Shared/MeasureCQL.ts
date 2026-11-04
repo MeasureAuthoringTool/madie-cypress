@@ -2057,24 +2057,24 @@ export class MeasureCQL {
         '      and EarlierGlucoseTest.id !~ GlucoseResult1000.id\n' +
         '    return GlucoseResult1000\n' +
 
-        'define function "Interval To Day Numbers"(Period Interval<DateTime> ):\n' +
-        '  ( expand { Interval[1, days between start of Period and \n' +
-        '  end of Period]} ) DayExpand\n' +
+        'define function "Interval To Day Numbers"(measurementPeriod Interval<DateTime> ):\n' +
+        '  ( expand { Interval[1, days between start of measurementPeriod and \n' +
+        '  end of measurementPeriod]} ) DayExpand\n' +
         '    return \n' +
         '    end of DayExpand\n' +
 
-        'define function "Hospital Days Max 10"(Period Interval<DateTime> ):\n' +
-        '  Interval[start of Period, Min({ \n' +
-        '    end of Period, start of Period + 10 days }\n' +
+        'define function "Hospital Days Max 10"(measurementPeriod Interval<DateTime> ):\n' +
+        '  Interval[start of measurementPeriod, Min({ \n' +
+        '    end of measurementPeriod, start of measurementPeriod + 10 days }\n' +
         '  )]\n' +
 
-        'define function "Days In Period"(Period Interval<DateTime> ):\n' +
-        '  ( "Interval To Day Numbers"(Period)) DayNumber\n' +
-        '    let startPeriod: start of Period + ( 24 hours * ( DayNumber - 1 ) ),\n' +
+        'define function "Days In Period"(measurementPeriod Interval<DateTime> ):\n' +
+        '  ( "Interval To Day Numbers"(measurementPeriod)) DayNumber\n' +
+        '    let startPeriod: start of measurementPeriod + ( 24 hours * ( DayNumber - 1 ) ),\n' +
         '    endPeriod: if ( hours between startPeriod and \n' +
-        '      end of Period < 24\n' +
+        '      end of measurementPeriod < 24\n' +
         '    ) then startPeriod \n' +
-        '      else start of Period + ( 24 hours * DayNumber )\n' +
+        '      else start of measurementPeriod + ( 24 hours * DayNumber )\n' +
         '    return Tuple {\n' +
         '      dayNumber: DayNumber,\n' +
         '      dayPeriod: Interval[startPeriod, endPeriod )\n' +

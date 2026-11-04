@@ -24,16 +24,25 @@ Current focus order:
 1. Stabilize CQL Library list entry and render readiness. The current full
    regression shows the library table unavailable across creation, validation,
    version/draft, transfer, sharing, history, editor, and comparison specs.
-   Diagnose the shared list/search request and rendered table state with a
-   representative consumer before changing downstream specs.
+   Recent TEST reports cover creation, validation, version/draft, transfer,
+   sharing, editor, and list sorting; comparison (1/1) and a focused name
+   search (1/1) also passed headless on 2026-10-26. The broad failure is not
+   reproduced by these consumers. Run the remaining unverified list/history
+   specs as a targeted CI group before changing the shared helper.
 2. Replace response-dependent list assertions where Cypress 16 reports an
    intercepted request with no response object. Keep request-query assertions
    explicit, and use a destination or rendered-list condition for readiness.
-   Start with CQL Library and Measure list sort consumers, then prove one Admin
-   list consumer.
+   The representative CQL Library sort (3/3), Measure sort (4/4), and Admin
+   library search (2/2) specs passed headless in TEST on 2026-10-26; the
+   missing-response condition did not reproduce in this batch. Require a
+   failing artifact before changing their response assertions.
 3. Batch current Admin tooltip copy changes only after confirming their exact
    accessible labels. Keep action enablement and permission assertions
-   independent from label text.
+   independent from label text. The no-selection Measure actions (2/2),
+   selected/unselected Measure action transition (1/1), and active Library
+   delete action (1/1) passed headless in TEST on 2026-10-26. No copy change
+   is indicated by these representative runs; require a failing artifact for
+   any remaining tooltip variant.
 4. Triage uncaught service/setup errors before their downstream specs are
    changed; hook or setup failures can cascade into misleading UI failures.
 
@@ -54,10 +63,30 @@ Current focus order:
 
 1. Run the Cypress 16.1.0 smoke collection in CI at the existing three-worker parallelism; retain runner artifacts for every worker.
 2. Audit custom Cypress commands and lifecycle hooks that queue login, retry, cleanup, or release work. Return the final chain before migrating more consumers.
-3. Complete remaining Test Case Details, JSON, Test Cases, and Expected/Actual migrations by repeated interaction pattern.
+3. Complete the MAT-10241 Monaco follow-up by repeated behavior, not by
+   individual failure. The merged migration has no active
+   `CQLEditorPage.saveCql()` consumers, and Smoke Tests plus ordinary Test
+   Case save flows already use the shared Monaco save and JSON-replacement
+   paths. The follow-up scope is recorded in
+   `docs/quality/mat-10241-monaco-cypress-plan.md` and must complete these
+   behavior buckets before retiring legacy editor support:
+   - Replace remaining direct Measure CQL typing and Ace diagnostic assertions
+     with `MonacoEditor` and MADiE validation contracts.
+   - Rename and migrate Test Case JSON page-object members and consumers that
+     still expose Ace names, classes, or Find UI mechanics; preserve the
+     existing semantic test ids and shared JSON replacement path.
+   - Convert read-only Test Case JSON checks to a user-visible read-only
+     contract, rather than an Ace implementation class.
+   - Migrate the remaining CQL Library empty-document version-validation path
+     and then remove dead legacy CQL helper methods and selectors only after
+     direct consumers are gone.
+   - Keep `MeasureGroupPage.loadTestCaseExecutionCql()` on its proven Monaco
+     path; it is a regression consumer, not a candidate for legacy cleanup.
 4. Verify CI collection for specs that produce no runner output before treating them as test failures.
 5. Audit repeated full `OktaLogin.Login()` paths for `SessionLogin()` eligibility, excluding scenarios that intentionally switch users or exercise UI logout.
-6. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
+6. Replace unconditional alternate-user allocation in `cypress/support/e2e.ts` with an explicit, compatible alt-user requirement contract. The support hook currently claims both a primary and alternate account for every spec run, although the audited export specs do not use an alternate account and 92 files do. This creates avoidable pool contention and makes headed reruns more likely to receive a different available account after a failed run releases its locks.
+7. Instrument the 100–162 second login/edit/editor startup floor seen in `TestCaseJSON_TerminologyTests.cy.ts`.
+8. Establish an incremental `strictNullChecks` migration. The baseline command reports existing nullability and Cypress chain-subject errors across shared helpers and legacy specs, so do not enable it as a blocking suite-wide gate yet. Fix strict diagnostics in touched files, measure the baseline, and introduce a non-blocking report before defining a ratcheted CI gate.
 
 Work boundaries:
 
@@ -66,6 +95,11 @@ Work boundaries:
 - Do not combine unrelated export, transfer, highlighting, and editor refactors.
 - Do not add retries or weaker assertions for known product defects.
 - Do not perform a suite-wide mechanical conversion. Migrate one repeated interaction bucket at a time, starting with consumers already covered by a shared helper.
+- Do not change the allocation default globally until alt-user consumers have an explicit opt-in path and representative multi-user, reviewer, and primary-only specs prove their allocation and release behavior.
+
+## Recently Completed
+
+- Removed the unused `serviceConfig` feature-flag capture from full login and retry navigation after confirming it had no active TypeScript consumer. The focused Admin Measure Change Version suite passed in under nine minutes after the change.
 
 ## Cypress 16 Conversion Scope
 
@@ -77,7 +111,7 @@ The Cypress 16.1.0 compatibility baseline is complete: clean installation, binar
 | B — Test Case readiness | Specs bypassing `TestCasesPage` save, execution, list, Expected/Actual, and status helpers. | Focused save/run/list flow proves response completion and named-row status. | Product-result expectation changes. |
 | C — UI interaction debt | Repeated forced interactions and fixed waits in shared helpers, import, highlighting, and editor clusters. | Replace one repeated reason with a selector/readiness helper and validate a consumer. | One-off force-clicks intentionally targeting native controls. |
 | D — Service setup tail | Repeated fixture-path and access-token plumbing in service/admin specs. | Existing `TestData` or request helper replaces a repeated pattern; service test remains API-focused. | Moving UI rendering assertions into service tests. |
-| E — Account/session efficiency | UI specs that repeatedly perform full login but do not validate authentication or switch users. | Explicit `SessionLogin()` eligibility review and focused role/ownership coverage. | Reviewer, permission, multi-user, and logout scenarios. |
+| E — Account/session efficiency | UI specs that repeatedly perform full login but do not validate authentication or switch users; unconditional alt-account allocation in global support. | Explicit `SessionLogin()` eligibility review; an opt-in alternate-account contract; focused primary-only, multi-user, reviewer, and parallel-lock coverage. | Reviewer, permission, multi-user, and logout scenarios; a global default flip before consumer migration. |
 
 Sequence batches by independent CI failures and shared-helper consumer count. Commit and validate each batch separately; do not treat a passing manual run as proof for unrelated specs.
 
@@ -146,6 +180,7 @@ skipped in TEST until reviewer functionality is promoted there.
 - Centralized user-scoped fixture, token, ID, cleanup, lock, share, measure-group, test-case, and CQL-library request mechanics through `TestData` and domain helpers.
 - Added bounded Cypress worker inactivity handling and CI diagnostics.
 - Removed helper-level fixed waits from `CQLEditorPage`, `CQLLibraryPage`, and `MeasureGroupPage` paths covered by focused tests.
+- Audited WebInterface full-document Monaco CQL replacement consumers and removed the remaining direct Save clicks in `CQLChanges.cy.ts`, `MeasureButtons.cy.ts`, and `RunAndExecuteTestCaseButtonValidations.cy.ts`. Valid CQL uses the shared settled save path; intentional invalid-CQL flows use the validation-submit path. The changed scenarios passed headless in TEST (2/2 and 4/4 respectively).
 
 ### Test-case reliability
 
@@ -177,21 +212,21 @@ skipped in TEST until reviewer functionality is promoted there.
 
 ## Latest Audit Signal
 
-Command: `npm run quality:no-focused-tests` on 2026-09-18.
+Command: `npm run quality:no-focused-tests` on 2026-10-06.
 
 | Metric | Count |
 | --- | ---: |
-| Specs | 311 |
-| Spec lines | 72,028 |
+| Specs | 313 |
+| Spec lines | 72,802 |
 | Shared files | 35 |
-| Shared lines | 21,336 |
-| Support files / lines | 3 / 631 |
-| Scripts / lines | 9 / 1,565 |
-| Skipped tests | 49 |
-| Manual fixture paths | 147 |
-| Manual access-token plumbing | 81 |
+| Shared lines | 21,605 |
+| Support files / lines | 3 / 648 |
+| Scripts / lines | 10 / 1,663 |
+| Skipped tests | 48 |
+| Manual fixture paths | 146 |
+| Manual access-token plumbing | 80 |
 | Fixed waits | 28 |
-| Forced interactions | 168 |
+| Forced interactions | 163 |
 | Global exception suppression | 1 |
 
 Largest current concentrations:

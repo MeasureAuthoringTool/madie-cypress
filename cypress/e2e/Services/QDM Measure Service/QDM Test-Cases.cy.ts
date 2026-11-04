@@ -425,7 +425,7 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
     })
 })
 
-describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
+describe('Measure Service: Removed test case import endpoint', () => {
     beforeEach('Create Measure and measure group', () => {
 
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
@@ -451,19 +451,20 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
             TestData.expectSavedMeasureCql(response)
         })
 
-        TestData.requestMeasureGroup<any>('POST', qdmGroupBody() as any).then((response) => {
+        return TestData.requestMeasureGroup<any>('POST', qdmGroupBody() as any).then((response) => {
             expect(response.status).to.eql(201)
             expect(response.body.id).to.be.exist
             TestData.writeFixture('groupId', response.body.id)
         })
     })
 
-    it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
+    afterEach('Clean up', () => {
+        return Utilities.deleteMeasure()
+    })
 
-        OktaLogin.setupUserSession(true)
-
+    it('Returns Method Not Allowed when adding test cases through the removed endpoint', () => {
         TestData.requestMeasureTestCaseList<any>(qdmTestCaseListBody() as any, { failOnStatusCode: false }).then((response) => {
-            expect(response.status).to.eql(403)
+            expect(response.status).to.eql(405)
         })
     })
 })

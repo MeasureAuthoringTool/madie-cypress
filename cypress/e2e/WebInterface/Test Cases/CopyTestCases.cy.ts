@@ -66,18 +66,20 @@ describe('Copy QDM Test Cases', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 1)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
-        cy.get(Header.mainMadiePageButton).click()
+        return cy.get(Header.mainMadiePageButton).click()
     })
 
-    afterEach('Logout', () => {
-        OktaLogin.UILogout()
+    afterEach('Logout and clean up measures', () => {
+        return OktaLogin.UILogout()
+            .then(() => Utilities.deleteMeasure(undefined, undefined, false, false, 1))
+            .then(() => Utilities.deleteMeasure(undefined, undefined, false, false, 2))
     })
 
     it('Copy QDM Test Case to another QDM Measure', () => {
@@ -134,19 +136,19 @@ describe('Copy Qi Core Test Cases', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 1)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
-        cy.get(Header.mainMadiePageButton).click()
+        return cy.get(Header.mainMadiePageButton).click()
     })
 
-    afterEach('Logout', () => {
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, false, 1)
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, true, false, 2)
+    afterEach('Logout and clean up measures', () => {
+        return OktaLogin.UILogout()
+            .then(() => Utilities.deleteMeasure(undefined, undefined, false, false, 1))
+            .then(() => Utilities.deleteMeasure(undefined, undefined, false, false, 2))
     })
 
     it('Copy Qi Core Test Case to another Qi Core Measure', () => {

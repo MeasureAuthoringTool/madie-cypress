@@ -1,11 +1,11 @@
-import { AdminUserProfilePage } from '../../../Shared/AdminUserProfilePage'
-import { CQLLibraryPage } from '../../../Shared/CQLLibraryPage'
-import { SupportedModels } from '../../../Shared/CreateMeasurePage'
-import { Environment } from '../../../Shared/Environment'
-import { LibraryCQL } from '../../../Shared/LibraryCQL'
-import { OktaLogin } from '../../../Shared/OktaLogin'
-import { TestData } from '../../../Shared/TestData'
-import { MadieObject, Utilities } from '../../../Shared/Utilities'
+import { AdminUserProfilePage } from '../../../../Shared/AdminUserProfilePage'
+import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
+import { SupportedModels } from '../../../../Shared/CreateMeasurePage'
+import { Environment } from '../../../../Shared/Environment'
+import { LibraryCQL } from '../../../../Shared/LibraryCQL'
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { TestData } from '../../../../Shared/TestData'
+import { MadieObject, Utilities } from '../../../../Shared/Utilities'
 
 describe('Admin user profile library View and Edit navigation', () => {
     let libraryName = ''
@@ -77,11 +77,15 @@ describe('Admin user profile library View and Edit navigation', () => {
 
     afterEach(() => {
         if (libraryLocked) {
-            Utilities.releaseAllLocksForCleanup(MadieObject.Library, true)
+            return Utilities.releaseAllLocksForCleanup(MadieObject.Library, true)
+                .then(() => libraryCreated ? Utilities.deleteLibrary() : cy.wrap(undefined))
         }
+
         if (libraryCreated) {
-            Utilities.deleteLibrary()
+            return Utilities.deleteLibrary()
         }
+
+        return cy.wrap(undefined)
     })
 
     it('opens an unshared draft from Owned Libraries in read-only View mode', () => {

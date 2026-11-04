@@ -5,7 +5,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { TestCasesPage } from '../../../Shared/TestCasesPage'
 import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
 import { Utilities } from '../../../Shared/Utilities'
-import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { TestData } from '../../../Shared/TestData'
 
 const utc = require('dayjs/plugin/utc')
 const dayjs = require('dayjs')
@@ -32,18 +32,20 @@ const testCaseJson = JSON.stringify({
                 resourceType: 'Patient',
                 id: 'create-update-test-case',
                 meta: {
-                    profile: ['http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient'],
+                    profile: ['http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient']
                 },
-                identifier: [{
-                    system: 'http://example.org/mrn',
-                    value: 'create-update-test-case',
-                }],
+                identifier: [
+                    {
+                        system: 'http://example.org/mrn',
+                        value: 'create-update-test-case'
+                    }
+                ],
                 name: [{ family: 'Test', given: ['Automation'] }],
                 gender: 'female',
-                birthDate: '2000-10-11',
-            },
-        },
-    ],
+                birthDate: '2000-10-11'
+            }
+        }
+    ]
 })
 
 const qiCore6MeasureCQL =
@@ -65,17 +67,15 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
             measureCql: qiCore6MeasureCQL
         })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
+        TestData.saveMeasureCql(qiCore6MeasureCQL).then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
-            collapseEditor: true,
-            successTimeout: 20700
-        })
+        return cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
     })
 
     afterEach('Logout and delete measure', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
@@ -86,11 +86,8 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         cy.get(TestCasesPage.lastSavedDate).should('contain', todaysDate)
 
         //Edit / update Test Case
-        cy.intercept('PUT', '/api/fhir/cql/relevant-elements').as('qiCoreRelevantElementsAfterReopen')
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait('@qiCoreRelevantElementsAfterReopen', { timeout: 60000 })
-            .its('response.statusCode')
-            .should('eq', 200)
+        TestCasesPage.waitForJsonEditorReady()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
 
         cy.get(TestCasesPage.lastSavedDate).should('contain.text', utcTime)

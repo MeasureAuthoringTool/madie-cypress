@@ -12,15 +12,20 @@ import { step } from '../../../../utils/step'
 
 const qicoreMeasureCql = QiCore6Cql.cqlCMS1272
 const qicorePopulationCql = QiCore4Cql.CQL_Populations
-const testCase: TestCase = {
-    title: 'Locked tooltip test case',
-    group: 'PASS',
-    description: 'Used for locked test case tooltip coverage'
-}
-const secondTestCase: TestCase = {
-    title: 'Unlocked companion test case',
-    group: 'PASS',
-    description: 'Used for locked dropdown tooltip coverage'
+let testCase: TestCase
+let secondTestCase: TestCase
+
+const createTestCases = (): void => {
+    testCase = {
+        title: `Locked tooltip test case ${Date.now()}`,
+        group: 'PASS',
+        description: 'Used for locked test case tooltip coverage'
+    }
+    secondTestCase = {
+        title: `Unlocked companion test case ${Date.now()}`,
+        group: 'PASS',
+        description: 'Used for locked dropdown tooltip coverage'
+    }
 }
 
 let harpUserALT = ''
@@ -48,14 +53,16 @@ describe('Locked Measure, Library, and Test Case tooltips display user name', ()
     beforeEach(() => {
         harpUserALT = OktaLogin.getUser(true)
         qicoreMeasureName = `LockTooltipMeasure${Date.now()}`
+        createTestCases()
         createdMeasure = false
     })
 
     afterEach(() => {
         if (createdMeasure) {
-            Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true)
-            Utilities.deleteMeasure()
+            return Utilities.releaseAllLocksForCleanup(MadieObject.Measure, true).then(() => Utilities.deleteMeasure())
         }
+
+        return cy.wrap(undefined)
     })
 
     describe('Measure list View tooltip', () => {
@@ -148,7 +155,7 @@ describe('Locked Measure, Library, and Test Case tooltips display user name', ()
                 EditMeasurePage.dismissMeasureLockedModal(expectedModalMessage)
 
                 step('Assert locked measure header In-Use tooltip')
-                EditMeasurePage.assertLockedIndicatorTooltip(qicoreMeasureName, expectedTooltip)
+                EditMeasurePage.assertLockedIndicatorTooltip(expectedTooltip)
             })
         })
     })

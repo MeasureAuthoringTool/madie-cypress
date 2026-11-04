@@ -112,15 +112,10 @@ const versionCompositeMeasure = (): void => {
 const openFirstTestCaseJsonAndAssertNames = (expectedFamily: string, expectedGiven: string): void => {
     TestCasesPage.clickEditforCreatedTestCase()
     cy.get(TestCasesPage.jsonTab).should('be.visible').click()
-    cy.get(TestCasesPage.tcSearchIcone).click()
-    cy.get('.ace_search_form > .ace_search_field').type('family').type('{enter}')
-    cy.get(TestCasesPage.testCaseJson).should('contain.text', `"family": "${expectedFamily}"`)
-    cy.get(TestCasesPage.testCaseJson)
-        .invoke('text')
-        .then((text: string) => {
-            const jsonText = text.replace(/\s+/g, ' ').trim()
-            expect(jsonText).to.contain(`"given": [ "${expectedGiven}" ]`)
-        })
+    TestCasesPage.assertJsonEditorText(
+        `"family": "${expectedFamily}"`,
+        `"given": [ "${expectedGiven}" ]`
+    )
 }
 
 // Enable these specs once MAT-10118 is available by default.

@@ -1072,7 +1072,7 @@ describe('Measure Highlighting', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
+        CQLEditorPage.saveMonacoCql({
             collapseEditor: true,
             waitForDisabled: false
         })
@@ -1176,19 +1176,17 @@ describe('Highlighting accurately appears for a single PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        TestData.saveMeasureCql(measureCQLPFTests).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({
-            collapseEditor: true,
-            successTimeout: 27700
-        })
+        return cy.then(() => undefined)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify highlighting for a measure with a single PC', () => {
@@ -1273,13 +1271,14 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
     beforeEach('Create measure, measure group, test case and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+        TestData.saveMeasureCql(measureCQLPFTests).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify highlighting for a measure with multiple PCs', () => {
@@ -1448,11 +1447,6 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
 
 describe('Verify multiple IPs on the highlighting tab', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(
             false,
@@ -1462,9 +1456,9 @@ describe('Verify multiple IPs on the highlighting tab', () => {
             'Initial Population',
             'boolean'
         )
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1497,12 +1491,8 @@ describe('Verify multiple IPs on the highlighting tab', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+        // Add JSON to the test case.
+        TestCasesPage.waitForJsonEditorReady()
         cy.editTestCaseJSON(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -1541,13 +1531,14 @@ describe('Highlighting tab shows Results, Definitions, Functions, and Unused sec
     beforeEach('Create measure, measure group, test case and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLDFUTests)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcDFNJson)
+        TestData.saveMeasureCql(measureCQLDFUTests).then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify tabs in the highlighting sub-menu', () => {
@@ -1657,7 +1648,7 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1825,7 +1816,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -1888,7 +1879,7 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: false })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {

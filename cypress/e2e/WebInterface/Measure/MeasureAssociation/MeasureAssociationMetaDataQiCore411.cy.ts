@@ -3,7 +3,6 @@ import { CreateMeasurePage, CreateMeasureOptions } from '../../../../Shared/Crea
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Utilities } from '../../../../Shared/Utilities'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Header } from '../../../../Shared/Header'
@@ -71,7 +70,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
             'boolean'
         )
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
@@ -180,13 +179,9 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
-
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })

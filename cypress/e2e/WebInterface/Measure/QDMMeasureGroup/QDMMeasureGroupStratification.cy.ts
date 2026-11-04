@@ -4,8 +4,8 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Utilities } from '../../../../Shared/Utilities'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'QDMGroupStratification' + Date.now()
 let CqlLibraryName = 'QDMGroupStratificationLib' + Date.now()
@@ -118,13 +118,14 @@ describe('Validating Stratification tabs', () => {
             '2024-01-01'
         )
 
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
     })
 
     afterEach('Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Stratification tab includes new fields and those fields have expected values', () => {
@@ -283,14 +284,15 @@ describe('Validating Stratification tabs', () => {
         //Add Stratification 4
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'Initial Population')
-        cy.get(MeasureGroupPage.stratDescFour).type('Stratification Four Description')
+        cy.get(MeasureGroupPage.stratFour).should('contain.text', 'Initial Population')
+        cy.get(MeasureGroupPage.stratDescFour).type('Stratification Four Description').blur()
 
         Utilities.waitForElementEnabled(MeasureGroupPage.ucumScoringUnitSelect, 30700)
         Utilities.waitForElementVisible(MeasureGroupPage.ucumScoringUnitSelect, 30700)
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
 
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled').click()
 
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
             'contain.text',

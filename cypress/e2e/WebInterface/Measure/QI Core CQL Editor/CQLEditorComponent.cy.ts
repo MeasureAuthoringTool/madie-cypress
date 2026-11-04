@@ -6,6 +6,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 // ToDo: replace the 4.1.1 CQLs for 6.0.0
 const measureName = 'CqlEditorComponent' + Date.now()
@@ -68,9 +69,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLValid)
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLValid)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
@@ -82,9 +82,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLErrors)
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
@@ -101,9 +100,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLWarnings)
+        CQLEditorPage.openMonacoCqlEditor()
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
@@ -111,8 +109,10 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Verify errors in CQL Editor component
         cy.get(TestCasesPage.importTestCaseAlertMessage).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(4) Errors:Row: 26, Col:27: ELM: 27:81 | Expected an expression of type \'System.Boolean\', but found an expression of type \'Interval of System.DateTime\'.Row: 26, Col:83: ELM: 83:95 | Could not resolve call to operator IncludedIn with signature (list<QICore.Encounter>,interval<System.DateTime>).Row: 26, Col:116: Parse: 116:117 | no viable alternative at input \'during day of "Measurement Period")\'Row: 26, Col:116: Parse: 116:117 | extraneous input \')\' expecting {<EOF>, \'define\', \'context\'}(1) Warning:Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology target of the retrieve.')
 
-        //Verify the same warning(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 17:268 | Could not ' +
-            'resolve membership operator for terminology target of the retrieve.')
+        // Verify the warning remains available through the editor alert list.
+        cy.get(CQLEditorPage.warningMsg).should(
+            'contain.text',
+            'ELM: 17:268 | Could not resolve membership operator for terminology target of the retrieve.'
+        )
     })
 })

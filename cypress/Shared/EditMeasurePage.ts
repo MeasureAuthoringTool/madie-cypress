@@ -211,8 +211,7 @@ export class EditMeasurePage {
     public static readonly libWarningTopMsg = '[data-testid="library-warning"]'
     public static readonly CQLMessageSuccess = '[data-testid="generic-success-text-header"]'
 
-    //cql editor box on page
-    public static readonly cqlEditorTextBox = '.ace_content'
+    public static readonly monacoCqlEditor = '[data-testid="split-view-view"] div.view-lines'
     //save button on page
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
     //discard changes
@@ -311,8 +310,8 @@ export class EditMeasurePage {
             .trim()
     }
 
-    public static getLockedIndicatorChipSelector(measureName: string): string {
-        return `[data-testid="measure-${measureName}-inuse-chip"]`
+    public static getLockedIndicatorChipSelector(): string {
+        return '[data-testid$="-inuse-chip"]'
     }
 
     public static assertMeasureLockedModalMessage(expectedText: string): void {
@@ -358,8 +357,8 @@ export class EditMeasurePage {
         this.closeMeasureLockedModalByButton()
     }
 
-    public static assertLockedIndicatorTooltip(measureName: string, expectedTooltip: string): void {
-        const chipSelector = this.getLockedIndicatorChipSelector(measureName)
+    public static assertLockedIndicatorTooltip(expectedTooltip: string): void {
+        const chipSelector = this.getLockedIndicatorChipSelector()
 
         cy.get(chipSelector).should('be.visible').trigger('mouseover', { force: true })
         cy.get('.MuiTooltip-tooltip').should(($tooltip) => {

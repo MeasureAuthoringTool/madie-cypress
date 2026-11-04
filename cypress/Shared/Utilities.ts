@@ -53,7 +53,7 @@ export class Utilities {
         deleteSecondMeasure?: boolean,
         altUser?: boolean,
         measureNumber?: number
-    ): Cypress.Chainable<void> {
+    ): Cypress.Chainable {
         const owner: FixtureOwner = altUser ? 'selectedAltUser' : 'selectedUser'
         const currentUser = Cypress.expose(owner)
 
@@ -112,27 +112,32 @@ export class Utilities {
         OktaLogin.setupAdminSession()
 
         const measurePath = TestData.measureIdPath(deleteSecondMeasure ? 2 : measureNumber)
-        return cy.task('readFileSafe', measurePath, { log: false }).then((id: string | null) => {
-            if (!id) {
-                return cy.log(
-                    `⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`
-                )
-            }
-            return TestData.requestAdminMeasureDeleteById(id, user, {
-                failOnStatusCode: false,
-                headers: {
-                    'api-key': Environment.credentials().adminApiKey
-                }
-            }).then((response) => {
-                if (response.status === 200) {
-                    cy.log('Versioned measure deleted successfully via admin API')
-                } else {
+        return cy
+            .task('readFileSafe', measurePath, { log: false })
+            .then((id: string | null) => {
+                if (!id) {
                     cy.log(
-                        `⚠️ Versioned measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                        `⚠️ deleteVersionedMeasure: Fixture file ${measurePath} is empty or missing — skipping cleanup`
                     )
+                    return
                 }
+
+                return TestData.requestAdminMeasureDeleteById(id, user, {
+                    failOnStatusCode: false,
+                    headers: {
+                        'api-key': Environment.credentials().adminApiKey
+                    }
+                }).then((response) => {
+                    if (response.status === 200) {
+                        cy.log('Versioned measure deleted successfully via admin API')
+                    } else {
+                        cy.log(
+                            `⚠️ Versioned measure cleanup returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                        )
+                    }
+                })
             })
-        }).then(() => undefined)
+            .then(() => undefined)
     }
 
     public static textValues = {
@@ -362,7 +367,11 @@ export class Utilities {
     }
 
     // ToDo: add similar function to easily transfer ownership of measures or libraries
-    public static setSharePermissions(objectType: MadieObject, action: PermissionActions, user: string) {
+    public static setSharePermissions(
+        objectType: MadieObject,
+        action: PermissionActions,
+        user: string
+    ): Cypress.Chainable {
         let readId: () => Cypress.Chainable<string>
         let urlPath: string
 
@@ -383,8 +392,8 @@ export class Utilities {
             }
         }
 
-        readId().then((madieId) => {
-            TestData.requestSharePermissions(
+        return readId().then((madieId) => {
+            return TestData.requestSharePermissions(
                 objectType === MadieObject.Library ? 'library' : 'measure',
                 action,
                 madieId,
@@ -399,7 +408,7 @@ export class Utilities {
                     expect(response.body[madieId]).to.eql([])
                 }
             })
-        })
+        }).then(() => undefined)
     }
 
     public static checkAll() {
@@ -578,7 +587,10 @@ export class Utilities {
         }
     }
 
-    public static releaseAllLocksForCleanup(type: MadieObject, altUser?: boolean) {
+    public static releaseAllLocksForCleanup(
+        type: MadieObject,
+        altUser?: boolean
+    ): Cypress.Chainable<Cypress.Response<any>> {
         if (!altUser) {
             altUser = false
         }
@@ -587,15 +599,17 @@ export class Utilities {
 
         const unlockTarget = type === MadieObject.Library ? 'cql-libraries' : 'measures'
 
-        TestData.requestUnlockAll(unlockTarget, { failOnStatusCode: false }).then((response) => {
-            if (response.status === 200) {
-                cy.log(`Released ${type} locks during cleanup`)
-                return
-            }
+        return TestData.requestUnlockAll(unlockTarget, { failOnStatusCode: false })
+            .then((response) => {
+                if (response.status === 200) {
+                    return cy.log(`Released ${type} locks during cleanup`).then(() => response)
+                }
 
-            cy.log(
-                `⚠️ Lock cleanup for ${type} returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
-            )
-        })
+                return cy
+                    .log(
+                        `⚠️ Lock cleanup for ${type} returned ${response.status} — ${JSON.stringify(response.body).substring(0, 200)}`
+                    )
+                    .then(() => response)
+            })
     }
 }

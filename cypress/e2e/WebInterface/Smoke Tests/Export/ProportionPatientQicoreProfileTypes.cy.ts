@@ -4,9 +4,9 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { TestData } from '../../../../Shared/TestData'
 
 const measureName = 'PPQiCorePT' + Date.now()
 const CqlLibraryName = 'PPQiCorePTLib' + Date.now()
@@ -40,20 +40,13 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
             'Initial Population',
             'boolean',
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 30000)
     })
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
-        cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
         cy.get(EditMeasurePage.measureDetailsTab).should('be.visible')
         cy.get(EditMeasurePage.measureDetailsTab).click()
 

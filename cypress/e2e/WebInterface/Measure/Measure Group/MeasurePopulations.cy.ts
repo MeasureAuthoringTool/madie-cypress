@@ -1,20 +1,21 @@
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
+import { OktaLogin } from '../../../../Shared/OktaLogin'
+import { CreateMeasurePage } from '../../../../Shared/CreateMeasurePage'
+import { MeasuresPage } from '../../../../Shared/MeasuresPage'
+import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
+import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
+import { Utilities } from '../../../../Shared/Utilities'
+import { MeasureCQL } from '../../../../Shared/MeasureCQL'
+import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { Header } from '../../../../Shared/Header'
 
 let newMeasureName = ''
 let newCqlLibraryName = ''
 const measureName = 'MeasurePopulations'
 const CqlLibraryName = 'MeasurePopulationsLib'
-const measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
-    'using FHIR version \'4.0.1\'\n\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+const measureCQL =
+    "library CQLLibrary5170 version '0.0.000'\n\n" +
+    "using FHIR version '4.0.1'\n\n" +
+    "include FHIRHelpers version '4.1.000' called FHIRHelpers\n\n" +
     'parameter "Measurement Period" Interval<DateTime>\n\n' +
     'context Patient\n\n' +
     'define "ipp":\n' +
@@ -42,25 +43,21 @@ const measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n\n' +
 let measureCQL_multiplePopulations = MeasureCQL.CQL_Multiple_Populations
 
 describe('Measure Populations', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         newMeasureName = measureName + Date.now()
         newCqlLibraryName = CqlLibraryName + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Validate if the Measure populations reset on Measure Group Scoring change', () => {
-
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -98,7 +95,10 @@ describe('Measure Populations', () => {
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
 
         //verify the measure group's description before reset
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).should('contain.text', 'MeasureGroup Description value')
@@ -115,7 +115,7 @@ describe('Measure Populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
 
         //verify the measure group's description after reset
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox).should('contain.text','MeasureGroup Description value')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).should('contain.text', 'MeasureGroup Description value')
 
         //verify the populations after reset
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
@@ -129,7 +129,6 @@ describe('Measure Populations', () => {
     })
 
     it('Measure group created successfully when the population basis match with population return type', () => {
-
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -167,11 +166,13 @@ describe('Measure Populations', () => {
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should(
+            'contain.text',
+            'Population details for this group saved successfully.'
+        )
     })
 
     it('Verify error message when the population basis does not match with population return type', () => {
-
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -192,11 +193,20 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.popBasisOption).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
-        cy.get(MeasureGroupPage.initialPopulationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
+        cy.get(MeasureGroupPage.initialPopulationMismatchErrorMsg).should(
+            'contain.text',
+            'The selected definition does not align with the Population Basis field selection of Encounter'
+        )
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
-        cy.get(MeasureGroupPage.measurePopulationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
+        cy.get(MeasureGroupPage.measurePopulationMismatchErrorMsg).should(
+            'contain.text',
+            'The selected definition does not align with the Population Basis field selection of Encounter'
+        )
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
-        cy.get(MeasureGroupPage.measurePopulationExclusionMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
+        cy.get(MeasureGroupPage.measurePopulationExclusionMismatchErrorMsg).should(
+            'contain.text',
+            'The selected definition does not align with the Population Basis field selection of Encounter'
+        )
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'fun')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
@@ -206,26 +216,29 @@ describe('Measure Populations', () => {
 })
 
 describe('Warning Messages on Population updates', () => {
-
     beforeEach('Create Measure and Login', () => {
-
         newMeasureName = measureName + Date.now()
         newCqlLibraryName = CqlLibraryName + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL_multiplePopulations)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(
+            false,
+            false,
+            'Initial Population',
+            'Initial Population',
+            'Initial Population',
+            'Boolean'
+        )
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout', () => {
-
         Utilities.deleteMeasure()
     })
 
     it('Verify warning message when the Measure scoring is updated', () => {
-
         //Click on the population criteria tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -242,12 +255,14 @@ describe('Warning Messages on Population updates', () => {
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Initial Population')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.')
+        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should(
+            'contain.text',
+            'Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.'
+        )
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
     })
 
     it('Verify warning message when the Population basis is updated', () => {
-
         //Click on the population criteria tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -267,7 +282,10 @@ describe('Warning Messages on Population updates', () => {
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Qualifying Encounters')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.')
+        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should(
+            'contain.text',
+            'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.'
+        )
         cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
     })
 })

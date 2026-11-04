@@ -10,6 +10,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
 import { Toasts } from "../../../../Shared/Toasts"
+import { TestData } from '../../../../Shared/TestData'
 
 const measureName = 'MeasureTransfer'
 const cqlLibraryName = 'MeasureTransferLib'
@@ -17,6 +18,8 @@ const randomMeasureName = 'TransferedMeasure'
 
 const versionNumber = '1.0.000'
 let harpUserALT = ''
+let measureTransferred = false
+let testCaseMeasureTransferred = false
 const measureCQL = MeasureCQL.SBTEST_CQL
 const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const testCaseTitle = 'Title for Auto Test'
@@ -28,17 +31,18 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         harpUserALT = OktaLogin.getUser(true)
-        let now = Date.now()
+        measureTransferred = false
+        const now = Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        // The scenarios below switch users, so a full login is required.
+        // The API save above translates CQL without opening Monaco.
+        return OktaLogin.Login()
+    })
+
+    afterEach('Clean up transferred measure', () => {
+        return Utilities.deleteVersionedMeasure(measureName, cqlLibraryName, false, measureTransferred)
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are Transferred to the new owner', () => {
@@ -80,8 +84,12 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.get(MeasuresPage.newOwnerErrorText).should('contain.text', 'The provided HARP ID is not associated with an active MADiE user.')
        
         cy.get(MeasuresPage.newOwnerTextbox).clear().type(harpUserALT)
+        cy.intercept('PUT', '**/api/measures/transfer?retainShareAccess=false').as('transferMeasure')
         cy.get(MeasuresPage.transferContinueButton).click()
-        OktaLogin.UILogout()
+        cy.wait('@transferMeasure').then(({ response }) => {
+            expect(response?.statusCode).to.eq(200)
+            measureTransferred = true
+        })
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -96,12 +104,10 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
             cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
         })
 
-        OktaLogin.UILogout()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName, false, true)
     })
 
     it('Verify Transfer button disabled for non Measure owner', () => {
-        //Login as ALT User
+        // Switch from the measure owner to the non-owner.
         OktaLogin.AltLogin()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 60000)
@@ -119,11 +125,6 @@ describe('Measure Transfer - Measure set transfer & Non-owner checks', () => {
         cy.get('[data-testid="transfer-action-tooltip"]').trigger('mouseover')
         cy.get('.MuiTooltip-tooltip').should('contain.text', 'You cannot transfer a measure you do not own, you have selected at least 1 measure that you do not own')
 
-        //Logout and Delete Measure with Regular user
-        OktaLogin.UILogout()
-        const currentAltUser = Cypress.expose('selectedAltUser')
-        OktaLogin.setupUserSession(false)
-        Utilities.deleteMeasure()
     })
 })
 
@@ -132,10 +133,13 @@ describe('Delete Test Case with Transferred user', () => {
     beforeEach('Create Measure and Set Access Token', () => {
 
         harpUserALT = OktaLogin.getUser(true)
+        testCaseMeasureTransferred = false
 
-        let now = Date.now()
+        const now = Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + now, cqlLibraryName + now, measureCQL)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        // This hook transfers ownership and the test logs in as the new owner.
         OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
 
@@ -145,8 +149,16 @@ describe('Delete Test Case with Transferred user', () => {
         //Verify message on the transfer pop up screen
         cy.get('[class="transfer-dialog-info-text"]').should('contain.text', 'You are about to Transfer ownership of the 1 selected measure(s) below. All versions and drafts will be transferred, but only the most recent measure name appears in the list below.This action cannot be undone.')
         cy.get(MeasuresPage.newOwnerTextbox).type(harpUserALT)
+        cy.intercept('PUT', '**/api/measures/transfer?retainShareAccess=false').as('transferTestCaseMeasure')
         cy.get(MeasuresPage.transferContinueButton).click()
-        OktaLogin.UILogout()
+        return cy.wait('@transferTestCaseMeasure').then(({ response }) => {
+            expect(response?.statusCode).to.eq(200)
+            testCaseMeasureTransferred = true
+        })
+    })
+
+    afterEach('Clean up transferred measure', () => {
+        return Utilities.deleteVersionedMeasure(measureName, cqlLibraryName, false, testCaseMeasureTransferred)
     })
 
     it('Verify Test Case can be deleted by the new owner after transfer', () => {
@@ -154,6 +166,7 @@ describe('Delete Test Case with Transferred user', () => {
         //Login as Alt User
         OktaLogin.AltLogin()
         MeasuresPage.actionCenter('edit')
+        EditMeasurePage.dismissMeasureLockedModal('This measure is currently being edited by')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

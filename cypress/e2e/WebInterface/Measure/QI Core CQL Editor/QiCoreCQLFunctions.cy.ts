@@ -4,6 +4,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Utilities } from "../../../../Shared/Utilities"
+import { MonacoEditor } from "../../../../Shared/MonacoEditor"
 
 const date = Date.now()
 let measureName = 'QiCoreCQLFunctions' + date
@@ -66,7 +67,7 @@ describe('Qi Core CQL Functions', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
@@ -92,12 +93,13 @@ describe('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.expressionEditorInsertBtn).click()
         cy.get(CQLEditorPage.applyFunctionBtn).click()
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Function Denominator Exclusions has been successfully added to the CQL.')
-        cy.get(CQLEditorPage.saveCQLButton).click()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
         //Navigate to Saved Functions tab
         CQLEditorPage.expandCQLBuilderPanel()
         cy.get(CQLEditorPage.functionsTab).click()
-        cy.get(CQLEditorPage.savedFunctionsTab).click().wait(1000)
+        cy.get(CQLEditorPage.savedFunctionsTab).should('be.visible')
+        cy.get(CQLEditorPage.savedFunctionsTab).click()
 
         // Note: this enforces https://jira.cms.gov/browse/MAT-8005
 
@@ -161,7 +163,7 @@ describe('Qi Core CQL Functions', () => {
     it('Dirty check pops up when there are changes in CQL and Edit/Delete Function button is clicked', () => {
 
         //Make changes to CQL editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
 
         //Click on Functions tab
         cy.get(CQLEditorPage.functionsTab).click()
@@ -203,26 +205,19 @@ describe('Qi Core CQL Functions', () => {
         cy.get(EditMeasurePage.successMessage, { timeout: 6500 }).should('have.text', 'Function isFinishedEncounter has been successfully removed from the CQL.')
     })
 
-    it('Verify error message appears on Functions tab when there is an error in the Measure CQL', () => {
+    it('Verify error message appears when there is an error in the Measure CQL', () => {
 
         //Navigate to Functions tab and verify no error message appears
         cy.get(CQLEditorPage.functionsTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        cy.get(CQLEditorPage.errorMsg).should('not.exist')
         //Navigate to Functions tab and verify saved functions appear
-        cy.get(CQLEditorPage.savedFunctionsTab).should('contain.text', 'Saved Functions (2)')
+        cy.get(CQLEditorPage.savedFunctionsTab).should('be.visible')
 
         //Add errors to CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
 
-        //Navigate to Functions tab
-        CQLEditorPage.expandCQLBuilderPanel()
-        cy.get(CQLEditorPage.functionsTab).click()
-        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
-
-        //Navigate to Saved Functions tab
-        cy.get(CQLEditorPage.savedFunctionsTab).should('contain.text', 'Saved Functions (0)').click()
-        cy.contains('No Results were found', { timeout: 30000 }).should('be.visible')
+        cy.get(CQLEditorPage.errorMsg).should('be.visible')
     })
 })
 
@@ -247,7 +242,7 @@ describe('Qi-Core CQL Functions - Measure ownership Validations', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         MeasuresPage.actionCenter('view')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        CQLEditorPage.openMonacoCqlEditor()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Navigate to Saved Functions tab

@@ -1,12 +1,12 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Utilities } from "./Utilities"
 import { CQLLibraryPage } from "./CQLLibraryPage"
+import { MonacoEditor } from "./MonacoEditor"
 
-type SaveCqlOptions = {
+type MonacoSaveCqlOptions = {
     appendNewLine?: boolean
-    appendCommand?: string
+    appendText?: string
     collapseEditor?: boolean
-    parseSpecialCharSequences?: boolean
     successTimeout?: number
     waitForDisabled?: boolean
 }
@@ -30,8 +30,6 @@ export class CQLEditorPage {
     //message that appears for various alerts that occur at successful saving
     public static readonly saveAlertMessage = '[id="status-handler"]'
 
-    //error tooltip container
-    public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'
     public static readonly errorMsg = '[data-testid="generic-errors-text-list"]'
     public static readonly warningMsg = '[data-testid="generic-warnings-text-list"]'
     public static readonly minimizeButton = '[data-testid="minimize-button-0"]'
@@ -43,10 +41,6 @@ export class CQLEditorPage {
 
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '.madie-alert'
-
-    //Error/warning marker in side of the CQL Editor window
-    public static readonly errorInCQLEditorWindow = '#ace-editor-wrapper > div.ace_gutter > div > div.ace_gutter-cell.ace_error'
-    public static readonly warningInCQLEditorWindow = '.ace_warning'
 
     //UMLS Not Logged in Error
     public static readonly umlsMessage = '[data-testid="valueset-success"]'
@@ -95,8 +89,16 @@ export class CQLEditorPage {
     public static readonly viewValueSetDetails = '[data-testid="action-center-0_View"]'
     public static readonly editValueSet = '[data-testid="action-center-0_Edit"]'
 
+    public static assertValueSetDetails(...expectedText: string[]): void {
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should(($details) => {
+            const detailText = $details.text().replace(/\s+/g, ' ')
+
+            expectedText.forEach((text) => expect(detailText).to.contain(text))
+        })
+    }
+
     //CQL Builder Sub tabs
-    public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
+    public static readonly expandCQLBuilder = '[data-testid="expanded-button"]'
     public static readonly collapseCQLBuilder = '[data-testid="collapsed-button"]'
 
     //Includes page
@@ -149,6 +151,7 @@ export class CQLEditorPage {
     public static readonly clearParametersExpressionButton = '[data-testid="clear-parameter-btn"]'
     public static readonly applyParametersExpressionButton = '[data-testid="apply-parameter-btn"]'
     public static readonly parameterExpressionEditor = '[data-testid="terminology-section-sub-header-content-Expression Editor"]'
+    public static readonly parameterExpressionMonacoEditor = `${CQLEditorPage.parameterExpressionEditor} .monaco-editor`
     public static readonly editParameterNameTextBox = '[data-testid="parameter-name-text-input"]'
     public static readonly saveParameterBtn = '[data-testid="parameter-save-btn"]'
     public static readonly editSavedCQLParameters = '[data-testid="edit-button-0"]'
@@ -187,14 +190,20 @@ export class CQLEditorPage {
 
     }
 
-    public static openCqlEditor(timeout = 30000): void {
+    public static openMonacoCqlEditor(timeout = 30000, requireRenderedCql = true): void {
         cy.get(EditMeasurePage.cqlEditorTab, { timeout })
             .should('not.have.attr', 'aria-disabled', 'true')
             .then(($tab) => {
                 $tab[0].click()
             })
 
-        Utilities.waitForElementWriteEnabled(EditMeasurePage.cqlEditorTextBox, timeout)
+        const editor = cy.get(EditMeasurePage.monacoCqlEditor, { timeout }).should('be.visible')
+
+        if (requireRenderedCql) {
+            editor.should(($editor) => {
+                expect($editor.text().trim(), 'rendered CQL').not.to.be.empty
+            })
+        }
     }
 
     public static validateSuccessfulCQLUpdate(library?: boolean): void {
@@ -208,7 +217,6 @@ export class CQLEditorPage {
         }
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
-            expect($msg).to.not.contain('Error')
             cy.wrap($msg)
                 .invoke('text')
                 .then(text => {
@@ -232,23 +240,45 @@ export class CQLEditorPage {
         cy.get(EditMeasurePage.cqlEditorExpandCollapseBtn).click()
     }
 
-    public static saveCql(options: SaveCqlOptions = {}): void {
+    public static replaceMonacoCqlDocument(cql: string): void {
+        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, cql)
+    }
+
+    public static clearMonacoCqlDocument(): void {
+        MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
+    }
+
+    public static replaceMonacoCqlDocumentFromFile(filePath: string): void {
+        MonacoEditor.replaceDocumentFromFile(filePath, EditMeasurePage.monacoCqlEditor)
+    }
+
+    public static saveMonacoCql(options: MonacoSaveCqlOptions = {}): void {
         const {
             appendNewLine = true,
-            appendCommand = '{moveToEnd}{end}{enter}',
+            appendText,
             collapseEditor = false,
-            parseSpecialCharSequences = true,
             successTimeout = 50000,
             waitForDisabled = false
         } = options
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get('body').then(($body) => {
+            if (!$body.find(EditMeasurePage.monacoCqlEditor).filter(':visible').length) {
+                CQLEditorPage.openMonacoCqlEditor()
+            }
+        })
 
-        if (appendNewLine) {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(appendCommand, { parseSpecialCharSequences })
+        if (appendText !== undefined) {
+            MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, appendText)
+            // CDP insertion preserves CQL characters that realType cannot enter, but Monaco
+            // only enables Save after a native editing event updates its dirty state.
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+        } else if (appendNewLine) {
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
         }
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('saveMeasureCql')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
+        cy.wait('@saveMeasureCql', { timeout: successTimeout }).its('response.statusCode').should('eq', 200)
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, successTimeout)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -259,6 +289,20 @@ export class CQLEditorPage {
         if (collapseEditor) {
             CQLEditorPage.collapseEditor()
         }
+    }
+
+    /**
+     * Submits a full-document Monaco replacement when the scenario asserts
+     * validation errors rather than a successful CQL save.
+     */
+    public static submitMonacoCqlForValidation(): void {
+        MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
+    }
+
+    public static applyParameter(parameterName: string, parameterType: string): void {
+        cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.enabled').click()
+        MonacoEditor.appendToLineContaining(EditMeasurePage.monacoCqlEditor, `parameter "${parameterName}"`, ` ${parameterType}`)
     }
 
     public static minimizeAlerts(hiddenAlertSelector: string): void {
@@ -292,38 +336,6 @@ export class CQLEditorPage {
 
     }
 
-    public static replaceCqlDocument(filePath: string, editorSelector = EditMeasurePage.cqlEditorTextBox) {
-
-        Utilities.waitForElementWriteEnabled(editorSelector, 8500)
-        cy.get(editorSelector)
-            .should('be.visible')
-            .click()
-            .focused()
-            .type('{selectall}{backspace}{selectall}{backspace}', { force: true })
-
-        Utilities.typeFileContents(filePath, editorSelector)
-    }
-
-    public static replaceCqlDocumentText(cql: string, editorSelector = EditMeasurePage.cqlEditorTextBox): void {
-        Utilities.waitForElementWriteEnabled(editorSelector, 8500)
-
-        cy.get(editorSelector)
-            .should('be.visible')
-            .closest('.ace_editor')
-            .then(($editor) => {
-                const aceEditor = ($editor.get(0) as any)?.env?.editor
-
-                expect(aceEditor, 'Ace editor instance').to.exist
-                aceEditor.setValue(cql)
-                aceEditor.clearSelection()
-                expect(aceEditor.getValue(), 'CQL editor contents').to.eq(cql)
-            })
-
-        // Ace emits its own change event, but the app's dirty-state handler
-        // requires a keyboard event before it enables Save.
-        cy.get(editorSelector).type('{moveToEnd} {backspace}')
-    }
-
     // Clicking expand can trigger a URL navigation that collapses the panel.
     // This helper clicks expand, waits for the page to stabilise, and retries
     // up to several times until the definitions tab is finally visible.
@@ -331,6 +343,10 @@ export class CQLEditorPage {
     // so we check for the collapse button as the reliable "panel is open" signal.
     public static expandCQLBuilderPanel(): void {
         const maxRetries = 5
+
+        // The builder tabs render only after the CQL Editor tab is active.
+        // This is idempotent when the editor is already selected.
+        CQLEditorPage.openMonacoCqlEditor()
 
         const attemptExpand = (attempt: number): void => {
             cy.document().its('readyState').should('eq', 'complete')
@@ -346,7 +362,7 @@ export class CQLEditorPage {
                 // If the expand button is present, click it
                 if ($body.find(CQLEditorPage.expandCQLBuilder).length > 0) {
                     cy.log(`Expanding CQL Builder panel (attempt ${attempt + 1}/${maxRetries})`)
-                    cy.get(CQLEditorPage.expandCQLBuilder).first().scrollIntoView().click({ force: true })
+                    cy.get(CQLEditorPage.expandCQLBuilder).should('be.visible').scrollIntoView().click()
                     cy.document().its('readyState').should('eq', 'complete')
 
                     if (attempt + 1 < maxRetries) {

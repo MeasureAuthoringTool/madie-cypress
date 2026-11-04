@@ -65,7 +65,7 @@ describe('Ratio based measure with measure observations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -167,7 +167,7 @@ describe('Proportion based measure with no observations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()

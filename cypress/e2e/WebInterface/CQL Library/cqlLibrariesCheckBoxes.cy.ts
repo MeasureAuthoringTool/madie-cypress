@@ -20,6 +20,11 @@ describe('CQL Library Sharing', () => {
 
         OktaLogin.setupUserSession(false)
         harpUserALT = OktaLogin.getUser(true)
+        return cy.then(() => undefined)
+    })
+
+    afterEach('Clean up CQL library', () => {
+        return Utilities.deleteLibrary()
     })
 
     it('Verify check box for CQL Libraries appear and can be checked / used', () => {

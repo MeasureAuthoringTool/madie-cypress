@@ -4,6 +4,7 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../Shared/EditMeasurePage'
 import { Utilities } from '../../../Shared/Utilities'
 import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
+import { MonacoEditor } from '../../../Shared/MonacoEditor'
 
 const now = Date.now()
 const measureName = 'MismatchMeasure' + now
@@ -24,7 +25,7 @@ describe('Mismatch between measure model and library model -- error state', () =
     })
 
     afterEach('Logout and Clean up Measure', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('QDM 5.6 measure, add QiCore 4.1.1 library', () => {
@@ -38,9 +39,9 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        CQLEditorPage.replaceCqlDocument(cqlFile)
+        MonacoEditor.replaceDocumentFromFile(cqlFile, EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         const expectedError =
             'Library model and version does not match the Measure model and version for name: CQMCommon, version: 2.2.000'
@@ -50,8 +51,8 @@ describe('Mismatch between measure model and library model -- error state', () =
             .then((measureId) => {
                 cy.url().should('contain', measureId + '/edit/cql-editor')
             })
-        Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, expectedError)
+        MonacoEditor.assertErrorMarker()
     })
 
     it('QiCore 4.1.1 measure, add QDM 5.6 library', () => {
@@ -65,9 +66,9 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        CQLEditorPage.replaceCqlDocument(cqlFile)
+        MonacoEditor.replaceDocumentFromFile(cqlFile, EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         const expectedError =
             'Library model and version does not match the Measure model and version for name: MATGlobalCommonFunction, version: 1.1.000'
@@ -77,8 +78,7 @@ describe('Mismatch between measure model and library model -- error state', () =
             .then((measureId) => {
                 cy.url().should('contain', measureId + '/edit/cql-editor')
             })
-        Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, expectedError)
     })
 
     it('QiCore 4.1.1 measure, add QiCore 6.0.0 library', () => {
@@ -92,9 +92,9 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        CQLEditorPage.replaceCqlDocument(cqlFile)
+        MonacoEditor.replaceDocumentFromFile(cqlFile, EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         const expectedError =
             'Library model and version does not match the Measure model and version for name: SupplementalDataElements, version: 4.0.000'
@@ -104,7 +104,7 @@ describe('Mismatch between measure model and library model -- error state', () =
             .then((measureId) => {
                 cy.url().should('contain', measureId + '/edit/cql-editor')
             })
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', expectedError)
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, expectedError)
     })
 
     it('QiCore 6.0.0 measure, add QiCore 4.1.1  library', () => {
@@ -118,9 +118,9 @@ describe('Mismatch between measure model and library model -- error state', () =
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        CQLEditorPage.replaceCqlDocument(cqlFile)
+        MonacoEditor.replaceDocumentFromFile(cqlFile, EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         const expectedError =
             'Library model and version does not match the Measure model and version for name: CQMCommon, version: 2.2.000'
@@ -130,14 +130,13 @@ describe('Mismatch between measure model and library model -- error state', () =
             .then((measureId) => {
                 cy.url().should('contain', measureId + '/edit/cql-editor')
             })
-        Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
+        MonacoEditor.assertErrors(CQLEditorPage.errorMsg, expectedError)
     })
 })
 
 describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
     afterEach('Logout and Clean up Measure', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('QiCore 4.1.1 measure, add FHIR 4.0.1 library', () => {
@@ -151,9 +150,9 @@ describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        CQLEditorPage.replaceCqlDocument(cqlFile)
+        MonacoEditor.replaceDocumentFromFile(cqlFile, EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 8500)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -170,9 +169,9 @@ describe('Compatible mismatch with QiCore and FHIR -- no errors', () => {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        CQLEditorPage.replaceCqlDocument(cqlFile)
+        MonacoEditor.replaceDocumentFromFile(cqlFile, EditMeasurePage.monacoCqlEditor)
 
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        CQLEditorPage.submitMonacoCqlForValidation()
 
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 8500)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')

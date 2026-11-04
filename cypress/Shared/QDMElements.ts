@@ -95,7 +95,7 @@ export class QDMElements {
         SOPT: 'SOP',
         LOINC: ['LOINC', 'http://loinc.org'],
         RxNORM: 'RXNORM',
-        RXNORM: 'RxNORM',
+        RXNORM: ['RxNORM', 'http://www.nlm.nih.gov/research/umls/rxnorm'],
         rxnorm: 'http://www.nlm.nih.gov/research/umls/rxnorm'
     }
 
@@ -151,6 +151,8 @@ export class QDMElements {
             .flatMap((prefix) => [
                 '[data-testid^="code-system-option-' + prefix + '"]',
                 '[data-testid*="code-system-option-' + prefix + '"]',
+                '[data-testid^="option-' + prefix + '"]',
+                '[data-testid*="option-' + prefix + '"]',
             ])
 
         return [exactSelector, legacySelector, ...fallbackSelector].join(', ')

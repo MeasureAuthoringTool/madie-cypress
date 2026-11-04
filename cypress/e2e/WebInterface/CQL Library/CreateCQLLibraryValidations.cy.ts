@@ -4,11 +4,12 @@ import { CQLLibrariesPage } from '../../../Shared/CQLLibrariesPage'
 import { Utilities } from '../../../Shared/Utilities'
 import { CQLEditorPage } from '../../../Shared/CQLEditorPage'
 import { SupportedModels } from '../../../Shared/CreateMeasurePage'
+import { MonacoEditor } from '../../../Shared/MonacoEditor'
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 
 describe('CQL Library Validations', () => {
-    let cleanupDuplicateLibrary = false
+    let cleanupCreatedLibrary = false
 
     const openCreateLibraryDialog = (): void => {
         CQLLibrariesPage.openLibrariesList()
@@ -34,15 +35,26 @@ describe('CQL Library Validations', () => {
         CQLLibrariesPage.openLibraryFromCurrentListWithExpectedAction('Edit')
     }
 
+    const createLibraryAndRegisterCleanup = (): Cypress.Chainable<string> => {
+        return CQLLibraryPage.clickCreateLibraryButton().then((libraryId) => {
+            cleanupCreatedLibrary = true
+            return libraryId
+        })
+    }
+
     beforeEach('Login', () => {
+        cleanupCreatedLibrary = false
         OktaLogin.SessionLogin()
     })
 
-    afterEach('Clean up duplicate library', () => {
-        if (cleanupDuplicateLibrary) {
-            Utilities.deleteLibrary()
-            cleanupDuplicateLibrary = false
+    afterEach('Clean up created CQL library', () => {
+        if (!cleanupCreatedLibrary) {
+            return cy.then(() => undefined)
         }
+
+        return Utilities.deleteLibrary().then(() => {
+            cleanupCreatedLibrary = false
+        })
     })
 
     it('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {
@@ -60,7 +72,7 @@ describe('CQL Library Validations', () => {
         Utilities.waitForElementEnabled(CQLLibraryPage.saveCQLLibraryBtn, 60000)
 
         //save the new CQL Library
-        CQLLibraryPage.clickCreateLibraryButton()
+        createLibraryAndRegisterCleanup()
         searchForAndEditLibrary(newCQLLibraryName)
 
         //validate header
@@ -85,7 +97,7 @@ describe('CQL Library Validations', () => {
         selectPublisher()
 
         //save the new CQL Library
-        CQLLibraryPage.clickCreateLibraryButton()
+        createLibraryAndRegisterCleanup()
         searchForAndEditLibrary(CQLLibraryName + randValue)
         //change up the value of the CQL Library name
         cy.get(CQLLibraryPage.currentCQLLibName)
@@ -105,7 +117,7 @@ describe('CQL Library Validations', () => {
         const duplicateLibraryName = `DuplicateUSQCLibrary${Date.now()}`
         CQLLibraryPage.createLibraryAPI(duplicateLibraryName, SupportedModels.USQC)
         cy.then(() => {
-            cleanupDuplicateLibrary = true
+            cleanupCreatedLibrary = true
         })
         openCreateLibraryDialog()
 
@@ -232,12 +244,14 @@ describe('CQL Library Validations', () => {
         enterLibraryDescription()
         selectPublisher()
 
-        CQLLibraryPage.clickCreateLibraryButton()
+        createLibraryAndRegisterCleanup()
 
         searchForAndEditLibrary(LibraryName)
-        Utilities.typeFileContents('cypress/fixtures/USQCTestLibrary.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        MonacoEditor.insertTextFromFile('cypress/fixtures/USQCTestLibrary.txt', CQLLibraryPage.cqlLibraryEditorTextBox, 'center')
+        MonacoEditor.append(CQLLibraryPage.cqlLibraryEditorTextBox, '', 'center')
+        MonacoEditor.assertRenderedText(CQLLibraryPage.cqlLibraryEditorTextBox, 'using USQualityCore')
 
-        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled').click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         searchForAndEditLibrary(LibraryName)
@@ -245,6 +259,8 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.currentCQLLibName).should('contain.value', LibraryName)
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('contain.text', "using USQualityCore version '0.5.0'")
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should(($editor) => {
+            expect($editor.text()).to.match(/using\s+USQualityCore\s+version\s+'0\.5\.0'/)
+        })
     })
 })

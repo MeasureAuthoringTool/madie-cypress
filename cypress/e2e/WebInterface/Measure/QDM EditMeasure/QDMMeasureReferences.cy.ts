@@ -28,13 +28,13 @@ describe('QDM Measure Reference', () => {
         measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and cleanup', () => {
 
         
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        return Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Add and Edit QDM Measure reference', () => {
@@ -53,7 +53,7 @@ describe('QDM Measure Reference', () => {
 
         //Edit Measure reference
         // .editReference will work as long as there is only 1 item on the table
-        cy.get(EditMeasurePage.editReference).should('have.attr', 'aria-label', 'Edit').click()
+        cy.get(EditMeasurePage.editReference).should('have.attr', 'aria-label', 'Edit reference Citation').click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
         cy.get(EditMeasurePage.measureReferenceText).clear().type('Updated Measure Reference').wait(1000)
@@ -94,7 +94,7 @@ describe('QDM Measure Reference', () => {
 
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
-        cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete').click()
+        cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete reference Citation').click()
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
@@ -149,13 +149,13 @@ describe('Add Measure Reference - ownership validation', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        OktaLogin.AltLogin()
+        return OktaLogin.SessionAltLogin()
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        return Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Non Measure owner unable to add Measure References', () => {
@@ -204,7 +204,7 @@ describe('Delete or Edit Measure Reference - Ownership validation', () => {
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        return Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Non Measure owner unable to delete or edit Measure reference', () => {
@@ -223,5 +223,3 @@ describe('Delete or Edit Measure Reference - Ownership validation', () => {
         cy.get(EditMeasurePage.editReference).should('not.exist')
     })
 })
-
-

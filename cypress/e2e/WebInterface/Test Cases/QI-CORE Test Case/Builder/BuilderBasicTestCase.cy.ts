@@ -14,12 +14,11 @@ import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { QiCore6Cql } from '../../../../../Shared/FHIRMeasuresCQL'
 import { PopulationType, Stratification } from '@madie/madie-models'
 import { v4 as uuidv4 } from 'uuid'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { Profile, TestCaseBuilder } from '../../../../../Shared/TestCaseBuilder'
+import { TestData } from '../../../../../Shared/TestData'
 
-const timestamp = Date.now()
-let measureName = 'BuilderBasicTC' + timestamp
-let CqlLibraryName = 'BuilderBasicTCLib' + timestamp
+let measureName = ''
+let CqlLibraryName = ''
 const cql = QiCore6Cql.cqlCMS125
 // TestCase #1 from the real measure
 const testCase1: TestCase = {
@@ -62,6 +61,10 @@ const strats: Array<Stratification> = [
 
 describe('Test Case Builder Basics', () => {
     beforeEach('Create measure and login', () => {
+        const timestamp = Date.now()
+        measureName = 'BuilderBasicTC' + timestamp
+        CqlLibraryName = 'BuilderBasicTCLib' + timestamp
+
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: cql })
         MeasureGroupPage.CreateMeasureGroupAPI(
             MeasureType.process,
@@ -72,13 +75,14 @@ describe('Test Case Builder Basics', () => {
         MeasureGroupPage.addStratificationDataAPI(strats)
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
 
-        OktaLogin.Login()
+        TestData.saveMeasureCql(cql).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Create a QiCore6 test case using the UI Builder', () => {
@@ -91,6 +95,7 @@ describe('Test Case Builder Basics', () => {
         TestCaseBuilder.addEditNewResource(Profile.Patient)
 
         Utilities.dropdownSelect('[data-testid="code-selector-Patient.gender"]', 'female')
+        cy.get('[data-testid="code-selector-Patient.gender"]').should('contain.text', 'Female')
 
         TestCaseBuilder.applyAndWait()
         TestCaseBuilder.selectLeftMenu(' *Identifier')
@@ -177,14 +182,8 @@ describe('Test Case Builder Basics', () => {
         cy.get('#time').eq(0).type('080000AM')
         TestCaseBuilder.applyAndWait()
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
-
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get('[data-testid="test-case-title-0_testCaseValidationStatus"]').should('contain.text', 'Pending')
-
+        TestCasesPage.saveTestCaseAndWait()
+        TestCasesPage.openTestCasesTabAndWaitForList()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get('[data-testid="show-json-validation-errors-button"]').should('have.attr', 'title', 'Valid')
