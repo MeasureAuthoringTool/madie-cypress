@@ -29,6 +29,7 @@ Add guidance only when it is supported by committed code, focused validation, au
 ## Reviewer Account Isolation
 
 - Use `OktaLogin.ReviewerLogin()` only for reviewer-role UI coverage. It reserves an available reviewer account (`harpUser2` / `MadieTestUser1` or reviewer-only `harpUser4` / `test.MadieUser5`, configured by `TEST_USERNAME4`) through the shared user lock, so parallel specs cannot share its session.
+- When author-side setup must grant access to the dynamically allocated reviewer, call `OktaLogin.reserveReviewer()` before that setup, grant access to `OktaLogin.getReviewerUser()`, then call `OktaLogin.ReviewerLogin()` to use the same reserved account.
 - Reviewer specs must call `OktaLogin.releaseReviewer()` in `afterEach`. If reviewer tests wait for the user lock or time out, first check whether another primary-user spec is using `harpUser2` or a prior run left its lock file marked.
 - Do not remove `harpUser2` from the primary user pool unless CI concurrency and replacement-account capacity have been reviewed. Keep additional reviewer-only accounts out of that pool and add them to the reviewer allocator instead.
 - Lock files are tracked to define the available account slots, not to retain runtime state. Before committing, ensure every entry in `userLock.json` and `altUserLock.json` is `false`; never commit a lock marked `true`.

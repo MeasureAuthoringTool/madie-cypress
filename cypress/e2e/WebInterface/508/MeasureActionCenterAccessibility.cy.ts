@@ -50,13 +50,17 @@ const comparableVersionsTooltipMessages: MeasureActionTooltipMessages = {
     compareVersions: 'Compare measure versions'
 }
 
+const openMeasureList = (): Cypress.Chainable<JQuery<HTMLElement>> => {
+    cy.get(Header.measures).should('be.visible')
+    cy.get(Header.measures).click()
+    return cy.get(MeasuresPage.measureListTitles).should('be.visible')
+}
+
 // MAT-10344
 describe('Measure action center accessibility', () => {
     beforeEach('Open the measure list', () => {
         OktaLogin.SessionLogin()
-        cy.get(Header.measures).should('be.visible').click()
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => Accessibility.injectAxe())
     })
 
     it('provides an accessible Select All Measures checkbox', () => {
@@ -80,13 +84,14 @@ describe('Measure action center accessibility', () => {
 describe.skip('Reviewer measure action-center accessibility', () => {
     beforeEach('Open All Reviews as the reviewer-role user', () => {
         OktaLogin.ReviewerLogin()
-        cy.get(Header.measures).should('be.visible').click()
-        MeasuresPage.openAllReviewsTab()
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => {
+            MeasuresPage.openAllReviewsTab()
+            return Accessibility.injectAxe()
+        })
     })
 
     afterEach('Release the reviewer-role user', () => {
-        OktaLogin.releaseReviewer()
+        return OktaLogin.releaseReviewer()
     })
 
     it('uses the reviewer action accessibility contract when the feature is enabled', () => {
@@ -111,9 +116,7 @@ describe('Versioned measure action-center tooltips', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         TestData.versionMeasure().its('status').should('eq', 200)
         OktaLogin.SessionLogin()
-        cy.get(Header.measures).should('be.visible').click()
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => Accessibility.injectAxe())
     })
 
     afterEach('Delete the scenario-owned versioned measure', () => {
@@ -141,9 +144,7 @@ describe('Multiple QI-Core measure action-center tooltips', () => {
             MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, undefined, undefined, measureNumber)
         })
         OktaLogin.SessionLogin()
-        cy.get(Header.measures).should('be.visible').click()
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => Accessibility.injectAxe())
     })
 
     afterEach('Delete the scenario-owned QI-Core measures', () => {
@@ -186,9 +187,7 @@ describe('QDM and QI-Core action-center tooltips without a CMS ID', () => {
             1
         )
         OktaLogin.SessionLogin()
-        cy.get(Header.measures).should('be.visible').click()
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => Accessibility.injectAxe())
     })
 
     afterEach('Delete the scenario-owned QDM and QI-Core measures', () => {
@@ -237,9 +236,7 @@ describe('QDM and QI-Core action-center tooltips with a CMS ID', () => {
                 method: 'PUT'
             }).its('status').should('eq', 201)
         })
-        cy.get(Header.measures).should('be.visible').click()
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => Accessibility.injectAxe())
     })
 
     afterEach('Delete the scenario-owned QDM and QI-Core measures', () => {
@@ -294,14 +291,13 @@ describe('Same measure-set version comparison action-center tooltips', () => {
             })
         })
         OktaLogin.SessionLogin()
-        cy.get(Header.measures).should('be.visible').click()
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => Accessibility.injectAxe())
     })
 
     afterEach('Delete the scenario-owned draft and versioned measure', () => {
-        Utilities.deleteVersionedMeasure(versionedMeasureName, cqlLibraryName)
-        return Utilities.deleteMeasure(undefined, undefined, false, false, 1)
+        return Utilities.deleteVersionedMeasure(versionedMeasureName, cqlLibraryName).then(() =>
+            Utilities.deleteMeasure(undefined, undefined, false, false, 1)
+        )
     })
 
     it('shows the required tooltips for two versions from the same measure set', () => {
@@ -326,9 +322,7 @@ describe('Measure action center tooltip states', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(draftMeasureName, `${draftMeasureName}Library`, MeasureCQL.CQL_For_Cohort)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.SessionLogin()
-        cy.get(Header.measures).should('be.visible').click()
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-        return Accessibility.injectAxe()
+        return openMeasureList().then(() => Accessibility.injectAxe())
     })
 
     afterEach('Delete the scenario-owned draft measure', () => {

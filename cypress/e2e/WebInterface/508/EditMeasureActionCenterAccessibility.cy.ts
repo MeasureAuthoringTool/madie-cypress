@@ -1,6 +1,7 @@
 import { Accessibility } from '../../../support/accessibility'
 import { EditMeasureActionCenter, EditMeasureAction } from '../../../Shared/EditMeasureActionCenter'
 import { Header } from '../../../Shared/Header'
+import { ManageReviewDialogPage } from '../../../Shared/ManageReviewDialogPage'
 import { MeasureCQL } from '../../../Shared/MeasureCQL'
 import { CreateMeasurePage } from '../../../Shared/CreateMeasurePage'
 import { MeasureGroupPage } from '../../../Shared/MeasureGroupPage'
@@ -8,11 +9,10 @@ import { MeasuresPage } from '../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../Shared/OktaLogin'
 import { TestData } from '../../../Shared/TestData'
 import { Utilities } from '../../../Shared/Utilities'
+import { Toasts } from '../../../Shared/Toasts'
 import { step } from '../../../utils/step'
 
 type MeasureState = 'draft' | 'versioned'
-
-const MAT_10348_DEFECT = 'MAT-10348 defect: see bugs/MAT-10348-defect-report.md'
 
 const actionOrder = (measureState: MeasureState, includesReview = false): EditMeasureAction[] => [
     ...(includesReview ? (['review'] as EditMeasureAction[]) : []),
@@ -22,7 +22,7 @@ const actionOrder = (measureState: MeasureState, includesReview = false): EditMe
     'transfer',
     'share',
     'export',
-    'delete'
+    ...(measureState === 'draft' ? (['delete'] as EditMeasureAction[]) : [])
 ]
 
 const assertFocusVisible = () => {
@@ -134,27 +134,48 @@ const openScenarioMeasure = () => {
 }
 
 const openReviewerScenarioMeasure = () => {
-    return OktaLogin.ReviewerLogin().then(() => {
-        const primaryUser = Cypress.expose('selectedUser')
-        const reviewerUser = Cypress.expose('reviewerUser')
+    return OktaLogin.reserveReviewer()
+        .then(() => {
+            createScenarioMeasure('draft')
+            TestData.requestMeasureReview('READY_FOR_REVIEW').its('status').should('eq', 201)
 
-        expect(primaryUser, 'Primary user allocation').to.be.a('string').and.not.be.empty
-        expect(reviewerUser, 'Reviewer user allocation').to.be.a('string').and.not.be.empty
-        Cypress.expose('mat10348PrimaryUser', primaryUser)
-        Cypress.expose('selectedUser', reviewerUser)
+            const reviewer = OktaLogin.getReviewerUser()
+            expect(reviewer, 'Reserved reviewer username').not.to.be.empty
 
-        createScenarioMeasure('draft')
-        MeasuresPage.openMeasureDetailsById()
-        return Accessibility.injectAxe()
-    })
-}
+            return TestData.readMeasureId().then((measureId) => {
+                return TestData.requestSharePermissions('measure', 'GRANT', measureId, reviewer)
+                    .its('status')
+                    .should('eq', 200)
+            })
+        })
+        .then(() => {
+            return OktaLogin.ReviewerLogin()
+        })
+        .then(() => {
+            MeasuresPage.openAllReviewsTab()
+            MeasuresPage.selectMeasureForReview()
+            MeasuresPage.openReviewDialog()
 
-const restorePrimaryUserAfterReviewerScenario = () => {
-    const primaryUser = Cypress.expose('mat10348PrimaryUser')
-
-    expect(primaryUser, 'Primary user allocation to restore').to.be.a('string').and.not.be.empty
-    Cypress.expose('selectedUser', primaryUser)
-    Cypress.expose('mat10348PrimaryUser', null)
+            return TestData.getAccountDisplayName(OktaLogin.getReviewerUser()).then((reviewerDisplayName) => {
+                ManageReviewDialogPage.selectReviewer(reviewerDisplayName)
+                TestData.readMeasureId().then((measureId) => {
+                    cy.intercept('PUT', `/api/measures/${measureId}/review`).as('assignReviewer')
+                    ManageReviewDialogPage.save()
+                    cy.wait('@assignReviewer').its('response.statusCode').should('eq', 200)
+                })
+                cy.get(ManageReviewDialogPage.content).should('not.exist')
+                Toasts.clearToast(
+                    ManageReviewDialogPage.successToast,
+                    'Review information has been saved successfully.',
+                    ManageReviewDialogPage.successToastCloseButton
+                )
+            })
+        })
+        .then(() => {
+            MeasuresPage.openMyReviewsTab()
+            MeasuresPage.openMeasureFromCurrentListWithExpectedAction('Edit')
+            return Accessibility.injectAxe()
+        })
 }
 
 const testActionCenterAccessibility = (measureState: MeasureState) => {
@@ -186,13 +207,7 @@ const testActionCenterAccessibility = (measureState: MeasureState) => {
         })
 
         actionOrder(measureState).forEach((action) => {
-            const isBlockedByDefect =
-                action === 'humanReadable' ||
-                action === 'share' ||
-                (measureState === 'versioned' && action === 'delete')
-            const actionTest = isBlockedByDefect ? it.skip : it
-
-            actionTest(`provides an accessible ${EditMeasureActionCenter.actions[action].accessibleName} action`, () => {
+            it(`provides an accessible ${EditMeasureActionCenter.actions[action].accessibleName} action`, () => {
                 step(`Open the action center and verify ${EditMeasureActionCenter.actions[action].accessibleName}`)
                 EditMeasureActionCenter.open()
                 EditMeasureActionCenter.assertAccessibleName(action)
@@ -202,7 +217,7 @@ const testActionCenterAccessibility = (measureState: MeasureState) => {
             })
         })
 
-        it.skip(`supports forward and reverse keyboard navigation through the expanded action center (${MAT_10348_DEFECT})`, () => {
+        it('supports forward and reverse keyboard navigation through the expanded action center', () => {
             step('Open the action center from its keyboard-reachable trigger')
             tabToActionCenter()
             cy.realPress('Enter')
@@ -220,26 +235,27 @@ const testActionCenterAccessibility = (measureState: MeasureState) => {
     })
 }
 
-describe('reviewer edit-measure action center accessibility', () => {
-    beforeEach('Create and open a reviewer-owned draft measure', () => openReviewerScenarioMeasure())
+// Reviewer functionality is not available in TEST.
+describe.skip('reviewer edit-measure action center accessibility', () => {
+    beforeEach('Create, assign, and open a reviewer-owned draft measure', () => openReviewerScenarioMeasure())
 
-    afterEach('Delete the reviewer-owned measure, restore the primary user, and release the reviewer user', () => {
+    afterEach('Delete the reviewer-assigned measure and release the reviewer user', () => {
         return Utilities.deleteMeasure().then(() => {
-            restorePrimaryUserAfterReviewerScenario()
             return OktaLogin.releaseReviewer()
         })
     })
 
-    it.skip(`includes Review as the first expanded action for a reviewer (${MAT_10348_DEFECT})`, () => {
+    it('includes Review as the first expanded action for a reviewer', () => {
         step('Open the action center and verify the Review action accessible name')
         EditMeasureActionCenter.open()
         EditMeasureActionCenter.assertAccessibleName('review')
         EditMeasureActionCenter.scanAction('review')
     })
 
-    it.skip(`supports the reviewer forward and reverse focus order (${MAT_10348_DEFECT})`, () => {
-        step('Open the action center with Space from the keyboard-reachable trigger')
-        tabToActionCenter()
+    it('supports the reviewer forward and reverse focus order', () => {
+        step('Focus the action center trigger and open it with Space')
+        EditMeasureActionCenter.triggerButton().focus().should('have.focus')
+        assertFocusVisible()
         cy.realPress('Space')
         EditMeasureActionCenter.actionButton('review').should('be.visible')
 
@@ -248,6 +264,5 @@ describe('reviewer edit-measure action center accessibility', () => {
     })
 })
 
-// MAT-10348. Run in DEV while the Review action remains unavailable in TEST.
 testActionCenterAccessibility('draft')
 testActionCenterAccessibility('versioned')

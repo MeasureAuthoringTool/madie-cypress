@@ -151,6 +151,7 @@ export class MeasureGroupPage {
 
     //Measure Group Type
     public static readonly measureGroupTypeSelect = '[data-testid="measure-group-type-dropdown"]'
+    public static readonly measureGroupTypeInput = '[data-testid="measure-group-type-input"]'
     public static readonly measureGroupTypeCheckbox = '[id="measure-group-type"]'
     public static readonly measureGroupTypeDropdownBtn = '[class="MuiBackdrop-root MuiBackdrop-invisible css-esi9ax"]'
 

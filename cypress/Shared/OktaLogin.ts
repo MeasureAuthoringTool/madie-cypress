@@ -60,9 +60,7 @@ export class OktaLogin {
     public static ReviewerLogin(): Cypress.Chainable<void> {
         // Reviewer accounts are acquired through the shared user lock so the
         // shared harpUser2 account cannot collide with ordinary primary specs.
-        return cy.task<string | null>('getAvailableReviewer').then((reviewerUser) => {
-            expect(reviewerUser, 'Available reviewer user').to.not.be.null
-            Cypress.expose('reviewerUser', reviewerUser)
+        return this.reserveReviewer().then((reviewerUser) => {
             return this.runLoginFlow({
                 selectedEnvVar: 'reviewerUser',
                 cookieSetters: {
@@ -81,6 +79,20 @@ export class OktaLogin {
                 logPrefix: 'Reviewer Login',
             })
         }).then(() => undefined)
+    }
+
+    public static reserveReviewer(): Cypress.Chainable<string> {
+        const reservedReviewer = Cypress.expose('reviewerUser')
+
+        if (typeof reservedReviewer === 'string' && reservedReviewer) {
+            return cy.wrap(reservedReviewer, { log: false })
+        }
+
+        return cy.task<string | null>('getAvailableReviewer').then((reviewerUser) => {
+            expect(reviewerUser, 'Available reviewer user').to.be.a('string').and.not.be.empty
+            Cypress.expose('reviewerUser', reviewerUser)
+            return reviewerUser
+        })
     }
 
     public static releaseReviewer(): Cypress.Chainable<void> {

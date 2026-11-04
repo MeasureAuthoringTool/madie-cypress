@@ -10,6 +10,8 @@ export class Header {
     public static readonly umlsConnectOption = '[data-value="Connect to UMLS"]'
     //Main MADiE page
     public static readonly mainMadiePageButton = '#fulllogo'
+    public static readonly mainNavigation = '#dropdown_div'
+    public static readonly mainNavigationList = '#dropdown_div > ul'
     public static readonly cqlLibraryTab = '[data-testid="main-nav-bar-cql-library"]'
     public static readonly measures = '[data-testid="main-nav-bar-measures"]'
     public static readonly umlsLoginButton = '[data-testid="UMLS-connect-button"]'

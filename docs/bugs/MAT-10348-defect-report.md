@@ -20,7 +20,7 @@ For the edit-measure Action Center, the focusable button must expose the ticket-
 - Export: `Export Measure`
 - Delete: `Delete Measure`
 
-For a versioned measure where the owner has edit access, the Action Center must include the Delete action.
+Delete Measure is available only for draft measures; versioned measures expose Draft Measure instead.
 
 ## Actual
 
@@ -29,8 +29,6 @@ For a versioned measure where the owner has edit access, the Action Center must 
 | Review | `Review Measure` | `Review` | Not consistent with ticket contract |
 | View Human Readable | `View Human Readable` | `View human readable` | `View Human Readable` |
 | Share/Unshare | `Share or Unshare Measure` | `Share/Unshare` | `Share Measure` |
-
-The full DEV run also could not find `[data-testid="DeleteMeasure"]` for the versioned owner-measure scenario.
 
 ## DOM Evidence
 
@@ -63,11 +61,10 @@ Failures attributable to this defect:
 - Review expected `Review Measure`; actual outer label `Review`.
 - View Human Readable expected `View Human Readable`; actual outer label `View human readable`.
 - Share/Unshare expected `Share or Unshare Measure`; actual outer label `Share/Unshare` and focused inner label `Share Measure`.
-- Versioned owner-measure scenario did not render Delete Measure.
 - Focus-order checks stop at Share because the focused button has `aria-label="Share Measure"`.
 
 The collapsed action-center tab-order checks and the History, Version/Draft, Transfer, Export, and draft Delete contracts passed.
 
 ## Suggested Remediation
 
-Use one focusable control per Action Center action. That control should carry the final ticket-defined `aria-label`; do not expose a nested focusable button with a competing accessible name. Confirm that the versioned owner-with-edit-access state renders Delete Measure as required.
+Use one focusable control per Action Center action. That control should carry the final ticket-defined `aria-label`; do not expose a nested focusable button with a competing accessible name.

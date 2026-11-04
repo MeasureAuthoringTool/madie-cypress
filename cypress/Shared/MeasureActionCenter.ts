@@ -109,7 +109,11 @@ export class MeasureActionCenter {
     }
 
     public static assertSelectAllMeasuresCheckbox(): void {
-        cy.get(MeasuresPage.selectAllMeasuresCheckbox).should('have.attr', 'aria-label', 'Select All Measures')
+        cy.get(MeasuresPage.selectAllMeasuresCheckbox)
+            .should('have.attr', 'type', 'checkbox')
+            .and('have.attr', 'aria-label', 'Select all measures on this page')
+            .parents('[role="group"][aria-label="Measure Selection"]')
+            .should('exist')
     }
 
     public static searchAndSelectMeasure(measureName: string, measureNumber = 0): void {

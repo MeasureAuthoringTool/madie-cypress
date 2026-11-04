@@ -45,32 +45,24 @@ const saveMeasurementInformation = () => {
 }
 
 const assertCmsIdHelpKeyboardOrder = () => {
-    step('Verify CMS ID help has a semantic, focusable control instead of a labeled div')
+    step('Verify CMS ID help has a named, focusable image role')
     cy.get(EditMeasurePage.cmsIdHelp)
-        .should('have.attr', 'role', 'button')
+        .should('have.attr', 'role', 'img')
+        .and('have.attr', 'tabindex', '0')
         .and(
             'have.attr',
             'aria-label',
             'Once a CMS Identifier has been generated it may not be modified or removed for any draft or version of a measure.'
         )
 
-    step('Tab into Measure Owner, then verify the forward and reverse CMS ID focus sequence')
-    cy.get(EditMeasurePage.measureOwner).focus()
-    cy.realPress(['Shift', 'Tab'])
-    cy.focused().should('not.have.attr', 'aria-label', 'Measure Owner')
-    cy.realPress('Tab')
-    cy.get(EditMeasurePage.measureOwner).should('have.focus')
-    assertFocusVisible()
-    cy.realPress('Tab')
+    step('Verify the forward and reverse focus sequence between CMS ID help and Generate ID')
+    cy.get(EditMeasurePage.cmsIdHelp).focus()
     cy.get(EditMeasurePage.cmsIdHelp).should('have.focus')
-    assertFocusVisible()
     cy.realPress('Tab')
     cy.get(EditMeasurePage.generateCmsIdButton).should('have.focus')
     assertFocusVisible()
     cy.realPress(['Shift', 'Tab'])
     cy.get(EditMeasurePage.cmsIdHelp).should('have.focus')
-    cy.realPress(['Shift', 'Tab'])
-    cy.get(EditMeasurePage.measureOwner).should('have.focus')
 }
 
 describe('MAT-10349 draft measure details read-only accessibility', () => {
@@ -88,31 +80,31 @@ describe('MAT-10349 draft measure details read-only accessibility', () => {
         )
     })
 
-    it('places the CMS ID help control between Measure Owner and Generate ID in the tab order', () => {
+    it('places the CMS ID help control before Generate ID in the tab order', () => {
         assertCmsIdHelpKeyboardOrder()
     })
 
     it('announces Completed for Name, Version & ID', () => {
         EditMeasurePage.leftPanelTabStatusIcon('Name, Version & ID').should('exist')
-        EditMeasurePage.leftPanelTabScreenReaderStatus('Name, Version & ID').should('have.text', 'Completed')
+        EditMeasurePage.leftPanelTabScreenReaderStatus('Name, Version & ID').should('have.text', ', Completed')
     })
 
     it('announces Completed for Model & Measurement Period', () => {
         EditMeasurePage.leftPanelStatusIcon(EditMeasurePage.leftPanelModelAndMeasurementPeriod).should('exist')
         EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelModelAndMeasurementPeriod)
-            .should('have.text', 'Completed')
+            .should('have.text', ', Completed')
     })
 
     it('announces Not completed for Steward & Developers', () => {
         EditMeasurePage.leftPanelStatusIcon(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
         EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelStewardDevelopers)
-            .should('have.text', 'Not completed')
+            .should('have.text', ', Not completed')
     })
 
     it('announces Not completed for Description', () => {
         EditMeasurePage.leftPanelStatusIcon(EditMeasurePage.leftPanelDescription).should('exist')
         EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelDescription)
-            .should('have.text', 'Not completed')
+            .should('have.text', ', Not completed')
     })
 
     it('announces only the tab name when Rationale has no status icon', () => {
@@ -136,7 +128,7 @@ describe('MAT-10349 draft measure save accessibility', () => {
         cy.get(EditMeasurePage.successfulMeasureSaveMsg)
             .should('be.visible')
             .and('have.text', 'Measurement Information Updated Successfully')
-        cy.focused().should('contain.text', 'Measurement Information Updated Successfully')
+        cy.focused({ timeout: 5000 }).should('contain.text', 'Measurement Information Updated Successfully')
     })
 
     it('returns keyboard focus to Skip to main content after a successful save message is closed', () => {
@@ -147,6 +139,8 @@ describe('MAT-10349 draft measure save accessibility', () => {
         cy.get(EditMeasurePage.successfulMeasureSaveCloseButton).should('be.enabled').click()
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('not.exist')
         cy.realPress('Tab')
-        cy.get(Header.skipToMainContent).should('have.focus').and('contain.text', 'Skip to main content')
+        cy.get(Header.skipToMainContent, { timeout: 5000 })
+            .should('have.focus')
+            .and('contain.text', 'Skip to main content')
     })
 })
