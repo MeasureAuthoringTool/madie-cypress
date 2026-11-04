@@ -89,6 +89,7 @@ export class OktaLogin {
         }
 
         return cy.task<string | null>('getAvailableReviewer').then((reviewerUser) => {
+            // A null or blank result means every reviewer test account is already allocated.
             if (typeof reviewerUser !== 'string' || reviewerUser.trim().length === 0) {
                 throw new Error('No reviewer test account is currently available')
             }
