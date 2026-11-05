@@ -44,6 +44,7 @@ export class MeasuresPage {
     public static readonly filterModelOption = '[data-testid="filter-by-Model"]'
     public static readonly filterCMSIdOption = '[data-testid="filter-by-CMS ID"]'
     public static readonly filterReviewOption = '[data-testid="filter-by-Review"]'
+    public static readonly selectAllMeasuresCheckbox = '[data-testid="checkbox-select-all-checkbox"]'
 
     //export
     public static readonly exportNonPublishingOption = '[data-testid="executable-export-option"]'
@@ -174,6 +175,14 @@ export class MeasuresPage {
             cy.visit(`/measures/${measureId}/edit/details`)
             cy.location('pathname').should('contain', `/measures/${measureId}/edit/details`)
             cy.get(EditMeasurePage.reviewAndHistoryActionCenterButton).should('be.visible')
+        })
+    }
+
+    public static openEditMeasureDetailsById(measureNumber = 0, owner: FixtureOwner = 'selectedUser'): void {
+        TestData.readMeasureId(measureNumber, owner).then((measureId) => {
+            cy.visit(`/measures/${measureId}/edit/details`)
+            cy.location('pathname').should('contain', `/measures/${measureId}/edit/details`)
+            cy.get(EditMeasurePage.measureNameTextBox).should('be.visible').and('be.enabled')
         })
     }
 
@@ -700,6 +709,20 @@ export class MeasuresPage {
                 .scrollIntoView()
                 .click()
         })
+    }
+
+    public static expandMeasure(measureNumber = 0): void {
+        TestData.readMeasureId(measureNumber).then((measureId) => {
+            cy.get(`[data-testid="measure-name-${measureId}_expandArrow"]`).should('be.visible').click()
+        })
+    }
+
+    public static expandSearchedMeasureSet(): void {
+        cy.get('[data-testid$="_expandArrow"]').should('have.length', 1).click()
+    }
+
+    public static selectExpandedMeasure(): void {
+        cy.get('.expanded-row').find('input[type="checkbox"]').should('be.visible').click()
     }
 
     public static selectMeasureForReview(measureNumber = 0): void {

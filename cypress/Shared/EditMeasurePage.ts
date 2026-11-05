@@ -58,12 +58,12 @@ export class EditMeasurePage {
     public static readonly deleteMeasureBtn = '[data-testid="DeleteMeasure"]'
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
     public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
-    public static readonly editMeasureExportActionBtn = '[data-testid="ExportMeasure"]'
+    public static readonly editMeasureExportActionBtn = '[data-testid="export-action-btn"]'
     public static readonly viewHRActionBtn = '[data-testid="ViewHumanReadable"]'
-    public static readonly shareMeasureActionBtn = '[data-testid="ShareorUnshareMeasure"]'
+    public static readonly shareMeasureActionBtn = '[data-testid="share-action-btn"]'
     public static readonly transferMeasureActionBtn = '[data-testid="transfer-action-btn"]'
     public static readonly viewHistoryActionBtn = '[data-testid="ViewHistory"]'
-    public static readonly reviewMeasureActionBtn = '[data-testid="Review"]'
+    public static readonly reviewMeasureActionBtn = '[data-testid="ReviewMeasure"]'
     public static readonly reviewStatus = '[data-testid="measure-review-status"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
@@ -85,6 +85,7 @@ export class EditMeasurePage {
 
     //Measurement Information
     public static readonly measureNameTextBox = '[data-testid="measure-name-input"]'
+    public static readonly measureOwner = '[aria-label="Measure Owner"]'
     public static readonly readOnlyMeasureName = '[data-testid="measure-name-text-field"]'
     public static readonly cqlLibraryNameTextBox = '[data-testid="cql-library-name-input"]'
     public static readonly readOnlyLibraryName = '[data-testid="cql-library-name"]'
@@ -94,10 +95,12 @@ export class EditMeasurePage {
     public static readonly versionId = '[data-testid="version-id-input"]'
     public static readonly abbreviatedTitleTextBox = '[data-testid="ecqm-input"]'
     public static readonly generateCmsIdButton = '[data-testid="generate-cms-id-button"]'
+    public static readonly cmsIdHelp = '[data-testid="cms-id-tooltip"]'
     public static readonly cmsIDDialogCancel = '[data-testid="cms-identifier-dialog-cancel-button"]'
     public static readonly cmsIDDialogContinue = '[data-testid="cms-identifier-dialog-continue-button"]'
     public static readonly cmsIdInput = '[data-testid="cms-id-text-field"]'
     public static readonly successfulMeasureSaveMsg = '[data-testid="edit-measure-information-success-text"]'
+    public static readonly successfulMeasureSaveCloseButton = '[data-testid="close-error-button"]'
 
     public static assertMeasureDetailsMode(mode: MeasureDetailsMode): void {
         if (mode === 'edit') {
@@ -130,6 +133,26 @@ export class EditMeasurePage {
     public static readonly leftPanelMeasureSet = '[data-testid="leftPanelMeasureSet"]'
     public static readonly leftPanelQiCoreDefinition = '[data-testid="leftPanelQiCoreMeasureDefinition"]'
     public static readonly leftPanelPurpose = '[data-testid="leftPanelMeasurePurpose"]'
+
+    public static leftPanelTabByName(tabName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.contains('[role="tab"]', tabName).should('be.visible')
+    }
+
+    public static leftPanelScreenReaderStatus(selector: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(selector).find('.sr-only')
+    }
+
+    public static leftPanelStatusIcon(selector: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(selector).find('svg')
+    }
+
+    public static leftPanelTabScreenReaderStatus(tabName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return this.leftPanelTabByName(tabName).find('.sr-only')
+    }
+
+    public static leftPanelTabStatusIcon(tabName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return this.leftPanelTabByName(tabName).find('svg')
+    }
 
     //Measure Set
     public static readonly measureSetText = '[data-testid="generic-field-rich-text-editor"]'

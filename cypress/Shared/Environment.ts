@@ -7,6 +7,8 @@ type Credentials = {
     password2: NullableString
     harpUser3: NullableString
     password3: NullableString
+    harpUser4: NullableString
+    password4: NullableString
     altHarpUser: NullableString
     altHarpUser2: NullableString
     altHarpUser3: NullableString
@@ -28,6 +30,7 @@ type Authentication = {
 
 const credentialKeys = [
     'TEST_USERNAME', 'TEST_PASSWORD', 'TEST_USERNAME2', 'TEST_PASSWORD2', 'TEST_USERNAME3', 'TEST_PASSWORD3',
+    'TEST_USERNAME4', 'TEST_PASSWORD4',
     'TEST_ALT_USERNAME', 'TEST_ALT_USERNAME2', 'TEST_ALT_USERNAME3', 'TEST_ALT_PASSWORD', 'TEST_ALT_PASSWORD2',
     'TEST_ALT_PASSWORD3', 'VSAC_API_KEY', 'DEV_ADMIN_API_KEY', 'TEST_ADMIN_API_KEY', 'TEST_ADMIN_USERNAME',
     'TEST_ADMIN_PASSWORD', 'IMPL_USERNAME', 'IMPL_PASSWORD', 'IMPL_ALT_USERNAME', 'IMPL_ALT_PASSWORD',
@@ -86,6 +89,8 @@ function sharedTestCredentials(adminApiKeyName: 'DEV_ADMIN_API_KEY' | 'TEST_ADMI
         password2: envValue('TEST_PASSWORD2'),
         harpUser3: envValue('TEST_USERNAME3'),
         password3: envValue('TEST_PASSWORD3'),
+        harpUser4: envValue('TEST_USERNAME4'),
+        password4: envValue('TEST_PASSWORD4'),
         altHarpUser: envValue('TEST_ALT_USERNAME'),
         altHarpUser2: envValue('TEST_ALT_USERNAME2'),
         altHarpUser3: envValue('TEST_ALT_USERNAME3'),
@@ -129,6 +134,8 @@ export class Environment {
                     password2: null,
                     harpUser3: null,
                     password3: null,
+                    harpUser4: null,
+                    password4: null,
                     altHarpUser: envValue('IMPL_ALT_USERNAME'),
                     altHarpUser2: null,
                     altHarpUser3: null,

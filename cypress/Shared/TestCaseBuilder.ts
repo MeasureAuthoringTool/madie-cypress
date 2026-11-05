@@ -58,7 +58,11 @@ export class TestCaseBuilder {
     public static readonly addAttribute = '[data-testid="add-attribute-dialog-button"]'
 
     public static readonly availableSearch = '[data-testid="search-elements-input-input"]'
+    public static readonly allProfiles = '[data-testid="all-profiles-radio"]'
     public static readonly allProfilesRadio = '[data-testid="all-profiles-option"]'
+    public static readonly visibleBuilderTables = 'table:visible'
+    public static readonly expandControls = 'button[aria-expanded]:not(.MuiSpeedDial-fab)'
+    public static readonly editorHeadings = 'h1, h2, h3, h4, h5, h6, [role="heading"]'
 
     public static readonly applyButton = '[data-testid="element-editor-submit-button"]'
     public static readonly undoButton = '[data-testid="element-editor-undo-button"]'
@@ -86,6 +90,16 @@ export class TestCaseBuilder {
 
     public static readonly horizontalSlider = "[data-testid='builder-slider']"
 
+    public static selectAllProfiles(): Cypress.Chainable<JQuery<HTMLElement>> {
+        return cy.get(`${this.allProfiles}, ${this.allProfilesRadio}`)
+            .filter(':visible')
+            .first()
+            .should('be.visible')
+            .click()
+            .find('input[type="radio"]')
+            .should('be.checked')
+    }
+
     public static addEditNewResource(addition: Profile, resourceNumber?: number) {
         const addResourceSelector = `[data-testid="add-element-${addition}"]`
         const searchTerm = addition.replace(/^qicore-/, 'QICore ').replace(/-/g, ' ')
@@ -98,8 +112,7 @@ export class TestCaseBuilder {
                 }
         })
         cy.get(this.availableTab).should('have.attr', 'aria-selected', 'true')
-        cy.get(this.allProfilesRadio).should('be.visible').click()
-        cy.get(this.allProfilesRadio).find('input[type="radio"]').should('be.checked')
+        this.selectAllProfiles()
         // The Available search input can be clipped by the Builder split pane.
         // Avoid Cypress actionability scrolling, which changes the pane layout.
         cy.get(this.availableSearch)

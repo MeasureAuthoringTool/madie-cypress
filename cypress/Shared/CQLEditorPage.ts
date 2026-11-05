@@ -14,6 +14,12 @@ type MonacoSaveCqlOptions = {
 export class CQLEditorPage {
 
     public static readonly mainCqlDocument = '.left-panel'
+    public static readonly monacoEditor = '.monaco-editor'
+    public static readonly monacoLineNumbers = '.monaco-editor .margin-view-overlays .line-numbers'
+    public static readonly monacoRenderedTokens = '.monaco-editor .view-lines .view-line span'
+    public static readonly howItWorksLink = '[data-testid="how-it-works-link"]'
+    public static readonly howItWorksContent = '[data-testid="how-it-works-content"]'
+    public static readonly howItWorksCloseButton = '[data-testid="how-it-works-close"]'
 
     //button to save CQL
     public static readonly saveCQLButton = '[data-testid="save-cql-btn"]'

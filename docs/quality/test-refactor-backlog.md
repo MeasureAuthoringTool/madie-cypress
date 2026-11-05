@@ -1,6 +1,6 @@
 # MADiE Cypress Quality Backlog
 
-Last updated: 2026-10-26
+Last updated: 2026-11-03
 
 Stable automation rules live in `docs/quality/cypress-automation-guidelines.md`. This file tracks only current priorities, blockers, audit signal, and concise completion evidence.
 
@@ -125,8 +125,33 @@ Sequence batches by independent CI failures and shared-helper consumer count. Co
 | `QDMRunExecuteTC.cy.ts` non-owner path | Previously reached VSAC `401`. | Recheck environment/session dependency independently. |
 | Locking follow-up | Okta auth failures prevented helper-path validation. | Rerun after authentication stabilizes. |
 | `BooleanAndNonBooleanExpectedValues.cy.ts`, `ExecutionAndCoverageValidations.cy.ts` | No runner output in a reported run. | Verify spec collection and runner artifacts first. |
+| `EditMeasureActionCenterAccessibility.cy.ts` (MAT-10348) | DEV full run found conflicting outer SpeedDial and nested focusable-button names for Review, View Human Readable, and Share/Unshare. | Resolve the product defects in `docs/bugs/MAT-10348-defect-report.md`, then re-enable the defect-linked accessible-name and focus-order assertions. |
 
 ## Next Architecture Targets
+
+### Section 508 POC
+
+The POC currently covers the UMLS header, Measure List action center, Edit
+Measure action center, and Edit Measure Details. Add one bounded, reusable
+workflow at a time to reach the six-to-eight representative-state target.
+
+1. **MAT-10559 — Layout and navigation:** verify landmarks, skip navigation,
+   keyboard focus order, and accessible navigation/menu behavior.
+2. **MAT-10351 / MAT-10564 — Population Criteria:** cover tab navigation,
+   expanded and collapsed content, validation, and scoped accessibility scans.
+3. **MAT-10354–MAT-10358 / MAT-10565–MAT-10566 — Test Case workflow:** cover
+   one representative journey across the action center, collapsed sidebar,
+   Available and Added tabs, pagination, and builder keyboard interaction.
+4. **MAT-10561 — Create Measure dialog:** verify its accessible name, initial
+   focus, focus trap, Escape behavior, validation, and focus return.
+
+Defer MAT-10562 (Edit Measure Page) unless an acceptance criterion is not
+already covered by the Edit Details or Edit Action Center specs. Treat
+MAT-10560 as list/search/table coverage beyond the existing Measure List
+action-center checks. Schedule CQL tickets MAT-10350 and MAT-10563 after these
+higher-risk workflows. MAT-10530 is final evidence and triage work, not a
+separate Cypress feature spec. Keep reviewer-role coverage DEV-targeted and
+skipped in TEST until reviewer functionality is promoted there.
 
 ### UI reliability
 

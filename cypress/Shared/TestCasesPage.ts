@@ -246,6 +246,9 @@ export class TestCasesPage {
   public static readonly testCaseListValidationPercTab = '[data-testid="validation-tab"]'
   public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
   public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
+  public static readonly testCaseListCells = `${TestCasesPage.testCaseListTable} th, ${TestCasesPage.testCaseListTable} td`
+  public static readonly testCaseListHeaderCheckbox = `${TestCasesPage.testCaseListTable} thead input[type="checkbox"]`
+  public static readonly testCaseListRowCheckboxes = `${TestCasesPage.testCaseListTable} tbody input[type="checkbox"]`
   public static readonly testCaseAction0Btn = '[data-testid="test-case-title-0_action"]'
   public static readonly tcCoverageTabIPpop = '[data-testid="Initial Population-population"]'
   public static readonly tcCoverageTabDenompop = '[data-testid="Denominator-population"]'
