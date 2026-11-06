@@ -745,7 +745,8 @@ export class MeasureGroupPage {
         altUser?: boolean,
         denominatorObservation?: MeasureObservations,
         numeratorObservation?: MeasureObservations,
-        cvPopulations?: CVGroups
+        cvPopulations?: CVGroups,
+        scoringUnit?: MeasureGroupBody['scoringUnit']
     ): string {
         if (altUser === undefined || altUser === null) {
             altUser = false
@@ -850,6 +851,7 @@ export class MeasureGroupPage {
                 measureGroupTypes: [measureType],
                 stratifications: [],
                 improvementNotation: 'Increased score indicates improvement',
+                ...(scoringUnit ? { scoringUnit } : {}),
                 measureObservations: observations.map((observation) => ({
                     ...observation,
                     criteriaReference: observation.criteriaReference ?? null
