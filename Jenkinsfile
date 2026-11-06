@@ -10,14 +10,16 @@ pipeline {
     choice(
       choices: [
         'cy:parallel:test','cy:parallel:test:ui:smoketests','cy:parallel:test:ui:smoketests:headless','cy:parallel:dev:ui:smoketests',
+        'cy:parallel:test:ui:508','cy:parallel:test:ui:508:headless','cy:parallel:dev:ui:508','cy:parallel:dev:ui:508:headless',
         'cy:parallel:test:all:tests','test:specific:files:parallel','test:specific:files:parallel:headless','dev:all:ui:tests','dev:all:tests',
-        'dev:ui:smoketests','dev:ui:cqllibrary:cqlEditor','dev:ui:cqllibrary','dev:ui:measure:cqlEditor',
+        'dev:ui:smoketests','dev:ui:508','dev:ui:508:headed','dev:ui:cqllibrary:cqlEditor','dev:ui:cqllibrary','dev:ui:measure:cqlEditor',
         'dev:measure:editMeasure:ui:tests','dev:ui:testCases:testCasePopulationValues',
         'dev:ui:cqllibrary:versionAndDraft','dev:all:services:tests','dev:services:measureService:tests',
         'dev:services:cqlLibrariesService:tests','dev:services:cqlTranslatorService:tests',
         'dev:services:terminologyService:tests','dev:ui:testCases','test:all:tests:headed','test:all:tests',
         'test:all:ui:tests','test:all:services:tests','test:services:measureservice:testcaseexport',
         'test:services:measureservice:measureversion','test:ui:smoketests','test:ui:smoketests:headed',
+        'test:ui:508','test:ui:508:headed',
         'test:ui:testcases','test:ui:cqllibrary:cqllibrarydelete',
         'test:ui:smoketests:endtoend:cohortepisodeencounter',
         'test:ui:smoketests:endtoend:proportionepisode',
@@ -229,6 +231,16 @@ pipeline {
         sh '''
           set -e
           cd "$WORKSPACE"
+
+          case "${TEST_SCRIPT}" in
+            test:ui:508|test:ui:508:headed|dev:ui:508|dev:ui:508:headed|cy:parallel:test:ui:508|cy:parallel:test:ui:508:headless|cy:parallel:dev:ui:508|cy:parallel:dev:ui:508:headless)
+              echo "Accessibility runs do not retry deterministic violations."
+              : > "$WORKSPACE/mochawesome-rerun1-$BUILD_NUMBER.tar.gz"
+              : > "$WORKSPACE/mochawesome-rerun2-$BUILD_NUMBER.tar.gz"
+              exit 0
+              ;;
+          esac
+
           npx cypress install
           npx cypress verify
 

@@ -37,7 +37,8 @@ const saveMeasurementInformation = () => {
 
     cy.intercept('PUT', '/api/measures/**').as('saveMeasureInformation')
     cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
-    cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.enabled').click()
+    cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.enabled').focus().should('have.focus')
+    cy.realPress('Enter')
     return cy.wait('@saveMeasureInformation').then(({ request, response }) => {
         expect(request.body.measureName, 'measure name submitted by the Save button').to.eq(updatedMeasureName)
         expect(response?.statusCode, JSON.stringify(response?.body)).to.eq(200)
@@ -91,20 +92,26 @@ describe('MAT-10349 draft measure details read-only accessibility', () => {
 
     it('announces Completed for Model & Measurement Period', () => {
         EditMeasurePage.leftPanelStatusIcon(EditMeasurePage.leftPanelModelAndMeasurementPeriod).should('exist')
-        EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelModelAndMeasurementPeriod)
-            .should('have.text', ', Completed')
+        EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelModelAndMeasurementPeriod).should(
+            'have.text',
+            ', Completed'
+        )
     })
 
     it('announces Not completed for Steward & Developers', () => {
         EditMeasurePage.leftPanelStatusIcon(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
-        EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelStewardDevelopers)
-            .should('have.text', ', Not completed')
+        EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelStewardDevelopers).should(
+            'have.text',
+            ', Not completed'
+        )
     })
 
     it('announces Not completed for Description', () => {
         EditMeasurePage.leftPanelStatusIcon(EditMeasurePage.leftPanelDescription).should('exist')
-        EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelDescription)
-            .should('have.text', ', Not completed')
+        EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelDescription).should(
+            'have.text',
+            ', Not completed'
+        )
     })
 
     it('announces only the tab name when Rationale has no status icon', () => {
@@ -112,7 +119,6 @@ describe('MAT-10349 draft measure details read-only accessibility', () => {
         EditMeasurePage.leftPanelStatusIcon(EditMeasurePage.leftPanelRationale).should('not.exist')
         EditMeasurePage.leftPanelScreenReaderStatus(EditMeasurePage.leftPanelRationale).should('not.exist')
     })
-
 })
 
 describe('MAT-10349 draft measure save accessibility', () => {
@@ -123,12 +129,25 @@ describe('MAT-10349 draft measure save accessibility', () => {
 
     afterEach('Delete the scenario-owned draft measure', () => Utilities.deleteMeasure())
 
-    it('moves focus to the successful save message', () => {
+    it('tabs to the successful save message Close control and closes it by keyboard', () => {
         saveMeasurementInformation()
         cy.get(EditMeasurePage.successfulMeasureSaveMsg)
             .should('be.visible')
             .and('have.text', 'Measurement Information Updated Successfully')
-        cy.focused({ timeout: 5000 }).should('contain.text', 'Measurement Information Updated Successfully')
+
+        step('Tab to the successful save message Close control and activate it')
+        cy.realPress('Tab')
+        cy.get(EditMeasurePage.successfulMeasureSaveCloseButton)
+            .should('be.enabled')
+            .then(($closeButton) =>
+                cy.focused().then(($focused) =>
+                    expect($focused[0], 'focused element after Tab from the successful save message').to.equal(
+                        $closeButton[0]
+                    )
+                )
+            )
+        cy.realPress('Enter')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('not.exist')
     })
 
     it('returns keyboard focus to Skip to main content after a successful save message is closed', () => {
@@ -136,8 +155,22 @@ describe('MAT-10349 draft measure save accessibility', () => {
         cy.get(EditMeasurePage.successfulMeasureSaveMsg)
             .should('be.visible')
             .and('have.text', 'Measurement Information Updated Successfully')
-        cy.get(EditMeasurePage.successfulMeasureSaveCloseButton).should('be.enabled').click()
+
+        step('Tab to the successful save message Close control and activate it')
+        cy.realPress('Tab')
+        cy.get(EditMeasurePage.successfulMeasureSaveCloseButton)
+            .should('be.enabled')
+            .then(($closeButton) =>
+                cy.focused().then(($focused) =>
+                    expect($focused[0], 'focused element after Tab from the successful save message').to.equal(
+                        $closeButton[0]
+                    )
+                )
+            )
+        cy.realPress('Enter')
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('not.exist')
+
+        step('Tab from the closed save message to Skip to main content')
         cy.realPress('Tab')
         cy.get(Header.skipToMainContent, { timeout: 5000 })
             .should('have.focus')

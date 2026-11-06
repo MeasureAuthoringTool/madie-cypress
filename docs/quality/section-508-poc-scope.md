@@ -8,7 +8,7 @@ MADiE already has the technical foundation for automated accessibility checks:
 
 - `axe-core` is available for focused, in-browser Cypress scans through the shared accessibility helper.
 - Lighthouse accessibility thresholds exist, but Lighthouse scores are diagnostic indicators, not a Section 508 conformance test.
-- Jenkins already runs Cypress and retains Mochawesome artifacts, but it has no dedicated accessibility job, policy, or structured violation report.
+- Jenkins exposes dedicated DEV and TEST Section 508 runs in headed and headless Chrome, both serial and three-worker parallel, and retains Mochawesome artifacts. Structured violation reporting remains a POC work item.
 
 The POC should establish a repeatable, risk-based accessibility quality signal for representative authenticated MADiE workflows. It must not be presented as full Section 508 certification. Automated tools detect only part of the applicable requirements; a qualified manual assessment is required for a conformance determination.
 
@@ -89,7 +89,7 @@ For every result, retain the route, workflow state, rule ID, impact, help text/l
 
 ### CI behavior
 
-The existing Jenkins pipeline reruns ordinary failed specs. Accessibility gates need a separate decision path: deterministic violations should be reported and triaged, not diluted by retries. The pilot should run as an explicit selectable job or script, retain artifacts, and avoid overwriting the current `lighthouse-report/lighthouse.html` file.
+The existing Jenkins pipeline reruns ordinary failed specs. The serial `dev:ui:508`, `dev:ui:508:headed`, `test:ui:508`, and `test:ui:508:headed` commands and the corresponding `cy:parallel:<environment>:ui:508` commands (with `:headless` for headless mode) skip that retry path so deterministic violations can be reported and triaged from their first-run artifacts. They do not overwrite the current `lighthouse-report/lighthouse.html` file.
 
 ### Manual-validation minimums
 
