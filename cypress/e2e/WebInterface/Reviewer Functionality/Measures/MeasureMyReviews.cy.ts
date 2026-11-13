@@ -88,7 +88,7 @@ describe.skip('MAT-10192 My Reviews', () => {
         OktaLogin.ReviewerLogin()
 
         MeasuresPage.openMyReviewsTab()
-        MeasuresPage.assertMyReviewsActionCenterShowsOnlyReview()
+        MeasuresPage.assertReviewActionCenterShowsOnlyReview()
     })
 
     it('shows a Ready FHIR measure assigned to the logged-in reviewer', () => {

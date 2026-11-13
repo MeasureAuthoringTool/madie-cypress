@@ -8,6 +8,7 @@ export class ReviewDialogPage {
     public static readonly closeButton = '[data-testid="close-button"]'
     public static readonly successToast = '[data-testid="review-dialog-success-text"]'
     public static readonly successToastCloseButton = '[data-testid="review-dialog-toast-close-button"]'
+    public static readonly removalConfirmation = '[role="dialog"]'
 
     public static assertInitialState(title: string): void {
         cy.get(this.dialog).should('be.visible').and('contain.text', title)
@@ -35,6 +36,41 @@ export class ReviewDialogPage {
         const stateAssertion = markedReady ? 'be.checked' : 'not.be.checked'
         cy.get(this.markReadySwitch).find('input[type="checkbox"]').should(stateAssertion)
         cy.get(this.commentsEditor).should('contain.text', comments)
+    }
+
+    public static assertExistingReviewState(): void {
+        cy.get(this.dialog).should('be.visible')
+        cy.get(this.markReadySwitch).find('input[type="checkbox"]').should('be.checked').and('be.enabled')
+    }
+
+    public static assertRemovalConfirmation(status: 'In Progress' | 'Complete'): void {
+        cy.contains(this.removalConfirmation, 'Are you sure?')
+            .should('be.visible')
+            .and('contain.text', `You are about to remove this measure from the review process which is already ${status}.`)
+            .and('contain.text', 'Any existing comments on the measure will be retained.')
+            .within(() => {
+                cy.contains('button', 'Cancel').should('be.enabled')
+                cy.contains('button', 'Continue').should('be.enabled')
+            })
+    }
+
+    public static cancelRemovalConfirmation(): void {
+        cy.contains(this.removalConfirmation, 'Are you sure?').contains('button', 'Cancel').click()
+        cy.contains(this.removalConfirmation, 'Are you sure?').should('not.exist')
+        cy.get(this.dialog).should('be.visible')
+    }
+
+    public static closeRemovalConfirmationWithX(): void {
+        cy.contains(this.removalConfirmation, 'Are you sure?').within(() => {
+            cy.get(this.closeButton).should('be.visible').click()
+        })
+        cy.contains(this.removalConfirmation, 'Are you sure?').should('not.exist')
+        cy.get(this.dialog).should('be.visible')
+    }
+
+    public static continueRemovalConfirmation(): void {
+        cy.contains(this.removalConfirmation, 'Are you sure?').contains('button', 'Continue').click()
+        cy.get(this.dialog).should('not.exist')
     }
 
     public static save(): void {

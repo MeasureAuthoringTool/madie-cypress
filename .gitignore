@@ -55,6 +55,7 @@ cypress/fixtures/cmsId4QiCore
 cypress/fixtures/referenceId
 
 docs/bugs/*
+docs/quality/reviewer-comments-feature-backlog.md
 
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node

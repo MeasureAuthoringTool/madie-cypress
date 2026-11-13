@@ -15,10 +15,12 @@ const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
 let harpUserALT = ''
 
-const measureName = 'ImportValidations' + Date.now()
-let CqlLibraryName = 'ImportValidationsLib' + Date.now()
+let measureName = ''
+let CqlLibraryName = ''
 let firstMeasureName = ''
 let updatedCQLLibraryName = ''
+let setupAttempt = 0
+let alternateUserOpenedSharedMeasure = false
 const testCaseTitle = 'Passing Test Case'
 const secondTestCaseTitle = 'Failing Test Case'
 const testCaseDescription = 'DENOMPass'
@@ -30,6 +32,12 @@ const validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 const measureCQLPFTests = MeasureCQL.CQL_Populations
 const versionNumber = '1.0.000'
 
+const createUniqueMeasureNames = (prefix: string) => {
+    const uniqueSuffix = `${Date.now()}${++setupAttempt}`
+    measureName = `${prefix}${uniqueSuffix}`
+    CqlLibraryName = `${prefix}Lib${uniqueSuffix}`
+}
+
 describe('Test Case Import: functionality tests', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -37,23 +45,28 @@ describe('Test Case Import: functionality tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
+        createUniqueMeasureNames('ImportValidations')
+        alternateUserOpenedSharedMeasure = false
         harpUserALT = OktaLogin.getUser(true)
-
-        CqlLibraryName = 'ImportValidation1Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 40700 })
-        OktaLogin.UILogout()
+
+        return TestData.saveMeasureCql(measureCQLPFTests)
+            .then(TestData.expectSavedMeasureCql)
     })
 
     afterEach('Logout and Clean up Measures', () => {
+        if (alternateUserOpenedSharedMeasure) {
+            return TestData.requestMeasureLock('DELETE')
+                .its('status')
+                .should('eq', 200)
+                .then(() => Utilities.deleteMeasure())
+        }
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Measure is not owned by nor shared with user: import button is not available', () => {
@@ -113,6 +126,7 @@ describe('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //Click on Edit Measure
+        alternateUserOpenedSharedMeasure = true
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
@@ -190,9 +204,8 @@ describe('Test Case Import validations for versioned Measures', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
+        createUniqueMeasureNames('ImportValidationVersioned')
         harpUserALT = OktaLogin.getUser(true)
-
-        CqlLibraryName = 'ImportValidation2Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
@@ -273,7 +286,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'ImportValidation3Lib' + Date.now()
+        createUniqueMeasureNames('ImportValidationStructure')
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
@@ -381,21 +394,20 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
+        createUniqueMeasureNames('ImportValidationUniquePatients')
         firstMeasureName = measureName + 'a'
-        updatedCQLLibraryName = 'ImportValidation4Lib' + Date.now()
+        updatedCQLLibraryName = CqlLibraryName
 
         CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 40700 })
-        OktaLogin.UILogout()
+
+        return TestData.saveMeasureCql(measureCQLPFTests)
+            .then(TestData.expectSavedMeasureCql)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        
-        Utilities.deleteMeasure()
-        Utilities.deleteMeasure(measureName + 'b', CqlLibraryName, undefined, undefined, 2)
+        return Utilities.deleteMeasure()
+            .then(() => Utilities.deleteMeasure(undefined, undefined, undefined, undefined, 2))
     })
 
     it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
@@ -406,9 +418,9 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         MeasureGroupPage.CreateCohortMeasureGroupAPI(true, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQLPFTests, 2).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveMonacoCql({ successTimeout: 27700 })
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get('[data-testid="populations[0].description-rich-text-editor-content"]')
@@ -482,27 +494,26 @@ describe('Test case uniqueness error validation', () => {
 
     beforeEach('Create measure, and create group', () => {
 
+        createUniqueMeasureNames('ImportValidationUniqueness')
         firstMeasureName = measureName + 'a'
-        updatedCQLLibraryName = 'ImportValidation5Lib' + Date.now()
+        updatedCQLLibraryName = CqlLibraryName
 
         CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 40700 })
-        OktaLogin.UILogout()
+
+        return TestData.saveMeasureCql(measureCQLPFTests)
+            .then(TestData.expectSavedMeasureCql)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Export existing test case, then delete the existing test case, then create new test case with previous series and title and, then, attempt to import previously exported test case: verify uniqueness error', () => {
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, false, false, false)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -592,20 +603,19 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
+        createUniqueMeasureNames('ImportValidationPopulationCriteria')
         firstMeasureName = measureName + 'a'
-        updatedCQLLibraryName = 'ImportValidation6Lib' + Date.now()
+        updatedCQLLibraryName = CqlLibraryName
 
         CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ successTimeout: 40700 })
-        OktaLogin.UILogout()
+
+        return TestData.saveMeasureCql(measureCQLPFTests)
+            .then(TestData.expectSavedMeasureCql)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Importing two new test cases with the pc not matching on the measure in which the test cases is being imported into', () => {
@@ -616,7 +626,8 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true, false)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
-        OktaLogin.Login()
+        TestData.saveMeasureCql(measureCQLPFTests, 2).then(TestData.expectSavedMeasureCql)
+        OktaLogin.SessionLogin()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit', 2)

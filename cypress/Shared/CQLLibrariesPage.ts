@@ -461,7 +461,7 @@ export class CQLLibrariesPage {
         })
     }
 
-    public static assertMyReviewsActionCenterShowsOnlyReview(): void {
+    public static assertReviewActionCenterShowsOnlyReview(): void {
         cy.get(this.actionCenterActionButtons)
             .should('have.length', 1)
             .and('have.attr', 'data-testid', 'review-action-btn')
