@@ -46,10 +46,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
+        TestCasesPage.saveTestCaseAndWait()
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
@@ -57,7 +54,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Click on Execute Test Case button on Edit Test Case page
         TestCasesPage.returnToTestCasesList(TestCasesPage.executeTestCaseButton)
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible').and('be.enabled').click()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
         //verify Passing Tab's text
@@ -81,10 +78,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
         TestCasesPage.checkExpectedActualCheckbox(TestCasesPage.testCaseIPPExpected)
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
+        TestCasesPage.saveTestCaseAndWait()
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
@@ -116,9 +110,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Click on Execute Test Case button on Edit Test Case page
         TestCasesPage.returnToTestCasesList(TestCasesPage.executeTestCaseButton)
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Fail')
 
@@ -155,9 +147,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Click on Execute Test Case button on Edit Test Case page
         TestCasesPage.returnToTestCasesList(TestCasesPage.executeTestCaseButton)
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        TestCasesPage.executeTestCasesAndWaitForCompletion()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
 
         //verify Passing Tab's text

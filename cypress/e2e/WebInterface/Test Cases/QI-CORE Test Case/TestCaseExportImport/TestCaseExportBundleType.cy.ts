@@ -3,18 +3,18 @@ import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../../../Shared/Utilities"
 import { TestCaseAction, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { TestData } from "../../../../../Shared/TestData"
 
-const timestamp = Date.now()
 const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
-const measureName = 'ExportBundleType' + timestamp
-const CqlLibraryName = 'ExportBundleTypeLib' + timestamp
+let measureName = ''
+let CqlLibraryName = ''
+let setupAttempt = 0
 const testCaseTitle = 'Title for Auto Test'
 const testCaseDescription = 'export test case scenarios'
 const testCaseSeries = 'SBTestSeries'
@@ -22,24 +22,42 @@ const measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
+const createUniqueMeasureNames = () => {
+    const uniqueSuffix = `${Date.now()}${++setupAttempt}`
+    measureName = `ExportBundleType${uniqueSuffix}`
+    CqlLibraryName = `ExportBundleTypeLib${uniqueSuffix}`
+}
+
 describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or Collection', () => {
 
     deleteDownloadsFolderBeforeEach()
 
-    beforeEach('Create measure, measure group, test case and login', () => {
+    beforeEach('Create and share a measure with an alternate user', () => {
+        createUniqueMeasureNames()
+        const alternateUser = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+
+        return Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, alternateUser)
+            .then(() => TestData.requestMeasureLock('DELETE'))
+            .its('status')
+            .should('eq', 200)
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        Utilities.deleteMeasure()
+        return TestData.requestMeasureLock('DELETE')
+            .its('status')
+            .should('eq', 200)
+            .then(() => Utilities.deleteMeasure())
     })
 
     it('Export single QI-Core Test case by Non Measure Owner: Transaction', () => {
 
-        OktaLogin.Login()
+        OktaLogin.SessionAltLogin()
+
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').click()
+        MeasuresPage.searchForMeasureByName(measureName)
 
         MeasuresPage.actionCenter('edit')
 
@@ -56,7 +74,10 @@ describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or C
 
     it('Export single QI-Core Test case by Non Measure Owner: Collection', () => {
 
-        OktaLogin.Login()
+        OktaLogin.SessionAltLogin()
+
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').click()
+        MeasuresPage.searchForMeasureByName(measureName)
 
         MeasuresPage.actionCenter('edit')
 
@@ -73,23 +94,25 @@ describe('QI-Core: Single Test Case on Measure: Export / Import', () => {
     deleteDownloadsFolderBeforeEach()
 
     beforeEach('Create measure, measure group, test case and login', () => {
+        createUniqueMeasureNames()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        return TestData.saveMeasureCql(measureCQLPFTests)
+            .then((response) => {
+                TestData.expectSavedMeasureCql(response)
+            })
+            .then(() => OktaLogin.SessionLogin())
+            .then(() => {
+                MeasuresPage.actionCenter('edit')
+                TestCasesPage.openTestCasesTab(TestCasesPage.testCaseListTable)
+            })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Export single QI-Core Test case Transaction bundle and Import to the same Measure', () => {
@@ -186,23 +209,26 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import', () => {
     deleteDownloadsFolderBeforeEach()
 
     beforeEach('Create measure, measure group, test case and login', () => {
+        createUniqueMeasureNames()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'a', testCaseSeries + 'a', testCaseDescription + 'a', testCaseJson)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b', testCaseSeries + 'b', testCaseDescription + 'b', testCaseJson, false, true)
-   
-        OktaLogin.Login()
 
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        return TestData.saveMeasureCql(measureCQLPFTests)
+            .then((response) => {
+                TestData.expectSavedMeasureCql(response)
+            })
+            .then(() => OktaLogin.SessionLogin())
+            .then(() => {
+                MeasuresPage.actionCenter('edit')
+                TestCasesPage.openTestCasesTab(TestCasesPage.testCaseListTable)
+            })
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Export multiple QI-Core Test cases Transaction bundle and Import to the same Measure', () => {

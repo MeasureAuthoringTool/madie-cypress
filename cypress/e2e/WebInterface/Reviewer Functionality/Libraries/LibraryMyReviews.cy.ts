@@ -115,7 +115,7 @@ describe.skip('MAT-10196 My Reviews libraries', () => {
         CQLLibrariesPage.openLibrariesList()
         CQLLibrariesPage.openMyReviewsTab()
 
-        CQLLibrariesPage.assertMyReviewsActionCenterShowsOnlyReview()
+        CQLLibrariesPage.assertReviewActionCenterShowsOnlyReview()
     })
 
     it('shows an assigned Ready FHIR library on My Reviews', () => {

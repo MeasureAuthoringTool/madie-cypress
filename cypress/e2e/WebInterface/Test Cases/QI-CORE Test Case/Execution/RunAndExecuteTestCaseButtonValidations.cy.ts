@@ -50,7 +50,7 @@ const setInitialPopulationExpected = (): void => {
 }
 
 const openMeasureForTestCases = (): void => {
-    OktaLogin.Login()
+    OktaLogin.SessionLogin()
     MeasuresPage.searchForMeasureByName(measureName)
     MeasuresPage.actionCenter('edit')
 }
@@ -59,7 +59,7 @@ describe('Run / Execute Test Case button validations', () => {
     beforeEach('Login and Create Measure', () => {
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6)
         TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.searchForMeasureByName(measureName)
         return cy.then(() => undefined)
     })
@@ -263,7 +263,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
             'boolean'
         )
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, validTestCaseJson)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.searchForMeasureByName(measureName)
         MeasuresPage.actionCenter('edit')
         CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
@@ -483,7 +483,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             'boolean'
         )
         TestData.saveMeasureCql(measureCQLWithQualifyingEncounters).then(TestData.expectSavedMeasureCql)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.searchForMeasureByName(measureName)
         MeasuresPage.actionCenter('edit')
         return cy.then(() => undefined)

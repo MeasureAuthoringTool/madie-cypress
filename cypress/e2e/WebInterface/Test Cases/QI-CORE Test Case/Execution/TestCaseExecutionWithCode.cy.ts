@@ -4,8 +4,8 @@ import { OktaLogin } from '../../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestData } from '../../../../../Shared/TestData'
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
@@ -18,12 +18,19 @@ describe('Test Case Execution with codes', () => {
     before('Create Measure and Test case', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
 
-        cy.readFile('cypress/fixtures/JSONForCQLWithCodes.txt')
+        return cy.readFile('cypress/fixtures/CQLWithCodes.txt')
             .should('exist')
+            .then((cql) => {
+                return TestData.saveMeasureCql(cql)
+            })
+            .then((response) => {
+                TestData.expectSavedMeasureCql(response)
+                return cy.readFile('cypress/fixtures/JSONForCQLWithCodes.txt')
+            })
             .then((fileContents) => {
                 TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, fileContents)
+                return OktaLogin.SessionLogin()
             })
-        return OktaLogin.Login()
     })
 
     after('Logout', () => {
@@ -33,10 +40,6 @@ describe('Test Case Execution with codes', () => {
     it('Verify Test Case Execution for the CQL that uses codes', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.openMonacoCqlEditor(30000, false)
-        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLWithCodes.txt')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
