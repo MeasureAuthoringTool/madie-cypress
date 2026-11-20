@@ -5,9 +5,9 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
@@ -69,14 +69,13 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
             'Encounter'
         )
 
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         OktaLogin.SessionLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -174,6 +173,18 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         })
         cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
+        TestData.readMeasure<{ cql: string }>().then(({ body, status }) => {
+            expect(status).to.eq(200)
+            expect(body.cql).to.contain('define "Initial Population"')
+        })
+        TestData.requestMeasureTestCase('GET', undefined, {}, 'selectedUser', null).then(({ body, status }) => {
+            expect(status).to.eq(200)
+            expect(body).to.have.length(2)
+        })
+        TestData.requestMeasureGroup('GET').then(({ body, status }) => {
+            expect(status).to.eq(200)
+            expect(body).to.have.length(1)
+        })
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).scrollIntoView().click()

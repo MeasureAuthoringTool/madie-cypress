@@ -5,9 +5,9 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
+import { TestData } from '../../../../Shared/TestData'
 
 const now = Date.now()
 const measureName = 'QiCoreManifestExpansion' + now
@@ -29,11 +29,11 @@ describe('Validating QICore Expansion -> Manifest', () => {
             'Initial Population',
             'boolean'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI('passing test', 'abc', 'example', testCaseJson)
 
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -66,9 +66,10 @@ describe('Validating QICore Expansion -> Manifest', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        // intercept expansion API call & check for expected versions
+        // The selected manifest expands its VSAC value sets when the list reloads.
         const expectedVersions = ['20170504', '20190315', '20240110', '20180310']
         cy.wait('@expansion', { timeout: 30000 }).then((expansion) => {
+            expect(expansion?.response?.statusCode, 'VSAC batch expansion status').to.eq(200)
             expect(expansion?.response?.body).to.have.length(5)
             // no guarantee of return order, and this avoids a for loop
             expect(expansion?.response?.body[0].version).to.be.oneOf(expectedVersions)

@@ -8,6 +8,7 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage, MeasureGroups, MeasureObservations, MeasureScoring, MeasureType, PopulationBasis } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { TestData } from "../../../../../Shared/TestData"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const now = Date.now()
@@ -51,6 +52,7 @@ describe('Ratio based measure with measure observations', () => {
         }
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.encounter, MeasureScoring.Ratio, pops, false, obs1, obs2)
 
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
         OktaLogin.Login()
     })
@@ -64,8 +66,6 @@ describe('Ratio based measure with measure observations', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -153,6 +153,7 @@ describe('Proportion based measure with no observations', () => {
 
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
 
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
         OktaLogin.Login()
     })
@@ -166,8 +167,6 @@ describe('Proportion based measure with no observations', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()
