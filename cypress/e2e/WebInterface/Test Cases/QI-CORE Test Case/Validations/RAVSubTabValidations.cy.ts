@@ -1,4 +1,3 @@
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { CreateMeasurePage } from '../../../../../Shared/CreateMeasurePage'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
@@ -7,6 +6,7 @@ import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../../../Shared/OktaLogin'
 import { TestCaseJson } from '../../../../../Shared/TestCaseJson'
 import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { TestData } from '../../../../../Shared/TestData'
 import { Utilities } from '../../../../../Shared/Utilities'
 
 const now = Date.now()
@@ -28,10 +28,10 @@ describe('QiCore Test Cases : RAV Sub tab validations', () => {
             false,
             'Patients Age 20 or Older at Start of Measurement Period'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCaseLizzyHealth)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Log out and Clean up', () => {
