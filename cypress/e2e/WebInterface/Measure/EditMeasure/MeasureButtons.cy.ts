@@ -138,10 +138,10 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
             'Denominator'
         )
 
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
         return cy.then(() => undefined)
@@ -161,13 +161,10 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+\/version(?:\?.*)?$/).as('versionedMeasure')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-
-        Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
-        cy.get(EditMeasurePage.editPageVersionDraftMsg).should(
-            'contain.text',
-            'New version of measure is Successfully created'
-        )
+        cy.wait('@versionedMeasure').its('response.statusCode').should('eq', 200)
+        cy.get(EditMeasurePage.editMeasureDraftActionBtn).should('be.visible').and('be.enabled')
         cy.log('Version Created Successfully')
 
         //Draft Measure
@@ -176,8 +173,9 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]')
             .clear()
             .type(updatedMeasureName)
+        cy.intercept('POST', /\/api\/measures\/[^/?]+\/draft(?:\?.*)?$/).as('draftedMeasure')
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New draft created successfully.')
+        cy.wait('@draftedMeasure').its('response.statusCode').should('eq', 201)
 
         cy.log('Draft Created Successfully')
     })
@@ -202,10 +200,10 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
             'Initial Population',
             'boolean'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
         return cy.then(() => undefined)
@@ -225,13 +223,10 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+\/version(?:\?.*)?$/).as('versionedMeasure')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-
-        Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
-        cy.get(EditMeasurePage.editPageVersionDraftMsg).should(
-            'contain.text',
-            'New version of measure is Successfully created'
-        )
+        cy.wait('@versionedMeasure').its('response.statusCode').should('eq', 200)
+        cy.get(EditMeasurePage.editMeasureDraftActionBtn).should('be.visible').and('be.enabled')
         cy.log('Version Created Successfully')
 
         //Draft Measure
@@ -240,8 +235,9 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
         cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]')
             .clear()
             .type(updatedMeasureName)
+        cy.intercept('POST', /\/api\/measures\/[^/?]+\/draft(?:\?.*)?$/).as('draftedMeasure')
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New draft created successfully.')
+        cy.wait('@draftedMeasure').its('response.statusCode').should('eq', 201)
 
         cy.log('Draft Created Successfully')
     })
@@ -276,6 +272,7 @@ describe('Export measure on the Edit Measure page', () => {
             '',
             'Denominator'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         measureQICore = 'QICoreExportMeasure' + date
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
@@ -308,8 +305,6 @@ describe('Export measure on the Edit Measure page', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ successTimeout: 20700, waitForDisabled: true })
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
@@ -418,7 +413,7 @@ describe('Share measure from the Edit Measure page', () => {
         CQLEditorPage.replaceMonacoCqlDocument(qdmMeasureCQL)
 
         //save CQL on measure
-        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -487,7 +482,7 @@ describe('Share measure from the Edit Measure page', () => {
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-        CQLEditorPage.saveMonacoCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
+        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
 
         //Navigate to the existing measure group form.
         EditMeasurePage.openPopulationCriteriaTab(MeasureGroupPage.measureGroupTypeSelect)

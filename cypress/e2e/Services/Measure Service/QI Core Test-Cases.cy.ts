@@ -33,6 +33,7 @@ const testCaseJsonSnippet = "{ \n  Encounter: \"Office Visit union\" \n  Id: \"I
 const overlongTestCaseField = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
     "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
     "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr"
+const overlongTestCaseDescription = 'a'.repeat(4001)
 const TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },' +
 '"type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter", "resource": { "id":"1", "resourceType": "Encounter","meta": {' +
 '"versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated",' +
@@ -180,19 +181,19 @@ describe('Test Case population values based on Measure Group population definiti
         return TestData.requestMeasureGroup('POST', measureGroupRequestBody()).then((response) => {
             expect(response.status).to.eql(201)
             expect(response.body.id).to.be.exist
-            TestData.writeFixture('groupId', response.body.id)
-        })
-
-        TestData.readMeasureGroupId().then((groupId) => {
-            TestData.requestMeasureTestCase('POST', groupedTestCaseBody(groupId)).then((response) => {
+            return TestData.writeFixture('groupId', response.body.id)
+        }).then(() => {
+            return TestData.readMeasureGroupId()
+        }).then((groupId) => {
+            return TestData.requestMeasureTestCase('POST', groupedTestCaseBody(groupId))
+        }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.series).to.eql(TCSeries)
                 expect(response.body.title).to.eql(TCTitle)
                 expect(response.body.description).to.eql(TCDescription)
                 expect(response.body.json).to.be.exist
-                TestData.writeFixture('testCaseId', response.body.id)
-            })
+                return TestData.writeFixture('testCaseId', response.body.id)
         })
     })
 
@@ -431,7 +432,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
-    it('Create Test Case: Description more than 250 characters', () => {
+    it('Create Test Case: Description more than 4000 characters', () => {
 
         OktaLogin.setupUserSession(false)
 
@@ -439,15 +440,16 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
             'name': "DENOMFail",
             'series': "WhenBP<120",
             'title': "test case title",
-            'description': overlongTestCaseField,
+            'description': overlongTestCaseDescription,
             'json': testCaseJsonSnippet
         }, { failOnStatusCode: false }).then((response) => {
-            expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.description).to.eql('Test Case Description can not be more than 250 characters.')
+            expect(response.status, `test-case validation response: ${JSON.stringify(response.body)}`).to.eql(400)
+            expect(response.body.validationErrors, 'test-case description validation errors').to.exist
+            expect(response.body.validationErrors.description).to.eql('Test Case Description cannot be more than 4000 characters.')
         })
     })
 
-    it('Edit Test Case: Description more than 250 characters', () => {
+    it('Edit Test Case: Description more than 4000 characters', () => {
 
         OktaLogin.setupUserSession(false)
 
@@ -456,11 +458,12 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
             'name': "IPPPass",
             'series': "WhenBP<120",
             'title': "test case title edited",
-            'description': overlongTestCaseField,
+            'description': overlongTestCaseDescription,
             'json': testCaseJsonSnippet
         }), { failOnStatusCode: false }).then((response) => {
-            expect(response.status).to.eql(400)
-            expect(response.body.validationErrors.description).to.eql('Test Case Description can not be more than 250 characters.')
+            expect(response.status, `test-case validation response: ${JSON.stringify(response.body)}`).to.eql(400)
+            expect(response.body.validationErrors, 'test-case description validation errors').to.exist
+            expect(response.body.validationErrors.description).to.eql('Test Case Description cannot be more than 4000 characters.')
         })
     })
 

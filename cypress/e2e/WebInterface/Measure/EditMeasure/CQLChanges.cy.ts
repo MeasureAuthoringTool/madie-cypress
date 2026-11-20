@@ -19,11 +19,20 @@ let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeSingleIPNoMO_IPP_PASS
 let newMeasureName = measureName + randValue
 let newCqlLibraryName = CqlLibraryName + randValue
-let measureCQL = MeasureCQL.measureCQL_5138_test
-const measureCQLWithoutDaysObs = measureCQL.replace(
-    'define function daysObs(e Encounter):\n  duration in days of e.period\n',
-    ''
-)
+// This scenario exercises return-type changes only. The source fixture's unused
+// value sets invoke TEST terminology expansion and can leave the editor incomplete.
+let measureCQL = MeasureCQL.measureCQL_5138_test.replace(/^valueset .*\n/gm, '')
+let savedMeasureCQL = ''
+
+const cqlWithBooleanMpopEx = (cql: string): string => {
+    const updatedCql = cql.replace(
+        'define "mpopEx":\n  ["Encounter"] E where E.status = \'finished\'\n',
+        'define "mpopEx":\n  true\n'
+    )
+
+    expect(updatedCql, 'CQL mutation for return-type mismatch').not.to.equal(cql)
+    return updatedCql
+}
 
 describe('CQL Changes and how that impacts test cases, observations and population criteria', () => {
     beforeEach('Create Measure, Test Case and login', () => {
@@ -32,6 +41,10 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        TestData.saveCurrentMeasureCql().then((response) => {
+            TestData.expectSavedMeasureCql(response)
+            savedMeasureCQL = response.body.cql
+        })
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.SessionLogin()
         return cy.then(() => undefined)
@@ -48,8 +61,6 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             let currentUser = Cypress.expose('selectedUser')
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
-
-            CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
             //Click on the measure group tab
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -128,9 +139,8 @@ describe('CQL Changes and how that impacts test cases, observations and populati
                 }
             })
 
-            CQLEditorPage.replaceMonacoCqlDocument(measureCQLWithoutDaysObs)
-            //save changes to CQL
-            CQLEditorPage.submitMonacoCqlForValidation()
+            CQLEditorPage.replaceMonacoCqlDocument(cqlWithBooleanMpopEx(savedMeasureCQL))
+            CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
             //wait until toast message appears
             Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 350000)
@@ -186,7 +196,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
             cy.get(EditMeasurePage.cqlEditorTab).click()
 
-            CQLEditorPage.replaceMonacoCqlDocument(measureCQL)
+            CQLEditorPage.replaceMonacoCqlDocument(savedMeasureCQL)
 
             //save changes to CQL
             CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
@@ -206,8 +216,6 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             let currentUser = Cypress.expose('selectedUser')
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
-
-            CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
             //Click on the measure group tab
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -275,9 +283,8 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
             cy.get(EditMeasurePage.cqlEditorTab).click()
 
-            CQLEditorPage.replaceMonacoCqlDocument(measureCQLWithoutDaysObs)
-            //save changes to CQL
-            CQLEditorPage.submitMonacoCqlForValidation()
+            CQLEditorPage.replaceMonacoCqlDocument(cqlWithBooleanMpopEx(savedMeasureCQL))
+            CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
             //wait until toast message appears
             Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 35000)
@@ -335,10 +342,12 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
             cy.get(EditMeasurePage.measureGroupsTab).click()
             //update PC scoring value to match updated CQL
+            cy.get(MeasureGroupPage.popBasis).click().type('boolean')
+            cy.get(MeasureGroupPage.popBasisOption).click()
             Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
             Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'mpopEx')
 
-            cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+            cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled').click()
             cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
             //validation successful updated message
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')

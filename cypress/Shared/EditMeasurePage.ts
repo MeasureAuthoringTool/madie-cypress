@@ -188,6 +188,14 @@ export class EditMeasurePage {
     public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
     public static readonly emptyDefinitionVal = '[data-testid="empty-definitions"]'
 
+    public static editDefinitionButton(term: string): string {
+        return `[aria-label="Edit definition ${term}"]`
+    }
+
+    public static deleteDefinitionButton(term: string): string {
+        return `[aria-label="Delete definition ${term}"]`
+    }
+
     //Share/Un share Measure
     public static readonly shareOption = '[data-testid="Share With-option"]'
     public static readonly unshareOption = '[data-testid="Unshare-option"]'

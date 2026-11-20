@@ -6,8 +6,8 @@ import { OktaLogin } from '../../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { QDMElements } from '../../../../../Shared/QDMElements'
+import { TestData } from '../../../../../Shared/TestData'
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -29,10 +29,10 @@ describe('Clone QDM Test Case', () => {
         measureData.mpEndDate = '2024-12-31'
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')

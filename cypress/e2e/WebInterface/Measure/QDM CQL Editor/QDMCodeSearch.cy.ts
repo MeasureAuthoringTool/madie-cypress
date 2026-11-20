@@ -6,6 +6,8 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
+import { Header } from '../../../../Shared/Header'
 
 const date = Date.now()
 let measureName = 'QDMCodeSearch' + date
@@ -63,18 +65,19 @@ let measureCQL_withCode =
 describe('QDM Code Search fields', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false)
-        OktaLogin.SessionLogin()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
 
-        MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        CQLEditorPage.saveMonacoCql()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        CQLEditorPage.expandCQLBuilderPanel()
+        return OktaLogin.SessionLogin().then(() => {
+            cy.get(Header.measures).click()
+            MeasuresPage.searchForMeasureByName(measureName)
+            MeasuresPage.assertMeasureSearchRowContains(0, measureName)
+            MeasuresPage.actionCenter('edit')
+            CQLEditorPage.expandCQLBuilderPanel()
+        })
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Search for the Codes', () => {

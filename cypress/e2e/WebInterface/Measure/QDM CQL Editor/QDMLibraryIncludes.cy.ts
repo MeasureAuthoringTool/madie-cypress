@@ -7,6 +7,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { Header } from '../../../../Shared/Header'
 import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = ''
 let cqlLibraryName = ''
@@ -34,6 +35,7 @@ const measureCQL =
   '\t true\n' +
   'define "n":\n' +
   '\ttrue'
+const unsavedCqlComment = '\n// unsaved include change'
 
 describe('QDM Library Includes fields', () => {
   beforeEach('Create Measure and Login', () => {
@@ -42,13 +44,14 @@ describe('QDM Library Includes fields', () => {
     cqlLibraryName = 'QDMLibraryIncludesLib' + timestamp
 
     CreateMeasurePage.CreateQDMMeasureAPI(measureName, cqlLibraryName, measureCQL)
-    OktaLogin.SessionLogin()
-
-    //Click on Edit Button
-    MeasuresPage.actionCenter('edit')
-
-    CQLEditorPage.openMonacoCqlEditor()
-    CQLEditorPage.expandCQLBuilderPanel()
+    return TestData.saveCurrentMeasureCql().then((response) => {
+      TestData.expectSavedMeasureCql(response)
+      OktaLogin.SessionLogin()
+      MeasuresPage.actionCenter('edit')
+      CQLEditorPage.openMonacoCqlEditor()
+      CQLEditorPage.expandCQLBuilderPanel()
+      return cy.get(CQLEditorPage.includesTab).should('be.visible')
+    })
   })
 
   afterEach('Clean up and Logout', () => {
@@ -169,13 +172,28 @@ describe('QDM Library Includes fields', () => {
     cy.get('[data-test-id="row-0"]').children().eq(3).should('contain.text', 'Angela Flanagan')
   })
 
-  it('QDM: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {
+  it('QDM: Delete Included Libraries functionality -- after discarding unsaved CQL changes', () => {
+    // MATGlobalCommonFunctionsQDM is a required system include and is no longer
+    // exposed in Saved Libraries as a deletable row. Establish a user-added,
+    // persisted include for this deletion workflow instead.
+    cy.get(CQLEditorPage.includesTab).click()
+    cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
+    cy.get(CQLEditorPage.librarySearchBtn).click()
+    cy.get('[data-testid="edit-button-0"]').click()
+    cy.get('[data-testid="library-alias-input"]').type('VTE')
+    cy.get('[data-testid="apply-button"]').click()
+    CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
+
     cy.get(Header.mainMadiePageButton).click()
 
     //make a change to CQL (don't save)
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
+    cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled').click()
+    Utilities.clickOnDiscardChanges()
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
+    cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.disabled')
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
@@ -185,26 +203,13 @@ describe('QDM Library Includes fields', () => {
     cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
 
-    //attempt to delete and choose No, keep working
-    cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
-    Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
-    cy.get(CQLEditorPage.deleteSavedLibrary).click()
-
-    Utilities.clickOnKeepWorking()
-
-    //confirm contents in CQL editor still contains changes and save button is still available
-    MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
-    Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
-    Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
-
-    //attempt to delete and choose yes to discard changes
-    Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
-    cy.get(CQLEditorPage.deleteSavedLibrary).click()
-    Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-    cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-    cy.get(Utilities.discardChangesContinue).click()
-
-    //confirm "are you sure" pop up
+    // Attempt to delete, then cancel. The delete flow discards unsaved CQL
+    // before it opens the delete confirmation.
+    cy.get('[data-testid="delete-button-1"]')
+      .should('have.attr', 'aria-label', 'delete-button-1')
+      .scrollIntoView()
+      .should('be.visible')
+      .click()
     Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
     cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
 
@@ -215,7 +220,7 @@ describe('QDM Library Includes fields', () => {
     //confirm that CQL value is the same as it was prior to change and the save button is not available
     cy.reload()
     CQLEditorPage.expandCQLBuilderPanel()
-    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
     Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
     Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -223,7 +228,9 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
+    cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled').click()
+    Utilities.clickOnDiscardChanges()
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
@@ -233,26 +240,22 @@ describe('QDM Library Includes fields', () => {
     cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
     cy.get(CQLEditorPage.includesTab).click()
-    cy.get(CQLEditorPage.libraryResultsTable)
-      .find('[data-test-id="row-0"]')
-      .should('contain.text', 'MATGlobalCommonFunctionsQDM')
+    cy.get('[data-testid="delete-button-1"]').should('have.attr', 'aria-label', 'delete-button-1')
 
-    //attempt to delete and choose yes to discard changes
-    cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
-    Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
-    cy.get(CQLEditorPage.deleteSavedLibrary).click()
+    // Attempt to delete; unsaved CQL is discarded before the delete confirmation.
+    cy.get('[data-testid="delete-button-1"]')
+      .scrollIntoView()
+      .should('be.visible')
+      .click()
 
-    //choose yes to delete
-    Utilities.waitForElementVisible(Utilities.discardChangesContinue, 5000)
-    cy.get(Utilities.discardChangesContinue).click()
     cy.get(CQLEditorPage.deleteContinueButton).click()
     cy.get(EditMeasurePage.successMsg).should(
       'contain.text',
-      'Library MATGlobalCommonFunctionsQDM has been successfully removed from the CQL',
+      'Library UATVTEQDM has been successfully removed from the CQL',
     )
 
     //Deletes the library include statement from the CQL
-    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
 
     //Deletes the library from the Saved Libraries grid
     CQLEditorPage.expandCQLBuilderPanel()
@@ -261,7 +264,7 @@ describe('QDM Library Includes fields', () => {
     //Navigate to Saved Libraries tab / number in parentheses has been updated
     cy.get(CQLEditorPage.savedLibrariesTab).should('be.visible')
     cy.get(CQLEditorPage.savedLibrariesTab).click()
-    cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('not.exist')
+    cy.get(CQLEditorPage.libraryResultsTable).should('not.contain.text', 'UATVTEQDM')
   })
 
   it('QDM: Delete Included Libraries functionality -- when changes to the CQL is saved', () => {

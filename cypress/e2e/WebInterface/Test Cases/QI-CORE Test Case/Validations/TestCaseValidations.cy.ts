@@ -19,6 +19,7 @@ const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const testCaseSeries = 'SBTestSeries'
 const twoFiftyTwoCharacters =
     'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
+const fourThousandOneCharacters = 'a'.repeat(4001)
 const updatedTestCaseSeries = 'CMSTestSeries'
 
 const initializeTestData = (): void => {
@@ -72,15 +73,15 @@ describe('Create Test Case Validations', () => {
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
-    it('Create Test Case: Description more than 250 characters', () => {
+    it('Create Test Case: Description more than 4000 characters', () => {
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).click()
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(twoFiftyTwoCharacters)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(fourThousandOneCharacters, { delay: 0 })
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
     })
 
@@ -139,15 +140,15 @@ describe('Edit Test Case Validations', () => {
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
-    it('Edit Test Case: Description more than 250 characters', () => {
-        MeasuresPage.actionCenter('edit')
+    it('Edit Test Case: Description more than 4000 characters', () => {
+        MeasuresPage.openEditMeasureDetailsById()
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.openDetailsTab(TestCasesPage.testCaseDescriptionTextBox)
-        TestCasesPage.replaceTestCaseDetailsInput(TestCasesPage.testCaseDescriptionTextBox, twoFiftyTwoCharacters)
+        TestCasesPage.replaceTestCaseDetailsInput(TestCasesPage.testCaseDescriptionTextBox, fourThousandOneCharacters)
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseDescriptionInlineError).should(
             'contain.text',
-            'Test Case Description cannot be more than 250 characters.'
+            'Test Case Description cannot be more than 4000 characters.'
         )
     })
 

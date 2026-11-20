@@ -10,6 +10,7 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { QDMElements } from '../../../../../Shared/QDMElements'
 import { Header } from '../../../../../Shared/Header'
 import { LandingPage } from '../../../../../Shared/LandingPage'
+import { TestData } from '../../../../../Shared/TestData'
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const now = Date.now()
@@ -39,12 +40,12 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
             '',
             'Denominator'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC2', 'QDMManifestTCGroup2', 'QDMManifestTC2', '', true, false)
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         // add SDE to test case coverage
         cy.wait(2000)

@@ -11,6 +11,7 @@ import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { TestCaseJson } from '../../../../Shared/TestCaseJson'
 import { Header } from '../../../../Shared/Header'
 import { TestData } from '../../../../Shared/TestData'
+import { MonacoEditor } from '../../../../Shared/MonacoEditor'
 
 const measureName = 'MeasureSharing' + Date.now()
 const cqlLibraryName = 'MeasureSharingLib' + Date.now()
@@ -23,6 +24,12 @@ const testCaseDescription = 'DENOMFail' + Date.now()
 const testCaseSeries = 'SBTestSeries'
 let updatedMeasuresPageName = ''
 let harpUserALT = ''
+
+const replaceCqlForSharedUser = (): void => {
+    cy.readFile<string>('cypress/fixtures/CQLForTestCaseExecution.txt').then((fixtureCql) => {
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, fixtureCql)
+    })
+}
 
 describe('Measure Sharing', () => {
     let randValue = Math.floor(Math.random() * 1000 + 1)
@@ -67,6 +74,8 @@ describe('Measure Sharing', () => {
 
         //Edit Measure details
         cy.get(LandingPage.sharedMeasures).click()
+        MeasuresPage.searchForMeasureByName(newMeasureName)
+        MeasuresPage.assertMeasureSearchRowContains(0, newMeasureName)
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
@@ -78,8 +87,8 @@ describe('Measure Sharing', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
+        replaceCqlForSharedUser()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -106,7 +115,7 @@ describe('Measure Sharing', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
         //Create New Test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
     })
 
     it('Verify Measure owner can share Measure from Action centre share button and shared user is able to edit Measure', () => {
@@ -114,22 +123,28 @@ describe('Measure Sharing', () => {
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
 
+        MeasuresPage.searchForMeasureByName(newMeasureName)
+        MeasuresPage.assertMeasureSearchRowContains(0, newMeasureName)
         MeasuresPage.actionCenter('share')
         cy.get(EditMeasurePage.shareOption).click({ force: true })
-        cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
-        cy.get(EditMeasurePage.addBtn).click()
+        cy.get('[role="dialog"]')
+            .should('be.visible')
+            .within(() => {
+                cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
+                cy.get(EditMeasurePage.addBtn).click()
 
-        //Verify that the Harp id is added to the table
-        cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
-
-        cy.get(EditMeasurePage.saveUserBtn).click()
+                //Verify that the Harp id is added to the share dialog table
+                cy.contains(EditMeasurePage.sharedUserTable, harpUserALT).should('be.visible')
+                cy.get(EditMeasurePage.saveUserBtn).click()
+            })
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
 
         //Login as ALT User
         OktaLogin.AltLogin()
         Utilities.waitForElementVisible(LandingPage.sharedMeasures, 50000)
         cy.get(LandingPage.sharedMeasures).click()
-        cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
+        MeasuresPage.searchForMeasureByName(newMeasureName)
+        MeasuresPage.assertMeasureSearchRowContains(0, newMeasureName)
 
         //Delete button disabled for shared owner
         cy.readFile('cypress/fixtures/' + currentUser + '/measureId')
@@ -146,6 +161,8 @@ describe('Measure Sharing', () => {
 
         //Edit Measure details
         cy.get(LandingPage.sharedMeasures).click()
+        MeasuresPage.searchForMeasureByName(newMeasureName)
+        MeasuresPage.assertMeasureSearchRowContains(0, newMeasureName)
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
@@ -157,8 +174,8 @@ describe('Measure Sharing', () => {
 
         //Edit Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        CQLEditorPage.replaceMonacoCqlDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt')
-        CQLEditorPage.saveMonacoCql({ appendNewLine: true, collapseEditor: true, waitForDisabled: true })
+        replaceCqlForSharedUser()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false, collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -185,7 +202,7 @@ describe('Measure Sharing', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
         //Create New Test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, false, true)
     })
 
     it('Action centre share button disabled for Non Measure Owner', () => {
@@ -237,7 +254,10 @@ describe('Measure Sharing - Multiple instances', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
         cy.get(Header.measures).click()
-        return cy.get(MeasuresPage.measureListTitles).should('be.visible').then(() => undefined)
+        return cy
+            .get(MeasuresPage.measureListTitles)
+            .should('be.visible')
+            .then(() => undefined)
     })
 
     afterEach('Log out and Clean up', () => {

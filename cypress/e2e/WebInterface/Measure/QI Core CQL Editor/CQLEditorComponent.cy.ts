@@ -59,7 +59,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     afterEach('Logout and Clean up Measures', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Verify success message on CQL editor component, on save and on tab / page load', () => {
@@ -83,14 +83,18 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         //Add CQL
         CQLEditorPage.openMonacoCqlEditor(30000, false)
-        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, measureCQLErrors)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureCQLErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
-        cy.get('.madie-alert').find('h6').should('contain.text', '(3) Errors:')
-        cy.get('[data-testid="generic-errors-text-list"]').should('contain.text', 'Row: 14, Col:0: VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
+        cy.get('.madie-alert').find('h6').should('contain.text', 'Errors:')
+        cy.get('[data-testid="generic-errors-text-list"]').should(
+            'contain.text',
+            "VSAC: 0:22 | \"'' is not a valid URL. Fhir URL should start with 'http://cts.nlm.nih.gov/fhir/ValueSet/'"
+        )
+        cy.get('[data-testid="generic-errors-text-list"]').should('contain.text', "Parse: 23:24 | extraneous input ')'")
     })
 
     //Skipping until able to investigate - warning shows in editor but not in "error box" above

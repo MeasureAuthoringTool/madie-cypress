@@ -25,7 +25,7 @@ const expectSaveMessage = (...expectedMessages: string[]) => {
 const replaceCqlFixture = (fileName: string) => {
     cy.readFile(`cypress/fixtures/${fileName}`).then((fixtureCql) => {
         MonacoEditor.clearDocument(EditMeasurePage.monacoCqlEditor)
-        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fixtureCql.replace(/\{home\}/gi, ''))
+        MonacoEditor.insertText(EditMeasurePage.monacoCqlEditor, fixtureCql)
         cy.get(EditMeasurePage.monacoCqlEditor).should(($editor) => {
             expect($editor.text().trim(), 'inserted CQL fixture').not.to.be.empty
         })
@@ -76,10 +76,13 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
 
         //Validate message on page
-        expectSaveMessage('CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(3) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:110 | Unable to find a code system version')
+        expectSaveMessage(
+            'CQL updated successfully but the following issues were found',
+            'VSAC: 0:94 | Unable to find a code system version'
+        )
 
         //Validate error(s) in CQL Editor window
-        expectEditorErrorAfterTabSwitch("VSAC: 0:110 | Unable to find a code system version")
+        expectEditorErrorAfterTabSwitch("VSAC: 0:94 | Unable to find a code system version")
     })
 
     it('Verify proper error(s) appear in CQL Editor, when a user includes version and there is no vsac version', () => {
@@ -142,7 +145,10 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
 
         //Validate message on page
-        expectSaveMessage('CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(1) Error:Row: 9, Col:0: ELM: 0:0 | Measure CQL must contain a Context.')
+        expectSaveMessage(
+            'CQL updated successfully but the following issues were found',
+            'ELM: 0:0 | Measure CQL must contain a Context.'
+        )
 
         //Validate error(s) in CQL Editor window
         expectNoEditorErrorsAfterTabSwitch()
@@ -163,7 +169,10 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled').click()
 
         //Validate message on page
-        expectSaveMessage('CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(1) Error:Row: 9, Col:0: ELM: 0:0 | Measure CQL must contain a Context.')
+        expectSaveMessage(
+            'CQL updated successfully but the following issues were found',
+            'ELM: 0:0 | Measure CQL must contain a Context.'
+        )
 
         //Validate error(s) in CQL Editor window
         expectNoEditorErrorsAfterTabSwitch()

@@ -18,6 +18,26 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const qiCoreCommonLib = 'resources/library-QICoreCommon-2.1.000.json'
 
+const qmigMeasureProfiles = (scoringProfile: string) => [
+    'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
+    'http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-computablemeasure',
+    'http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-publishablemeasure',
+    'http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-executablemeasure',
+    'http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-cqlmeasure',
+    'http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-elmmeasure',
+    `http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-${scoringProfile}measure`
+]
+
+const qmigLibraryProfiles = [
+    'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary',
+    'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-computablelibrary',
+    'http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-publishablelibrary',
+    'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-executablelibrary',
+    'http://hl7.org/fhir/uv/cql/StructureDefinition/cql-library',
+    'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-json-library',
+    'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-xml-library'
+]
+
 const expectExtension = (extensions: Array<{ url: string }>, expectedUrl: string) => {
     expect(extensions.map(({ url }) => url)).to.include(expectedUrl)
 }
@@ -62,7 +82,7 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
         )
         TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -75,15 +95,7 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
     it('Export contains all correct Meta profile for its spec & included libraries', () => {
         // read export json
         cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
-            const expectedMeasureProfiles = [
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/proportion-measure-cqfm'
-            ]
+            const expectedMeasureProfiles = qmigMeasureProfiles('proportion')
 
             expect(measureJson.entry[0].resource.resourceType).to.eq('Measure')
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)
@@ -99,18 +111,8 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
         // read QICoreCommon
         cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then((libJson) => {
-            const expectedLibraryProfile = [
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary',
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-computablelibrary',
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-publishablelibrary',
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-executablelibrary',
-                'http://hl7.org/fhir/uv/cql/StructureDefinition/cql-library',
-                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-json-library',
-                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-xml-library'
-            ]
-
             expect(libJson.resourceType).to.eq('Library')
-            expect(libJson.meta.profile).to.deep.contain.members(expectedLibraryProfile)
+            expect(libJson.meta.profile).to.deep.contain.members(qmigLibraryProfiles)
             expectExtension(libJson.extension, 'http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
         })
 
@@ -147,7 +149,7 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
         TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -160,15 +162,7 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
     it('Export contains all correct Meta profile for its spec & included libraries', () => {
         // read export json
         cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
-            const expectedMeasureProfiles = [
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cohort-measure-cqfm'
-            ]
+            const expectedMeasureProfiles = qmigMeasureProfiles('cohort')
 
             expect(measureJson.entry[0].resource.resourceType).to.eq('Measure')
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)
@@ -176,18 +170,8 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
 
         // read QICoreCommon
         cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then((libJson) => {
-            const expectedLibraryProfile = [
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary',
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-computablelibrary',
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-publishablelibrary',
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-executablelibrary',
-                'http://hl7.org/fhir/uv/cql/StructureDefinition/cql-library',
-                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-json-library',
-                'http://hl7.org/fhir/uv/cql/StructureDefinition/elm-xml-library'
-            ]
-
             expect(libJson.resourceType).to.eq('Library')
-            expect(libJson.meta.profile).to.deep.contain.members(expectedLibraryProfile)
+            expect(libJson.meta.profile).to.deep.contain.members(qmigLibraryProfiles)
             expectExtension(libJson.extension, 'http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
         })
     })
@@ -232,7 +216,7 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
         )
         TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -245,15 +229,7 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
     it('Export contains all correct Meta profile for its spec', () => {
         // read export json
         cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
-            const expectedMeasureProfiles = [
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cv-measure-cqfm'
-            ]
+            const expectedMeasureProfiles = qmigMeasureProfiles('cv')
 
             expect(measureJson.entry[0].resource.resourceType).to.eq('Measure')
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)
@@ -286,7 +262,7 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
         )
         TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
 
         exportMeasureArchive(fileName)
         unzipMeasureArchive(fileName)
@@ -299,15 +275,7 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
     it('Export contains all correct Meta profile for its spec', () => {
         // read export json
         cy.readFile(path.join(downloadsFolder, fileName + '.json')).then((measureJson) => {
-            const expectedMeasureProfiles = [
-                'http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm',
-                'http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/ratio-measure-cqfm'
-            ]
+            const expectedMeasureProfiles = qmigMeasureProfiles('ratio')
 
             expect(measureJson.entry[0].resource.resourceType).to.eq('Measure')
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)

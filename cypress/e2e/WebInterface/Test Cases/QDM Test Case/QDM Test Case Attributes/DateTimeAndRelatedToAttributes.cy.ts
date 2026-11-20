@@ -4,8 +4,8 @@ import { Utilities } from '../../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
+import { TestData } from '../../../../../Shared/TestData'
 
 const measureName = 'DateTimeAndRelated' + Date.now()
 const CqlLibraryName = 'DateTimeAndRelatedLib' + Date.now()
@@ -64,10 +64,10 @@ describe('Test Case Attributes', () => {
             '',
             'Initial Population',
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')

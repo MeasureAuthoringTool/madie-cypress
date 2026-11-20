@@ -5,9 +5,9 @@ import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
 import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
+import { TestData } from "../../../../../Shared/TestData"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -26,6 +26,7 @@ describe('QDM Test Case Excel Export', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-01', '2012-12-31')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, undefined, true)
         OktaLogin.Login()
@@ -44,8 +45,6 @@ describe('QDM Test Case Excel Export', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Group Creation
         //Click on Measure Group tab

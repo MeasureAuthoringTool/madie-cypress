@@ -5,6 +5,7 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestData } from "../../../../../Shared/TestData"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
@@ -29,14 +30,7 @@ const CqlLibraryName = 'ProportionPatient' + timestamp
 const newMeasureName = 'Updated' + measureName
 const versionNumber = '1.0.000'
 
-const saveCqlForTestCaseCoverage = (): void => {
-    CQLEditorPage.saveMonacoCql({
-        appendNewLine: true,
-        collapseEditor: true,
-        successTimeout: 50000,
-        waitForDisabled: true,
-    })
-}
+const saveCqlForTestCaseCoverage = () => TestData.saveMeasureCql(`${qdmManifestTestCQL}\n`).then(TestData.expectSavedMeasureCql)
 
 describe('QDM Test Case sorting by Test Case number', () => {
 

@@ -794,11 +794,7 @@ export class TestCasesPage {
 
   public static editTestCaseJson(testCaseJson: string, navigateToJsonTab = false, useNativeClear = false): void {
     if (navigateToJsonTab) {
-      cy.get(TestCasesPage.topJsonTab, { timeout: 30000 })
-        .should('not.have.attr', 'aria-disabled', 'true')
-        .then(($tab) => {
-          $tab[0].click()
-        })
+      this.openJsonTab()
     }
 
     this.waitForJsonEditorReady()
@@ -809,6 +805,12 @@ export class TestCasesPage {
     }
 
     MonacoEditor.replaceDocument(TestCasesPage.monacoJsonEditorSurface, testCaseJson)
+  }
+
+  public static openJsonTab(): void {
+    this.activateTab(TestCasesPage.topJsonTab, 30000)
+    cy.get(TestCasesPage.topJsonTab).should('have.attr', 'aria-selected', 'true')
+    this.waitForJsonEditorReady()
   }
 
   public static waitForJsonEditorReady(): void {

@@ -6,6 +6,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { Header } from '../../../../Shared/Header'
 
 let measureName = 'QDMTestMeasure' + Date.now() + 1
 let CqlLibraryName = 'QDMTestLibrary' + Date.now() + 1
@@ -182,7 +183,11 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName)
-        OktaLogin.SessionLogin()
+        return OktaLogin.SessionLogin().then(() => {
+            cy.get(Header.measures).click()
+            MeasuresPage.searchForMeasureByName(newMeasureName)
+            MeasuresPage.assertMeasureSearchRowContains(0, newMeasureName)
+        })
 
     })
 
@@ -212,7 +217,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_without_using)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureQDMCQL_without_using)
 
         CQLEditorPage.submitMonacoCqlForValidation()
 
@@ -227,7 +232,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_incorrect_using)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_incorrect_using)
 
         CQLEditorPage.submitMonacoCqlForValidation()
 
@@ -245,7 +250,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_different_Lib_name)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureQDMCQL_with_different_Lib_name)
 
         CQLEditorPage.submitMonacoCqlForValidation()
 
@@ -261,7 +266,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_withSameLibraryVersionAndDifferentAlias)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureCQL_withSameLibraryVersionAndDifferentAlias)
 
         CQLEditorPage.submitMonacoCqlForValidation()
 
@@ -277,7 +282,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_withDifferentLibraryVersionAndDifferentAlias)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureCQL_withDifferentLibraryVersionAndDifferentAlias)
 
         CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
@@ -294,7 +299,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_without_CodeSystem_Name)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureCQL_without_CodeSystem_Name)
 
         CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
@@ -373,7 +378,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, measureCQL_with_Concept_Constructor)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, measureCQL_with_Concept_Constructor)
 
         CQLEditorPage.submitMonacoCqlForValidation()
         Utilities.waitForElementVisible('#content', 60000)

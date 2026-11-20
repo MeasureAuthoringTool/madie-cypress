@@ -17,6 +17,7 @@ const testCaseDescription = 'DENOMFail' + Date.now()
 const testCaseTitle = 'test case title'
 const testCaseSeries = 'SBTestSeries'
 const twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
+const fourThousandOneCharacters = 'a'.repeat(4001)
 const QDMTCJson = TestCaseJson.QDMTestCaseJson
 const measureQDMCQL = QdmCql.QDM4TestCaseElementsAttributes
 
@@ -99,16 +100,16 @@ describe('Create Test Case Validations', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Description more than 250 characters', () => {
+    it('Description more than 4000 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).click()
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(twoFiftyTwoCharacters)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(fourThousandOneCharacters, { delay: 0 })
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
     })
 
@@ -187,10 +188,10 @@ describe('Edit Test Case Validations', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Description more than 250 characters', () => {
+    it('Description more than 4000 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -201,12 +202,12 @@ describe('Edit Test Case Validations', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        //Update Test Case Description with more than 250 characters
+        //Update Test Case Description with more than 4000 characters
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, { delay: 0 })
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).type(fourThousandOneCharacters, { delay: 0 })
         cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.editTestCaseDescriptionInlineError).should('contain.text', 'Test Case Description cannot be more than 250 characters.')
+        cy.get(TestCasesPage.editTestCaseDescriptionInlineError).should('contain.text', 'Test Case Description cannot be more than 4000 characters.')
     })
 
     it('Title more than 250 characters', () => {

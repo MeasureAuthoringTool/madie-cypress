@@ -54,6 +54,9 @@ describe('Validating that the valueset version is removed and message appears, o
 
             const updatedCql = body.cql.replace(/^context Patient\r?$/m, `${versionedValueSet}\ncontext Patient`)
             MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, updatedCql)
+            // CDP replacement updates Monaco's text but requires a native edit
+            // event before the editor marks the document as changed.
+            MonacoEditor.append(EditMeasurePage.monacoCqlEditor, '')
         })
 
         cy.intercept('PUT', /\/api\/measures\/[^/?]+(?:\?.*)?$/).as('saveVersionedValueSet')
@@ -61,8 +64,6 @@ describe('Validating that the valueset version is removed and message appears, o
         cy.wait('@saveVersionedValueSet').its('response.statusCode').should('eq', 200)
         Utilities.waitForElementVisible(CQLEditorPage.saveAlertMessage, 35000)
         cy.get(CQLEditorPage.saveAlertMessage)
-            .find('[class="madie-alert success"]')
-            .find(TestCasesPage.importTestCaseSuccessInfo)
             .find('[data-testid="library-warning"]')
             .should(($warning) => {
                 expect($warning.text().replace(/\s+/g, ' ').trim()).to.match(

@@ -123,7 +123,7 @@
         "@types/node": "^24.1.0",
         "axe-core": "^4.13.0",
         "cy-verify-downloads": "^0.3.0",
-        "cypress": "^16.2.1",
+        "cypress": "^16.3.0",
         "cypress-commands": "^3.0.0",
         "cypress-delete-downloads-folder": "^0.0.6",
         "cypress-file-upload": "^5.0.8",

@@ -1,10 +1,10 @@
-{home}library DuplicateMeasureTest version '0.0.000'
+library DuplicateMeasureTest version '0.0.000'
 
-{home}using FHIR version '4.0.1'
+using FHIR version '4.0.1'
 
-{home}include FHIRHelpers version '4.1.000' called FHIRHelpers
+include FHIRHelpers version '4.1.000' called FHIRHelpers
 
-{home}codesystem "ParticipationMode": 'http://terminology.hl7.org/CodeSystem/v3-ParticipationMode' version '3.1.0'
-{home}codesystem "LOINC": 'http://loinc.org' version '4.5'
+codesystem "ParticipationMode": 'http://terminology.hl7.org/CodeSystem/v3-ParticipationMode' version '3.1.0'
+codesystem "LOINC": 'http://loinc.org' version '4.5'
 
-{home}code "preop": 'p' from "ParticipationMode" display 'preop'
+code "preop": 'p' from "ParticipationMode" display 'preop'
