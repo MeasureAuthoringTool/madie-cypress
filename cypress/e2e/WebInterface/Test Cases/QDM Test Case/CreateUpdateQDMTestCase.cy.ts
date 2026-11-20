@@ -6,7 +6,7 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { QdmCql } from '../../../../Shared/QDMMeasuresCQL'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -136,6 +136,7 @@ describe('Create and Update QDM Test Case', () => {
         measureData.measureCql = measureCQLPatient
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(measureCQLPatient).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         return OktaLogin.SessionLogin()
     })
@@ -146,8 +147,6 @@ describe('Create and Update QDM Test Case', () => {
 
     it('Create and Update Test Case for QDM Measure', () => {
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)

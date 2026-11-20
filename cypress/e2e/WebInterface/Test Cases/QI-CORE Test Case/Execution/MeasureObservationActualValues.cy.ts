@@ -7,6 +7,7 @@ import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../../Shared/TestData'
 
 const now = Date.now()
 let measureName = 'MOActualValues' + now
@@ -46,6 +47,7 @@ let measureCQL =
 describe('Non Boolean Measure Observation Actual values', () => {
     beforeEach('Create Measure, Test Case and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.Login()
     })
@@ -58,8 +60,6 @@ describe('Non Boolean Measure Observation Actual values', () => {
     it('Verify Actual values for Non Boolean CV Measure', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -110,8 +110,6 @@ describe('Non Boolean Measure Observation Actual values', () => {
     it('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -195,8 +193,6 @@ describe('Boolean Measure Observation Actual values', () => {
     it('Verify Actual values for Boolean CV Measure', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

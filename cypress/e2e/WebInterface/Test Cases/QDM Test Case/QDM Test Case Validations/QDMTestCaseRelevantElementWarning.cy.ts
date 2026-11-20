@@ -12,6 +12,7 @@ import {
     PopulationBasis
 } from '../../../../../Shared/MeasureGroupPage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { TestData } from '../../../../../Shared/TestData'
 import { QDMElements } from '../../../../../Shared/QDMElements'
 import { QdmCql } from '../../../../../Shared/QDMMeasuresCQL'
 
@@ -47,6 +48,7 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
             MeasureScoring.Proportion,
             pops
         )
+        TestData.saveMeasureCql(`${measureCQL}\n`).then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -58,12 +60,6 @@ describe('QDM Test cases - Checks for CQL Changes', () => {
 
     it('Present Relevant Elements warning & SDE changed warning after major CQL changes that affect test cases', () => {
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({
-            appendNewLine: true,
-            collapseEditor: true,
-            waitForDisabled: true
-        })
 
         // Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

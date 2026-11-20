@@ -202,7 +202,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get('[aria-label="Edit"]').eq(0).click()
+        cy.get(EditMeasurePage.editDefinitionButton('DefinitionTerm')).click()
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
         cy.get(EditMeasurePage.definitionInputNonQDM).clear().type('Definition details for DefinitionTerm')
@@ -213,10 +213,10 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //delete definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get('[aria-label="Delete"]').eq(0).click()
+        cy.get(EditMeasurePage.deleteDefinitionButton('DefinitionTermUpdate')).click()
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 50000)
         cy.get(CQLEditorPage.deleteContinueButton).click()
-        Utilities.waitForElementToNotExist
+        cy.get(EditMeasurePage.definitionMetaTableBody).should('not.contain', 'DefinitionTermUpdate')
         cy.log('Measure Definition deleted successfully')
     })
 

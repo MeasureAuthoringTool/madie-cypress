@@ -4,11 +4,11 @@ import { Utilities } from '../../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../../Shared/Header'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { QDMElements } from '../../../../../Shared/QDMElements'
+import { TestData } from '../../../../../Shared/TestData'
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -32,10 +32,10 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
         return cy.get(EditMeasurePage.testCasesTab).should('be.visible')
     })
 
@@ -132,7 +132,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //asserting value that appears in the element table
-        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  SNOMEDCT : 112648003')
+        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  http://snomed.info/sct : 112648003')
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')

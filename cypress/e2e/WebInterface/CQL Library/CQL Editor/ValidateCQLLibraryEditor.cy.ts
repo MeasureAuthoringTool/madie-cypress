@@ -290,7 +290,7 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 
         MonacoEditor.assertErrors(CQLEditorPage.errorMsg,
-            'Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900'
+            'Request failed with status code 400 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900'
         )
     })
 

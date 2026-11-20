@@ -64,6 +64,19 @@ Do not sacrifice a higher priority for a lower one.
 - UI specs should use the browser only for UI behavior, rendering, editor behavior, permissions, navigation, and interaction.
 - Page objects should not own service setup mechanics.
 
+## Regression Failure Workflow
+
+For a regression failure, inspect the failing spec, relevant shared helpers and fixtures, and a comparable passing scenario before changing code. Reuse the current pattern rather than preserving a legacy workaround.
+
+- Use API helpers such as `TestData` for setup and persistence that are not under UI test; reserve the browser for behavior the scenario is intended to verify.
+- Before an Action Center interaction, search for and assert the exact target measure, library, or test case. Scope controls and assertions to the active dialog, panel, or table when a selector is reused elsewhere on the page.
+- For a full Monaco CQL or JSON document replacement, use `MonacoEditor.replaceDocumentAfterNativeClear()`. CDP-only replacement can leave the editor text changed without registering a dirty state.
+- When creating a test case that replaces JSON, use `TestCasesPage.createTestCase(..., false, true)` so the JSON editor follows the native-clear path.
+- Use stable `data-testid` selectors. Assert scenario-owned messages or error fragments, not full alert text, error counts, order-dependent diagnostics, or unrelated validation messages.
+- Treat legacy fixture tokens and fixture-time text substitution as refactor targets. Fixtures should contain valid, self-contained CQL or JSON unless dynamic content is integral to the scenario.
+- Add `.only` only when the user explicitly requests focused validation. Remove all focused markers before completing the task and run the standard validation commands.
+- Do not claim a regression is fixed until the requested focused run proves it. For 400, 401, or 500 responses, distinguish a test defect from a service or environment issue and report the endpoint, request purpose, response body, and reproduction steps.
+
 ## Refactor Rules
 
 - Keep changes small.

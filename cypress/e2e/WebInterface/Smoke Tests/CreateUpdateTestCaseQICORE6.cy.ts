@@ -79,7 +79,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
     })
 
     it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, true)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson, true, true)
 
         //Verify Last Saved Date on Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -87,7 +87,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
-        TestCasesPage.waitForJsonEditorReady()
+        TestCasesPage.openJsonTab()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
 
         cy.get(TestCasesPage.lastSavedDate).should('contain.text', utcTime)

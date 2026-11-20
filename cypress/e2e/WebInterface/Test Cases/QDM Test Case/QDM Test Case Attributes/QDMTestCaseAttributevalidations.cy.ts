@@ -4,9 +4,9 @@ import { Utilities } from '../../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { EditMeasurePage } from '../../../../../Shared/EditMeasurePage'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
-import { CQLEditorPage } from '../../../../../Shared/CQLEditorPage'
 import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { MeasureCQL } from '../../../../../Shared/MeasureCQL'
+import { TestData } from '../../../../../Shared/TestData'
 
 const measureName = 'QDMAttributeTestMeasure' + Date.now()
 const CqlLibraryName = 'QDMAttributeTestLibrary' + Date.now()
@@ -37,10 +37,10 @@ describe('QDM Test case Attribute validations', () => {
             '',
             'Initial Population',
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Logout and Clean up Measures', () => {

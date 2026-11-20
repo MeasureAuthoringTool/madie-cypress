@@ -6,6 +6,7 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../../../Shared/OktaLogin'
 import { TestCase, TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { TestData } from '../../../../../Shared/TestData'
 import { Utilities } from '../../../../../Shared/Utilities'
 
 const now = Date.now()
@@ -29,6 +30,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(createMeasure)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(testCase.title, testCase.group, testCase.description)
 
         OktaLogin.Login()
@@ -41,9 +43,6 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
     it('RAV sub tab is visible on Edit Test case Highlighting page when RAV is included', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -169,9 +168,6 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
     it('RAV sub tab is not visible on Edit Test case Highlighting page when RAV is not included', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)

@@ -5,8 +5,8 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { QiCore6Cql } from "../../../../../Shared/FHIRMeasuresCQL"
+import { TestData } from "../../../../../Shared/TestData"
 
 const measureName = 'ImportTestCaseWithTwoMOs' + Date.now()
 const CqlLibraryName = 'ImportTestCaseWithTwoMOsLib' + Date.now()
@@ -26,11 +26,11 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
     before('Create Measure', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, opts)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
         OktaLogin.Login()
 
         MeasuresPage.actionCenter("edit")
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 

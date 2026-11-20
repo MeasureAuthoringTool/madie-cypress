@@ -5,6 +5,8 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MonacoEditor } from "../../../../Shared/MonacoEditor"
+import { TestData } from '../../../../Shared/TestData'
+import { Header } from '../../../../Shared/Header'
 
 let measureName = 'QiCoreParamsMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreParamsLibrary' + Date.now()
@@ -42,16 +44,20 @@ describe('Qi-Core CQL Parameters', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: measureCQL })
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        CQLEditorPage.expandCQLBuilderPanel()
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
+
+        return OktaLogin.SessionLogin().then(() => {
+            cy.get(Header.measures).click()
+            MeasuresPage.searchForMeasureByName(measureName)
+            MeasuresPage.assertMeasureSearchRowContains(0, measureName)
+            MeasuresPage.actionCenter('edit')
+            CQLEditorPage.expandCQLBuilderPanel()
+        })
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Validate default Parameters tab and basic form functions', () => {

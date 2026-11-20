@@ -4,7 +4,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { EditMeasureActions, EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
+import { TestData } from '../../../../Shared/TestData'
 
 const measureName = 'AdminMeasureShare' + Date.now()
 const cqlLibraryName = 'AdminMeasureShareLib' + Date.now()
@@ -16,14 +16,11 @@ describe('Admin Measure Share', () => {
         harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
-        OktaLogin.UILogout()
+        return TestData.saveMeasureCql(`${measureCQL}\n`).then(TestData.expectSavedMeasureCql)
     })
 
     afterEach('Log out and Clean up', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Admin user can share measure access for a measure they do not own', () => {

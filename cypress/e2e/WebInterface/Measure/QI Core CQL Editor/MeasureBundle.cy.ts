@@ -12,6 +12,11 @@ import { TestData } from '../../../../Shared/TestData'
 const measureName = 'MeasureBundle ' + Date.now()
 const CqlLibraryName = 'MeasureBundleLib' + Date.now()
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
+    .replace("using QICore version '4.1.0'", "using QICore version '4.1.1'")
+    .replace(
+        "codesystem \"SNOMEDCT:2017-09\": 'http://snomed.info/sct/731000124108' version 'http://snomed.info/sct/731000124108/version/201709'\n",
+        ''
+    )
 const measureCQLWithPopulationDefinitions = `${measureCQL}
 define "ipp":
     true
@@ -75,7 +80,11 @@ describe('Measure Bundle end points', () => {
         let currentUser = Cypress.expose('selectedUser')
 
         //Click on the CQL Editor tab
-        CQLEditorPage.saveMonacoCql()
+        CQLEditorPage.openMonacoCqlEditor(30000, false)
+        TestData.readMeasure().then((response) => {
+            MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, response.body.cql)
+        })
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
         //log out of UI
         
@@ -176,14 +185,15 @@ describe('Measure bundle end point returns stratifications', () => {
     beforeEach('Create Measure', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLWithPopulationDefinitions)
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        TestData.saveMeasureCql(measureCQLWithPopulationDefinitions).then(TestData.expectSavedMeasureCql)
+        return OktaLogin.SessionLogin().then(() => {
+            MeasuresPage.actionCenter('edit')
+        })
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Measure bundle end point returns stratifications for Cohort Measure', () => {
@@ -254,14 +264,14 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.resourceType).to.eql('Bundle')
                     expect(response.body.entry[0].resource.group[0].extension[0].valueCodeableConcept.coding[0].code).to.eql('cohort')
                     expect(response.body.entry[0].resource.group[0].stratifier[0].id).to.not.be.empty
-                    expect(response.body.entry[0].resource.group[0].stratifier[0].extension[0].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-appliesTo')
+                    expect(response.body.entry[0].resource.group[0].stratifier[0].extension[0].url).to.eql('http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-appliesTo')
                     expect(response.body.entry[0].resource.group[0].stratifier[0].extension[0].valueCodeableConcept.coding[0].code).to.eql('initial-population')
                     expect(response.body.entry[0].resource.group[0].stratifier[0].criteria.expression).to.eql('Surgical Absence of Cervix')
                     expect(response.body.entry[0].resource.group[0].stratifier[1].id).to.not.be.empty
-                    expect(response.body.entry[0].resource.group[0].stratifier[1].extension[0].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-appliesTo')
+                    expect(response.body.entry[0].resource.group[0].stratifier[1].extension[0].url).to.eql('http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-appliesTo')
                     expect(response.body.entry[0].resource.group[0].stratifier[1].extension[0].valueCodeableConcept.coding[0].code).to.eql('initial-population')
                     expect(response.body.entry[0].resource.group[0].stratifier[1].criteria.expression).to.eql('Surgical Absence of Cervix')
-                    expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
+                    expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-scoringUnit')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
                 })
@@ -466,6 +476,9 @@ describe('Verify the criteria reference for measure observations', () => {
     beforeEach('Create Measure', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').then((cql) => {
+            return TestData.saveMeasureCql(cql).then(TestData.expectSavedMeasureCql)
+        })
         return OktaLogin.SessionLogin()
     })
 
@@ -478,11 +491,6 @@ describe('Verify the criteria reference for measure observations', () => {
         let currentUser = Cypress.expose('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-
-        //navigate to CQL Editor page / tab
-        CQLEditorPage.openMonacoCqlEditor(30000, false)
-        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.monacoCqlEditor)
-        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -548,7 +556,7 @@ describe('Verify the criteria reference for measure observations', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.resourceType).to.eql('Bundle')
-                    expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
+                    expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-scoringUnit')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
 
@@ -561,11 +569,6 @@ describe('Verify the criteria reference for measure observations', () => {
         let currentUser = Cypress.expose('selectedUser')
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-
-        //Add CQL
-        CQLEditorPage.openMonacoCqlEditor(30000, false)
-        MonacoEditor.replaceDocumentFromFile('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.monacoCqlEditor)
-        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -632,7 +635,7 @@ describe('Verify the criteria reference for measure observations', () => {
                     //Compare numerator population id with numerator criteria reference
                     expect(response.body.entry[0].resource.group[0].population[3].id).to.eql(response.body.entry[0].resource.group[0].population[6].extension[1].valueString)
                     expect(response.body.entry[0].resource.group[0].population[3].code.coding[0].code).to.eql('numerator')
-                    expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
+                    expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/uv/cqm/StructureDefinition/cqm-scoringUnit')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
                 })

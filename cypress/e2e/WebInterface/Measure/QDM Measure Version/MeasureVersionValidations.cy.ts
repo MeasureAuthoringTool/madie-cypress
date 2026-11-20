@@ -221,16 +221,15 @@ describe('Edit Test case for QDM Versioned Measure', () => {
         measureData.measureCql = measureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveMeasureCql(measureCQL).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
-        OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return OktaLogin.SessionLogin()
     })
 
     afterEach('Logout and Clean up', () => {
         OktaLogin.UILogout()
-        Utilities.deleteVersionedMeasure()
+        return Utilities.deleteVersionedMeasure()
     })
 
     it('Measure owner able to Edit Test case on a QDM Versioned Measure, that was created before Versioning', () => {

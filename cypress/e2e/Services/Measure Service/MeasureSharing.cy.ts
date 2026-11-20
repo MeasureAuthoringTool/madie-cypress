@@ -32,6 +32,7 @@ describe('Measure Sharing Service', () => {
             cy.readFile('cypress/fixtures/' + currentUser + '/measureId').should('exist').then((measureId) => {
 
                 cy.request({
+                    failOnStatusCode: false,
                     url: '/api/measures/shared',
                     headers: {
                         authorization: 'Bearer ' + accessToken?.value
@@ -41,7 +42,7 @@ describe('Measure Sharing Service', () => {
                         [measureId]: [harpUserALT]
                     }
                 }).then((response) => {
-                    expect(response.status).to.eql(200)
+                    expect(response.status, `measure sharing response: ${JSON.stringify(response.body)}`).to.eql(200)
                     expect(response.body[measureId][0].userId).to.eql(harpUserALT)
                     expect(response.body[measureId][0].roles[0]).to.eql('SHARED_WITH')
                 })

@@ -3,11 +3,9 @@ import { CreateMeasureOptions, CreateMeasurePage } from '../../../../Shared/Crea
 import { OktaLogin } from '../../../../Shared/OktaLogin'
 import { Utilities } from '../../../../Shared/Utilities'
 import { MeasuresPage } from '../../../../Shared/MeasuresPage'
-import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
-import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { Header } from '../../../../Shared/Header'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
-import { Toasts } from '../../../../Shared/Toasts'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'CompareMeasureVersion' + Date.now()
 const cqlLibraryName = 'CompareMeasureVersion' + Date.now()
@@ -37,9 +35,8 @@ describe('Compare Measure Versions', () => {
             'Surgical Absence of Cervix',
             'Procedure'
         )
+        TestData.saveMeasureCql(`${measureCQL}\n`).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
-        MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     // afterEach('Log out and Clean up', () => {
@@ -60,12 +57,10 @@ describe('Compare Measure Versions', () => {
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.intercept('PUT', /\/api\/measures\/[^/?]+\/version(?:\?.*)?$/).as('versionedMeasure')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(Toasts.successToast, { timeout: 18500 }).should(
-            'contain.text',
-            'New version of measure is Successfully created'
-        )
+        cy.wait('@versionedMeasure', { timeout: 30000 }).its('response.statusCode').should('eq', 200)
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
 
@@ -77,10 +72,10 @@ describe('Compare Measure Versions', () => {
         cy.get(MeasuresPage.createDraftContinueBtn).click()
 
         cy.wait('@drafted').then((int) => {
+            expect(int.response?.statusCode).to.eq(201)
             // capture measureId of new draft
             cy.writeFile('cypress/fixtures/' + currentUser + '/measureId1', int?.response?.body.id)
         })
-        cy.get(Toasts.successToast, { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
         cy.log('Draft Created Successfully')
 

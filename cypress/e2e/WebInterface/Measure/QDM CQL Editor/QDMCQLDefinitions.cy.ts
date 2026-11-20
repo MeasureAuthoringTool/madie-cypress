@@ -470,24 +470,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
         OktaLogin.Login()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
-        cy.get('[data-testid="groups-tab"]').click()
-        cy.get('[data-testid="base-configuration-types-input"]')
-            .click()
-            .type('{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{downarrow}{enter}')
-        cy.get('[id="scoring-select"]').click()
-        cy.get('[data-testid="scoring-option-COHORT"]').click()
-        cy.get('[data-testid="measure-Base Configuration-save"]').click()
-        cy.get('[data-testid="leftPanelMeasureInformation-MeasureGroup1"]').wait(1000).click()
-        cy.get('[data-testid="population-select-initial-population"]').click()
-        cy.get('[data-testid="select-option-measure-group-population"]')
-            .eq(5)
-            .should('have.attr', 'data-value', 'n')
-            .click()
-        cy.get('[data-testid="group-form-submit-btn"]').click().wait(1000)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.expandCQLBuilderPanel()
 

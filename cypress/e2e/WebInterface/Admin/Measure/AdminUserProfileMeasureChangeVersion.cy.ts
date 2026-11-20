@@ -8,7 +8,7 @@ import { MeasureDraftBody, TestData } from '../../../../Shared/TestData'
 import { Utilities } from '../../../../Shared/Utilities'
 
 const measureDisabledTooltip =
-    'Select the latest version in a measure set that does not have a draft and is not a component of a composite measure to change version #'
+    'To change the version number, select exactly one measure that you own or have shared access to, is the latest version in its measure set, does not have a draft version, and is not a component of a composite measure.'
 
 describe('Admin user profile Change Version Measure action', () => {
     let measureName = ''

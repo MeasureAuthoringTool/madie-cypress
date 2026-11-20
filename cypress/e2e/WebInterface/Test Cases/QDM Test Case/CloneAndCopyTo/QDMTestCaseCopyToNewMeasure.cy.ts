@@ -7,7 +7,7 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
 import { Header } from "../../../../../Shared/Header"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { TestData } from '../../../../../Shared/TestData'
 
 const now = Date.now()
 const originalMeasure = {
@@ -47,13 +47,12 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.QDM, measureOptions)
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Proportion, populations)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description)
         OktaLogin.Login()
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')

@@ -80,16 +80,14 @@ describe('Qi Core Code Search fields', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
-
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.expandCQLBuilderPanel()
     })
 
-    // afterEach('Clean up and Logout', () => {
-
-    //     Utilities.deleteMeasure()
-    // })
+    afterEach('Clean up and Logout', () => {
+        return Utilities.deleteMeasure()
+    })
 
     it('Search for the Codes', () => {
         //Click on Codes tab
@@ -261,8 +259,7 @@ describe('Qi Core Code Search fields', () => {
         )
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
     })
 
     it('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
@@ -393,14 +390,13 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
-
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
+        return Utilities.deleteMeasure()
     })
 
     it('Edit Code with Suffix and Version from Saved Codes Grid', () => {
@@ -457,8 +453,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been updated successfully.')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.saveMonacoCql({ appendNewLine: false })
     })
 
     it('Remove Code from Saved Codes Grid', () => {

@@ -6,6 +6,7 @@ import { MeasureGroupPage } from '../../../../../Shared/MeasureGroupPage'
 import { MeasuresPage } from '../../../../../Shared/MeasuresPage'
 import { OktaLogin } from '../../../../../Shared/OktaLogin'
 import { TestCasesPage } from '../../../../../Shared/TestCasesPage'
+import { TestData } from '../../../../../Shared/TestData'
 import { Utilities } from '../../../../../Shared/Utilities'
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
@@ -27,6 +28,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(createMeasure)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -39,8 +41,6 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     it('SDE sub tab is visible on Edit Test case Highlighting page when SDE is included', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
@@ -141,8 +141,6 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
-
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).should('be.visible')
@@ -183,8 +181,6 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     it('Test Case Coverage Percentage updated based on the SDE selection', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
@@ -291,8 +287,6 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
     it('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
         MeasuresPage.actionCenter('edit')
-
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()

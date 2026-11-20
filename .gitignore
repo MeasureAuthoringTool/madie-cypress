@@ -16,6 +16,7 @@ mochawesome-report/
 runner-results/
 
 # files for local processing
+regression-test-files.txt
 cypress/plugins/userLock.json
 cypress/plugins/altUserLock.json
 cypress/fixtures/featureFlags

@@ -181,22 +181,21 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.SessionLogin()
 
-        MeasuresPage.actionCenter('edit', 0)
+        MeasuresPage.openEditMeasureDetailsById(0)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         CQLEditorPage.expandCQLBuilderPanel()
     })
 
     afterEach('Clean up and Logout', () => {
-        Utilities.deleteMeasure()
-        OktaLogin.UILogout()
+        return Utilities.deleteMeasure()
     })
 
     it('Qi Core: Edit Included Libraries functionality -- when changes to the CQL is not saved', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
         CQLEditorPage.openMonacoCqlEditor()
         MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 
@@ -245,7 +244,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.openEditMeasureDetailsById()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
 

@@ -24,7 +24,7 @@ export enum MadieObject {
 export class Utilities {
     public static readonly dirtCheckModal = '.MuiDialogContent-root'
     public static readonly discardChangesContinue = '[data-testid="discard-dialog-continue-button"]'
-    public static readonly discardChangesConfirmationModal = '.MuiBox-root'
+    public static readonly discardChangesConfirmationModal = '[data-testid="discard-dialog"]'
     public static readonly keepWorkingCancel = '[data-testid="discard-dialog-cancel-button"]'
     public static readonly DiscardCancelBtn = '[data-testid="cancel-button"]'
     public static readonly DiscardButton = '[data-testid="discard-button"]'
@@ -400,7 +400,10 @@ export class Utilities {
                 user
             ).then((response) => {
                 console.log(response)
-                expect(response.status).to.eql(200)
+                expect(
+                    response.status,
+                    `share permission response for ${user}: ${JSON.stringify(response.body)}`
+                ).to.eql(200)
                 if (action === PermissionActions.GRANT) {
                     expect(response.body[madieId][0].roles).to.include('SHARED_WITH')
                     expect(response.body[madieId][0].userId).to.eq(user)

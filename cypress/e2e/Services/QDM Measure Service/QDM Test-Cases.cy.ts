@@ -25,6 +25,7 @@ let TCSeries = 'SBTestSeries'
 let TCTitle = 'test case title'
 let TCDescription = 'DENOMFail1651609688032'
 let TCJson = TestCaseJson.QDMTestCaseJson
+const overlongTestCaseDescription = 'a'.repeat(4001)
 
 const measureData: CreateMeasureOptions = {}
 const qdmPopulationValues = [
@@ -303,30 +304,27 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
         Utilities.deleteMeasure()
     })
 
-    it('Create Test Case: Description more than 250 characters', () => {
+    it('Create Test Case: Description more than 4000 characters', () => {
         qdmTestCaseBody({
             name: "DENOMFail",
             series: "WhenBP120",
             title: "test case title",
-            description: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
-                "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
-                "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr"
+            description: overlongTestCaseDescription
         }).then((body) => {
             TestData.requestMeasureTestCase<any>('POST', body as any, { failOnStatusCode: false }).then((response) => {
-                expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.description).to.eql('Test Case Description can not be more than 250 characters.')
+                expect(response.status, `test-case validation response: ${JSON.stringify(response.body)}`).to.eql(400)
+                expect(response.body.validationErrors, 'test-case description validation errors').to.exist
+                expect(response.body.validationErrors.description).to.eql('Test Case Description cannot be more than 4000 characters.')
             })
         })
     })
 
-    it('Edit Test Case: Description more than 250 characters', () => {
+    it('Edit Test Case: Description more than 4000 characters', () => {
         qdmTestCaseBody({
             name: "IPPPass",
             series: "WhenBP<120",
             title: "test case title edited",
-            description: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
-                "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
-                "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr"
+            description: overlongTestCaseDescription
         }).then((body) => {
             TestData.readTestCaseId().then((testCaseId) => {
                 TestData.requestMeasureTestCase<any>(
@@ -334,8 +332,9 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     { ...body, id: testCaseId } as any,
                     { failOnStatusCode: false }
                 ).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.description).to.eql('Test Case Description can not be more than 250 characters.')
+                    expect(response.status, `test-case validation response: ${JSON.stringify(response.body)}`).to.eql(400)
+                    expect(response.body.validationErrors, 'test-case description validation errors').to.exist
+                    expect(response.body.validationErrors.description).to.eql('Test Case Description cannot be more than 4000 characters.')
                 })
             })
         })
