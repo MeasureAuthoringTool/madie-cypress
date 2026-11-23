@@ -121,6 +121,7 @@ Reuse these established paths before adding request code:
 - When a scenario only verifies that text remains or is removed from the main CQL document, use `MonacoEditor.assertRenderedText(...)` or `assertRenderedTextDoesNotContain(...)`. Do not exercise Monaco's Find UI or assert its result counter as a proxy for document state.
 - Create or update Population Criteria only after valid CQL has settled.
 - Use API group setup when the scenario does not validate the Population Criteria UI itself.
+- Keep setup CQL minimal, but preserve the consuming workflow's semantic contract. For QDM Test Case demographics, use the canonical value-set-backed `SDE Ethnicity`, `SDE Payer`, `SDE Race`, and `SDE Sex` definitions; code-backed substitutes can compile but provide the wrong option shape to the UI. For episode-based groups, selected population definitions must return lists of the same non-Boolean QDM type.
 - Preserve intentional invalid-CQL UI flows when the test verifies editor error persistence or visible validation behavior.
 - For export-only missing/invalid CQL scenarios, seed the measure state through `TestData.readMeasure(...)` and `TestData.updateMeasure(...)`, assert the saved `cql` or `cqlErrors` field, then use the UI to verify export blocking. Do not make export coverage depend on Monaco editing or translator acceptance when editor validation is not the behavior under test.
 

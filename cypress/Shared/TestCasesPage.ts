@@ -1405,9 +1405,16 @@ export class TestCasesPage {
 
   private static clickVisible(selector: string, timeout = 20000): void {
     cy.get(selector, { timeout })
+      .filter(':visible')
       .scrollIntoView()
+    cy.get(selector, { timeout })
+      .filter(':visible')
       .should('be.visible')
       .click()
+  }
+
+  public static openCodeSystemSelector(timeout = 20000): void {
+    this.clickVisible(this.codeSystemSelector, timeout)
   }
 
   private static openQdmElementActionMenu(actionCenterSelector: string): void {

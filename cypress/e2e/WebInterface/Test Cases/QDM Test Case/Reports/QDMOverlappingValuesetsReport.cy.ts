@@ -5,8 +5,8 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { TestData } from "../../../../../Shared/TestData"
 
     /*
         This test scenario does not require creation of a measure.
@@ -112,9 +112,9 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
 
         cy.task<Array<Record<string, unknown>>>('readXlsx', { file: file, sheet: 'Overlapping Codes' }).then(rows => {
             expect(rows[0]['Code']).to.equal('10D00Z0')
-            expect(rows[0]['Code System']).to.equal('2.16.840.1.113883.6.4')
+            expect(rows[0]['Code System']).to.equal('http://www.cms.gov/Medicare/Coding/ICD10')
             expect(rows[0]['Description']).to.equal('Extraction of Products of Conception, High, Open Approach')
-            expect(rows[0]['Version']).to.be.undefined
+            expect(rows[0]['Version']).to.equal('2027')
             expect(rows[0]['Value Set']).to.equal('CesareanBirth')
             expect(rows[0]['Value Set OID/URL']).to.equal('2.16.840.1.113883.3.117.1.7.1.282')
         })
@@ -127,9 +127,10 @@ describe('Overlapping Value Set report validations', () => {
     beforeEach('Create Measure, Test Case and login', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -156,8 +157,6 @@ describe('Overlapping Value Set report validations', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
-
-        CQLEditorPage.saveMonacoCql({ waitForDisabled: true })
 
         //Navigate to Test Cases Tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

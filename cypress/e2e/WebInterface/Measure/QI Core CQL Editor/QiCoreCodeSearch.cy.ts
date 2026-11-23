@@ -6,6 +6,7 @@ import { MeasuresPage } from '../../../../Shared/MeasuresPage'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { TestCasesPage } from '../../../../Shared/TestCasesPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
 
 const date = Date.now()
 let measureName = 'QiCoreCodeSearch' + date
@@ -348,6 +349,7 @@ describe('Error Message on Codes tab', () => {
         newCqlLibraryName = 'QiCoreCodeSearchLib' + now + randValue + 5
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, newCqlLibraryName, measureCQLWithCode)
+        TestData.saveMeasureCql(measureCQLWithCode).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')

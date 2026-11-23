@@ -38,6 +38,12 @@ let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '  (Enc E where E.status = \'finished\') is not null '
 
+const currentMeasureCql = (): string =>
+    measureCQL.replace(
+        /^library\s+\S+\s+version\s+'[^']+'/,
+        `library ${CqlLibraryName} version '0.0.000'`
+    )
+
 
 describe('Qi-Core CQL Parameters', () => {
 
@@ -247,7 +253,11 @@ describe('Qi-Core CQL Parameters', () => {
         cy.get(CQLEditorPage.savedParametersTab).should('contain.text', 'Saved Parameters (1)')
 
         //Add errors to CQL
-        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'define "test":')
+        MonacoEditor.replaceDocumentAfterNativeClear(
+            EditMeasurePage.monacoCqlEditor,
+            `${currentMeasureCql()}\ndefine "test":`
+        )
+        MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, 'define "test":')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Navigate to Parameters tab

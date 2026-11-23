@@ -91,6 +91,7 @@ export class QDMElements {
         SNOMEDCT: 'http://snomed',
         ICD10CM: 'http://hl7.org/fhir/sid/icd-10-cm',
         ICD10PCS: 'http://www.cms.gov/Medicare/Coding/ICD10',
+        CDCREC: ['CDCREC', 'urn:oid:2.16.840.1.113883.6.238', '2.16.840.1.113883.6.238'],
         SOP: 'SOPT',
         SOPT: 'SOP',
         LOINC: ['LOINC', 'http://loinc.org'],

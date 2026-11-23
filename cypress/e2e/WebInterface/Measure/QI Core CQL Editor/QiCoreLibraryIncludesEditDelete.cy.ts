@@ -8,14 +8,33 @@ import { EditMeasurePage } from '../../../../Shared/EditMeasurePage'
 import { Header } from '../../../../Shared/Header'
 import { CQLLibraryPage } from '../../../../Shared/CQLLibraryPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
+const unsavedCqlMarker = 'fgdfgfgdfg'
+const savedCqlComment = '// saved include change'
+
+const currentMeasureCql = (): string =>
+    measureCQL.replace(
+        /^library\s+\S+\s+version\s+'[^']+'/,
+        `library ${CqlLibraryName} version '0.0.000'`
+    )
+
+const replaceCqlWithMarker = (marker: string): void => {
+    CQLEditorPage.openMonacoCqlEditor()
+    MonacoEditor.replaceDocumentAfterNativeClear(
+        EditMeasurePage.monacoCqlEditor,
+        `${currentMeasureCql()}\n${marker}`
+    )
+    MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, marker)
+}
 
 describe('Qi-Core Library Includes - Delete functionality', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit', 0)
@@ -128,6 +147,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
+        replaceCqlWithMarker(savedCqlComment)
         CQLEditorPage.saveMonacoCql()
 
         //Click on Includes tab
@@ -144,8 +164,8 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 5000)
+        cy.get(CQLLibraryPage.cqlLibraryDeleteDialog).should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
@@ -179,6 +199,7 @@ describe('Qi-Core Library Includes - Delete functionality', () => {
 describe('Qi-Core Library Includes - Edit functionality', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.openEditMeasureDetailsById(0)
@@ -197,7 +218,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         //make a change to CQL (don't save)
         MeasuresPage.openEditMeasureDetailsById()
         CQLEditorPage.openMonacoCqlEditor()
-        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+        replaceCqlWithMarker(unsavedCqlMarker)
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
@@ -246,7 +267,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.openEditMeasureDetailsById()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+        replaceCqlWithMarker(unsavedCqlMarker)
 
         //Click on Includes tab
         CQLEditorPage.expandCQLBuilderPanel()
@@ -293,7 +314,7 @@ describe('Qi-Core Library Includes - Edit functionality', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        replaceCqlWithMarker(savedCqlComment)
         CQLEditorPage.saveMonacoCql()
 
         //Click on Includes tab

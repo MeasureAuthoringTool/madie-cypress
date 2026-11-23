@@ -184,10 +184,10 @@ describe('Measure History - Version and Draft actions', () => {
         harpUserALT = OktaLogin.getUser(true)
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
     })
 
     afterEach('Log out and Clean up', () => {
@@ -421,6 +421,7 @@ describe('Measure History - QDM Export Test case Action', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
@@ -444,7 +445,6 @@ describe('Measure History - QDM Export Test case Action', () => {
 
     it('Verify that Export QDM Test case Action is recorded in Measure History', () => {
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         //Navigate to Test Case page
         TestCasesPage.openTestCasesTab(TestCasesPage.executeTestCaseButton)

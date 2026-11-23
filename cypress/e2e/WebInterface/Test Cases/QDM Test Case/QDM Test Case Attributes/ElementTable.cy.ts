@@ -122,7 +122,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.ABEMBDiathesisValue).click()
 
         //select the SNOMED code system
-        cy.get(TestCasesPage.codeSystemSelector).click()
+        TestCasesPage.openCodeSystemSelector(50000)
         QDMElements.selectCodeSystemOption('SNOMEDCT')
 
         //select a value for the code
@@ -159,14 +159,14 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
                     $tab[0].click()
                 }
             })
-        cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeLOINCValue).click()
+        TestCasesPage.openCodeSystemSelector(50000)
+        QDMElements.selectCodeSystemOption('LOINC')
         cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-14463-4"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click() //click the "Add" button
         cy.get('tbody > tr > :nth-child(1)').should(
             'contain.text',
-            'Laboratory_test, PerformedChlamydia ScreeningLOINC: 14463-4 ',
+            'Laboratory_test, PerformedChlamydia Screeninghttp://loinc.org: 14463-4 ',
         )
     })
 })

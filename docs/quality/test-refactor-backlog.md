@@ -94,6 +94,7 @@ Work boundaries:
 - Convert one repeated interaction bucket at a time.
 - Do not combine unrelated export, transfer, highlighting, and editor refactors.
 - Do not add retries or weaker assertions for known product defects.
+- Keep the shared `EditMeasurePage` version-modal delay until the application exposes a committed version-type readiness signal. DEV validation proved that a generated version value and a visible/enabled confirmation input do not reliably enable Continue; migrate direct consumers independently only when their concrete readiness contract is proven.
 - Do not perform a suite-wide mechanical conversion. Migrate one repeated interaction bucket at a time, starting with consumers already covered by a shared helper.
 - Do not change the allocation default globally until alt-user consumers have an explicit opt-in path and representative multi-user, reviewer, and primary-only specs prove their allocation and release behavior.
 

@@ -116,9 +116,10 @@ describe('Practitioner Attribute', () => {
         cy.get(TestCasesPage.codeSelector).eq(2).click()
         cy.get('[data-testid=option-2135-2]').click() //Select Hispanic or Latino
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get(TestCasesPage.attributeChip).should(
-            'contain.text',
-            'Performer - Practitioner Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: CDCREC : 2135-2',
-        )
+        cy.get(TestCasesPage.attributeChip)
+            .should('contain.text', 'Performer - Practitioner Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3')
+            .and('contain.text', 'Role: http://snomed.info/sct : 4525004')
+            .and('contain.text', 'Specialty: http://snomed.info/sct : 183452005')
+            .and('contain.text', 'Qualification: urn:oid:2.16.840.1.113883.6.238 : 2135-2')
     })
 })

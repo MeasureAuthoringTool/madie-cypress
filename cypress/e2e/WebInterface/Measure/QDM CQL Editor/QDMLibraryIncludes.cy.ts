@@ -35,7 +35,32 @@ const measureCQL =
   '\t true\n' +
   'define "n":\n' +
   '\ttrue'
-const unsavedCqlComment = '\n// unsaved include change'
+const unsavedCqlComment = '// unsaved include change'
+const savedCqlComment = '// saved include change'
+
+const currentMeasureCql = (includeVte = false): string => {
+  const normalizedCql = measureCQL.replace(
+    /^library\s+\S+\s+version\s+'[^']+'/,
+    `library ${cqlLibraryName} version '0.0.000'`,
+  )
+
+  return includeVte
+    ? normalizedCql.replace(
+        "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n",
+        "include MATGlobalCommonFunctionsQDM version '8.0.000' called Common\n" +
+          "include UATVTEQDM version '0.1.000' called VTE\n",
+      )
+    : normalizedCql
+}
+
+const replaceCqlWithComment = (comment: string, includeVte = false): void => {
+  CQLEditorPage.openMonacoCqlEditor()
+  MonacoEditor.replaceDocumentAfterNativeClear(
+    EditMeasurePage.monacoCqlEditor,
+    `${currentMeasureCql(includeVte)}\n${comment}`,
+  )
+  MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, comment)
+}
 
 describe('QDM Library Includes fields', () => {
   beforeEach('Create Measure and Login', () => {
@@ -189,7 +214,7 @@ describe('QDM Library Includes fields', () => {
     //make a change to CQL (don't save)
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
+    replaceCqlWithComment(unsavedCqlComment, true)
     cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled').click()
     Utilities.clickOnDiscardChanges()
     MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
@@ -210,8 +235,8 @@ describe('QDM Library Includes fields', () => {
       .scrollIntoView()
       .should('be.visible')
       .click()
-    Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-    cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
+    Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 5000)
+    cy.get(CQLLibraryPage.cqlLibraryDeleteDialog).should('contain.text', 'Are you sure?')
 
     //choose cancel
     Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn, 5000)
@@ -228,7 +253,7 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, unsavedCqlComment)
+    replaceCqlWithComment(unsavedCqlComment, true)
     cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled').click()
     Utilities.clickOnDiscardChanges()
 
@@ -272,6 +297,7 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
 
     MeasuresPage.actionCenter('edit')
+    replaceCqlWithComment(savedCqlComment)
     CQLEditorPage.saveMonacoCql()
 
     //Click on Includes tab
@@ -288,8 +314,8 @@ describe('QDM Library Includes fields', () => {
     cy.get(CQLEditorPage.deleteSavedLibrary).click()
 
     //confirm "are you sure" pop up
-    Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
-    cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
+    Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 5000)
+    cy.get(CQLLibraryPage.cqlLibraryDeleteDialog).should('contain.text', 'Are you sure?')
 
     //choose yes to delete
     Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
@@ -300,7 +326,7 @@ describe('QDM Library Includes fields', () => {
     )
 
     //Deletes the library include statement from the CQL
-    MonacoEditor.assertRenderedTextDoesNotContain(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+    MonacoEditor.assertRenderedText(EditMeasurePage.monacoCqlEditor, savedCqlComment)
 
     //Deletes the library from the Saved Libraries grid
     CQLEditorPage.expandCQLBuilderPanel()
@@ -318,7 +344,7 @@ describe('QDM Library Includes fields', () => {
     //make a change to CQL (don't save)
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+    replaceCqlWithComment('fgdfgfgdfg')
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
@@ -362,7 +388,7 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
     MeasuresPage.actionCenter('edit')
     cy.get(EditMeasurePage.cqlEditorTab).click()
-    MonacoEditor.appendDocumentText(EditMeasurePage.monacoCqlEditor, 'fgdfgfgdfg')
+    replaceCqlWithComment('fgdfgfgdfg')
 
     //Click on Includes tab
     CQLEditorPage.expandCQLBuilderPanel()
@@ -408,6 +434,7 @@ describe('QDM Library Includes fields', () => {
     cy.get(Header.mainMadiePageButton).click()
 
     MeasuresPage.actionCenter('edit')
+    replaceCqlWithComment(savedCqlComment)
     CQLEditorPage.saveMonacoCql()
 
     //Click on Includes tab
