@@ -7,6 +7,7 @@ import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { MeasureGroupPage } from '../../../../Shared/MeasureGroupPage'
 import { Header } from '../../../../Shared/Header'
+import { TestData } from '../../../../Shared/TestData'
 
 const measureData: CreateMeasureOptions = {
     measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean
@@ -35,6 +36,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
@@ -61,6 +63,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure2)
+        TestData.saveCurrentMeasureCql(2).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             2,
             false,
@@ -78,33 +81,31 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         measureData.measureCql = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 
         CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 3)
+        TestData.saveCurrentMeasureCql(3).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', undefined, 3)
 
         //Create second QI Core measure
         measureQICore2 = 'QICore600Measure2' + Date.now() + randValue + 2 + randValue
 
         CreateMeasurePage.CreateMeasureAPI(measureQICore2, measureQICore2, SupportedModels.qiCore6, measureData, 4)
+        TestData.saveCurrentMeasureCql(4).then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', undefined, 4)
 
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 3)
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 4)
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
 
         cy.get(Header.mainMadiePageButton).click()
     })

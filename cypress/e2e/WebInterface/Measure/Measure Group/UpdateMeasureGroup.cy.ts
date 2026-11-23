@@ -7,6 +7,7 @@ import { Utilities } from '../../../../Shared/Utilities'
 import { MeasureCQL } from '../../../../Shared/MeasureCQL'
 import { CQLEditorPage } from '../../../../Shared/CQLEditorPage'
 import { MonacoEditor } from '../../../../Shared/MonacoEditor'
+import { TestData } from '../../../../Shared/TestData'
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -258,6 +259,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(
             false,
             false,
@@ -268,7 +270,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         )
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: true })
+        return cy.then(() => undefined)
     })
 
     afterEach('Logout and Clean up Measures', () => {

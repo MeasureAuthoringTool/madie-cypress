@@ -62,8 +62,8 @@ describe('QDM Measure Versioning', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(3000)
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible').and('be.enabled').type('1.0.000')
         Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
         cy.get('.MuiDialogContent-root').click()
@@ -138,8 +138,8 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(3000)
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible').and('be.enabled').type('1.0.000')
         Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
         cy.get('.MuiDialogContent-root').click()
@@ -220,10 +220,9 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         Utilities.waitForElementVisible(MeasuresPage.measureVersionMajor, 50000)
         cy.get(MeasuresPage.measureVersionMajor).should('be.visible')
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(3000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 50000)
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible')
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible').and('be.enabled').type('1.0.000')
 
         cy.get('.MuiDialogContent-root').click()
 

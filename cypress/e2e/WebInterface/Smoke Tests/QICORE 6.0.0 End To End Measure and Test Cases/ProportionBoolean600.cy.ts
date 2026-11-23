@@ -30,7 +30,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Proportion, pops)
         TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
 
-        OktaLogin.Login()
+        return OktaLogin.SessionLogin()
     })
 
     after('Logout', () => {
@@ -99,10 +99,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
 
-        // please leave this in place. it needs a short pause here for the modal to present new fields
-        cy.wait(1000)
-
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible').and('be.enabled').type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 

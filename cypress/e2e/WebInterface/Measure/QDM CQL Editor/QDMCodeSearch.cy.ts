@@ -473,13 +473,12 @@ describe('QDM Code Search fields', () => {
 describe('Error Message on Codes tab', () => {
     beforeEach('Create Measure and Login', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withCode)
+        TestData.saveMeasureCql(measureCQL_withCode).then(TestData.expectSavedMeasureCql)
         OktaLogin.SessionLogin()
 
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL builder
-        CQLEditorPage.saveMonacoCql()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
         CQLEditorPage.expandCQLBuilderPanel()
     })
 
