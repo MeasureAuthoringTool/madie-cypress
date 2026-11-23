@@ -253,7 +253,7 @@ export class MeasureGroupPage {
 
     //left panel
     public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'
-    public static readonly leftPanelSupplementalDataTab = '[datatestid=leftPanelMeasurePopulationsSupplementalDataTab]'
+    public static readonly leftPanelSupplementalDataTab = '#sideNavMeasurePopulationsSupplementalData'
     public static readonly leftPanelBaseConfigTab = '[data-testid="leftPanelMeasureBaseConfigurationTab"]'
     public static readonly qdmMeasureReportingTab = '[datatestid=leftPanelMeasureReportingTab]'
 

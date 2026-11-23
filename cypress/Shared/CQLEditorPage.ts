@@ -216,23 +216,17 @@ export class CQLEditorPage {
             Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 120000)
         }
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
-            cy.wrap($msg)
-                .invoke('text')
-                .then(text => {
-                    const trimmedText = text.trim()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).then($messages => {
+            const validSubstrings = [
+                'CQL updated successfully but the following issues were found',
+                'CQL updated successfully',
+                'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.'
+            ]
+            const hasSaveConfirmation = [...$messages].some(message =>
+                validSubstrings.some(substring => message.textContent?.trim().includes(substring))
+            )
 
-                    const validSubstrings = [
-                        'CQL updated successfully but the following issues were found',
-                        'CQL updated successfully',
-                        'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.'
-                    ]
-
-                    const containsMatch = validSubstrings.some(substring =>
-                        trimmedText.includes(substring)
-                    )
-                    expect(containsMatch).to.be.true
-                })
+            expect(hasSaveConfirmation, 'CQL save confirmation alert').to.be.true
         })
     }
 
@@ -241,7 +235,7 @@ export class CQLEditorPage {
     }
 
     public static replaceMonacoCqlDocument(cql: string): void {
-        MonacoEditor.replaceDocument(EditMeasurePage.monacoCqlEditor, cql)
+        MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, cql)
     }
 
     public static clearMonacoCqlDocument(): void {
@@ -249,7 +243,9 @@ export class CQLEditorPage {
     }
 
     public static replaceMonacoCqlDocumentFromFile(filePath: string): void {
-        MonacoEditor.replaceDocumentFromFile(filePath, EditMeasurePage.monacoCqlEditor)
+        cy.readFile(filePath).then((contents) => {
+            MonacoEditor.replaceDocumentAfterNativeClear(EditMeasurePage.monacoCqlEditor, contents)
+        })
     }
 
     public static saveMonacoCql(options: MonacoSaveCqlOptions = {}): void {

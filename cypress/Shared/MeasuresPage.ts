@@ -537,35 +537,41 @@ export class MeasuresPage {
                 const rowSelector = this.measureRowSelectSelector(measureId)
                 const actionSelector = this.measureActionSelector(measureId)
 
-                cy.get('body', { timeout: 60000 })
-                    .should(($body) => {
-                        const editTabExists = $body.find(EditMeasurePage.cqlEditorTab).length
-                        const measureRowExists = $body.find(rowSelector).length
-                        expect(editTabExists + measureRowExists, 'edit tab or measure list row').to.be.greaterThan(0)
-                    })
-                    .then(($body) => {
-                        if ($body.find(EditMeasurePage.cqlEditorTab).length) {
-                            if (expectCqlEditor) {
-                                Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
-                            }
-                            return
-                        }
-
-                        this.selectMeasureRow(selectedMeasureNumber, options)
-                        Utilities.waitForElementVisible(actionSelector, 60000)
-                        cy.get(actionSelector)
-                            .should('be.visible')
-                            .should('be.enabled')
-                            .scrollIntoView({
-                                offset: { top: -250, left: 0 }
-                            })
-                        cy.get(actionSelector).should('be.visible').should('be.enabled').click()
-
+                cy.get('body').then(($body) => {
+                    if ($body.find(EditMeasurePage.cqlEditorTab).length) {
                         if (expectCqlEditor) {
-                            cy.location('pathname', { timeout: 60000 }).should('contain', `/measures/${measureId}/edit`)
                             Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
                         }
-                    })
+                        return
+                    }
+
+                    if (!$body.find(rowSelector).length) {
+                        cy.visit('/measures')
+                        Utilities.waitForElementVisible(this.measureListTitles, 60000)
+                    }
+
+                    this.selectMeasureRow(selectedMeasureNumber, options)
+                    Utilities.waitForElementVisible(actionSelector, 60000)
+                    cy.get(actionSelector)
+                        .filter(':visible')
+                        .first()
+                        .should('be.visible')
+                        .should('be.enabled')
+                        .scrollIntoView({
+                            offset: { top: -250, left: 0 }
+                        })
+                    cy.get(actionSelector)
+                        .filter(':visible')
+                        .first()
+                        .should('be.visible')
+                        .should('be.enabled')
+                        .click()
+
+                    if (expectCqlEditor) {
+                        cy.location('pathname', { timeout: 60000 }).should('contain', `/measures/${measureId}/edit`)
+                        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 60000)
+                    }
+                })
             })
 
             return
