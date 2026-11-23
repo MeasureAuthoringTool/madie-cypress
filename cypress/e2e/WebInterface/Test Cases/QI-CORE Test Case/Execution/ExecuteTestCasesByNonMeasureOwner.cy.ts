@@ -60,11 +60,11 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
             TestCasesPage.openExpectedActualTab({ checkboxSelector: TestCasesPage.testCaseIPPExpected })
-            TestCasesPage.checkExpectedActualCheckboxes([
+            TestCasesPage.ensureExpectedActualCheckboxesAfterFhirExpansion([
                 { selector: TestCasesPage.testCaseIPPExpected },
                 { selector: TestCasesPage.testCaseDENOMExpected },
                 { selector: TestCasesPage.testCaseNUMERExpected },
-            ])
+            ], [], 3, false)
 
             Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
             cy.get(TestCasesPage.editTestCaseSaveButton).click()

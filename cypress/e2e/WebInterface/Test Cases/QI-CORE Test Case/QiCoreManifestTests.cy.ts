@@ -42,7 +42,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
 
     it('Verify Madie users can successfully execute test cases against their chosen manifest version', () => {
         // set intercept for manifest expansion
-        cy.intercept('PUT', '/api/terminology/value-sets/expansion/fhir').as('expansion')
+        cy.intercept('PUT', '/api/terminology/value-sets/fhir').as('expansion')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

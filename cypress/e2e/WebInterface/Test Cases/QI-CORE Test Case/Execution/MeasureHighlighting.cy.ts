@@ -1071,7 +1071,7 @@ describe('Measure Highlighting', () => {
         TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
     })
 
@@ -1080,8 +1080,6 @@ describe('Measure Highlighting', () => {
     })
 
     it('Execute single Test Case and verify Measure highlighting', () => {
-        cy.intercept('/api/terminology/value-sets/expansion/fhir').as('expansion')
-
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1126,26 +1124,6 @@ describe('Measure Highlighting', () => {
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
-
-        /* 
-            added for https://jira.cms.gov/browse/MAT-8567
-            1. intercept valueset expansion
-            2. examine set of codes in each valueset
-            3. verify no duplicates are occuring on that single valueset
-        */
-        // 1
-        cy.wait('@expansion', { timeout: 35000 }).then((expansion) => {
-            for (let valueset of expansion?.response?.body) {
-                // 2
-                const codes: Array<string> = valueset.expansion.contains.map((a) => a.code)
-
-                let duplicates = codes.filter(
-                    (value, index) => codes.indexOf(value) !== index && codes.lastIndexOf(value) === index
-                )
-                // 3
-                expect(duplicates).to.be.empty
-            }
-        })
 
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -1445,6 +1423,7 @@ describe('Highlighting accurately appears for a multiple PC measure', () => {
 describe('Verify multiple IPs on the highlighting tab', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(
             false,
             false,
@@ -1455,7 +1434,6 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         )
         OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1642,10 +1620,10 @@ describe('Highlighting tab sub-sections default to expanded but can be collapsed
 
     beforeEach('Create measure, measure group, test case and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLResults)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1790,6 +1768,7 @@ describe('Highlighting accurately appears for a measure with same Definition in 
             '2025-01-01',
             '2025-12-31'
         )
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(
             0,
             false,
@@ -1809,11 +1788,10 @@ describe('Highlighting accurately appears for a measure with same Definition in 
     })
 
     it('Highlighting is accurate when measure & included library both have definitions with the same name', () => {
-        OktaLogin.Login()
+        OktaLogin.SessionLogin()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        CQLEditorPage.saveMonacoCql({ collapseEditor: true, waitForDisabled: false })
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

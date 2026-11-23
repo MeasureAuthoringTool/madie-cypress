@@ -6,7 +6,6 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { TestData } from "../../../../../Shared/TestData"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
 import { LandingPage } from "../../../../../Shared/LandingPage"
@@ -22,7 +21,46 @@ const testCase2: TestCase = {
     description: 'SecondTC-DENOMFail',
     group: 'SecondTC-SBTestSeries'
 }
-const qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
+const qdmTestCaseIdCql = `library QDMTestCaseIdFixture version '0.0.000'
+
+using QDM version '5.6'
+
+valueset "Ethnicity": 'urn:oid:2.16.840.1.114222.4.11.837'
+valueset "ONC Administrative Sex": 'urn:oid:2.16.840.1.113762.1.4.1'
+valueset "Payer": 'urn:oid:2.16.840.1.114222.4.11.3591'
+valueset "Race": 'urn:oid:2.16.840.1.114222.4.11.836'
+
+codesystem "Test Code System": 'urn:oid:2.16.840.1.113883.6.1'
+
+code "Test Code": '1234-5' from "Test Code System"
+
+parameter "Measurement Period" Interval<DateTime>
+
+context Patient
+
+define "SDE Ethnicity":
+  ["Patient Characteristic Ethnicity": "Ethnicity"]
+
+define "SDE Payer":
+  ["Patient Characteristic Payer": "Payer"]
+
+define "SDE Race":
+  ["Patient Characteristic Race": "Race"]
+
+define "SDE Sex":
+  ["Patient Characteristic Sex": "ONC Administrative Sex"]
+
+define "Initial Population":
+  ["Encounter, Performed": "Test Code"]
+
+define "Denominator":
+  ["Encounter, Performed": "Test Code"]
+
+define "Denominator Exceptions":
+  ["Encounter, Performed": "Test Code"]
+
+define "Numerator":
+  ["Encounter, Performed": "Test Code"]`
 const timestamp = Date.now()
 const measureName = 'ProportionPatient' + timestamp
 const measureQDMManifestName = 'QDMManifestTest' + timestamp
@@ -30,7 +68,7 @@ const CqlLibraryName = 'ProportionPatient' + timestamp
 const newMeasureName = 'Updated' + measureName
 const versionNumber = '1.0.000'
 
-const saveCqlForTestCaseCoverage = () => TestData.saveMeasureCql(`${qdmManifestTestCQL}\n`).then(TestData.expectSavedMeasureCql)
+const saveCqlForTestCaseCoverage = () => TestData.saveMeasureCql(`${qdmTestCaseIdCql}\n`).then(TestData.expectSavedMeasureCql)
 
 describe('QDM Test Case sorting by Test Case number', () => {
 
@@ -41,24 +79,21 @@ describe('QDM Test Case sorting by Test Case number', () => {
             cqlLibraryName: CqlLibraryName,
             measureScoring: 'Proportion',
             patientBasis: 'false',
-            measureCql: qdmManifestTestCQL,
+            measureCql: qdmTestCaseIdCql,
             mpStartDate: '2025-01-01',
             mpEndDate: '2025-12-31'
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        saveCqlForTestCaseCoverage()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-
-        saveCqlForTestCaseCoverage()
-
-        // add SDE to test case coverage
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        MeasureGroupPage.includeSdeData()
+        return OktaLogin.SessionLogin().then(() => {
+            MeasuresPage.actionCenter('edit')
+            cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+            MeasureGroupPage.includeSdeData()
+            return cy.then(() => undefined)
+        })
     })
 
     afterEach('Clean up', () => {
@@ -201,21 +236,19 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
             cqlLibraryName: CqlLibraryName,
             measureScoring: 'Proportion',
             patientBasis: 'false',
-            measureCql: qdmManifestTestCQL
+            measureCql: qdmTestCaseIdCql
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        saveCqlForTestCaseCoverage()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateTestCaseAPI(testCase1.group, testCase1.title, testCase1.description)
-        OktaLogin.Login()
-
-        //adding supplemental data
-        MeasuresPage.actionCenter('edit')
-        saveCqlForTestCaseCoverage()
-
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        MeasureGroupPage.includeSdeData()
+        return OktaLogin.SessionLogin().then(() => {
+            MeasuresPage.actionCenter('edit')
+            cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+            MeasureGroupPage.includeSdeData()
+            return cy.then(() => undefined)
+        })
     })
 
     afterEach('Delete Measure and Logout', () => {
@@ -232,7 +265,8 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get('#draggable-dialog-title').click()
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled').click()
         cy.get(Toasts.successToast, { timeout: 26500 }).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
@@ -289,23 +323,21 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
             cqlLibraryName: qdmCqlLibraryName,
             measureScoring: 'Proportion',
             patientBasis: 'false',
-            measureCql: qdmManifestTestCQL,
+            measureCql: qdmTestCaseIdCql,
             mpStartDate: '2025-01-01',
             mpEndDate: '2025-12-31'
         }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        saveCqlForTestCaseCoverage()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
-        OktaLogin.Login()
-
-        //adding supplemental data
-        MeasuresPage.actionCenter('edit')
-        saveCqlForTestCaseCoverage()
-
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        MeasureGroupPage.includeSdeData()
+        return OktaLogin.SessionLogin().then(() => {
+            MeasuresPage.actionCenter('edit')
+            cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').click()
+            MeasureGroupPage.includeSdeData()
+            return cy.then(() => undefined)
+        })
     })
 
     afterEach('Clean up', () => {

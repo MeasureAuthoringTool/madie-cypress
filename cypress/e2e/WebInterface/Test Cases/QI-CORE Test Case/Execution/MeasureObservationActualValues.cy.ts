@@ -181,6 +181,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
 describe('Boolean Measure Observation Actual values', () => {
     beforeEach('Create Measure, Test Case and login', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestData.saveCurrentMeasureCql().then(TestData.expectSavedMeasureCql)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.Login()
     })
